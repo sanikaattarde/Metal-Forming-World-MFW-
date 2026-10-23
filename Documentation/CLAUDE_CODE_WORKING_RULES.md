@@ -7,10 +7,9 @@
 | Document | Claude Code Working Rules |
 | File | `Documentation/CLAUDE_CODE_WORKING_RULES.md` |
 | Phase | 3 — Development Planning and Collaboration (document 26) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers |
 
 **Change history**
@@ -18,15 +17,16 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. The no-guest-reading rule labelled as a working position (PROVISIONAL). The file-access rule limited to the app's copy. Decision wording aligned with the status model. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
-| `DEVELOPMENT_WORKFLOW.md` | Exists, created in this task. The Git workflow these rules apply. |
-| `TASK_OWNERSHIP_MATRIX.md` | Exists, created in this task. Owned paths and shared files. |
-| `DEFINITION_OF_DONE.md` | Exists, created in this task. Completion evidence. |
-| `DECISION_LOG.md`, `OPEN_QUESTIONS.md` | Exist, created in this task |
+| `DEVELOPMENT_WORKFLOW.md` | Exists (draft). The Git workflow these rules apply. |
+| `TASK_OWNERSHIP_MATRIX.md` | Exists (draft). Owned paths and shared files. |
+| `DEFINITION_OF_DONE.md` | Exists (draft). Completion evidence. |
+| `DECISION_LOG.md`, `OPEN_QUESTIONS.md` | Exist (draft) |
 | `REQUIREMENTS_SPECIFICATION.md`, `PROJECT_CHARTER.md` | Exist, drafts |
 
 ## 2. Purpose, Scope and Status
@@ -43,7 +43,7 @@ Each request is classified before any work starts. If the type is unclear, the s
 |---|---|---|
 | **T1 Planning only** (questions, audits, estimates, reviews) | Read files and Git metadata. Write notes outside the repository (for example, a scratch directory). | Any change to files in the repository |
 | **T2 Documentation** | Create or edit only the documents named in the task | Application code, configuration, CI, dependencies. Phase 1 or Phase 2 documents unless the task names them. |
-| **T3 Implementation** | Change files only inside the workstream's owned paths (`TASK_OWNERSHIP_MATRIX.md` §6) and the task's named files. Run relevant local tests. | Shared or high-risk files without the shared-file protocol (`DEVELOPMENT_WORKFLOW.md` §8). Decisions that are not AGREED or APPROVED. |
+| **T3 Implementation** | Change files only inside the workstream's owned paths (`TASK_OWNERSHIP_MATRIX.md` §6) and the task's named files. Run relevant local tests. | Shared or high-risk files without the shared-file protocol (`DEVELOPMENT_WORKFLOW.md` §8). Decisions that are OPEN or PROPOSED. |
 | **T4 Spike** | Exploratory code on a `spike/` topic branch, to gather evidence for an OPEN decision | Merging spike code into `main` as production code |
 
 ## 4. Mandatory Preflight
@@ -97,10 +97,10 @@ The session confirms each of the following. It stops and reports if any check fa
 ## 7. Requirement and Architecture Boundaries
 
 1. **Never redefine architecture.** A session does not choose or change the backend, database, storage, authentication provider, reader library, admin technology or CI service. Those choices are `DECISION_LOG.md` entries, and they are made by the developers.
-2. **OPEN or PROPOSED decisions.** Code may depend only on the technology-neutral interfaces in `API_AND_MODULE_CONTRACTS.md`. Code tied to a specific provider is written only in a spike (T4), until the decision is AGREED or APPROVED.
-3. **Mandatory product rules.** No session may weaken these:
-   - Full issues can be opened or downloaded only by a signed-in reader with full access. There is no guest reading and no public sample (DEC-007).
-   - Issue files are released only after a server-side authorization check, never through a public or guessable address (DEC-009).
+2. **OPEN or PROPOSED decisions.** Code may depend only on the technology-neutral interfaces in `API_AND_MODULE_CONTRACTS.md`. Code tied to a specific provider is written only in a spike (T4), until the decision is no longer OPEN or PROPOSED (AGREED, APPROVED or BASELINE).
+3. **Product rules.** No session may weaken these. The first is a working position (DEC-007, PROVISIONAL) until MFW confirms it in writing. The others are baseline:
+   - Full issues can be opened or downloaded only by a signed-in reader with full access. There is no guest reading and no public sample (DEC-007, working position, PROVISIONAL).
+   - Issue files are released only after a server-side authorization check, never through a public or guessable address (DEC-009, baseline). This covers the app's copy only. The same issues are publicly downloadable from MFW's website, and MFW has not decided whether that stays (OQ-57).
    - Downloaded issues are kept in the app's private storage (RS NFR-SEC-004).
    - Content is free. No payments, subscriptions or paywalls (RS BR-004).
 4. **Conflicts.** If a task conflicts with RS, CH, S2 or an AGREED or APPROVED decision, the session stops, quotes the conflicting text and asks. It does not choose a side.

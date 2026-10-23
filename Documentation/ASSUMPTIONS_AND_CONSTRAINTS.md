@@ -7,12 +7,12 @@
 | Document title | Assumptions and Constraints Register |
 | File | `ASSUMPTIONS_AND_CONSTRAINTS.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for Review |
 | Last updated | 23 October 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Glossary](GLOSSARY.md) v0.1; `PROJECT_CHARTER.md` v0.1 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Glossary](GLOSSARY.md) v0.1; `PROJECT_CHARTER.md` v0.2 |
 
 **Purpose.** This register records the project's assumptions, constraints, dependencies, open questions and conflicts in one place. For each entry it gives the evidence, the current status, what happens if the entry is wrong or stays unresolved, who owns it, and what evidence or decision would settle it. It does not answer any open question or resolve any conflict. It changes no requirement, status or acceptance criterion in the specification.
 
@@ -21,6 +21,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft for internal review |
+| 0.2 | 23 October 2026 | Remediation note on REG-001 (YG's statement about the S3 emails). No assumption, constraint, status or priority changed. |
 
 ### 1.1 Source documents and authority
 
@@ -29,7 +30,7 @@
 | S1 | MFW Mobile App Commercial Proposal, `MFW_Commercial_Proposal-2.pdf`, 17 October 2026, 7 pages | Read for this register. Unsigned. Acceptance, approver and sign-off sections blank. | Shows what the proposal says. Its acceptance is unverified (REG-002). |
 | S2 | MFW Mobile App Statement of Work, `MFW_Statement_of_Work.pdf`, 17 October 2026, 8 pages | Read for this register. Unsigned. | Shows what the SOW says. Its acceptance is unverified (REG-002). |
 | S3 | Client emails received after S1 and S2 | Not available. Not in the repository. | Missing evidence. Not reconstructed from summaries or any other secondary record (REG-001). |
-| CH | Project Charter, `PROJECT_CHARTER.md` v0.1, 22 October 2026 | Read for this register. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
+| CH | Project Charter, `PROJECT_CHARTER.md` v0.2, 22 October 2026 | Read for this register. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
 | SPEC | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1, 22 October 2026 | Read for this register. Draft for Review. | Detailed requirements reference. Its IDs, statuses and acceptance criteria are used as written. |
 
 S1, S2 and CH are named by file name and not linked, because they are not in the folder where this register was prepared. Fee and payment amounts and personal names are left out. Where the revised commercial terms matter (REG-004), the register refers to the CH sections that hold them.
@@ -189,7 +190,7 @@ Totals: 59 entries. By type: ASSUMPTION 8, CONSTRAINT 14, DEPENDENCY 16, OPEN 10
 |---|---|
 | Type | DEPENDENCY |
 | Status | OPEN |
-| Description and evidence | CH records client amendments received by email after S1 and S2 [S3]. The emails are not in the repository, and CH leaves their dates and senders "to be inserted from the emails". The specification therefore labels every amendment PROVISIONAL. CH §19.1 nevertheless lists the S3 items as confirmed facts (REG-003). This register does not reconstruct the emails from summaries or other secondary records. |
+| Description and evidence | CH records client amendments received by email after S1 and S2 [S3]. The emails are not in the repository, and CH leaves their dates and senders "to be inserted from the emails". The specification therefore labels every amendment PROVISIONAL. CH §19.1 nevertheless lists the S3 items as confirmed facts (REG-003). This register does not reconstruct the emails from summaries or other secondary records. Reported by YG, not filed: the S3 client emails exist and support the amendments. They are not in the repository and were not seen by the reviewer. The items stay PROVISIONAL until the emails are filed or MFW confirms in writing. |
 | Source | CH §1 (source table), §17.3, §19.1; spec §1.1, §1.2 |
 | Confidence | High. The absence of the emails was checked in the repository on 23 October 2026. |
 | Impact if incorrect or unresolved | No PROVISIONAL item can become CONFIRMED. The team may build or test features that MFW has not agreed in writing, or omit ones it has. The revised schedule and commercial terms stay unsupported (REG-004, REG-006). |

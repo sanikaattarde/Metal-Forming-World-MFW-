@@ -7,7 +7,7 @@
 | Document title | Project Charter |
 | Repository file | `PROJECT_CHARTER.md` |
 | Project name | Metal Forming World (MFW) mobile application |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review |
 | Date | 22 October 2026 |
 | Purpose | Establish the purpose, scope boundaries, stakeholders, constraints, success criteria and governance of the MFW project. This is the foundational reference for the requirements, architecture, task assignment, development workflow, testing and deployment documents that follow. |
@@ -17,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 22 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation note on S3 added after the table in section 17.3. No requirement, date or fee changed. |
 
 **Source documents**
 
@@ -302,6 +303,8 @@ Anything that is not a defect against an acceptance criterion is a change. Chang
 | Issue share link | Share sheet with title and link | Store listing for issues, WordPress article link for news | S3 |
 | Per-user reading-activity tracking | Excluded (analytics dashboard excluded) | Remains excluded | S2, S3 |
 | Delivery team | One developer | Sanika Attarde as contracting developer, working with Developer YG | S3 |
+
+**Note on S3 (23 October 2026).** YG states that the S3 client emails exist and support these amendments. They are not in the repository and were not seen by the reviewer. The status of these amendments stays as in the requirements specification: PROVISIONAL until the S3 emails are filed or MFW confirms in writing (RS section 1.2, OQ-29, REG-001). This note changes no requirement, date or fee.
 
 ### 17.4 Technical decisions
 The architecture, authentication provider, reader library and data model are not approved by this charter. Each is decided in a recorded decision, agreed by both developers. A decision that adds third-party cost, changes scope or touches the contract is approved by MFW in writing before it is implemented.

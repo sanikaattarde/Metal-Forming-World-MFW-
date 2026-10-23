@@ -7,10 +7,9 @@
 | Document | Development Roadmap |
 | File | `Documentation/DEVELOPMENT_ROADMAP.md` |
 | Phase | 3 — Development Planning and Collaboration (document 23) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
 
 **Change history**
@@ -18,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Document names and status rows corrected after the merge. Tasks T-00.6 and T-00.7 added for the documents not yet scheduled. Working baseline for dates stated (CH dates, PROVISIONAL), with the S3 note. No date, estimate or milestone changed. |
 
 ### 1.1 Related documents
 
@@ -27,8 +27,10 @@
 | `MFW_Commercial_Proposal-2.pdf` (S1) "What we need from MFW" | Exists, issued, unsigned. Client inputs, set relative to project weeks. |
 | `PROJECT_CHARTER.md` (CH) §12 | Exists, draft. Re-based dates (PROVISIONAL, C-08). |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft |
-| `TASK_OWNERSHIP_MATRIX.md`, `DECISION_LOG.md`, `OPEN_QUESTIONS.md`, `DEFINITION_OF_DONE.md`, `ACCEPTANCE_CRITERIA.md` | Exist, created in this task |
-| `SYSTEM_ARCHITECTURE.md`, `TECH_STACK_DECISIONS.md` | Planned (Phase 2). Not created. Needed for M1. |
+| `TASK_OWNERSHIP_MATRIX.md`, `DECISION_LOG.md`, `OPEN_QUESTIONS.md`, `DEFINITION_OF_DONE.md`, `ACCEPTANCE_CRITERIA.md` | Exist (draft) |
+| `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md` | Exist on `main` (drafts, merged by pull request #2). Needed for M1. `TECHNOLOGY_DECISIONS.md` was planned as `TECH_STACK_DECISIONS.md` (document map: `TASK_OWNERSHIP_MATRIX.md` section 13). |
+| `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md`, `SECURITY_AND_ACCESS_CONTROL.md` | Exist on `main` (drafts, merged by pull request #2). Not yet reviewed against this roadmap. |
+| `PDF_READER_AND_OFFLINE_DESIGN.md`, `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Planned. Not written (T-00.7). |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal. **INTERNAL ESTIMATE** marks an unvalidated planning figure that is not a commitment.
 
@@ -41,7 +43,7 @@ This roadmap turns the requirements into sequenced work packages, tasks, depende
 | Content | Nature |
 |---|---|
 | Milestones M1 to M5 and what MFW approves at each | Contractual baseline in S2 (unsigned copy). Not changed here. |
-| Milestone dates | In conflict (C-08, DEC-017). Planned in relative weeks; dates shown with their source. |
+| Milestone dates | In conflict (C-08, DEC-017). Planned in relative weeks; dates shown with their source. The CH dates are the working baseline (section 3). |
 | Work packages, tasks, sequence, estimates | Internal planning only. PROPOSED. |
 | Six-week finish | An internal target only (CH §12). Not a commitment to MFW. |
 
@@ -59,6 +61,8 @@ S1 and S2 set two-week milestone spacing: M2 at the end of Week 2, M3 at the end
 | M4 Feature-complete build | End of Week 6 | Fri 25 Dec 2026 | 2 Dec 2026 |
 | M5 Approval and store submission | End of Week 8 | Fri 8 Jan 2027 | 16 Dec 2026 |
 
+**Working baseline.** Following YG's order of authority, the CH §12 dates are the working baseline for planning. They stay PROVISIONAL and the conflict C-08 stays open, because the S3 emails are not in the repository. The S1 and S2 column is the text of the issued documents. YG states that the S3 client emails exist and support these amendments. They are not in the repository and were not seen by the reviewer.
+
 Under S2, a one-working-day delay on a key client input moves later dates by one working day, and a delay of more than five working days is a schedule change agreed in writing [S2 Responsibilities]. M5 completes at submission, not at store approval [S2 Deliverables and milestones].
 
 ## 4. Current Status
@@ -67,10 +71,10 @@ Evidence from the repository on 23 October 2026.
 
 | Item | State |
 |---|---|
-| Project week | If the CH start date (21 October 2026) applies, the project is in Week 1. If the S2 date applies, it has not started. (C-08) |
-| Phase 1 documents | `PROJECT_CHARTER.md` and `REQUIREMENTS_SPECIFICATION.md` exist as v0.1 drafts. `SCOPE_AND_EXCLUSIONS.md`, `ASSUMPTIONS_AND_CONSTRAINTS.md` and `GLOSSARY.md` are planned but not created. |
-| Phase 2 documents | None exist |
-| Phase 3 and Phase 4 documents | Drafted in this task and committed on `SA`. Not merged to `main` and not reviewed. |
+| Project week | On the working baseline (the CH start date, 21 October 2026, PROVISIONAL) the project is in Week 1. On the S2 date it has not started. (C-08) |
+| Phase 1 documents | `PROJECT_CHARTER.md` (v0.2) and `REQUIREMENTS_SPECIFICATION.md` (v0.1) exist as drafts. `SCOPE_AND_EXCLUSIONS.md`, `ASSUMPTIONS_AND_CONSTRAINTS.md` and `GLOSSARY.md` also exist as drafts (merged by pull request #2). |
+| Phase 2 documents | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` exist as drafts (merged by pull request #2). `PDF_READER_AND_OFFLINE_DESIGN.md` and `CLOUD_INFRASTRUCTURE_AND_COSTS.md` are not written. |
+| Phase 3 and Phase 4 documents | Merged into `main` by pull request #1 (merge commit 56c6d97) on 23 October 2026. Drafts. No review is recorded on the pull request. |
 | Application code | None |
 | M1 | No evidence of MFW's written approval of a requirements and architecture note. No architecture note exists. |
 | MFW inputs (S1 "What we need from MFW") | The repository holds no record of any input being received, other than the S1 and S2 PDFs themselves |
@@ -81,7 +85,7 @@ The "MFW approves when" column restates S2 and is not changed here. The internal
 
 | Gate | MFW approves when [S2] | Internal exit checks before asking MFW |
 |---|---|---|
-| M1 | MFW approves the requirements and architecture note in writing, names its approver and deputy, and supplies brand assets | `REQUIREMENTS_SPECIFICATION.md` agreed internally; `SYSTEM_ARCHITECTURE.md` and `TECH_STACK_DECISIONS.md` drafted; DEC-003 and DEC-004 at least AGREED; repository set up (WP-01, T-01.1 and T-01.2) |
+| M1 | MFW approves the requirements and architecture note in writing, names its approver and deputy, and supplies brand assets | `REQUIREMENTS_SPECIFICATION.md` agreed internally; `SYSTEM_ARCHITECTURE.md` and `TECHNOLOGY_DECISIONS.md` reviewed; DEC-003 and DEC-004 at least AGREED; repository set up (WP-01, T-01.1 and T-01.2) |
 | M2 | MFW approves the screens; the reader approach is confirmed, or an agreed alternative is recorded | Prototype covers every in-scope screen, including loading, empty and error states (RS ASM-13); reader test report on MFW's PDFs (T-02.3); P1 questions in `OPEN_QUESTIONS.md` answered or explicitly deferred |
 | M3 | A tester can sign up, log in, browse the catalogue and open an issue in the reader on the demo build | Demo builds on Android and iOS test devices; WP-03 core tasks, WP-04 and the first reader from WP-05 meet DoD-FEAT (`DEFINITION_OF_DONE.md` §6) |
 | M4 | Every feature in S2 is present, and no critical defect is open | All work packages up to WP-10 meet DoD-FEAT; admin panel live; notifications working end to end; internal test summary (T-11.4) |
@@ -93,15 +97,17 @@ Estimates are **INTERNAL ESTIMATES** in developer-days. They are ranges, not val
 
 ### WP-00 Clarification and architecture approval (M1 gate)
 
-Lead: Sanika Attarde. Support: Yuvraj. Estimate: 3–5 developer-days.
+Lead: Sanika Attarde. Support: Yuvraj. Estimate: 3–5 developer-days (INTERNAL ESTIMATE; T-00.6 and T-00.7 are not yet included in it).
 
 | Task | Description | Blocked by | Exit criterion |
 |---|---|---|---|
 | T-00.1 | Obtain MFW's written records: the S3 amendments (OQ-29), approver and deputy (OQ-28), commercial terms (OQ-32, OQ-33), two-developer delivery (OQ-34) | MFW response | Records filed or referenced. DEC-016 to DEC-019 updated. |
 | T-00.2 | Put the P1 product questions to MFW: OQ-01 to OQ-03, OQ-08, OQ-09, OQ-12, OQ-13, OQ-16 to OQ-18, OQ-25, OQ-27, OQ-31 | MFW response | Each answer recorded in `OPEN_QUESTIONS.md` |
-| T-00.3 | Draft `SYSTEM_ARCHITECTURE.md` and `TECH_STACK_DECISIONS.md` (Phase 2) | None | DEC-003 and DEC-004 move from OPEN to PROPOSED with options assessed |
+| T-00.3 | Review `SYSTEM_ARCHITECTURE.md` and `TECHNOLOGY_DECISIONS.md` (drafts exist; Phase 2) | None | DEC-003 and DEC-004 move from OPEN to PROPOSED with options assessed |
 | T-00.4 | Review and agree the Phase 3 and Phase 4 documents, DEC-010 to DEC-015, DEC-022 to DEC-024, and the task split (OQ-38) | None | AGREED, with pull-request review evidence |
 | T-00.5 | Send the M1 requirements and architecture note to MFW | T-00.3 | MFW's written approval recorded (S2 M1) |
+| T-00.6 | Review `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` (drafts exist; S2 Handover requires the data model and security rules) and record where they differ from `API_AND_MODULE_CONTRACTS.md` | T-00.3 | AGREED with pull-request review evidence. Differences recorded as conflicts or open items. Owner PROPOSED, not agreed |
+| T-00.7 | Write `PDF_READER_AND_OFFLINE_DESIGN.md` and `CLOUD_INFRASTRUCTURE_AND_COSTS.md` (not yet written) | DEC-003, DEC-005 | Drafts reviewed by the other developer. Owner PROPOSED, not agreed |
 
 ### WP-01 Repository and development setup
 

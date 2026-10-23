@@ -7,10 +7,9 @@
 | Document | Coding Standards |
 | File | `Documentation/CODING_STANDARDS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 25) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers |
 
 **Change history**
@@ -18,17 +17,18 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Planned name replaced by the existing document. Access-rule labels. Personal-data term for crash and usage events marked NOT VERIFIED. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft. Requirement IDs cited below. |
-| `DECISION_LOG.md` | Exists, created in this task. DEC-002, DEC-003, DEC-004, DEC-012, DEC-013, DEC-014. |
-| `API_AND_MODULE_CONTRACTS.md` | Exists, created in this task. Interfaces and error codes these standards apply. |
-| `TASK_OWNERSHIP_MATRIX.md`, `DEVELOPMENT_WORKFLOW.md`, `DEFINITION_OF_DONE.md` | Exist, created in this task |
-| `DEPENDENCY_REGISTER.md`, `TEST_DATA_AND_FIXTURES.md`, `TESTING_STRATEGY.md` | Exist, created in this task |
-| `TECH_STACK_DECISIONS.md` | Planned (Phase 2). Not created. Backend and admin specifics wait for it. |
+| `DECISION_LOG.md` | Exists (draft). DEC-002, DEC-003, DEC-004, DEC-012, DEC-013, DEC-014. |
+| `API_AND_MODULE_CONTRACTS.md` | Exists (draft). Interfaces and error codes these standards apply. |
+| `TASK_OWNERSHIP_MATRIX.md`, `DEVELOPMENT_WORKFLOW.md`, `DEFINITION_OF_DONE.md` | Exist (draft) |
+| `DEPENDENCY_REGISTER.md`, `TEST_DATA_AND_FIXTURES.md`, `TESTING_STRATEGY.md` | Exist (draft) |
+| `TECHNOLOGY_DECISIONS.md` | Exists on `main` (draft). It was planned as `TECH_STACK_DECISIONS.md`. Backend and admin specifics wait for its decisions (DEC-003, DEC-004). |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal in this document. In RS terms it is an ASSUMPTION (DEV).
 
@@ -170,6 +170,7 @@ If both are AGREED:
    - Reader account IDs.
 4. Never record which reader opened which issue or page (RS NFR-PRIV-003). Usage events come only from the approved list (OQ-23).
 5. Issue IDs and news post IDs may be logged. They identify content, not people.
+6. Whether device and installation identifiers count as personal data in crash reports and usage events is not defined, and the provider's behaviour is NOT VERIFIED. The term is defined when the crash and analytics provider is chosen (DEC-028, OQ-23).
 
 ## 7. API and Model Serialization
 
@@ -307,7 +308,7 @@ The reviewer checks:
 | 3 | The layer and import rules in Section 3 are respected. |
 | 4 | Errors are converted to `AppFailure`. No raw messages reach users. |
 | 5 | Nothing in Section 6.2 "never log" appears in logs or usage events. |
-| 6 | Access rules are not weakened, and the server enforces them (DEC-007, DEC-009). |
+| 6 | Access rules are not weakened, and the server enforces them (DEC-007, working position, PROVISIONAL; DEC-009, baseline). |
 | 7 | No secrets, no real personal data, no production data. |
 | 8 | Tests cover the new behaviour and its failure paths, with requirement IDs in the test names. |
 | 9 | Any new dependency has a `DEPENDENCY_REGISTER.md` entry. |

@@ -7,10 +7,9 @@
 | Document | Dependency Register |
 | File | `Documentation/DEPENDENCY_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 39) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. No package is installed. No version, licence or price below has been verified unless it is quoted from a source document. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. MFW for any paid component (RS NFR-MAINT-006). |
 
 **Change history**
@@ -18,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial register |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Planned name replaced by the existing document. Stale status rows corrected. |
 
 ### 1.1 Related documents
 
@@ -25,8 +25,8 @@
 |---|---|
 | `MFW_Commercial_Proposal-2.pdf` (S1) "Costs outside the fee", "What we need from MFW" | Exists, issued, unsigned. Source of the cost figures below. |
 | `MFW_Statement_of_Work.pdf` (S2) "Proposed technical architecture" | Exists, issued, unsigned |
-| `DECISION_LOG.md`, `CODING_STANDARDS.md` §12, `CI_CD_AND_QUALITY_GATES.md` QG-10 | Exist, created in this task |
-| `TECH_STACK_DECISIONS.md` | Planned (Phase 2). Not created. |
+| `DECISION_LOG.md`, `CODING_STANDARDS.md` §12, `CI_CD_AND_QUALITY_GATES.md` QG-10 | Exist (draft) |
+| `TECHNOLOGY_DECISIONS.md` | Exists on `main` (draft). It was planned as `TECH_STACK_DECISIONS.md`. |
 
 ## 2. Purpose, Scope and Status
 

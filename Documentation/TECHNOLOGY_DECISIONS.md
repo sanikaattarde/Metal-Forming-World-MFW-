@@ -7,12 +7,12 @@
 | Document title | Technology Decisions |
 | File | `TECHNOLOGY_DECISIONS.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for Review |
 | Last updated | 23 October 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. Every decision below is PROPOSED or OPEN, except TD-01, which S2 and the charter confirm, and TD-15 and TD-19, which the development team accepted in the second interview (GS-Q19, GS-Q28). That status is not MFW's approval (Section 1.2). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.1; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.2; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.2; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.1; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.1; `PROJECT_CHARTER.md` v0.1 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.3; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.3; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.2; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.2; `PROJECT_CHARTER.md` v0.2 |
 
 **Purpose.** This document records the technology choices for the MFW mobile app, its backend and its admin panel, in the form of architecture decision records. For each material choice it states the problem, the realistic options, the evaluation criteria, the recommendation, the evidence, the conditions for approval and the triggers for review. It separates choosing a technology from configuring a provider, and it separates decisions that must be made before implementation from decisions that can wait.
 
@@ -23,7 +23,8 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft for internal review. Revised the same day: a tree replaces the decision summary table in Section 8.1, and a proof plan for resumable signed-URL downloads is added to TD-09 and referred to in AOQ-07. TD-15 gains enforcement tests and a revised security note, and AOQ-17 is added. No decision, status or requirement changed. |
-| 0.2 | 23 October 2026 | Revised after the second interview (GS-Q17 to GS-Q33, GS-D13 to GS-D20) and a read-only review of MFW's website (WEB). TD-15 and TD-19 take the status accepted by the development team, with MFW written approval pending. TD-15 drops the role claim and makes admin reads function-only (GS-Q20), and AOQ-17 is answered by that proposal. TD-19 gains an undo and an immediate option, and no longer disables sign-in during the window. TD-09 gains an approval condition on the website's public PDFs (AOQ-18). New: PRC-04 (the update gate), AOQ-18 to AOQ-20, and not-verified items 22 and 23. No requirement status in the specification changed. |
+| 0.2 | 23 October 2026 | Revised after the second interview (GS-Q17 to GS-Q33, GS-D13 to GS-D20) and a read-only review of MFW's website (WEB). TD-15 and TD-19 take the status accepted by the development team, with MFW written approval pending. TD-15 drops the role claim and makes admin reads function-only (GS-Q20), and AOQ-17 is answered by that proposal. TD-19 gains an undo and an immediate option, and no longer disables sign-in during the window. TD-09 gains an approval condition on the website's public PDFs (AOQ-18, now OQ-57). New: PRC-04 (the update gate), AOQ-18, now OQ-57 to AOQ-20, and not-verified items 22 and 23. No requirement status in the specification changed. |
+| 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. TD-15 and TD-19 are proposed (not accepted by the development team), each with a baseline and a labelled change. GS-Q34 added: the requirements-specification profile list is required by default (PRC-03 superseded). Not-verified item 24 added (account-existence behaviour of the provider). The statement that MFW accepted the App Store risk is qualified: S3 is not filed. AOQ numbers carry their OQ aliases. "Team-accepted" replaced by PROPOSED. |
 
 ### 1.1 Sources and authority
 
@@ -32,7 +33,7 @@
 | S1 | MFW Mobile App Commercial Proposal, `MFW_Commercial_Proposal-2.pdf`, 17 October 2026 | Read. The copy is unsigned. | Shows what the proposal says. Its formal acceptance is unverified (REG-002). |
 | S2 | MFW Mobile App Statement of Work, `MFW_Statement_of_Work.pdf`, 17 October 2026 | Read. The copy is unsigned. | Source of the proposed architecture and the acceptance criteria. Its formal acceptance is unverified (REG-002). |
 | S3 | Client emails received after S1 and S2 | Not available. Not in the repository. Known only through the charter. | Not used as evidence. Amendments recorded in the charter stay PROVISIONAL (REG-001). |
-| CH | `PROJECT_CHARTER.md` v0.1, 22 October 2026 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
+| CH | `PROJECT_CHARTER.md` v0.2, 22 October 2026 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
 | SPEC | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1 | Read. Draft for Review. | Requirement IDs, statuses and acceptance criteria are used exactly as written there. |
 | GS | The architecture questioning session held on 23 October 2026 with a member of the development team, run with the `/grill-me` skill | Answers recorded as GS-Q1 to GS-Q16 in Section 10. A second session on the same day, with the same skill, produced GS-Q17 to GS-Q33 and the defaults GS-D13 to GS-D20. | Development-team positions. They are not MFW approvals, and the other developer has not yet agreed them (charter §17.4, REG-052). |
 | WEB | MFW's public website, https://metalformingworld.com/, read on 23 October 2026 | Observed. Not an approved source. | A reference for the WordPress contract and the taxonomy seed values. It does not change scope (INT-WP-002) and is not MFW's approval. |
@@ -49,7 +50,7 @@ Two vocabularies are used, and they are kept apart.
 | Status | Meaning |
 |---|---|
 | accepted | Settled by a source that confirms it. Only TD-01 qualifies. |
-| accepted by the development team | The developer who ran the interview recorded the choice as accepted (GS-Q30). The requirement label stays PROVISIONAL, MFW's written approval is pending, and the other developer's agreement is not recorded (REG-052, AR-12). It is not CONFIRMED and it is not an approval. Used for TD-15 and TD-19. |
+| accepted by the development team (retired) | Version 0.2 used this status for TD-15 and TD-19, recorded by the developer who ran the interview (GS-Q30). It is not in the repository's status model (`DECISION_LOG.md` section 3.1), so both are now **proposed**, with this note: "Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed." The requirement label stays PROVISIONAL and MFW written approval is pending. |
 | proposed | The development team recommends it. It is not approved. |
 | open | No recommendation is possible yet, or the recommendation depends on an open question. |
 | rejected | Considered and not chosen. It is kept so the reasoning is not lost. |
@@ -113,7 +114,7 @@ The same criteria are applied to every decision in Section 5. They are not weigh
 
 ## 4. Technology Inventory
 
-The inventory covers every capability the brief names. "Decide by" uses the spec's stage wording, because the milestone dates are PROVISIONAL (C-08).
+Each TD maps to an entry in `DECISION_LOG.md` (section 5.2). The inventory covers every capability the brief names. "Decide by" uses the spec's stage wording, because the milestone dates are PROVISIONAL (C-08).
 
 | TD | Capability | Proposed choice | Decision status | Evidence label | Decide by |
 |---|---|---|---|---|---|
@@ -131,11 +132,11 @@ The inventory covers every capability the brief names. "Decide by" uses the spec
 | TD-12 | WordPress integration | Direct read of the WordPress REST API from the app, with device caching | proposed | CONFIRMED basis (INT-WP-001) | Before M2 approval |
 | TD-13 | Push notifications | Firebase Cloud Messaging, with one topic per category | proposed | CONFIRMED basis (INT-PUSH-001) | Before M3 |
 | TD-14 | Admin panel | React web app on Firebase Hosting | proposed | CONFIRMED in S2, OPEN in the charter | Before M3 |
-| TD-15 | Admin roles and role management | Two roles, in-panel management, function-only admin reads and an audit log | accepted by the development team | CONFLICT (PRC-01) | Before M2 approval |
+| TD-15 | Admin roles and role management | Two roles, in-panel management, function-only admin reads and an audit log | proposed | CONFLICT (PRC-01) | Before M2 approval |
 | TD-16 | Logging, monitoring and crash reporting | Crashlytics on, Analytics collection off until OQ-23 | proposed | CONFLICT (C-07) | Before M3 |
 | TD-17 | Testing and CI/CD | Automated checks on every change, manual production deploys | proposed | ASSUMPTION | Before M3 |
 | TD-18 | Environments, deployment and secrets | Development and production projects, plus a throwaway project for the AC-12 proof | proposed | ASSUMPTION | Before any cloud project is created |
-| TD-19 | Account deletion, retention and backups | A grace window with undo, an immediate option, a scheduled purge, and managed backups | accepted by the development team | CONFIRMED basis (FR-PRIV-003), PRC-02 | Before M4 |
+| TD-19 | Account deletion, retention and backups | A grace window with undo, an immediate option, a scheduled purge, and managed backups | proposed | CONFIRMED basis (FR-PRIV-003), PRC-02 | Before M4 |
 | TD-20 | Offline data and synchronisation | Database offline cache, with queued writes | proposed | OPEN (OQ-10) | Before M2 approval |
 | TD-21 | Search and filters | Run on the device over the cached catalogue | proposed | ASSUMPTION (FR-SRCH-007) | Before M2 approval |
 | TD-22 | Data location | Not chosen | open | OPEN (AOQ-01) | Before any cloud project is created |
@@ -261,11 +262,11 @@ Each record uses the same fields. "Approval needed from" names the role that mus
 | Evaluation criteria used | EC-1, EC-3, EC-4, EC-7, EC-8 |
 | Advantages and disadvantages | A is named in S2 and supports every INT-AUTH-001 capability. Its no-cost limit is 50,000 monthly active users (VS-01). Multi-factor sign-in, by SMS or TOTP, needs the upgrade in option B, and its rates were NOT VERIFIED (VS-32, VS-33). The documentation says accounts are linked automatically when criteria are met, that a password account without a verified email is untrusted, and that Google counts as trusted only for Gmail addresses (VS-25). Linking a credential that already belongs to another account is documented as failing, and unlinking and signing in again creates a separate account (VS-26). The outcome for each combination, and whether Google sign-in sets the verified-email state, were NOT VERIFIED (AOQ-08, AOQ-09). |
 | Cost and operational implications | No sign-in cost is expected at the assumed scale (VS-01). Phone sign-in is billed per SMS and is not used. |
-| Security and privacy implications | The provider holds the email, name and user identifier, and the app keeps only the identifier (GS-Q5). The linking rule below protects against taking over an account through an unverified email. Apple's guideline 4.8 expects an equivalent sign-in option when a third-party sign-in is offered, unless an exemption applies (VS-40). MFW has been recorded as accepting that risk [S3 via CH §18 R9], and the proposal here does not change it (OQ-06, CHG-06). |
+| Security and privacy implications | The provider holds the email, name and user identifier, and the app keeps only the identifier (GS-Q5). The linking rule below protects against taking over an account through an unverified email. Apple's guideline 4.8 expects an equivalent sign-in option when a third-party sign-in is offered, unless an exemption applies (VS-40). The charter records MFW as accepting that risk [S3 via CH §18 R9]. S3 is not in the repository, so the acceptance is not evidenced, and OQ-06 stays OPEN. The proposal here does not change it (CHG-06). |
 | Vendor lock-in and migration | High for user identifiers and password hashes. A migration route was not researched (NOT VERIFIED). |
 | Recommendation | A, with this proposed rule for OQ-04 and OQ-05: one account per email address, trust the provider's verified-email result for Google, and link Google to an existing password account only when that account's email is verified. Otherwise the reader verifies first. This follows GS-Q1 and GS-Q3. Multi-factor sign-in for admins stays OPEN (AOQ-03). |
 | Evidence and requirement traceability | FR-AUTH-001 to FR-AUTH-004, FR-AUTH-009, FR-AUTH-010 (CONFIRMED); FR-AUTH-005 (PROVISIONAL); FR-AUTH-006, FR-AUTH-007 (OPEN); INT-AUTH-001 (CONFIRMED); INT-AUTH-002 (PROVISIONAL); BR-002 (CONFIRMED); OQ-04, OQ-05, OQ-06; C-04; REG-017, REG-018, REG-020 |
-| Conditions for approval | MFW confirms Google Sign-In in writing (OQ-29) and accepts the App Store risk (OQ-06). A spike tests each linking combination and the Google verified-email state (AOQ-08, AOQ-09). MFW approves OQ-04 and OQ-05 in writing, as the specification requires. |
+| Conditions for approval | MFW confirms Google Sign-In in writing (OQ-29) and accepts the App Store risk (OQ-06). A spike tests each linking combination and the Google verified-email state (AOQ-08, AOQ-09). MFW approves OQ-04 and OQ-05 in writing, as the specification requires. How the provider answers a duplicate sign-up and a password-reset request for an address that has an account, and whether it limits them, is checked when it is chosen (NOT VERIFIED, item 24). |
 | Review triggers | Apple requires an equivalent sign-in option. Linking errors appear for non-Gmail Google accounts. Pricing or plan limits change. |
 | Approval needed from | MFW authorised approver, for OQ-04, OQ-05 and OQ-06. Development team, for the provider. |
 | Decide by | Architecture document, then before M2 approval |
@@ -319,7 +320,7 @@ Each record uses the same fields. "Approval needed from" names the role that mus
 | Technology or capability | A callable function that checks the reader and returns a short-lived signed URL for the issue file |
 | Decision status | proposed |
 | Evidence label | CONFIRMED basis (NFR-SEC-002), proposed mechanism |
-| Problem and context | The backend must refuse a direct file request from a logged-out reader or from a reader with an unverified email (NFR-SEC-002, AC-3). The file is up to 150 MB, so a download must resume after a network break (FR-DL-006). When BR-003 is confirmed, a complete profile is also required. Under the working assumption of one action (GS-Q6), opening an issue downloads it and keeps it. The same issues may be public on MFW's website, so the sign-in gate controls the app's copy only (AOQ-18, GS-Q32). |
+| Problem and context | The backend must refuse a direct file request from a logged-out reader or from a reader with an unverified email (NFR-SEC-002, AC-3). The file is up to 150 MB, so a download must resume after a network break (FR-DL-006). When BR-003 is confirmed, a complete profile is also required. Under the working assumption of one action (GS-Q6), opening an issue downloads it and keeps it. The same issues may be public on MFW's website, so the sign-in gate controls the app's copy only (AOQ-18, now OQ-57, GS-Q32). |
 | Options considered | A: function-issued V4 signed URLs. B: direct download through the Storage SDK under Storage rules. C: stream the file through a function. |
 | Evaluation criteria used | EC-1, EC-4, EC-5, EC-7 |
 | Advantages and disadvantages | A puts the access decision in one function. A signed URL expires, and its longest lifetime is seven days (VS-07). The signing identity needs the Service Account Token Creator role and the Service Account Credentials API, plus read permission on the object (VS-08). The Range header on object downloads is documented for resuming an interrupted download (VS-09). Whether a signed URL honours Range was NOT VERIFIED (AR-01). B avoids a function, but Storage rules may read at most two Firestore documents per evaluation, each read is billed (VS-11), and the use of the verified-email claim in Storage rules was NOT VERIFIED (VS-12). The provider's download links are described as non-expiring (VS-10). C hits function time and egress limits at this file size. |
@@ -328,7 +329,7 @@ Each record uses the same fields. "Approval needed from" names the role that mus
 | Vendor lock-in and migration | Low. Signed URLs are a general object-store feature. |
 | Recommendation | A, following GS-Q7. |
 | Evidence and requirement traceability | NFR-SEC-002, NFR-SEC-003, FR-READ-001, FR-DL-001, FR-DL-002, FR-DL-006, BR-002, INT-FILE-001 (CONFIRMED); BR-003 (PROVISIONAL); BR-005 (ASSUMPTION); AC-3, AC-4; CH R2, R4 |
-| Conditions for approval | The TD-09 proof plan below passes: resumed download on a signed URL for a 150 MB file on a real Android device and a real iPhone, with the expiry, refresh, authorisation and log checks (AR-01, AOQ-07). MFW grants the signing role through role-based access (NFR-SEC-012). The profile gate is a configuration flag until BR-003 is confirmed. MFW confirms in writing what the app's sign-in gate is for, given that the same PDFs may be public on its website (AOQ-18). |
+| Conditions for approval | The TD-09 proof plan below passes: resumed download on a signed URL for a 150 MB file on a real Android device and a real iPhone, with the expiry, refresh, authorisation and log checks (AR-01, AOQ-07). MFW grants the signing role through role-based access (NFR-SEC-012). The profile gate is a configuration flag until BR-003 is confirmed. MFW confirms in writing what the app's sign-in gate is for, given that the same PDFs may be public on its website (AOQ-18, now OQ-57). |
 | Review triggers | Resume fails on a signed URL. Egress cost grows. A content delivery network is added (CHG-05). |
 | Approval needed from | Development team |
 | Decide by | Before M3 |
@@ -514,7 +515,7 @@ TD-09 proof plan: resumable signed-URL downloads       [proposed plan; nothing h
 | Field | Entry |
 |---|---|
 | Technology or capability | Two admin roles, in-panel admin management, backend role checks on every privileged operation, and an audit log of role changes |
-| Decision status | accepted by the development team (GS-Q19) |
+| Decision status | proposed (GS-Q19). Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. |
 | Evidence label | CONFLICT (PRC-01) |
 | Problem and context | The intended requirement from GS-Q11 is that a Super Admin can grant admin access to existing registered users, change their permissions and revoke access from the panel. A Content Admin manages issues, PDF uploads, metadata, news and content, and notifications, but cannot grant or revoke admin privileges. The last Super Admin cannot be removed or demoted. Sensitive role changes need appropriate authentication. A second factor stays OPEN. This conflicts with FR-ADMIN-004 (one admin role, CONFIRMED), ASM-06, SCP-060 and EXC-07, which excludes editorial roles and an audit log. The second interview fixed the permissions: a Content Admin can replace a PDF and unpublish but cannot delete an issue permanently, which only a Super Admin can do, after the issue is unpublished (GS-Q21, GS-Q22). The audit set is wider than a log of role changes (GS-Q26). The first Super Admin, and any recovery, are created by a controlled two-person step (GS-Q33). |
 | Options considered | A: one role, with admin access granted by a developer-run script from MFW's admin list. This is the S2-compatible position. B: the two-role model with in-panel management and an audit log. C: a separate sign-in project for admins. |
@@ -523,7 +524,7 @@ TD-09 proof plan: resumable signed-URL downloads       [proposed plan; nothing h
 | Cost and operational implications | About 7 to 11 additional person-days compared with option A. This is a development-team estimate and not evidence. The formal figure comes from the S2 impact assessment, within two working days of MFW's written request [S2 Changes]. The estimate breaks down as: server functions for grant, revoke, role change and user search, 1.5 to 2 days; last-Super-Admin guard, 0.5; audit log write and view, 1 to 1.5; panel screens, 2 to 3; re-authentication and token revocation, 1; backend role checks on every privileged function plus tests, 2 to 3. Option A still needs a one-off step to create the first Super Admin, so the difference is smaller than the full cost of B. The estimate does not include the guard record, the count repair task, the wider audit set (GS-Q26), the deleted-issue record, the bootstrap procedure or the enforcement tests below. It is to be revised, and it is not an approved change order. |
 | Security and privacy implications | The server-side role record is the source of truth. No role is copied into the sign-in claims (GS-Q20). Every privileged function, including every privileged read, reads the role record and the account status on each call and fails closed if it cannot, and rules give admins no direct read of admin data. A changed claim would reach a signed-in device only when its token refreshes, which can take up to about an hour (VS-27, VS-28), and that is why no claim is trusted. Ending the target's sessions after the commit signs the person out (VS-28). A guard record that every role change reads and writes in the same transaction stops the last Super Admin being removed, including under concurrent requests (INV-03). AOQ-17 is answered by this design: admin reads go through functions. Whether a read made right after the commit always sees the change is NOT VERIFIED (Section 9.4, item 21). Role changes need a recent sign-in. The ID token carries the time the user authenticated (VS-30), and the documentation names sensitive actions that require a recent sign-in and gives no time window, so the window is a configuration value (AOQ-14, VS-31). The audit log is append-only, written only by functions, and holds identifiers and actions, not extra personal data. It covers the audit set in GS-Q26, and its retention is OPEN (AOQ-04). Super Admin only access to personal-data exports is inferred from the roles you listed (AOQ-05). Multi-factor sign-in needs the Identity Platform upgrade, with rates NOT VERIFIED (VS-32, VS-33, AOQ-03). |
 | Vendor lock-in and migration | Medium. The role model is ours. Claims and token revocation are provider-specific. |
-| Recommendation | B as the intended requirement, recorded as a proposed change that MFW must approve (PRC-01). Until MFW approves it, the S2-compatible option A stays the contracted position. This follows GS-Q11. |
+| Recommendation | B as the intended requirement, recorded as a proposed change that MFW must approve (PRC-01). Until MFW approves it, the S2-compatible option A stays the contracted position and is the baseline text in every document (DEC-027). This follows GS-Q11. |
 | Evidence and requirement traceability | FR-ADMIN-002, FR-ADMIN-003, FR-ADMIN-017, NFR-SEC-007 (CONFIRMED); FR-ADMIN-004 (CONFIRMED, conflicts); FR-USER-005, NFR-SEC-011 (OPEN); FR-USER-002, FR-USER-003 (PROVISIONAL); NFR-SEC-006 (ASSUMPTION); DATA-011 (CONFIRMED); EXC-07; CHG-01; REG-056; OQ-20; AOQ-03, AOQ-04, AOQ-05, AOQ-14; GS-Q19 to GS-Q22, GS-Q26, GS-Q33 |
 | Conditions for approval | MFW approves PRC-01 in writing through the S2 change process, before any work starts (CHG-01). Both developers agree. AOQ-17 is closed by the function-only admin reads (GS-Q20). The enforcement tests below are accepted as part of the build. The glossary is updated, because it defines one admin role and says "Content administrator" is not a project term. |
 | Review triggers | MFW declines the change. MFW wants more roles. A second factor is required. |
@@ -635,7 +636,7 @@ TD-15 enforcement tests                 [proposed; none written; all depend on P
 | Field | Entry |
 |---|---|
 | Technology or capability | A server-side deletion workflow with a grace window and a scheduled purge, plus managed database backups |
-| Decision status | accepted by the development team (GS-Q28) |
+| Decision status | proposed (GS-Q28). Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. |
 | Evidence label | CONFIRMED basis (FR-PRIV-003), changed by PRC-02 |
 | Problem and context | A reader can delete the account from inside the app, and deleting it removes the reader's data (FR-AUTH-009, FR-PRIV-003, AC-3). Retention periods are MFW's decision (OQ-24, NFR-PRIV-005, DATA-017). The deletion of an edition-update sign-up depends on whether that feature is kept (OQ-31, CONFLICT). |
 | Options considered | A: delete everything at once. B: soft delete, then a scheduled purge after a window. C: keep records and strip identifiers. |
@@ -644,7 +645,7 @@ TD-15 enforcement tests                 [proposed; none written; all depend on P
 | Cost and operational implications | One scheduled job and one purge function. The Admin SDK can disable and delete users, and batch deletion does not trigger deletion functions, so users are deleted one at a time (VS-29). Scheduled database backups allow one daily and one weekly schedule, keep at most 14 weeks, and are billed by storage. Point-in-time recovery keeps seven days and has no no-cost allowance (VS-19, VS-20). The rates were NOT VERIFIED. Deleted storage objects persist for seven days by default (VS-05). |
 | Security and privacy implications | At the request, the app asks the reader to confirm (FR-PRIV-004). The server then signs the reader out everywhere, marks the account as pending deletion, removes any edition-update entry at once if that feature exists, and hides the reader from admin lists and exports. The sign-in account is not disabled during the window, so the reader can sign in to undo, and every server operation except the undo and a deletion request is refused. An immediate option skips the window. The app removes its notification subscriptions on the device. After the window, the purge removes the profile, bookmarks, favourites, preferences and the sign-in account. Deleted data can remain in backups until they expire, and the privacy inputs say so. A restore must re-apply deletions, which needs a short-lived list of purged identifiers that outlives the backup retention. Whether such a list is acceptable is a privacy question for MFW (AOQ-02). Whether consent records and audit entries outlive the person is also open (OQ-24, AOQ-04). |
 | Vendor lock-in and migration | Low. The workflow is ours. |
-| Recommendation | B, following GS-Q13 and GS-Q28, with a configurable window, an undo during the window, and an immediate-delete option. The window length, whether the immediate option stays, and the backup retention are open (AOQ-02). |
+| Recommendation | The baseline is A, delete at once, which is what FR-PRIV-003 says (DEC-029). B is proposed as the labelled change PRC-02, following GS-Q13 and GS-Q28, with a configurable window, an undo during the window, and an immediate-delete option. The window length, whether the immediate option stays, and the backup retention are open (AOQ-02). |
 | Evidence and requirement traceability | FR-AUTH-009, FR-PRIV-003, AC-3 (CONFIRMED); FR-PRIV-004 (ASSUMPTION); NFR-PRIV-005, DATA-017 (OPEN); OQ-24, OQ-31; REG-025, REG-026; PRC-02; AR-02; AOQ-02, AOQ-04, AOQ-06 |
 | Conditions for approval | MFW and its adviser agree the window and the disclosure in the privacy policy. The store rules are re-checked on the live pages. MFW approves PRC-02. |
 | Review triggers | A store rejects the flow. MFW prefers immediate deletion. |
@@ -750,7 +751,7 @@ TD-12 WordPress integration, TD-15 and PRC-01 admin roles, TD-20 offline behavio
 
 ### 7.3 Before M3
 
-TD-02, TD-04, TD-05, TD-09, TD-11, TD-13, TD-14, TD-16 and TD-17. The spikes in AOQ-07, AOQ-08, AOQ-09, AOQ-10 and AOQ-13. AOQ-03, AOQ-14, AOQ-18, AOQ-19 and AOQ-20. PRC-04. OQ-06, OQ-07, OQ-11, OQ-19, OQ-20, OQ-21, OQ-22, OQ-23 and OQ-30 from the specification. OQ-04 and OQ-05 are answered in the architecture document, which this document proposes for approval.
+TD-02, TD-04, TD-05, TD-09, TD-11, TD-13, TD-14, TD-16 and TD-17. The spikes in AOQ-07, AOQ-08, AOQ-09, AOQ-10 and AOQ-13. AOQ-03, AOQ-14, AOQ-18, now OQ-57, AOQ-19 and AOQ-20. PRC-04. OQ-06, OQ-07, OQ-11, OQ-19, OQ-20, OQ-21, OQ-22, OQ-23 and OQ-30 from the specification. OQ-04 and OQ-05 are answered in the architecture document, which this document proposes for approval.
 
 ### 7.4 Before M4
 
@@ -769,7 +770,7 @@ Technology decisions (22)
 ├── Accepted (1)
 │   └── TD-01 Mobile framework: Flutter
 │       └── Blocks implementation: no
-├── Accepted by the development team (2), MFW written approval pending
+├── Proposed, each with a baseline and a labelled change (2), MFW written approval pending
 │   ├── TD-15 Admin roles: two roles, in-panel management, function-only admin reads
 │   │   └── Blocks implementation: yes for the admin design, until MFW approves PRC-01
 │   └── TD-19 Deletion and backups: grace window with undo, immediate option, scheduled purge
@@ -822,7 +823,7 @@ Technology decisions (22)
 
 ### 8.2 New architecture open questions (AOQ)
 
-These are questions that the specification does not list. They are new in this set of documents. Owners and stages are proposals.
+These are questions that the specification does not list. They are new in this set of documents. Owners and stages are proposals. Each AOQ maps to an OQ in `OPEN_QUESTIONS.md` (section 7), and the AOQ number stays as an alias. Seven became new OQ entries.
 
 | ID | Question | Related | Owner | Needed by |
 |---|---|---|---|---|
@@ -830,20 +831,20 @@ These are questions that the specification does not list. They are new in this s
 | AOQ-02 | What are the deletion grace window, whether an immediate-delete option is offered, the backup retention, and whether a short-lived list of purged identifiers may be kept? | TD-19; OQ-24; PRC-02 | MFW authorised approver and legal adviser | Before M4 |
 | AOQ-03 | Is a second factor required for admin sign-in, and is the Identity Platform upgrade accepted, given that its rates were NOT VERIFIED? | TD-15; NFR-SEC-011; OQ-20 | MFW authorised approver, with development team | Before M3 |
 | AOQ-04 | How long is the admin audit log kept, and what happens to its entries when an admin account is deleted? | TD-15; PRC-01; OQ-24 | MFW authorised approver | Before M2 approval |
-| AOQ-05 | Which roles may see the registered-user list and export it? Super Admin only is inferred. | TD-15; FR-USER-002; FR-USER-003; NFR-PRIV-004 | MFW authorised approver | Before M2 approval |
+| AOQ-05 (OQ-51) | Which roles may see the registered-user list and export it? Super Admin only is inferred. | TD-15; FR-USER-002; FR-USER-003; NFR-PRIV-004 | MFW authorised approver | Before M2 approval |
 | AOQ-06 | Where does the web link for account-deletion requests live, if the store requires one? | TD-19; VS-39 | MFW authorised approver, with development team | Before M4 |
 | AOQ-07 | What signed-URL lifetime works on slow connections, and does resume work with a signed URL on a 150 MB file? Open until the TD-09 proof plan has been run on a real Android device and a real iPhone. | TD-09; TD-11; AR-01 | Development team | Before M3 |
 | AOQ-08 | What is the outcome of each account-linking combination, including non-Gmail Google accounts and unverified password accounts? | TD-06; OQ-04; OQ-05 | Development team | Before M3 |
 | AOQ-09 | Does Google sign-in set the verified-email state? | TD-06; OQ-04 | Development team | Before M3 |
-| AOQ-10 | Is App Check enabled for callable functions, and at what cost and setup? | TD-05; TD-09 | Development team | Before M3 |
-| AOQ-11 | What is MFW's monthly cloud cost ceiling, and what volume should the design assume? | TD-03; TD-08; TD-22 | MFW authorised approver | Before M2 approval |
-| AOQ-12 | Must a download continue while the app is in the background or the screen is locked? | TD-11; FR-DL-005; FR-DL-006 | MFW authorised approver, with development team | Before M2 approval |
-| AOQ-13 | Does the app removing its notification token also end its topic subscriptions, on sign-out and on deletion? | TD-13; TD-19 | Development team | Before M3 |
-| AOQ-14 | How recent must a sign-in be before an admin can change roles? | TD-15 | Development team, with MFW approval | Before M3 |
+| AOQ-10 (OQ-52) | Is App Check enabled for callable functions, and at what cost and setup? | TD-05; TD-09 | Development team | Before M3 |
+| AOQ-11 (OQ-53) | What is MFW's monthly cloud cost ceiling, and what volume should the design assume? | TD-03; TD-08; TD-22 | MFW authorised approver | Before M2 approval |
+| AOQ-12 (OQ-54) | Must a download continue while the app is in the background or the screen is locked? | TD-11; FR-DL-005; FR-DL-006 | MFW authorised approver, with development team | Before M2 approval |
+| AOQ-13 (OQ-55) | Does the app removing its notification token also end its topic subscriptions, on sign-out and on deletion? | TD-13; TD-19 | Development team | Before M3 |
+| AOQ-14 (OQ-56) | How recent must a sign-in be before an admin can change roles? | TD-15 | Development team, with MFW approval | Before M3 |
 | AOQ-15 | Who owns and pays for the development project? | TD-18; REG-037; REG-038 | MFW authorised approver | Before any cloud project is created |
 | AOQ-16 | Is the industry-segment list set up by the developers, or maintained in the admin panel? What do the values mean? | OQ-13; TD-21 | MFW authorised approver, with development team | Before M2 approval |
-| AOQ-17 | How are the admin-only reads (unpublished issue metadata, upload jobs, the send log) protected against a revoked admin who still holds an older token? Answered by proposal: admin reads go only through functions that check the role record on each call, and the role claim is dropped (GS-Q20). The answer is accepted by the development team and is pending MFW's approval of PRC-01. | TD-15; TD-07; AR-06; INV-08 | Development team | Before M2 approval |
-| AOQ-18 | Are the issue PDFs on MFW's website meant to stay public, and what is the app's sign-in gate for? Only the April-May 2026 PDF was tested. | TD-09; GS-Q32; NFR-SEC-009; AR-19 | MFW authorised approver | Before M3 |
+| AOQ-17 | How are the admin-only reads (unpublished issue metadata, upload jobs, the send log) protected against a revoked admin who still holds an older token? Answered by proposal: admin reads go only through functions that check the role record on each call, and the role claim is dropped (GS-Q20). The answer is PROPOSED and is pending MFW's approval of PRC-01. | TD-15; TD-07; AR-06; INV-08 | Development team | Before M2 approval |
+| AOQ-18 (OQ-57) | Are the issue PDFs on MFW's website meant to stay public, and what is the app's sign-in gate for? Three issue PDFs were checked by header on 23 October 2026 (7.7, 9.2 and 9.6 MB) and all were downloadable without sign-in. The 15.3 MB file and the other issues were not checked. | TD-09; GS-Q32; NFR-SEC-009; AR-19 | MFW authorised approver | Before M3 |
 | AOQ-19 | How long is the deleted-issue list kept, given devices that stay offline for a long time? | GS-Q25; OQ-11; OQ-21; OQ-24 | MFW authorised approver, with development team | Before M3 |
 | AOQ-20 | Is a cover image for an unpublished issue held privately until the issue is published? | TD-08; GS-D7 | Development team | Before M3 |
 
@@ -853,10 +854,10 @@ A PRC records a position that departs from, or adds to, a requirement or exclusi
 
 | ID | Proposed change | Departs from | Status | Approval route |
 |---|---|---|---|---|
-| PRC-01 | Two admin roles (Super Admin and Content Admin), in-panel admin management, revocation, an audit log of role changes, and re-authentication for sensitive role changes. About 7 to 11 additional person-days compared with a script-granted single role (development-team estimate). The audit log now covers the wider audit set (GS-Q26), which the estimate does not cover. Team-accepted (GS-Q19). | FR-ADMIN-004 (CONFIRMED), ASM-06, SCP-060, EXC-07 | OPEN | S2 change request (CHG-01) |
-| PRC-02 | Account deletion with a grace window, an undo, an immediate option and a scheduled purge, and not an immediate purge only. Team-accepted (GS-Q28). | The wording of FR-PRIV-003 (CONFIRMED) and AC-3 | OPEN | MFW and legal adviser (OQ-24), then change process if wording changes |
-| PRC-03 | A working mandatory profile list: full name, email taken from sign-in, mobile number, company, job title, industry segment, country, and age or date of birth. City and areas of interest are optional. Gender is left out. The development team kept this list (GS-Q23). | FR-PROF-002 (PROVISIONAL), which lists name, exact age, gender, occupation and domain of work | ASSUMPTION | MFW's answer to OQ-01, OQ-02 and OQ-07 (CHG-08, CHG-10) |
-| PRC-04 | A minimum supported app version and an update-required screen (the update gate), with a compatibility policy for the backend contract. The gate adds to S2 scope, which lists no forced-update screen. Effort is not estimated. Team-accepted (GS-Q29). | Adds to S2 scope | ASSUMPTION | MFW's written agreement through the S2 change process. The compatibility policy alone is an engineering rule of the development team |
+| PRC-01 | Two admin roles (Super Admin and Content Admin), in-panel admin management, revocation, an audit log of role changes, and re-authentication for sensitive role changes. About 7 to 11 additional person-days compared with a script-granted single role (development-team estimate). The audit log now covers the wider audit set (GS-Q26), which the estimate does not cover. PROPOSED (GS-Q19). | FR-ADMIN-004 (CONFIRMED), ASM-06, SCP-060, EXC-07 | OPEN | S2 change request (CHG-01) |
+| PRC-02 | Account deletion with a grace window, an undo, an immediate option and a scheduled purge, and not an immediate purge only. PROPOSED (GS-Q28). | The wording of FR-PRIV-003 (CONFIRMED) and AC-3 | OPEN | MFW and legal adviser (OQ-24), then change process if wording changes |
+| PRC-03 | A working mandatory profile list: full name, email taken from sign-in, mobile number, company, job title, industry segment, country, and age or date of birth. City and areas of interest are optional. Gender is left out. SUPERSEDED as the default: the requirements-specification list is required by default and these extras are optional candidates (GS-Q34). | FR-PROF-002 (PROVISIONAL), which lists name, exact age, gender, occupation and domain of work | SUPERSEDED as the default; the extra fields stay ASSUMPTION | MFW's answer to OQ-01, OQ-02 and OQ-07 (CHG-08, CHG-10) |
+| PRC-04 | A minimum supported app version and an update-required screen (the update gate), with a compatibility policy for the backend contract. The gate adds to S2 scope, which lists no forced-update screen. Effort is not estimated. PROPOSED (GS-Q29). | Adds to S2 scope | ASSUMPTION | MFW's written agreement through the S2 change process. The compatibility policy alone is an engineering rule of the development team |
 
 ### 8.4 Open specification questions this document depends on
 
@@ -978,6 +979,7 @@ These were looked for and not found on an official page, or the page returned on
 21. How many other documents Firestore security rules may read in one evaluation, what each read costs, and whether rules can see that a token was revoked (AOQ-17). VS-11 covers Storage rules only.
 22. Whether the push service delivers a repeated send to the same topic twice (GS-Q27, INV-17).
 23. Whether the app stores restrict or review a forced-update screen, or a sign-in wall for content that is public on the web (PRC-04, AR-20).
+24. How the chosen identity provider answers a duplicate sign-up and a password-reset request for an address that has an account, and whether it limits sign-in, registration and password reset (TD-06; SC-21 and T26 in the security document).
 
 ## 10. Questioning Record and Traceability
 
@@ -990,7 +992,7 @@ The session was run on 23 October 2026 with the `/grill-me` skill. The skill's o
 | GS-Q1 | Backend baseline | Firebase as the proposed baseline, each service not approved | TD-03, TD-06, TD-07, TD-08 |
 | GS-Q2 | Server language and admin stack | TypeScript Cloud Functions and a React admin panel | TD-04, TD-14 |
 | GS-Q3 | Google accounts and linking | One account per email, trust Google's verified result, link only when verified | TD-06 |
-| GS-Q4 | Profile fields | A working list: full name, email, mobile number, company, job title, industry segment, country, age or date of birth mandatory; city and areas of interest optional; gender left out and flagged; name and email prefilled; one shared segment list | PRC-03, [Database and Data Model](DATABASE_AND_DATA_MODEL.md) |
+| GS-Q4 | Profile fields | A working list: full name, email, mobile number, company, job title, industry segment, country, age or date of birth mandatory; city and areas of interest optional; gender left out and flagged; name and email prefilled; one shared segment list | PRC-03, [Database and Data Model](DATABASE_AND_DATA_MODEL.md). The default required set is now the requirements-specification list (GS-Q34) |
 | GS-Q5 | Identity data location | Reference only. No stored email. | TD-06, TD-07 |
 | GS-Q6 | Reading and offline copies | One action: opening downloads the file and keeps it. An earlier answer of two actions was replaced at the developer's request. | TD-09, TD-11, OQ-08 |
 | GS-Q7 | Private PDF access | Function-issued signed URLs | TD-09 |
@@ -1009,17 +1011,18 @@ The session was run on 23 October 2026 with the `/grill-me` skill. The skill's o
 | GS-Q20 | How a revoked admin loses reads | Admin reads only through functions that check the role record on each call. No role claim. Fail closed | TD-15, AOQ-17 |
 | GS-Q21 | Replacing and deleting issue PDFs | Admins can replace a PDF and permanently delete an issue, with audit events. OQ-21 stays OPEN for MFW | TD-15, [Database and Data Model](DATABASE_AND_DATA_MODEL.md) |
 | GS-Q22 | Who may delete an issue | Only a Super Admin, only after the issue is unpublished, with a typed confirmation and an audit event. A Content Admin may replace a PDF and unpublish | TD-15 |
-| GS-Q23 | Mandatory profile fields | The GS-Q4 working list stays the mandatory set, marked ASSUMPTION. Gender is left out and flagged | PRC-03 |
+| GS-Q23 | Mandatory profile fields | The GS-Q4 working list stays the mandatory set, marked ASSUMPTION. Gender is left out and flagged. Partly reversed by GS-Q34 | PRC-03 (superseded) |
 | GS-Q24 | Downloaded copies | Unpublishing leaves copies. Permanent deletion makes the app remove its copy once it learns of the deletion. OQ-11 stays OPEN | [Database and Data Model](DATABASE_AND_DATA_MODEL.md) |
 | GS-Q25 | How the app learns of a deletion | A minimal deleted-issue record (identifier and time), compared on the device. Retention OPEN. Identifiers are opaque, server-generated and never reused | AOQ-19, [Database and Data Model](DATABASE_AND_DATA_MODEL.md) |
 | GS-Q26 | Audit set | Role changes, issue deletion, PDF replacement, publish and unpublish, reader-list views and exports, and denied privileged attempts by signed-in callers. Routine edits are not recorded. Retention OPEN | TD-15, AOQ-04 |
 | GS-Q27 | Notification sends | Recorded as pending first, then marked accepted or failed. A crash leaves it unknown. Only an admin retries. Status means accepted by the push service | TD-13 |
 | GS-Q28 | Account deletion | A grace window with undo and an immediate option. The window length is configuration and OPEN. PRC-02 stays OPEN | TD-19, PRC-02 |
 | GS-Q29 | Contract changes | Additive by default, a record and an approval for breaking changes, and an update gate (a minimum app version) as a proposed addition to S2 scope | TD-05, PRC-04 |
-| GS-Q30 | Labels | A team-accepted decision is labelled accepted by the development team, with the requirement label PROVISIONAL and MFW written approval pending. CONFIRMED is never used for it | Section 1.2 |
+| GS-Q30 | Labels | Version 0.2 labelled some decisions "accepted by the development team". That wording is retired (section 1.2). Such a decision is PROPOSED, with the requirement label PROVISIONAL, MFW written approval pending, and the agreement note. CONFIRMED is never used for it | Section 1.2 |
 | GS-Q31 | Taxonomy | Industry segments from the website's 16 circulation industries, issue categories from the editorial calendar themes, Stamping and Tooling as search topics only, and news categories reused from WordPress. PROVISIONAL | [Database and Data Model](DATABASE_AND_DATA_MODEL.md) Appendix B |
-| GS-Q32 | Website and app channels | The website stays public and the app requires authentication. The consequences are documented. The gate controls the app's copy only. MFW to confirm (AOQ-18) | TD-09, [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) |
+| GS-Q32 | Website and app channels | The website stays public and the app requires authentication. The consequences are documented. The gate controls the app's copy only. MFW to confirm (AOQ-18, now OQ-57) | TD-09, [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) |
 | GS-Q33 | First Super Admin and recovery | MFW's authorised approver names the person in writing, one developer runs the documented step, the other verifies it, and an audit event holds the written reference. Recovery uses the same procedure | TD-15 |
+| GS-Q34 | Default required profile set | The list in the requirements specification (name, exact age, gender, occupation and domain of work) is required by default. Mobile number, company, country, city and areas of interest are optional candidates until MFW confirms them. Partly reverses GS-Q23. Recorded 23 October 2026. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. | PRC-03 (superseded), OQ-01, [Database and Data Model](DATABASE_AND_DATA_MODEL.md) |
 
 ### 10.2 Defaults applied after confirmation
 
@@ -1060,7 +1063,7 @@ A member of the development team confirmed these defaults at the end of the sess
 | TD-06 | FR-AUTH-005 (PROVISIONAL); INT-AUTH-001 (CONFIRMED); OQ-04; OQ-05; OQ-06 |
 | TD-07 | DATA-001 (CONFIRMED); DATA-005 (CONFIRMED); NFR-MAINT-005 (ASSUMPTION) |
 | TD-08 | NFR-SEC-003 (CONFIRMED); NFR-STOR-001 (ASSUMPTION); INT-FILE-001 (CONFIRMED) |
-| TD-09 | NFR-SEC-002 (CONFIRMED); FR-DL-006 (CONFIRMED); BR-003 (PROVISIONAL); AOQ-18 |
+| TD-09 | NFR-SEC-002 (CONFIRMED); FR-DL-006 (CONFIRMED); BR-003 (PROVISIONAL); AOQ-18, now OQ-57 |
 | TD-10 | FR-READ-006 (CONFIRMED); NFR-PERF-001 (CONFIRMED); NFR-MAINT-006 (CONFIRMED) |
 | TD-11 | FR-DL-005 (CONFIRMED); FR-DL-006 (CONFIRMED); AC-4 |
 | TD-12 | INT-WP-001 (CONFIRMED); DATA-015 (CONFIRMED); OQ-16; OQ-17 |

@@ -7,10 +7,9 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
 
 **Change history**
@@ -18,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft, including the proposed security checklist required by RS NFR-SEC-010 |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. SEC-CHK-17 to SEC-CHK-19 added (account-existence messages, removed admin, abuse and throttling). SEC-CHK-03 limited to the app's storage. Registration wording corrected. Test lines for breaking news and for a failed replacement. Section 16 added: protected files and offline copies, intended and tested. |
 
 ### 1.1 Related documents
 
@@ -25,11 +25,11 @@
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) AC-1 to AC-12, "How acceptance testing works" | Exists, issued, unsigned. Contractual criteria and severity definitions. |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §10, §13 | Exists, draft. NFR-SEC-010 places the security checklist in this document. |
-| `ACCEPTANCE_CRITERIA.md` | Exists, created in this task. Each acceptance row maps to a suite below. |
-| `TEST_DATA_AND_FIXTURES.md` | Exists, created in this task. Fixtures FX-* used below. |
-| `CI_CD_AND_QUALITY_GATES.md` | Exists, created in this task. Gates QG-* that run these suites. |
-| `API_AND_MODULE_CONTRACTS.md`, `DEFINITION_OF_DONE.md`, `DEPLOYMENT_PLAN.md` | Exist, created in this task |
-| `OPEN_QUESTIONS.md`, `RISK_REGISTER.md` | Exist, created in this task |
+| `ACCEPTANCE_CRITERIA.md` | Exists (draft). Each acceptance row maps to a suite below. |
+| `TEST_DATA_AND_FIXTURES.md` | Exists (draft). Fixtures FX-* used below. |
+| `CI_CD_AND_QUALITY_GATES.md` | Exists (draft). Gates QG-* that run these suites. |
+| `API_AND_MODULE_CONTRACTS.md`, `DEFINITION_OF_DONE.md`, `DEPLOYMENT_PLAN.md` | Exist (draft) |
+| `OPEN_QUESTIONS.md`, `RISK_REGISTER.md` | Exist (draft) |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal. **PLANNED** means designed but not implemented. Availability labels ([NOW], [SCAFFOLD], [BACKEND], [CI], [DEVICES], [STORE]) are defined in `DEFINITION_OF_DONE.md` §3.
 
@@ -105,7 +105,7 @@ Each plan lists what must be shown. The acceptance rows in `ACCEPTANCE_CRITERIA.
 - The access matrix: every capability in `API_AND_MODULE_CONTRACTS.md` §4.1, tested for each fixture user FX-USR-01 to FX-USR-05 in the app (TS-03, TS-04) and on the server (TS-05).
 - No guest reading: a logged-out visitor cannot open or download any issue content, including any sample (PAC-04).
 - Direct requests for issue files are refused for every state below full access (AC-3.5, PAC-13, SEC-CHK-02).
-- Error messages do not reveal whether an email address has an account (PROPOSED, `API_AND_MODULE_CONTRACTS.md` §6.3).
+- Sign-in and password reset show the same message for a known and an unknown address. Registration tells the visitor that an account exists for the address, by design. All three are rate limited. This is PROPOSED (`API_AND_MODULE_CONTRACTS.md` §6.3), and the identity provider's behaviour is NOT VERIFIED (SEC-CHK-17, SEC-CHK-19, PAC-17).
 
 ### 7.2 Google Sign-In and email verification
 
@@ -179,10 +179,14 @@ Network scenarios come from `TEST_DATA_AND_FIXTURES.md` §8 (FX-NET-01 to FX-NET
 - Tapping opens the linked issue or article, with access rules applied (AC-9.3, BR-005). Use payloads FX-NTF-01 to FX-NTF-08, including an issue that requires sign-in.
 - The send log records each send (AC-9.4). Only admins can send (AC-9.5).
 - Delivery time is recorded but never judged (AC-9.6; RS NFR-REL-003).
+- A WordPress post marked as breaking in the admin panel is flagged in the app, and sending it as a breaking-news notification reaches opted-in devices (RS FR-ADMIN-014, FR-ADMIN-015; AC-9.7, PROPOSED).
 
 ### 7.9 Admin permissions and upload validation
 
 - A wrong password and a non-admin account are refused (AC-8.1, AC-8.2), and admin operations called directly by a non-admin are refused on the server (SEC-CHK-06).
+- Only if MFW approves two admin roles (PRC-01): the role matrix, role changes, the last-Super-Admin rule, the bootstrap step and the audit events are tested as ST-02 and ST-07 to ST-11 (`SECURITY_AND_ACCESS_CONTROL.md` section 14; PAC-18). None of this applies to the baseline.
+- An admin whose role record is removed is refused on the next privileged call, including from a session opened before the removal (SEC-CHK-18, FX-ADM-08). How long a token stays valid is NOT VERIFIED.
+- A replacement file that fails validation leaves the current revision in place (FX-ADM-09). Whether an issue can be deleted or replaced at all is OQ-21.
 - A valid PDF and cover upload (AC-8.3).
 - Rejections with a clear message (AC-8.4, AC-8.5; FX-PDF-06 to FX-PDF-09, FX-PDF-12, FX-PDF-13):
   - A renamed non-PDF
@@ -220,7 +224,7 @@ Check the PROVISIONAL baseline in `CODING_STANDARDS.md` §9: semantic labels wit
 
 | Check | Reference |
 |---|---|
-| Logs, crash reports and usage events contain no personal data, tokens or reading activity per reader | RS NFR-PRIV-003; PAC-09; SEC-CHK-10 |
+| Logs, crash reports and usage events contain no personal data, tokens or reading activity per reader. The term "personal data" is not defined for device and installation identifiers and the provider's behaviour is NOT VERIFIED; it is defined when the provider is chosen (DEC-028, OQ-23) | RS NFR-PRIV-003; PAC-09; SEC-CHK-10 |
 | Only the approved profile fields are collected | RS NFR-PRIV-001 (OQ-01) |
 | Account deletion removes the reader's data. The reader is absent from new exports. | RS FR-PRIV-003; PAC-06; SEC-CHK-11 |
 | Consent is recorded as decided | RS FR-PRIV-001; PAC-08 (OQ-27) |
@@ -235,7 +239,7 @@ RS NFR-SEC-010 places the contents of the S2 AC-10 security checklist in this do
 |---|---|---|---|
 | SEC-CHK-01 | All network traffic uses HTTPS; cleartext is disabled on both platforms | Configuration inspection; proxy observation | RS NFR-SEC-001 |
 | SEC-CHK-02 | A request for an issue file is refused when signed out, unverified, profile incomplete, using another reader's grant, using an expired grant, or using a guessed storage path | TS-05 rule tests; manual requests | RS NFR-SEC-002; S2 AC-3; PAC-13 |
-| SEC-CHK-03 | Issue PDFs are not publicly readable or listable, and no long-lived bearer link to a PDF is ever issued | Storage configuration inspection; grant inspection | RS NFR-SEC-003; DEC-009 |
+| SEC-CHK-03 | Issue PDFs are not publicly readable or listable in the app's storage, and no long-lived bearer link to a PDF is ever issued. This covers the app's copy only; the website's copy is outside the project (OQ-57) | Storage configuration inspection; grant inspection | RS NFR-SEC-003; DEC-009 |
 | SEC-CHK-04 | Downloaded issues are only in app-private storage, not shared storage, and are excluded from device backups where applicable | Device file inspection | RS NFR-SEC-004; `CODING_STANDARDS.md` §8.2 |
 | SEC-CHK-05 | A reader can read and change only their own bookmarks, favourites, profile and preferences | TS-05 rule tests with two readers | RS NFR-SEC-005, NFR-SEC-006 |
 | SEC-CHK-06 | Every admin operation is refused on the server for non-admin accounts | TS-05 direct calls | RS NFR-SEC-007; FR-ADMIN-003 |
@@ -249,6 +253,9 @@ RS NFR-SEC-010 places the contents of the S2 AC-10 security checklist in this do
 | SEC-CHK-14 | Developers reach MFW's accounts through role-based access, with no shared passwords | Account access review | RS NFR-SEC-012 |
 | SEC-CHK-15 | WordPress content is rendered without running scripts, and external links open outside the app | TS-03 with FX-WP-05 | `CODING_STANDARDS.md` §7 |
 | SEC-CHK-16 | Notification payloads contain no personal data, and tap routing re-checks access | Payload inspection; FX-NTF-07 | `API_AND_MODULE_CONTRACTS.md` §6.11 |
+| SEC-CHK-17 | Sign-in and password-reset responses are the same for a known and an unknown address (the message and the error category). Registration may reveal that an account exists. Timing is not tested | TS-03 and TS-05 with FX-USR-13 | `API_AND_MODULE_CONTRACTS.md` §6.3; PAC-17 |
+| SEC-CHK-18 | An admin whose role record is removed is refused on the next privileged call, including from a session opened before the removal. The time until the removal is visible to the check is measured and reported, not judged | TS-05 direct calls with FX-ADM-08 | RS NFR-SEC-007, FR-ADMIN-003; OQ-20 |
+| SEC-CHK-19 | Sign-in, registration, password reset, file-link requests and notification sends are limited, and a limited request is refused with RATE_LIMITED. No limit value is set here, and the mechanism is OPEN | TS-05; manual repeated requests | `API_AND_BACKEND_CONTRACT.md` §2.7; OQ-52 |
 
 An independent penetration test is out of scope (S2 "Scope not included").
 
@@ -326,3 +333,24 @@ RS requirement (RS §13) → ACCEPTANCE_CRITERIA.md row (AC-n.m or PAC-nn) → t
 | Reader performance on real content | MFW sample PDFs; DEC-005 |
 | Upload boundary and the unit of "MB" | OQ-30 |
 | Accessibility severity | OQ-25 |
+
+## 16. Protected Files and Offline Copies: Intended and Tested
+
+This table keeps the intended behaviour apart from what has been tested. Nothing in it has been tested, and nothing is guaranteed. A row changes only when a test has been run and its evidence recorded.
+
+| Behaviour | Intended (PROPOSED) | Tested | Test that would show it |
+|---|---|---|---|
+| Issuing a link | A link is issued only after the access checks, for one object, read only and short lived (DEC-020, OP-11) | NOT TESTED | SEC-CHK-02, PAC-13 |
+| Link expiry | The link expires after `signed_url_lifetime`. 60 minutes is an ASSUMPTION (AOQ-07) | NOT TESTED | FX-NET-05 (grant expires mid-download); the TD-09 proof plan for the length on slow connections |
+| Refresh and signing in again | A new link is requested after expiry. If the sign-in has expired, the reader signs in again | NOT TESTED | FX-NET-05; PROPOSED new line: a download that outlives the sign-in |
+| Interrupted download | The status shows waiting, and the download continues when the network returns | NOT TESTED | AC-4.3 with FX-NET-01 |
+| Byte-range support | The file store honours byte ranges on the issued link | NOT VERIFIED (AR-01) | The TD-09 proof plan on a real Android device and a real iPhone |
+| Resume | The download continues from its previous progress and not from zero (S2 AC-4) | NOT TESTED | AC-4.3 with FX-NET-01 and FX-PDF-05 |
+| Storage-provider support | Signed links and byte ranges work with the provider that is chosen | NOT VERIFIED | The TD-09 proof plan (`TECHNOLOGY_DECISIONS.md`) |
+| Unpublishing | The issue leaves the catalogue and no new link is issued | NOT TESTED | AC-8.7; SEC-CHK-02 |
+| Links already issued | A link cannot be withdrawn before it expires (AR-06) | NOT TESTED | PROPOSED new line: unpublish while a link is live, and record what happens |
+| Offline retention | Opening an issue keeps the full copy until the reader deletes it. This is the working position. MFW's answer is reported by YG and not filed (OQ-08) | NOT TESTED | AC-4.2 and AC-4.6 |
+| Cache clean-up | Deleting a download frees its space, and no partial file is listed as downloaded | NOT TESTED | AC-4.6, AC-4.7; FX-NET-03; PROPOSED new line: stale partial files after an interrupted download |
+| Sign-out | What happens to downloaded issues is decided under OQ-11 | NOT TESTED. The behaviour is OPEN | PAC-14 |
+| Account deletion | Local user data is cleared. Downloaded issues behave as OQ-11 decides | NOT TESTED | IC-08; PAC-06 |
+| Copies already on devices | A copy on a device cannot be recalled remotely. The app removes a copy only when the issue is on the deleted-issue list (OP-03) | NOT TESTED | PROPOSED new line: a deleted issue on the list, with the device online and offline |

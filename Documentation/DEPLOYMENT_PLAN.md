@@ -7,10 +7,9 @@
 | Document | Deployment Plan |
 | File | `Documentation/DEPLOYMENT_PLAN.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 34) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. **The architecture is not approved (DEC-003, DEC-004).** Component-specific steps are BLOCKED. Nothing has been deployed. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. MFW for environments and costs (DEC-023). |
 
 **Change history**
@@ -18,16 +17,18 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Backup steps marked as proposed additions. First-admin step named. Planned names replaced by the existing documents. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Proposed technical architecture", "Responsibilities", "Handover" | Exists, issued, unsigned. The architecture is a proposal. |
-| `DECISION_LOG.md` | Exists, created in this task. DEC-003, DEC-004, DEC-020, DEC-021, DEC-023. |
-| `CI_CD_AND_QUALITY_GATES.md`, `BACKUP_AND_RECOVERY.md`, `APP_STORE_RELEASE_CHECKLIST.md`, `MAINTENANCE_AND_HANDOVER.md` | Exist, created in this task |
-| `API_AND_MODULE_CONTRACTS.md`, `TESTING_STRATEGY.md` | Exist, created in this task |
-| `SYSTEM_ARCHITECTURE.md`, `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Planned (Phase 2). Not created. |
+| `DECISION_LOG.md` | Exists (draft). DEC-003, DEC-004, DEC-020, DEC-021, DEC-023. |
+| `CI_CD_AND_QUALITY_GATES.md`, `BACKUP_AND_RECOVERY.md`, `APP_STORE_RELEASE_CHECKLIST.md`, `MAINTENANCE_AND_HANDOVER.md` | Exist (draft) |
+| `API_AND_MODULE_CONTRACTS.md`, `TESTING_STRATEGY.md` | Exist (draft) |
+| `SYSTEM_ARCHITECTURE.md` | Exists on `main` (draft). |
+| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Planned. Not written. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal.
 
@@ -122,11 +123,11 @@ BLOCKED by DEC-003. PROPOSED principles: deploy from a release tag only; access 
 
 ### 7.2 Database and file storage
 
-BLOCKED by DEC-003 and `DATABASE_DESIGN.md` (planned). Fixed requirements:
+BLOCKED by DEC-003 and `DATABASE_AND_DATA_MODEL.md` (draft exists; planned as `DATABASE_DESIGN.md`). Fixed requirements:
 
 - Issue PDFs are stored privately, with no public listing or reading (RS NFR-SEC-003; DEC-009).
 - Access rules deny by default and are deployed with tests (QG-08).
-- Backup is configured before the first production data exists (`BACKUP_AND_RECOVERY.md`).
+- Backup is configured before the first production data exists (PROPOSED: backup is not an S2 deliverable, OQ-46; `BACKUP_AND_RECOVERY.md`).
 - There is no CDN at launch (RS ASM-15). Adding one is an architecture decision needing MFW's approval for cost.
 
 ### 7.3 Authentication provider
@@ -145,7 +146,7 @@ The iOS push credential is created in MFW's Apple Developer account (RS INT-PUSH
 
 ### 7.5 Admin panel
 
-BLOCKED by DEC-004. Deployed from a release tag to MFW-owned hosting. A custom domain is optional and at MFW's cost (S1). The first admin accounts are created from MFW's admin list (CH §12; OQ-20).
+BLOCKED by DEC-004. Deployed from a release tag to MFW-owned hosting. A custom domain is optional and at MFW's cost (S1). The first admin accounts are created from MFW's admin list (CH §12; OQ-20). The first admin is a named step and not an implicit one: it is run from that list by one developer, verified by the other and recorded (PROPOSED).
 
 ### 7.6 WordPress integration
 
@@ -170,7 +171,7 @@ PROPOSED order for the first production release:
 1. Release candidate tagged after DoD-RC items 1 to 4.
 2. Backend and access rules deployed to ENV-TEST from the tag. SM-01 to SM-12 pass.
 3. Acceptance testing by MFW (TS-12).
-4. Production backup configuration confirmed (`BACKUP_AND_RECOVERY.md`).
+4. Production backup configuration confirmed, if MFW has agreed to backups (PROPOSED addition, OQ-46; `BACKUP_AND_RECOVERY.md`).
 5. Backend and access rules deployed to ENV-PROD from the approved tag. Both developers approve, and MFW is informed.
 6. Admin panel deployed to ENV-PROD.
 7. MFW enters the launch content in the production admin panel (S2: MFW enters production content).

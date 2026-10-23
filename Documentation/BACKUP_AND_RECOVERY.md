@@ -7,10 +7,9 @@
 | Document | Backup and Recovery |
 | File | `Documentation/BACKUP_AND_RECOVERY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 36) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. **No backup exists. No provider backup is assumed. Every frequency, retention period, RPO and RTO below is PROPOSED and needs MFW's approval.** |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers, then MFW (cost and data obligations) |
 
 **Change history**
@@ -18,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Backup set-up, restore tests, RPO and RTO and monitoring marked as proposed additions. Section 13 added: status of the proposals and who does what. Planned names replaced by the existing document. |
 
 ### 1.1 Related documents
 
@@ -26,14 +26,15 @@
 | `MFW_Statement_of_Work.pdf` (S2) | Exists, issued, unsigned. Contains no backup requirement. |
 | `MFW_Commercial_Proposal-2.pdf` (S1) "Costs outside the fee" | Exists, issued, unsigned. Cloud usage is billed to MFW. |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §7.3, FR-PRIV-003, NFR-PRIV-005 | Exists, draft. Retention is open (OQ-24). |
-| `DEPLOYMENT_PLAN.md`, `API_AND_MODULE_CONTRACTS.md`, `RISK_REGISTER.md`, `OPEN_QUESTIONS.md` | Exist, created in this task |
-| `DATABASE_DESIGN.md`, `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Planned (Phase 2). Not created. |
+| `DEPLOYMENT_PLAN.md`, `API_AND_MODULE_CONTRACTS.md`, `RISK_REGISTER.md`, `OPEN_QUESTIONS.md` | Exist (draft) |
+| `DATABASE_AND_DATA_MODEL.md` | Exists on `main` (draft). Planned as `DATABASE_DESIGN.md`. |
+| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Planned. Not written. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal.
 
 ## 2. Purpose, Scope and Status
 
-This document proposes how the product's data is backed up and restored. Neither S1 nor S2 states any backup or recovery requirement, so every value here is a proposal for MFW to approve, change or decline (OQ-46).
+This document proposes how the product's data is backed up and restored. Neither S1 nor S2 states any backup or recovery requirement, so every value here is a proposal for MFW to approve, change or decline (OQ-46). Backup set-up, restore tests, RPO and RTO targets and monitoring access are proposed additions and not S2 deliverables.
 
 Storage and database technology are not decided (DEC-003), so the methods are written as requirements, with provider options listed for evaluation only.
 
@@ -121,7 +122,7 @@ No restore has been tested on 23 October 2026.
 
 ## 9. Account Deletion and Backups
 
-RS FR-PRIV-003 requires that deleting an account removes the reader's data. Backups keep the data until they expire.
+RS FR-PRIV-003 requires that deleting an account removes the reader's data. Backups keep the data until they expire. This holds in the baseline (immediate deletion) and under the labelled change PRC-02 (a grace window with undo).
 
 1. A deleted reader's data remains only in backups, until their retention ends (Section 4).
 2. A restore must not bring back deleted accounts. Step RP-7 re-applies deletions made after the restore point. That needs a minimal record of deleted account IDs and deletion times, which may conflict with "is any record kept after account deletion?" (OQ-24).
@@ -140,7 +141,7 @@ RS FR-PRIV-003 requires that deleting an account removes the reader's data. Back
 
 - Storage and operations for backups are cloud usage billed to MFW [S1 Costs outside the fee]. No amount is quoted, because provider prices change.
 - MFW owns the backups and the accounts that hold them.
-- Setting up backups during the build is part of backend deployment. Running them after handover is MFW's responsibility, unless a support plan covers it.
+- Setting up backups during the build is a PROPOSED addition and not an S2 deliverable (OQ-46). If MFW agrees, it is done as part of backend deployment. Running them after handover is MFW's responsibility, unless a support plan covers it.
 
 ## 12. Open Items
 
@@ -152,3 +153,23 @@ RS FR-PRIV-003 requires that deleting an account removes the reader's data. Back
 | Environment for test restores | DEC-023, OQ-40 |
 | Region | OQ-41 |
 | Who receives backup alerts | OQ-47 |
+
+## 13. Status of the Proposals
+
+State on 23 October 2026. Every row is a proposal. None is approved, configured or tested.
+
+| Item | Proposed | Approved by MFW | Configured | Restore tested |
+|---|---|---|---|---|
+| Method and frequency (Section 4) | Yes | No | No | Not applicable |
+| Retention (Section 4) | Yes | No | No | Not applicable |
+| RPO and RTO (Section 5) | Yes | No | Not applicable | No |
+| Restore procedure (Section 7) | Yes | No | Not applicable | No |
+| Restore verification (Section 8) | Yes | No | Not applicable | No |
+
+```text
+Who does what, if MFW agrees (PROPOSED)
+├── MFW           owns the accounts and the backups, pays for storage and operations, decides RPO, RTO, scope and retention (OQ-46)
+├── Developers    set up the backups during the build and document them; run the test restore before M5; hand the procedure over
+└── Provider      runs the managed backup features it offers. Availability, limits and cost of those features are NOT VERIFIED
+                  until the backend is chosen (DEC-003). A provider outage is not a product defect [S2 Warranty]
+```

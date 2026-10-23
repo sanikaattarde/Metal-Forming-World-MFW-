@@ -7,10 +7,9 @@
 | Document | Maintenance and Handover |
 | File | `Documentation/MAINTENANCE_AND_HANDOVER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 37) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. Every handover item is NOT STARTED. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. MFW agrees the handover at M5. |
 
 **Change history**
@@ -18,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. HO-13, HO-14 and the section 2 sentence marked as proposed additions. Planned names replaced by the existing documents. Note on the S1 maintenance figures. |
 
 ### 1.1 Related documents
 
@@ -26,7 +26,7 @@
 | `MFW_Statement_of_Work.pdf` (S2) "Changes, handover and warranty", AC-11, AC-12 | Exists, issued, unsigned |
 | `MFW_Commercial_Proposal-2.pdf` (S1) "Key terms", "Costs outside the fee" | Exists, issued, unsigned |
 | `PROJECT_CHARTER.md` (CH) §10, §11, §13, §19.3 D8 | Exists, draft |
-| `DEPLOYMENT_PLAN.md`, `BACKUP_AND_RECOVERY.md`, `DEPENDENCY_REGISTER.md`, `APP_STORE_RELEASE_CHECKLIST.md`, `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md` | Exist, created in this task |
+| `DEPLOYMENT_PLAN.md`, `BACKUP_AND_RECOVERY.md`, `DEPENDENCY_REGISTER.md`, `APP_STORE_RELEASE_CHECKLIST.md`, `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md` | Exist (draft) |
 
 Status labels follow RS §1.2.
 
@@ -34,7 +34,7 @@ Status labels follow RS §1.2.
 
 This document lists what MFW receives at handover, how ownership and access move to MFW, how defects are reported, and what applies during and after the warranty.
 
-Every obligation below is quoted from S1 or S2 with its source. This document creates no new obligation. Where sources differ, both positions are shown. S1 and S2 are unsigned copies (OQ-28), and some commercial terms are in conflict (OQ-32).
+Every obligation below is quoted from S1 or S2 with its source. Two items are the exception: monitoring and alert access (HO-13) and a backup configuration with a verified restore (HO-14) are proposed additions that S1 and S2 do not contain. They are not obligations unless MFW agrees them (OQ-46, OQ-47). Otherwise this document creates no new obligation. Where sources differ, both positions are shown. S1 and S2 are unsigned copies (OQ-28), and some commercial terms are in conflict (OQ-32).
 
 ## 3. Sources of Obligations
 
@@ -65,8 +65,8 @@ Delivered as technical documentation, which S2 Handover requires to cover set-up
 | Developer set-up | `app/README.md`, `backend/README.md`, `admin/README.md` (WP-01) | PLANNED |
 | Build and sign | `CI_CD_AND_QUALITY_GATES.md` §6; app README | PLANNED |
 | Deployment steps | `DEPLOYMENT_PLAN.md`, updated with the actual configuration names | PLANNED |
-| Data model | `DATABASE_DESIGN.md` (planned, Phase 2) | PLANNED |
-| Security rules | `backend/` access rules and `AUTHENTICATION_AND_AUTHORIZATION.md` (planned, Phase 2) | PLANNED |
+| Data model | `DATABASE_AND_DATA_MODEL.md` (draft exists; brought up to date at handover) | PLANNED |
+| Security rules | `backend/` access rules and `SECURITY_AND_ACCESS_CONTROL.md` (draft exists; brought up to date at handover) | PLANNED |
 | Third-party licences | `DEPENDENCY_REGISTER.md`; the in-app licence page | PLANNED |
 | Clean-copy rebuild check | AC-12.2 | NOT STARTED |
 
@@ -138,7 +138,7 @@ From S2 Warranty (unsigned):
 | Standard | 16 | ₹8,000 |
 | Extended | 32 | ₹12,000 |
 
-S1 states a rate of ₹312.50 an hour, with a three-month minimum. Without a plan, occasional work is ₹5,500 per day. Whether MFW takes a plan is OQ-49.
+S1 states a rate of ₹312.50 an hour, with a three-month minimum. S1's figures do not agree with each other: ₹312.50 an hour for 8 hours is ₹2,500, not ₹5,000, and the other two plans imply ₹500 an hour (₹8,000 for 16 hours) and ₹375 an hour (₹12,000 for 32 hours). No conclusion is drawn here. The question for MFW is part of OQ-32. Without a plan, occasional work is ₹5,500 per day. Whether MFW takes a plan is OQ-49.
 
 **Exclusions.** Support after the 30-day warranty is not covered by the fixed fee (S2 "Scope not included"; CH §10). The S2 later-phase features and other exclusions are change requests.
 
@@ -173,8 +173,8 @@ S1 states a rate of ₹312.50 an hour, with a three-month minimum. Without a pla
 | HO-10 | List of known limitations | S2 Handover | NOT STARTED |
 | HO-11 | Dependency inventory with licences | RS NFR-MAINT-004; `DEPENDENCY_REGISTER.md` | NOT STARTED |
 | HO-12 | Store submission confirmations held by MFW | S2 AC-11 | NOT STARTED |
-| HO-13 | Monitoring and alert access set up for MFW | OQ-47 | NOT STARTED |
-| HO-14 | Backup configuration documented, and a restore verified | `BACKUP_AND_RECOVERY.md`; OQ-46 | NOT STARTED |
+| HO-13 | Monitoring and alert access set up for MFW. PROPOSED addition: not in S1 or S2 | OQ-47 | NOT STARTED |
+| HO-14 | Backup configuration documented, and a restore verified. PROPOSED addition: not in S1 or S2 | `BACKUP_AND_RECOVERY.md`; OQ-46 | NOT STARTED |
 | HO-15 | Outstanding-issues record agreed with MFW | S2 How acceptance testing works | NOT STARTED |
 | HO-16 | Warranty start and end dates recorded | S2 Warranty | NOT STARTED |
 
