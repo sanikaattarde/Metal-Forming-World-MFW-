@@ -7,10 +7,9 @@
 | Document | App Store Release Checklist |
 | File | `Documentation/APP_STORE_RELEASE_CHECKLIST.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 35) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. **No build has been uploaded and no app has been submitted. No item is verified. Compliance with store guidelines is not asserted.** |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. MFW approves the listing text and submission (S2 AC-11, M5). |
 
 **Change history**
@@ -18,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Stale status wording corrected. |
 
 ### 1.1 Related documents
 
@@ -26,7 +26,7 @@
 | `MFW_Statement_of_Work.pdf` (S2) AC-11, "Release", "Scope not included" | Exists, issued, unsigned |
 | `PROJECT_CHARTER.md` (CH) §18 R8, R9, R10 | Exists, draft |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) NFR-PRIV-002, FR-AUTH-009, FR-NOTIF-001 | Exists, draft |
-| `DEPLOYMENT_PLAN.md`, `CI_CD_AND_QUALITY_GATES.md`, `TESTING_STRATEGY.md`, `RISK_REGISTER.md`, `OPEN_QUESTIONS.md` | Exist, created in this task |
+| `DEPLOYMENT_PLAN.md`, `CI_CD_AND_QUALITY_GATES.md`, `TESTING_STRATEGY.md`, `RISK_REGISTER.md`, `OPEN_QUESTIONS.md` | Exist (draft) |
 
 Store policies change. S2 assumes they are as published at the time of S2 (RS ASM-08). Each item marked "verify" must be checked against the store's current rules when the release is prepared.
 

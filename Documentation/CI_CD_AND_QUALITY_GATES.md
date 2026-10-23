@@ -7,10 +7,9 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. **PLANNED: no CI/CD exists and no check runs automatically.** |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
 
 **Change history**
@@ -18,16 +17,17 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. QG-12 states that its script is not in the repository. Planned name replaced by the existing document. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
-| `TESTING_STRATEGY.md` | Exists, created in this task. The suites these gates run. |
-| `DEFINITION_OF_DONE.md` | Exists, created in this task. Gates referenced by DoD-TASK, DoD-INT and DoD-RC. |
-| `DEVELOPMENT_WORKFLOW.md` | Exists, created in this task. Branch roles and pull-request flow. |
-| `CODING_STANDARDS.md`, `DEPENDENCY_REGISTER.md`, `DEPLOYMENT_PLAN.md`, `DECISION_LOG.md` | Exist, created in this task |
-| `TECH_STACK_DECISIONS.md` | Planned (Phase 2). Not created. Backend and admin gates wait for it. |
+| `TESTING_STRATEGY.md` | Exists (draft). The suites these gates run. |
+| `DEFINITION_OF_DONE.md` | Exists (draft). Gates referenced by DoD-TASK, DoD-INT and DoD-RC. |
+| `DEVELOPMENT_WORKFLOW.md` | Exists (draft). Branch roles and pull-request flow. |
+| `CODING_STANDARDS.md`, `DEPENDENCY_REGISTER.md`, `DEPLOYMENT_PLAN.md`, `DECISION_LOG.md` | Exist (draft) |
+| `TECHNOLOGY_DECISIONS.md` | Exists on `main` (draft). It was planned as `TECH_STACK_DECISIONS.md`. Backend and admin gates wait for its decisions. |
 
 Status labels follow RS §1.2. **PLANNED** means designed, not implemented. Availability labels follow `DEFINITION_OF_DONE.md` §3.
 
@@ -61,7 +61,7 @@ This document proposes the automated checks that guard pull requests, integratio
 | QG-09 | Admin panel build and tests | Blocked by DEC-004 | Pull requests that touch `admin/` | Yes | [BACKEND] | TS-05 |
 | QG-10 | Dependency and licence check | A script comparing `pubspec.lock` with `DEPENDENCY_REGISTER.md` (planned); `flutter pub outdated` report; published advisory check | Pull requests that touch dependency files; weekly | Yes, for an unregistered dependency | [SCAFFOLD] | SEC-CHK-13 |
 | QG-11 | Secrets scan | Candidate: gitleaks, or GitHub secret scanning if the plan includes it | Every pull request and push | Yes | [CI] | SEC-CHK-09 |
-| QG-12 | Documentation checks | A script checking IDs, references and status labels, as run in this task; link check | Pull requests that touch `Documentation/` | Yes | [NOW] (manual until CI exists) | DoD-DOC |
+| QG-12 | Documentation checks | A check of IDs, references, file names, status labels and links. The script that was used when the documents were drafted is not in the repository, so the check cannot be reproduced from the repository and is PLANNED, not available; link check | Pull requests that touch `Documentation/` | Yes | [NOW] (manual until CI exists) | DoD-DOC |
 | QG-13 | Release build and signing | Tag-triggered signed Android App Bundle and iOS archive; manual approval | Release tags `v*` | Not a merge gate | [STORE] | AC-11.1 |
 
 ## 5. Pipelines

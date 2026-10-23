@@ -7,10 +7,9 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. Changes follow Section 12. |
 
 **Change history**
@@ -18,17 +17,19 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft. 14 modules, 31 backend operations, 8 integration contracts. |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 8 gains a column with the main identifier in `API_AND_BACKEND_CONTRACT.md` and notes on OP-ADM-11, OP-ADM-12 and OP-ACC-01. Section 4.2 error table gains the category and reason, with GONE and RATE_LIMITED added. Registration and sign-in messages stated. Compatibility and paging requirements added (4.5). Guest-reading rule labelled as a working position. Planned names replaced by the existing documents. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft. Source of every requirement ID below. |
-| `DECISION_LOG.md` | Exists, created in this task. DEC-003, DEC-007, DEC-008, DEC-009, DEC-020, DEC-021. |
-| `CODING_STANDARDS.md` | Exists, created in this task. Project structure and error-handling rules. |
-| `TASK_OWNERSHIP_MATRIX.md` | Exists, created in this task. Module owners. |
-| `ACCEPTANCE_CRITERIA.md`, `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist, created in this task |
-| `SYSTEM_ARCHITECTURE.md`, `TECH_STACK_DECISIONS.md`, `DATABASE_DESIGN.md`, `API_SPECIFICATION.md`, `AUTHENTICATION_AND_AUTHORIZATION.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Planned (Phase 2). Not created. They will make these contracts concrete. |
+| `DECISION_LOG.md` | Exists (draft). DEC-003, DEC-007, DEC-008, DEC-009, DEC-020, DEC-021, DEC-026. |
+| `CODING_STANDARDS.md` | Exists (draft). Project structure and error-handling rules. |
+| `TASK_OWNERSHIP_MATRIX.md` | Exists (draft). Module owners. The document map is in section 13. |
+| `ACCEPTANCE_CRITERIA.md`, `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist (draft) |
+| `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md`, `SECURITY_AND_ACCESS_CONTROL.md` | Exist on `main` (drafts, merged by pull request #2). They were planned as `SYSTEM_ARCHITECTURE.md`, `TECH_STACK_DECISIONS.md`, `DATABASE_DESIGN.md`, `API_SPECIFICATION.md` and `AUTHENTICATION_AND_AUTHORIZATION.md`. `API_AND_BACKEND_CONTRACT.md` is the single catalogue of backend operations (section 8 below holds aliases of its identifiers). These contracts are not yet reconciled line by line with those documents; the differences are listed in `API_AND_BACKEND_CONTRACT.md` section 3.4. |
+| `PDF_READER_AND_OFFLINE_DESIGN.md` | Planned. Not written. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal in this document. In RS terms it is an ASSUMPTION (DEV).
 
@@ -45,10 +46,10 @@ This document sets the boundaries between modules and the contracts each module 
 | Backend operations (Section 8) | Technology-neutral capability contracts. **Not** a REST API, database schema or Firebase configuration. The transport is decided under DEC-003. |
 | Provider-specific notes | Labelled "PROVISIONAL example". They are not decisions. |
 
-**Mandatory rules these contracts preserve**
+**Rules these contracts preserve**
 
-- Full issues can be opened or downloaded only by a reader with full access. There is no guest reading (DEC-007).
-- Issue files are released only after a server-side check, never through a public or guessable address (DEC-009).
+- Full issues can be opened or downloaded only by a reader with full access. There is no guest reading (DEC-007, working position, PROVISIONAL until MFW confirms it in writing).
+- Issue files are released only after a server-side check, never through a public or guessable address (DEC-009, baseline). This covers the app's copy only. The same issues are publicly downloadable from MFW's website, and MFW has not decided whether that stays (OQ-57).
 
 ## 3. Module Map
 
@@ -133,22 +134,26 @@ final class AppFailure {
 }
 ```
 
-**Backend error codes** (transport-neutral names) map to app codes as follows.
+**Backend error codes** (transport-neutral names) map to app codes as follows. The backend reports a category and a reason code (`API_AND_BACKEND_CONTRACT.md` section 2.5). A name that was a top-level code in earlier text is now a reason under a category, as the second column shows. The scheme is PROPOSED. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed.
 
-| Backend code | `FailureCode` | Retryable | User-facing meaning (wording set in the M2 designs) |
-|---|---|---|---|
-| `UNAUTHENTICATED` | `unauthenticated` | No | Sign in to continue |
-| `EMAIL_NOT_VERIFIED` | `emailNotVerified` | No | Verify your email address |
-| `PROFILE_INCOMPLETE` | `profileIncomplete` | No | Complete your profile |
-| `FORBIDDEN` | `forbidden` | No | You do not have access |
-| `NOT_FOUND` | `notFound` | No | No longer available |
-| `INVALID_ARGUMENT` | `invalidInput` | No | Check the highlighted fields |
-| `FILE_TOO_LARGE` | `fileTooLarge` | No | File is larger than the limit (admin) |
-| `NOT_A_PDF` | `notAPdf` | No | File is not a valid PDF (admin) |
-| `CONFLICT` | `conflict` | No | Already exists, or in use |
-| `UNAVAILABLE` | `serviceUnavailable` | Yes | Service unavailable, try again |
-| `DEADLINE_EXCEEDED` | `timeout` | Yes | Taking too long, try again |
-| `INTERNAL` | `unknown` | Yes | Something went wrong |
+| Backend code | Category and reason | `FailureCode` | Retryable | User-facing meaning (wording set in the M2 designs) |
+|---|---|---|---|---|
+| `UNAUTHENTICATED` | UNAUTHENTICATED | `unauthenticated` | No | Sign in to continue |
+| `EMAIL_NOT_VERIFIED` | FAILED_PRECONDITION, reason EMAIL_NOT_VERIFIED | `emailNotVerified` | No | Verify your email address |
+| `PROFILE_INCOMPLETE` | FAILED_PRECONDITION, reason PROFILE_INCOMPLETE | `profileIncomplete` | No | Complete your profile |
+| `FORBIDDEN` | FORBIDDEN | `forbidden` | No | You do not have access |
+| `NOT_FOUND` | NOT_FOUND | `notFound` | No | No longer available |
+| `INVALID_ARGUMENT` | INVALID_ARGUMENT | `invalidInput` | No | Check the highlighted fields |
+| `FILE_TOO_LARGE` | Upload-job reason OVER_LIMIT (a request-level problem is INVALID_ARGUMENT) | `fileTooLarge` | No | File is larger than the limit (admin) |
+| `NOT_A_PDF` | Upload-job reason NOT_A_PDF | `notAPdf` | No | File is not a valid PDF (admin) |
+| `CONFLICT` | CONFLICT | `conflict` | No | Already exists, or in use |
+| `UNAVAILABLE` | UNAVAILABLE | `serviceUnavailable` | Yes | Service unavailable, try again |
+| `DEADLINE_EXCEEDED` | UNAVAILABLE, reason DEADLINE_EXCEEDED | `timeout` | Yes | Taking too long, try again |
+| `INTERNAL` | INTERNAL | `unknown` | Yes | Something went wrong |
+| `GONE` (added) | GONE: the issue was permanently deleted | Not mapped yet (open) | No | No longer available |
+| `RATE_LIMITED` (added) | RATE_LIMITED: a rate or size limit | Not mapped yet (open) | Yes, after the retry-after value (PROPOSED) | Too many requests, try again later |
+
+The retryable flag belongs to the category, with the exceptions listed above. In section 8, a code that the table shows as a reason (`EMAIL_NOT_VERIFIED`, `PROFILE_INCOMPLETE`, `FILE_TOO_LARGE`, `NOT_A_PDF`, `DEADLINE_EXCEEDED`) is read as that category and reason. No rate-limit value is set.
 
 `network`, `insufficientStorage`, `fileCorrupt`, `invalidResponse` and `cancelled` arise on the device.
 
@@ -170,7 +175,7 @@ PROVISIONAL example: if DEC-003 chooses Firebase callable functions, the backend
 1. The server is the authority for every rule in Section 4.1. App checks only shape the user experience.
 2. Every operation in Section 8 states its authorization rule, and MOD-13 enforces it.
 3. Readers can read and change only their own records (RS NFR-SEC-005, NFR-SEC-006).
-4. Admin operations check the admin role on the server (RS FR-ADMIN-003, NFR-SEC-007).
+4. Admin operations check the admin role on the server (RS FR-ADMIN-003, NFR-SEC-007). The check reads the current role record on each call and refuses if it cannot. The intended guarantee is that a removed admin is refused once the removal is visible to the check. How long a token stays valid and whether a read made right after the change always sees it are NOT VERIFIED. A test for a removed admin is proposed (`TESTING_STRATEGY.md` section 9). The first admin is a named step (`DEPLOYMENT_PLAN.md` section 7.5).
 5. Issue-file access follows DEC-009. A request without a valid grant is refused, whatever address it uses.
 
 ### 4.5 Contract changes and compatibility
@@ -178,6 +183,8 @@ PROVISIONAL example: if DEC-003 chooses Firebase callable functions, the backend
 1. Changes to `app/lib/contracts/` or to Section 8 follow the shared-file protocol (`DEVELOPMENT_WORKFLOW.md` §8) and Section 12 of this document.
 2. Prefer additive changes. A breaking change needs a `DECISION_LOG.md` entry agreed by both developers.
 3. After the first store release, the backend must keep working for the app version in the stores: keep old fields until no supported version needs them, and accept unknown fields.
+4. The fuller policy is PROPOSED in `API_AND_BACKEND_CONTRACT.md` section 9: backward compatibility by default; an impact assessment and a compatibility record for any breaking change; a migration and rollout plan with rollback; deprecation criteria; contract tests (section 10 there); and, only if MFW agrees, a minimum supported app version (the update gate, PRC-04). No version scheme and no compatibility period is set.
+5. Three technology-neutral requirements (PROPOSED): admin lists page with a cursor (`page_size` and `cursor`, the largest size OPEN); a write operation carries a request identifier that makes a retry harmless; an issue file or cover is uploaded to a holding area, validated by the backend after the upload, and only then moved (`API_AND_BACKEND_CONTRACT.md` OP-19 and OP-40).
 
 ### 4.6 Logging and privacy in contracts
 
@@ -187,7 +194,7 @@ PROVISIONAL example: if DEC-003 chooses Firebase callable functions, the backend
 
 ## 5. MOD-00 Shared Domain Models
 
-These are conceptual shapes for interfaces, not a database schema. `DATABASE_DESIGN.md` (planned) defines storage.
+These are conceptual shapes for interfaces, not a database schema. `DATABASE_AND_DATA_MODEL.md` (draft; planned as `DATABASE_DESIGN.md`) defines storage.
 
 | Model | Fields (conceptual) | Source | Status | Written by |
 |---|---|---|---|---|
@@ -344,8 +351,8 @@ String messageFor(AppFailure failure);
 | Responsibilities | Email and password (RS FR-AUTH-001 to 004); Google Sign-In (FR-AUTH-005, PROVISIONAL, C-04); sign-out (FR-AUTH-008); in-app account deletion (FR-AUTH-009); computing `AccessState` |
 | Excludes | Sign in with Apple (excluded); profile fields (MOD-04); admin sign-in (MOD-12) |
 | Depends on | MOD-04 `watchStatus`; identity provider (DEC-003); OP-ACC-01 |
-| Errors | `invalidInput`, `conflict` (address already used; the rule is OQ-05), `unauthenticated` (wrong credentials, with a message that does not say which part was wrong), `cancelled` (Google flow cancelled), `network`, `serviceUnavailable` |
-| Authorization | `deleteAccount` requires a signed-in session. PROPOSED: password reset shows the same message whether or not the address has an account. |
+| Errors | `invalidInput`, `conflict` (address already used, shown to the visitor by design; the rule for an address used with another sign-in method is OQ-05), `unauthenticated` (wrong credentials, with a message that does not say which part was wrong), `cancelled` (Google flow cancelled), `network`, `serviceUnavailable` |
+| Authorization | `deleteAccount` requires a signed-in session. PROPOSED: registration tells the visitor that an account exists for the address. Sign-in shows one message for any wrong email or password. Password reset shows the same message whether or not the address has an account. All three are rate limited. The identity provider's behaviour is NOT VERIFIED. |
 | Data owned | Reader account (RS DATA-003), held by the identity provider |
 | Blocked | OQ-04 (Google verification), OQ-05 (linking), OQ-06 (guideline 4.8) |
 | Tests | Unit tests with a fake provider; widget tests of each form state; integration register → verify → full access (AC-3.1, AC-3.2); PAC-01; PAC-12 |
@@ -655,7 +662,7 @@ abstract interface class NotificationService {
 | Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B. |
 | Responsibilities | Admin sign-in and the single admin role (RS FR-ADMIN-002 to 004); issue upload with validation (FR-ADMIN-005 to 008); issue details (FR-ADMIN-009); categories (FR-ADMIN-010); publish and unpublish (FR-ADMIN-011); news controls (FR-ADMIN-013 to 015); notifications and send log (FR-ADMIN-016 to 018); registered-user list and export (FR-USER-002, FR-USER-003, PROVISIONAL); subscriber export (FR-USER-001, CONFLICT C-02); result messages (FR-STATE-007) |
 | Excludes | News authoring (FR-ADMIN-019); editorial roles, drafts, scheduled publishing and audit log (S2 "Later-phase features"); readership analytics (FR-USER-004) |
-| Interface | OP-ADM-01 to OP-ADM-11 (Section 8) |
+| Interface | OP-ADM-01 to OP-ADM-11 (Section 8). OP-ADM-12 is a note: sign-in is the identity provider's job, and the role lookup is OP-14 in `API_AND_BACKEND_CONTRACT.md` |
 | Authorization | The admin role is checked on the server for every operation. |
 | Data owned | Issues, categories, news controls, send records, admin accounts (RS DATA-001, 002, 008, 009, 011) |
 | Blocked | DEC-003, DEC-004, OQ-20, OQ-21, OQ-22, OQ-30, OQ-31 |
@@ -675,41 +682,50 @@ abstract interface class NotificationService {
 
 ## 8. Backend Operation Catalogue
 
+`API_AND_BACKEND_CONTRACT.md` is the single catalogue of backend operations, and its OP-nn identifiers are the main ones. The identifiers in this table are aliases of them (last column). This table stays until that catalogue is agreed, and then becomes a pointer to it. The two catalogues differ in four design points that are open, not decided (`API_AND_BACKEND_CONTRACT.md` section 3.4).
+
 These are technology-neutral operations. Each row is a contract: who may call it, what it takes, what it returns, and which errors it can raise. The transport (SDK call, function, HTTP endpoint) is decided under DEC-003.
 
-| OP | Operation | Caller | Authorization (enforced on the server) | Input | Output | Errors | Requirements |
-|---|---|---|---|---|---|---|---|
-| OP-CAT-01 | `listPublishedIssues` | App | Public | None | Published `IssueSummary` list | `UNAVAILABLE` | FR-MAG-001, FR-MAG-004, FR-MAG-007 |
-| OP-CAT-02 | `getIssue` | App | Public. Unpublished returns `NOT_FOUND`. | `issueId` | `IssueSummary` | `NOT_FOUND` | FR-MAG-005, FR-MAG-008 |
-| OP-CAT-03 | `listCategories` | App | Public | None | `IssueCategory` list | `UNAVAILABLE` | FR-MAG-003, FR-SRCH-002 |
-| OP-FILE-01 | `requestIssueFile` | App | Signed in; email verified for email accounts (Google: OQ-04); profile complete (PROVISIONAL, BR-003); issue published | `issueId` | `IssueFileGrant` | `UNAUTHENTICATED`, `EMAIL_NOT_VERIFIED`, `PROFILE_INCOMPLETE`, `NOT_FOUND` | FR-READ-001, FR-DL-001, FR-DL-002, NFR-SEC-002, INT-FILE-001 |
-| OP-PRF-01 | `getOwnProfile` | App | Signed in; own record | None | `ReaderProfile` or none | `UNAUTHENTICATED` | FR-PROF-006 |
-| OP-PRF-02 | `saveOwnProfile` | App | Signed in; own record | `ReaderProfile` | None | `INVALID_ARGUMENT` | FR-PROF-001, FR-PROF-002, FR-PROF-007 |
-| OP-PRF-03 | `recordConsent` | App | Signed in; own record | `ConsentRecord` | None | `INVALID_ARGUMENT` | FR-PRIV-001, DATA-012 |
-| OP-LIB-01 | `listBookmarks` | App | Signed in; own records | None | `Bookmark` list | `UNAUTHENTICATED` | FR-BKM-006 |
-| OP-LIB-02 | `addBookmark` | App | Full access; own record | `issueId`, `page` | `Bookmark` | `INVALID_ARGUMENT` (page out of range) | FR-BKM-001 |
-| OP-LIB-03 | `removeBookmark` | App | Own record | `bookmarkId` | None | `NOT_FOUND` | FR-BKM-007 |
-| OP-LIB-04 | `listFavourites` | App | Signed in; own records | None | Issue ID list | `UNAUTHENTICATED` | FR-BKM-006 |
-| OP-LIB-05 | `setFavourite` | App | Full access (incomplete access: OQ-12); idempotent | `issueId`, `favourite` | None | `NOT_FOUND` | FR-BKM-003 |
-| OP-NWS-01 | `getNewsControls` | App | Public | None | Hidden and breaking post IDs | `UNAVAILABLE` | FR-NEWS-008, FR-NEWS-009 |
-| OP-NTF-01 | `registerDevice` | App | Signed in (logged out: OQ-09); idempotent | Device token, platform | None | `INVALID_ARGUMENT` | DATA-007 |
-| OP-NTF-02 | `unregisterDevice` | App | Own device | Device token | None | None | DATA-007 |
-| OP-NTF-03 | `getPreferences` | App | Own record | None | `NotificationPreferences` | `UNAUTHENTICATED` | FR-NOTIF-002 |
-| OP-NTF-04 | `savePreferences` | App | Own record | `NotificationPreferences` | None | `INVALID_ARGUMENT` | FR-NOTIF-002, FR-NOTIF-003 |
-| OP-EML-01 | `setEditionUpdateSubscription` | App | OQ-09 | Opt in or out | None | None | FR-EMAIL-001, FR-EMAIL-002 (CONFLICT C-02) |
-| OP-ACC-01 | `deleteOwnAccount` | App | Signed in; own account; recent sign-in if the provider requires it | None | None | `UNAUTHENTICATED` | FR-AUTH-009, FR-PRIV-003 |
-| OP-ADM-01 | `uploadIssue` | Admin panel | Admin role | PDF, cover, issue details | `issueId` (unpublished) | `FORBIDDEN`, `NOT_A_PDF`, `FILE_TOO_LARGE`, `INVALID_ARGUMENT` | FR-ADMIN-005 to 009, NFR-SEC-008 |
-| OP-ADM-02 | `updateIssueDetails` | Admin panel | Admin role | `issueId`, details | None | `NOT_FOUND`, `INVALID_ARGUMENT` | FR-ADMIN-009 |
-| OP-ADM-03 | `setIssuePublished` | Admin panel | Admin role | `issueId`, `published` | None | `NOT_FOUND` | FR-ADMIN-011 |
-| OP-ADM-04 | `manageCategory` | Admin panel | Admin role | Create, rename or remove | Category | `CONFLICT` (in use) | FR-ADMIN-010 |
-| OP-ADM-05 | `setNewsControl` | Admin panel | Admin role | `postId`, `hidden`, `breaking` | None | `INVALID_ARGUMENT` | FR-ADMIN-013, FR-ADMIN-014 |
-| OP-ADM-06 | `sendNotification` | Admin panel | Admin role | Category, target, title, body | `sendId` | `FORBIDDEN`, `INVALID_ARGUMENT` | FR-ADMIN-015 to 017, FR-NOTIF-004 |
-| OP-ADM-07 | `listSendLog` | Admin panel | Admin role | Paging | `NotificationSendRecord` list | `FORBIDDEN` | FR-ADMIN-018 |
-| OP-ADM-08 | `listRegisteredUsers` | Admin panel | Admin role | Paging | `RegisteredUserRow` list | `FORBIDDEN` | FR-USER-002 (PROVISIONAL) |
-| OP-ADM-09 | `exportRegisteredUsersCsv` | Admin panel | Admin role | None | CSV file | `FORBIDDEN` | FR-USER-003, NFR-PRIV-004 |
-| OP-ADM-10 | `exportSubscriberListCsv` | Admin panel | Admin role | None | CSV file | `FORBIDDEN` | FR-USER-001 (CONFLICT C-02, OQ-31) |
-| OP-ADM-11 | `deleteIssue` or `replaceIssueFile` | Admin panel | Admin role | `issueId` | None | `NOT_FOUND` | FR-ADMIN-012 (OPEN, OQ-21) |
-| OP-ADM-12 | `adminSignIn` | Admin panel | Valid credentials and admin role | Credentials | Admin session | `UNAUTHENTICATED`, `FORBIDDEN` | FR-ADMIN-002, FR-ADMIN-003, NFR-SEC-011 (OQ-20) |
+| OP | Operation | Caller | Authorization (enforced on the server) | Input | Output | Errors | Requirements | Main identifier (`API_AND_BACKEND_CONTRACT.md`) |
+|---|---|---|---|---|---|---|---|---|
+| OP-CAT-01 | `listPublishedIssues` | App | Public | None | Published `IssueSummary` list | `UNAVAILABLE` | FR-MAG-001, FR-MAG-004, FR-MAG-007 | OP-01 |
+| OP-CAT-02 | `getIssue` | App | Public. Unpublished returns `NOT_FOUND`. | `issueId` | `IssueSummary` | `NOT_FOUND` | FR-MAG-005, FR-MAG-008 | none (open) |
+| OP-CAT-03 | `listCategories` | App | Public | None | `IssueCategory` list | `UNAVAILABLE` | FR-MAG-003, FR-SRCH-002 | OP-01 |
+| OP-FILE-01 | `requestIssueFile` | App | Signed in; email verified for email accounts (Google: OQ-04); profile complete (PROVISIONAL, BR-003); issue published | `issueId` | `IssueFileGrant` | `UNAUTHENTICATED`, `EMAIL_NOT_VERIFIED`, `PROFILE_INCOMPLETE`, `NOT_FOUND` | FR-READ-001, FR-DL-001, FR-DL-002, NFR-SEC-002, INT-FILE-001 | OP-11 |
+| OP-PRF-01 | `getOwnProfile` | App | Signed in; own record | None | `ReaderProfile` or none | `UNAUTHENTICATED` | FR-PROF-006 | OP-06 |
+| OP-PRF-02 | `saveOwnProfile` | App | Signed in; own record | `ReaderProfile` | None | `INVALID_ARGUMENT` | FR-PROF-001, FR-PROF-002, FR-PROF-007 | OP-10 |
+| OP-PRF-03 | `recordConsent` | App | Signed in; own record | `ConsentRecord` | None | `INVALID_ARGUMENT` | FR-PRIV-001, DATA-012 | OP-10 |
+| OP-LIB-01 | `listBookmarks` | App | Signed in; own records | None | `Bookmark` list | `UNAUTHENTICATED` | FR-BKM-006 | OP-07 |
+| OP-LIB-02 | `addBookmark` | App | Full access; own record | `issueId`, `page` | `Bookmark` | `INVALID_ARGUMENT` (page out of range) | FR-BKM-001 | OP-07 |
+| OP-LIB-03 | `removeBookmark` | App | Own record | `bookmarkId` | None | `NOT_FOUND` | FR-BKM-007 | OP-07 |
+| OP-LIB-04 | `listFavourites` | App | Signed in; own records | None | Issue ID list | `UNAUTHENTICATED` | FR-BKM-006 | OP-08 |
+| OP-LIB-05 | `setFavourite` | App | Full access (incomplete access: OQ-12); idempotent | `issueId`, `favourite` | None | `NOT_FOUND` | FR-BKM-003 | OP-08 |
+| OP-NWS-01 | `getNewsControls` | App | Public | None | Hidden and breaking post IDs | `UNAVAILABLE` | FR-NEWS-008, FR-NEWS-009 | OP-04 |
+| OP-NTF-01 | `registerDevice` | App | Signed in (logged out: OQ-09); idempotent | Device token, platform | None | `INVALID_ARGUMENT` | DATA-007 | none (open) |
+| OP-NTF-02 | `unregisterDevice` | App | Own device | Device token | None | None | DATA-007 | none (open) |
+| OP-NTF-03 | `getPreferences` | App | Own record | None | `NotificationPreferences` | `UNAUTHENTICATED` | FR-NOTIF-002 | OP-09 |
+| OP-NTF-04 | `savePreferences` | App | Own record | `NotificationPreferences` | None | `INVALID_ARGUMENT` | FR-NOTIF-002, FR-NOTIF-003 | OP-09 |
+| OP-EML-01 | `setEditionUpdateSubscription` | App | OQ-09 | Opt in or out | None | None | FR-EMAIL-001, FR-EMAIL-002 (CONFLICT C-02) | none (conditional, C-02) |
+| OP-ACC-01 | `deleteOwnAccount` | App | Signed in; own account; recent sign-in if the provider requires it | None | None | `UNAUTHENTICATED` | FR-AUTH-009, FR-PRIV-003 | OP-12 (OP-13 only under PRC-02) |
+| OP-ADM-01 | `uploadIssue` | Admin panel | Admin role | PDF, cover, issue details | `issueId` (unpublished) | `FORBIDDEN`, `NOT_A_PDF`, `FILE_TOO_LARGE`, `INVALID_ARGUMENT` | FR-ADMIN-005 to 009, NFR-SEC-008 | OP-19, OP-20, OP-40 |
+| OP-ADM-02 | `updateIssueDetails` | Admin panel | Admin role | `issueId`, details | None | `NOT_FOUND`, `INVALID_ARGUMENT` | FR-ADMIN-009 | OP-16 |
+| OP-ADM-03 | `setIssuePublished` | Admin panel | Admin role | `issueId`, `published` | None | `NOT_FOUND` | FR-ADMIN-011 | OP-21, OP-22 |
+| OP-ADM-04 | `manageCategory` | Admin panel | Admin role | Create, rename or remove | Category | `CONFLICT` (in use) | FR-ADMIN-010 | OP-17, OP-18 |
+| OP-ADM-05 | `setNewsControl` | Admin panel | Admin role | `postId`, `hidden`, `breaking` | None | `INVALID_ARGUMENT` | FR-ADMIN-013, FR-ADMIN-014 | OP-23 |
+| OP-ADM-06 | `sendNotification` | Admin panel | Admin role | Category, target, title, body | `sendId` | `FORBIDDEN`, `INVALID_ARGUMENT` | FR-ADMIN-015 to 017, FR-NOTIF-004 | OP-25, OP-26 |
+| OP-ADM-07 | `listSendLog` | Admin panel | Admin role | Paging | `NotificationSendRecord` list | `FORBIDDEN` | FR-ADMIN-018 | OP-27 |
+| OP-ADM-08 | `listRegisteredUsers` | Admin panel | Admin role | Paging | `RegisteredUserRow` list | `FORBIDDEN` | FR-USER-002 (PROVISIONAL) | OP-31 |
+| OP-ADM-09 | `exportRegisteredUsersCsv` | Admin panel | Admin role | None | CSV file | `FORBIDDEN` | FR-USER-003, NFR-PRIV-004 | OP-32 |
+| OP-ADM-10 | `exportSubscriberListCsv` | Admin panel | Admin role | None | CSV file | `FORBIDDEN` | FR-USER-001 (CONFLICT C-02, OQ-31) | OP-33 |
+| OP-ADM-11 | `deleteIssue` or `replaceIssueFile` | Admin panel | Admin role | `issueId` | None | `NOT_FOUND` | FR-ADMIN-012 (OPEN, OQ-21) | OP-30 (delete); a replacement is OP-19 with OP-40 |
+| OP-ADM-12 | `adminSignIn` | Admin panel | Valid credentials and admin role | Credentials | Admin session | `UNAUTHENTICATED`, `FORBIDDEN` | FR-ADMIN-002, FR-ADMIN-003, NFR-SEC-011 (OQ-20) | OP-14 |
+
+**Notes on the table**
+
+- "Admin role" means the one admin role of the baseline (RS FR-ADMIN-004). Two roles are the labelled change PRC-01 (`API_AND_BACKEND_CONTRACT.md` section 3.2).
+- OP-ADM-11 joins two different things, deleting an issue and replacing its PDF. They need different safeguards (a typed confirmation, an atomic swap, the effect on copies already downloaded). The split waits for OQ-21. One rule applies now, whatever OQ-21 decides: a replacement file is validated before the old file is removed.
+- OP-ADM-12 is not a backend operation: sign-in is the identity provider's job, and the role lookup is OP-14 in the catalogue.
+- OP-ACC-01 is an immediate deletion in the baseline. A grace window with undo is the labelled change PRC-02.
 
 ## 9. External Interfaces
 

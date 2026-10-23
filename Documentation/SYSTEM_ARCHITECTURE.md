@@ -7,12 +7,12 @@
 | Document title | System Architecture |
 | File | `SYSTEM_ARCHITECTURE.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for Review |
 | Last updated | 23 October 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The architecture is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.1; [Glossary](GLOSSARY.md) v0.1; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.2; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.2; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.1; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.1; `PROJECT_CHARTER.md` v0.1 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.3; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.3; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.2; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.2; `PROJECT_CHARTER.md` v0.2 |
 
 **Purpose.** This document describes how the MFW mobile app, its backend and its admin panel are put together. It shows the components, what each is responsible for, how data moves between them, where trust changes, how failures are handled and what the architecture costs to run. It is meant to let a developer plan implementation without mistaking an assumption for an approved requirement.
 
@@ -28,6 +28,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft for internal review. Revised the same day: diagrams and trees added or replacing tables in Sections 5.1, 6, 7, 8.1, 8.3, 9 and 10.1. AR-01 and the diagram lines and rows in Sections 7.4, 7.5 and 11.1 now say that resume on a signed URL is unproven. Section 7.11, AR-06 and Section 10.2 now describe the guard record, the steps outside the database transaction and AOQ-17. No decision, status or requirement changed. |
 | 0.2 | 23 October 2026 | Revised after the second interview (GS-Q17 to GS-Q33). Admin reads are function-only and no role is copied into the sign-in claim (GS-Q20), so Sections 7.11, 8.3, 10.1, 10.2 and AR-06 are corrected and AOQ-17 is answered by proposal. A notification is recorded before it is sent (Section 7.9). Account deletion has an undo, an immediate option, and no disabled sign-in during the window (Section 7.10). Replacement and permanent deletion of issues, and the deleted-issue list, are described (Sections 7.5, 7.8, 10.1). New: AR-19, AR-20, the update gate (PRC-04) in Section 10.4, and rows in Sections 14.2, 15.1 and 16. The detailed contracts are in the API and Backend Contract and the permission rules in the Security and Access Control document. No requirement status in the specification changed. |
+| 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 1.3 added: the baseline (one admin role, immediate deletion) and the labelled changes PRC-01 and PRC-02. The deletion flow, the role flow and the function list marked accordingly. Registration and sign-in messages stated (7.1). Error categories aligned with the API and Backend Contract. "Accepted by the development team" replaced by PROPOSED with the agreement note. References to the website question extended to OQ-57. |
 
 ### 1.1 Sources and authority
 
@@ -35,7 +36,7 @@
 |---|---|---|---|
 | S1, S2 | MFW Mobile App Commercial Proposal and Statement of Work, 17 October 2026 | Read. Both copies are unsigned (REG-002). | S2 is the source of the proposed architecture and the acceptance criteria. |
 | S3 | Client emails received after S1 and S2 | Not available (REG-001). | Not used as evidence. Anything known only through the charter is PROVISIONAL. |
-| CH | `PROJECT_CHARTER.md` v0.1 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
+| CH | `PROJECT_CHARTER.md` v0.2 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
 | SPEC | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) | Read. Draft for Review. | Requirement IDs, statuses and acceptance criteria are used as written there. |
 | TD, GS, VS | [Technology Decisions](TECHNOLOGY_DECISIONS.md) | Draft for Review. | Decision records, the questioning record and the vendor evidence behind the facts used here. |
 
@@ -43,7 +44,7 @@ S1, S2 and CH are named by file name and not linked, because they are not in thi
 
 ### 1.2 Status labels and identifiers
 
-The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, ASSUMPTION, OPEN and CONFLICT. "Proposed" is used for components and decisions that the development team recommends and that are not approved. It is a decision status, and it is not a requirement status. "Accepted by the development team" (team-accepted) is a decision status for a choice the developer who ran the interview recorded as accepted, with the requirement label PROVISIONAL and MFW written approval pending (GS-Q30). CONFIRMED is never used for it.
+The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, ASSUMPTION, OPEN and CONFLICT. "Proposed" is used for components and decisions that the development team recommends and that are not approved. It is a decision status, and it is not a requirement status. Version 0.2 used "accepted by the development team" (team-accepted) for a choice the developer who ran the interview recorded as accepted. That wording is not in the repository's status model (`DECISION_LOG.md` section 3.1), so every such choice is now PROPOSED and carries this note: "Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed." The requirement label stays PROVISIONAL and MFW written approval is pending (GS-Q30). CONFIRMED is never used for it.
 
 | Prefix | Meaning | Defined in |
 |---|---|---|
@@ -58,6 +59,10 @@ The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, A
 | FR, NFR, DATA, INT, BR, AC | Requirement IDs and S2 acceptance criteria | Specification Sections 5 to 10 |
 | OQ, C, ASM, PAC | Open questions, conflicts, assumptions, proposed criteria | Specification Sections 10 and 12 |
 | SCP, EXC, CHG, REG | Scope items, exclusions, change items, register entries | The scope document and the register |
+
+### 1.3 Baseline and the labelled changes
+
+The baseline is one admin role (RS FR-ADMIN-004, CONFIRMED) and immediate account deletion (FR-PRIV-003, CONFIRMED). Super Admin and Content Admin, in-panel role management, the guard record and the audit log are the labelled change PRC-01. The grace window with undo is the labelled change PRC-02. MFW has approved neither. Wherever this document describes Super Admin, Content Admin, the audit log, the grace window, a pending-deletion state or an undo, it describes PRC-01 or PRC-02 and applies only if MFW approves it. The document map and the reconciliation with the other documents are in `TASK_OWNERSHIP_MATRIX.md` section 13.
 
 ## 2. Architectural Goals and Non-Goals
 
@@ -127,7 +132,7 @@ The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, A
 | BR-001 no guest reading | PROVISIONAL (C-01) | Logged-out visitors see metadata and news only. No public sample. |
 | BR-003 complete profile before full access | PROVISIONAL | A configuration flag in the access check. The check works with the flag on or off. |
 | FR-AUTH-005, INT-AUTH-002 Google Sign-In | PROVISIONAL (C-04) | Supported by the sign-in design, and labelled proposed. |
-| FR-PROF-001 to FR-PROF-005 and DATA-004 profile | PROVISIONAL | A separate profile record, with required-ness held in configuration (PRC-03). |
+| FR-PROF-001 to FR-PROF-005 and DATA-004 profile | PROVISIONAL | A separate profile record, with required-ness held in configuration (OQ-01, GS-Q34). |
 | FR-USER-002, FR-USER-003 registered-user list and export | PROVISIONAL | A server function for Super Admins only (AOQ-05). |
 | NFR-PRIV-001, NFR-PRIV-003 | PROVISIONAL | Only approved profile fields. No per-reader reading events. |
 | NFR-STOR-001 to NFR-STOR-003 file profile, no CDN | ASSUMPTION | Design sizing and the no-CDN position. |
@@ -574,6 +579,7 @@ Registration and sign-in
 3. The app calls `saveProfile` with the profile fields and the consent versions. The function checks them against the configured required-field rule, writes the profile and consent records, and creates the user record. The profile is not written by the app directly.
 4. For Google Sign-In, the app obtains the Google credential and the provider signs the reader in or creates the account. The name and email are taken from the account to prefill the form (GS-Q4). When the reader completes the profile is OQ-03: straight after the first sign-in, or when the reader first opens a full issue (FR-PROF-004). The same access check supports both.
 5. For a Google address that already has a password account, the linking rule applies: link only when the password account's email is verified, otherwise verify first (TD-06, OQ-05).
+6. Registration tells the visitor that an account exists for an address that already has one. The duplicate-address error arises at the provider and is mapped in the app to the conflict case. Sign-in gives one message for any wrong email or password, and password reset gives the same message whether or not the address has an account. All three are rate limited. This is PROPOSED, and the provider's behaviour is NOT VERIFIED (TD-06, SECURITY_AND_ACCESS_CONTROL SC-21).
 
 ```mermaid
 sequenceDiagram
@@ -620,7 +626,7 @@ Profile creation and updates
     └── OQ-01, OQ-02, OQ-07
 ```
 
-The working field list is PRC-03: full name, mobile number, company, job title, industry segment, country and age or date of birth are mandatory, and city and areas of interest are optional. Email comes from the sign-in provider and is not stored again. Gender is left out and flagged against FR-PROF-002. The required set is a configuration value, so MFW's answer to OQ-01 does not need a schema change. The age format is unresolved (OQ-02) and so is the legal review (OQ-07).
+The default required set is the list in the requirements specification: name, exact age, gender, occupation and domain of work (FR-PROF-002, PROVISIONAL). The earlier working list (PRC-03) added mobile number, company and country. They are now optional candidates, and so are city and areas of interest, until MFW confirms a list (OQ-01, GS-Q34). Email comes from the sign-in provider and is not stored again. The required set is a configuration value, so MFW's answer to OQ-01 does not need a schema change. The age format is unresolved (OQ-02) and so is the legal review (OQ-07).
 
 ### 7.3 Magazine catalogue browsing
 
@@ -945,7 +951,7 @@ sequenceDiagram
   participant Auth as Authentication
   participant DB as Database
   participant Job as Scheduled purge
-  R->>App: Chooses Delete account, confirms, and picks the grace window or immediate deletion
+  R->>App: Chooses Delete account, confirms, and picks the grace window (PRC-02) or immediate deletion (the baseline)
   App->>Fn: requestAccountDeletion with the mode
   Fn->>DB: Mark pending deletion with a purge date, or deleting for an immediate deletion, and remove any edition-update entry
   Fn->>Auth: End the reader's sessions. The sign-in account stays enabled during the window so the reader can undo
@@ -958,7 +964,7 @@ sequenceDiagram
   Fn->>Auth: Delete the account
 ```
 
-1. This is the soft-delete flow with an undo and an immediate option (GS-Q13, GS-Q28, PRC-02). It departs from the wording of FR-PRIV-003 and AC-3, which say deleting the account removes the reader's data. The window length and the backup retention are open (AOQ-02), and PRC-02 stays OPEN for MFW and its legal adviser.
+1. This is the flow under PRC-02: a soft delete with an undo and an immediate option (GS-Q13, GS-Q28). In the baseline the deletion is immediate: the reader confirms, the sessions end and the purge steps run at once. It departs from the wording of FR-PRIV-003 and AC-3, which say deleting the account removes the reader's data. The window length and the backup retention are open (AOQ-02), and PRC-02 stays OPEN for MFW and its legal adviser.
 2. The edition-update entry is removed only if that feature exists. Its status is CONFLICT (OQ-31), so this step is conditional (Appendix A, item 4).
 3. Whether consent records and audit entries outlive the person is OQ-24 and AOQ-04. Until MFW decides, the design keeps the consent record with the user and deletes it at the purge.
 4. Deleted data can remain in database backups until they expire. A restore must re-apply deletions (Section 11.4).
@@ -1274,11 +1280,11 @@ Backend functions (working names)
 │   │   ├── Refuses: the six checks in 7.4
 │   │   └── Requirements: NFR-SEC-002, BR-002, INT-FILE-001 (CONFIRMED); BR-003 (PROVISIONAL)
 │   ├── requestAccountDeletion                   [caller: the account owner]
-│   │   ├── In: a confirmation flag and a mode, the grace window or immediate
+│   │   ├── In: a confirmation flag. The baseline is immediate. Under PRC-02 a mode is added, the grace window or immediate
 │   │   ├── Out: confirmation and the purge date, or confirmation that deletion has started
-│   │   ├── Refuses: not the owner; already deleting; the last Super Admin
+│   │   ├── Refuses: not the owner; already deleting; the last Super Admin (PRC-01 only)
 │   │   └── Requirements: FR-AUTH-009, FR-PRIV-003 (CONFIRMED); PRC-02
-│   └── cancelAccountDeletion                    [caller: the account owner, during the window]
+│   └── cancelAccountDeletion                    [caller: the account owner, during the window; PRC-02 only]
 │       ├── In: none
 │       ├── Out: the account is active again
 │       ├── Refuses: not pending deletion; already deleting
@@ -1348,7 +1354,7 @@ Backend functions (working names)
         └── Requirements: FR-PRIV-003 (CONFIRMED); PRC-02
 ```
 
-Error categories are the usual callable ones: unauthenticated, permission denied, failed precondition (for example an unverified email or an incomplete profile), not found, invalid argument and resource exhausted. The exact names are confirmed at implementation. The contract adds gone, conflict and unavailable. This tree is a summary, and the API and Backend Contract governs the detail of each operation. The app maps each to the prompts in 7.4 and to the empty and error states in FR-STATE-001 to FR-STATE-007 (ASSUMPTION).
+Error categories are the upper-case names of `API_AND_BACKEND_CONTRACT.md` section 2.5: UNAUTHENTICATED, FORBIDDEN, FAILED_PRECONDITION (for example an unverified email or an incomplete profile), INVALID_ARGUMENT, NOT_FOUND, GONE, CONFLICT, RATE_LIMITED, UNAVAILABLE and INTERNAL. Each refusal carries a reason code. The exact names are confirmed at implementation. This tree is a summary, and the API and Backend Contract governs the detail of each operation.
 
 ### 10.2 Direct database access under rules
 
@@ -1418,6 +1424,8 @@ Reading progress such as a last-read page is not a requirement. It is not stored
 
 No availability, recovery-time or recovery-point target has been agreed (spec §6.2). This document does not invent one. An outage at the cloud provider, Apple, Google or the WordPress host is not a product defect [S2 Warranty].
 
+The intended and the tested behaviour of downloads, links and offline copies are listed in `TESTING_STRATEGY.md` section 16. Nothing in that table has been tested.
+
 ### 11.4 Backup and recovery
 
 | Asset | Protection | Notes |
@@ -1446,7 +1454,7 @@ A database restore can bring back personal data that was purged. After any resto
 | T8 | A malicious or malformed upload | A holding area. A genuine-PDF check on the first bytes and a size check before the file moves to the private path. | A parser flaw if PDF content is parsed on the server. Page count extraction must use a maintained library. |
 | T9 | HTML from news posts runs script in the app | A sanitising renderer. No script execution. | A renderer defect |
 | T10 | A spreadsheet formula in an exported cell | Cells that start with a formula character are neutralised on export | None expected |
-| T11 | Too much personal data is collected | Only the approved profile fields. Required-ness is configuration. No email copy. No device tokens. Analytics off until OQ-23. | The working field list is wider than the S3 list (PRC-03) |
+| T11 | Too much personal data is collected | Only the approved profile fields. Required-ness is configuration. No email copy. No device tokens. Analytics off until OQ-23. | The earlier working list (PRC-03, superseded as the default) was wider than the S3 list. Its extra fields are optional candidates (GS-Q34) |
 | T12 | Personal data in logs | Logs carry identifiers and event names, not personal data or URLs | Developer error |
 | T13 | Backups keep deleted data | Documented in the privacy inputs. Deletions are re-applied after a restore. | Retention until backups expire |
 | T14 | A dependency is compromised or breaks | Versions are pinned and audited. The Firebase plugins published new major versions about a week before this document (VS-42). | A late-found defect |
@@ -1461,7 +1469,7 @@ The full model is in [Database and Data Model](DATABASE_AND_DATA_MODEL.md). This
 | Data | Where it lives | Purpose | Status |
 |---|---|---|---|
 | Email address, name, user identifier, verification state | The sign-in provider | Sign-in and verification. Name and email prefill the profile. | CONFIRMED for email (DATA-003). The app keeps only the identifier (GS-Q5). |
-| Profile fields: full name, mobile number, company, job title, industry segment, country, age or date of birth, city, areas of interest | The database, in a profile record | MFW's visibility of who registers (O6) | PROVISIONAL and ASSUMPTION (DATA-004, PRC-03) |
+| Profile fields: name, exact age, gender, occupation and domain of work (the default required set). Optional candidates, not required until MFW confirms them: mobile number, company, country, city, areas of interest | The database, in a profile record | MFW's visibility of who registers (O6) | PROVISIONAL (FR-PROF-002, DATA-004); optional candidates ASSUMPTION (GS-Q34) |
 | Consent record | The database | Evidence of consent | ASSUMPTION (DATA-012, OQ-27) |
 | Bookmarks, favourites | The database, under the reader's identifier | Features | CONFIRMED (DATA-005, DATA-006) |
 | Notification choices | The database for signed-in readers | Features | CONFIRMED (DATA-007) |
@@ -1544,7 +1552,7 @@ Review triggers: a measured monthly download volume near scenario C, MFW stating
 
 ### 14.1 Architecture risks
 
-These are risks to the architecture. The charter's own risks R1 to R11 stay as they are in the charter and the register. Owners are proposals.
+These are risks to the architecture. The charter's own risks R1 to R11 stay as they are in the charter and the register. Owners are proposals. Each AR maps to a risk in `RISK_REGISTER.md` section 7 (AR-18 became R23).
 
 | ID | Risk | Effect | Mitigation | Owner | Linked |
 |---|---|---|---|---|---|
@@ -1558,7 +1566,7 @@ These are risks to the architecture. The charter's own risks R1 to R11 stay as t
 | AR-08 | Lock-in to Firebase sign-in identifiers and the database model. | A costly migration. | A thin data layer, a vendor-neutral data model and standard object storage. A migration route for accounts was not researched. | Development team | TD-03; NFR-MAINT-005 |
 | AR-09 | Whole-file downloads of up to 150 MB on mobile networks and small devices, with no CDN. | Failed downloads, storage pressure and cost (CH R2). | Size warning, resume, free-space check, a limit on URL requests, and a request to MFW for smaller PDFs. | Development team | FR-DL-003 to FR-DL-006; NFR-STOR-003 |
 | AR-10 | The Firebase plugins published new major versions about a week before this document, and the Flutter stable release is recent (VS-42, VS-43). | Breakage on upgrade or hidden defects. | Pin versions and test before use. | Development team | TD-01; TD-06 |
-| AR-11 | The working mandatory profile list is wider than the S3-reported list and includes mobile number and company. | Privacy and legal exposure that MFW owns (CH R10, R11). | MFW confirms the list (OQ-01) and its adviser reviews it (OQ-07). The required set is configuration. | MFW authorised approver; legal adviser | PRC-03; REG-022; REG-023 |
+| AR-11 | The earlier working profile list (PRC-03, superseded as the default) was wider than the S3-reported list and included mobile number and company. They are now optional candidates (GS-Q34), and the risk stays until MFW confirms a list. | Privacy and legal exposure that MFW owns (CH R10, R11). | MFW confirms the list (OQ-01) and its adviser reviews it (OQ-07). The required set is configuration. | MFW authorised approver; legal adviser | PRC-03; REG-022; REG-023 |
 | AR-12 | Charter §17.4 needs both developers to agree each architecture decision. One developer confirmed them in the questioning session. | Decisions are later reversed. | Record all as proposed. Get the other developer's agreement. | Development team | REG-052; GS |
 | AR-13 | MFW may choose a temporary-copy model for OQ-08. | Rework of the device registry and flows. | A retention-mode field is kept so the change is small. | Development team | TD-11; OQ-08 |
 | AR-14 | Google Play may require a web link for deletion requests, and no such page is in scope. | A store rejection. | MFW decides where it lives. | MFW authorised approver | AOQ-06; VS-39 |
@@ -1566,8 +1574,8 @@ These are risks to the architecture. The charter's own risks R1 to R11 stay as t
 | AR-16 | MFW's WordPress host throttles or blocks the app. | News does not load. | Paging, caching, and a move to a backend cache (TD-12, option B). | Development team | CH R5; TD-12 |
 | AR-17 | The glossary defines one admin role and says "Content administrator" is not a project term. | Contradictory terms if PRC-01 is approved. | Mark Super Admin and Content Admin as proposed terms. Update the glossary only after MFW approves. | Development team | TD-15; Appendix B |
 | AR-18 | Many vendor facts came from summaries of long pages. | A wrong fact in a decision. | The reading mode is recorded for each source. Re-check summaries before approval. | Development team | Technology Decisions §9.1 |
-| AR-19 | The same issue PDFs may be public on MFW's website, while the app requires sign-in. | The app's gate controls the app's copy only, and a reader or MFW may take it for content secrecy. Withdrawal in the app does not withdraw the website's copy. | State the channel policy plainly (Security and Access Control §3). MFW confirms in writing what the gate is for (AOQ-18). Do not call the app's issues secret or exclusive in project documents. | MFW authorised approver; development team | AOQ-18; GS-Q32; NFR-SEC-009 |
-| AR-20 | A sign-in wall for content that is public on the web, and a forced-update screen, may draw questions in app store review. Not verified. | A store rejection or a late change. | Check the live store guidelines before submission (Technology Decisions §9.4, item 23). The update gate is a proposal that MFW can decline (PRC-04). | Development team | PRC-04; AOQ-18; AR-02 |
+| AR-19 | The same issue PDFs may be public on MFW's website, while the app requires sign-in. | The app's gate controls the app's copy only, and a reader or MFW may take it for content secrecy. Withdrawal in the app does not withdraw the website's copy. | State the channel policy plainly (Security and Access Control §3). MFW confirms in writing what the gate is for (AOQ-18, now OQ-57). Do not call the app's issues secret or exclusive in project documents. | MFW authorised approver; development team | AOQ-18, now OQ-57; GS-Q32; NFR-SEC-009 |
+| AR-20 | A sign-in wall for content that is public on the web, and a forced-update screen, may draw questions in app store review. Not verified. | A store rejection or a late change. | Check the live store guidelines before submission (Technology Decisions §9.4, item 23). The update gate is a proposal that MFW can decline (PRC-04). | Development team | PRC-04; AOQ-18, now OQ-57; AR-02 |
 
 ### 14.2 Unresolved decisions that affect the architecture
 
@@ -1576,7 +1584,7 @@ These are risks to the architecture. The charter's own risks R1 to R11 stay as t
 | Approval | TD-03 and C-05 (CHG-04). REG-001, REG-002 and REG-007. | Any cloud project |
 | Location | TD-22 (AOQ-01). AOQ-11 and AOQ-15. | Any cloud project |
 | Sign-in | OQ-04, OQ-05, OQ-06. AOQ-08, AOQ-09. C-04. | The sign-in design and the access check |
-| Profile | OQ-01, OQ-02, OQ-03, OQ-07, PRC-03. | The profile function, consent text, store privacy forms |
+| Profile | OQ-01, OQ-02, OQ-03, OQ-07. | The profile function, consent text, store privacy forms |
 | Reading and offline | OQ-08, OQ-10, OQ-11, OQ-21. AOQ-07, AOQ-12. | Device registry, download flow |
 | Reader library | TD-10 (CH D3) | The reader module, at the M2 test |
 | Admin | PRC-01, OQ-20. AOQ-03, AOQ-04, AOQ-05, AOQ-14. AOQ-17 is answered by proposal (GS-Q20). | The admin panel's role design |
@@ -1584,7 +1592,7 @@ These are risks to the architecture. The charter's own risks R1 to R11 stay as t
 | Edition-update list | OQ-31, C-02 | The list, its export and the deletion step |
 | Privacy and deletion | OQ-24, OQ-27, PRC-02. AOQ-02, AOQ-06. | Deletion workflow, backups, consent record |
 | Usage events | OQ-23, C-07 | Analytics |
-| Channels and content | AOQ-18, AOQ-19, AOQ-20. OQ-11, OQ-21. | The wording of the app's gate, the deleted-issue list and cover handling |
+| Channels and content | AOQ-18, now OQ-57, AOQ-19, AOQ-20. OQ-11, OQ-21. | The wording of the app's gate, the deleted-issue list and cover handling |
 | Contract changes | PRC-04 | The update gate |
 
 ### 14.3 What blocks implementation
@@ -1609,7 +1617,7 @@ Work that does not depend on these, such as the screen designs and the static pa
 | Per-reader records under rules | TD-05, TD-07 | FR-BKM-001 (CONFIRMED); FR-BKM-003 (CONFIRMED); FR-BKM-004 (CONFIRMED); NFR-SEC-005 (CONFIRMED) | OQ-12 |
 | Sign-in provider | TD-06 | FR-AUTH-001 (CONFIRMED); FR-AUTH-009 (CONFIRMED); INT-AUTH-001 (CONFIRMED); FR-AUTH-005 (PROVISIONAL); INT-AUTH-002 (PROVISIONAL) | OQ-06; C-04 |
 | One account per email, verified-email linking rule | TD-06 | FR-AUTH-006 (OPEN); FR-AUTH-007 (OPEN) | OQ-04, OQ-05; AOQ-08; AOQ-09 |
-| Profile record written through a function | TD-05, TD-07 | FR-PROF-001 (PROVISIONAL); FR-PROF-006 (CONFIRMED); FR-PROF-007 (ASSUMPTION); DATA-004 (PROVISIONAL) | OQ-01, OQ-02, OQ-03; PRC-03 |
+| Profile record written through a function | TD-05, TD-07 | FR-PROF-001 (PROVISIONAL); FR-PROF-006 (CONFIRMED); FR-PROF-007 (ASSUMPTION); DATA-004 (PROVISIONAL) | OQ-01, OQ-02, OQ-03; GS-Q34 |
 | Consent record | TD-07 | FR-PRIV-001 (CONFIRMED); FR-PRIV-002 (ASSUMPTION); DATA-012 (ASSUMPTION) | OQ-27 |
 | Direct WordPress read with device cache | TD-12 | INT-WP-001 (CONFIRMED); INT-WP-004 (CONFIRMED); DATA-015 (CONFIRMED); FR-NEWS-007 (CONFIRMED); FR-NEWS-005 (CONFIRMED) | OQ-16, OQ-17 |
 | News controls kept in the database | TD-12 | DATA-009 (CONFIRMED); FR-ADMIN-013 (CONFIRMED); FR-ADMIN-014 (CONFIRMED) | |
@@ -1630,7 +1638,7 @@ Work that does not depend on these, such as the screen designs and the static pa
 | Region of the database, bucket and functions | TD-22 | NFR-STOR-001 (ASSUMPTION) | AOQ-01; AOQ-11 |
 | Deleted-issue list and opaque identifiers | TD-07 | DATA-013 (CONFIRMED); FR-ADMIN-012 (OPEN) | OQ-11; OQ-21; AOQ-19 |
 | Update gate and compatibility policy | TD-05 | NFR-MAINT-005 (ASSUMPTION) | PRC-04 |
-| Website and app channels | TD-09, TD-12 | NFR-SEC-009 (CONFIRMED); NFR-SEC-003 (CONFIRMED); INT-WP-002 (CONFIRMED) | AOQ-18; AR-19 |
+| Website and app channels | TD-09, TD-12 | NFR-SEC-009 (CONFIRMED); NFR-SEC-003 (CONFIRMED); INT-WP-002 (CONFIRMED) | AOQ-18, now OQ-57; AR-19 |
 
 ### 15.2 S2 acceptance criteria and the architecture that serves them
 
@@ -1651,7 +1659,7 @@ Work that does not depend on these, such as the screen designs and the static pa
 
 ## 16. What Remains Provisional
 
-Nothing in this document is approved. The items below are the ones most likely to be mistaken for settled.
+Nothing in this document is approved. The items below are the ones most likely to be mistaken for settled. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed.
 
 | Item | Label | What resolves it |
 |---|---|---|
@@ -1659,16 +1667,16 @@ Nothing in this document is approved. The items below are the ones most likely t
 | TypeScript, React, Riverpod and go_router | proposed | Both developers agree. |
 | Google Sign-In | PROVISIONAL (C-04) | The S3 record or MFW's written confirmation (OQ-29), and OQ-06 |
 | The account-linking and verified-email rule | proposed | MFW's approval of OQ-04 and OQ-05, and the spikes |
-| The working profile field list and its required set | ASSUMPTION (PRC-03) | MFW's answer to OQ-01, OQ-02 and OQ-07 |
+| The default required profile set (the requirements-specification list) and the optional extra fields | PROVISIONAL (FR-PROF-002); extra fields ASSUMPTION (GS-Q34) | MFW's answer to OQ-01, OQ-02 and OQ-07 |
 | Profile completeness before full access | PROVISIONAL (BR-003) | The S3 record or MFW's written confirmation |
 | One-action reading and offline copies | ASSUMPTION | MFW's answer to OQ-08 |
 | Offline cache and queued writes | proposed, OPEN (OQ-10) | MFW's approval |
 | Signed-URL delivery and its resume behaviour | proposed | The TD-09 proof plan (AR-01) |
-| Two admin roles, in-panel management and the audit log | accepted by the development team (GS-Q19), proposed change (PRC-01) | MFW's written approval through the change process |
-| Admin reads through functions only, and a revoked admin's older token | accepted by the development team (GS-Q20), AOQ-17 answered by proposal | MFW's approval of PRC-01, and the TD-15 and security tests |
-| Soft delete with undo, the immediate option and the purge window | accepted by the development team (GS-Q28), proposed change (PRC-02) | MFW's and its adviser's agreement |
+| Two admin roles, in-panel management and the audit log | PROPOSED (GS-Q19), proposed change (PRC-01) | MFW's written approval through the change process |
+| Admin reads through functions only, and a revoked admin's older token | PROPOSED (GS-Q20), AOQ-17 answered by proposal | MFW's approval of PRC-01, and the TD-15 and security tests |
+| Soft delete with undo, the immediate option and the purge window | PROPOSED (GS-Q28), proposed change (PRC-02) | MFW's and its adviser's agreement |
 | The update gate and the compatibility policy | proposed addition (PRC-04) | MFW's written agreement for the gate |
-| The channel policy for the website and the app | accepted by the development team (GS-Q32) | MFW's written confirmation (AOQ-18) |
+| The channel policy for the website and the app | PROPOSED (GS-Q32) | MFW's written confirmation (AOQ-18, now OQ-57) |
 | Crashlytics on and Analytics off | proposed, CONFLICT (C-07) | MFW's decision on C-07 and OQ-23 |
 | Data location | open (TD-22) | MFW's decision |
 | The reader library | open (TD-10) | The M2 reader test |
@@ -1703,7 +1711,7 @@ Reader, signed-in reader, logged-out visitor, access incomplete, full access, ca
 | Guard record | A single record that every admin role change reads and writes, so that two concurrent changes cannot both succeed when only one should | Proposed (PRC-01) |
 | Deleted-issue record | An identifier and a time kept after an issue is permanently deleted, so apps can remove their copies | Proposed (GS-Q25) |
 | Update gate | A minimum supported app version and an update-required screen | Proposed addition to S2 scope (PRC-04) |
-| Team-accepted | Accepted by the development team, with the requirement label PROVISIONAL and MFW written approval pending | Label (GS-Q30) |
+| Team-accepted (retired word) | Used in version 0.2 for a choice the interviewed developer recorded as accepted. Replaced by PROPOSED plus the agreement note (section 1.2) | Label (GS-Q30) |
 | Signed URL | A web address that grants access to one file for a short time | Technical term |
 | Holding area | A private place where uploads wait for validation before they move to the private path | Design term |
 | File revision | A numbered version of an issue's PDF. A replacement creates a new revision. | Design term |

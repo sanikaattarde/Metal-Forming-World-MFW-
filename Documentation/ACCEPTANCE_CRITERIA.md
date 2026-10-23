@@ -7,10 +7,9 @@
 | Document | Acceptance Criteria |
 | File | `Documentation/ACCEPTANCE_CRITERIA.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 31) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. No criterion has been tested. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers for the verification detail. MFW in writing for every PAC criterion before it becomes contractual. |
 
 **Change history**
@@ -18,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft. AC-1 to AC-12 broken into verification checks. PAC-01 to PAC-11 carried from RS. PAC-12 to PAC-15 proposed. |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Rule 1 reworded to state which rows are proposed checks. AC-9.7 added for FR-ADMIN-014 and FR-ADMIN-015. PAC-16 (conditional on PRC-02), PAC-17 (account-existence messages) and PAC-18 (conditional on PRC-01) added. Coverage table updated. |
 
 ### 1.1 Related documents
 
@@ -25,9 +25,9 @@
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Acceptance criteria", "Deliverables and milestones", "How acceptance testing works" | Exists, issued, unsigned. **The S2 text is authoritative.** |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §10, §13 | Exists, draft. Summary of AC-1 to AC-12 and the PAC-01 to PAC-11 proposals. |
-| `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist, created in this task |
-| `OPEN_QUESTIONS.md` | Exists, created in this task. Questions linked below. |
-| `DEFINITION_OF_DONE.md`, `API_AND_MODULE_CONTRACTS.md` | Exist, created in this task |
+| `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist (draft) |
+| `OPEN_QUESTIONS.md` | Exists (draft). Questions linked below. |
+| `DEFINITION_OF_DONE.md`, `API_AND_MODULE_CONTRACTS.md` | Exist (draft) |
 
 ## 2. Purpose, Scope and Status
 
@@ -35,9 +35,9 @@ This matrix makes each acceptance criterion testable and traceable. It covers au
 
 **Rules**
 
-1. The S2 criteria AC-1 to AC-12 keep their IDs and wording. The rows **AC-n.m** split each criterion into separate checks, quoting or closely following the S2 text. **They do not add or change contractual conditions.** If a check and the S2 text ever differ, S2 prevails.
+1. The S2 criteria AC-1 to AC-12 keep their IDs and wording. The rows **AC-n.m** split each criterion into separate checks, quoting or closely following the S2 text. **They do not add or change contractual conditions.** A row whose Status or Clarification says it is not in the AC text (AC-2.7, AC-4.7, AC-7.5, AC-9.7) or that adds a precondition (AC-3.2) is a proposed check, and it adds no contractual condition until MFW approves it. The priority P1 on such a row refers to the S2 criterion it belongs to and not to the check. If a check and the S2 text ever differ, S2 prevails.
 2. PAC-01 to PAC-11 are the RS §10.2 proposals, unchanged in meaning.
-3. PAC-12 to PAC-15 are new proposals.
+3. PAC-12 to PAC-18 are new proposals.
 4. No PAC is contractual until MFW approves it in writing.
 5. No result is recorded. Section 9 is the place for results once testing starts.
 
@@ -168,6 +168,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | AC-9.4 | S2 AC-9; RS FR-ADMIN-018 | The send log records each send | Two sends | I: open the send log | Both recorded | P1 | CONFIRMED | Fields: OQ-19 |
 | AC-9.5 | S2 AC-9; RS FR-ADMIN-017 | Only admins can send | FX-USR-01 | T: attempt a send directly (SEC-CHK-06) | Refused | P1 | CONFIRMED | — |
 | AC-9.6 | S2 AC-9; RS NFR-REL-003 | Delivery time is not guaranteed | — | I: delivery times are recorded, not judged | Recorded | P1 | CONFIRMED | — |
+| AC-9.7 | S2 Scope: Notifications; RS FR-ADMIN-014, FR-ADMIN-015 | A post marked as breaking in the admin panel is flagged in the app, and sending it as a breaking-news notification reaches opted-in devices | A published WordPress fixture post; a device opted into the matching category | T: mark the post as breaking; send it as a notification | The post is flagged in the app after a refresh, and the opted-in device receives the notification | P1 | PROPOSED. A check of CONFIRMED requirements; not in the S2 AC text | How a breaking post is shown: OQ-17 |
 
 ### AC-10 Testing
 
@@ -216,6 +217,9 @@ PAC-01 to PAC-11 are from RS §10.2. They are summarised here, and RS holds the 
 | PAC-13 | New. RS NFR-SEC-002; DEC-009 | An issue-file request is refused when signed out, unverified, profile incomplete, using another reader's grant, using an expired grant, or using a guessed storage path. A valid grant for a full-access reader succeeds. (SEC-CHK-02, SEC-CHK-03) | T | P2 | PROPOSED | DEC-020, OQ-37 |
 | PAC-14 | New. RS FR-DL-010 | Downloaded issues after sign-out, account deletion, or unpublishing behave as decided | T | P2 | PROPOSED; BLOCKED | OQ-11 |
 | PAC-15 | New. Store policy | If confirmed as required, readers can request account deletion through a web link outside the app, as declared to Google Play | I | P2 | PROPOSED; BLOCKED | OQ-45 |
+| PAC-16 | New. PRC-02 | Only if MFW approves the grace window (PRC-02): a deletion request puts the account in a pending state, the reader can undo during the window, and the purge at the end removes the data. The baseline checks AC-3.7 and PAC-06 are unchanged | T | P3 | PROPOSED; conditional on PRC-02 | OQ-24, AOQ-02 |
+| PAC-17 | New. RS FR-AUTH-001 to FR-AUTH-004 | Registering with an address that already has an account shows that an account exists and offers sign-in or reset. A wrong-credential sign-in and a password reset give the same messages for a known and an unknown address. Test with FX-USR-13 (SEC-CHK-17). It adds no contractual condition | T | P3 | PROPOSED; the provider's behaviour is NOT VERIFIED | OQ-05, DEC-006 |
+| PAC-18 | New. PRC-01 | Only if MFW approves two admin roles (PRC-01): a Content Admin can do content work and cannot grant or revoke roles, delete an issue permanently or view the reader list; a Super Admin can; the last Super Admin cannot be removed; each audited action writes one audit event. The baseline checks AC-8.1 and AC-8.2 are unchanged. Tests ST-02 and ST-07 to ST-11 in `SECURITY_AND_ACCESS_CONTROL.md` section 14 | T | P3 | PROPOSED; conditional on PRC-01 | OQ-20, AOQ-03, AOQ-04 |
 
 ## 7. Ambiguous or Conflicting Criteria
 
@@ -242,12 +246,12 @@ PAC-01 to PAC-11 are from RS §10.2. They are summarised here, and RS holds the 
 | §5.7 Bookmarks and favourites | AC-5.1 to AC-5.4 |
 | §5.8 News | AC-7.1 to AC-7.5, AC-8.8 |
 | §5.9 Sharing | AC-6.1, AC-6.2, PAC-05 |
-| §5.10 Notifications | AC-9.1 to AC-9.6 |
+| §5.10 Notifications | AC-9.1 to AC-9.7 |
 | §5.11 Edition-update emails | AC-8.9, PAC-11 (CONFLICT) |
-| §5.12 Admin | AC-8.1 to AC-8.8 |
+| §5.12 Admin | AC-8.1 to AC-8.8, AC-9.7 (FR-ADMIN-014, FR-ADMIN-015), PAC-18 (conditional on PRC-01) |
 | §5.13 User administration | AC-8.9, PAC-03, PAC-06 |
 | §5.14 States | PAC-10 |
-| §5.15 Privacy and deletion | AC-3.7, PAC-06, PAC-08, PAC-15 |
+| §5.15 Privacy and deletion | AC-3.7, PAC-06, PAC-08, PAC-15, PAC-16 |
 | §6.3 Security | AC-3.5, AC-5.4, AC-8.2, AC-9.5, AC-10.3, PAC-13 |
 | §6.1 and §6.2 Performance and reliability | AC-2.1, AC-2.3, AC-2.5, AC-10.4 |
 | §6.6 Compatibility | AC-10.2 |

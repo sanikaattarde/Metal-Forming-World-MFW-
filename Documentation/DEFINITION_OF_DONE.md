@@ -7,10 +7,9 @@
 | Document | Definition of Done |
 | File | `Documentation/DEFINITION_OF_DONE.md` |
 | Phase | 3 — Development Planning and Collaboration (document 27) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers |
 
 **Change history**
@@ -18,16 +17,17 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Access-rule wording labelled (working position, baseline). Decision wording aligned with the status model. Handover gating: HO-13 and HO-14 gate only if MFW agrees them. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Acceptance criteria" and "How acceptance testing works" | Exists, issued, unsigned. Contractual acceptance. Not changed here. |
-| `ACCEPTANCE_CRITERIA.md` | Exists, created in this task. Detailed verification of AC-1 to AC-12 and PAC-01 to PAC-15. |
-| `TESTING_STRATEGY.md`, `CI_CD_AND_QUALITY_GATES.md` | Exist, created in this task. Test levels and quality gates, all PLANNED. |
-| `CODING_STANDARDS.md`, `DEVELOPMENT_WORKFLOW.md`, `API_AND_MODULE_CONTRACTS.md` | Exist, created in this task |
-| `MAINTENANCE_AND_HANDOVER.md`, `APP_STORE_RELEASE_CHECKLIST.md` | Exist, created in this task |
+| `ACCEPTANCE_CRITERIA.md` | Exists (draft). Detailed verification of AC-1 to AC-12 and PAC-01 to PAC-15. |
+| `TESTING_STRATEGY.md`, `CI_CD_AND_QUALITY_GATES.md` | Exist (draft). Test levels and quality gates, all PLANNED. |
+| `CODING_STANDARDS.md`, `DEVELOPMENT_WORKFLOW.md`, `API_AND_MODULE_CONTRACTS.md` | Exist (draft) |
+| `MAINTENANCE_AND_HANDOVER.md`, `APP_STORE_RELEASE_CHECKLIST.md` | Exist (draft) |
 
 ## 2. Purpose, Scope and Status
 
@@ -59,7 +59,7 @@ Some checks cannot be done until infrastructure exists. Each check is labelled w
 | 5 | No invented dates, approvals, test results, prices, credentials or commercial commitments | [NOW] |
 | 6 | No draft is described as approved | [NOW] |
 | 7 | Conflicts are shown, not silently resolved | [NOW] |
-| 8 | The mandatory access rules (DEC-007, DEC-009) are preserved | [NOW] |
+| 8 | The access rules are preserved: DEC-007 (working position, PROVISIONAL) and DEC-009 (baseline, covering the app's copy only) | [NOW] |
 | 9 | No content duplicates a source document wholesale. Sources are cited instead. | [NOW] |
 | 10 | Reviewed and approved by the other developer in a pull request | [NOW] |
 | 11 | Any MFW approval required is recorded with evidence (`DECISION_LOG.md` §3.1) | [NOW] |
@@ -70,7 +70,7 @@ Some checks cannot be done until infrastructure exists. Each check is labelled w
 | # | Check | Available |
 |---|---|---|
 | 1 | Changes stay within the task's owned paths, or follow the shared-file protocol | [NOW] |
-| 2 | Relies only on AGREED or APPROVED decisions. Otherwise the work is a spike on a `spike/` branch and is not merged as production code (`DEVELOPMENT_WORKFLOW.md` §13). | [NOW] |
+| 2 | Relies only on decisions that are not OPEN or PROPOSED (AGREED, APPROVED or BASELINE). Otherwise the work is a spike on a `spike/` branch and is not merged as production code (`DEVELOPMENT_WORKFLOW.md` §13). | [NOW] |
 | 3 | Follows `CODING_STANDARDS.md`. Formatting and analysis are clean. | [SCAFFOLD] |
 | 4 | Unit and widget tests for the new behaviour and its failure paths pass, with requirement IDs in the test names | [SCAFFOLD] |
 | 5 | Loading, empty and error states handled where the screen has them (RS FR-STATE-001 to 007) | [SCAFFOLD] |
@@ -142,7 +142,7 @@ A feature is a set of tasks that together deliver one area, for example offline 
 | 4 | Credentials are held by MFW. A record of who holds each one is delivered. No secret values appear in it. [S2 Handover] | [STORE] |
 | 5 | Technical documentation, administrator guide, training session, release package, test evidence and known limitations delivered [S2 Handover] | [NOW] |
 | 6 | Both builds submitted, and MFW holds the confirmations (S2 AC-11) | [STORE] |
-| 7 | The items in `MAINTENANCE_AND_HANDOVER.md` are complete or explicitly agreed as outstanding | [NOW] |
+| 7 | The S1 and S2 items in `MAINTENANCE_AND_HANDOVER.md` are complete or explicitly agreed as outstanding. HO-13 and HO-14 are PROPOSED additions and gate the handover only if MFW agrees them (OQ-46, OQ-47) | [NOW] |
 
 ## 11. Evidence
 

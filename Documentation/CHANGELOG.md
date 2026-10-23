@@ -4,10 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -15,9 +14,9 @@
 
 | Document | Status on 23 October 2026 |
 |---|---|
-| `DECISION_LOG.md` DEC-015 | Exists, created in this task. Commit, changelog and version conventions (PROPOSED). |
-| `DEVELOPMENT_WORKFLOW.md` §8, §11 | Exists, created in this task. How pull requests add changelog lines. |
-| `APP_STORE_RELEASE_CHECKLIST.md` §8 | Exists, created in this task. When a version section is added. |
+| `DECISION_LOG.md` DEC-015 | Exists (draft). Commit, changelog and version conventions (PROPOSED). |
+| `DEVELOPMENT_WORKFLOW.md` §8, §11 | Exists (draft). How pull requests add changelog lines. |
+| `APP_STORE_RELEASE_CHECKLIST.md` §8 | Exists (draft). When a version section is added. |
 
 ## Conventions
 
@@ -32,9 +31,49 @@ PROPOSED (DEC-015).
 
 ## Unreleased
 
-### Documentation — committed on `SA` on 2026-10-23, not merged to `main`, not reviewed
+### Documentation: remediation of the merged documentation set, 2026-10-23, on topic branch `docs/yg-reconcile-merged-set` on top of `6e85734`, submitted for review by a pull request, not merged, not reviewed
 
-These were drafted in Sanika Attarde's Claude Code session on branch `SA`, on top of commit `8941964`, and committed to `SA` in a single commit. When that commit was made, it had not been pushed or merged to `main`. Every document is a draft v0.1 awaiting review by both developers.
+Prepared after pull request #1 and pull request #2 were merged. The edits apply the reconciliation of the two document sets, correct stale statements and record what the developers report as evidence. They change no requirement, scope item, exclusion, date, fee or CONFIRMED label. Statuses follow the repository's rules (`DECISION_LOG.md` section 3.1). What YG reports (the S3 emails, the other developer's agreement, MFW's answer to OQ-08) is recorded as a note. No entry is AGREED, APPROVED or ANSWERED because of it. Each document that changed has a new minor version and a row in its change history. Sanika Attarde has not reviewed any of these edits.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-10-23 | `Documentation/ACCEPTANCE_CRITERIA.md` | Reworded rule 1; added AC-9.7 (breaking news), PAC-16 (conditional on PRC-02), PAC-17 (account-existence messages) and PAC-18 (conditional on PRC-01); updated the coverage table; removed the Prepared-in row | Review findings F-11, F-12, F-10; deletion baseline and PRC-02 | AC-9.7; PAC-16 to PAC-18; PRC-01; PRC-02 | Both developers (reported by YG, not filed). PAC rows need MFW's written approval to become contractual | No scope effect: proposed checks add no contractual condition |
+| 2026-10-23 | `Documentation/API_AND_BACKEND_CONTRACT.md` | Single catalogue: added the 31 aliases (3.1), baseline and PRC-01 privileges (3.2), baseline and PRC-02 deletion (3.3), open design differences (3.4); error scheme changed to category plus reason; OP-12 and OP-13 marked baseline or PRC-02; registration and sign-in message rule; "team-accepted" replaced by PROPOSED plus note; website check updated | Reconciliation of the two document sets; review findings X-02, X-04, F-04, F-06, F-10, F-01 | OP-01 to OP-42; OP-AREA-nn aliases; DEC-026; DEC-027; DEC-029; PRC-01; PRC-02; OQ-57 | Both developers (reported by YG, not filed). MFW for PRC-01 and PRC-02 | No scope effect: the baseline is the confirmed text; PRC-01 and PRC-02 stay labelled proposals |
+| 2026-10-23 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Section 8: added the main-identifier column and notes (OP-ADM-11 split waits for OQ-21; OP-ADM-12; OP-ACC-01); section 4.2: category and reason column, GONE and RATE_LIMITED added; registration and sign-in messages; removed-admin and first-admin statements (4.4); compatibility and paging requirements (4.5); guest-reading rule labelled; planned names replaced; removed the Prepared-in row | Reconciliation of the two document sets; review findings X-02, F-04, F-05, F-06, F-10, F-13, F-14, F-15, F-07, X-01 | OP-AREA-nn aliases; DEC-026; OQ-21; OQ-57; PRC-01; PRC-02 | Both developers (reported by YG, not filed) | No scope effect: aliases, labels and PROPOSED requirements only |
+| 2026-10-23 | `Documentation/APP_STORE_RELEASE_CHECKLIST.md` | Corrected stale status wording; removed the Prepared-in row | Review findings F-20, F-09 | None | None | No scope effect |
+| 2026-10-23 | `Documentation/ASSUMPTIONS_AND_CONSTRAINTS.md` | Added a note to REG-001 (YG states the S3 emails exist; not in the repository; status unchanged) | Interview answers on the S3 evidence | REG-001; OQ-29 | YG (attestation). REG-001 stays OPEN | No scope effect |
+| 2026-10-23 | `Documentation/BACKUP_AND_RECOVERY.md` | Marked backup set-up as a proposed addition (not an S2 deliverable); added section 13 (status of the proposals and who does what); corrected related-document rows; removed the Prepared-in row | Review finding F-02; brief section 3.9 | OQ-46; OQ-47; HO-14 | MFW for the additions (OQ-46) | No change order: no effort figure; RPO and RTO remain proposals |
+| 2026-10-23 | `Documentation/CHANGELOG.md` | Added this remediation entry and the repository-history entries for the two merged pull requests; corrected the stale heading and related-document rows; removed the Prepared-in row | Review finding F-20, F-09; the record of changes required by the remediation | None | None | No scope effect |
+| 2026-10-23 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | QG-12 now states that the documentation-check script is not in the repository; replaced the planned technology-decisions name with the existing document; corrected related-document rows; removed the Prepared-in row | Review findings F-18, X-01, F-20, F-09 | QG-12 | None | No scope effect |
+| 2026-10-23 | `Documentation/CLAUDE_CODE_WORKING_RULES.md` | Labelled the no-guest-reading rule as a working position (PROVISIONAL); limited the file-access rule to the app's copy with a pointer to OQ-57; aligned decision wording with the status model; removed the Prepared-in row | Review findings F-07, F-08, F-01, F-09 | DEC-007; DEC-009; OQ-57 | None for labels | No scope effect: behaviour of the rules unchanged |
+| 2026-10-23 | `Documentation/CODING_STANDARDS.md` | Replaced the planned technology-decisions name with the existing document; labelled the access rules; marked the personal-data term for crash and usage events NOT VERIFIED; removed the Prepared-in row | Review findings X-01, F-07, F-24, F-09 | DEC-007; DEC-009; DEC-028; OQ-23 | None for labels | No scope effect |
+| 2026-10-23 | `Documentation/DATABASE_AND_DATA_MODEL.md` | Profile default required set aligned with the requirements specification (gender added; mobile number, company and country optional); deletion states marked PRC-02; admin role, guard and audit marked PRC-01; "team-accepted" replaced by PROPOSED plus note; website references extended to OQ-57 | Reconciliation of the two document sets; review findings X-03, X-04, X-02, F-01 | GS-Q34; PRC-01; PRC-02; PRC-03 (superseded); OQ-01; OQ-57; MA-5; MA-8 | Both developers (reported by YG, not filed). MFW confirms the field list (OQ-01) | No scope effect: the baseline is the confirmed text |
+| 2026-10-23 | `Documentation/DECISION_LOG.md` | Added DEC-025 to DEC-031, TD crosswalk (5.2), status rules 6 and 7, working-position notes on DEC-008, DEC-009, DEC-016, DEC-017, DEC-019; reworded 13 approver lines; corrected names and stale rows; removed the Prepared-in row | Reconciliation of the two document sets; evidence rules for reported statements; review findings F-23, F-01, F-20, F-09 | DEC-025 to DEC-031; DEC-008; DEC-009; DEC-016; DEC-017; DEC-019 | Both developers (reported by YG, not filed). MFW for PRC-01, PRC-02 and region | No scope effect: no requirement, exclusion, date or fee changed |
+| 2026-10-23 | `Documentation/DEFINITION_OF_DONE.md` | Labelled the access rules (DEC-007 working position, DEC-009 baseline); aligned decision wording with the status model (not OPEN or PROPOSED); HO-13 and HO-14 gate handover only if MFW agrees; removed the Prepared-in row | Review findings F-07, F-08, F-02, F-09 | DEC-007; DEC-009; HO-13; HO-14 | None for labels. MFW for HO-13 and HO-14 | No scope effect |
+| 2026-10-23 | `Documentation/DEPENDENCY_REGISTER.md` | Replaced the planned technology-decisions name with the existing document; corrected stale status rows; removed the Prepared-in row | Review findings X-01, F-20, F-09 | None | None | No scope effect |
+| 2026-10-23 | `Documentation/DEPLOYMENT_PLAN.md` | Marked backup steps as proposed additions; named the first-admin step; replaced planned names with the existing documents; removed the Prepared-in row | Review findings F-02, F-04, X-01, F-09 | OQ-20; OQ-46 | MFW for backup (OQ-46); both developers for the first-admin step | No scope effect |
+| 2026-10-23 | `Documentation/DEVELOPMENT_ROADMAP.md` | Corrected document names and stale status rows; stated the working baseline for dates with the S3 note; added tasks T-00.6 and T-00.7; removed the Prepared-in row | Document map (X-01), stale statements (F-20), order of authority and S3 evidence (Q1, Q2) | T-00.3; T-00.6; T-00.7; DEC-017; C-08 | Both developers (reported by YG, not filed). Dates stay PROVISIONAL | No scope effect: no date, estimate or milestone changed |
+| 2026-10-23 | `Documentation/DEVELOPMENT_WORKFLOW.md` | Updated the repository state (section 3) and the immediate actions (section 16) to the state after the two merges; replaced the co-author trailer requirement with the proposed no-attribution rule; removed the Prepared-in row | Review findings F-20, F-09 | DEC-010 | Both developers (the rule is PROPOSED; agreement reported by YG, not filed) | No scope effect |
+| 2026-10-23 | `Documentation/MAINTENANCE_AND_HANDOVER.md` | Marked HO-13 and HO-14 as proposed additions and qualified the "creates no new obligation" sentence; replaced planned names with the existing documents; added a note on the S1 maintenance figures; removed the Prepared-in row | Review findings F-02, F-17, X-01, F-09 | HO-13; HO-14; OQ-32; OQ-46; OQ-47 | MFW for HO-13 and HO-14 (OQ-46, OQ-47) | No change order: no effort figure, no new commitment |
+| 2026-10-23 | `Documentation/OPEN_QUESTIONS.md` | Added OQ-51 to OQ-57 and the AOQ crosswalk (section 7); restored OQ-20 and OQ-25 wording; notes on OQ-08, OQ-29, OQ-32, OQ-46, OQ-47; counts updated to 57; removed the Prepared-in row | Reconciliation of the register families; review findings F-01, F-22, F-17, F-02, F-09, F-20 | OQ-08; OQ-20; OQ-25; OQ-29; OQ-32; OQ-46; OQ-47; OQ-51 to OQ-57 | Both developers (reported by YG, not filed). MFW answers each question | No scope effect: no question is answered or closed |
+| 2026-10-23 | `Documentation/PROJECT_CHARTER.md` | Added a note on S3 after the amendments table in section 17.3 (YG states the emails exist; not in the repository; status unchanged) | Interview answers on the S3 evidence (the repository's status rules apply) | CH 17.3; OQ-29; REG-001 | YG (attestation). The amendments stay PROVISIONAL | No scope effect: no requirement, date or fee changed |
+| 2026-10-23 | `Documentation/RISK_REGISTER.md` | Added R23 (vendor facts) and R24 (verbal latitude), the AR-to-R crosswalk (section 7), a scope note on R4, corrections on R6, R7, R12, R14, R19, R20, R22; removed the Prepared-in row | Reconciliation of the register families; review findings F-01, F-02, F-20, F-09; interview context X1 | R4; R6; R7; R12; R19; R20; R22; R23; R24 | Both developers (reported by YG, not filed). MFW for any risk it must accept | No scope effect: no requirement, exclusion, date or fee changed |
+| 2026-10-23 | `Documentation/SECURITY_AND_ACCESS_CONTROL.md` | Separated the baseline from PRC-01 and PRC-02 (6.1a classification, section 7 intro, headers and labels); added T26, SC-21, ST-21; added what the gate and a signed link cannot protect (3.2); updated the website check; aligned the profile fields with the requirements specification; "team-accepted" replaced by PROPOSED plus note; error names upper-case | Reconciliation of the two document sets; review findings X-02, X-03, X-04, F-01, F-10 | PRC-01; PRC-02; SC-21; ST-21; T26; OQ-57; DEC-027; DEC-029 | Both developers (reported by YG, not filed). MFW for PRC-01 and PRC-02 | No scope effect: the baseline is the confirmed text; PRC-01 and PRC-02 stay labelled proposals |
+| 2026-10-23 | `Documentation/SYSTEM_ARCHITECTURE.md` | Added section 1.3 (baseline and the labelled changes PRC-01 and PRC-02); deletion flow and function list marked baseline or PRC-02; registration and sign-in messages (7.1); error categories aligned with the API and Backend Contract; "accepted by the development team" replaced by PROPOSED plus note; website references extended to OQ-57; pointers to the AR crosswalk and to the tested table | Reconciliation of the two document sets; review findings X-02, X-04, F-10, F-01 | PRC-01; PRC-02; GS-Q34; OQ-57; DEC-027; DEC-029 | Both developers (reported by YG, not filed). MFW for PRC-01 and PRC-02 | No scope effect: labels and cross-references only |
+| 2026-10-23 | `Documentation/TASK_OWNERSHIP_MATRIX.md` | Added the document map (section 13): canonical homes, retired names as aliases, unwritten documents, note on the document numbers; updated Phase 2 ownership row; corrected stale statements; removed the Prepared-in row | Two document sets with different names (review finding X-01, F-21, F-20, F-09) | G2-01; DEC-011 | Both developers (reported by YG, not filed) | No scope effect: names and cross-references only |
+| 2026-10-23 | `Documentation/TECHNOLOGY_DECISIONS.md` | TD-15 and TD-19 changed from "accepted by the development team" to proposed, each with a baseline and a labelled change; GS-Q34 added and PRC-03 superseded; not-verified item 24 added; the claim that MFW accepted the App Store risk qualified; AOQ aliases to OQ-51 to OQ-57; "team-accepted" replaced by PROPOSED plus note | Reconciliation of the two document sets; review findings X-04, X-03, F-10, F-01; brief section 3.8 | TD-06; TD-15; TD-19; GS-Q30; GS-Q34; PRC-03; AOQ-05; AOQ-10 to AOQ-14; AOQ-18; OQ-06; OQ-51 to OQ-57 | Both developers (reported by YG, not filed). MFW for PRC-01, PRC-02 and the region | No scope effect: labels and cross-references only |
+| 2026-10-23 | `Documentation/TESTING_STRATEGY.md` | Added SEC-CHK-17 to SEC-CHK-19 and section 16 (intended versus tested for protected files and offline copies); SEC-CHK-03 limited to the app's storage; corrected the registration wording; added test lines for breaking news, a removed admin and a failed replacement; personal-data term marked NOT VERIFIED; removed the Prepared-in row | Review findings F-04, F-05, F-06, F-10, F-12, F-24, F-01, F-09; brief section 3.6 | SEC-CHK-03; SEC-CHK-17 to SEC-CHK-19; OQ-08; OQ-57; AC-9.7; FX-ADM-08; FX-ADM-09; FX-USR-13 | Both developers (reported by YG, not filed) | No scope effect: proposed checks only; no test has been run |
+| 2026-10-23 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Added FX-USR-13, FX-ADM-08 and FX-ADM-09; replaced the planned data-model name with the existing document; removed the Prepared-in row | Review findings F-10, F-04, F-05, X-01, F-09 | FX-USR-13; FX-ADM-08; FX-ADM-09 | Both developers (reported by YG, not filed) | No scope effect: no fixture file is created |
+
+**New identifiers.** The numbers are the next free ones at the time of the edit, and the primary editor of each register may renumber a new entry before it merges: DEC-025 to DEC-031; OQ-51 to OQ-57; R23 and R24; SEC-CHK-17 to SEC-CHK-19; AC-9.7; PAC-16 to PAC-18; FX-USR-13; FX-ADM-08 and FX-ADM-09; T26; SC-21; ST-21; GS-Q34; T-00.6 and T-00.7; the document map in section 13 of `TASK_OWNERSHIP_MATRIX.md`.
+
+**Version citations.** The version numbers cited in the related-documents rows of `API_AND_BACKEND_CONTRACT.md`, `DATABASE_AND_DATA_MODEL.md`, `SYSTEM_ARCHITECTURE.md`, `SECURITY_AND_ACCESS_CONTROL.md`, `TECHNOLOGY_DECISIONS.md` and `ASSUMPTIONS_AND_CONSTRAINTS.md` were updated to the new versions.
+
+**Not changed:** `README.md`, `Documentation/REQUIREMENTS_SPECIFICATION.md`, `Documentation/GLOSSARY.md`, `Documentation/SCOPE_AND_EXCLUSIONS.md` (checked, no edit needed), `Documentation/MFW_Statement_of_Work.pdf`, `Documentation/MFW_Commercial_Proposal-2.pdf`.
+
+### Documentation: committed on `SA` on 2026-10-23 and merged to `main` by pull request #1 (merge commit `56c6d97`). No review is recorded on the pull request
+
+These were drafted in Sanika Attarde's Claude Code session on branch `SA`, on top of commit `8941964`, and committed to `SA` in a single commit. When that commit was made, it had not been pushed or merged to `main`. It was pushed as `0b54088` and merged to `main` by pull request #1 on 2026-10-23. Every document is a draft v0.1 awaiting review by both developers.
 
 **Added: Phase 3, development planning and collaboration**
 
@@ -67,6 +106,26 @@ These were drafted in Sanika Attarde's Claude Code session on branch `SA`, on to
 ## Repository History
 
 From Git on 2026-10-23.
+
+### 2026-10-23 - `6e85734` "Merge pull request #2 from sanikaattarde/YG"
+
+Author: Yuvraj Gaykhe. On `main`. The merge commit of pull request #2, with parents `56c6d97` and `cb85f0b`. The pull request shows one automated comment saying that a review could not be done. No person's review is recorded.
+
+### 2026-10-23 - `cb85f0b` "Add eight documentation drafts to the YG branch"
+
+Author: YuvrajGaykhe. On `YG`, merged by pull request #2. Parent `8941964`.
+
+- **Added** eight documents in `Documentation/`: `SCOPE_AND_EXCLUSIONS.md`, `ASSUMPTIONS_AND_CONSTRAINTS.md`, `GLOSSARY.md`, `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md`, `SECURITY_AND_ACCESS_CONTROL.md`
+
+### 2026-10-23 - `56c6d97` "Merge pull request #1 from sanikaattarde/SA"
+
+Author: Yuvraj Gaykhe. On `main`. The merge commit of pull request #1, with parents `8941964` and `0b54088`. The pull request shows no review.
+
+### 2026-10-23 - `0b54088` "docs: add Phase 3 and Phase 4 project documents"
+
+Author: Sanika Attarde. On `SA`, merged by pull request #1. Parent `8941964`.
+
+- **Added** twenty documents in `Documentation/`, listed in the Phase 3 and Phase 4 entry under Unreleased
 
 ### 2026-10-23 — `8941964` "Add project documentation"
 

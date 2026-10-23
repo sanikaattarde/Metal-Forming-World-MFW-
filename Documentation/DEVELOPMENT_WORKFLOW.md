@@ -7,10 +7,9 @@
 | Document | Development Workflow |
 | File | `Documentation/DEVELOPMENT_WORKFLOW.md` |
 | Phase | 3 — Development Planning and Collaboration (document 21) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. The branching model is DEC-010, PROPOSED. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers (AGREED in `DECISION_LOG.md`). No MFW approval: process only. |
 
 **Change history**
@@ -18,17 +17,18 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 3 updated to the state after the two merges. Section 16 states what happened to each action. The co-author trailer requirement replaced by the proposed no-attribution rule. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
 | `PROJECT_CHARTER.md` (CH) §17.5 | Exists, draft. States the source-control principle this document expands. |
-| `DECISION_LOG.md` | Exists, created in this task. DEC-010, DEC-012, DEC-015. |
-| `TASK_OWNERSHIP_MATRIX.md` | Exists, created in this task. Owned paths and shared files. |
-| `CLAUDE_CODE_WORKING_RULES.md` | Exists, created in this task. Session rules that apply this workflow. |
-| `CODING_STANDARDS.md`, `DEFINITION_OF_DONE.md`, `CHANGELOG.md` | Exist, created in this task |
-| `CI_CD_AND_QUALITY_GATES.md` | Exists, created in this task. All gates are PLANNED. |
+| `DECISION_LOG.md` | Exists (draft). DEC-010, DEC-012, DEC-015. |
+| `TASK_OWNERSHIP_MATRIX.md` | Exists (draft). Owned paths and shared files. |
+| `CLAUDE_CODE_WORKING_RULES.md` | Exists (draft). Session rules that apply this workflow. |
+| `CODING_STANDARDS.md`, `DEFINITION_OF_DONE.md`, `CHANGELOG.md` | Exist (draft) |
+| `CI_CD_AND_QUALITY_GATES.md` | Exists (draft). All gates are PLANNED. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal made in this document. In RS terms it is an ASSUMPTION (DEV): it has no force until both developers agree.
 
@@ -40,19 +40,20 @@ It applies to code, configuration and documents. Every rule here is PROPOSED unt
 
 ## 3. Current Repository State
 
-Verified with local Git on 23 October 2026. The remote was last fetched the same day.
+Verified with Git and the GitHub API on 23 October 2026, after pull request #1 and pull request #2 were merged.
 
 | Item | State | Evidence class |
 |---|---|---|
 | Remote | `origin` = `https://github.com/sanikaattarde/Metal-Forming-World-MFW-.git` | CONFIRMED (local config) |
-| `main` on GitHub | `8941964` "Add project documentation" | CONFIRMED (fetched) |
-| `SA` on GitHub | `3e642e0` "Initial commit". It does not contain the Phase 1 documents. | CONFIRMED (fetched) |
-| `YG` on GitHub | `3e642e0`. It does not contain the Phase 1 documents. | CONFIRMED (fetched) |
-| Local `SA` (Sanika Attarde's checkout) | Two commits ahead of `origin/SA`, not pushed: `8941964` (the Phase 1 documents, from `main`) and the commit that adds the Phase 3 and Phase 4 documents. | CONFIRMED |
+| `main` on GitHub | `6e85734` "Merge pull request #2 from sanikaattarde/YG". Before the two merges it was `8941964` "Add project documentation". | CONFIRMED (GitHub API) |
+| `SA` on GitHub | `0b54088` "docs: add Phase 3 and Phase 4 project documents". Merged into `main` by pull request #1 (merge commit `56c6d97`). | CONFIRMED (GitHub API) |
+| `YG` on GitHub | `cb85f0b` "Add eight documentation drafts to the YG branch". Merged into `main` by pull request #2 (merge commit `6e85734`). | CONFIRMED (GitHub API) |
+| Local checkouts | Not verified after the merges. | OPEN |
 | Tags | None | CONFIRMED |
 | CI | None. There is no `.github/` directory. | CONFIRMED |
-| Branch protection on GitHub | Not verified from local Git | OPEN |
+| Branch protection on GitHub | Not verified. The GitHub API answered "Not Found" for the protection settings of `main` on 23 October 2026, which means either none are set or the account used cannot read them. | OPEN |
 | How `8941964` reached `main` | A single-parent commit by YuvrajGaykhe, with no pull request visible in local metadata. Whether it was reviewed cannot be verified locally. | OPEN |
+| Reviews on the two pull requests | Pull request #1 shows no review. Pull request #2 shows one automated comment saying a review could not be done. No person's review is recorded on either. | CONFIRMED (GitHub API) |
 
 ## 4. Branch Roles
 
@@ -166,7 +167,7 @@ Refs: <RS IDs, AC IDs, DEC IDs, roadmap task ID>
   - `feat(downloads): resume interrupted issue downloads` with `Refs: FR-DL-006, AC-4.3, T-06.3`
   - `docs(decision-log): propose DEC-013 state management` with `Refs: DEC-013`
 - Never put secrets, tokens, personal data or real user names from production in a commit.
-- A commit created with help from a Claude Code session carries that session's co-author trailer.
+- Repository files and commits carry no AI-tool attribution lines and no co-author trailers (team rule, PROPOSED). Existing history is not rewritten.
 
 ## 12. Documentation Change Workflow
 
@@ -212,6 +213,8 @@ These settings are proposed for the repository owner (currently the `sanikaattar
 ## 16. Immediate Actions (Not Performed)
 
 These actions change Git state. They are listed for the developers to decide on and are not carried out by this document.
+
+Status on 23 October 2026, after the merges: actions 1 and 2 were done (`SA` was pushed and pull request #1 was merged). Action 3 was done differently: `YG` was pushed with the design drafts on top of `main`, and pull request #2 was merged. Actions 4 and 5 are not done: DEC-010 is still PROPOSED and branch protection is not verified.
 
 | # | Action | Who |
 |---|---|---|

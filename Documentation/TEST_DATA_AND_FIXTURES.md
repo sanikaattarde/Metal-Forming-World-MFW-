@@ -7,10 +7,9 @@
 | Document | Test Data and Fixtures |
 | File | `Documentation/TEST_DATA_AND_FIXTURES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 32) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. MFW confirms where its sample PDFs may be stored (DEC-024). |
 
 **Change history**
@@ -18,16 +17,17 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. FX-USR-13, FX-ADM-08 and FX-ADM-09 added. Planned name replaced by the existing document. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
-| `TESTING_STRATEGY.md`, `ACCEPTANCE_CRITERIA.md` | Exist, created in this task. They use the fixture IDs below. |
-| `API_AND_MODULE_CONTRACTS.md` | Exists, created in this task. Access states and payload shapes. |
-| `DECISION_LOG.md` DEC-024 | Exists, created in this task. Test data policy (PROPOSED). |
+| `TESTING_STRATEGY.md`, `ACCEPTANCE_CRITERIA.md` | Exist (draft). They use the fixture IDs below. |
+| `API_AND_MODULE_CONTRACTS.md` | Exists (draft). Access states and payload shapes. |
+| `DECISION_LOG.md` DEC-024 | Exists (draft). Test data policy (PROPOSED). |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft |
-| `DATABASE_DESIGN.md` | Planned (Phase 2). Seed formats for ENV-TEST wait for it. |
+| `DATABASE_AND_DATA_MODEL.md` | Exists on `main` (draft; planned as `DATABASE_DESIGN.md`). Seed formats for ENV-TEST wait for the data model to be agreed. |
 
 Status labels follow RS §1.2. **PLANNED** means designed but not created.
 
@@ -35,7 +35,7 @@ Status labels follow RS §1.2. **PLANNED** means designed but not created.
 
 This document defines safe, repeatable test data: users and roles, access states, magazine metadata, PDF files, network scenarios, bookmarks and favourites, WordPress responses, notification payloads, and admin test cases.
 
-**This task creates no fixture files, no large test files and no code.** Formats for backend seed data are blocked by DEC-003 and `DATABASE_DESIGN.md`.
+**This task creates no fixture files, no large test files and no code.** Formats for backend seed data are blocked by DEC-003 and by agreement of `DATABASE_AND_DATA_MODEL.md`.
 
 ## 3. Principles
 
@@ -76,6 +76,7 @@ Access states follow `API_AND_MODULE_CONTRACTS.md` §4.1.
 | FX-USR-10 | Readers with boundary age values, for the OQ-07 review | Email and password | Yes | Complete | `fullAccess` | Profile validation once OQ-02 and OQ-07 are answered | BLOCKED |
 | FX-USR-11 | Same address registered by email, then tried with Google | Both | Yes | Complete | Per OQ-05 | PAC-12 | BLOCKED |
 | FX-USR-12 | Store-review demo account, production only | Email and password | Yes | Complete | `fullAccess` | `APP_STORE_RELEASE_CHECKLIST.md` | BLOCKED (OQ-43). Created only with MFW's approval. Credentials are given only through the store consoles. |
+| FX-USR-13 | A known and an unknown email address, for the registration, sign-in and password-reset messages | Email and password | Known address: Yes | Known address: Complete | Not applicable | SEC-CHK-17, PAC-17 | PLANNED |
 
 **Addresses**
 
@@ -204,6 +205,8 @@ The shape follows `API_AND_MODULE_CONTRACTS.md` §6.11 (PROPOSED).
 | FX-ADM-05 | Admin operation called with a reader session (FX-USR-01) | Refused on the server (SEC-CHK-06) |
 | FX-ADM-06 | Admin operation with an expired or signed-out admin session | Refused; asked to sign in |
 | FX-ADM-07 | Registered-user rows whose synthetic names start with `=`, `+`, `-` or `@` | Exported cells are escaped (SEC-CHK-12) |
+| FX-ADM-08 | An admin whose role record is removed while a session opened before the removal is still held | Refused on the next privileged call (SEC-CHK-18). The time until the refusal is measured and reported |
+| FX-ADM-09 | A replacement PDF that fails validation (FX-PDF-10 or FX-PDF-12) for an issue that already has a current revision | The current revision stays in place and readers can still download it. Applies only if OQ-21 allows a replacement |
 
 ## 13. Setup and Teardown
 
@@ -246,4 +249,4 @@ The shape follows `API_AND_MODULE_CONTRACTS.md` §6.11 (PROPOSED).
 | WordPress site and categories | OQ-39 |
 | Google test-account ownership | OPEN |
 | Store-review demo account | OQ-43 |
-| ENV-TEST seed format | DEC-003; `DATABASE_DESIGN.md` (planned) |
+| ENV-TEST seed format | DEC-003; `DATABASE_AND_DATA_MODEL.md` (draft) |

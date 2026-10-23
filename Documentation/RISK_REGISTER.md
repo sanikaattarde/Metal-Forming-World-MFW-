@@ -7,10 +7,9 @@
 | Document | Risk Register |
 | File | `Documentation/RISK_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 38) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. Ratings are an initial development-team assessment and are unreviewed. |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers. Risks that MFW must accept need MFW's written acceptance. |
 
 **Change history**
@@ -18,6 +17,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial register. CH R1 to R11 carried with their IDs. R12 to R22 added. |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. R23 and R24 added, with the AR crosswalk (section 7). Scope note on R4 (the app's copy only). Stale evidence on R6, R7 and R12 corrected. Backup items on R19 marked as proposed additions. All ratings remain unreviewed. |
 
 ### 1.1 Related documents
 
@@ -26,7 +26,7 @@
 | `PROJECT_CHARTER.md` (CH) §18 | Exists, draft. Source of R1 to R11. |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §12.4 | Exists, draft. Maps CH risks to requirements. |
 | `MFW_Statement_of_Work.pdf` (S2) "Assumptions and key risks" | Exists, issued, unsigned |
-| `OPEN_QUESTIONS.md`, `DECISION_LOG.md`, `DEVELOPMENT_ROADMAP.md` | Exist, created in this task |
+| `OPEN_QUESTIONS.md`, `DECISION_LOG.md`, `DEVELOPMENT_ROADMAP.md` | Exist (draft) |
 
 ## 2. Purpose, Scope and Status
 
@@ -82,6 +82,8 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 | R20 | PROVISIONAL requirements not confirmed | Scope | 2 | 4 | 8 | Medium | Sanika Attarde | OPEN |
 | R21 | Developer availability not recorded | Delivery | 3 | 4 | 12 | Medium | Both | OPEN |
 | R22 | Documentation drift and duplicate sources of truth | Governance | 3 | 2 | 6 | Low | Sanika Attarde (interim editor) | OPEN |
+| R23 | Vendor facts not fully verified | Technical and governance | 3 | 3 | 9 | Medium | Both | OPEN |
+| R24 | Developers' latitude on development decisions is verbal | Scope and governance | 2 | 3 | 6 | Low | Both | OPEN |
 
 ## 5. Risk Details
 
@@ -120,9 +122,10 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 | Field | Detail |
 |---|---|
 | Description [CH §18] | Full issues must not be reachable without signing in. The mandatory profile adds a registration step, and Google users need a profile-completion step. |
+| Scope note | The controls below cover the app's copy of an issue. The same issues are publicly downloadable from MFW's website (observed 23 October 2026, not an approved source). The app's sign-in does not protect or remove the website copy, and MFW has not decided whether those copies stay public (OQ-57). |
 | Trigger | Any refused state can obtain issue content, or a long-lived public link to a PDF exists. |
 | Mitigation [CH §18] | Enforce access on the backend, not only in app screens. Test with direct file requests (AC-3.5). Additionally: DEC-009, PAC-13, SEC-CHK-02 and SEC-CHK-03, and rule tests for every access state (QG-08). |
-| Contingency | Treat any exposure as a critical defect (S2): stop the release and fix before anything else. |
+| Contingency | Treat any exposure of an issue through the app's storage or API as a critical defect (S2): stop the release and fix before anything else. |
 | Evidence and related | RS NFR-SEC-002, BR-002, BR-003, FR-PROF-004; DEC-007; DEC-020; OQ-04; OQ-37 |
 
 ### R5 WordPress API blocked, slow or not enabled
@@ -143,14 +146,14 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 | Trigger | Merge conflicts in shared files, overwritten work, or a direct push to `main`. |
 | Mitigation [CH §18, expanded] | Branch discipline, reviewed integration into `main`, an agreed task split. Drafted but not agreed: `DEVELOPMENT_WORKFLOW.md`, `TASK_OWNERSHIP_MATRIX.md`, `CLAUDE_CODE_WORKING_RULES.md`. |
 | Contingency | The recovery procedures in `DEVELOPMENT_WORKFLOW.md` §14 |
-| Evidence and related | Commit `8941964` reached `main` with no pull request visible locally (`DEVELOPMENT_WORKFLOW.md` §3). `YG` does not yet contain the Phase 1 documents. DEC-010, DEC-011, OQ-38. |
+| Evidence and related | Commit `8941964` reached `main` with no pull request visible locally (`DEVELOPMENT_WORKFLOW.md` §3). Since then, pull request #1 (merge commit 56c6d97) and pull request #2 (merge commit 6e85734) were merged into `main` on 23 October 2026. DEC-010, DEC-011, OQ-38. |
 
 ### R7 Compressed timeline
 
 | Field | Detail |
 |---|---|
 | Description [CH §18] | The start moved up from 16 November, client inputs are due earlier, and added scope is absorbed. |
-| Current evidence | If the CH dates apply, M1 (21 October 2026) has no evidence of approval, and M2 (4 November 2026) needs approved screens and a reader test. Internal estimates total 58–88 developer-days against at most 80 at full time over eight weeks (`DEVELOPMENT_ROADMAP.md` §8). |
+| Current evidence | The CH dates are the working baseline (YG's order of authority; PROVISIONAL because the S3 emails are not filed, DEC-017). On them, M1 (21 October 2026) has no evidence of approval, and M2 (4 November 2026) needs approved screens and a reader test. Internal estimates total 58–88 developer-days against at most 80 at full time over eight weeks (`DEVELOPMENT_ROADMAP.md` §8). |
 | Trigger | A milestone exit check is not met by its relative week. |
 | Mitigation [CH §18, expanded] | Eight weeks remains the commitment. Track client inputs weekly. Raise delays in writing (S2). Prioritise the P1 questions. |
 | Contingency | The S2 delay rule. A schedule change agreed in writing for delays over five working days. |
@@ -203,7 +206,7 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 |---|---|
 | Description | The backend platform, admin technology and data model are not approved (DEC-003, DEC-004). Most backend and admin work, ENV-TEST, CI backend gates, deployment and backup depend on them. |
 | Trigger | DEC-003 is not AGREED by the end of Week 1, or not APPROVED at M1. |
-| Mitigation | Technology-neutral contracts. Draft `SYSTEM_ARCHITECTURE.md` and `TECH_STACK_DECISIONS.md` (planned, Phase 2) first (T-00.3). App work proceeds against fakes. |
+| Mitigation | Technology-neutral contracts. `SYSTEM_ARCHITECTURE.md` and `TECHNOLOGY_DECISIONS.md` exist as drafts (T-00.3). App work proceeds against fakes. |
 | Contingency | Adopt the S2 baseline as the default if no alternative is agreed, recorded in the decision log |
 | Evidence and related | C-05; OQ-35; `DEVELOPMENT_ROADMAP.md` §9 |
 
@@ -223,7 +226,7 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 |---|---|
 | Description | Cloud usage is billed to MFW at actual use [S1]. Full downloads of files up to 150 MB, with no CDN, and a possible second environment, make the costs hard to predict. No estimate exists. |
 | Trigger | MFW queries a bill, or usage grows beyond expectations. |
-| Mitigation | Produce a usage-based cost model in `CLOUD_INFRASTRUCTURE_AND_COSTS.md` (planned) once DEC-003 is decided. MFW sets billing alerts in its account. |
+| Mitigation | Produce a usage-based cost model in `CLOUD_INFRASTRUCTURE_AND_COSTS.md` (planned, not written) once DEC-003 is decided. Cost scenarios already exist in `TECHNOLOGY_DECISIONS.md` section 9 and `SYSTEM_ARCHITECTURE.md` section 13. MFW sets billing alerts in its account. |
 | Contingency | A CDN, or limits on re-downloads, as architecture changes approved by MFW |
 | Evidence and related | DEC-003; DEC-023; OQ-40; R2 |
 
@@ -271,7 +274,7 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 
 | Field | Detail |
 |---|---|
-| Description | S1 and S2 state no backup or recovery requirement. No provider backup is assumed, and whether MFW keeps master copies of issue PDFs is unknown. |
+| Description | S1 and S2 state no backup or recovery requirement. No provider backup is assumed, and whether MFW keeps master copies of issue PDFs is unknown. Backup set-up, restore tests, RPO and RTO targets and monitoring access are proposed additions and not S2 deliverables. |
 | Trigger | Data loss before backups are configured, or an untested restore fails. |
 | Mitigation | Get MFW's decision on the proposals in `BACKUP_AND_RECOVERY.md` (OQ-46). Test a restore before M5. |
 | Contingency | Re-upload from MFW's master copies, if they exist |
@@ -282,6 +285,7 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 | Field | Detail |
 |---|---|
 | Description | Google Sign-In, no guest reading, the mandatory profile, the registered-user export and the revised schedule rest on S3 emails that are not in the repository. If MFW does not confirm them, work done on them may be rework. |
+| Reported by YG | The S3 client emails exist and support the amendments. They are not in the repository and were not seen by the reviewer. The items stay PROVISIONAL until the emails are filed or MFW confirms in writing. |
 | Trigger | MFW's written response differs from CH §17.3. |
 | Mitigation | Obtain written confirmation early (OQ-29, T-00.1). Keep PROVISIONAL features behind clear module boundaries. |
 | Contingency | Re-plan through the change process |
@@ -303,12 +307,59 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 |---|---|
 | Description | Questions, risks, criteria and milestones appear in CH, RS and the new registers. Without a rule, the copies drift apart. |
 | Trigger | The same item has different text or status in two documents. |
-| Mitigation | Each new register names itself as the working copy once agreed, and the CH and RS sections are pointed to it at their next revision. QG-12 documentation checks. |
+| Mitigation | Each new register names itself as the working copy once agreed, and the CH and RS sections are pointed to it at their next revision. QG-12 documentation checks. The document map and the retired-name aliases are in `TASK_OWNERSHIP_MATRIX.md` section 13. The crosswalks between the register families are in `DECISION_LOG.md` section 5.2, `OPEN_QUESTIONS.md` section 7 and section 7 of this register. |
 | Contingency | The document higher in the source-of-truth order prevails, and the discrepancy is recorded |
 | Evidence and related | `TASK_OWNERSHIP_MATRIX.md` §8.2; `DEVELOPMENT_WORKFLOW.md` §12 |
+
+### R23 Vendor facts not fully verified
+
+| Field | Detail |
+|---|---|
+| Description | Many vendor facts in the technology decisions came from summaries of long pages, and some were looked for and not found (NOT VERIFIED). A wrong fact could drive a wrong decision (`SYSTEM_ARCHITECTURE.md` AR-18). The rating is a proposal and is unreviewed. |
+| Trigger | A fact marked as a summary, a relay or NOT VERIFIED in `TECHNOLOGY_DECISIONS.md` section 9 is relied on in a decision that MFW is asked to approve. |
+| Mitigation | The reading mode is recorded for each source. Re-check summaries and NOT VERIFIED items on the live vendor pages before MFW approves a decision. |
+| Contingency | Revise the decision through a new log entry that supersedes the old one (`DECISION_LOG.md` section 3.3). |
+| Evidence and related | AR-18; AR-07; `TECHNOLOGY_DECISIONS.md` section 9.1; R12; R14 |
+
+### R24 Developers' latitude on development decisions is verbal
+
+| Field | Detail |
+|---|---|
+| Description | YG reports that MFW gave the developers latitude on development decisions at the last meeting. This is not written. Changes after the build remain possible and follow S2 change control (CH §17.2). The rating is a proposal and is unreviewed. |
+| Trigger | MFW asks for a change to a decision made under that latitude, or questions a decision that was not put to it in writing. |
+| Mitigation | A decision that adds third-party cost, changes scope or touches the contract still needs MFW's written approval (CH §17.4). Work on a proposal that needs approval (PRC-01 to PRC-04) does not start before it. The developers may ask MFW for a short written confirmation of the latitude. |
+| Contingency | Handle the change under S2 Changes: a written request, a reply with effort and price, and MFW's written approval before work begins. |
+| Evidence and related | Reported by YG. No date, attendee or written record. R7; R20; DEC-027; DEC-029 |
 
 ## 6. Review
 
 - Each risk is reviewed at every milestone, and whenever its trigger occurs.
 - Rating changes are made in a pull request, with the reason given.
 - A risk is CLOSED only with recorded evidence. It is ACCEPTED only with written acceptance from the party responsible.
+
+## 7. Architecture Risks (AR-nn)
+
+`SYSTEM_ARCHITECTURE.md` section 14.1 holds 20 architecture risks, AR-01 to AR-20. This register is the single risk list, so each AR maps to an R here. No AR or R number is changed. Only AR-18 had no fit and became R23.
+
+| AR | Topic | R |
+|---|---|---|
+| AR-01 | Resume with a signed URL not shown to work | R2 |
+| AR-02 | Soft delete against the wording of FR-PRIV-003; store rule on scheduled deletion | R18 |
+| AR-03 | Bucket location cannot be changed | R14 |
+| AR-04 | Account-linking outcomes not verified | R4 |
+| AR-05 | Two-role admin model as a scope change | R7 |
+| AR-06 | Revoked admin keeps access | R4 |
+| AR-07 | Vendor prices and plan rules change | R14 |
+| AR-08 | Lock-in to Firebase sign-in identifiers and the database model | R12 |
+| AR-09 | Whole-file downloads up to 150 MB with no CDN | R2 |
+| AR-10 | New major plugin versions | R16 |
+| AR-11 | Working profile list wider than the S3-reported list | R11 |
+| AR-12 | Charter 17.4 needs both developers to agree each architecture decision | R12 |
+| AR-13 | MFW may choose a temporary-copy model (OQ-08) | R3 |
+| AR-14 | Web link for deletion requests | R18 |
+| AR-15 | Admin exports carry personal data | R11 |
+| AR-16 | WordPress host throttles or blocks the app | R5 |
+| AR-17 | Glossary defines one admin role | R22 |
+| AR-18 | Vendor facts from summaries of long pages | R23 (new) |
+| AR-19 | Issue PDFs may be public on MFW's website | R4 (scope note, OQ-57) |
+| AR-20 | Sign-in wall for public content, and a forced-update screen, in store review | R18 |

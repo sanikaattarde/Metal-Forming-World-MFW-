@@ -7,12 +7,12 @@
 | Document title | Database and Data Model |
 | File | `DATABASE_AND_DATA_MODEL.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for Review |
 | Last updated | 23 October 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The data model is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.1; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.2; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.2; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.1; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.1; `PROJECT_CHARTER.md` v0.1 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.3; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.3; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.2; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.2; `PROJECT_CHARTER.md` v0.2 |
 
 **Purpose.** This document defines what data the MFW product keeps, how the pieces relate, who may read and change each piece, and when each piece is deleted. S2 lists the data model as a handover deliverable [S2 Handover], and the charter leaves it to a recorded decision (CH §17.4). The access rules for each entity are summarised in Section 19 and defined in the [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) document. The operations that read and write the entities are defined in the [API and Backend Contract](API_AND_BACKEND_CONTRACT.md).
 
@@ -26,6 +26,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft for internal review. Revised the same day: trees replace tables in Sections 7.1, 8 and 12. An invariant enforcement register (Section 10.8) and a guard record (ADMIN_GUARD) are added for the proposed admin roles (PRC-01). No decision, status or requirement changed. |
 | 0.2 | 23 October 2026 | Revised after the 17-question interview (GS-Q17 to GS-Q33) and a read-only review of MFW's public website (WEB). Admin reads go through functions only and no role is copied into the sign-in claim (GS-Q20): INV-08 is rewritten and INV-09 is narrowed to sessions. The audit event covers the audit set (GS-Q26). New: the DELETED_ISSUE entity (Section 4.22), the account deletion states, the notification send states, invariants INV-14 to INV-18, website-based seed values for segments and categories (GS-Q31), Sections 17 to 19 (issue lifecycle, query patterns, access by entity and actor) and Appendix B. Decisions in this version are team-accepted, with the requirement label PROVISIONAL and MFW written approval pending (GS-Q30). No requirement status in the specification changed. |
+| 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Profile: the requirements-specification list is required by default and gender is added; mobile number, company and country become optional candidates (GS-Q34). Deletion states and fields marked PRC-02 (immediate deletion is the baseline). ADMIN_ROLE, the guard record and the audit event marked PRC-01 (one admin role is the baseline). "Team-accepted" replaced by PROPOSED with the agreement note. References to the website question extended to OQ-57. |
 
 ### 1.1 Sources and authority
 
@@ -33,7 +34,7 @@
 |---|---|---|---|
 | S1, S2 | MFW Mobile App Commercial Proposal and Statement of Work, 17 October 2026 | Read. Both copies are unsigned (REG-002). | S2 lists the data the product stores and the access rules. |
 | S3 | Client emails received after S1 and S2 | Not available (REG-001). | Not used as evidence. Anything known only through the charter is PROVISIONAL. |
-| CH | `PROJECT_CHARTER.md` v0.1 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
+| CH | `PROJECT_CHARTER.md` v0.2 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
 | SPEC | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) | Read. Draft for Review. | The data requirements (Section 7 of the specification) and every requirement ID. Used as written. |
 | TD, GS | [Technology Decisions](TECHNOLOGY_DECISIONS.md) | Draft for Review. | The decisions and the questioning answers (GS-Q4 to GS-Q6, GS-Q11, GS-Q13, GS-Q14, GS-Q16 and, for version 0.2, GS-Q17 to GS-Q33 and GS-D13 to GS-D20) behind this model. |
 | WEB | MFW's public website, https://metalformingworld.com/ (home, About, April-May 2026 issue, Industry News and Contact pages, and the public WordPress REST API), read on 23 October 2026 | Observed. Not an approved source. | A reference for seed values and the WordPress contract. It does not change scope (INT-WP-002) and is not MFW's approval. |
@@ -42,7 +43,7 @@ S1, S2 and CH are named by file name and not linked, because they are not in thi
 
 ### 1.2 Status labels and identifiers
 
-The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, ASSUMPTION, OPEN and CONFLICT. "Proposed" is a decision status for choices the development team recommends and that are not approved. "Team-accepted" is a decision status for a choice the developer who ran the interview recorded as accepted. The requirement label stays PROVISIONAL, MFW written approval is pending, and the other developer's agreement is not recorded (GS-Q30, REG-052). CONFIRMED is never used for it.
+The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, ASSUMPTION, OPEN and CONFLICT. "Proposed" is a decision status for choices the development team recommends and that are not approved. Version 0.2 used "team-accepted" for a choice the developer who ran the interview recorded as accepted. That word is not in the repository's status model (`DECISION_LOG.md` section 3.1), so every such choice is now PROPOSED and carries this note: "Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed." The requirement label stays PROVISIONAL and MFW written approval is pending (GS-Q30, REG-052). CONFIRMED is never used for it. The baseline is the confirmed text: one admin role (FR-ADMIN-004) and immediate account deletion (FR-PRIV-003). The two-role model with its audit log is the labelled change PRC-01, and the grace window is the labelled change PRC-02. Neither is approved.
 
 | Prefix | Meaning | Defined in |
 |---|---|---|
@@ -69,7 +70,7 @@ The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, A
 | Required | The model requires a value for the record to be valid. Where a requirement is PROVISIONAL, "required" means required in the working position and not required by MFW. |
 | Personal data | Information about an identifiable person. This document makes no legal classification (spec §7.2). |
 | Guard record | A single record that every admin role change reads and writes, so that two concurrent changes cannot both succeed when only one should. It is a design device and is proposed (PRC-01). |
-| Team-accepted | Accepted by the development team as a decision. The requirement label is PROVISIONAL, MFW written approval is pending, and the other developer's agreement is not recorded (GS-Q30, REG-052). |
+| Team-accepted (retired word) | Version 0.2 used it for a decision the interviewed developer recorded as accepted. It is replaced by PROPOSED plus the agreement note in section 1.2 (GS-Q30, REG-052). |
 | Deleted-issue record | A record of an issue that was permanently deleted. It holds the issue's identifier and the time, and no content (Section 4.22). |
 
 ## 2. Modelling Principles and Assumptions
@@ -98,10 +99,10 @@ The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, A
 | MA-2 | Each issue is one PDF of up to 150 MB and about 120 pages, with five to twelve issues live at launch. | ASSUMPTION (ASM-01, ASM-02) |
 | MA-3 | One sign-in account is one reader, with one set of app records. | Proposed (TD-06) |
 | MA-4 | Opening a full issue downloads it and keeps it until the reader deletes it. | ASSUMPTION (GS-Q6, OQ-08) |
-| MA-5 | The working profile field list is the development team's, and MFW has not confirmed it. | ASSUMPTION (PRC-03, OQ-01) |
+| MA-5 | The default required profile set is the list in the requirements specification (RS FR-PROF-002, PROVISIONAL): name, exact age, gender, occupation and domain of work. The extra fields of the earlier working list are optional candidates. MFW has not confirmed any list. | PROVISIONAL (FR-PROF-002); ASSUMPTION for the optional fields (OQ-01, GS-Q34) |
 | MA-6 | Type names are logical. Length limits and formats are proposals for testing and are not requirements. | ASSUMPTION |
-| MA-7 | The same issue PDFs may be public on MFW's website. The app's sign-in gate controls the app's copy and is not a claim that the content is secret. | Observed (WEB); team-accepted position (GS-Q32); MFW confirmation pending (AOQ-18) |
-| MA-8 | The administrator model is the two-role model, Super Admin and Content Admin. | Team-accepted (GS-Q19), PROVISIONAL, MFW written approval pending (PRC-01) |
+| MA-7 | The same issue PDFs may be public on MFW's website. The app's sign-in gate controls the app's copy and is not a claim that the content is secret. | Observed (WEB); proposed position (GS-Q32); MFW confirmation pending (AOQ-18, now OQ-57) |
+| MA-8 | The baseline administrator model is one admin role (RS FR-ADMIN-004). The two-role model, Super Admin and Content Admin, is the labelled change PRC-01. | Baseline CONFIRMED. PRC-01 PROPOSED (GS-Q19), PROVISIONAL, MFW written approval pending |
 
 ## 3. Conceptual Model
 
@@ -176,7 +177,7 @@ flowchart LR
 | News post title, content, image, date, category | `NEWS_CONTROL.wp_post_id` | No (DATA-015) |
 | PDF and cover binaries | `ISSUE_FILE.storage_path` and `ISSUE.cover_path` | No. Only paths and facts about the file are stored. |
 | Device registration tokens and topic subscriptions | The topic name, derived from `NOTIFICATION_CATEGORY.category_id` | No. Held by the push provider (TD-13). |
-| The website's public copy of an issue (its page and PDF) | Nothing | No. The model never refers to it (GS-Q32, AOQ-18). |
+| The website's public copy of an issue (its page and PDF) | Nothing | No. The model never refers to it (GS-Q32, AOQ-18, now OQ-57). |
 
 ## 4. Logical Relational Model
 
@@ -196,13 +197,13 @@ flowchart LR
 | Field | Entry |
 |---|---|
 | Purpose | The app's own record for one account. It holds the lifecycle of the account and nothing that the sign-in provider already holds. |
-| Status | CONFIRMED in part (DATA-003). The deletion fields and states are team-accepted (GS-Q28) and PROVISIONAL. PRC-02 stays OPEN for MFW and its legal adviser. |
+| Status | CONFIRMED in part (DATA-003). The baseline is immediate deletion (FR-PRIV-003): the status moves from `active` to `deleting`. The state `pending_deletion` and the field `purge_after` belong to the labelled change PRC-02: PROPOSED (GS-Q28), PROVISIONAL, OPEN for MFW and its legal adviser. |
 | Primary key | `user_id` |
 | Foreign keys | `user_id` refers to the sign-in provider's account (external). |
 | Uniqueness | `user_id` is unique. |
 | Indexing | `(status, purge_after)` for the purge job. |
-| Validation | `user_id` must equal the caller's identifier when the record is created. `purge_after` is set only when `status` is `pending_deletion`. The status moves from `active` to `pending_deletion`, from `pending_deletion` back to `active` (undo) or on to `deleting`, and from `active` straight to `deleting` for an immediate deletion. From `deleting` the record can only be removed (INV-18). |
-| Retention and deletion | Created at registration. Deleted at the purge, after the window, or at once if the reader chooses immediate deletion (TD-19, GS-Q28). The window length is configuration and OPEN (AOQ-02). |
+| Validation | `user_id` must equal the caller's identifier when the record is created. In the baseline the status moves from `active` straight to `deleting`. Under PRC-02, `purge_after` is set only when `status` is `pending_deletion`, and the status can also move from `active` to `pending_deletion`, from `pending_deletion` back to `active` (undo) or on to `deleting`. From `deleting` the record can only be removed (INV-18). |
+| Retention and deletion | Created at registration. Deleted at once in the baseline. Under PRC-02, deleted at the purge after the window, or at once if the reader chooses immediate deletion (TD-19, GS-Q28). The window length is configuration and OPEN (AOQ-02). |
 | Privacy class | Pseudonymous |
 | Client access | Read by the owner. Written by functions only. |
 | Related requirement IDs | DATA-003 (CONFIRMED); FR-AUTH-009 (CONFIRMED); FR-PRIV-003 (CONFIRMED); NFR-PRIV-005, DATA-017 (OPEN); PRC-02 |
@@ -210,10 +211,10 @@ flowchart LR
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `user_id` | text | Yes | The provider's user identifier. Never the email address. |
-| `status` | enum(active, pending_deletion, deleting) | Yes | Default `active`. `pending_deletion` is the grace window, in which the reader can undo. `deleting` means the deletion is running and is retried until it finishes. |
+| `status` | enum(active, pending_deletion, deleting) | Yes | Default `active`. `pending_deletion` (PRC-02 only) is the grace window, in which the reader can undo. `deleting` means the deletion is running and is retried until it finishes. |
 | `created_at` | timestamp | Yes | |
 | `deletion_requested_at` | timestamp | No | Set when the reader confirms deletion. |
-| `purge_after` | timestamp | No | `deletion_requested_at` plus the purge window, from configuration (AOQ-02). |
+| `purge_after` | timestamp | No | PRC-02 only. `deletion_requested_at` plus the purge window, from configuration (AOQ-02). |
 
 Whether the profile is complete is not stored. It is worked out from the profile and the configured required fields each time, so a change to the required set needs no data migration.
 
@@ -222,33 +223,34 @@ Whether the profile is complete is not stored. It is worked out from the profile
 | Field | Entry |
 |---|---|
 | Purpose | The reader's profile information, kept apart from the account record. It gives MFW visibility of who registers (objective O6). |
-| Status | PROVISIONAL (DATA-004). The field list is the development team's working list and is not MFW-confirmed (PRC-03, ASSUMPTION). The development team keeps it as the mandatory set (GS-Q23), and the status stays ASSUMPTION until MFW answers OQ-01 and OQ-02. |
+| Status | PROVISIONAL (DATA-004). The default required set is the list in the requirements specification (RS FR-PROF-002, PROVISIONAL): name, exact age, gender, occupation and domain of work. The extra fields of the earlier working list (mobile number, company, country, city, areas of interest) are optional candidates and stay ASSUMPTION until MFW answers OQ-01 and OQ-02. PRC-03 is superseded and GS-Q23 is partly reversed (GS-Q34). |
 | Primary key | `user_id` |
 | Foreign keys | `user_id` refers to APP_USER. `industry_segment_id` refers to INDUSTRY_SEGMENT. |
 | Uniqueness | One profile per user. |
 | Indexing | None needed for access. The admin list and export read all profiles, which is a small set. |
-| Validation | Each field named in the configured required set must be present. Text fields are trimmed and limited in length. `mobile_number` follows an international format. `country` is a two-letter country code. Age is a whole number within a sanity range of 1 to 120, or a date in the past. There is no minimum age (FR-PROF-005). |
+| Validation | Each field named in the configured required set must be present. Text fields are trimmed and limited in length. `mobile_number` follows an international format and `country` is a two-letter country code, but only if the field is collected. Age is a whole number within a sanity range of 1 to 120, or a date in the past. There is no minimum age (FR-PROF-005). |
 | Retention and deletion | Created and changed through `saveProfile`. Deleted at the purge. The retention period is MFW's (OQ-24). |
 | Privacy class | Personal |
 | Client access | Read by the owner. Written through a function only. Read by Super Admins through the registered-user functions. |
 | Related requirement IDs | DATA-004, FR-PROF-001 to FR-PROF-005, NFR-PRIV-001 (PROVISIONAL); FR-PROF-006 (CONFIRMED); FR-PROF-007, NFR-SEC-006 (ASSUMPTION); NFR-PRIV-006 (OPEN); OQ-01, OQ-02, OQ-03, OQ-07 |
 
-| Field | Type | Required in the working position | Notes |
+| Field | Type | Required by default | Notes |
 |---|---|---|---|
 | `user_id` | text | Yes | |
 | `full_name` | text | Yes | Prefilled from the sign-in account and then owned by the profile (GS-Q4). |
-| `mobile_number` | text | Yes | Not in any source. Collected only if MFW confirms it (Section 11). |
-| `company_name` | text | Yes | Not in any source. |
-| `job_title` | text | Yes | Close to "occupation" in the S3-reported list. |
-| `industry_segment_id` | text | Yes | Refers to INDUSTRY_SEGMENT. Close to "domain of work" in the S3-reported list. The seed list is the website's circulation industries (Section 4.5). |
-| `country` | text | Yes | Two-letter country code. Not in any source. |
-| `city` | text | No | Optional in the working list. |
+| `mobile_number` | text | No (optional candidate) | Not in any source. Collected only if MFW confirms it (Section 11). |
+| `company_name` | text | No (optional candidate) | Not in any source. |
+| `job_title` | text | Yes | Treated as "occupation" in the requirements list (ASSUMPTION). |
+| `industry_segment_id` | text | Yes | Refers to INDUSTRY_SEGMENT. Treated as "domain of work" in the requirements list (ASSUMPTION). The seed list is the website's circulation industries (Section 4.5). |
+| `country` | text | No (optional candidate) | Two-letter country code. Not in any source. |
+| `city` | text | No | Optional in the earlier working list. |
+| `gender` | text | Yes | In the requirements list (FR-PROF-002). The options and whether "prefer not to say" is offered are OPEN (OQ-01). |
 | `age_value` | integer | Working position: one of these two | UNRESOLVED (OQ-02). Exactly one of `age_value` and `date_of_birth` will remain. The other is dropped. |
 | `date_of_birth` | date | Working position: one of these two | UNRESOLVED (OQ-02). More sensitive than an age. It stays current without edits. |
 | `areas_of_interest` | text list | No | Optional free text (GS-Q4). |
 | `updated_at` | timestamp | Yes | |
 
-Gender is not in the model. The S3-reported list includes it (FR-PROF-002), and the working list leaves it out on purpose. That difference is flagged and not decided (PRC-03, OQ-01). The development team confirmed this position (GS-Q23). It is recorded as a known divergence from FR-PROF-002 and is not resolved here.
+Gender is in the model and is required by default, because the requirements specification lists it (FR-PROF-002, PROVISIONAL). Its options are OPEN (OQ-01). The earlier working list left it out (PRC-03, GS-Q23). That position is superseded by GS-Q34.
 
 ### 4.4 CONSENT_RECORD
 
@@ -534,7 +536,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Field | Entry |
 |---|---|
 | Purpose | One entry per notification an admin sends. It is the send log. |
-| Status | CONFIRMED (DATA-008). The fields recorded are OPEN (OQ-19). The list here is a proposal. The record-first order and the states are team-accepted (GS-Q27). |
+| Status | CONFIRMED (DATA-008). The fields recorded are OPEN (OQ-19). The list here is a proposal. The record-first order and the states are PROPOSED (GS-Q27). |
 | Primary key | `send_id` |
 | Foreign keys | `category_id` refers to NOTIFICATION_CATEGORY. |
 | Uniqueness | `send_id` only. |
@@ -610,7 +612,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Field | Entry |
 |---|---|
 | Purpose | The server-side record of who is an admin and in which role. It is the authority for every privileged operation. |
-| Status | CONFIRMED in need (DATA-011) with one role. The two-role model is team-accepted (GS-Q19), PROVISIONAL, with MFW written approval pending (PRC-01). EXC-07 and CHG-01 are preserved: S2 excludes editorial roles and an audit log. |
+| Status | CONFIRMED in need (DATA-011) with one role: the baseline needs only the admin identity. ADMIN_ROLE as designed here, the guard record and ADMIN_AUDIT_EVENT are the proposed change PRC-01. The two-role model is PROPOSED (GS-Q19), PROVISIONAL, with MFW written approval pending (PRC-01). EXC-07 and CHG-01 are preserved: S2 excludes editorial roles and an audit log. |
 | Primary key | `user_id` |
 | Foreign keys | `user_id` refers to APP_USER. `granted_by` refers to APP_USER. These are logical references and not constraints the database enforces. Functions check them when they write (INV-13). |
 | Uniqueness | One active role per user, because the record's key is the user identifier (INV-06). At least one active `super_admin` must always exist, enforced through the guard record in the transaction that changes a role (ADMIN_GUARD, INV-03). |
@@ -635,7 +637,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Field | Entry |
 |---|---|
 | Purpose | An append-only record of the audited admin actions (GS-Q26): role changes and the bootstrap step, issue deletion, PDF replacement, publish and unpublish, views of the full reader list, exports of reader data, and denied privileged attempts by signed-in callers. Routine edits are not recorded. |
-| Status | A proposed change. S2 excludes an audit log (EXC-07, PRC-01). The audit set goes beyond the log of role changes that PRC-01 describes, so the PRC-01 effort estimate does not cover it. The set is team-accepted (GS-Q26), PROVISIONAL, with MFW written approval pending. Retention is OPEN (AOQ-04). |
+| Status | A proposed change. S2 excludes an audit log (EXC-07, PRC-01). The audit set goes beyond the log of role changes that PRC-01 describes, so the PRC-01 effort estimate does not cover it. The set is PROPOSED (GS-Q26), PROVISIONAL, with MFW written approval pending. Retention is OPEN (AOQ-04). |
 | Primary key | `event_id` |
 | Foreign keys | `actor_user_id` and `target_user_id` refer to APP_USER. `subject_ref` refers to an issue or names an operation. These are logical references (INV-13). |
 | Uniqueness | `event_id` only. |
@@ -707,7 +709,7 @@ Searching for a reader by email address is not in the audit set (GS-D19).
 
 | Setting | Part | Used for |
 |---|---|---|
-| `profile_required_fields` | Public | The profile fields that make a profile complete (PRC-03, OQ-01). |
+| `profile_required_fields` | Public | The profile fields that make a profile complete (OQ-01). The default is name, exact age, gender, occupation and domain of work (FR-PROF-002). |
 | `profile_gate_enabled` | Private | Whether a complete profile is needed before a full issue (BR-003). |
 | `policy_versions` | Public | The current privacy policy and terms of use versions (OQ-27). |
 | `news_category_ids` | Public | The WordPress categories shown in the app (INT-WP-003). |
@@ -718,7 +720,7 @@ Searching for a reader by email address is not in the audit set (GS-D19).
 | `retention_periods` | Private | Retention for send records, audit events, superseded revisions, upload jobs and the deleted-issue list (OQ-24, AOQ-04, AOQ-19). |
 | `denied_audit_cap` | Private | The cap on denied-attempt audit entries per caller (GS-Q26). No value is set. |
 | `notification_unknown_after` | Private | How long a send stays pending before it is marked unknown (GS-Q27). No value is set. |
-| `min_supported_app_version` | Public | The update gate: an app older than this shows an update-required screen (PRC-04). It is a team-accepted addition to S2 scope that needs MFW's agreement. No value is set. |
+| `min_supported_app_version` | Public | The update gate: an app older than this shows an update-required screen (PRC-04). It is a PROPOSED addition to S2 scope that needs MFW's agreement. No value is set. |
 | `schema_version` | Private | The version of the data model, for migrations (Section 10). |
 
 ### 4.21 ADMIN_GUARD (proposed change)
@@ -744,12 +746,12 @@ Searching for a reader by email address is not in the audit set (GS-D19).
 | `version` | integer | Yes | Increased by one on every role change. |
 | `updated_at` | timestamp | Yes | |
 
-### 4.22 DELETED_ISSUE (team-accepted design)
+### 4.22 DELETED_ISSUE (proposed design)
 
 | Field | Entry |
 |---|---|
 | Purpose | A minimal record of an issue that was permanently deleted, so that the app can find downloaded copies of it and remove them (GS-Q24, GS-Q25). |
-| Status | Team-accepted (GS-Q25), PROVISIONAL, MFW written approval pending. It exists only if permanent deletion is allowed (OQ-21, OPEN). That anyone may read it is an ASSUMPTION (GS-D20). Its retention is OPEN (AOQ-19). |
+| Status | PROPOSED (GS-Q25), PROVISIONAL, MFW written approval pending. It exists only if permanent deletion is allowed (OQ-21, OPEN). That anyone may read it is an ASSUMPTION (GS-D20). Its retention is OPEN (AOQ-19). |
 | Primary key | `issue_id`, the identifier the deleted issue had. It is never reused (INV-14). |
 | Foreign keys | None. It names an issue that no longer exists. |
 | Uniqueness | `issue_id` |
@@ -872,7 +874,7 @@ On the reader's device
 
 ### 7.3 Sign-out, deletion and unpublishing (OQ-11, OPEN)
 
-Until MFW answers OQ-11, the behaviour below is the working design. It is team-accepted (GS-Q24), PROVISIONAL, with MFW written approval pending. Account deletion deletes the reader's files, registry rows and caches on the device. Sign-out keeps the files but hides them until the same reader signs in again, which avoids repeating a 150 MB download. Unpublishing stops new downloads and leaves a copy that a reader already has. Permanent deletion of an issue makes the app remove its copy and registry row once it sees the issue on the deleted-issue list (Section 4.22). MFW cannot recall a copy from a device that is offline or that has not opened the app since the deletion, and MFW has to accept that limit in writing. The registry's `retention_mode` field, with a default of "kept", lets a temporary-copy model be added if MFW chooses one under OQ-08.
+Until MFW answers OQ-11, the behaviour below is the working design. It is PROPOSED (GS-Q24), PROVISIONAL, with MFW written approval pending. Account deletion deletes the reader's files, registry rows and caches on the device. Sign-out keeps the files but hides them until the same reader signs in again, which avoids repeating a 150 MB download. Unpublishing stops new downloads and leaves a copy that a reader already has. Permanent deletion of an issue makes the app remove its copy and registry row once it sees the issue on the deleted-issue list (Section 4.22). MFW cannot recall a copy from a device that is offline or that has not opened the app since the deletion, and MFW has to accept that limit in writing. The registry's `retention_mode` field, with a default of "kept", lets a temporary-copy model be added if MFW chooses one under OQ-08.
 
 ## 8. File Metadata and File Binaries
 
@@ -886,7 +888,7 @@ File store
 │   ├── The database holds: ISSUE_FILE (path, size, page count, checksum, revision, status)
 │   ├── Access: no client read; a signed URL from getIssueFile only
 │   └── Not the website's copy: the same issue may be public on MFW's website as a separate object that
-│       WordPress owns. The model never refers to it (GS-Q32, AOQ-18)
+│       WordPress owns. The model never refers to it (GS-Q32, AOQ-18, now OQ-57)
 ├── Cover image
 │   ├── Lives in: the public-read area
 │   ├── Path pattern (provisional): covers/{issue_id}/{version}
@@ -912,7 +914,7 @@ The path patterns are PROVISIONAL and depend on the file-store choice (TD-08, TD
 5. The checksum and size returned with the URL let the app confirm that the downloaded file is complete and undamaged (FR-READ-010).
 6. Download tokens that never expire are not used for private files (VS-10).
 7. Cover images are public on purpose. They carry no private content.
-8. The sign-in gate and the signed URL protect the app's copy of an issue, including an issue that is not yet released. They do not make the content secret, because the same issue may be public on MFW's website (GS-Q32, AOQ-18). The [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) document says what the gate is for.
+8. The sign-in gate and the signed URL protect the app's copy of an issue, including an issue that is not yet released. They do not make the content secret, because the same issue may be public on MFW's website (GS-Q32, AOQ-18, now OQ-57). The [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) document says what the gate is for.
 
 | Entity | Anyone | The owning reader | Admins | Functions only |
 |---|---|---|---|---|
@@ -984,7 +986,7 @@ The database engine is not assumed to enforce references or uniqueness (TD-07). 
 9. An issue is deleted only by a Super Admin and only while unpublished, with its deleted-issue record written in the same transaction (INV-15).
 10. An audited admin action and its audit event are written together (INV-16).
 11. A notification send is recorded before it is sent, and a retry reuses the record (INV-17).
-12. A reader's deletion state moves only forward, except for the undo from the grace window (INV-18).
+12. A reader's deletion state moves only forward, except for the undo from the grace window, which exists only under PRC-02 (INV-18).
 
 ### 10.5 Migrations
 
@@ -1118,7 +1120,7 @@ Invariant enforcement register           [all mechanisms proposed; nothing imple
 │   ├── Not covered: whether the push service delivers a repeated send twice is NOT VERIFIED
 │   └── Test: stop the process after the record and before the send, and after the send and before the mark.
 │       Retry twice at once
-└── INV-18 A reader's deletion state moves forward, except for the undo   [Section 10.4, rule 12; GS-Q28]
+└── INV-18 A reader's deletion state moves forward, except for the undo   [Section 10.4, rule 12; GS-Q28; the undo is PRC-02]
     ├── Enforced by: only the deletion functions change APP_USER.status, and each move is checked against the
     │   allowed moves in one transaction
     ├── When broken: the call is refused
@@ -1169,12 +1171,12 @@ Every personal-data field has a stated purpose. Fields that no source supports a
 | Job title | READER_PROFILE | The same | S3 via CH §8 as "occupation", if "occupation" means this | PROVISIONAL, interpretation not confirmed |
 | Industry segment | READER_PROFILE | The same, and consistent filters and exports | S3 via CH §8 as "domain of work", if it means this | PROVISIONAL, interpretation not confirmed. Seed values from the website (GS-Q31, WEB). |
 | Age or date of birth | READER_PROFILE | The same | S3 via CH §8, §9 as "exact age" | PROVISIONAL. Format OQ-02. Legal review OQ-07. |
-| Mobile number | READER_PROFILE | The same | None. The development team's working list. | ASSUMPTION |
+| Mobile number | READER_PROFILE | The same | None. The earlier working list (an optional candidate). | ASSUMPTION |
 | Company or organisation name | READER_PROFILE | The same | None | ASSUMPTION |
 | Country | READER_PROFILE | The same | None | ASSUMPTION |
 | City | READER_PROFILE | The same. Optional. | None | ASSUMPTION |
 | Areas of interest | READER_PROFILE | The same. Optional. | None | ASSUMPTION |
-| Gender | Not stored | | S3 via CH §8 reports it | Left out on purpose and flagged (PRC-03, OQ-01, GS-Q23) |
+| Gender | READER_PROFILE | The same | S3 via CH §8 reports it | PROVISIONAL (FR-PROF-002). Options OPEN (OQ-01) |
 | Consent record | CONSENT_RECORD | Evidence of consent | S2 Not included, as an inference | ASSUMPTION (DATA-012) |
 | Bookmarks, favourites, notification choices | Reader-owned entities | Features | S2 AC-5, AC-9 | CONFIRMED |
 | Edition-update email | EDITION_UPDATE_SIGNUP | MFW's edition emails | S2 Scope: Accounts | CONFLICT |
@@ -1185,7 +1187,7 @@ Every personal-data field has a stated purpose. Fields that no source supports a
 
 The following stay unresolved until MFW confirms them in writing. None is a confirmed requirement. They are modelled as columns that can be empty, and the required set is configuration (M2).
 
-1. Which profile fields exist at all, and which are mandatory (OQ-01, PRC-03). The working list is wider than the S3-reported list and leaves out gender. The development team keeps the working list as the mandatory set (GS-Q23).
+1. Which profile fields exist at all, and which are mandatory (OQ-01). The default required set is the list in the requirements specification: name, exact age, gender, occupation and domain of work. The extra fields of the earlier working list are optional candidates (GS-Q34). PRC-03 is superseded.
 2. Whether age is stored as a number or a date of birth, and how it stays current (OQ-02). The model carries both candidates and keeps one.
 3. Whether to collect age without an age gate or parental-consent flow (FR-PROF-005, OQ-07). MFW's legal adviser reviews it (NFR-PRIV-006). An age gate, if later required, is a change request (CHG-07).
 4. Whether mobile number, company, job title, country, city, industry segment and areas of interest are collected, and their formats and allowed values (OQ-01).
@@ -1252,7 +1254,7 @@ Cloud Firestore                                   [PROVISIONAL; applies only if 
 | Entity | Purpose | Personal data | Client access | Requirement IDs | Status |
 |---|---|---|---|---|---|
 | APP_USER | The app's account record | Pseudonymous | Owner reads | DATA-003 | CONFIRMED in part, PRC-02 for the deletion states (OPEN, GS-Q28) |
-| READER_PROFILE | Profile information | Personal | Owner reads | DATA-004 | PROVISIONAL (PRC-03) |
+| READER_PROFILE | Profile information | Personal | Owner reads | DATA-004 | PROVISIONAL (FR-PROF-002); optional candidates ASSUMPTION (GS-Q34) |
 | CONSENT_RECORD | Evidence of consent | Pseudonymous | Owner reads | DATA-012 | ASSUMPTION |
 | INDUSTRY_SEGMENT | Shared segment list | None | Anyone reads | FR-SRCH-003 | ASSUMPTION, seed values PROVISIONAL (GS-Q31), OQ-13 |
 | ISSUE_CATEGORY | Issue categories | None | Anyone reads | DATA-002 | CONFIRMED, seed values PROVISIONAL (GS-Q31) |
@@ -1263,13 +1265,13 @@ Cloud Firestore                                   [PROVISIONAL; applies only if 
 | FAVOURITE | A favourite issue | Treated as personal | Owner | DATA-006 | CONFIRMED |
 | NOTIFICATION_CATEGORY | A notification topic | None | Anyone reads | FR-NOTIF-006 | CONFIRMED in need, OQ-18 |
 | NOTIFICATION_PREFERENCE | A reader's chosen categories | Pseudonymous | Owner | DATA-007 | CONFIRMED |
-| NOTIFICATION_SEND | The send log | Pseudonymous | Admins through functions | DATA-008 | CONFIRMED, OQ-19, states team-accepted (GS-Q27) |
+| NOTIFICATION_SEND | The send log | Pseudonymous | Admins through functions | DATA-008 | CONFIRMED, OQ-19, states PROPOSED (GS-Q27) |
 | NEWS_CONTROL | Hide and breaking flags for a post | None | Anyone reads | DATA-009 | CONFIRMED |
 | EDITION_UPDATE_SIGNUP | Edition-update email list | Personal | None | DATA-010 | CONFLICT, conditional |
-| ADMIN_ROLE | Who is an admin and which role | Pseudonymous | None | DATA-011 | CONFIRMED in need, PRC-01 for roles (team-accepted, GS-Q19) |
+| ADMIN_ROLE | Who is an admin and which role | Pseudonymous | None | DATA-011 | CONFIRMED in need, PRC-01 for roles (PROPOSED, GS-Q19) |
 | ADMIN_AUDIT_EVENT | Log of the audited admin actions | Pseudonymous | Super Admin through a function | None in the specification | Proposed change (PRC-01), set widened (GS-Q26) |
 | ADMIN_GUARD | Serialises role changes and holds the active Super Admin count | None | None | None in the specification | Proposed change (PRC-01) |
-| DELETED_ISSUE | Identifier and time of a deleted issue | None | Anyone reads (ASSUMPTION) | FR-ADMIN-012 | Team-accepted (GS-Q25), PROVISIONAL, OQ-21 OPEN |
+| DELETED_ISSUE | Identifier and time of a deleted issue | None | Anyone reads (ASSUMPTION) | FR-ADMIN-012 | PROPOSED (GS-Q25), PROVISIONAL, OQ-21 OPEN |
 | UPLOAD_JOB | Upload status for the panel | Pseudonymous | Admins through functions | FR-STATE-007 | ASSUMPTION |
 | APP_CONFIG | Settings | None | Public part reads | FR-ADMIN-007 | ASSUMPTION |
 | Device file registry and caches | Offline reading | Pseudonymous (`owner_user_id`) | Not applicable, local | DATA-013 | CONFIRMED |
@@ -1350,6 +1352,7 @@ All values are fictional. No sample uses a real person, company, number or addre
 | full_name | Asha Example |
 | mobile_number | +91 00000 00000 |
 | company_name | Example Forming Works |
+| gender | (an option from the list, OPEN) |
 | job_title | Production Manager |
 | industry_segment_id | `seg-8d27e0` |
 | country | IN |
@@ -1491,8 +1494,8 @@ The sample identifiers are fictional and have no meaning in their form, as M10 r
 | Full name | READER_PROFILE | FR-PROF-002 (PROVISIONAL); NFR-PRIV-001 (PROVISIONAL) | OQ-01 |
 | Age or date of birth | READER_PROFILE | FR-PROF-002, FR-PROF-005 (PROVISIONAL); NFR-PRIV-006 (OPEN) | OQ-02, OQ-07; CH R10 |
 | Job title, industry segment | READER_PROFILE | FR-PROF-002 (PROVISIONAL) | OQ-01, OQ-13 |
-| Mobile number, company, country, city, areas of interest | READER_PROFILE | NFR-PRIV-001 (PROVISIONAL) | OQ-01; PRC-03; no source supports them |
-| Gender | Not stored | FR-PROF-002 (PROVISIONAL) | OQ-01; PRC-03 |
+| Mobile number, company, country, city, areas of interest | READER_PROFILE (optional candidates) | NFR-PRIV-001 (PROVISIONAL) | OQ-01; no source supports them |
+| Gender | READER_PROFILE | FR-PROF-002 (PROVISIONAL) | OQ-01 |
 | Consent record | CONSENT_RECORD | FR-PRIV-001 (CONFIRMED); DATA-012 (ASSUMPTION) | OQ-27; OQ-24 |
 | Bookmarks and favourites | BOOKMARK, FAVOURITE | NFR-SEC-005 (CONFIRMED) | OQ-10; OQ-12 |
 | Edition-update email | EDITION_UPDATE_SIGNUP | FR-EMAIL-001 (CONFLICT); FR-PRIV-003 (CONFIRMED) | OQ-31; OQ-09 |
@@ -1505,21 +1508,22 @@ Charter risks R10 and R11 map to READER_PROFILE and CONSENT_RECORD together with
 ### 15.3 Decisions of version 0.2 and where they are modelled
 
 ```text
-Decisions of version 0.2      [team-accepted, PROVISIONAL, MFW written approval pending, unless a line says otherwise]
+Decisions of version 0.2      [PROPOSED, PROVISIONAL, MFW written approval pending, unless a line says otherwise]
 ├── GS-Q17 Baseline kept and revised in place            this document, version 0.2
 ├── GS-Q18 Neutral core with a Firebase mapping          Sections 4 (logical model) and 12 (Firestore mapping, PROVISIONAL)
 ├── GS-Q19 Two admin roles                               Sections 4.17, 4.21 and 10.8 (INV-03 to INV-07)
 ├── GS-Q20 Admin reads through functions, no role claim  Sections 4.7, 4.14, 4.19, 5.2, 9 and 10.8 (INV-08, INV-09)
 ├── GS-Q21 Replace a PDF, delete an issue                Sections 4.7, 4.9, 4.22, 10.2, 10.8 (INV-15) and 17; OQ-21 OPEN for MFW
 ├── GS-Q22 Super Admin only, after unpublish             Sections 4.7, 4.18 and 10.8 (INV-15)
-├── GS-Q23 Working profile list kept, gender left out    Sections 4.3 and 11.2 (ASSUMPTION)
+├── GS-Q23 Working profile list (partly reversed by GS-Q34)    Sections 4.3 and 11.2 (ASSUMPTION)
+├── GS-Q34 Requirements-specification list required by default   Sections 4.3 and 11.2 (PROVISIONAL)
 ├── GS-Q24 Downloaded copies on unpublish and delete     Sections 6.2, 7.1, 7.3 and 4.22; OQ-11 OPEN for MFW
 ├── GS-Q25 Deleted-issue list, opaque never-reused ids   Sections 4.1, 4.22 and 10.8 (INV-14); M10, M11
 ├── GS-Q26 Audit set                                     Sections 4.18 and 10.8 (INV-16); retention OPEN (AOQ-04)
 ├── GS-Q27 Notification send: record first               Sections 4.14, 10.3 and 10.8 (INV-17)
 ├── GS-Q28 Account deletion: window, undo, immediate     Sections 4.2, 10.2, 10.3 and 10.8 (INV-18); PRC-02 OPEN
 ├── GS-Q29 Compatibility policy and update gate          Sections 4.20 and 10.5, and the API and Backend Contract (PRC-04)
-├── GS-Q30 Labels for team-accepted decisions            Section 1.2
+├── GS-Q30 Labels for PROPOSED decisions            Section 1.2
 ├── GS-Q31 Website-based taxonomy                        Sections 4.5, 4.6 and Appendix B
 ├── GS-Q32 Channel policy: public website, signed-in app Sections 3.2, 8 and 9, and the Security and Access Control document
 └── GS-Q33 Bootstrap and lockout recovery                Sections 4.17 and 10.8 (INV-03)
@@ -1530,7 +1534,7 @@ Decisions of version 0.2      [team-accepted, PROVISIONAL, MFW written approval 
 | Schema decision | Depends on | If it goes the other way |
 |---|---|---|
 | Keep `age_value` or `date_of_birth` | OQ-02, OQ-07 | Drop the other field, by the one known migration (Section 10.5). An age gate, if later required, is CHG-07. |
-| Which profile fields exist and which are required | OQ-01, PRC-03 | Add or drop nullable columns. The required set is configuration, so no data migration is needed for a change of required-ness. |
+| Which profile fields exist and which are required | OQ-01, GS-Q34 | Add or drop nullable columns. The required set is configuration, so no data migration is needed for a change of required-ness. |
 | Gender | OQ-01 | Add a nullable field with its allowed values. |
 | When a Google reader completes the profile | OQ-03 | No schema effect. It changes the flow only. |
 | The sign-in provider and the linking rule | TD-06, OQ-04, OQ-05, AOQ-08 | A different provider has a different identifier format. `user_id` would need an identifier migration. A different linking rule changes how many accounts a person has, not the schema. |
@@ -1556,12 +1560,12 @@ Decisions of version 0.2      [team-accepted, PROVISIONAL, MFW written approval 
 | Cover image before publication | AOQ-20 | A private holding path for covers adds a move at publication. |
 | The update gate | PRC-04 | If MFW declines it, `min_supported_app_version` is removed and no screen is built. |
 | The account deletion window | PRC-02, AOQ-02, OQ-24 | If MFW wants immediate deletion only, the `pending_deletion` state, `purge_after` and the undo are dropped. |
-| The website's public PDFs | AOQ-18 | No schema effect. It changes how the sign-in gate is described in the Security and Access Control document. |
+| The website's public PDFs | AOQ-18, now OQ-57 | No schema effect. It changes how the sign-in gate is described in the Security and Access Control document. |
 | Taxonomy seed values | GS-Q31, OQ-13, AOQ-16 | Seed values only. Nothing in the schema changes. |
 
 ## 17. Issue Lifecycle and Publication States
 
-The lifecycle follows S2: there is no draft and review workflow and no scheduled publishing (EXC-07, GS-D18). Everything here is team-accepted, PROVISIONAL, with MFW written approval pending.
+The lifecycle follows S2: there is no draft and review workflow and no scheduled publishing (EXC-07, GS-D18). Everything here is PROPOSED, PROVISIONAL, with MFW written approval pending.
 
 ```mermaid
 stateDiagram-v2
@@ -1575,7 +1579,7 @@ stateDiagram-v2
 `deleted` is not a stored state. The issue record is gone, and a DELETED_ISSUE record remains (Section 4.22).
 
 ```text
-Issue lifecycle                                     [team-accepted, PROVISIONAL; OQ-21 and OQ-11 OPEN for MFW]
+Issue lifecycle                                     [PROPOSED, PROVISIONAL; OQ-21 and OQ-11 OPEN for MFW]
 ├── States
 │   ├── unpublished   the default for a new issue. It also stands in for "draft", because S2 has no separate draft state
 │   ├── published     visible to every reader in the catalogue after a refresh (FR-MAG-007)
@@ -1610,7 +1614,7 @@ Issue lifecycle                                     [team-accepted, PROVISIONAL;
     ├── Metadata of unpublished issues: admins read it through functions only (GS-Q20)
     ├── Files: no client reads a private PDF. The link comes from getIssueFile after its checks (System Architecture §7.4)
     ├── Covers: public-read. Before publication a cover is reachable by anyone who knows its path (AOQ-20)
-    └── Known limits: the website may already show the issue (GS-Q32, AOQ-18), and a link issued before an unpublish works
+    └── Known limits: the website may already show the issue (GS-Q32, AOQ-18, now OQ-57), and a link issued before an unpublish works
         until it expires (AR-06)
 ```
 

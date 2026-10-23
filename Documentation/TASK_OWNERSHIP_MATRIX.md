@@ -7,10 +7,9 @@
 | Document | Task Ownership Matrix |
 | File | `Documentation/TASK_OWNERSHIP_MATRIX.md` |
 | Phase | 3 — Development Planning and Collaboration (document 22) |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. Every assignment is PROPOSED (DEC-011). |
 | Date | 23 October 2026 |
-| Prepared in | Sanika Attarde's Claude Code session, branch `SA` |
 | Approval required | Both developers (CH §19.3 D9; OQ-38). No MFW approval. |
 
 **Change history**
@@ -18,17 +17,19 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Document map, retired names and unwritten documents added (section 13). Phase 2 document ownership updated for the five design drafts. Stale statements corrected. |
 
 ### 1.1 Related documents
 
 | Document | Status on 23 October 2026 |
 |---|---|
 | `PROJECT_CHARTER.md` (CH) §7, §14, §19.3 D9 | Exists, draft. Names the developers and branches. Says the task split is pending. |
-| `API_AND_MODULE_CONTRACTS.md` | Exists, created in this task. Module definitions MOD-00 to MOD-13. |
-| `CODING_STANDARDS.md` §3 | Exists, created in this task. The project structure behind the paths below. |
-| `DEVELOPMENT_ROADMAP.md` | Exists, created in this task. Work packages WP-00 to WP-12. |
-| `DEVELOPMENT_WORKFLOW.md` §8 | Exists, created in this task. The shared-file protocol. |
-| `ACCEPTANCE_CRITERIA.md` | Exists, created in this task |
+| `API_AND_MODULE_CONTRACTS.md` | Exists (draft). Module definitions MOD-00 to MOD-13. |
+| `CODING_STANDARDS.md` §3 | Exists (draft). The project structure behind the paths below. |
+| `DEVELOPMENT_ROADMAP.md` | Exists (draft). Work packages WP-00 to WP-12. |
+| `DEVELOPMENT_WORKFLOW.md` §8 | Exists (draft). The shared-file protocol. |
+| `ACCEPTANCE_CRITERIA.md` | Exists (draft) |
+| Document map and retired names | Section 13 of this document |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal. In RS terms it is an ASSUMPTION (DEV).
 
@@ -138,7 +139,7 @@ Work packages are defined in `DEVELOPMENT_ROADMAP.md` §6. All rows are PROPOSED
 |---|---|---|---|
 | `PROJECT_CHARTER.md`, `REQUIREMENTS_SPECIFICATION.md` | **Not agreed.** Both were committed by YuvrajGaykhe in `8941964`; who drafted them is not recorded. PROPOSED: Yuvraj, pending confirmation. | Sanika Attarde | Both developers review every change. Section numbers and requirement IDs are never renumbered (`DEVELOPMENT_WORKFLOW.md` §12). |
 | `MFW_Statement_of_Work.pdf`, `MFW_Commercial_Proposal-2.pdf` | None. These are issued documents. | — | Never edited. A newer issued version is added beside the old one by the contracting developer, with a `CHANGELOG.md` entry. |
-| Phase 2 documents (planned) | Assigned when each is created. `SYSTEM_ARCHITECTURE.md` and `TECH_STACK_DECISIONS.md` are joint. | Both | — |
+| Phase 2 documents | `SYSTEM_ARCHITECTURE.md` and `TECHNOLOGY_DECISIONS.md` are joint. `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` exist as drafts written in Yuvraj's session; the primary editor is **not agreed**, PROPOSED: Yuvraj, pending confirmation. `PDF_READER_AND_OFFLINE_DESIGN.md` and `CLOUD_INFRASTRUCTURE_AND_COSTS.md` are not written; an editor is assigned when each is created. | Both | Both developers review every change |
 | `API_AND_MODULE_CONTRACTS.md` | Sanika Attarde (interim: drafted in Sanika Attarde's session) | Yuvraj | Both developers approve every change (`API_AND_MODULE_CONTRACTS.md` §12). |
 | `DECISION_LOG.md` | Sanika Attarde (interim) | Yuvraj | Anyone may add an entry in a pull request. Status changes need the evidence in `DECISION_LOG.md` §3.1. |
 | `CHANGELOG.md` | Sanika Attarde (interim) | Yuvraj | Each pull request adds its own line. On a conflict, keep both lines. |
@@ -192,3 +193,68 @@ The criteria are defined in S2 and detailed in `ACCEPTANCE_CRITERIA.md`. All row
 | Each developer's availability is not recorded, so capacity cannot be checked | OQ-38; `DEVELOPMENT_ROADMAP.md` §8 |
 | Primary editor of CH and RS | Section 8.2 |
 | Two-developer delivery recorded with MFW | OQ-34; DEC-018 |
+
+## 13. Document Map
+
+This section records which document is the home of each topic, which planned names were retired, and which documents are still unwritten. It changes no document name and moves no content. The choices are PROPOSED. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed.
+
+### 13.1 Canonical home of each topic
+
+```text
+Sources (never edited here)
+├── MFW_Commercial_Proposal-2.pdf (S1), MFW_Statement_of_Work.pdf (S2)   issued, unsigned copies
+└── S3, client emails after S1 and S2                                     not in the repository
+
+Framing and requirements
+├── PROJECT_CHARTER                  project framing; S3 amendments listed in section 17.3
+├── REQUIREMENTS_SPECIFICATION       requirements, original OQ-01 to OQ-31, conflicts C-01 to C-08
+├── SCOPE_AND_EXCLUSIONS             scope, exclusions, change candidates (CHG-nn)
+├── ASSUMPTIONS_AND_CONSTRAINTS      assumptions and constraints (REG-nnn)
+└── GLOSSARY                         terms
+
+Registers (one canonical register per family)
+├── DECISION_LOG                     decisions (DEC-nnn); TECHNOLOGY_DECISIONS holds the options behind them (TD-nn)
+├── OPEN_QUESTIONS                   questions (OQ-nn); architecture questions AOQ-nn map to it (section 7 there)
+└── RISK_REGISTER                    risks (R-nn); architecture risks AR-nn map to it (section 7 there)
+
+Design
+├── SYSTEM_ARCHITECTURE              logical architecture
+├── TECHNOLOGY_DECISIONS             technology options, proposed choices, proposed requirement changes (PRC-nn)
+├── DATABASE_AND_DATA_MODEL          data model
+├── API_AND_BACKEND_CONTRACT         the single catalogue of backend operations (OP-nn) and their errors
+├── API_AND_MODULE_CONTRACTS         app modules (MOD-nn), integration contracts (IC-nn), app-side errors
+└── SECURITY_AND_ACCESS_CONTROL      access rules, threats, controls, security tests
+
+Plans, tests and process
+├── DEVELOPMENT_ROADMAP, TASK_OWNERSHIP_MATRIX, DEVELOPMENT_WORKFLOW, CODING_STANDARDS, DEFINITION_OF_DONE
+├── ACCEPTANCE_CRITERIA, TESTING_STRATEGY, TEST_DATA_AND_FIXTURES, CI_CD_AND_QUALITY_GATES
+├── DEPENDENCY_REGISTER, DEPLOYMENT_PLAN, BACKUP_AND_RECOVERY, MAINTENANCE_AND_HANDOVER
+├── APP_STORE_RELEASE_CHECKLIST, CLAUDE_CODE_WORKING_RULES
+└── CHANGELOG
+```
+
+Section 8 of `API_AND_MODULE_CONTRACTS.md` (the 31-operation table) stays until the catalogue in `API_AND_BACKEND_CONTRACT.md` is agreed. Its operation IDs are aliases of the catalogue's IDs (see the alias table in `API_AND_BACKEND_CONTRACT.md`).
+
+### 13.2 Retired planned names
+
+Earlier documents named four documents that were not yet written. Documents with different names now exist. The old names stay here so any old reference still resolves.
+
+| Planned name (retired) | Document that exists |
+|---|---|
+| `TECH_STACK_DECISIONS` | `TECHNOLOGY_DECISIONS.md` |
+| `DATABASE_DESIGN` | `DATABASE_AND_DATA_MODEL.md` |
+| `API_SPECIFICATION` | `API_AND_BACKEND_CONTRACT.md` (backend operations). App-side contracts are in `API_AND_MODULE_CONTRACTS.md` |
+| `AUTHENTICATION_AND_AUTHORIZATION` | `SECURITY_AND_ACCESS_CONTROL.md` |
+
+The change is of names only. It does not make the content of either set authoritative, and it does not mean the contents agree. Where they differ, the difference is recorded as a conflict or an open item in the document that holds it.
+
+### 13.3 Planned, not written
+
+| Document | Purpose | Status |
+|---|---|---|
+| `PDF_READER_AND_OFFLINE_DESIGN.md` | Reader and offline design | Not written. Task to be added to `DEVELOPMENT_ROADMAP.md` (T-00.3) |
+| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Cloud cost model once DEC-003 is decided (R14) | Not written. Cost scenarios already exist in `TECHNOLOGY_DECISIONS.md` section 9 and `SYSTEM_ARCHITECTURE.md` section 13 |
+
+### 13.4 Numbers in document control
+
+The Phase 3 and Phase 4 documents carry the numbers 21 to 40 in their document-control tables. No document in the repository is assigned the numbers 1 to 20, and the numbers do not define an order of reading or approval.

@@ -7,12 +7,12 @@
 | Document title | Security and Access Control |
 | File | `SECURITY_AND_ACCESS_CONTROL.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for Review |
 | Last updated | 23 October 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The architecture is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.1; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.2; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.2; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.2; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.1; `PROJECT_CHARTER.md` v0.1 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.3; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.3; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.3; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.2; `PROJECT_CHARTER.md` v0.2 |
 
 **Purpose.** This document says who may do what in the MFW product, how each rule is enforced, how it is checked, and what it does not promise. It covers the roles and permissions, the administrator lifecycle, the audit policy, the protection of personal data and of the app's issue files, the rules that the database and the file store must apply, and the tests that prove them.
 
@@ -25,6 +25,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft. Written after the 17-question interview (GS-Q17 to GS-Q33) and a read-only review of MFW's public website (WEB). Decisions recorded here are team-accepted, with the requirement label PROVISIONAL and MFW written approval pending (GS-Q30). No requirement status in the specification changed. |
+| 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Baseline (one admin role, immediate deletion) separated from the labelled changes PRC-01 and PRC-02 (section 6.1a classifies every control and test). Threat T26, control SC-21 and test ST-21 added (account-existence messages). Section 3.2: what the gate and a signed link cannot protect; website check updated. Profile fields aligned with the requirements specification. "Team-accepted" replaced by PROPOSED with the agreement note. Error names upper-case. |
 
 ### 1.1 Sources and authority
 
@@ -32,7 +33,7 @@
 |---|---|---|---|
 | S1, S2 | MFW Mobile App Commercial Proposal and Statement of Work, 17 October 2026 | Read. Both copies are unsigned (REG-002). | S2 states the security requirements and the acceptance criteria. |
 | S3 | Client emails received after S1 and S2 | Not available (REG-001). | Not used as evidence. Anything known only through the charter is PROVISIONAL. |
-| CH | `PROJECT_CHARTER.md` v0.1 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
+| CH | `PROJECT_CHARTER.md` v0.2 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
 | SPEC | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) | Read. Draft for Review. | The requirement IDs and statuses, used as written. |
 | TD, GS | [Technology Decisions](TECHNOLOGY_DECISIONS.md) | Draft for Review. | The decisions, the interview answers GS-Q1 to GS-Q33, and the defaults GS-D1 to GS-D20. |
 | ARCH | [System Architecture](SYSTEM_ARCHITECTURE.md) | Draft for Review. | The trust boundaries (§8.1) and the threats T1 to T17 (§12.1), which are not repeated here. |
@@ -44,13 +45,13 @@ S1, S2 and CH are named by file name and not linked, because they are not in thi
 
 ### 1.2 Status labels and identifiers
 
-The status legend is the specification's: CONFIRMED, PROVISIONAL, ASSUMPTION, OPEN and CONFLICT. "Proposed" is a decision status for choices the development team recommends. "Team-accepted" is a decision status for a choice the developer who ran the interview recorded as accepted. The requirement label stays PROVISIONAL, MFW written approval is pending, and the other developer's agreement is not recorded (GS-Q30, REG-052). CONFIRMED is never used for a team-accepted decision.
+The status legend is the specification's: CONFIRMED, PROVISIONAL, ASSUMPTION, OPEN and CONFLICT. "Proposed" is a decision status for choices the development team recommends. Version 0.1 used "team-accepted" for a choice the developer who ran the interview recorded as accepted. That word is not in the repository's status model (`DECISION_LOG.md` section 3.1), so every such choice is now PROPOSED and carries this note: "Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed." The requirement label stays PROVISIONAL, and MFW written approval is pending (GS-Q30, REG-052). CONFIRMED is never used for a proposed decision. The baseline is the confirmed text: one admin role (FR-ADMIN-004) and immediate account deletion (FR-PRIV-003). Super Admin, Content Admin and the audit log are the labelled change PRC-01, and the grace window is the labelled change PRC-02. Neither is approved.
 
 | Prefix | Meaning | Defined in |
 |---|---|---|
 | SC-nn | A security control | Section 6.3 |
 | ST-nn | A security test | Section 14 |
-| T1 to T17, T18 to T25 | Threats | T1 to T17 in System Architecture §12.1. T18 to T25 in Section 4.3 |
+| T1 to T17, T18 to T26 | Threats | T1 to T17 in System Architecture §12.1. T18 to T26 in Section 4.3 |
 | OP-nn, CT-nn | Operations and contract tests | [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) |
 | INV-nn | Data invariant | [Database and Data Model](DATABASE_AND_DATA_MODEL.md) §10.8 |
 | FR, NFR, INT, BR, AC, DATA | Requirement IDs and S2 acceptance criteria | Specification Sections 5 to 10 |
@@ -97,8 +98,8 @@ Assumptions and constraints
 ├── No legal assessment is made here. Items for MFW's legal adviser are listed in Section 9.6
 ├── Multi-factor sign-in for admins is NOT assumed. It is OPEN (AOQ-03)
 ├── Admin sign-in measures (password rules, session expiry) are OPEN (NFR-SEC-011, OQ-20)
-├── The two-role model is team-accepted and PROVISIONAL, with MFW written approval pending (PRC-01). S2 excludes editorial roles and
-│   an audit log (EXC-07), and that conflict is preserved
+├── The baseline is one admin role (FR-ADMIN-004, CONFIRMED). The two-role model is the labelled change PRC-01: PROPOSED, PROVISIONAL, MFW
+│   written approval pending. S2 excludes editorial roles and an audit log (EXC-07), and that conflict is preserved
 └── The effort estimate for PRC-01 (7 to 11 additional person-days, a development-team estimate) is not an approved change order, and it
     does not cover the guard record, the repair task, the wider audit set or the tests
 ```
@@ -137,7 +138,7 @@ flowchart LR
 ### 3.2 Channel policy
 
 ```text
-Channel policy                      [team-accepted (GS-Q32), PROVISIONAL, MFW written confirmation pending (AOQ-18)]
+Channel policy                      [PROPOSED (GS-Q32), PROVISIONAL, MFW written confirmation pending (AOQ-18, OQ-57); agreement reported by YG, not filed]
 ├── The decision
 │   ├── The website stays public. The app requires authentication. The two channels have different access policies
 │   └── The project makes no change to the website (INT-WP-002)
@@ -166,14 +167,23 @@ Channel policy                      [team-accepted (GS-Q32), PROVISIONAL, MFW wr
 │   │   That wording is MFW's. This document only flags it
 │   ├── Readers may ask why the app needs a sign-in when the website does not. The stated purposes are MFW's visibility of who registers
 │   │   (objective O6) and the app's features
-│   └── MFW is asked to confirm in writing what the gate is for (AOQ-18)
+│   └── MFW is asked to confirm in writing what the gate is for (AOQ-18, now OQ-57)
 └── Unverified
-    ├── Whether every issue PDF on the website is public. Only the April-May 2026 PDF was tested, with a header-only request
+    ├── Whether every issue PDF on the website is public. Three files were checked by header-only requests on 23 October 2026 (7.7, 9.2 and 9.6 MB), and all returned 200 without sign-in. The 15.3 MB file and the other issues were not checked
     ├── Whether the app stores question a sign-in wall for content that is public on the web (Technology Decisions §9.4, item 23)
     └── Whether MFW means the website PDFs to stay public. That is MFW's decision
 ```
 
 The observations behind this section are in the [API and Backend Contract](API_AND_BACKEND_CONTRACT.md), Appendix A.
+
+```text
+What the sign-in gate and a signed link cannot protect
+├── A link works until it expires and can be shared within its lifetime (T2). It cannot be withdrawn earlier (AR-06)
+├── A copy already downloaded stays on the device. It cannot be recalled from a device that is offline (OQ-11)
+├── A copy that exists elsewhere, such as the website's PDF, a cache or a search index, is outside the project. Unpublishing or deleting in the app does not remove it
+├── There is no DRM (NFR-SEC-009). A signed-in reader can keep a file they were entitled to download
+└── Tests that show the app-side limits: SEC-CHK-02 and SEC-CHK-03 (`TESTING_STRATEGY.md` section 9), PAC-13 and the table in `TESTING_STRATEGY.md` section 16. None has been run
+```
 
 ## 4. Actors, Assets and Threats
 
@@ -184,6 +194,7 @@ Actors
 ├── Logged-out visitor        can read public metadata, covers, the deleted-issue list, news and the public configuration
 ├── Reader                    signed in. Has full access when the account is active, the email is verified (for password accounts) and the
 │                             profile gate, if on, is met. Otherwise has incomplete access (System Architecture §8.3)
+├── Admin (baseline)          a reader with an active admin role record: the one admin role of FR-ADMIN-004
 ├── Content Admin             a reader with an active Content Admin role record (PRC-01)
 ├── Super Admin               a reader with an active Super Admin role record (PRC-01)
 ├── The backend               server operations, triggers and the schedule, running under the backend's own credentials
@@ -206,18 +217,19 @@ Assets and what protects them
 
 ### 4.3 Threats
 
-Threats T1 to T17 are in [System Architecture](SYSTEM_ARCHITECTURE.md) §12.1 and are not repeated. This section adds T18 to T25. Each control and test is proposed. None is built, and no test is written.
+Threats T1 to T17 are in [System Architecture](SYSTEM_ARCHITECTURE.md) §12.1 and are not repeated. This section adds T18 to T26. Each control and test is proposed. None is built, and no test is written.
 
 | Ref | Threat | Control | Residual risk | Tests |
 |---|---|---|---|---|
-| T18 | A revoked or demoted admin keeps acting with an old token or an open session | Every privileged function reads the current role record and the account status on each call. No claim is trusted. Rules deny direct reads of admin data. Sessions are ended after the commit (SC-02, SC-12) | A signed upload URL issued earlier works until it expires. Whether a read made right after the commit always sees the change is NOT VERIFIED (Technology Decisions §9.4, item 21) | ST-03, ST-04 |
-| T19 | Two role changes at once remove the last Super Admin, or a change is replayed or applied from a stale screen | The guard record in one transaction, the expected previous role and the request identifier (SC-10, SC-11) | How transactions behave under concurrency is NOT VERIFIED (item 20) | ST-07, ST-08 |
-| T20 | The bootstrap or recovery step is used to create an unauthorised Super Admin | A written naming by MFW's authorised approver, one developer who runs the step and another who verifies it, an audit event with the written reference, and a refusal to run while an active Super Admin exists unless declared a recovery (SC-14) | The approver is not yet named (OQ-28). Two developers acting together, or a compromised developer account | ST-09 |
+| T18 | (both models) A revoked or demoted admin keeps acting with an old token or an open session | Every privileged function reads the current role record and the account status on each call. No claim is trusted. Rules deny direct reads of admin data. Sessions are ended after the commit (SC-02, SC-12) | A signed upload URL issued earlier works until it expires. Whether a read made right after the commit always sees the change is NOT VERIFIED (Technology Decisions §9.4, item 21) | ST-03, ST-04 |
+| T19 | (PRC-01) Two role changes at once remove the last Super Admin, or a change is replayed or applied from a stale screen | The guard record in one transaction, the expected previous role and the request identifier (SC-10, SC-11) | How transactions behave under concurrency is NOT VERIFIED (item 20) | ST-07, ST-08 |
+| T20 | (PRC-01; the baseline has a named first-admin step) The bootstrap or recovery step is used to create an unauthorised Super Admin | A written naming by MFW's authorised approver, one developer who runs the step and another who verifies it, an audit event with the written reference, and a refusal to run while an active Super Admin exists unless declared a recovery (SC-14) | The approver is not yet named (OQ-28). Two developers acting together, or a compromised developer account | ST-09 |
 | T21 | Someone treats the sign-in gate as content secrecy | The channel policy states what the gate is for (Section 3.2) | The website copy is public (AOQ-18) | None. It is a statement and not a control |
-| T22 | The audit log is flooded with denied entries, or altered | Denied entries only for signed-in callers, with a cap per caller, written on a best-effort basis. The log is append-only, one module writes it, and no client can reach it (SC-13) | The cap value is OPEN | ST-10, ST-11 |
+| T22 | (PRC-01) The audit log is flooded with denied entries, or altered | Denied entries only for signed-in callers, with a cap per caller, written on a best-effort basis. The log is append-only, one module writes it, and no client can reach it (SC-13) | The cap value is OPEN | ST-10, ST-11 |
 | T23 | A deleted issue's copy stays on devices | The deleted-issue list, which the app uses to remove copies (GS-Q24) | A copy cannot be recalled from a device that is offline or never opens the app (OQ-11) | ST-17 |
 | T24 | A notification is sent twice or sent with no record | The record is written first. A stale record becomes unknown. Only an admin retries (SC-13, INV-17) | Whether the push service delivers a repeated send twice is NOT VERIFIED (item 22) | ST-16 |
-| T25 | An account pending deletion is used to act | Every server operation except the undo and the deletion request is refused. The account leaves the active Super Admin count (SC-17) | The sign-in stays possible during the window, because the undo needs it. The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status | ST-14 |
+| T25 | (PRC-02) An account pending deletion is used to act | Every server operation except the undo and the deletion request is refused. The account leaves the active Super Admin count (SC-17) | The sign-in stays possible during the window, because the undo needs it. The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status | ST-14 |
+| T26 | Someone tests which email addresses have an account, through registration, sign-in or password reset | Sign-in gives one message for any wrong email or password. Password reset gives the same message whether or not the address has an account. All three are rate limited (SC-18, SC-21) | Registration tells the visitor that an account exists, by design (PROPOSED), so an address can be tested there, limited by the rate limit. The identity provider's behaviour is NOT VERIFIED | ST-21 |
 
 ## 5. Authentication and Account Status
 
@@ -233,7 +245,7 @@ Authentication and account status
 │   └── One account per email address. Google is linked to a password account only when that account's email is verified (TD-06, proposed; AOQ-08)
 ├── Account states the backend checks
 │   ├── active
-│   ├── pending_deletion    the grace window. Every server operation is refused with account_closed except cancelAccountDeletion and
+│   ├── pending_deletion    (PRC-02 only) the grace window. Every server operation is refused with ACCOUNT_CLOSED except cancelAccountDeletion and
 │   │                       requestAccountDeletion. The reader can still read their own account (getMyAccount), and the direct operations on
 │   │                       their own records stay open to them, because rules do not look up the account status
 │   ├── deleting            as for pending_deletion
@@ -256,7 +268,7 @@ Authentication and account status
 
 ### 6.1 The roles
 
-The two-role model is team-accepted (GS-Q19), PROVISIONAL, with MFW written approval pending (PRC-01). S2 has one admin role (FR-ADMIN-004, CONFIRMED) and excludes editorial roles and an audit log (EXC-07). That conflict is preserved. If MFW declines PRC-01, the two roles collapse into one and the Super-Admin-only rules in this document fall away or move to that single role, as the [Database and Data Model](DATABASE_AND_DATA_MODEL.md) §10.8 says.
+The baseline is one admin role (FR-ADMIN-004, CONFIRMED). The two-role model below is the labelled change PRC-01: PROPOSED (GS-Q19), PROVISIONAL, with MFW written approval pending. S2 excludes editorial roles and an audit log (EXC-07). That conflict is preserved. Everything in Sections 6 to 8 that names a Content Admin or a Super Admin applies only if MFW approves PRC-01. If MFW declines PRC-01, the two roles collapse into one and the Super-Admin-only rules in this document fall away or move to that single role, as the [Database and Data Model](DATABASE_AND_DATA_MODEL.md) §10.8 says.
 
 ```text
 Roles
@@ -270,9 +282,23 @@ Roles
     └── View and export the reader list, search for a reader by email, and read the audit log
 ```
 
+### 6.1a Baseline and PRC-01: what applies where
+
+```text
+Classification of controls and tests
+├── Baseline and PRC-01 alike     SC-01 to SC-08, SC-12 (in the baseline it is the removal of the single admin role), SC-16, SC-18 to SC-21
+│                                 ST-01, ST-03 to ST-06, ST-12, ST-13, ST-15 to ST-21
+├── Different in the two models   SC-15 (reader lists: any admin in the baseline, Super Admin only under PRC-01)
+│                                 ST-02 (the Content Admin and Super Admin columns exist only under PRC-01)
+├── PRC-01 only                   SC-09, SC-10, SC-11, SC-13, SC-14
+│                                 ST-07, ST-08, ST-09, ST-10, ST-11; threats T19, T20, T22
+├── PRC-02 only                   the grace-window parts of SC-17 and ST-14; threat T25
+└── The baseline's own step       the first admin is a named step from MFW's admin list (`DEPLOYMENT_PLAN.md` section 7.5), not SC-14
+```
+
 ### 6.2 Permissions by operation
 
-The operations are defined in the [API and Backend Contract](API_AND_BACKEND_CONTRACT.md). "Own" means the caller's own records. Every "Yes" in an admin column holds only while the role record is active, the account is active, and the check succeeds on that call (SC-02).
+The operations are defined in the [API and Backend Contract](API_AND_BACKEND_CONTRACT.md). The table gives the PRC-01 columns. In the baseline, the one Admin role can do what the Content Admin column allows, and also OP-30 (only if OQ-21 allows) and OP-31 to OP-33 (PROVISIONAL). OP-34 to OP-39 and OP-42 do not exist in the baseline (`API_AND_BACKEND_CONTRACT.md` section 3.2). "Own" means the caller's own records. Every "Yes" in an admin column holds only while the role record is active, the account is active, and the check succeeds on that call (SC-02).
 
 | Operations | Logged out | Reader | Content Admin | Super Admin |
 |---|---|---|---|---|
@@ -307,15 +333,16 @@ The register is proposed. Nothing in it is implemented and no test is written.
 | SC-09 | Admin roles change only through the Super Admin operations, with a recent sign-in, in one transaction with the audit event and the guard record | OP-35 to OP-37; INV-04 | PRC-01 | ST-07 |
 | SC-10 | At least one active Super Admin always exists | The guard record; INV-03 | PRC-01 | ST-08 |
 | SC-11 | A role change is applied once, and only against the role the caller saw | The request identifier and the expected previous role; INV-07 | PRC-01 | ST-08 |
-| SC-12 | After a revocation is committed, privileged requests from that person are denied, and their sessions are ended | INV-08, INV-09 | PRC-01; GS-Q20 | ST-03 |
+| SC-12 | After a revocation is committed, privileged requests from that person are denied, and their sessions are ended | INV-08, INV-09 | GS-Q20; FR-ADMIN-003 (CONFIRMED). In the baseline a revocation is the removal of the single admin role; role changes themselves are PRC-01 | ST-03 |
 | SC-13 | The audit set is recorded in the same transaction as the action. Denied attempts by signed-in callers are recorded on a best-effort basis with a cap | INV-16 | GS-Q26 | ST-10, ST-11 |
 | SC-14 | The first Super Admin, and any recovery, are created by a controlled, auditable two-person step | OP-42; Section 7.1 | GS-Q33; NFR-SEC-012 (CONFIRMED) | ST-09 |
-| SC-15 | Reader lists and exports are Super Admin only, built in memory, neutral to spreadsheet formulas, and audited without their data | OP-31 to OP-33 | FR-USER-002, FR-USER-003 (PROVISIONAL); NFR-PRIV-004 (ASSUMPTION) | ST-15 |
+| SC-15 | Reader lists and exports are Super Admin only under PRC-01 (any admin in the baseline), built in memory, neutral to spreadsheet formulas, and audited without their data | OP-31 to OP-33 | FR-USER-002, FR-USER-003 (PROVISIONAL); NFR-PRIV-004 (ASSUMPTION) | ST-15 |
 | SC-16 | Logs hold no personal data, token, signed link or exported data | All operations | NFR-PRIV-003 (PROVISIONAL); ARCH T12 | ST-12 |
-| SC-17 | Account deletion asks for confirmation, offers a grace window with undo and an immediate option, and is safe to repeat | OP-12, OP-13, OP-41 | FR-AUTH-009, FR-PRIV-003 (CONFIRMED); FR-PRIV-004 (ASSUMPTION); PRC-02 | ST-14 |
+| SC-17 | Account deletion asks for confirmation and is safe to repeat. In the baseline it is immediate. A grace window with undo and an immediate option are the labelled change PRC-02 | OP-12, OP-13, OP-41 | FR-AUTH-009, FR-PRIV-003 (CONFIRMED); FR-PRIV-004 (ASSUMPTION); PRC-02 | ST-14 |
 | SC-18 | Each class of operation has a rate or size limit. The mechanism is OPEN | [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) §2.7 | AOQ-10 | ST-18 |
 | SC-19 | The app and the repository hold no secret, and developers use role-based access | TD-17, TD-18 | NFR-SEC-012 (CONFIRMED) | ST-19 |
 | SC-20 | News HTML runs no script | The sanitising renderer | TD-12; ARCH T9 | ST-20 |
+| SC-21 | Sign-in gives one message for any wrong email or password, and password reset gives the same message whether or not the address has an account. Registration may say that an account exists. All three are rate limited | The identity provider and the app's message mapping; SC-18 | FR-AUTH-001 to FR-AUTH-004 (CONFIRMED); PAC-17 (PROPOSED). The provider's behaviour is NOT VERIFIED | ST-21 |
 
 ### 6.4 Enforcement rules
 
@@ -346,10 +373,12 @@ Separation of duties
 
 ## 7. Administrator Lifecycle
 
+In the baseline there is one admin role and no in-panel admin management. The first admin account is a named step from MFW's admin list (OQ-20; `DEPLOYMENT_PLAN.md` section 7.5). Sections 7.1 to 7.4, 7.6 and 7.7 describe PRC-01 and apply only if MFW approves it. Section 7.5 (revocation) applies in both models.
+
 ### 7.1 Bootstrap of the first Super Admin
 
 ```text
-Bootstrap of the first Super Admin                     [team-accepted (GS-Q33), PROVISIONAL, MFW written approval pending; OP-42]
+Bootstrap of the first Super Admin                     [PRC-01 only; PROPOSED (GS-Q33), PROVISIONAL, MFW written approval pending; OP-42]
 ├── Why a special step: the first Super Admin cannot be granted by another Super Admin, because none exists yet
 ├── Who does what
 │   ├── 1. The person registers an ordinary reader account in the app
@@ -374,7 +403,7 @@ Bootstrap of the first Super Admin                     [team-accepted (GS-Q33), 
 ### 7.2 Managing admins in the panel
 
 ```text
-Managing admins in the panel                           [team-accepted (GS-Q19), PROVISIONAL; OP-35 to OP-39]
+Managing admins in the panel                           [PRC-01 only; PROPOSED (GS-Q19), PROVISIONAL; OP-35 to OP-39]
 ├── Who: a Super Admin only
 ├── How: grant, change and revoke are operations of the backend. The panel only calls them (SC-09)
 ├── Rules
@@ -390,7 +419,7 @@ Managing admins in the panel                           [team-accepted (GS-Q19), 
 ### 7.3 The last Super Admin
 
 ```text
-Last Super Admin protection                            [team-accepted, PROVISIONAL; INV-03; SC-10]
+Last Super Admin protection                            [PRC-01 only; PROPOSED, PROVISIONAL; INV-03; SC-10]
 ├── Mechanism: the guard record holds the count of active Super Admins. Every role change, and every removal of a Super Admin's account,
 │   reads and writes it in the same transaction, and a change that would leave the count below one is refused
 ├── What counts as active: a Super Admin whose account is neither disabled nor pending deletion
@@ -428,7 +457,7 @@ Concurrent and repeated changes                        [SC-10, SC-11; ST-07, ST-
 ├── Two changes at once: both read the guard record, so the second finds it changed and is retried or refused. How the platform
 │   signals the conflict is NOT VERIFIED (Technology Decisions §9.4, item 20)
 ├── A repeated request: the same request identifier returns the first result and adds no second audit event (INV-07)
-├── A stale screen: the expected previous role no longer matches, and the answer is a conflict (stale_role)
+├── A stale screen: the expected previous role no longer matches, and the answer is CONFLICT (STALE_ROLE)
 └── Not claimed: that two changes can never both succeed. The claim is tested (ST-08) before it is relied on
 ```
 
@@ -437,7 +466,7 @@ Concurrent and repeated changes                        [SC-10, SC-11; ST-07, ST-
 The guarantee that is intended is kept apart from the details that are not yet verified.
 
 ```text
-Revocation and existing sessions                       [team-accepted (GS-Q20), PROVISIONAL; INV-08, INV-09; SC-12]
+Revocation and existing sessions                       [both models; PROPOSED (GS-Q20), PROVISIONAL; INV-08, INV-09; SC-12]
 ├── Intended guarantee
 │   ├── Once a revocation or demotion is committed and visible to the authorisation check, every privileged request from that person
 │   │   is denied
@@ -461,7 +490,7 @@ Revocation and existing sessions                       [team-accepted (GS-Q20), 
 ### 7.6 Lockout recovery
 
 ```text
-Recovery after a lockout                               [team-accepted (GS-Q33), PROVISIONAL]
+Recovery after a lockout                               [PRC-01 only; PROPOSED (GS-Q33), PROVISIONAL]
 ├── When: no active Super Admin can sign in, for example a lost password or an account removed outside the app
 ├── How: the same procedure as the bootstrap (Section 7.1). MFW's authorised approver names a registered reader in writing, one
 │   developer runs the step declared as a recovery, the other verifies it, and the audit event holds the written reference
@@ -472,7 +501,7 @@ Recovery after a lockout                               [team-accepted (GS-Q33), 
 ### 7.7 Admin account deletion
 
 ```text
-Admin account deletion
+Admin account deletion                                 [the Super Admin parts are PRC-01; the pending state is PRC-02]
 ├── An admin who asks to delete their own account goes through OP-12 like any reader
 ├── A Super Admin leaves the active count at the request, and the request is refused if they are the last (INV-03)
 ├── While the deletion is pending, every server operation except the undo and the deletion request is refused for that account, which includes every privileged operation (SC-17)
@@ -483,7 +512,7 @@ Admin account deletion
 ## 8. Audit Policy
 
 ```text
-Audit policy                                           [team-accepted (GS-Q26), PROVISIONAL, MFW written approval pending; retention OPEN (AOQ-04)]
+Audit policy                                           [PRC-01 only; PROPOSED (GS-Q26), PROVISIONAL, MFW written approval pending; retention OPEN (AOQ-04). No audit log exists in the baseline]
 ├── Why: accountability for sensitive admin actions (PRC-01). S2 excludes an audit log (EXC-07). That conflict is preserved, and no
 │   approved audit policy exists
 ├── What is recorded
@@ -521,9 +550,9 @@ The full model is in the [Database and Data Model](DATABASE_AND_DATA_MODEL.md), 
 ```text
 Personal data
 ├── The sign-in provider holds the email address, name, verification state and sign-in methods. The app keeps only the user identifier (GS-Q5)
-├── The profile holds the working field list: full name, mobile number, company, job title, industry segment, country, and age or date
-│   of birth, with city and areas of interest optional. It is an ASSUMPTION that MFW has not confirmed (PRC-03, GS-Q23). Gender is
-│   left out and flagged against FR-PROF-002
+├── The profile holds the required set of the requirements specification (RS FR-PROF-002, PROVISIONAL): name, exact age, gender,
+│   occupation and domain of work. Mobile number, company, country, city and areas of interest are optional candidates that MFW has not
+│   confirmed (OQ-01). The earlier working list (PRC-03, GS-Q23) is superseded
 ├── The consent record holds the accepted policy versions (DATA-012, ASSUMPTION; OQ-27)
 ├── Bookmarks, favourites and notification choices are the reader's own records (DATA-005 to DATA-007, CONFIRMED)
 ├── The push provider holds device tokens and topic subscriptions. The backend stores none
@@ -538,7 +567,7 @@ Personal data
 Access to personal data
 ├── The owner reads their own account, profile, consent record, bookmarks, favourites and preferences (SC-06)
 ├── Profile writes go through OP-10 only. Bookmarks, favourites and preferences are written by the owner under rules
-├── Super Admins reach profiles only through the reader list and the exports (NFR-SEC-006, ASSUMPTION; FR-USER-002, FR-USER-003, PROVISIONAL)
+├── Admins (Super Admins only, under PRC-01) reach profiles only through the reader list and the exports (NFR-SEC-006, ASSUMPTION; FR-USER-002, FR-USER-003, PROVISIONAL)
 ├── Content Admins have no access to other readers' personal data
 └── Nobody else, including the developers in the normal course, reads it. Developer access to MFW's accounts is role-based (NFR-SEC-012)
 ```
@@ -547,7 +576,7 @@ Access to personal data
 
 ```text
 Exports of reader data                                 [SC-15; OP-31 to OP-33]
-├── Only a Super Admin, and each list view and export writes an audit event that holds a count and no reader data
+├── Any admin in the baseline, and only a Super Admin under PRC-01. Under PRC-01 each list view and export writes an audit event that holds a count and no reader data
 ├── Built in memory, returned to the caller and not stored
 ├── Cells that start with a spreadsheet formula character are neutralised (T10)
 └── Whether a Super Admin may export at all, and the export's retention, are for MFW's adviser (NFR-PRIV-004, ASSUMPTION; AOQ-05)
@@ -556,13 +585,13 @@ Exports of reader data                                 [SC-15; OP-31 to OP-33]
 ### 9.4 Deletion
 
 ```text
-Account deletion                                       [team-accepted (GS-Q28), PROVISIONAL; PRC-02 OPEN for MFW and its legal adviser; SC-17]
+Account deletion                                       [baseline: immediate deletion (FR-PRIV-003, CONFIRMED). The grace window is PRC-02: PROPOSED (GS-Q28), PROVISIONAL, OPEN for MFW and its legal adviser; SC-17]
 ├── The reader confirms in the app (FR-PRIV-004, ASSUMPTION)
-├── Grace option: the account is marked pending, the reader's sessions end, and the reader can undo during the window. The window length
+├── Grace option (PRC-02 only): the account is marked pending, the reader's sessions end, and the reader can undo during the window. The window length
 │   is configuration and OPEN (AOQ-02). A scheduled purge removes the profile, bookmarks, favourites, preferences, the app record and
 │   the sign-in account
-├── Immediate option: the deletion starts at once, without the window, and a failed step is retried until it finishes
-├── During the window the sign-in is not disabled, because the undo needs it. Every server operation except the undo and the
+├── Immediate deletion (the baseline): the deletion starts at once, without a window, and a failed step is retried until it finishes
+├── During the window (PRC-02 only) the sign-in is not disabled, because the undo needs it. Every server operation except the undo and the
 │   deletion request is refused (T25)
 ├── Backups keep deleted data until they expire. After a restore, deletions are re-applied using a short-lived list of purged identifiers
 │   (AOQ-02, Database and Data Model §10.6)
@@ -588,7 +617,7 @@ Items for MFW's legal adviser
 ├── The deletion window, the retention periods and what is kept after deletion (OQ-24, AOQ-02, AOQ-04)
 ├── How consent is recorded (OQ-27)
 ├── Whether audit events and consent records may outlive a person (OQ-24, AOQ-04)
-└── What the website's public PDFs mean for the wording MFW uses about the app's issues (AOQ-18). That is MFW's wording, not a legal finding
+└── What the website's public PDFs mean for the wording MFW uses about the app's issues (AOQ-18, OQ-57). That is MFW's wording, not a legal finding
 ```
 
 ## 10. File and Content Access Controls
@@ -602,10 +631,10 @@ File and content access                                [SC-07, SC-08, SC-16; OP-
 │   ├── The link is for one object, read-only and short-lived. Its lifetime is configuration, and 60 minutes is an ASSUMPTION (AOQ-07)
 │   ├── The link is never stored in the database or logged (SC-16)
 │   ├── A link issued before an unpublish or a deletion works until it expires (AR-06). It can be shared within its lifetime (T2)
-│   └── A cap on link requests per reader is an ASSUMPTION (SC-18)
+│   └── A cap on link requests per reader is an ASSUMPTION (SC-18). This section describes the app's copy only
 ├── Unpublished, withdrawn and deleted issues
-│   ├── Unpublished: the metadata is readable by admins through functions only, and OP-11 answers issue_not_available
-│   ├── Deleted: the identifier is on the deleted-issue list, OP-11 answers gone, and the file revisions are removed
+│   ├── Unpublished: the metadata is readable by admins through functions only, and OP-11 answers ISSUE_NOT_AVAILABLE
+│   ├── Deleted: the identifier is on the deleted-issue list, OP-11 answers GONE, and the file revisions are removed
 │   └── The website's copy is not affected (Section 3)
 ├── Covers: public-read by design (GS-D7). Before publication a cover is reachable by anyone who knows its opaque address (AOQ-20)
 ├── Uploads
@@ -632,8 +661,8 @@ Abuse and rate limiting                                [SC-18; mechanism OPEN (A
 ├── App Check for callable functions is OPEN and is not assumed (AOQ-10). Its cost and setup were not researched (Technology Decisions §9.4, item 16)
 ├── A per-reader cap on link requests, a size limit on uploads, and a cap on denied audit entries per caller are the limits the design names
 ├── Super Admin operations that expose personal data or search by email are limited because the roles are few but the data is sensitive
-├── Password guessing and account lockout are the sign-in provider's protections. They were not researched
-└── A refusal for a limit is resource_exhausted, and it never reveals whether the thing asked for exists
+├── Password guessing and account lockout are the sign-in provider's protections. They were not researched. Sign-in, registration and password reset are limited through the provider, and whether it limits them is NOT VERIFIED (T26, SC-21)
+└── A refusal for a limit is RATE_LIMITED, and it never reveals whether the thing asked for exists
 ```
 
 ## 12. Database and Storage Access Rules
@@ -757,7 +786,7 @@ Security tests                                         [proposed; none is writte
 │   └── No link, token or reader value appears in the app, crash and function logs. The TD-09 proof plan covers the device parts
 ├── ST-13 Upload validation                     [SC-08]
 │   └── A renamed non-PDF, an oversized file, a file from a user whose role was revoked, and a cover that fails its checks are rejected and removed
-├── ST-14 Account deletion                      [SC-17, T25]
+├── ST-14 Account deletion                      [SC-17, T25; the grace and undo parts are PRC-02]
 │   └── Grace, undo, immediate, a repeated request, and a failed step that is retried. A pending account is refused by every server operation
 │       except the undo and the deletion request. The last Super Admin is refused. An undo restores the count
 ├── ST-15 Exports                               [SC-15]
@@ -768,11 +797,13 @@ Security tests                                         [proposed; none is writte
 ├── ST-17 Deleted-issue copies                  [T23]
 │   └── The app removes a copy only when the identifier is on the list, never because an issue is missing from a fetch. Unpublishing leaves the copy
 ├── ST-18 Limits                                [SC-18]
-│   └── Each class of operation answers resource_exhausted past its limit, once the mechanism and the values are chosen
+│   └── Each class of operation answers RATE_LIMITED past its limit, once the mechanism and the values are chosen
 ├── ST-19 Secrets and access review             [SC-19]
 │   └── No key, token or credential is in the repository, the app or CI. Developers use role-based access
-└── ST-20 News rendering                        [SC-20]
-    └── A post with a script, a form and an embedded frame is shown without running them
+├── ST-20 News rendering                        [SC-20]
+│   └── A post with a script, a form and an embedded frame is shown without running them
+└── ST-21 Account-existence messages            [SC-21, T26]
+    └── Compare sign-in and password reset for a known and an unknown address: the same message and the same error category. Registration for an address that has an account shows the account-exists prompt. Repeated attempts are limited. Timing is not tested
 ```
 
 ## 15. Risks, Open Questions and Verification Gaps
@@ -790,7 +821,7 @@ Risks and open items
 ├── Open for MFW
 │   ├── PRC-01, PRC-02, PRC-03 and PRC-04, which need MFW's written approval
 │   ├── NFR-SEC-011 and FR-USER-005 (OQ-20): admin sign-in measures and how admin accounts are managed
-│   ├── AOQ-04 audit retention, AOQ-05 exports, AOQ-18 the website's public PDFs, AOQ-19 the deleted-issue list
+│   ├── AOQ-04 audit retention, AOQ-05 exports (OQ-51), AOQ-18 the website's public PDFs (OQ-57), AOQ-19 the deleted-issue list
 │   ├── OQ-11 downloaded copies, OQ-21 replacement and deletion, OQ-24 retention, OQ-27 consent, OQ-28 the authorised approver
 │   └── The legal items in Section 9.6
 ├── Open for the development team
@@ -827,7 +858,7 @@ Requirements to controls
 ```text
 Decisions to sections
 ├── GS-Q18 Neutral core with a Firebase mapping        Sections 1 to 12 are neutral. Section 13 is the mapping
-├── GS-Q19 Two admin roles                             Sections 6 and 7
+├── GS-Q19 Two admin roles (PRC-01)                             Sections 6 and 7
 ├── GS-Q20 Admin reads through functions               Sections 6.4, 7.5 and 12.1
 ├── GS-Q21, GS-Q22 Replacement and deletion            Sections 6.1, 6.2 and 10
 ├── GS-Q24, GS-Q25 Deleted issues and their copies     Section 10
