@@ -7,9 +7,9 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
-| Date | 23 October 2026 |
+| Date | 25 October 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft, including the proposed security checklist required by RS NFR-SEC-010 |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. SEC-CHK-17 to SEC-CHK-19 added (account-existence messages, removed admin, abuse and throttling). SEC-CHK-03 limited to the app's storage. Registration wording corrected. Test lines for breaking news and for a failed replacement. Section 16 added: protected files and offline copies, intended and tested. |
+| 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No test, gate or checklist item changed. |
 
 ### 1.1 Related documents
 
@@ -30,6 +31,7 @@
 | `CI_CD_AND_QUALITY_GATES.md` | Exists (draft). Gates QG-* that run these suites. |
 | `API_AND_MODULE_CONTRACTS.md`, `DEFINITION_OF_DONE.md`, `DEPLOYMENT_PLAN.md` | Exist (draft) |
 | `OPEN_QUESTIONS.md`, `RISK_REGISTER.md` | Exist (draft) |
+| `REQUIREMENT_COVERAGE_MATRIX.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Exist (draft, version 0.1, dated 24 October 2026). The matrix is derived from this document, `ACCEPTANCE_CRITERIA.md` and RS §13, and reports gaps without adding tests. The reader design cites sections 7.5 and 16 below for download rules. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal. **PLANNED** means designed but not implemented. Availability labels ([NOW], [SCAFFOLD], [BACKEND], [CI], [DEVICES], [STORE]) are defined in `DEFINITION_OF_DONE.md` §3.
 

@@ -7,9 +7,9 @@
 | Document | Acceptance Criteria |
 | File | `Documentation/ACCEPTANCE_CRITERIA.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 31) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. No criterion has been tested. |
-| Date | 23 October 2026 |
+| Date | 25 October 2026 |
 | Approval required | Both developers for the verification detail. MFW in writing for every PAC criterion before it becomes contractual. |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft. AC-1 to AC-12 broken into verification checks. PAC-01 to PAC-11 carried from RS. PAC-12 to PAC-15 proposed. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Rule 1 reworded to state which rows are proposed checks. AC-9.7 added for FR-ADMIN-014 and FR-ADMIN-015. PAC-16 (conditional on PRC-02), PAC-17 (account-existence messages) and PAC-18 (conditional on PRC-01) added. Coverage table updated. |
+| 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No criterion changed. |
 
 ### 1.1 Related documents
 
@@ -28,6 +29,7 @@
 | `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist (draft) |
 | `OPEN_QUESTIONS.md` | Exists (draft). Questions linked below. |
 | `DEFINITION_OF_DONE.md`, `API_AND_MODULE_CONTRACTS.md` | Exist (draft) |
+| `REQUIREMENT_COVERAGE_MATRIX.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Exist (draft, version 0.1, dated 24 October 2026). The matrix shows which requirements have an AC or PAC row and lists eight proposed checks that are not rows. A new PAC row needs MFW's written approval. The reader design cites AC-2 and AC-4. |
 
 ## 2. Purpose, Scope and Status
 

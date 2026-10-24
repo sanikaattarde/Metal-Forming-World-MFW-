@@ -7,9 +7,9 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
-| Date | 23 October 2026 |
+| Date | 25 October 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft. 14 modules, 31 backend operations, 8 integration contracts. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 8 gains a column with the main identifier in `API_AND_BACKEND_CONTRACT.md` and notes on OP-ADM-11, OP-ADM-12 and OP-ACC-01. Section 4.2 error table gains the category and reason, with GONE and RATE_LIMITED added. Registration and sign-in messages stated. Compatibility and paging requirements added (4.5). Guest-reading rule labelled as a working position. Planned names replaced by the existing documents. |
+| 0.3 | 25 October 2026 | The related-documents row for `PDF_READER_AND_OFFLINE_DESIGN.md` now says the draft exists. No contract changed. |
 
 ### 1.1 Related documents
 
@@ -29,7 +30,7 @@
 | `TASK_OWNERSHIP_MATRIX.md` | Exists (draft). Module owners. The document map is in section 13. |
 | `ACCEPTANCE_CRITERIA.md`, `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist (draft) |
 | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md`, `SECURITY_AND_ACCESS_CONTROL.md` | Exist on `main` (drafts, merged by pull request #2). They were planned as `SYSTEM_ARCHITECTURE.md`, `TECH_STACK_DECISIONS.md`, `DATABASE_DESIGN.md`, `API_SPECIFICATION.md` and `AUTHENTICATION_AND_AUTHORIZATION.md`. `API_AND_BACKEND_CONTRACT.md` is the single catalogue of backend operations (section 8 below holds aliases of its identifiers). These contracts are not yet reconciled line by line with those documents; the differences are listed in `API_AND_BACKEND_CONTRACT.md` section 3.4. |
-| `PDF_READER_AND_OFFLINE_DESIGN.md` | Planned. Not written. |
+| `PDF_READER_AND_OFFLINE_DESIGN.md` | Exists (draft, version 0.1, dated 24 October 2026). The device-side lifecycle of a downloaded issue. It follows the `DownloadStatus` types in section 6.6 below and adds the removal paths. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal in this document. In RS terms it is an ASSUMPTION (DEV).
 

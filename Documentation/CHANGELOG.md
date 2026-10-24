@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 24 October 2026 |
+| Date | 25 October 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,24 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: one stale row corrected and pointers to the four new documents added, 2026-10-25, on topic branch `docs/yg-remaining-docs` on top of `7ce9081`, not reviewed
+
+Follows the entry below. The edits correct one row that still said the reader design was not written, and add related-document rows so the four new documents can be found from the documents a reader opens first. They change no requirement, scope item, exclusion, date, fee, contract, control, test or criterion, and no entry is AGREED, APPROVED or ANSWERED because of them. Four of the five edited documents are interim-owned by Sanika Attarde (`TASK_OWNERSHIP_MATRIX.md` 8.2). Sanika Attarde has not reviewed any of it. Nothing here has gone to MFW. The "Not changed" list of the entry below describes that entry only: three of the documents on it are edited here.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-10-25 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.3: the related-documents row for `PDF_READER_AND_OFFLINE_DESIGN.md` now says the draft exists. It said "Planned. Not written." | The row went stale when the entry below added the document | T-00.7 | Both developers (not agreed) | No scope effect: no contract changed |
+| 2026-10-25 | `Documentation/MAINTENANCE_AND_HANDOVER.md` | Version 0.3: related-documents row added for `SECURITY_INCIDENT_PROCEDURE.md` | A reader of the handover document is told where the steps for security events are. Section 10 stays the general flow | OQ-47; HO-13 | Both developers (not agreed) | No scope effect: no handover item, status or obligation changed |
+| 2026-10-25 | `Documentation/SECURITY_AND_ACCESS_CONTROL.md` | Version 0.3: `SECURITY_INCIDENT_PROCEDURE.md` added to the related documents field | A reader of the security document is told where the incident steps are | OQ-47 | Both developers (not agreed) | No scope effect: no role, control, threat or test changed |
+| 2026-10-25 | `Documentation/TESTING_STRATEGY.md` | Version 0.3: related-documents row added for `REQUIREMENT_COVERAGE_MATRIX.md` and `PDF_READER_AND_OFFLINE_DESIGN.md` | A reader of the test plans is told where requirement-level coverage is reported and which rules the reader design takes from sections 7.5 and 16 | RC-01 to RC-04 | Both developers (not agreed) | No scope effect: no test, gate or checklist item changed |
+| 2026-10-25 | `Documentation/ACCEPTANCE_CRITERIA.md` | Version 0.3: related-documents row added for `REQUIREMENT_COVERAGE_MATRIX.md` and `PDF_READER_AND_OFFLINE_DESIGN.md` | A reader of the acceptance rows is told where coverage is reported. The row repeats that a new PAC row needs MFW's written approval | RC-01; AC-2; AC-4 | Both developers (not agreed). MFW in writing for any PAC row | No scope effect: no criterion changed |
+| 2026-10-25 | `README.md` | Version column updated for the five documents above and for this changelog | Keep the index accurate | None | Both developers (not agreed) | No scope effect |
+| 2026-10-25 | `Documentation/CHANGELOG.md` | Version 0.4: added this entry | The record of changes | None | None | No scope effect |
+
+**Known effect of the version change.** `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md` and `API_AND_BACKEND_CONTRACT.md` cite `SECURITY_AND_ACCESS_CONTROL.md` as v0.2 in their related-documents field. They now cite a version one behind. They were not edited here because they are outside the edits agreed for this task. Update the citations when each of them is next revised.
+
+**Not changed:** `Documentation/REQUIREMENTS_SPECIFICATION.md`, `Documentation/GLOSSARY.md`, `Documentation/SCOPE_AND_EXCLUSIONS.md`, `Documentation/DECISION_LOG.md`, `Documentation/OPEN_QUESTIONS.md`, `Documentation/RISK_REGISTER.md`, the four documents named in the version paragraph above, `Documentation/DEVELOPMENT_ROADMAP.md`, `Documentation/TASK_OWNERSHIP_MATRIX.md`, the four documents added by the entry below, and the SOW and proposal PDFs.
 
 ### Documentation: four documents and a document index added, 2026-10-24, on topic branch `docs/yg-remaining-docs` on top of `5a436a3`, not reviewed
 
