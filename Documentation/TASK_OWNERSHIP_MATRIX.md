@@ -7,9 +7,9 @@
 | Document | Task Ownership Matrix |
 | File | `Documentation/TASK_OWNERSHIP_MATRIX.md` |
 | Phase | 3 — Development Planning and Collaboration (document 22) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. Every assignment is PROPOSED (DEC-011). |
-| Date | 23 October 2026 |
+| Date | 24 October 2026 |
 | Approval required | Both developers (CH §19.3 D9; OQ-38). No MFW approval. |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Document map, retired names and unwritten documents added (section 13). Phase 2 document ownership updated for the five design drafts. Stale statements corrected. |
+| 0.3 | 24 October 2026 | Tracking edit, see `CHANGELOG.md`. The document map (section 13.1) lists the four documents added on 24 October 2026 and `README.md`. Section 13.3 no longer lists `PDF_READER_AND_OFFLINE_DESIGN.md` as unwritten. Section 8.2 records the proposed editors of the new documents. No decision, requirement or status label changed. |
 
 ### 1.1 Related documents
 
@@ -139,7 +140,7 @@ Work packages are defined in `DEVELOPMENT_ROADMAP.md` §6. All rows are PROPOSED
 |---|---|---|---|
 | `PROJECT_CHARTER.md`, `REQUIREMENTS_SPECIFICATION.md` | **Not agreed.** Both were committed by YuvrajGaykhe in `8941964`; who drafted them is not recorded. PROPOSED: Yuvraj, pending confirmation. | Sanika Attarde | Both developers review every change. Section numbers and requirement IDs are never renumbered (`DEVELOPMENT_WORKFLOW.md` §12). |
 | `MFW_Statement_of_Work.pdf`, `MFW_Commercial_Proposal-2.pdf` | None. These are issued documents. | — | Never edited. A newer issued version is added beside the old one by the contracting developer, with a `CHANGELOG.md` entry. |
-| Phase 2 documents | `SYSTEM_ARCHITECTURE.md` and `TECHNOLOGY_DECISIONS.md` are joint. `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` exist as drafts written in Yuvraj's session; the primary editor is **not agreed**, PROPOSED: Yuvraj, pending confirmation. `PDF_READER_AND_OFFLINE_DESIGN.md` and `CLOUD_INFRASTRUCTURE_AND_COSTS.md` are not written; an editor is assigned when each is created. | Both | Both developers review every change |
+| Phase 2 documents | `SYSTEM_ARCHITECTURE.md` and `TECHNOLOGY_DECISIONS.md` are joint. `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` exist as drafts written in Yuvraj's session; the primary editor is **not agreed**, PROPOSED: Yuvraj, pending confirmation. `PDF_READER_AND_OFFLINE_DESIGN.md` exists as a draft (24 October 2026); the primary editor is **not agreed**, PROPOSED: Yuvraj. `CLOUD_INFRASTRUCTURE_AND_COSTS.md` is not written; an editor is assigned when it is created. | Both | Both developers review every change |
 | `API_AND_MODULE_CONTRACTS.md` | Sanika Attarde (interim: drafted in Sanika Attarde's session) | Yuvraj | Both developers approve every change (`API_AND_MODULE_CONTRACTS.md` §12). |
 | `DECISION_LOG.md` | Sanika Attarde (interim) | Yuvraj | Anyone may add an entry in a pull request. Status changes need the evidence in `DECISION_LOG.md` §3.1. |
 | `CHANGELOG.md` | Sanika Attarde (interim) | Yuvraj | Each pull request adds its own line. On a conflict, keep both lines. |
@@ -147,6 +148,7 @@ Work packages are defined in `DEVELOPMENT_ROADMAP.md` §6. All rows are PROPOSED
 | `RISK_REGISTER.md` | Sanika Attarde (interim) | Yuvraj | Anyone may add a risk. Rating changes are reviewed. |
 | `DEPENDENCY_REGISTER.md` | Sanika Attarde (interim; also edits `pubspec.yaml`) | Yuvraj | An entry is added before any dependency |
 | Other Phase 3 and Phase 4 documents | Sanika Attarde (interim) | Yuvraj | Normal review |
+| Documents added on 24 October 2026 | **Not agreed.** PROPOSED: `REQUIREMENT_COVERAGE_MATRIX.md` and the app screens of `SCREEN_INVENTORY_AND_NAVIGATION.md`: Yuvraj. `SECURITY_INCIDENT_PROCEDURE.md` and the admin panel screens of the inventory: Sanika Attarde. | The other developer | Both developers review every change |
 
 "Interim" means the document was drafted in Sanika Attarde's session on 23 October 2026, and the team has not yet chosen an editor. **PROPOSED rebalancing after review:** Yuvraj becomes primary editor of `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` and `CI_CD_AND_QUALITY_GATES.md`, matching WS-B's lead on WP-11 and CI.
 
@@ -223,14 +225,21 @@ Design
 ├── DATABASE_AND_DATA_MODEL          data model
 ├── API_AND_BACKEND_CONTRACT         the single catalogue of backend operations (OP-nn) and their errors
 ├── API_AND_MODULE_CONTRACTS         app modules (MOD-nn), integration contracts (IC-nn), app-side errors
-└── SECURITY_AND_ACCESS_CONTROL      access rules, threats, controls, security tests
+├── SECURITY_AND_ACCESS_CONTROL      access rules, threats, controls, security tests
+├── PDF_READER_AND_OFFLINE_DESIGN    device-side reader and offline design (draft 0.1, 24 October 2026)
+└── SCREEN_INVENTORY_AND_NAVIGATION  screens and states the requirements imply; input to the M2 designs (draft 0.1)
 
 Plans, tests and process
 ├── DEVELOPMENT_ROADMAP, TASK_OWNERSHIP_MATRIX, DEVELOPMENT_WORKFLOW, CODING_STANDARDS, DEFINITION_OF_DONE
 ├── ACCEPTANCE_CRITERIA, TESTING_STRATEGY, TEST_DATA_AND_FIXTURES, CI_CD_AND_QUALITY_GATES
 ├── DEPENDENCY_REGISTER, DEPLOYMENT_PLAN, BACKUP_AND_RECOVERY, MAINTENANCE_AND_HANDOVER
 ├── APP_STORE_RELEASE_CHECKLIST, CLAUDE_CODE_WORKING_RULES
+├── SECURITY_INCIDENT_PROCEDURE      security incident steps (draft 0.1)
+├── REQUIREMENT_COVERAGE_MATRIX      which rows and plans name each requirement; derived, not a source (draft 0.1)
 └── CHANGELOG
+
+Entry point
+└── README.md (repository root)      document index, derived from this section
 ```
 
 Section 8 of `API_AND_MODULE_CONTRACTS.md` (the 31-operation table) stays until the catalogue in `API_AND_BACKEND_CONTRACT.md` is agreed. Its operation IDs are aliases of the catalogue's IDs (see the alias table in `API_AND_BACKEND_CONTRACT.md`).
@@ -252,9 +261,10 @@ The change is of names only. It does not make the content of either set authorit
 
 | Document | Purpose | Status |
 |---|---|---|
-| `PDF_READER_AND_OFFLINE_DESIGN.md` | Reader and offline design | Not written. Task to be added to `DEVELOPMENT_ROADMAP.md` (T-00.3) |
-| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Cloud cost model once DEC-003 is decided (R14) | Not written. Cost scenarios already exist in `TECHNOLOGY_DECISIONS.md` section 9 and `SYSTEM_ARCHITECTURE.md` section 13 |
+| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Cloud cost model once DEC-003 is decided (R14) | Not written. BLOCKED by DEC-003. Cost scenarios already exist in `TECHNOLOGY_DECISIONS.md` section 9 and `SYSTEM_ARCHITECTURE.md` section 13 |
+
+`PDF_READER_AND_OFFLINE_DESIGN.md` was planned here and was written as a draft on 24 October 2026 (version 0.1, not reviewed). It is listed in section 13.1. Its review is part of T-00.7 in `DEVELOPMENT_ROADMAP.md`.
 
 ### 13.4 Numbers in document control
 
-The Phase 3 and Phase 4 documents carry the numbers 21 to 40 in their document-control tables. No document in the repository is assigned the numbers 1 to 20, and the numbers do not define an order of reading or approval.
+The Phase 3 and Phase 4 documents carry the numbers 21 to 40 in their document-control tables. No document in the repository is assigned the numbers 1 to 20, and the numbers do not define an order of reading or approval. The four documents added on 24 October 2026 carry no number.

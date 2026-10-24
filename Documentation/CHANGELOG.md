@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 23 October 2026 |
+| Date | 24 October 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,25 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: four documents and a document index added, 2026-10-24, on topic branch `docs/yg-remaining-docs` on top of `5a436a3`, not reviewed
+
+Prepared after the remediation below, which is open as pull request #3 and is not merged. The new documents cite identifiers that exist only in commit `5a436a3` (the operation catalogue, PRC-01 to PRC-04, DEC-025 to DEC-031, OQ-51 to OQ-57). If Sanika Attarde renumbers entries in that pull request, the references in these files are to be updated. The edits add documents for the two developers and track them. They change no requirement, scope item, exclusion, date, fee or CONFIRMED label, and no entry is AGREED, APPROVED or ANSWERED because of them. Nothing here has gone to MFW. Sanika Attarde has not reviewed any of it.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-10-24 | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` | Added (version 0.1): lifecycle of a local copy as a state machine, start-up repair, revisions, storage and removal rules, edge cases and a verification map | Planned as T-00.7. The device-side rules were spread over several documents and the rules between them were open | FR-READ-001 to FR-READ-010; FR-DL-001 to FR-DL-010; DEC-005; DEC-008; DEC-020; OQ-08; OQ-11; OQ-36; OQ-37; OQ-54; RD-01 to RD-07 | Both developers (not agreed). MFW at M2 for the reader approach and library | No scope effect: PROPOSED rules, no requirement changed |
+| 2026-10-24 | `Documentation/SECURITY_INCIDENT_PROCEDURE.md` | Added (version 0.1): common steps and six scenarios for security events, taken from the threat list; what the design cannot undo; what must exist first | Gap found in the inventory: only a general incident flow existed (`MAINTENANCE_AND_HANDOVER.md` section 10) | T1 to T26; SC-02, SC-05, SC-06, SC-08, SC-10, SC-12, SC-13, SC-15, SC-16, SC-18, SC-19, SC-21; OQ-28; OQ-47; SI-01 to SI-06 | Both developers (not agreed). MFW for contacts. MFW's legal adviser for anything legal | No scope effect: PLANNED, creates no obligation to MFW |
+| 2026-10-24 | `Documentation/REQUIREMENT_COVERAGE_MATRIX.md` | Added (version 0.1): 166 requirements with the acceptance rows, test plans and design anchors that name them, and eight candidate checks | Gap found in the inventory: coverage was traced by area only | RS section 13; AC-1 to AC-12; PAC-01 to PAC-18; RC-01 to RC-04 | Both developers (not agreed). Derived, not a source of truth. A PAC row needs MFW's written approval | No scope effect: candidate checks carry no AC or PAC number |
+| 2026-10-24 | `Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md` | Added (version 0.1): app and admin panel screens implied by the requirements, access guard, states, open points and six gaps in the proposed route list | Input to the M2 designs. NFR-UX-002 requires MFW to approve the screens | SCR-A-01 to SCR-A-23; SCR-W-01 to SCR-W-12; SN-01 to SN-06; PAC-10 | Both developers (not agreed). MFW approves the screens at M2 | No scope effect: lists what the requirements imply |
+| 2026-10-24 | `README.md` | Replaced the one-line title with a short statement of the repository's state, a reading order and an index of every document | The repository had no entry point or index | None | Sanika Attarde is the primary editor (`TASK_OWNERSHIP_MATRIX.md` 8.1); normal review | No scope effect |
+| 2026-10-24 | `Documentation/TASK_OWNERSHIP_MATRIX.md` | Version 0.3: document map (13.1) lists the new documents and the README; 13.3 no longer lists the reader design as unwritten; 8.2 records the proposed editors | Keep the map current | None | Both developers (not agreed) | No scope effect |
+| 2026-10-24 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.3: the new documents listed as drafts; T-00.7 now covers their review and keeps the cost document as the one still to write | Keep the task list current | T-00.7 | Both developers (not agreed) | No scope effect: no date, estimate or milestone changed |
+| 2026-10-24 | `Documentation/CHANGELOG.md` | Version 0.3: added this entry | The record of changes | None | None | No scope effect |
+
+**New identifiers.** These are local to each file and are not yet in the registers. After pull request #3 merges they are to be registered in `OPEN_QUESTIONS.md`: RD-01 to RD-07 (reader design), SI-01 to SI-06 (incident procedure), RC-01 to RC-04 (coverage matrix) and SN-01 to SN-06 (screen inventory). Also new: SCR-A-01 to SCR-A-23, SCR-W-01 to SCR-W-12 (screens), and I-1 to I-6 (invariants in the reader design).
+
+**Not changed:** `Documentation/REQUIREMENTS_SPECIFICATION.md`, `Documentation/GLOSSARY.md`, `Documentation/SCOPE_AND_EXCLUSIONS.md`, `Documentation/DECISION_LOG.md`, `Documentation/OPEN_QUESTIONS.md`, `Documentation/RISK_REGISTER.md`, `Documentation/MAINTENANCE_AND_HANDOVER.md`, `Documentation/ACCEPTANCE_CRITERIA.md`, `Documentation/TESTING_STRATEGY.md`, and the SOW and proposal PDFs.
 
 ### Documentation: remediation of the merged documentation set, 2026-10-23, on topic branch `docs/yg-reconcile-merged-set` on top of `6e85734`, submitted for review by a pull request, not merged, not reviewed
 
