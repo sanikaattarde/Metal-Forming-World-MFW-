@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 25 October 2026 |
 
@@ -31,6 +31,20 @@ PROPOSED (DEC-015).
 
 ## Unreleased
 
+### Documentation: statements about pull request #3 corrected, 2026-10-25, on topic branch `docs/yg-remaining-docs` on top of `9c9dcdb`, not reviewed
+
+Follows the entry below. Pull request #3 reached `main` by a direct push on 2026-10-25, with no review by a person (see Repository History). Six statements that called it open or not merged are corrected, and the push is recorded under Repository History. The 0.1 history rows of four documents are corrected in place without a version change, because a new version would leave the citations of version 0.1 added on 2026-10-25 one behind. The edits change no requirement, scope item, exclusion, date, fee, contract, control, test or criterion. Sanika Attarde has not reviewed any of it. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-10-25 | `Documentation/CHANGELOG.md` | Version 0.5: the entry of 2026-10-24 and the heading of the entry of 2026-10-23 no longer call pull request #3 open or not merged. Repository History gains an entry for the push | The statements were true when written and became false when `main` moved | None | Both developers (not agreed) | No scope effect |
+| 2026-10-25 | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md`, `Documentation/SECURITY_INCIDENT_PROCEDURE.md`, `Documentation/REQUIREMENT_COVERAGE_MATRIX.md`, `Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md` | The version 0.1 change-history row no longer says pull request 3 is "not merged". Version and date unchanged | Same reason | None | Both developers (not agreed) | No scope effect |
+| 2026-10-25 | `README.md` | Version column for the changelog: 0.5 | Keep the index accurate | None | Both developers (not agreed) | No scope effect |
+
+**Left as written.** Five sentences still say the identifiers are to be registered "after pull request 3 is merged": the "New identifiers" paragraph of the entry of 2026-10-24 and the open-items section of each of the four documents above. The pull request has merged, so the registration is now due. It has not been done.
+
+**Not changed:** every other document, the SOW and the proposal PDFs.
+
 ### Documentation: one stale row corrected and pointers to the four new documents added, 2026-10-25, on topic branch `docs/yg-remaining-docs` on top of `7ce9081`, not reviewed
 
 Follows the entry below. The edits correct one row that still said the reader design was not written, and add related-document rows so the four new documents can be found from the documents a reader opens first. They change no requirement, scope item, exclusion, date, fee, contract, control, test or criterion, and no entry is AGREED, APPROVED or ANSWERED because of them. Four of the five edited documents are interim-owned by Sanika Attarde (`TASK_OWNERSHIP_MATRIX.md` 8.2). Sanika Attarde has not reviewed any of it. Nothing here has gone to MFW. The "Not changed" list of the entry below describes that entry only: three of the documents on it are edited here.
@@ -51,7 +65,7 @@ Follows the entry below. The edits correct one row that still said the reader de
 
 ### Documentation: four documents and a document index added, 2026-10-24, on topic branch `docs/yg-remaining-docs` on top of `5a436a3`, not reviewed
 
-Prepared after the remediation below, which is open as pull request #3 and is not merged. The new documents cite identifiers that exist only in commit `5a436a3` (the operation catalogue, PRC-01 to PRC-04, DEC-025 to DEC-031, OQ-51 to OQ-57). If Sanika Attarde renumbers entries in that pull request, the references in these files are to be updated. The edits add documents for the two developers and track them. They change no requirement, scope item, exclusion, date, fee or CONFIRMED label, and no entry is AGREED, APPROVED or ANSWERED because of them. Nothing here has gone to MFW. Sanika Attarde has not reviewed any of it.
+Prepared after the remediation below, which was submitted as pull request #3 and has since reached `main` by a direct push on 2026-10-25, with no review by a person (see Repository History). The new documents cite identifiers that came in with commit `5a436a3` (the operation catalogue, PRC-01 to PRC-04, DEC-025 to DEC-031, OQ-51 to OQ-57). If Sanika Attarde renumbers any of those entries, the references in these files are to be updated. The edits add documents for the two developers and track them. They change no requirement, scope item, exclusion, date, fee or CONFIRMED label, and no entry is AGREED, APPROVED or ANSWERED because of them. Nothing here has gone to MFW. Sanika Attarde has not reviewed any of it.
 
 | Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
 |---|---|---|---|---|---|---|
@@ -68,7 +82,7 @@ Prepared after the remediation below, which is open as pull request #3 and is no
 
 **Not changed:** `Documentation/REQUIREMENTS_SPECIFICATION.md`, `Documentation/GLOSSARY.md`, `Documentation/SCOPE_AND_EXCLUSIONS.md`, `Documentation/DECISION_LOG.md`, `Documentation/OPEN_QUESTIONS.md`, `Documentation/RISK_REGISTER.md`, `Documentation/MAINTENANCE_AND_HANDOVER.md`, `Documentation/ACCEPTANCE_CRITERIA.md`, `Documentation/TESTING_STRATEGY.md`, and the SOW and proposal PDFs.
 
-### Documentation: remediation of the merged documentation set, 2026-10-23, on topic branch `docs/yg-reconcile-merged-set` on top of `6e85734`, submitted for review by a pull request, not merged, not reviewed
+### Documentation: remediation of the merged documentation set, 2026-10-23, on topic branch `docs/yg-reconcile-merged-set` on top of `6e85734`, submitted for review by pull request #3, which reached `main` by a direct push on 2026-10-25 (see Repository History), not reviewed by a person
 
 Prepared after pull request #1 and pull request #2 were merged. The edits apply the reconciliation of the two document sets, correct stale statements and record what the developers report as evidence. They change no requirement, scope item, exclusion, date, fee or CONFIRMED label. Statuses follow the repository's rules (`DECISION_LOG.md` section 3.1). What YG reports (the S3 emails, the other developer's agreement, MFW's answer to OQ-08) is recorded as a note. No entry is AGREED, APPROVED or ANSWERED because of it. Each document that changed has a new minor version and a row in its change history. Sanika Attarde has not reviewed any of these edits.
 
@@ -142,7 +156,17 @@ These were drafted in Sanika Attarde's Claude Code session on branch `SA`, on to
 
 ## Repository History
 
-From Git on 2026-10-23.
+From Git on 2026-10-23. The entry dated 2026-10-25 was added from Git and GitHub on that date.
+
+### 2026-10-25 - `9c9dcdb` "docs: link the four new documents and correct the stale reader-design row"
+
+Author: YuvrajGaykhe, for the three commits below. On `main`. `main` moved from `6e85734` to `9c9dcdb` by one direct fast-forward push of the branch `docs/yg-remaining-docs`, made from the YuvrajGaykhe account. No pull request was opened for the last two commits.
+
+- `5a436a3` "docs: reconcile the merged documentation set", authored 2026-10-23. It is the commit of pull request #3. GitHub marked the pull request merged at 2026-10-25T07:19:55Z, with `5a436a3` as the merge commit, merged by the YuvrajGaykhe account.
+- `7ce9081` "docs: add reader design, incident procedure, coverage matrix and screen inventory", authored 2026-10-24.
+- `9c9dcdb` "docs: link the four new documents and correct the stale reader-design row", authored 2026-10-25.
+
+Pull request #3 shows one automated review comment (Copilot) and no review by a person. Sanika Attarde has not reviewed any of the three commits. Nothing was sent to MFW.
 
 ### 2026-10-23 - `6e85734` "Merge pull request #2 from sanikaattarde/YG"
 

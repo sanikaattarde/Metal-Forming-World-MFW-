@@ -18,7 +18,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 24 October 2026 | Initial draft. Read from the documents of commit 5a436a3 (pull request 3, not merged, not reviewed), so the identifiers it cites are those of that commit. |
+| 0.1 | 24 October 2026 | Initial draft. Read from the documents of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 
 ### 1.1 Related documents
 

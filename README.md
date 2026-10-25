@@ -59,7 +59,7 @@ Reading order
 | [DEFINITION_OF_DONE](Documentation/DEFINITION_OF_DONE.md) | What done means for each kind of work | Authoritative: done | 0.2 | Sanika (interim) | Both developers |
 | (see the document map) | Working rules for AI-assisted drafting. Named in the document map, `TASK_OWNERSHIP_MATRIX.md` section 13.1 | Supporting | 0.2 | Sanika (interim) | Both developers |
 | [DEPENDENCY_REGISTER](Documentation/DEPENDENCY_REGISTER.md) | Packages, services and accounts, with licences | Authoritative: dependencies | 0.2 | Sanika (interim) | Both developers; MFW for any paid component |
-| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.4 | Sanika (interim) | None stated |
+| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.5 | Sanika (interim) | None stated |
 | [ACCEPTANCE_CRITERIA](Documentation/ACCEPTANCE_CRITERIA.md) | S2 criteria AC-1 to AC-12 as checks, and proposed PAC rows | Authoritative: acceptance rows | 0.3 | Sanika (interim) | Both developers; MFW in writing for each PAC row |
 | [TESTING_STRATEGY](Documentation/TESTING_STRATEGY.md) | Test levels, plans, security checklist | Authoritative: test plans | 0.3 | Sanika (interim); move to Yuvraj proposed | Both developers |
 | [TEST_DATA_AND_FIXTURES](Documentation/TEST_DATA_AND_FIXTURES.md) | Test users, files and network scenarios | Authoritative: fixtures | 0.2 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW for where its sample PDFs are stored |
