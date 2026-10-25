@@ -7,9 +7,9 @@
 | Document | Risk Register |
 | File | `Documentation/RISK_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 38) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. Ratings are an initial development-team assessment and are unreviewed. |
-| Date | 23 October 2026 |
+| Date | 25 October 2026 |
 | Approval required | Both developers. Risks that MFW must accept need MFW's written acceptance. |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial register. CH R1 to R11 carried with their IDs. R12 to R22 added. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. R23 and R24 added, with the AR crosswalk (section 7). Scope note on R4 (the app's copy only). Stale evidence on R6, R7 and R12 corrected. Backup items on R19 marked as proposed additions. All ratings remain unreviewed. |
+| 0.3 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The mitigation of R14 now says that a draft comparison of candidates and a parameterised cost model exists in `CLOUD_INFRASTRUCTURE_AND_COSTS.md`. No rating, trigger or contingency changed, and all ratings remain unreviewed. |
 
 ### 1.1 Related documents
 
@@ -226,7 +227,7 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 |---|---|
 | Description | Cloud usage is billed to MFW at actual use [S1]. Full downloads of files up to 150 MB, with no CDN, and a possible second environment, make the costs hard to predict. No estimate exists. |
 | Trigger | MFW queries a bill, or usage grows beyond expectations. |
-| Mitigation | Produce a usage-based cost model in `CLOUD_INFRASTRUCTURE_AND_COSTS.md` (planned, not written) once DEC-003 is decided. Cost scenarios already exist in `TECHNOLOGY_DECISIONS.md` section 9 and `SYSTEM_ARCHITECTURE.md` section 13. MFW sets billing alerts in its account. |
+| Mitigation | A draft comparison of candidates and a parameterised cost model exists in `CLOUD_INFRASTRUCTURE_AND_COSTS.md` (version 0.1, 25 October 2026, not reviewed). The single-provider cost model waits until DEC-003 is decided. Cost scenarios also exist in `TECHNOLOGY_DECISIONS.md` section 9 and `SYSTEM_ARCHITECTURE.md` section 13. MFW sets billing alerts in its account. |
 | Contingency | A CDN, or limits on re-downloads, as architecture changes approved by MFW |
 | Evidence and related | DEC-003; DEC-023; OQ-40; R2 |
 

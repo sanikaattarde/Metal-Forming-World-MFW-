@@ -7,9 +7,9 @@
 | Document | Backup and Recovery |
 | File | `Documentation/BACKUP_AND_RECOVERY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 36) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. **No backup exists. No provider backup is assumed. Every frequency, retention period, RPO and RTO below is PROPOSED and needs MFW's approval.** |
-| Date | 23 October 2026 |
+| Date | 25 October 2026 |
 | Approval required | Both developers, then MFW (cost and data obligations) |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Backup set-up, restore tests, RPO and RTO and monitoring marked as proposed additions. Section 13 added: status of the proposals and who does what. Planned names replaced by the existing document. |
+| 0.3 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` now says it exists as a draft. No backup frequency, retention period, RPO or RTO changed, and none is approved. |
 
 ### 1.1 Related documents
 
@@ -28,7 +29,7 @@
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §7.3, FR-PRIV-003, NFR-PRIV-005 | Exists, draft. Retention is open (OQ-24). |
 | `DEPLOYMENT_PLAN.md`, `API_AND_MODULE_CONTRACTS.md`, `RISK_REGISTER.md`, `OPEN_QUESTIONS.md` | Exist (draft) |
 | `DATABASE_AND_DATA_MODEL.md` | Exists on `main` (draft). Planned as `DATABASE_DESIGN.md`. |
-| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Planned. Not written. |
+| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Exists (draft, version 0.1, dated 25 October 2026). Section 14 there gives backup and recovery unit rates only. It adds no frequency, retention period, RPO or RTO. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal.
 

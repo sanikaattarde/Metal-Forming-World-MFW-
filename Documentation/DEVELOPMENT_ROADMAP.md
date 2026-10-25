@@ -7,9 +7,9 @@
 | Document | Development Roadmap |
 | File | `Documentation/DEVELOPMENT_ROADMAP.md` |
 | Phase | 3 — Development Planning and Collaboration (document 23) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
-| Date | 24 October 2026 |
+| Date | 25 October 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
 
 **Change history**
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Document names and status rows corrected after the merge. Tasks T-00.6 and T-00.7 added for the documents not yet scheduled. Working baseline for dates stated (CH dates, PROVISIONAL), with the S3 note. No date, estimate or milestone changed. |
 | 0.3 | 24 October 2026 | Tracking edit, see `CHANGELOG.md`. Four documents added on 24 October 2026 are listed as existing drafts. T-00.7 now covers their review and keeps `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as the one document still to write. No date, estimate or milestone changed. |
+| 0.4 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. `CLOUD_INFRASTRUCTURE_AND_COSTS.md` is listed as an existing draft, and T-00.7 now covers its review. The single-provider cost model is still blocked by DEC-003. No date, estimate or milestone changed. |
 
 ### 1.1 Related documents
 
@@ -32,7 +33,7 @@
 | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md` | Exist on `main` (drafts, merged by pull request #2). Needed for M1. `TECHNOLOGY_DECISIONS.md` was planned as `TECH_STACK_DECISIONS.md` (document map: `TASK_OWNERSHIP_MATRIX.md` section 13). |
 | `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md`, `SECURITY_AND_ACCESS_CONTROL.md` | Exist on `main` (drafts, merged by pull request #2). Not yet reviewed against this roadmap. |
 | `PDF_READER_AND_OFFLINE_DESIGN.md`, `SECURITY_INCIDENT_PROCEDURE.md`, `REQUIREMENT_COVERAGE_MATRIX.md`, `SCREEN_INVENTORY_AND_NAVIGATION.md` | Exist (drafts, version 0.1, 24 October 2026). Not reviewed (T-00.7). |
-| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Planned. Not written. BLOCKED by DEC-003 (T-00.7). |
+| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Exists (draft, version 0.1, dated 25 October 2026). A comparison of candidates and a parameterised cost model. The single-provider cost model is still BLOCKED by DEC-003 (T-00.7). |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal. **INTERNAL ESTIMATE** marks an unvalidated planning figure that is not a commitment.
 
@@ -75,7 +76,7 @@ Evidence from the repository on 23 October 2026.
 |---|---|
 | Project week | On the working baseline (the CH start date, 21 October 2026, PROVISIONAL) the project is in Week 1. On the S2 date it has not started. (C-08) |
 | Phase 1 documents | `PROJECT_CHARTER.md` (v0.2) and `REQUIREMENTS_SPECIFICATION.md` (v0.1) exist as drafts. `SCOPE_AND_EXCLUSIONS.md`, `ASSUMPTIONS_AND_CONSTRAINTS.md` and `GLOSSARY.md` also exist as drafts (merged by pull request #2). |
-| Phase 2 documents | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` exist as drafts (merged by pull request #2). `PDF_READER_AND_OFFLINE_DESIGN.md` exists as a draft (24 October 2026). `CLOUD_INFRASTRUCTURE_AND_COSTS.md` is not written. |
+| Phase 2 documents | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` exist as drafts (merged by pull request #2). `PDF_READER_AND_OFFLINE_DESIGN.md` exists as a draft (24 October 2026). `CLOUD_INFRASTRUCTURE_AND_COSTS.md` exists as a draft (25 October 2026), written while DEC-003 is open. |
 | Phase 3 and Phase 4 documents | Merged into `main` by pull request #1 (merge commit 56c6d97) on 23 October 2026. Drafts. No review is recorded on the pull request. |
 | Application code | None |
 | M1 | No evidence of MFW's written approval of a requirements and architecture note. No architecture note exists. |
@@ -109,7 +110,7 @@ Lead: Sanika Attarde. Support: Yuvraj. Estimate: 3–5 developer-days (INTERNAL 
 | T-00.4 | Review and agree the Phase 3 and Phase 4 documents, DEC-010 to DEC-015, DEC-022 to DEC-024, and the task split (OQ-38) | None | AGREED, with pull-request review evidence |
 | T-00.5 | Send the M1 requirements and architecture note to MFW | T-00.3 | MFW's written approval recorded (S2 M1) |
 | T-00.6 | Review `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` (drafts exist; S2 Handover requires the data model and security rules) and record where they differ from `API_AND_MODULE_CONTRACTS.md` | T-00.3 | AGREED with pull-request review evidence. Differences recorded as conflicts or open items. Owner PROPOSED, not agreed |
-| T-00.7 | Review `PDF_READER_AND_OFFLINE_DESIGN.md`, `SECURITY_INCIDENT_PROCEDURE.md`, `REQUIREMENT_COVERAGE_MATRIX.md` and `SCREEN_INVENTORY_AND_NAVIGATION.md` (drafts exist, version 0.1). Write `CLOUD_INFRASTRUCTURE_AND_COSTS.md` (not yet written) | DEC-003 and DEC-005 for the cost document; OQ-36 and OQ-37 for the reader design; OQ-47 for the incident procedure | Drafts reviewed by the other developer. Owner PROPOSED, not agreed |
+| T-00.7 | Review `PDF_READER_AND_OFFLINE_DESIGN.md`, `SECURITY_INCIDENT_PROCEDURE.md`, `REQUIREMENT_COVERAGE_MATRIX.md` and `SCREEN_INVENTORY_AND_NAVIGATION.md` (drafts exist, version 0.1), and `CLOUD_INFRASTRUCTURE_AND_COSTS.md` (draft exists, version 0.1; the single-provider cost model waits for DEC-003) | DEC-003 and DEC-005 for the cost document; OQ-36 and OQ-37 for the reader design; OQ-47 for the incident procedure | Drafts reviewed by the other developer. Owner PROPOSED, not agreed |
 
 ### WP-01 Repository and development setup
 

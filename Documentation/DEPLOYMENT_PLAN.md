@@ -7,9 +7,9 @@
 | Document | Deployment Plan |
 | File | `Documentation/DEPLOYMENT_PLAN.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 34) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. **The architecture is not approved (DEC-003, DEC-004).** Component-specific steps are BLOCKED. Nothing has been deployed. |
-| Date | 23 October 2026 |
+| Date | 25 October 2026 |
 | Approval required | Both developers. MFW for environments and costs (DEC-023). |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Backup steps marked as proposed additions. First-admin step named. Planned names replaced by the existing documents. |
+| 0.3 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` now says it exists as a draft. No environment, configuration item or step changed. |
 
 ### 1.1 Related documents
 
@@ -28,7 +29,7 @@
 | `CI_CD_AND_QUALITY_GATES.md`, `BACKUP_AND_RECOVERY.md`, `APP_STORE_RELEASE_CHECKLIST.md`, `MAINTENANCE_AND_HANDOVER.md` | Exist (draft) |
 | `API_AND_MODULE_CONTRACTS.md`, `TESTING_STRATEGY.md` | Exist (draft) |
 | `SYSTEM_ARCHITECTURE.md` | Exists on `main` (draft). |
-| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Planned. Not written. |
+| `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Exists (draft, version 0.1, dated 25 October 2026). Candidates and a parameterised cost model. No provider is chosen (DEC-003). It changes no environment or configuration item. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal.
 

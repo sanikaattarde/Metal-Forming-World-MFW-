@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 25 October 2026 |
 
@@ -30,6 +30,28 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: cloud infrastructure and costs document added, 2026-10-25, on topic branch `docs/yg-remaining-docs` on top of `4769de3`, not reviewed
+
+Follows the entry below. One new document, `CLOUD_INFRASTRUCTURE_AND_COSTS.md`, is the document that `TASK_OWNERSHIP_MATRIX.md` section 13.3 listed as planned and blocked by DEC-003. It is written while DEC-003 is still OPEN, as a comparison of two candidates (Firebase on Google Cloud, and an illustrative AWS-based design) and a parameterised cost model. It chooses no provider, and it does not lift the block on a single-provider cost model. Its amounts are planning arithmetic on stated inputs, not a quotation, a budget or a commitment, and MFW has seen none of them. Vendor prices were read from official pages in the built-in browser on 2026-10-25. Where a page did not give a figure, the figure is marked NOT VERIFIED. Five existing documents get tracking edits only, and no entry is AGREED, APPROVED or ANSWERED because of them. All five are interim-owned by Sanika Attarde (`TASK_OWNERSHIP_MATRIX.md` 8.2). Sanika Attarde has not reviewed any of it. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-10-25 | `Documentation/CLOUD_INFRASTRUCTURE_AND_COSTS.md` | New, version 0.1. Workload inputs, infrastructure requirements, two candidate mappings, unit rates for sign-in, database, files, functions, logs and backups, four egress scenarios with formulas, sensitivity, open items and decision criteria | R14 had no cost model and the first scenarios covered egress only. The vendor figures in `TECHNOLOGY_DECISIONS.md` section 9 that were NOT VERIFIED are read where the pages allowed | DEC-003, DEC-031, DEC-023, OQ-41, OQ-53, R14, TD-03, TD-22 | Both developers (not agreed). MFW's written approval for any provider, region, cost ceiling or CDN | No scope effect by itself. Cloud usage is billed to MFW (S1). A provider that differs from S2 needs MFW's approval (CHG-04, CHG-05) |
+| 2026-10-25 | `Documentation/TASK_OWNERSHIP_MATRIX.md` | Version 0.4: the document map (13.1) lists the new document; the 13.3 row says a draft comparison exists and that a single-provider cost model is still blocked; 8.2 records the proposed editor | Keep the map accurate | DEC-003 | Both developers (not agreed) | No scope effect: no assignment is agreed |
+| 2026-10-25 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.4: three rows no longer say the document is not written, and T-00.7 covers its review | The rows went stale when the document was added | T-00.7 | Both developers (not agreed) | No scope effect: no date, estimate or milestone changed |
+| 2026-10-25 | `Documentation/BACKUP_AND_RECOVERY.md`, `Documentation/DEPLOYMENT_PLAN.md` | Version 0.3 each: the related-documents row no longer says "Planned. Not written." | Same reason | OQ-46; DEC-023 | Both developers (not agreed) | No scope effect: no backup value, environment or configuration item changed |
+| 2026-10-25 | `Documentation/RISK_REGISTER.md` | Version 0.3: the mitigation of R14 says a draft comparison and parameterised model exists | Same reason | R14 | Both developers (not agreed) | No scope effect: no rating, trigger or contingency changed |
+| 2026-10-25 | `README.md` | Index row added for the new document, and the version column updated for the five documents above and for this changelog | Keep the index accurate | None | Both developers (not agreed) | No scope effect |
+| 2026-10-25 | `Documentation/CHANGELOG.md` | Version 0.6: added this entry | The record of changes | None | None | No scope effect |
+
+**New identifiers.** All are local to `CLOUD_INFRASTRUCTURE_AND_COSTS.md` and are not in any register: WI-01 to WI-13 (workload inputs), CV-01 to CV-15 (vendor pages read on 2026-10-25) and CL-01 to CL-07 (open items). They collide with no existing identifier. Registering the open items follows the same step as the identifiers of the entry of 2026-10-24.
+
+**Vendor evidence.** Appendix A of the new document names each page, its region setting and the date read. A request to the AWS Price List host was refused by the browser pane and was not used. Appendix B lists ten observations for the owners of `TECHNOLOGY_DECISIONS.md` section 9, including five items there that were NOT VERIFIED: four are now read and one is read in part. Section 9 itself is not edited.
+
+**Left as written.** The description of R14 in `RISK_REGISTER.md` still says "No estimate exists". Only the mitigation was edited. The new document holds planning arithmetic that no one at MFW has seen, so the statement is loose, not false. The related-documents tables of the edited documents keep their earlier "Status on" dates in the table header. `TASK_OWNERSHIP_MATRIX.md` section 13.4 says four documents carry no number. The new document carries none either, and that sentence was not changed. The stale "v0.2" citations of `SECURITY_AND_ACCESS_CONTROL.md` named in the entry below are still not updated.
+
+**Not changed:** `Documentation/TECHNOLOGY_DECISIONS.md`, `Documentation/SYSTEM_ARCHITECTURE.md`, `Documentation/DECISION_LOG.md`, `Documentation/OPEN_QUESTIONS.md`, `Documentation/REQUIREMENTS_SPECIFICATION.md`, `Documentation/GLOSSARY.md`, every other document, and the SOW and proposal PDFs.
 
 ### Documentation: statements about pull request #3 corrected, 2026-10-25, on topic branch `docs/yg-remaining-docs` on top of `9c9dcdb`, not reviewed
 
