@@ -6,9 +6,9 @@
 |---|---|
 | Document | Screen Inventory and Navigation |
 | File | `Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md` |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. **Every screen below is PROPOSED. MFW approves the screens at M2 (NFR-UX-002), and has not seen this list.** This is an input to the designs and not a design. |
-| Date | 24 October 2026 |
+| Date | 27 October 2026 |
 | Audience | The two developers, and whoever prepares the screen designs for M2. MFW sees the designs at M2 and not this list. |
 | Proposed owner | Joint, by workstream and PROPOSED: app screens Yuvraj (WS-B), admin panel screens Sanika Attarde (WS-A). Not agreed. The other developer reviews. |
 | Approval required | Both developers for the list. MFW at M2 for the screens themselves (S2 Scope: Design; S2 Milestones). |
@@ -19,6 +19,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 24 October 2026 | Initial draft. Written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
+| 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). SCR-W-11 is the admin management screen on the one-role position, and it also shows the change record. SCR-A-09, SCR-A-23, SCR-W-10 and SCR-W-12 are withdrawn or dropped, and their identifiers stay. Two reading actions, the default reader mode, visitor notifications, fixed categories and the news Save control are noted on the screens they touch. No decision is approved. |
 
 ### 1.1 Related documents
 
@@ -32,7 +33,7 @@
 | `PDF_READER_AND_OFFLINE_DESIGN.md` | Exists (draft). Owns the download and reader behaviour that SCR-A-13 to SCR-A-15 present |
 | `REQUIREMENT_COVERAGE_MATRIX.md` | Exists (draft, derived) |
 
-Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal in this document. In RS terms it is an ASSUMPTION (DEV). The baseline is one Admin role, with immediate account deletion (FR-ADMIN-004, FR-PRIV-003). Screens that exist only under a labelled change (PRC-01, PRC-02) say so, and MFW has not approved either change.
+Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal in this document. In RS terms it is an ASSUMPTION (DEV). The baseline is one Admin role, with immediate account deletion (FR-ADMIN-004, FR-PRIV-003). PRC-01 and PRC-02 are withdrawn. In-panel add and remove of admins is a proposed addition that MFW has not confirmed (OQ-58), and the screen that depends on it says so.
 
 ## 2. Purpose, Scope and Status
 
@@ -123,29 +124,29 @@ Reachability (PROPOSED)
 | SCR-A-04 | Password reset | none | FR-AUTH-004 | signedOut | The same message for a known and an unknown address (SC-21). Missing from the route list (SN-01) |
 | SCR-A-05 | Complete profile | `/complete-profile` | FR-PROF-001 to FR-PROF-005 | profileIncomplete | PROVISIONAL. Fields: OQ-01, OQ-02, GS-Q34. Timing for Google readers: OQ-03. Whether it is part of registration for email accounts: SN-02 |
 | SCR-A-06 | Profile | none | FR-PROF-006, FR-PROF-007 | Signed in | Viewing is CONFIRMED. Editing is an ASSUMPTION. Own screen or part of settings: SN-01 |
-| SCR-A-07 | Settings | `/settings` | FR-AUTH-008, FR-AUTH-009, FR-NOTIF-002, FR-NOTIF-003, FR-PRIV-002 | Signed in | Hosts notification choices, sign out, delete account and the policy and terms links. Visitors: OQ-09 |
-| SCR-A-08 | Delete account confirmation | none | FR-AUTH-009, FR-PRIV-003, FR-PRIV-004 | Signed in | Baseline: confirm, then immediate deletion. Missing from the route list (SN-01) |
-| SCR-A-09 | Deletion pending, with undo | none | PRC-02 | Signed in, pending deletion | PRC-02 only, not approved. Calls OP-12 and OP-13. Does not exist in the baseline |
+| SCR-A-07 | Settings | `/settings` | FR-AUTH-008, FR-AUTH-009, FR-NOTIF-002, FR-NOTIF-003, FR-PRIV-002 | Signed in | Hosts notification choices, sign out, delete account and the policy and terms links. Visitors see fewer items (GS-Q46; OQ-09 stays open) |
+| SCR-A-08 | Delete account confirmation | none | FR-AUTH-009, FR-PRIV-003, FR-PRIV-004 | Signed in | Confirm, then immediate deletion (GS-Q50). Missing from the route list (SN-01) |
+| SCR-A-09 | Deletion pending, with undo | none | PRC-02 | Withdrawn | Withdrawn with PRC-02. Deletion is immediate (GS-Q50), so there is no pending state and no undo. The identifier stays so that earlier references resolve |
 | SCR-A-10 | Home | `/` | FR-MAG-006, FR-MAG-004 | All | Content is set in the M2 designs (SCP-002). One screen with the catalogue, or two: SN-03 |
 | SCR-A-11 | Catalogue, search and filters | none | FR-MAG-001 to FR-MAG-004, FR-MAG-007 to FR-MAG-009, FR-SRCH-001 to FR-SRCH-007 | All | Latest issue and archive. Pull to refresh. Filters by category, segment, year, edition (meanings: OQ-13). Offline catalogue: OQ-10 |
 | SCR-A-12 | Issue details | `/issues/:issueId` | FR-MAG-005, FR-DL-003, FR-BKM-003, FR-SHR-001 | All | Public metadata only for visitors (OQ-13). Read or Download starts the guard. Favourite: OQ-12. Share: OQ-09, store link OQ-15 |
-| SCR-A-13 | Download prompt and progress | none | FR-DL-003 to FR-DL-006, FR-STATE-004, FR-STATE-006 | fullAccess | Size, mobile-data warning, progress, waiting for network, failure with retry. Placement: SN-04. Rules: `PDF_READER_AND_OFFLINE_DESIGN.md` §4 |
-| SCR-A-14 | Reader | `/issues/:issueId/read?page=n` | FR-READ-001 to FR-READ-010, FR-BKM-001 | fullAccess | Page-turn and swipe modes, two pages in landscape, zoom to 300%, damaged-file error with retry. Switching and default: OQ-14. Bookmark action |
-| SCR-A-15 | Downloads | `/downloads` | FR-DL-007 to FR-DL-009, NFR-OFF-001, FR-STATE-002 | fullAccess | Works with no network. Partial downloads are not listed. After sign-out: OQ-11 |
+| SCR-A-13 | Download prompt and progress | none | FR-DL-003 to FR-DL-006, FR-STATE-004, FR-STATE-006 | fullAccess | Size, mobile-data warning, progress, waiting for network, failure with retry. Two actions: Read opens a temporary copy and Download keeps one (GS-Q43, reported as MFW's answer; OQ-08 stays open). Downloads run in the foreground and resume later (GS-Q60). Placement: SN-04. Rules: `PDF_READER_AND_OFFLINE_DESIGN.md` §4 |
+| SCR-A-14 | Reader | `/issues/:issueId/read?page=n` | FR-READ-001 to FR-READ-010, FR-BKM-001 | fullAccess | Page-turn and swipe modes, two pages in landscape, zoom to 300%, damaged-file error with retry. Page-turn is the default, and the reader can switch to the plain swipe mode in settings, remembered (GS-Q55; OQ-14 stays open). Bookmark action |
+| SCR-A-15 | Downloads | `/downloads` | FR-DL-007 to FR-DL-009, NFR-OFF-001, FR-STATE-002 | fullAccess | Works with no network. Partial downloads and temporary copies are not listed (GS-Q43). After sign-out: OQ-11 |
 | SCR-A-16 | Bookmarks | `/library` | FR-BKM-002, FR-BKM-006, FR-BKM-007 | fullAccess | Opening a bookmark opens the issue at its page. Removal is an ASSUMPTION. Offline: OQ-10 |
 | SCR-A-17 | Favourites | `/library` | FR-BKM-003, FR-BKM-006 | fullAccess, or wider (OQ-12) | The requirement says "screens" for bookmarks and favourites: two screens or two views of one (SN-05) |
 | SCR-A-18 | News list | `/news` | FR-NEWS-001, FR-NEWS-003, FR-NEWS-004, FR-NEWS-007, FR-NEWS-009 | All | Only the categories MFW selects (INT-WP-003). Breaking presentation: OQ-17. Offline notice: FR-NEWS-005 |
-| SCR-A-19 | News article | `/news/:postId` | FR-NEWS-002, FR-NEWS-005, FR-SHR-003 | All | Offline saving model: OQ-16. WordPress unreachable: FR-STATE-005 |
-| SCR-A-20 | Notification explanation | none | FR-NOTIF-001 | Before the system permission prompt | Explains what the app sends. Visitors: OQ-09. Missing from the route list (SN-01) |
-| SCR-A-21 | Notification categories | part of SCR-A-07 | FR-NOTIF-002, FR-NOTIF-003, FR-NOTIF-006 | See OQ-09 | Final category list: OQ-18 |
+| SCR-A-19 | News article | `/news/:postId` | FR-NEWS-002, FR-NEWS-005, FR-SHR-003 | All | Recently opened articles are cached automatically, and a Save button keeps one until the reader removes it (GS-Q48; OQ-16 stays open). WordPress unreachable: FR-STATE-005 |
+| SCR-A-20 | Notification explanation | none | FR-NOTIF-001 | Before the system permission prompt | Explains what the app sends. Visitors can accept notifications (GS-Q46; OQ-09 stays open). Missing from the route list (SN-01) |
+| SCR-A-21 | Notification categories | part of SCR-A-07 | FR-NOTIF-002, FR-NOTIF-003, FR-NOTIF-006 | See OQ-09 | Three fixed categories set by the developers: new issues, expo specials, major news (GS-Q47; OQ-18 stays open) |
 | SCR-A-22 | Not found | any unknown route | `API_AND_MODULE_CONTRACTS.md` §6.1 | All | Required by MOD-01 for an unknown route |
-| SCR-A-23 | Edition-update sign-up | none | FR-EMAIL-001, FR-EMAIL-002 | See OQ-09 | CONFLICT (C-02, OQ-31). Not drawn until it is resolved. The product sends no emails (FR-EMAIL-003) |
+| SCR-A-23 | Edition-update sign-up | none | FR-EMAIL-001, FR-EMAIL-002 | See OQ-09 | Dropped on the working position (GS-Q49). CONFLICT (C-02, OQ-31) until MFW agrees in writing. Not drawn. The product sends no emails (FR-EMAIL-003) |
 
 Two things are not app screens. Sharing uses the system share sheet, and a shared link does not open the app (FR-SHR-001, FR-SHR-003, FR-SHR-005, FR-SHR-006). The notification permission prompt is the system's.
 
 ## 6. Admin Panel Screens
 
-The panel needs sign-in and refuses accounts without the admin role (FR-ADMIN-002, FR-ADMIN-003). The baseline has one role. Under PRC-01 some screens are limited to a Super Admin. No page list for the panel exists elsewhere (SN-06), so this table is the first.
+The panel needs sign-in and refuses accounts without the admin role (FR-ADMIN-002, FR-ADMIN-003). There is one admin role, so every admin sees every screen (GS-Q44). No page list for the panel exists elsewhere (SN-06), so this table is the first.
 
 | ID | Screen | Requirements | Operations | Notes and open points |
 |---|---|---|---|---|
@@ -153,14 +154,14 @@ The panel needs sign-in and refuses accounts without the admin role (FR-ADMIN-00
 | SCR-W-02 | Issues list | FR-ADMIN-011 | OP-15 | Published and unpublished issues |
 | SCR-W-03 | Issue editor | FR-ADMIN-005 to FR-ADMIN-009, FR-ADMIN-011, FR-STATE-007 | OP-16, OP-19, OP-21, OP-22, OP-40 | Details; PDF and cover upload with a clear rejection message; publish and unpublish. Replace or delete: OQ-21 (OP-30). Cover checks: OQ-22. Size limit: OQ-30 |
 | SCR-W-04 | Upload status | FR-ADMIN-006, FR-ADMIN-007, FR-STATE-007 | OP-20 | Waiting, accepted, or rejected with the reason. May be part of SCR-W-03 |
-| SCR-W-05 | Categories and segments | FR-ADMIN-010 | OP-17, OP-18, OP-28 | Segments only if the panel maintains them (conditional on AOQ-16 and OQ-18) |
+| SCR-W-05 | Categories and segments | FR-ADMIN-010 | OP-17, OP-18, OP-28 | Issue categories only. The developers seed segments and notification categories (GS-Q47, GS-Q56), so OP-28 is not built on the working position |
 | SCR-W-06 | News controls | FR-ADMIN-013, FR-ADMIN-014, FR-ADMIN-019 | OP-23, OP-24 | Pick a WordPress post, hide it, mark it breaking. The panel does not write or edit news |
 | SCR-W-07 | Send notification | FR-ADMIN-015, FR-ADMIN-016, FR-ADMIN-017 | OP-25 | Chosen category, linked to an issue or an article, or a post sent as breaking news. Categories: OQ-18 |
 | SCR-W-08 | Send log | FR-ADMIN-018, FR-STATE-007 | OP-26, OP-27 | Fields: OQ-19. An admin can retry a send |
-| SCR-W-09 | Registered users | FR-USER-002, FR-USER-003 | OP-31, OP-32 | PROVISIONAL. Any admin in the baseline. Super Admin only under PRC-01 |
-| SCR-W-10 | Subscriber export | FR-USER-001 | OP-33 | CONFLICT (C-02). Not drawn until it is resolved |
-| SCR-W-11 | Admin management | PRC-01 | OP-35 to OP-38 | PRC-01 only, not approved. In the baseline the developers set admins up from MFW's admin list (OQ-20) |
-| SCR-W-12 | Audit log | PRC-01 | OP-39 | PRC-01 only, not approved. S2 excludes an audit log (EXC-07) |
+| SCR-W-09 | Registered users | FR-USER-002, FR-USER-003 | OP-31, OP-32 | PROVISIONAL. Any admin (GS-Q49) |
+| SCR-W-10 | Subscriber export | FR-USER-001 | OP-33 | Dropped on the working position (GS-Q49). CONFLICT (C-02) until MFW agrees in writing. Not drawn |
+| SCR-W-11 | Admin management and change record | FR-USER-005, NFR-SEC-011 | OP-34, OP-35, OP-37, OP-38, OP-39 | PROPOSED (GS-Q44), waiting for MFW's confirmation (OQ-58). Find a registered reader by email, add the person as an admin, remove an admin after a confirmation that names the person, list the admins, and show the record of who added or removed whom. Needs a recent sign-in. If MFW declines, the screen does not exist and the developers set admins up from MFW's admin list (OQ-20) |
+| SCR-W-12 | Audit log | PRC-01 | OP-39 | Withdrawn as a separate screen. The change record is part of SCR-W-11 (GS-Q44). S2 excludes an audit log (EXC-07) |
 
 Two screens must **not** exist. The panel has no readership analytics dashboard (FR-USER-004), and it does not write or edit news (FR-ADMIN-019).
 
@@ -198,12 +199,12 @@ States and where they apply
 | OQ-18, OQ-19 (categories, send log fields) | SCR-A-21, SCR-W-07, SCR-W-08 | The category list, the log columns |
 | OQ-21, OQ-22, OQ-30 (delete or replace, cover checks, size limit) | SCR-W-03, SCR-W-04 | The controls and messages |
 | OQ-25 (accessibility baseline, NFR-UX-004) | All screens | The text-size and contrast rules |
-| PRC-01, PRC-02 (not approved) | SCR-A-08, SCR-A-09, SCR-W-09, SCR-W-11, SCR-W-12 | Whether these screens exist at all |
-| C-02, OQ-31 (edition-update emails) | SCR-A-23, SCR-W-10 | Whether these screens exist at all |
+| OQ-58 (in-panel add and remove) | SCR-W-11 | Whether the screen exists. PRC-01 and PRC-02 are withdrawn, so SCR-A-09 and SCR-W-12 are withdrawn |
+| C-02, OQ-31 (edition-update emails) | SCR-A-23, SCR-W-10 | Dropped on the working position. They return only if MFW keeps the sign-up |
 
 ## 9. Gaps Found in the Proposed Route List
 
-`API_AND_MODULE_CONTRACTS.md` §6.1 proposes twelve routes. Reading the requirements against that list shows what it leaves out. These items are local to this document. They are not yet in the registers. After pull request 3 is merged they are to be registered in `OPEN_QUESTIONS.md`.
+`API_AND_MODULE_CONTRACTS.md` §6.1 proposes twelve routes. Reading the requirements against that list shows what it leaves out. These items are local to this document. They are not yet in the registers. Pull request 3 has reached `main` (by a direct push on 2026-10-25), so they are still to be registered in `OPEN_QUESTIONS.md`.
 
 | Ref | Item | Owner |
 |---|---|---|
@@ -235,6 +236,6 @@ This document to its sources
 ├── BR-002, BR-003, BR-005; INT-WP-003
 ├── Scope items: SCP-002, SCP-003, SCP-006
 ├── Open questions: OQ-01 to OQ-05, OQ-09 to OQ-19, OQ-20 to OQ-22, OQ-25, OQ-27, OQ-29 to OQ-31; AOQ-16
-├── Labelled changes: PRC-01, PRC-02 (not approved). Conflict C-02
+├── Withdrawn changes: PRC-01, PRC-02. Open: OQ-58. Conflict C-02
 └── Acceptance: PAC-10; the AC rows listed in the coverage matrix
 ```

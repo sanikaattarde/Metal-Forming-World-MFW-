@@ -7,12 +7,12 @@
 | Document title | Database and Data Model |
 | File | `DATABASE_AND_DATA_MODEL.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for Review |
-| Last updated | 23 October 2026 |
+| Last updated | 27 October 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The data model is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.3; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.3; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.2; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.2; `PROJECT_CHARTER.md` v0.2 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.4; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.3; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.4; `PROJECT_CHARTER.md` v0.2 |
 
 **Purpose.** This document defines what data the MFW product keeps, how the pieces relate, who may read and change each piece, and when each piece is deleted. S2 lists the data model as a handover deliverable [S2 Handover], and the charter leaves it to a recorded decision (CH §17.4). The access rules for each entity are summarised in Section 19 and defined in the [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) document. The operations that read and write the entities are defined in the [API and Backend Contract](API_AND_BACKEND_CONTRACT.md).
 
@@ -27,6 +27,7 @@
 | 0.1 | 23 October 2026 | Initial draft for internal review. Revised the same day: trees replace tables in Sections 7.1, 8 and 12. An invariant enforcement register (Section 10.8) and a guard record (ADMIN_GUARD) are added for the proposed admin roles (PRC-01). No decision, status or requirement changed. |
 | 0.2 | 23 October 2026 | Revised after the 17-question interview (GS-Q17 to GS-Q33) and a read-only review of MFW's public website (WEB). Admin reads go through functions only and no role is copied into the sign-in claim (GS-Q20): INV-08 is rewritten and INV-09 is narrowed to sessions. The audit event covers the audit set (GS-Q26). New: the DELETED_ISSUE entity (Section 4.22), the account deletion states, the notification send states, invariants INV-14 to INV-18, website-based seed values for segments and categories (GS-Q31), Sections 17 to 19 (issue lifecycle, query patterns, access by entity and actor) and Appendix B. Decisions in this version are team-accepted, with the requirement label PROVISIONAL and MFW written approval pending (GS-Q30). No requirement status in the specification changed. |
 | 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Profile: the requirements-specification list is required by default and gender is added; mobile number, company and country become optional candidates (GS-Q34). Deletion states and fields marked PRC-02 (immediate deletion is the baseline). ADMIN_ROLE, the guard record and the audit event marked PRC-01 (one admin role is the baseline). "Team-accepted" replaced by PROPOSED with the agreement note. References to the website question extended to OQ-57. |
+| 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). ADMIN_ROLE has one role and the guard record counts admins. ADMIN_AUDIT_EVENT is narrowed to adds and removes of admins, and keeps its name so that references stay stable. INV-03 to INV-09 are rewritten, INV-16 is withdrawn, and INV-15 and INV-18 are simplified. The deletion state `pending_deletion` and the field `purge_after` are withdrawn. EDITION_UPDATE_SIGNUP stays conditional and is dropped on the working position. `retention_mode` records Read as temporary and Download as kept. Section 15.4 added. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
 
 ### 1.1 Sources and authority
 
@@ -36,14 +37,14 @@
 | S3 | Client emails received after S1 and S2 | Not available (REG-001). | Not used as evidence. Anything known only through the charter is PROVISIONAL. |
 | CH | `PROJECT_CHARTER.md` v0.2 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
 | SPEC | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) | Read. Draft for Review. | The data requirements (Section 7 of the specification) and every requirement ID. Used as written. |
-| TD, GS | [Technology Decisions](TECHNOLOGY_DECISIONS.md) | Draft for Review. | The decisions and the questioning answers (GS-Q4 to GS-Q6, GS-Q11, GS-Q13, GS-Q14, GS-Q16 and, for version 0.2, GS-Q17 to GS-Q33 and GS-D13 to GS-D20) behind this model. |
+| TD, GS | [Technology Decisions](TECHNOLOGY_DECISIONS.md) | Draft for Review. | The decisions and the questioning answers (GS-Q4 to GS-Q6, GS-Q11, GS-Q13, GS-Q14, GS-Q16 and, for version 0.2, GS-Q17 to GS-Q33 and GS-D13 to GS-D20, and for version 0.4 GS-Q43 to GS-Q50) behind this model. |
 | WEB | MFW's public website, https://metalformingworld.com/ (home, About, April-May 2026 issue, Industry News and Contact pages, and the public WordPress REST API), read on 23 October 2026 | Observed. Not an approved source. | A reference for seed values and the WordPress contract. It does not change scope (INT-WP-002) and is not MFW's approval. |
 
 S1, S2 and CH are named by file name and not linked, because they are not in this folder. Fees, payment amounts and personal names are left out, as in the specification. All sample values are fictional.
 
 ### 1.2 Status labels and identifiers
 
-The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, ASSUMPTION, OPEN and CONFLICT. "Proposed" is a decision status for choices the development team recommends and that are not approved. Version 0.2 used "team-accepted" for a choice the developer who ran the interview recorded as accepted. That word is not in the repository's status model (`DECISION_LOG.md` section 3.1), so every such choice is now PROPOSED and carries this note: "Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed." The requirement label stays PROVISIONAL and MFW written approval is pending (GS-Q30, REG-052). CONFIRMED is never used for it. The baseline is the confirmed text: one admin role (FR-ADMIN-004) and immediate account deletion (FR-PRIV-003). The two-role model with its audit log is the labelled change PRC-01, and the grace window is the labelled change PRC-02. Neither is approved.
+The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, ASSUMPTION, OPEN and CONFLICT. "Proposed" is a decision status for choices the development team recommends and that are not approved. Version 0.2 used "team-accepted" for a choice the developer who ran the interview recorded as accepted. That word is not in the repository's status model (`DECISION_LOG.md` section 3.1), so every such choice is now PROPOSED and carries this note: "Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed." The requirement label stays PROVISIONAL and MFW written approval is pending (GS-Q30, REG-052). CONFIRMED is never used for it. The baseline is the confirmed text: one admin role (FR-ADMIN-004) and immediate account deletion (FR-PRIV-003). Version 0.4 keeps both, adds in-panel add and remove of admins (GS-Q44, OQ-58), and withdraws PRC-01 (two roles and an audit log) and PRC-02 (a grace window). None of it is approved.
 
 | Prefix | Meaning | Defined in |
 |---|---|---|
@@ -69,7 +70,7 @@ The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, A
 | Reference | A pointer to something another system owns, such as the sign-in provider's user identifier or a WordPress post number. The product does not copy what it points to. |
 | Required | The model requires a value for the record to be valid. Where a requirement is PROVISIONAL, "required" means required in the working position and not required by MFW. |
 | Personal data | Information about an identifiable person. This document makes no legal classification (spec §7.2). |
-| Guard record | A single record that every admin role change reads and writes, so that two concurrent changes cannot both succeed when only one should. It is a design device and is proposed (PRC-01). |
+| Guard record | A single record that every admin add and remove reads and writes, so that two concurrent changes cannot both succeed when only one should. It is a design device and is proposed (GS-Q44). |
 | Team-accepted (retired word) | Version 0.2 used it for a decision the interviewed developer recorded as accepted. It is replaced by PROPOSED plus the agreement note in section 1.2 (GS-Q30, REG-052). |
 | Deleted-issue record | A record of an issue that was permanently deleted. It holds the issue's identifier and the time, and no content (Section 4.22). |
 
@@ -98,11 +99,11 @@ The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, A
 | MA-1 | The product serves fewer than 1,000 monthly active users. No source gives a volume target. | ASSUMPTION (GS-D10) |
 | MA-2 | Each issue is one PDF of up to 150 MB and about 120 pages, with five to twelve issues live at launch. | ASSUMPTION (ASM-01, ASM-02) |
 | MA-3 | One sign-in account is one reader, with one set of app records. | Proposed (TD-06) |
-| MA-4 | Opening a full issue downloads it and keeps it until the reader deletes it. | ASSUMPTION (GS-Q6, OQ-08) |
+| MA-4 | Read opens a temporary full copy that is removed when the reader leaves the issue. Download keeps a copy until the reader deletes it. | REPORTED as MFW's answer, not filed (GS-Q43). OPEN (OQ-08) |
 | MA-5 | The default required profile set is the list in the requirements specification (RS FR-PROF-002, PROVISIONAL): name, exact age, gender, occupation and domain of work. The extra fields of the earlier working list are optional candidates. MFW has not confirmed any list. | PROVISIONAL (FR-PROF-002); ASSUMPTION for the optional fields (OQ-01, GS-Q34) |
 | MA-6 | Type names are logical. Length limits and formats are proposals for testing and are not requirements. | ASSUMPTION |
 | MA-7 | The same issue PDFs may be public on MFW's website. The app's sign-in gate controls the app's copy and is not a claim that the content is secret. | Observed (WEB); proposed position (GS-Q32); MFW confirmation pending (AOQ-18, now OQ-57) |
-| MA-8 | The baseline administrator model is one admin role (RS FR-ADMIN-004). The two-role model, Super Admin and Content Admin, is the labelled change PRC-01. | Baseline CONFIRMED. PRC-01 PROPOSED (GS-Q19), PROVISIONAL, MFW written approval pending |
+| MA-8 | The baseline administrator model is one admin role (RS FR-ADMIN-004). In-panel add and remove of admins by any admin is a proposed addition (GS-Q44). The two-role model, Super Admin and Content Admin (PRC-01), is withdrawn. | Baseline CONFIRMED. The addition is PROPOSED (GS-Q44), PROVISIONAL, MFW written confirmation pending (OQ-58) |
 
 ## 3. Conceptual Model
 
@@ -140,7 +141,7 @@ erDiagram
   }
   ADMIN_GUARD {
     text guard_id PK
-    integer active_super_admin_count
+    integer active_admin_count
     integer version
   }
   DELETED_ISSUE {
@@ -149,7 +150,7 @@ erDiagram
   }
 ```
 
-`NEWS_CONTROL` refers to a WordPress post by number and has no relationship inside the model. `APP_CONFIG` holds settings and has none either. `ADMIN_GUARD` is one record that serialises admin role changes. It is derived from `ADMIN_ROLE` and has no relationship of its own (Section 10.8). `DELETED_ISSUE` holds the identifier of an issue that no longer exists, so it has no relationship inside the model (Section 4.22).
+`NEWS_CONTROL` refers to a WordPress post by number and has no relationship inside the model. `APP_CONFIG` holds settings and has none either. `ADMIN_GUARD` is one record that serialises admin adds and removes. It is derived from `ADMIN_ROLE` and has no relationship of its own (Section 10.8). `DELETED_ISSUE` holds the identifier of an issue that no longer exists, so it has no relationship inside the model (Section 4.22).
 
 ### 3.2 What the model points to but does not own
 
@@ -197,24 +198,23 @@ flowchart LR
 | Field | Entry |
 |---|---|
 | Purpose | The app's own record for one account. It holds the lifecycle of the account and nothing that the sign-in provider already holds. |
-| Status | CONFIRMED in part (DATA-003). The baseline is immediate deletion (FR-PRIV-003): the status moves from `active` to `deleting`. The state `pending_deletion` and the field `purge_after` belong to the labelled change PRC-02: PROPOSED (GS-Q28), PROVISIONAL, OPEN for MFW and its legal adviser. |
+| Status | CONFIRMED in part (DATA-003). Deletion is immediate (FR-PRIV-003, GS-Q50): the status moves from `active` to `deleting`. The earlier soft-delete state `pending_deletion` and the field `purge_after` (PRC-02) are withdrawn. |
 | Primary key | `user_id` |
 | Foreign keys | `user_id` refers to the sign-in provider's account (external). |
 | Uniqueness | `user_id` is unique. |
-| Indexing | `(status, purge_after)` for the purge job. |
-| Validation | `user_id` must equal the caller's identifier when the record is created. In the baseline the status moves from `active` straight to `deleting`. Under PRC-02, `purge_after` is set only when `status` is `pending_deletion`, and the status can also move from `active` to `pending_deletion`, from `pending_deletion` back to `active` (undo) or on to `deleting`. From `deleting` the record can only be removed (INV-18). |
-| Retention and deletion | Created at registration. Deleted at once in the baseline. Under PRC-02, deleted at the purge after the window, or at once if the reader chooses immediate deletion (TD-19, GS-Q28). The window length is configuration and OPEN (AOQ-02). |
+| Indexing | `status` for the cleanup job. |
+| Validation | `user_id` must equal the caller's identifier when the record is created. The status moves from `active` straight to `deleting`. From `deleting` the record can only be removed (INV-18). |
+| Retention and deletion | Created at registration. Deleted at once when the reader confirms (TD-19, GS-Q50), or by the cleanup job if a deletion stopped part-way. |
 | Privacy class | Pseudonymous |
 | Client access | Read by the owner. Written by functions only. |
-| Related requirement IDs | DATA-003 (CONFIRMED); FR-AUTH-009 (CONFIRMED); FR-PRIV-003 (CONFIRMED); NFR-PRIV-005, DATA-017 (OPEN); PRC-02 |
+| Related requirement IDs | DATA-003 (CONFIRMED); FR-AUTH-009 (CONFIRMED); FR-PRIV-003 (CONFIRMED); NFR-PRIV-005, DATA-017 (OPEN); GS-Q50 |
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `user_id` | text | Yes | The provider's user identifier. Never the email address. |
-| `status` | enum(active, pending_deletion, deleting) | Yes | Default `active`. `pending_deletion` (PRC-02 only) is the grace window, in which the reader can undo. `deleting` means the deletion is running and is retried until it finishes. |
+| `status` | enum(active, deleting) | Yes | Default `active`. `deleting` means the deletion is running and is retried until it finishes. |
 | `created_at` | timestamp | Yes | |
 | `deletion_requested_at` | timestamp | No | Set when the reader confirms deletion. |
-| `purge_after` | timestamp | No | PRC-02 only. `deletion_requested_at` plus the purge window, from configuration (AOQ-02). |
 
 Whether the profile is complete is not stored. It is worked out from the profile and the configured required fields each time, so a change to the required set needs no data migration.
 
@@ -228,10 +228,10 @@ Whether the profile is complete is not stored. It is worked out from the profile
 | Foreign keys | `user_id` refers to APP_USER. `industry_segment_id` refers to INDUSTRY_SEGMENT. |
 | Uniqueness | One profile per user. |
 | Indexing | None needed for access. The admin list and export read all profiles, which is a small set. |
-| Validation | Each field named in the configured required set must be present. Text fields are trimmed and limited in length. `mobile_number` follows an international format and `country` is a two-letter country code, but only if the field is collected. Age is a whole number within a sanity range of 1 to 120, or a date in the past. There is no minimum age (FR-PROF-005). |
-| Retention and deletion | Created and changed through `saveProfile`. Deleted at the purge. The retention period is MFW's (OQ-24). |
+| Validation | Each field named in the configured required set must be present. Text fields are trimmed and limited in length. `mobile_number` follows an international format and `country` is a two-letter country code, but only if the field is collected. Age is a whole number within a sanity range of 1 to 120 (GS-Q40). A date in the past applies only if MFW answers OQ-02 that way. There is no minimum age (FR-PROF-005). |
+| Retention and deletion | Created and changed through `saveProfile`. Deleted with the account. The retention period is MFW's (OQ-24). |
 | Privacy class | Personal |
-| Client access | Read by the owner. Written through a function only. Read by Super Admins through the registered-user functions. |
+| Client access | Read by the owner. Written through a function only. Read by admins through the registered-user functions. |
 | Related requirement IDs | DATA-004, FR-PROF-001 to FR-PROF-005, NFR-PRIV-001 (PROVISIONAL); FR-PROF-006 (CONFIRMED); FR-PROF-007, NFR-SEC-006 (ASSUMPTION); NFR-PRIV-006 (OPEN); OQ-01, OQ-02, OQ-03, OQ-07 |
 
 | Field | Type | Required by default | Notes |
@@ -263,7 +263,7 @@ Gender is in the model and is required by default, because the requirements spec
 | Uniqueness | `(user_id, document_type, document_version)` |
 | Indexing | `(user_id)` through the owner's path. |
 | Validation | The document versions must be the current versions from configuration at the time of consent. |
-| Retention and deletion | Kept with the user. Whether a consent record must outlive the person is a question for MFW's adviser (OQ-24). Until then it is deleted at the purge. |
+| Retention and deletion | Kept with the user. Whether a consent record must outlive the person is a question for MFW's adviser (OQ-24). Until then it is deleted with the account. |
 | Privacy class | Pseudonymous |
 | Client access | Read by the owner. Written by a function only. |
 | Related requirement IDs | DATA-012 (ASSUMPTION); FR-PRIV-001 (CONFIRMED); FR-PRIV-002 (ASSUMPTION); NFR-PRIV-002 (CONFIRMED); OQ-27 |
@@ -371,10 +371,10 @@ A category is the theme of one issue, and an issue has exactly one (FR-MAG-003).
 | Uniqueness | `issue_id` only. No uniqueness is placed on title, year or edition, because "edition" is not defined (OQ-13). The admin panel warns about a likely duplicate. |
 | Indexing | `(publication_state, publication_date)` for the catalogue. `category_id`. `year`. |
 | Validation | An issue can be published only when `current_revision` refers to an accepted file. `title` and `description` are required (FR-MAG-002). `year` is entered with the issue and defaults to the year of `publication_date` (FR-ADMIN-009). An issue can be deleted only while it is unpublished (INV-15). |
-| Retention and deletion | Kept while MFW keeps the issue. Unpublish hides it. Permanent deletion is in the working design (GS-Q21): only a Super Admin, only after the issue is unpublished, with a typed confirmation and an audit event (GS-Q22). Its file revisions go with it, its bookmarks and favourites are removed by orphan cleanup (Section 10), and a deleted-issue record is kept (Section 4.22). OQ-21 and FR-ADMIN-012 stay OPEN for MFW. |
+| Retention and deletion | Kept while MFW keeps the issue. Unpublish hides it. Permanent deletion is in the working design (GS-Q45): any admin, only after the issue is unpublished, with a typed confirmation. No audit event is written, because the change record covers only admin adds and removes (GS-Q44). Its file revisions go with it, its bookmarks and favourites are removed by orphan cleanup (Section 10), and a deleted-issue record is kept (Section 4.22). OQ-21 and FR-ADMIN-012 stay OPEN for MFW. |
 | Privacy class | None |
 | Client access | Published issues are readable by anyone. Unpublished issues are readable by admins through functions only (GS-Q20). Written through functions only. |
-| Related requirement IDs | DATA-001, FR-MAG-002 to FR-MAG-008, FR-SRCH-001 to FR-SRCH-005, FR-ADMIN-009, FR-ADMIN-011 (CONFIRMED); FR-MAG-009, FR-ADMIN-012 (OPEN); OQ-13, OQ-21; GS-Q21, GS-Q22 |
+| Related requirement IDs | DATA-001, FR-MAG-002 to FR-MAG-008, FR-SRCH-001 to FR-SRCH-005, FR-ADMIN-009, FR-ADMIN-011 (CONFIRMED); FR-MAG-009, FR-ADMIN-012 (OPEN); OQ-13, OQ-21; GS-Q45 |
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
@@ -416,7 +416,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Field | Entry |
 |---|---|
 | Purpose | One numbered revision of an issue's PDF: the facts about the file and the path to it. The binary is in the file store (Section 8). |
-| Status | CONFIRMED in need (DATA-001, NFR-SEC-003). Replacement and deletion are OPEN (OQ-21). The working design lets either admin role replace a PDF as a new revision, and removes the revisions with a deleted issue (GS-Q21). |
+| Status | CONFIRMED in need (DATA-001, NFR-SEC-003). Replacement and deletion are OPEN (OQ-21). The working design lets any admin replace a PDF as a new revision, and removes the revisions with a deleted issue (GS-Q45). |
 | Primary key | `(issue_id, revision)` |
 | Foreign keys | `issue_id` refers to ISSUE. |
 | Uniqueness | The primary key. Exactly one revision per issue has `status = current`, enforced in a single transaction. |
@@ -450,7 +450,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Uniqueness | `(user_id, issue_id, page_number)`. Bookmarking a page that is already bookmarked changes nothing, so a repeated tap or a replayed offline write creates no duplicate. |
 | Indexing | `(user_id, issue_id)` and `(user_id, created_at)` |
 | Validation | `page_number` is at least 1. The app checks it against the page count it knows, and the stored value is clamped on opening if the file changed (Section 6). |
-| Retention and deletion | Kept with the reader. Removed by the reader (FR-BKM-007). Removed at the purge. Removed by orphan cleanup if the issue is permanently deleted. |
+| Retention and deletion | Kept with the reader. Removed by the reader (FR-BKM-007). Removed with the account. Removed by orphan cleanup if the issue is permanently deleted. |
 | Privacy class | Pseudonymous. It reveals a reader's interest, so it is treated as personal data. |
 | Client access | Read and written by the owner only (NFR-SEC-005). |
 | Related requirement IDs | DATA-005, FR-BKM-001, FR-BKM-002, FR-BKM-004 to FR-BKM-006, NFR-SEC-005 (CONFIRMED); FR-BKM-007 (ASSUMPTION); FR-BKM-008 (OPEN); OQ-10 |
@@ -491,7 +491,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Field | Entry |
 |---|---|
 | Purpose | A topic a reader can opt into, and the target of a send. |
-| Status | CONFIRMED in need (FR-NOTIF-006). The final list and whether admins can change it are OPEN (OQ-18). |
+| Status | CONFIRMED in need (FR-NOTIF-006). The final list and whether admins can change it are OPEN (OQ-18). On the working position there are three fixed categories, set by the developers: new issues, expo specials and major news (GS-Q47). Admins cannot change the list. |
 | Primary key | `category_id` |
 | Foreign keys | None |
 | Uniqueness | `name` is unique, ignoring case. |
@@ -520,7 +520,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Uniqueness | The primary key. A row means the reader opted in to the category. |
 | Indexing | `(user_id)` through the owner's path |
 | Validation | The category must exist and be active. |
-| Retention and deletion | Kept with the reader. Removed at the purge. |
+| Retention and deletion | Kept with the reader. Removed with the account. |
 | Privacy class | Pseudonymous |
 | Client access | Read and written by the owner only. |
 | Related requirement IDs | DATA-007, FR-NOTIF-002, FR-NOTIF-003 (CONFIRMED); FR-NOTIF-007 (OPEN); OQ-09 |
@@ -588,7 +588,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Field | Entry |
 |---|---|
 | Purpose | The email address of someone who opted in to edition-update emails. MFW sends the emails itself from an export (FR-EMAIL-003). |
-| Status | CONFLICT (DATA-010, C-02). The entity exists only if OQ-31 keeps the feature. |
+| Status | CONFLICT (DATA-010, C-02). The entity exists only if OQ-31 keeps the feature. On the working position the sign-up is dropped (GS-Q49, DEC-032), so the entity is not built unless MFW keeps it. S1 and S2 list the sign-up, so MFW must agree in writing. |
 | Primary key | `signup_id` |
 | Foreign keys | `user_id` refers to APP_USER, and may be empty. |
 | Uniqueness | The email address, ignoring case. |
@@ -607,62 +607,57 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | `created_at` | timestamp | Yes | |
 | `withdrawn_at` | timestamp | No | |
 
-### 4.17 ADMIN_ROLE (proposed change)
+### 4.17 ADMIN_ROLE (proposed position)
 
 | Field | Entry |
 |---|---|
-| Purpose | The server-side record of who is an admin and in which role. It is the authority for every privileged operation. |
-| Status | CONFIRMED in need (DATA-011) with one role: the baseline needs only the admin identity. ADMIN_ROLE as designed here, the guard record and ADMIN_AUDIT_EVENT are the proposed change PRC-01. The two-role model is PROPOSED (GS-Q19), PROVISIONAL, with MFW written approval pending (PRC-01). EXC-07 and CHG-01 are preserved: S2 excludes editorial roles and an audit log. |
+| Purpose | The server-side record of who is an admin. There is one role. It is the authority for every privileged operation. |
+| Status | CONFIRMED in need (DATA-011) with one role: the baseline needs only the admin identity. In-panel add and remove of admins, the guard record and ADMIN_AUDIT_EVENT are a proposed addition: PROPOSED (GS-Q44), PROVISIONAL, with MFW written confirmation pending (OQ-58). The earlier two-role model (PRC-01) is withdrawn. EXC-07 is preserved: there are no editorial roles. |
 | Primary key | `user_id` |
 | Foreign keys | `user_id` refers to APP_USER. `granted_by` refers to APP_USER. These are logical references and not constraints the database enforces. Functions check them when they write (INV-13). |
-| Uniqueness | One active role per user, because the record's key is the user identifier (INV-06). At least one active `super_admin` must always exist, enforced through the guard record in the transaction that changes a role (ADMIN_GUARD, INV-03). |
-| Indexing | `role` |
-| Validation | A change is rejected if it would remove or demote the last Super Admin. The database engine does not enforce this itself, so the function and the guard record do (Section 10.8). |
-| Retention and deletion | A revoked record is kept so the audit log stays readable. It is removed at the purge of the account, unless AOQ-04 decides otherwise. |
+| Uniqueness | One record per user, because the record's key is the user identifier (INV-06). At least one active admin must always exist, enforced through the guard record in the transaction that removes an admin (ADMIN_GUARD, INV-03). |
+| Indexing | None needed. The admin list is a small set. |
+| Validation | A removal is rejected if it would leave no active admin. The database engine does not enforce this itself, so the function and the guard record do (Section 10.8). An addition is accepted only for a registered reader whose email is verified (GS-Q44). |
+| Retention and deletion | A removed record is kept, with `revoked_at` set, so the change record stays readable. It is removed with the account, unless AOQ-04 decides otherwise. |
 | Privacy class | Pseudonymous |
 | Client access | None. Functions only. |
-| Related requirement IDs | DATA-011, FR-ADMIN-002, FR-ADMIN-003 (CONFIRMED); FR-ADMIN-004 (CONFIRMED, in conflict); FR-USER-005, NFR-SEC-011 (OPEN); EXC-07; PRC-01; OQ-20; AOQ-04; GS-Q19, GS-Q33 |
+| Related requirement IDs | DATA-011, FR-ADMIN-002, FR-ADMIN-003, FR-ADMIN-004 (CONFIRMED); FR-USER-005, NFR-SEC-011 (OPEN); EXC-07; OQ-20, OQ-58; AOQ-04; GS-Q33, GS-Q44 |
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `user_id` | text | Yes | |
-| `role` | enum(content_admin, super_admin) | Yes | Under S2's single role, `content_admin` stands for "admin" and `super_admin` is not used. |
 | `is_active` | boolean | Yes | |
-| `granted_by` | text | Yes | The first Super Admin is created by the controlled bootstrap step (GS-Q33) and has `granted_by` set to a fixed marker. The same step is the recovery route after a lockout. |
+| `granted_by` | text | Yes | The first admin is created by the controlled bootstrap step (GS-Q33) and has `granted_by` set to a fixed marker. The same step is the recovery route after a lockout. |
 | `granted_at` | timestamp | Yes | |
 | `revoked_at` | timestamp | No | |
 
-### 4.18 ADMIN_AUDIT_EVENT (proposed change)
+### 4.18 ADMIN_AUDIT_EVENT (the narrow record of admin adds and removes)
 
 | Field | Entry |
 |---|---|
-| Purpose | An append-only record of the audited admin actions (GS-Q26): role changes and the bootstrap step, issue deletion, PDF replacement, publish and unpublish, views of the full reader list, exports of reader data, and denied privileged attempts by signed-in callers. Routine edits are not recorded. |
-| Status | A proposed change. S2 excludes an audit log (EXC-07, PRC-01). The audit set goes beyond the log of role changes that PRC-01 describes, so the PRC-01 effort estimate does not cover it. The set is PROPOSED (GS-Q26), PROVISIONAL, with MFW written approval pending. Retention is OPEN (AOQ-04). |
+| Purpose | An append-only record of who added or removed which admin, and of the bootstrap step (GS-Q44). It is the only audited set. Issue deletion, PDF replacement, publish and unpublish, reader-list views, exports and denied attempts are not recorded. The entity keeps its earlier name so that references stay stable. |
+| Status | A proposed addition. S2 excludes an audit log (EXC-07), and this record is limited to admin changes. PROPOSED (GS-Q44), PROVISIONAL, with MFW written confirmation pending (OQ-58). Retention is OPEN (AOQ-04). |
 | Primary key | `event_id` |
-| Foreign keys | `actor_user_id` and `target_user_id` refer to APP_USER. `subject_ref` refers to an issue or names an operation. These are logical references (INV-13). |
+| Foreign keys | `actor_user_id` and `target_user_id` refer to APP_USER. These are logical references (INV-13). |
 | Uniqueness | `event_id` only. |
-| Indexing | `occurred_at`, newest first. `(action, occurred_at)` and `(actor_user_id, occurred_at)` if the panel filters by them, to be validated against the chosen platform. |
-| Validation | For a successful action, written in the same transaction as the action itself (INV-04, INV-16). A denied-attempt entry is written on a best-effort basis, and a failure to write it never changes the denial. Denied entries are written only for signed-in callers, with a per-caller cap so that a loop of denied calls cannot flood the log. The cap is configuration and its value is OPEN. An entry never holds exported data or reader data. No update and no delete from any client or function path except the retention clean-up. |
+| Indexing | `occurred_at`, newest first. The set is small, so no further index is needed. |
+| Validation | Written in the same transaction as the add or remove itself (INV-04). An entry never holds reader data. No update and no delete from any client or function path except the retention clean-up. |
 | Retention and deletion | The period is AOQ-04. What happens when an admin's account is deleted is AOQ-04. Until MFW decides, an entry keeps only the identifiers. |
 | Privacy class | Pseudonymous |
-| Client access | Read by Super Admins through a function. Written by functions only. |
-| Related requirement IDs | PRC-01; EXC-07; FR-ADMIN-012 (OPEN); FR-USER-002, FR-USER-003 (PROVISIONAL); NFR-SEC-011 (OPEN); OQ-21; OQ-24; AOQ-04; GS-Q22, GS-Q26, GS-Q33 |
+| Client access | Read by admins through a function. Written by functions only. |
+| Related requirement IDs | EXC-07; NFR-SEC-011 (OPEN); OQ-58; AOQ-04; GS-Q33, GS-Q44 |
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `event_id` | text | Yes | Derived from the caller's request identifier, so a repeated request does not add a second event (INV-07). Generated for a denied attempt. |
-| `action` | enum(role_grant, role_change, role_revoke, bootstrap_super_admin, issue_delete, file_replace, issue_publish, issue_unpublish, reader_list_view, reader_export, denied) | Yes | |
+| `event_id` | text | Yes | Derived from the caller's request identifier, so a repeated request does not add a second event (INV-07). |
+| `action` | enum(admin_add, admin_remove, bootstrap_admin) | Yes | |
 | `actor_user_id` | text | Yes | A fixed marker for the bootstrap step. |
-| `target_user_id` | text | No | Set for role actions. |
-| `subject_type` | enum(user, issue, reader_list, operation) | Yes | |
-| `subject_ref` | text | No | An issue identifier, or the name of the operation that was denied. |
-| `previous_role`, `new_role` | text | No | Role actions only. |
+| `target_user_id` | text | Yes | The person added or removed. |
 | `reference` | text | No | The written reference for a bootstrap or recovery step (GS-Q33). Never a document's content. |
-| `result_count` | integer | No | For a list view or an export, how many records were returned. Never the records. |
-| `recent_sign_in_checked` | boolean | Yes | True when the recent-sign-in rule was applied (AOQ-14). False for a denied attempt. |
+| `recent_sign_in_checked` | boolean | Yes | True when the recent-sign-in rule was applied (AOQ-14). False for the bootstrap step. |
 | `occurred_at` | timestamp | Yes | No network address or device detail is stored. |
 
-Searching for a reader by email address is not in the audit set (GS-D19).
+Searching for a reader by email address, when an admin looks for a person to add, is not recorded (GS-D19).
 
 ### 4.19 UPLOAD_JOB
 
@@ -705,7 +700,7 @@ Searching for a reader by email address is not in the audit set (GS-D19).
 | Retention and deletion | Kept. Not personal data. |
 | Privacy class | None |
 | Client access | A public part is readable by anyone. A private part is readable by functions only. Both are written by developers at deployment. |
-| Related requirement IDs | FR-PROF-001 (PROVISIONAL); BR-003 (PROVISIONAL); FR-ADMIN-007 (CONFIRMED); INT-WP-003 (CONFIRMED); OQ-24, OQ-27, OQ-30; PRC-04; GS-Q26, GS-Q27, GS-Q29 |
+| Related requirement IDs | FR-PROF-001 (PROVISIONAL); BR-003 (PROVISIONAL); FR-ADMIN-007 (CONFIRMED); INT-WP-003 (CONFIRMED); OQ-24, OQ-27, OQ-30; PRC-04; GS-Q27, GS-Q29 |
 
 | Setting | Part | Used for |
 |---|---|---|
@@ -716,34 +711,32 @@ Searching for a reader by email address is not in the audit set (GS-D19).
 | `max_upload_bytes` | Private | The upload limit, 150 MB by default (FR-ADMIN-007, OQ-30). |
 | `signed_url_lifetime` | Private | How long a download link works (TD-09, AOQ-07). |
 | `signed_url_requests_per_reader` | Private | A cap on download-link requests per reader per day (an ASSUMPTION). |
-| `purge_window` | Private | The deletion grace window (PRC-02, AOQ-02). |
-| `retention_periods` | Private | Retention for send records, audit events, superseded revisions, upload jobs and the deleted-issue list (OQ-24, AOQ-04, AOQ-19). |
-| `denied_audit_cap` | Private | The cap on denied-attempt audit entries per caller (GS-Q26). No value is set. |
+| `retention_periods` | Private | Retention for send records, change records, superseded revisions, upload jobs and the deleted-issue list (OQ-24, AOQ-04, AOQ-19). |
 | `notification_unknown_after` | Private | How long a send stays pending before it is marked unknown (GS-Q27). No value is set. |
 | `min_supported_app_version` | Public | The update gate: an app older than this shows an update-required screen (PRC-04). It is a PROPOSED addition to S2 scope that needs MFW's agreement. No value is set. |
 | `schema_version` | Private | The version of the data model, for migrations (Section 10). |
 
-### 4.21 ADMIN_GUARD (proposed change)
+### 4.21 ADMIN_GUARD (proposed position)
 
 | Field | Entry |
 |---|---|
-| Purpose | One record that every admin role change reads and writes, so that two concurrent role changes cannot both succeed when only one should. It holds the count of active Super Admins. |
-| Status | A design device that depends on PRC-01. It is not a requirement. |
+| Purpose | One record that every admin add and remove reads and writes, so that two concurrent changes cannot both succeed when only one should. It holds the count of active admins. |
+| Status | A design device that depends on in-panel add and remove (GS-Q44, OQ-58). It is not a requirement. |
 | Primary key | `guard_id`, always the same value |
 | Foreign keys | None |
 | Uniqueness | Exactly one record |
 | Indexing | None |
-| Validation | `active_super_admin_count` is never below 1 after a change. It equals the number of `ADMIN_ROLE` records with `role` super_admin and `is_active` true whose account is neither disabled nor pending deletion. A repair task recomputes it and reports any difference (INV-03). |
-| Retention and deletion | Kept while admin roles exist. Not personal data. |
+| Validation | `active_admin_count` is never below 1 after a change. It equals the number of `ADMIN_ROLE` records with `is_active` true whose account is neither disabled nor being deleted. A repair task recomputes it and reports any difference (INV-03). |
+| Retention and deletion | Kept while admin records exist. Not personal data. |
 | Privacy class | None |
 | Client access | None. Functions only (INV-05). |
-| Related requirement IDs | PRC-01; EXC-07; NFR-SEC-011 (OPEN) |
+| Related requirement IDs | EXC-07; NFR-SEC-011 (OPEN); OQ-58; GS-Q44 |
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `guard_id` | text | Yes | A fixed value. |
-| `active_super_admin_count` | integer | Yes | Maintained in the same transaction as every role change. |
-| `version` | integer | Yes | Increased by one on every role change. |
+| `active_admin_count` | integer | Yes | Maintained in the same transaction as every add and remove. |
+| `version` | integer | Yes | Increased by one on every add and remove. |
 | `updated_at` | timestamp | Yes | |
 
 ### 4.22 DELETED_ISSUE (proposed design)
@@ -765,7 +758,7 @@ Searching for a reader by email address is not in the audit set (GS-D19).
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `issue_id` | text | Yes | |
-| `deleted_at` | timestamp | Yes | Who deleted the issue is in the audit event, not here. |
+| `deleted_at` | timestamp | Yes | Who deleted the issue is not recorded, because the change record covers only admin adds and removes (GS-Q44). |
 
 When the app is online it reads this list and removes any downloaded copy, and its registry row, whose issue identifier is on it. It never removes a copy because an issue is missing from a fetch. It does not send the server a list of what the reader holds (M8). An issue that is only unpublished is not on the list, and its downloaded copies stay (GS-Q24). OQ-11 stays OPEN for MFW.
 
@@ -798,7 +791,7 @@ The sign-in provider's user identifier is the primary key of `APP_USER` and the 
 4. An `APP_USER` record without a provider account is found by a periodic reconciliation and removed with its subtree (Section 10).
 5. The registered-user list is built from the provider's accounts joined with profiles. A registrant who has not completed the profile appears with blank profile fields.
 6. Changing the email address is not a feature in scope. Because no copy is kept, nothing would need to be kept in sync if it were added later.
-7. At the purge, the app's records are deleted first and the provider account last. `APP_USER` stays until the final step, so a failed run is retried from where it stopped.
+7. When the account is deleted, the app's records are deleted first and the provider account last. `APP_USER` stays until the final step, so a failed run is retried from where it stopped.
 
 ## 6. Bookmarks and Replaced PDFs
 
@@ -833,23 +826,24 @@ A bookmark names the issue, the page number and the file revision. The page numb
 On the reader's device
 ├── Downloaded issue files
 │   ├── Kept in: app-private storage
-│   ├── Content: complete PDFs (NFR-SEC-004)
+│   ├── Content: complete PDFs, kept after a Download or temporary after a Read (NFR-SEC-004, GS-Q43)
 │   ├── Synced to the server: no
-│   └── Removed when: the reader deletes them (FR-DL-009); account deletion deletes them; a permanent
+│   └── Removed when: the reader deletes a kept copy (FR-DL-009); a temporary copy is removed when the reader leaves the
+│       issue, or at the next start of the app after a crash (GS-Q43); account deletion deletes them; a permanent
 │       deletion of the issue removes them once the app sees it on the deleted-issue list (GS-Q24).
 │       Sign-out hides them until the same reader signs in again, and unpublishing leaves them
 │       (ASSUMPTION, GS-Q24). All three are OPEN for MFW (OQ-11)
 ├── File registry
 │   ├── Kept in: a small local table in app-private storage
 │   ├── Content: owner_user_id, issue_id, file_revision, local_path, size_bytes, checksum,
-│   │   state (partial or complete), retention_mode (default kept)
+│   │   state (partial or complete), retention_mode (kept after a Download, temporary after a Read)
 │   ├── Synced to the server: no
 │   └── Removed when: with the file
 ├── Article cache
 │   ├── Kept in: app-private storage
-│   ├── Content: recent WordPress posts with their images (FR-NEWS-005)
+│   ├── Content: recently opened WordPress posts with their images, cached automatically, and posts the reader saved with Save (FR-NEWS-005, GS-Q48)
 │   ├── Synced to the server: no
-│   └── Removed when: the cache size limit is reached, or on sign-out if MFW decides (OQ-16)
+│   └── Removed when: the cache size limit is reached (a saved post stays until the reader removes it), or on sign-out if MFW decides (OQ-16)
 ├── Database cache
 │   ├── Kept in: managed by the database's mobile SDK
 │   ├── Content: the cached catalogue, the deleted-issue list and the reader's own records
@@ -874,7 +868,7 @@ On the reader's device
 
 ### 7.3 Sign-out, deletion and unpublishing (OQ-11, OPEN)
 
-Until MFW answers OQ-11, the behaviour below is the working design. It is PROPOSED (GS-Q24), PROVISIONAL, with MFW written approval pending. Account deletion deletes the reader's files, registry rows and caches on the device. Sign-out keeps the files but hides them until the same reader signs in again, which avoids repeating a 150 MB download. Unpublishing stops new downloads and leaves a copy that a reader already has. Permanent deletion of an issue makes the app remove its copy and registry row once it sees the issue on the deleted-issue list (Section 4.22). MFW cannot recall a copy from a device that is offline or that has not opened the app since the deletion, and MFW has to accept that limit in writing. The registry's `retention_mode` field, with a default of "kept", lets a temporary-copy model be added if MFW chooses one under OQ-08.
+Until MFW answers OQ-11, the behaviour below is the working design. It is PROPOSED (GS-Q24), PROVISIONAL, with MFW written approval pending. Account deletion deletes the reader's files, registry rows and caches on the device. Sign-out keeps the files but hides them until the same reader signs in again, which avoids repeating a 150 MB download. Unpublishing stops new downloads and leaves a copy that a reader already has. Permanent deletion of an issue makes the app remove its copy and registry row once it sees the issue on the deleted-issue list (Section 4.22). MFW cannot recall a copy from a device that is offline or that has not opened the app since the deletion, and MFW has to accept that limit in writing. The registry's `retention_mode` field records whether a copy is kept (Download) or temporary (Read), which is the two-action position reported as MFW's answer (GS-Q43, OQ-08).
 
 ## 8. File Metadata and File Binaries
 
@@ -920,10 +914,10 @@ The path patterns are PROVISIONAL and depend on the file-store choice (TD-08, TD
 |---|---|---|---|---|
 | ISSUE (published), ISSUE_CATEGORY, INDUSTRY_SEGMENT, ISSUE_SEGMENT, NOTIFICATION_CATEGORY, NEWS_CONTROL, DELETED_ISSUE, public APP_CONFIG | Read | Read | Read | Write |
 | ISSUE (unpublished), UPLOAD_JOB, NOTIFICATION_SEND | No | No | Through functions only (GS-Q20) | Read and write |
-| APP_USER, READER_PROFILE, CONSENT_RECORD | No | Read | Through functions (Super Admin lists) | Write |
+| APP_USER, READER_PROFILE, CONSENT_RECORD | No | Read | Through functions (the registered-user list) | Write |
 | BOOKMARK, FAVOURITE, NOTIFICATION_PREFERENCE | No | Read and write | No | No |
 | ISSUE_FILE, ADMIN_ROLE, ADMIN_GUARD, EDITION_UPDATE_SIGNUP, private APP_CONFIG | No | No | No | Read and write |
-| ADMIN_AUDIT_EVENT | No | No | Super Admin through a function | Read and write |
+| ADMIN_AUDIT_EVENT | No | No | Through a function | Read and write |
 
 Section 19 gives the same rules by actor and by operation, and the [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) document defines them. Admins hold no direct read on any admin data. Every admin read is a function that checks the current role and account status on each call (GS-Q20).
 
@@ -948,11 +942,10 @@ Section 19 gives the same rules by actor and by operation, and the [Security and
 
 | Deleting | Also removes or blocks |
 |---|---|
-| An issue, if MFW allows it (OQ-21). Super Admin only, after unpublish (GS-Q22) | Its issue-segment links, file revisions and their binaries, its cover, upload jobs, and every reader's bookmarks and favourites for it. A deleted-issue record is left behind (Section 4.22). The website's copy is not touched (GS-Q32). |
+| An issue, if MFW allows it (OQ-21). Any admin, after unpublish (GS-Q45) | Its issue-segment links, file revisions and their binaries, its cover, upload jobs, and every reader's bookmarks and favourites for it. A deleted-issue record is left behind (Section 4.22). The website's copy is not touched (GS-Q32). |
 | An issue category or an industry segment in use | Blocked. It can be made inactive instead. |
 | A notification category in use | Blocked. It can be made inactive instead. |
-| A reader's account | See the lifecycle table in Section 13 |
-| A reader's account, by immediate deletion | The same subtree as the purge, started at once without the grace window (GS-Q28) |
+| A reader's account | The subtree in the lifecycle table in Section 13, removed at once (GS-Q50) |
 | A WordPress post | Nothing at once. A control record for a missing post is removed by cleanup. |
 
 ### 10.3 Orphan cleanup
@@ -961,13 +954,13 @@ One scheduled function can run these tasks, so it needs one scheduled job. The j
 
 | Task | Removes | Proposed frequency |
 |---|---|---|
-| Account purge | Accounts whose purge date has passed, and deletions left in the `deleting` state (TD-19, GS-Q28) | Daily |
+| Account deletion cleanup | Accounts left in the `deleting` state (TD-19, GS-Q50) | Daily |
 | Holding area and upload jobs | Unfinished uploads and finished jobs older than the retention period | Daily |
 | Superseded revisions | Old file revisions and their binaries after the retention period | Daily |
 | Orphaned reader records | Bookmarks and favourites that point to a removed issue | Weekly |
 | Orphaned user records | `APP_USER` records with no provider account | Weekly |
 | Orphaned news controls | Controls for WordPress posts that no longer exist | Monthly |
-| Admin role repair (PRC-01) | A guard count that differs from the role records. It reports the difference and corrects the count (INV-03). No claim exists to repair (GS-Q20). | Hourly while admin roles exist (ASSUMPTION), run by the same scheduled job |
+| Admin guard repair (GS-Q44) | A guard count that differs from the role records. It reports the difference and corrects the count (INV-03). No claim exists to repair (GS-Q20). | Hourly while admin records exist (ASSUMPTION), run by the same scheduled job |
 | Stale notification sends | Marks sends still pending after the configured time as unknown (GS-Q27, INV-17) | Hourly (ASSUMPTION), run by the same scheduled job |
 | Deleted-issue list | Records older than the retention period, if MFW sets one (AOQ-19) | Monthly (ASSUMPTION), run by the same scheduled job |
 
@@ -977,16 +970,16 @@ The database engine is not assumed to enforce references or uniqueness (TD-07). 
 
 1. Exactly one current revision per issue.
 2. An issue is published only when it has an accepted current revision.
-3. At least one active Super Admin always exists, if PRC-01 is approved.
-4. A role change and its audit event are written together or not at all.
+3. At least one active admin always exists (INV-03, GS-Q44).
+4. An admin add or remove and its change record are written together or not at all (INV-04).
 5. A profile is complete when the configured required fields are present. It is worked out and not stored.
 6. User-owned records are written only under the owner's identifier.
 7. Public-read records carry no admin identity (M9).
 8. An identifier is never reused (INV-14).
-9. An issue is deleted only by a Super Admin and only while unpublished, with its deleted-issue record written in the same transaction (INV-15).
-10. An audited admin action and its audit event are written together (INV-16).
+9. An issue is deleted only by an admin and only while unpublished, with its deleted-issue record written in the same transaction (INV-15).
+10. Withdrawn: the audit set is narrowed to adds and removes of admins, which rule 4 covers (INV-16).
 11. A notification send is recorded before it is sent, and a retry reuses the record (INV-17).
-12. A reader's deletion state moves only forward, except for the undo from the grace window, which exists only under PRC-02 (INV-18).
+12. A reader's deletion state moves only forward, from active to deleting (INV-18).
 
 ### 10.5 Migrations
 
@@ -998,7 +991,7 @@ Backups are the managed scheduled backups of the database and optional point-in-
 
 ### 10.7 Concurrency
 
-For a reader's own records, the last write wins (VS-18). Where a rule must hold across records, such as one current revision or the last Super Admin, a single transaction makes the change. The transaction also reads and writes a record that all competing changes share, which is the issue record for revisions and the guard record for admin roles, so that two changes conflict and do not both succeed. How Firestore resolves such a conflict was not verified (Technology Decisions §9.4) and is tested (Section 10.8). The same applies to a notification retry: the move from failed or unknown back to pending is made in one transaction on the send record, so only one of two simultaneous retries proceeds (INV-17).
+For a reader's own records, the last write wins (VS-18). Where a rule must hold across records, such as one current revision or the last admin, a single transaction makes the change. The transaction also reads and writes a record that all competing changes share, which is the issue record for revisions and the guard record for admins, so that two changes conflict and do not both succeed. How Firestore resolves such a conflict was not verified (Technology Decisions §9.4) and is tested (Section 10.8). The same applies to a notification retry: the move from failed or unknown back to pending is made in one transaction on the send record, so only one of two simultaneous retries proceeds (INV-17).
 
 ### 10.8 Invariant enforcement register
 
@@ -1016,48 +1009,48 @@ Invariant enforcement register           [all mechanisms proposed; nothing imple
 │   │   otherwise. Rules deny every client write to publication_state
 │   ├── When broken: the panel shows an error and the issue stays unpublished
 │   └── Test: publish with no file, with a rejected file, and while a replacement upload is pending
-├── INV-03 At least one active Super Admin always exists                  [Section 10.4, rule 3; PRC-01]
-│   ├── Enforced by: the guard record (ADMIN_GUARD). Every grant, change, revoke and account removal reads and
-│   │   writes it in the same transaction, and a change that would leave the count below 1 is refused
-│   ├── What counts: a Super Admin whose account is neither disabled nor pending deletion
-│   ├── Paths covered: role changes, a Super Admin deleting their own account, and the account purge
+├── INV-03 At least one active admin always exists                        [Section 10.4, rule 3; GS-Q44]
+│   ├── Enforced by: the guard record (ADMIN_GUARD). Every removal and account removal reads and writes it in
+│   │   the same transaction, and a change that would leave the count below 1 is refused
+│   ├── What counts: an admin whose account is neither disabled nor being deleted
+│   ├── Paths covered: removing an admin, an admin removing themself, an admin deleting their own account, and
+│   │   the cleanup job that finishes a deletion
 │   ├── Detected, not prevented: an outside change, such as disabling or deleting the account in the sign-in
 │   │   console. The repair task reports it
-│   ├── First Super Admin: created by the controlled bootstrap step (GS-Q33). MFW's authorised approver names the
-│   │   person in writing, one developer runs the step, the other verifies it, and an audit event records the
+│   ├── First admin: created by the controlled bootstrap step (GS-Q33). MFW's authorised approver names the
+│   │   person in writing, one developer runs the step, the other verifies it, and the change record holds the
 │   │   written reference. The step also creates the guard record and is the way back if an outside change
 │   │   ever leaves none
-│   ├── When broken: the change is refused with a last-Super-Admin error
+│   ├── When broken: the change is refused with a last-admin error
 │   └── Test: the TD-15 enforcement tests, concurrency and deletion cases
-├── INV-04 A role change, its audit event and the guard update are written together or not at all
-│   │                                                                     [Section 10.4, rule 4; PRC-01]
+├── INV-04 An add or remove, its change record and the guard update are written together or not at all
+│   │                                                                     [Section 10.4, rule 4; GS-Q44]
 │   ├── Enforced by: one transaction, or one batched write, holding all three writes, issued from one module
 │   │   that no other code path bypasses
-│   ├── When broken: the whole change is refused and the previous role stands
-│   ├── Not covered: the ending of the target's sessions, which follows the commit (INV-09)
-│   └── Test: force the audit write to fail. The role record, the audit log and the count are unchanged
-├── INV-05 Clients cannot read or write role, audit or guard records      [PRC-01]
+│   ├── When broken: the whole change is refused and the previous state stands
+│   ├── Not covered: the ending of the removed admin's sessions, which follows the commit (INV-09)
+│   └── Test: force the record write to fail. The role record, the change record and the count are unchanged
+├── INV-05 Clients cannot read or write role, change-record or guard records   [GS-Q44]
 │   ├── Enforced by: rules that deny every read and write on those collections and any collection not listed,
 │   │   and an allow-list of fields on the documents a client may write (bookmarks, favourites, notification
 │   │   preferences), so that none can carry a role
 │   ├── Server code: the admin SDK bypasses rules, so one module is the only writer of the three collections
 │   │   and it applies its own checks
 │   ├── When broken: rules refuse the request
-│   └── Test: rules tests as a signed-out user, a reader, a Content Admin and a Super Admin, on each
-│       collection and on an unlisted one
-├── INV-06 One active role per user                                       [PRC-01]
-│   ├── Enforced by: the role record's key is the user identifier, so a second record cannot exist. A change
-│   │   updates that record
-│   ├── When broken: not possible by design. A repeated grant is refused as unchanged
-│   └── Test: grant twice. Grant after a revoke
-├── INV-07 A role change is applied once, and only against the role the caller saw   [PRC-01]
-│   ├── Enforced by: the call carries a request identifier, from which the audit event identifier is derived,
-│   │   and the expected previous role. The transaction refuses if the previous role differs and returns the
-│   │   earlier result for a repeated identifier
-│   ├── When broken: a stale screen gets a conflict message. A retry adds no second audit event
-│   └── Test: send one request twice. Change a role from a stale screen
-├── INV-08 A revoked or demoted admin loses privileged access             [PRC-01; AOQ-17; GS-Q20]
-│   ├── Intended guarantee: once the change is committed and visible to the authorisation check, every
+│   └── Test: rules tests as a signed-out user, a reader and an admin, on each collection and on an unlisted one
+├── INV-06 One role record per user                                       [GS-Q44]
+│   ├── Enforced by: the role record's key is the user identifier, so a second record cannot exist. An add after a
+│   │   removal updates that record
+│   ├── When broken: not possible by design. A repeated add is refused as unchanged
+│   └── Test: add twice. Add after a removal
+├── INV-07 An add or remove is applied once, and only against the state the caller saw   [GS-Q44]
+│   ├── Enforced by: the call carries a request identifier, from which the change record identifier is derived,
+│   │   and the expected state of the target (admin or not). The transaction refuses if the state differs and
+│   │   returns the earlier result for a repeated identifier
+│   ├── When broken: a stale screen gets a conflict message. A retry adds no second change record
+│   └── Test: send one request twice. Remove an admin from a stale screen
+├── INV-08 A removed admin loses privileged access                        [GS-Q44; AOQ-17; GS-Q20]
+│   ├── Intended guarantee: once the removal is committed and visible to the authorisation check, every
 │   │   privileged request from that person is denied
 │   ├── Enforced by: every privileged function, including every privileged read, reads the current role record
 │   │   and the account status on each call and fails closed if it cannot. No role claim is trusted. The step
@@ -1065,12 +1058,12 @@ Invariant enforcement register           [all mechanisms proposed; nothing imple
 │   ├── Known limit: a signed upload URL issued earlier works until it expires
 │   ├── Unverified: whether a read made right after the commit always sees the change, and how long an old
 │   │   sign-in token or session stays usable, are NOT VERIFIED (Technology Decisions §9.4, items 20 and 21)
-│   ├── When broken: the function refuses and writes a denied audit entry (INV-16)
-│   └── Test: revoke an admin, then call every privileged function with a token from before. Try the direct
-│       reads. Finish an upload after revoking the uploader. Make the role read fail and check the call is refused
-├── INV-09 Existing sessions after a role change                          [PRC-01; GS-Q20]
+│   ├── When broken: the function refuses
+│   └── Test: remove an admin, then call every privileged function with a token from before. Try the direct
+│       reads. Finish an upload after removing the uploader. Make the role read fail and check the call is refused
+├── INV-09 Existing sessions after a removal                              [GS-Q44; GS-Q20]
 │   ├── Enforced by: no role is carried in the sign-in claim, so there is no claim to correct. After the commit
-│   │   the function ends the target's sessions, with retry, as defence in depth
+│   │   the function ends the removed admin's sessions, with retry, as defence in depth
 │   ├── When broken: the session step fails after the commit. The record already decides, so every privileged
 │   │   function refuses the person, and the step is retried
 │   └── Test: stop the process between the commit and the session step. Privileged calls are still refused
@@ -1099,19 +1092,18 @@ Invariant enforcement register           [all mechanisms proposed; nothing imple
 │   │   copy or bookmark point at a different issue
 │   └── Test: create many records and check there is no collision. Try to create an issue with the identifier
 │       of a deleted one
-├── INV-15 An issue is deleted only by a Super Admin, only while unpublished   [Section 10.4, rule 9; GS-Q21, GS-Q22]
-│   ├── Enforced by: deleteIssue checks the Super Admin role and the unpublished state in one transaction that
-│   │   also writes the deleted-issue record and the audit event. The call must carry the typed confirmation
+├── INV-15 An issue is deleted only by an admin, only while unpublished   [Section 10.4, rule 9; GS-Q45]
+│   ├── Enforced by: deleteIssue checks the admin role and the unpublished state in one transaction that
+│   │   also writes the deleted-issue record. The call must carry the typed confirmation
 │   ├── After the commit: the file revisions are removed from the file store, and orphan cleanup removes the
 │   │   bookmarks and favourites. A failure here leaves orphans and never a half-deleted issue record
-│   ├── When broken: the call is refused with a failed-precondition error and a denied audit entry
-│   └── Test: delete a published issue, delete as a Content Admin, delete with a wrong confirmation, delete twice
-├── INV-16 An audited admin action and its audit event are written together    [Section 10.4, rule 10; GS-Q26]
-│   ├── Enforced by: one transaction or batched write holds the action and the event, issued from the one
-│   │   module that writes audit events. A denied attempt is written on a best-effort basis and never changes
-│   │   the denial
-│   ├── When broken: the action is refused and nothing changes
-│   └── Test: force the audit write to fail for each audited action. The action does not happen
+│   ├── When broken: the call is refused with a failed-precondition error
+│   └── Test: delete a published issue, delete as a reader, delete with a wrong confirmation, delete twice
+├── INV-16 Withdrawn: the audit set is narrowed to adds and removes of admins   [GS-Q44]
+│   ├── The earlier rule wrote an audit event with every audited action: issue deletion, PDF replacement, publish
+│   │   and unpublish, reader-list views, exports and denied attempts. Only adds and removes of admins are
+│   │   recorded now, and INV-04 covers them
+│   └── The identifier stays, so earlier references still resolve
 ├── INV-17 A notification send is recorded before it is sent, and a retry reuses the record   [Section 10.4, rule 11; GS-Q27]
 │   ├── Enforced by: sendNotification writes the record as pending, sends, then marks it accepted or failed. A
 │   │   stale pending record is marked unknown. A retry is an admin call that moves failed or unknown to
@@ -1120,19 +1112,19 @@ Invariant enforcement register           [all mechanisms proposed; nothing imple
 │   ├── Not covered: whether the push service delivers a repeated send twice is NOT VERIFIED
 │   └── Test: stop the process after the record and before the send, and after the send and before the mark.
 │       Retry twice at once
-└── INV-18 A reader's deletion state moves forward, except for the undo   [Section 10.4, rule 12; GS-Q28; the undo is PRC-02]
-    ├── Enforced by: only the deletion functions change APP_USER.status, and each move is checked against the
-    │   allowed moves in one transaction
+└── INV-18 A reader's deletion state moves only forward                  [Section 10.4, rule 12; GS-Q50]
+    ├── Enforced by: only the deletion functions change APP_USER.status, and the one move, active to deleting, is
+    │   checked in one transaction
     ├── When broken: the call is refused
-    └── Test: undo after deleting has begun, delete twice, undo twice
+    └── Test: delete twice. Call a server operation for an account that is being deleted
 ```
 
 The database transaction covers only the database. These operations also touch other systems, so their order and their failure behaviour are fixed here.
 
 ```text
 Operations that cross systems               [proposed order]
-├── Role change (PRC-01)
-│   ├── Order: database transaction, then ending the target's sessions, then the reply
+├── Admin add or remove (System Architecture §7.11)
+│   ├── Order: database transaction, then (for a removal) ending the removed admin's sessions, then the reply
 │   ├── If the second step fails: the role record already decides, so every privileged function refuses the
 │   │   person, and the step is retried (INV-09)
 │   └── Never: end the sessions before the commit
@@ -1141,22 +1133,21 @@ Operations that cross systems               [proposed order]
 │   ├── If the database write fails: an orphan file remains and orphan cleanup removes it (Section 10.3)
 │   └── Never: write a revision that points to a file that does not exist
 ├── Account deletion (System Architecture §7.10)
-│   ├── Order: mark pending (or deleting, for an immediate deletion) in the database, then delete the subtree,
-│   │   then the sign-in account. Undo is possible only from pending (INV-18)
-│   ├── If it stops part-way: the account stays marked and the next run continues
-│   └── A Super Admin's account follows INV-03 on the same path
+│   ├── Order: mark deleting in the database, end the sessions, delete the subtree, then the sign-in account
+│   ├── If it stops part-way: the account stays marked and the cleanup job continues (INV-18)
+│   └── An admin's account follows INV-03 on the same path
 ├── Notification send (System Architecture §7.9)
 │   ├── Order: write the record as pending, send to the topic, then mark it accepted or failed (GS-Q27)
 │   ├── If it stops in between: the record stays pending, is marked unknown, and only an admin retries (INV-17)
 │   └── Never: send without a record, or retry automatically
-└── Issue deletion (GS-Q21, GS-Q22)
-    ├── Order: database transaction (delete the issue, write the deleted-issue record and the audit event), then
+└── Issue deletion (GS-Q45)
+    ├── Order: database transaction (delete the issue and write the deleted-issue record), then
     │   remove the file revisions, then orphan cleanup removes the readers' bookmarks and favourites
     ├── If the file removal fails: an orphan file remains and cleanup removes it
     └── Never: remove the file before the commit
 ```
 
-If MFW declines PRC-01, INV-03, INV-04, INV-06, INV-07 and INV-16 fall away, and the guard record and the audit event are not built. INV-15 keeps its unpublished-only rule for the single admin role. INV-05, INV-08 and INV-09 remain.
+If MFW declines in-panel add and remove (OQ-58), INV-04, INV-06 and INV-07 fall away, the narrow change record is not built, and a developer-run step grants admin access. INV-03 stays for the account deletion path. INV-15 keeps its unpublished-only rule. INV-05, INV-08 and INV-09 remain.
 
 ## 11. Minimum Data and Unresolved Profile Fields
 
@@ -1179,8 +1170,8 @@ Every personal-data field has a stated purpose. Fields that no source supports a
 | Gender | READER_PROFILE | The same | S3 via CH §8 reports it | PROVISIONAL (FR-PROF-002). Options OPEN (OQ-01) |
 | Consent record | CONSENT_RECORD | Evidence of consent | S2 Not included, as an inference | ASSUMPTION (DATA-012) |
 | Bookmarks, favourites, notification choices | Reader-owned entities | Features | S2 AC-5, AC-9 | CONFIRMED |
-| Edition-update email | EDITION_UPDATE_SIGNUP | MFW's edition emails | S2 Scope: Accounts | CONFLICT |
-| Admin identifiers | ADMIN_ROLE, ADMIN_AUDIT_EVENT, UPLOAD_JOB, NOTIFICATION_SEND, ISSUE_FILE | Authorisation and accountability | S2 Architecture: Accounts, and PRC-01 | Pseudonymous identifiers only |
+| Edition-update email | EDITION_UPDATE_SIGNUP | MFW's edition emails | S2 Scope: Accounts | CONFLICT. Dropped on the working position (GS-Q49) |
+| Admin identifiers | ADMIN_ROLE, ADMIN_AUDIT_EVENT, UPLOAD_JOB, NOTIFICATION_SEND, ISSUE_FILE | Authorisation and accountability | S2 Architecture: Accounts, and GS-Q44 | Pseudonymous identifiers only |
 | Identifier of a deleted issue | DELETED_ISSUE | The app removes downloaded copies of it | None. The development team's design (GS-Q25). | ASSUMPTION for public read, retention OPEN (AOQ-19). Not personal data. |
 
 ### 11.2 Unresolved until MFW confirms
@@ -1225,10 +1216,10 @@ Cloud Firestore                                   [PROVISIONAL; applies only if 
 ├── notification_categories/{category_id}         NOTIFICATION_CATEGORY
 ├── notification_sends/{send_id}                  NOTIFICATION_SEND
 ├── news_controls/{wp_post_id}                    NEWS_CONTROL
-├── edition_updates/{signup_id}                   EDITION_UPDATE_SIGNUP (conditional)
-├── admin_roles/{user_id}                         ADMIN_ROLE (proposed change, PRC-01)
-├── admin_audit/{event_id}                        ADMIN_AUDIT_EVENT (proposed change, PRC-01)
-├── admin_guard/current                           ADMIN_GUARD (proposed change, PRC-01)
+├── edition_updates/{signup_id}                   EDITION_UPDATE_SIGNUP (conditional, dropped on the working position)
+├── admin_roles/{user_id}                         ADMIN_ROLE (proposed position, GS-Q44)
+├── admin_audit/{event_id}                        ADMIN_AUDIT_EVENT (the narrow record, GS-Q44)
+├── admin_guard/current                           ADMIN_GUARD (proposed position, GS-Q44)
 ├── upload_jobs/{job_id}                          UPLOAD_JOB
 └── config/public and config/private              APP_CONFIG
 ```
@@ -1236,9 +1227,9 @@ Cloud Firestore                                   [PROVISIONAL; applies only if 
 | Topic | Provisional position |
 |---|---|
 | References and uniqueness | Enforced by rules, functions and transactions, as in Section 10.4. The database engine is not assumed to do it. |
-| Deletion of a reader | The purge function removes `users/{user_id}` and everything under it, then the provider account. How recursive deletion is done is to be confirmed. |
+| Deletion of a reader | The deletion function removes `users/{user_id}` and everything under it, then the provider account. How recursive deletion is done is to be confirmed. |
 | Document size | Every document is far below the 1 MiB limit (VS-17). |
-| Indexes | With on-device filtering (TD-21), the catalogue needs one query for published issues. The purge needs a query on status and purge date. Any composite index is added only when a query needs it. |
+| Indexes | With on-device filtering (TD-21), the catalogue needs one query for published issues. The cleanup job needs a query on status. Any composite index is added only when a query needs it. |
 | Offline | The mobile SDK caches documents and queues writes (VS-18). Cache size is set explicitly. |
 | Cost | Reads and writes are counted per document. The design keeps catalogue reads to one query per refresh. The Mumbai price beyond the daily allowance was NOT VERIFIED. |
 | Roles and claims | No custom claim carries a role (GS-Q20). Functions read `admin_roles/{user_id}` on each privileged call. Rules deny every client read and write on `admin_roles`, `admin_audit` and `admin_guard`. |
@@ -1253,7 +1244,7 @@ Cloud Firestore                                   [PROVISIONAL; applies only if 
 
 | Entity | Purpose | Personal data | Client access | Requirement IDs | Status |
 |---|---|---|---|---|---|
-| APP_USER | The app's account record | Pseudonymous | Owner reads | DATA-003 | CONFIRMED in part, PRC-02 for the deletion states (OPEN, GS-Q28) |
+| APP_USER | The app's account record | Pseudonymous | Owner reads | DATA-003 | CONFIRMED in part. Immediate deletion (GS-Q50) |
 | READER_PROFILE | Profile information | Personal | Owner reads | DATA-004 | PROVISIONAL (FR-PROF-002); optional candidates ASSUMPTION (GS-Q34) |
 | CONSENT_RECORD | Evidence of consent | Pseudonymous | Owner reads | DATA-012 | ASSUMPTION |
 | INDUSTRY_SEGMENT | Shared segment list | None | Anyone reads | FR-SRCH-003 | ASSUMPTION, seed values PROVISIONAL (GS-Q31), OQ-13 |
@@ -1267,10 +1258,10 @@ Cloud Firestore                                   [PROVISIONAL; applies only if 
 | NOTIFICATION_PREFERENCE | A reader's chosen categories | Pseudonymous | Owner | DATA-007 | CONFIRMED |
 | NOTIFICATION_SEND | The send log | Pseudonymous | Admins through functions | DATA-008 | CONFIRMED, OQ-19, states PROPOSED (GS-Q27) |
 | NEWS_CONTROL | Hide and breaking flags for a post | None | Anyone reads | DATA-009 | CONFIRMED |
-| EDITION_UPDATE_SIGNUP | Edition-update email list | Personal | None | DATA-010 | CONFLICT, conditional |
-| ADMIN_ROLE | Who is an admin and which role | Pseudonymous | None | DATA-011 | CONFIRMED in need, PRC-01 for roles (PROPOSED, GS-Q19) |
-| ADMIN_AUDIT_EVENT | Log of the audited admin actions | Pseudonymous | Super Admin through a function | None in the specification | Proposed change (PRC-01), set widened (GS-Q26) |
-| ADMIN_GUARD | Serialises role changes and holds the active Super Admin count | None | None | None in the specification | Proposed change (PRC-01) |
+| EDITION_UPDATE_SIGNUP | Edition-update email list | Personal | None | DATA-010 | CONFLICT, conditional. Dropped on the working position (GS-Q49) |
+| ADMIN_ROLE | Who is an admin | Pseudonymous | None | DATA-011 | CONFIRMED in need. In-panel add and remove PROPOSED (GS-Q44) |
+| ADMIN_AUDIT_EVENT | The narrow record of admin adds and removes | Pseudonymous | Admins through a function | None in the specification | Proposed (GS-Q44) |
+| ADMIN_GUARD | Serialises admin adds and removes and holds the active admin count | None | None | None in the specification | Proposed (GS-Q44) |
 | DELETED_ISSUE | Identifier and time of a deleted issue | None | Anyone reads (ASSUMPTION) | FR-ADMIN-012 | PROPOSED (GS-Q25), PROVISIONAL, OQ-21 OPEN |
 | UPLOAD_JOB | Upload status for the panel | Pseudonymous | Admins through functions | FR-STATE-007 | ASSUMPTION |
 | APP_CONFIG | Settings | None | Public part reads | FR-ADMIN-007 | ASSUMPTION |
@@ -1295,31 +1286,31 @@ Cloud Firestore                                   [PROVISIONAL; applies only if 
 | ISSUE to ISSUE_FILE | One to zero or many. One of them is current once the issue is published. | A published issue needs a current revision | Removed with the issue |
 | ISSUE to UPLOAD_JOB | One to zero or many | No | Removed by retention clean-up |
 | ISSUE to DELETED_ISSUE | One to zero or one, and never both at once | No | The issue record is removed and the deleted-issue record stays |
-| APP_USER to ADMIN_ROLE | One to zero or one | No | Kept as revoked, or removed at the purge (AOQ-04) |
+| APP_USER to ADMIN_ROLE | One to zero or one | No | Kept as removed, or removed with the account (AOQ-04) |
 | APP_USER to ADMIN_AUDIT_EVENT | One to zero or many, as actor or as target | No | Open (AOQ-04) |
 | APP_USER to EDITION_UPDATE_SIGNUP | Zero or one to zero or many | The link is optional | Removed with a linked account's deletion, if the feature exists |
 | NEWS_CONTROL to a WordPress post | One to one, outside the model | The post is external | Removed by cleanup if the post is gone |
 
 ### 13.3 Data lifecycle and deletion
 
-Retention periods are MFW's decision (OQ-24, NFR-PRIV-005, DATA-017) and are OPEN unless the cell says otherwise. "Purge" means the scheduled removal after the deletion window (TD-19, PRC-02).
+Retention periods are MFW's decision (OQ-24, NFR-PRIV-005, DATA-017) and are OPEN unless the cell says otherwise. "Deleted with the account" means removed by the deletion workflow at once, or by the cleanup job if it stopped part-way (TD-19, GS-Q50).
 
 | Entity | Created | Changed | Removed | Retention period | On a reader's account deletion |
 |---|---|---|---|---|---|
-| APP_USER | At registration | On a deletion request, on undo, and while a deletion runs | When the deletion finishes | The account's life, plus the window (OPEN, AOQ-02) | Marked pending at the request, or deleting for an immediate deletion. Undo returns it to active during the window. |
-| READER_PROFILE | At registration or first profile save | By the reader, through `saveProfile` | At the purge | OPEN | Hidden from admin lists at the request. Removed at the purge. |
-| CONSENT_RECORD | At consent | Never | At the purge | OPEN (OQ-24) | Removed at the purge, unless MFW's adviser requires it to be kept, and then only pseudonymously |
+| APP_USER | At registration | On a deletion request, and while a deletion runs | When the deletion finishes | The account's life. Backups are OPEN (AOQ-02) | Marked deleting at the request, then removed at once |
+| READER_PROFILE | At registration or first profile save | By the reader, through `saveProfile` | With the account | OPEN | Removed with the account |
+| CONSENT_RECORD | At consent | Never | With the account | OPEN (OQ-24) | Removed with the account, unless MFW's adviser requires it to be kept, and then only pseudonymously |
 | INDUSTRY_SEGMENT, ISSUE_CATEGORY, NOTIFICATION_CATEGORY | By developers or admins | By developers or admins | When unused and no longer wanted | Not personal data | Not affected |
-| ISSUE | By an admin | By an admin | By a Super Admin after unpublish, if deletion is allowed (OQ-21) | Not personal data | Not affected |
+| ISSUE | By an admin | By an admin | By an admin after unpublish, if deletion is allowed (OQ-21) | Not personal data | Not affected |
 | ISSUE_FILE | By the upload function | When a new revision supersedes it | After the superseded-revision period | OPEN | Not affected |
-| BOOKMARK, FAVOURITE | By the reader | By the reader | By the reader, or at the purge | The account's life | Removed at the purge |
-| NOTIFICATION_PREFERENCE | By the reader | By the reader | At the purge | The account's life | Removed at the purge. The app removes its topic subscriptions at once. |
+| BOOKMARK, FAVOURITE | By the reader | By the reader | By the reader, or with the account | The account's life | Removed with the account |
+| NOTIFICATION_PREFERENCE | By the reader | By the reader | With the account | The account's life | Removed with the account. The app removes its topic subscriptions at once. |
 | NOTIFICATION_SEND | By the send function, as pending | By the send function and by an admin retry (state and attempt count) | By retention clean-up | OPEN (OQ-24) | Not affected. It holds no reader data. |
 | NEWS_CONTROL | By an admin | By an admin | By clean-up | Not personal data | Not affected |
-| EDITION_UPDATE_SIGNUP | By the reader or visitor, if the feature exists | On withdrawal | On withdrawal, or with a linked account's deletion | OPEN (OQ-24, OQ-31) | Removed at once if linked, if the feature exists |
-| ADMIN_ROLE | By a Super Admin | By a Super Admin | At the purge of the account | OPEN (AOQ-04) | Removed at the purge |
-| ADMIN_AUDIT_EVENT | By the function that performs the audited action | Never | By retention clean-up | OPEN (AOQ-04) | Open (AOQ-04) |
-| ADMIN_GUARD | At deployment, with the first Super Admin | In the transaction of every role change | Never | Not personal data | Updated in the same step if a Super Admin's account is removed (INV-03) |
+| EDITION_UPDATE_SIGNUP | By the reader or visitor, if the feature exists (dropped on the working position, GS-Q49) | On withdrawal | On withdrawal, or with a linked account's deletion | OPEN (OQ-24, OQ-31) | Removed at once if linked, if the feature exists |
+| ADMIN_ROLE | By an admin | By an admin | With the account | OPEN (AOQ-04) | Removed with the account. The last admin cannot delete the account (INV-03). |
+| ADMIN_AUDIT_EVENT | By the function that adds or removes an admin | Never | By retention clean-up | OPEN (AOQ-04) | Open (AOQ-04) |
+| ADMIN_GUARD | At deployment, with the first admin | In the transaction of every add and remove | Never | Not personal data | Updated in the same step if an admin's account is removed (INV-03) |
 | DELETED_ISSUE | By the delete function, with the deletion | Never | By retention clean-up, if MFW sets a period | OPEN (AOQ-19) | Not affected. It holds no reader data. |
 | UPLOAD_JOB | By `requestUpload` | By the upload function | By retention clean-up | A short period | Not affected |
 | Device files, registry and caches | On download or read | By the app | By the reader, on account deletion, or when the issue is permanently deleted | Until the reader deletes them | Deleted on the device (OQ-11 is OPEN for sign-out, unpublish and deletion) |
@@ -1340,9 +1331,9 @@ All values are fictional. No sample uses a real person, company, number or addre
 
 **APP_USER**
 
-| user_id | status | created_at | deletion_requested_at | purge_after |
-|---|---|---|---|---|
-| `demo-user-0001` | active | 2026-10-23T09:00:00Z | | |
+| user_id | status | created_at | deletion_requested_at |
+|---|---|---|---|
+| `demo-user-0001` | active | 2026-10-23T09:00:00Z | |
 
 **READER_PROFILE**
 
@@ -1432,22 +1423,21 @@ The bookmark was made on revision 1 and the issue is now at revision 2, so openi
 |---|---|---|---|
 | 9001 | false | true | 2026-10-02T07:00:00Z |
 
-**ADMIN_ROLE, ADMIN_AUDIT_EVENT and ADMIN_GUARD (proposed change)**
+**ADMIN_ROLE, ADMIN_AUDIT_EVENT and ADMIN_GUARD (proposed position)**
 
-| user_id | role | is_active | granted_by | granted_at |
-|---|---|---|---|---|
-| `demo-superadmin-0001` | super_admin | true | `deploy-step` | 2026-09-01T08:00:00Z |
-| `demo-admin-0001` | content_admin | true | `demo-superadmin-0001` | 2026-09-15T09:00:00Z |
-
-| event_id | actor_user_id | action | subject_type | subject_ref | target_user_id | new_role | reference | recent_sign_in_checked | occurred_at |
-|---|---|---|---|---|---|---|---|---|---|
-| `audit-0000` | `deploy-step` | bootstrap_super_admin | user | | `demo-superadmin-0001` | super_admin | `written-request-0001` | false | 2026-09-01T08:00:00Z |
-| `audit-0001` | `demo-superadmin-0001` | role_grant | user | | `demo-admin-0001` | content_admin | | true | 2026-09-15T09:00:00Z |
-| `audit-0002` | `demo-admin-0001` | denied | operation | `deleteIssue` | | | | false | 2026-10-12T11:00:00Z |
-
-| guard_id | active_super_admin_count | version | updated_at |
+| user_id | is_active | granted_by | granted_at |
 |---|---|---|---|
-| `admin` | 1 | 2 | 2026-09-15T09:00:00Z |
+| `demo-admin-0001` | true | `deploy-step` | 2026-09-01T08:00:00Z |
+| `demo-admin-0002` | true | `demo-admin-0001` | 2026-09-15T09:00:00Z |
+
+| event_id | actor_user_id | action | target_user_id | reference | recent_sign_in_checked | occurred_at |
+|---|---|---|---|---|---|---|
+| `audit-0000` | `deploy-step` | bootstrap_admin | `demo-admin-0001` | `written-request-0001` | false | 2026-09-01T08:00:00Z |
+| `audit-0001` | `demo-admin-0001` | admin_add | `demo-admin-0002` | | true | 2026-09-15T09:00:00Z |
+
+| guard_id | active_admin_count | version | updated_at |
+|---|---|---|---|
+| `admin` | 2 | 2 | 2026-09-15T09:00:00Z |
 
 **DELETED_ISSUE**
 
@@ -1478,8 +1468,8 @@ The sample identifiers are fictional and have no meaning in their form, as M10 r
 | DATA-007 Notification preferences | CONFIRMED | NOTIFICATION_PREFERENCE, and the push provider for device registration |
 | DATA-008 Notification send record | CONFIRMED | NOTIFICATION_SEND |
 | DATA-009 News control | CONFIRMED | NEWS_CONTROL |
-| DATA-010 Edition-update list | CONFLICT | EDITION_UPDATE_SIGNUP, conditional |
-| DATA-011 Admin account | CONFIRMED | The sign-in provider, and ADMIN_ROLE (with ADMIN_GUARD and ADMIN_AUDIT_EVENT if PRC-01 is approved) |
+| DATA-010 Edition-update list | CONFLICT | EDITION_UPDATE_SIGNUP, conditional. Dropped on the working position (GS-Q49) |
+| DATA-011 Admin account | CONFIRMED | The sign-in provider, and ADMIN_ROLE (with ADMIN_GUARD and ADMIN_AUDIT_EVENT for in-panel add and remove, GS-Q44) |
 | DATA-012 Consent record | ASSUMPTION | CONSENT_RECORD |
 | DATA-013 Data on the device | CONFIRMED | Section 7 |
 | DATA-014 Crash reports and usage events | CONFIRMED | The crash-reporting service. No entity here. |
@@ -1499,9 +1489,9 @@ The sample identifiers are fictional and have no meaning in their form, as M10 r
 | Consent record | CONSENT_RECORD | FR-PRIV-001 (CONFIRMED); DATA-012 (ASSUMPTION) | OQ-27; OQ-24 |
 | Bookmarks and favourites | BOOKMARK, FAVOURITE | NFR-SEC-005 (CONFIRMED) | OQ-10; OQ-12 |
 | Edition-update email | EDITION_UPDATE_SIGNUP | FR-EMAIL-001 (CONFLICT); FR-PRIV-003 (CONFIRMED) | OQ-31; OQ-09 |
-| Admin identifiers and the audit log | ADMIN_ROLE, ADMIN_AUDIT_EVENT | NFR-SEC-011 (OPEN) | PRC-01; AOQ-04 |
+| Admin identifiers and the narrow change record | ADMIN_ROLE, ADMIN_AUDIT_EVENT | NFR-SEC-011 (OPEN) | OQ-58; AOQ-04 |
 | Exports of personal data | Not stored | FR-USER-002, FR-USER-003 (PROVISIONAL); NFR-PRIV-004 (ASSUMPTION) | AOQ-05 |
-| Views and exports of the reader list | ADMIN_AUDIT_EVENT (a count only, never the data) | FR-USER-002, FR-USER-003 (PROVISIONAL) | GS-Q26; AOQ-04 |
+| Views and exports of the reader list | Not recorded on the working position (GS-Q44). Exports are built in memory and not stored. | FR-USER-002, FR-USER-003 (PROVISIONAL) | GS-Q44; AOQ-05 |
 
 Charter risks R10 and R11 map to READER_PROFILE and CONSENT_RECORD together with REG-022, REG-023 and REG-024. That mapping covers the profile-field decisions and the legal review, and not only the privacy policy and terms.
 
@@ -1511,22 +1501,36 @@ Charter risks R10 and R11 map to READER_PROFILE and CONSENT_RECORD together with
 Decisions of version 0.2      [PROPOSED, PROVISIONAL, MFW written approval pending, unless a line says otherwise]
 ├── GS-Q17 Baseline kept and revised in place            this document, version 0.2
 ├── GS-Q18 Neutral core with a Firebase mapping          Sections 4 (logical model) and 12 (Firestore mapping, PROVISIONAL)
-├── GS-Q19 Two admin roles                               Sections 4.17, 4.21 and 10.8 (INV-03 to INV-07)
+├── GS-Q19 Two admin roles (replaced by GS-Q44)          Sections 4.17, 4.21 and 10.8 (INV-03 to INV-07)
 ├── GS-Q20 Admin reads through functions, no role claim  Sections 4.7, 4.14, 4.19, 5.2, 9 and 10.8 (INV-08, INV-09)
 ├── GS-Q21 Replace a PDF, delete an issue                Sections 4.7, 4.9, 4.22, 10.2, 10.8 (INV-15) and 17; OQ-21 OPEN for MFW
-├── GS-Q22 Super Admin only, after unpublish             Sections 4.7, 4.18 and 10.8 (INV-15)
+├── GS-Q22 Super Admin only, after unpublish (replaced by GS-Q45)   Sections 4.7 and 10.8 (INV-15)
 ├── GS-Q23 Working profile list (partly reversed by GS-Q34)    Sections 4.3 and 11.2 (ASSUMPTION)
 ├── GS-Q34 Requirements-specification list required by default   Sections 4.3 and 11.2 (PROVISIONAL)
 ├── GS-Q24 Downloaded copies on unpublish and delete     Sections 6.2, 7.1, 7.3 and 4.22; OQ-11 OPEN for MFW
 ├── GS-Q25 Deleted-issue list, opaque never-reused ids   Sections 4.1, 4.22 and 10.8 (INV-14); M10, M11
-├── GS-Q26 Audit set                                     Sections 4.18 and 10.8 (INV-16); retention OPEN (AOQ-04)
+├── GS-Q26 Audit set (narrowed by GS-Q44)                Sections 4.18 and 10.8 (INV-16 withdrawn); retention OPEN (AOQ-04)
 ├── GS-Q27 Notification send: record first               Sections 4.14, 10.3 and 10.8 (INV-17)
-├── GS-Q28 Account deletion: window, undo, immediate     Sections 4.2, 10.2, 10.3 and 10.8 (INV-18); PRC-02 OPEN
+├── GS-Q28 Account deletion: window, undo (replaced by GS-Q50)   Sections 4.2, 10.2, 10.3 and 10.8 (INV-18)
 ├── GS-Q29 Compatibility policy and update gate          Sections 4.20 and 10.5, and the API and Backend Contract (PRC-04)
 ├── GS-Q30 Labels for PROPOSED decisions            Section 1.2
 ├── GS-Q31 Website-based taxonomy                        Sections 4.5, 4.6 and Appendix B
 ├── GS-Q32 Channel policy: public website, signed-in app Sections 3.2, 8 and 9, and the Security and Access Control document
 └── GS-Q33 Bootstrap and lockout recovery                Sections 4.17 and 10.8 (INV-03)
+```
+
+### 15.4 Positions of version 0.4
+
+```text
+Positions of version 0.4      [PROPOSED, PROVISIONAL, MFW written approval pending, unless a line says otherwise]
+├── GS-Q40 Age as a whole number                          Section 4.3; OQ-02 OPEN
+├── GS-Q43 Read is temporary, Download is kept            Sections 7.1, 7.3 and 16 (retention_mode); OQ-08 OPEN
+├── GS-Q44 One Admin role, in-panel add and remove        Sections 4.17, 4.18, 4.21 and 10.8 (INV-03 to INV-09); OQ-58
+├── GS-Q45 Any admin: unpublish, replace, delete          Sections 4.7, 4.9, 10.2, 10.8 (INV-15) and 17; OQ-21 OPEN
+├── GS-Q47 Three fixed notification categories            Section 4.12; OQ-18 OPEN
+├── GS-Q48 News cache and Save                            Section 7.1; OQ-16 OPEN
+├── GS-Q49 Registered-user export only                    Sections 4.16 and 19; OQ-31 OPEN
+└── GS-Q50 Immediate account deletion                     Sections 4.2, 10.2, 10.3 and 10.8 (INV-18)
 ```
 
 ## 16. Schema Decisions That Depend on Open Decisions
@@ -1539,27 +1543,27 @@ Decisions of version 0.2      [PROPOSED, PROVISIONAL, MFW written approval pendi
 | When a Google reader completes the profile | OQ-03 | No schema effect. It changes the flow only. |
 | The sign-in provider and the linking rule | TD-06, OQ-04, OQ-05, AOQ-08 | A different provider has a different identifier format. `user_id` would need an identifier migration. A different linking rule changes how many accounts a person has, not the schema. |
 | Verified email for Google accounts | OQ-04, AOQ-09 | No schema effect. The access check reads the provider. |
-| Temporary versus retained copies | OQ-08 | Use the `retention_mode` field on the device registry. No server schema effect. |
+| Read as temporary, Download as kept | OQ-08, GS-Q43 | The `retention_mode` field on the device registry records which. If MFW chooses one model only, the field has one value. No server schema effect. |
 | Sign-out, deletion and unpublish on the device | OQ-11 | Device registry behaviour only. |
 | Offline bookmarks and favourites | OQ-10 | No schema effect. The write queue is the SDK's. |
 | Replacing or deleting a PDF | OQ-21 | If replacement is not allowed, only revision 1 exists. If deletion is allowed, orphan cleanup is needed. |
-| The edition-update list | OQ-31, OQ-09, C-02 | The entity exists or it does not. Logged-out sign-ups need a deletion route that does not use an account. |
+| The edition-update list | OQ-31, OQ-09, C-02 | On the working position the entity does not exist (GS-Q49). If MFW keeps the sign-up, the entity exists and logged-out sign-ups need a deletion route that does not use an account. |
 | Public issue metadata | OQ-13 | Move `file_size_bytes` and `page_count` to a restricted record. |
 | The meaning of "edition" and "industry segment" | OQ-13, AOQ-16 | Changes the issue's edition field, uniqueness rules and the segment list's maintenance. |
 | How WordPress news is served | TD-12, OQ-16, OQ-17 | A backend cache would add a news cache entity. Today there is none, because WordPress stays the master source (DATA-015). |
 | How push targeting works | TD-13, OQ-09, OQ-18 | Stored device tokens would add a device-registration entity holding personal data. Today there is none. |
-| Admin roles and the audit log | PRC-01, OQ-20, AOQ-04 | Without approval there is one role, and no audit entity or guard record. Deletion becomes an admin power, and INV-03, INV-04, INV-06, INV-07 and INV-16 fall away. |
+| Admin add and remove, and the narrow change record | OQ-58, OQ-20, AOQ-04 | If MFW declines in-panel add and remove, there is one role granted by a developer-run step, and no change record or guard record is built. INV-04, INV-06 and INV-07 fall away. |
 | Admin reads | AOQ-17, GS-Q20 | The working design has no direct admin reads. If it is rejected, rules that read the role record add a billed read to each evaluation, or an accepted window changes nothing in the schema. |
 | Retention periods | OQ-24, AOQ-02, AOQ-04 | Set the retention values in configuration and the cleanup tasks. |
 | Consent recording | OQ-27 | Change the `CONSENT_RECORD` fields. |
 | Fields in the send log | OQ-19 | Add or drop fields in `NOTIFICATION_SEND`. |
 | Cover image formats | OQ-22 | Add checks. No schema effect. |
 | The database product and the data location | TD-07, TD-22 | Only Section 12 changes. Moving data between locations or products is a migration. |
-| Issue replacement and deletion | OQ-21, GS-Q21, GS-Q22 | If MFW disallows deletion, DELETED_ISSUE is not built and INV-15 falls away. If replacement is disallowed, only revision 1 exists. |
+| Issue replacement and deletion | OQ-21, GS-Q45 | If MFW disallows deletion, DELETED_ISSUE is not built and INV-15 falls away. If replacement is disallowed, only revision 1 exists. |
 | The deleted-issue list | AOQ-19, OQ-11 | A different retention period changes configuration only. If MFW wants copies kept after deletion, the app does not use the list. |
 | Cover image before publication | AOQ-20 | A private holding path for covers adds a move at publication. |
 | The update gate | PRC-04 | If MFW declines it, `min_supported_app_version` is removed and no screen is built. |
-| The account deletion window | PRC-02, AOQ-02, OQ-24 | If MFW wants immediate deletion only, the `pending_deletion` state, `purge_after` and the undo are dropped. |
+| The account deletion window | PRC-02 (withdrawn), AOQ-02, OQ-24 | If MFW asks for an undo, the `pending_deletion` state, `purge_after` and the undo return as a change. |
 | The website's public PDFs | AOQ-18, now OQ-57 | No schema effect. It changes how the sign-in gate is described in the Security and Access Control document. |
 | Taxonomy seed values | GS-Q31, OQ-13, AOQ-16 | Seed values only. Nothing in the schema changes. |
 
@@ -1585,15 +1589,15 @@ Issue lifecycle                                     [PROPOSED, PROVISIONAL; OQ-2
 │   ├── published     visible to every reader in the catalogue after a refresh (FR-MAG-007)
 │   └── deleted       not stored: the issue record is gone and a DELETED_ISSUE record remains
 ├── Transitions and who may make them
-│   ├── create to unpublished                     Content Admin or Super Admin (FR-ADMIN-009)
-│   ├── unpublished to published                  Content Admin or Super Admin. Refused without an accepted current revision (INV-02)
-│   ├── published to unpublished (withdrawal)     Content Admin or Super Admin. Audited (FR-ADMIN-011, GS-Q26)
-│   ├── unpublished to deleted                    Super Admin only, with a typed confirmation, audited (INV-15, GS-Q22)
+│   ├── create to unpublished                     Any admin (FR-ADMIN-009)
+│   ├── unpublished to published                  Any admin. Refused without an accepted current revision (INV-02)
+│   ├── published to unpublished (withdrawal)     Any admin (FR-ADMIN-011, GS-Q45)
+│   ├── unpublished to deleted                    Any admin, with a typed confirmation (INV-15, GS-Q45)
 │   └── Not allowed                               published to deleted, anything from deleted, and any client change to publication_state
 ├── The file of an issue, separate from the issue's state
 │   ├── An upload is pending, then accepted as the current revision or rejected. A replacement adds the next revision and
 │   │   supersedes the old one (INV-01)
-│   ├── Either admin role may replace a PDF. The replacement is audited. Readers keep what they downloaded and see an
+│   ├── Any admin may replace a PDF (GS-Q45). Readers keep what they downloaded and see an
 │   │   updated badge (Section 6.2)
 │   └── An issue with a pending replacement stays published with its old current revision
 ├── Publication and withdrawal as readers see them
@@ -1642,12 +1646,11 @@ Query patterns and indexes
 │   ├── Issues including unpublished        by publication_date and by publication_state: to be validated
 │   ├── Upload jobs                         (issue_id, created_at)
 │   ├── Send log                            newest first by sent_at, and by outcome for pending and unknown sends: to be validated
-│   ├── Registered users (Super Admin)      a page at a time with a cursor, joined with the provider's accounts at request time (GS-Q5)
-│   ├── Admin list (Super Admin)            all ADMIN_ROLE records, a small set, by role
-│   └── Audit history (Super Admin)         newest first by occurred_at, and by action or actor: (action, occurred_at) and
-│                                           (actor_user_id, occurred_at): to be validated
+│   ├── Registered users (admin)            a page at a time with a cursor, joined with the provider's accounts at request time (GS-Q5)
+│   ├── Admin list                          all ADMIN_ROLE records, a small set
+│   └── Change history                      newest first by occurred_at. A small set, so no further index
 └── Scheduled tasks
-    ├── Account purge                       (status, purge_after)
+    ├── Account deletion cleanup            status
     ├── Stale notification sends            (outcome, last_attempt_at)
     ├── Orphan cleanup                      bookmarks and favourites by issue_id, news controls by wp_post_id
     └── Retention clean-up                  by occurred_at, deleted_at and created_at: to be validated
@@ -1659,30 +1662,30 @@ This is the data model's view of who may do what. The policies, the enforcement 
 
 Legend: C create, R read, U update, D delete. A plain letter is a direct access that the database rules allow. A letter followed by "f" goes through a function that checks the caller on every call. A dash means no access. "Own" means the record whose owner is the caller.
 
-| Entity | Logged out | Reader | Content Admin | Super Admin | Functions and triggers |
-|---|---|---|---|---|---|
-| APP_USER | - | R own | - | Rf (user list) | C U D |
-| READER_PROFILE | - | R own, Uf own | - | Rf (list, export) | C U D |
-| CONSENT_RECORD | - | R own, Cf own | - | - | C D |
-| INDUSTRY_SEGMENT | R | R | R, Cf Uf (AOQ-16) | R, Cf Uf (AOQ-16) | C U |
-| ISSUE_CATEGORY | R | R | R, Cf Uf | R, Cf Uf | C U |
-| ISSUE (published) | R | R | R | R | C U D |
-| ISSUE (unpublished) | - | - | Rf, Cf Uf | Rf, Cf Uf Df | C U D |
-| ISSUE_SEGMENT | R (published issues) | R | Cf Uf with the issue | Cf Uf with the issue | C U D |
-| ISSUE_FILE | - | - | Cf (upload) | Cf (upload) | C U D |
-| BOOKMARK, FAVOURITE | - | C R U D own | - | - | D |
-| NOTIFICATION_CATEGORY | R | R | R, Cf Uf (OQ-18) | R, Cf Uf (OQ-18) | C U |
-| NOTIFICATION_PREFERENCE | - | C R U D own | - | - | D |
-| NOTIFICATION_SEND | - | - | Rf, Cf (send, retry) | Rf, Cf (send, retry) | C U D |
-| NEWS_CONTROL | R | R | R, Cf Uf | R, Cf Uf | D |
-| DELETED_ISSUE | R | R | R | R | C D |
-| UPLOAD_JOB | - | - | Rf, Cf | Rf, Cf | C U D |
-| EDITION_UPDATE_SIGNUP (conditional) | Cf (OQ-31) | Cf (OQ-31) | - | Rf (export) | C U D |
-| ADMIN_ROLE | - | - | - | Rf, Cf Uf | C U D |
-| ADMIN_AUDIT_EVENT | - | - | - | Rf | C D |
-| ADMIN_GUARD | - | - | - | - | C U |
-| APP_CONFIG (public) | R | R | R | R | C U |
-| APP_CONFIG (private) | - | - | - | - | R C U |
+| Entity | Logged out | Reader | Admin | Functions and triggers |
+|---|---|---|---|---|
+| APP_USER | - | R own | Rf (user list) | C U D |
+| READER_PROFILE | - | R own, Uf own | Rf (list, export) | C U D |
+| CONSENT_RECORD | - | R own, Cf own | - | C D |
+| INDUSTRY_SEGMENT | R | R | R, Cf Uf (AOQ-16) | C U |
+| ISSUE_CATEGORY | R | R | R, Cf Uf | C U |
+| ISSUE (published) | R | R | R | C U D |
+| ISSUE (unpublished) | - | - | Rf, Cf Uf Df | C U D |
+| ISSUE_SEGMENT | R (published issues) | R | Cf Uf with the issue | C U D |
+| ISSUE_FILE | - | - | Cf (upload) | C U D |
+| BOOKMARK, FAVOURITE | - | C R U D own | - | D |
+| NOTIFICATION_CATEGORY | R | R | R (three fixed categories, GS-Q47) | C U |
+| NOTIFICATION_PREFERENCE | - | C R U D own | - | D |
+| NOTIFICATION_SEND | - | - | Rf, Cf (send, retry) | C U D |
+| NEWS_CONTROL | R | R | R, Cf Uf | D |
+| DELETED_ISSUE | R | R | R | C D |
+| UPLOAD_JOB | - | - | Rf, Cf | C U D |
+| EDITION_UPDATE_SIGNUP (conditional, dropped on the working position) | Cf (OQ-31) | Cf (OQ-31) | Rf (export) | C U D |
+| ADMIN_ROLE | - | - | Rf, Cf Uf | C U D |
+| ADMIN_AUDIT_EVENT | - | - | Rf | C D |
+| ADMIN_GUARD | - | - | - | C U |
+| APP_CONFIG (public) | R | R | R | C U |
+| APP_CONFIG (private) | - | - | - | R C U |
 
 Every function check is the same: the caller is authenticated, the current role record and the account status are read on this call, and the call is refused if they cannot be read (INV-08). A logged-out visitor and a signed-in reader without full access read the same public data.
 
@@ -1692,10 +1695,10 @@ Five issues in the earlier documents were checked before drafting. None was reso
 
 | # | Issue | Finding | Effect on the data model |
 |---|---|---|---|
-| 1 | Reading model | The download-before-read rule has S2 support. Temporary versus retained copies is OPEN (OQ-08, REG-029, FR-DL-010). | The device registry carries a `retention_mode` field. No server entity depends on the answer. |
+| 1 | Reading model | The download-before-read rule has S2 support. Temporary versus retained copies is OPEN (OQ-08, REG-029, FR-DL-010). | The device registry carries a `retention_mode` field, kept for Download and temporary for Read (GS-Q43, reported as MFW's answer). No server entity depends on the answer. |
 | 2 | Registration consent | S2 says only that MFW supplies the policy and terms and the developers implement consent and deletion. Mandatory consent at registration and the reference to terms of use are inferences (OQ-27). | CONSENT_RECORD is an ASSUMPTION (DATA-012), with document types for both documents. |
 | 3 | Public news | S2 is silent on news for logged-out visitors. The charter says it is public, citing S3. FR-NEWS-007 is CONFIRMED on weaker evidence. | NEWS_CONTROL is public-read and holds no admin identity. |
-| 4 | Deletion and edition-update sign-up | FR-PRIV-003 mentions any edition-update sign-up while FR-EMAIL-001 is CONFLICT (OQ-31). | EDITION_UPDATE_SIGNUP and its deletion are conditional. |
+| 4 | Deletion and edition-update sign-up | FR-PRIV-003 mentions any edition-update sign-up while FR-EMAIL-001 is CONFLICT (OQ-31). | EDITION_UPDATE_SIGNUP and its deletion are conditional. They are dropped on the working position (GS-Q49). |
 | 5 | Privacy-risk mapping | Charter risk R11 covers the policy, consent and deletion only. The profile-field decisions and the legal review sit with R10 and REG-022, REG-023 and REG-024. | Section 15.2 maps R10 and R11 to the profile entities and the open decisions. |
 
 ## Appendix B. Website Observations Used for the Taxonomy

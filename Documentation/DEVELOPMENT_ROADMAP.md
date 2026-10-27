@@ -7,9 +7,9 @@
 | Document | Development Roadmap |
 | File | `Documentation/DEVELOPMENT_ROADMAP.md` |
 | Phase | 3 — Development Planning and Collaboration (document 23) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
-| Date | 25 October 2026 |
+| Date | 27 October 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
 
 **Change history**
@@ -20,6 +20,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Document names and status rows corrected after the merge. Tasks T-00.6 and T-00.7 added for the documents not yet scheduled. Working baseline for dates stated (CH dates, PROVISIONAL), with the S3 note. No date, estimate or milestone changed. |
 | 0.3 | 24 October 2026 | Tracking edit, see `CHANGELOG.md`. Four documents added on 24 October 2026 are listed as existing drafts. T-00.7 now covers their review and keeps `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as the one document still to write. No date, estimate or milestone changed. |
 | 0.4 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. `CLOUD_INFRASTRUCTURE_AND_COSTS.md` is listed as an existing draft, and T-00.7 now covers its review. The single-provider cost model is still blocked by DEC-003. No date, estimate or milestone changed. |
+| 0.5 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). Section 4.1 added: the proposed plan for 27 October 2026. WP-09 gains T-09.7 (admin management), and the subscriber export leaves T-09.5. Availability is noted as reported (GS-Q53). The status table notes the reported late inputs and the chat message about M1. The related-documents row shows the new versions. No date, estimate or milestone changed, and T-09.7 has no estimate. |
 
 ### 1.1 Related documents
 
@@ -32,7 +33,7 @@
 | `TASK_OWNERSHIP_MATRIX.md`, `DECISION_LOG.md`, `OPEN_QUESTIONS.md`, `DEFINITION_OF_DONE.md`, `ACCEPTANCE_CRITERIA.md` | Exist (draft) |
 | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md` | Exist on `main` (drafts, merged by pull request #2). Needed for M1. `TECHNOLOGY_DECISIONS.md` was planned as `TECH_STACK_DECISIONS.md` (document map: `TASK_OWNERSHIP_MATRIX.md` section 13). |
 | `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md`, `SECURITY_AND_ACCESS_CONTROL.md` | Exist on `main` (drafts, merged by pull request #2). Not yet reviewed against this roadmap. |
-| `PDF_READER_AND_OFFLINE_DESIGN.md`, `SECURITY_INCIDENT_PROCEDURE.md`, `REQUIREMENT_COVERAGE_MATRIX.md`, `SCREEN_INVENTORY_AND_NAVIGATION.md` | Exist (drafts, version 0.1, 24 October 2026). Not reviewed (T-00.7). |
+| `PDF_READER_AND_OFFLINE_DESIGN.md`, `SECURITY_INCIDENT_PROCEDURE.md`, `REQUIREMENT_COVERAGE_MATRIX.md`, `SCREEN_INVENTORY_AND_NAVIGATION.md` | Exist (drafts, version 0.2, 27 October 2026). Not reviewed by a second person (T-00.7). |
 | `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Exists (draft, version 0.1, dated 25 October 2026). A comparison of candidates and a parameterised cost model. The single-provider cost model is still BLOCKED by DEC-003 (T-00.7). |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal. **INTERNAL ESTIMATE** marks an unvalidated planning figure that is not a commitment.
@@ -79,8 +80,50 @@ Evidence from the repository on 23 October 2026.
 | Phase 2 documents | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` exist as drafts (merged by pull request #2). `PDF_READER_AND_OFFLINE_DESIGN.md` exists as a draft (24 October 2026). `CLOUD_INFRASTRUCTURE_AND_COSTS.md` exists as a draft (25 October 2026), written while DEC-003 is open. |
 | Phase 3 and Phase 4 documents | Merged into `main` by pull request #1 (merge commit 56c6d97) on 23 October 2026. Drafts. No review is recorded on the pull request. |
 | Application code | None |
-| M1 | No evidence of MFW's written approval of a requirements and architecture note. No architecture note exists. |
-| MFW inputs (S1 "What we need from MFW") | The repository holds no record of any input being received, other than the S1 and S2 PDFs themselves |
+| M1 | No evidence of MFW's written approval of a requirements and architecture note. No architecture note exists. YG reports a chat message from MFW that says "go ahead" and names no note (GS-Q63, OQ-59). It is not filed, and it is weak evidence of approval. |
+| MFW inputs (S1 "What we need from MFW") | The repository holds no record of any input being received, other than the S1 and S2 PDFs themselves. YG reports on 27 October 2026 that the brand assets, sample PDFs, WordPress details, cloud project and store accounts have not been received, and that the request for them has been sent (GS-Q35). Not filed |
+
+### 4.1 Plan for 27 October 2026
+
+PROPOSED, from the questioning session of 26 and 27 October 2026. Nothing in it has been done. Work that depends on a decision that is OPEN or PROPOSED is a spike until Sanika's written agreement is filed (`DEFINITION_OF_DONE.md`). Sanika has reviewed none of the documents since 23 October 2026, and her agreement is reported as verbal (GS-Q38).
+
+```text
+Plan for 27 October 2026                               [PROPOSED]
+├── WS-B (Yuvraj)
+│   ├── 1 T-01.1 Flutter scaffold                      [a spike until Sanika's agreement on DEC-013 and DEC-014 is filed]
+│   │   ├── Pin the current stable Flutter and its matching Dart. Create app/ as in CODING_STANDARDS section 3, with Riverpod and go_router
+│   │   ├── Accept: it builds and runs on an Android emulator and an iOS simulator, and `flutter analyze` and `dart format` are clean
+│   │   └── Verify: command output in the pull request. Sanika approves DEC-013, DEC-014 and OQ-50 in the same pull request
+│   ├── 2 MOD-00 contracts and fakes                   [after 1]
+│   │   └── Accept: AccessState, Result and AppFailure, IssueSummary, DownloadStatus and the fakes compile, with tests that name FR and AC IDs
+│   ├── 3 T-08.1 WordPress client                      [can run in parallel; waits for MFW's confirmed address and category list, OQ-39]
+│   │   └── Accept: fixture tests pass, and one live read of MFW's public API is recorded without storing content
+│   ├── 4 T-02.3 reader spike                          [a spike branch; the library choice stays OPEN]
+│   │   ├── Compare pdfrx and pdfx on the mid-range Android phone and the current iPhone (GS-Q54), with public website PDFs and a generated 150 MB, 120-page PDF
+│   │   ├── Do not use or commit MFW's confidential samples. None has been received
+│   │   └── Output: a short report. The choice waits for MFW's samples and the devices the team does not have (R25)
+│   └── 5 T-01.5 CI skeleton                           [after 1]
+│       └── Verify first: Actions availability and the macOS runner cost for this repository (DEC-022, NOT VERIFIED)
+├── WS-A (Sanika)
+│   ├── 1 Record agreement                             [first, because it unblocks the rest]
+│   │   ├── Approve the pull request, or write a note that names each DEC (010 to 015, 025 to 030) and the work split
+│   │   └── File references to the S3 emails and the signed S1 and S2: date, sender role and subject only, because the repository is public
+│   ├── 2 MFW contact tasks
+│   │   ├── The M1 note, and a request for approval that names it
+│   │   ├── The question list with proposed defaults
+│   │   └── The inputs that are due: the cloud project in MFW's name, the sample PDFs and the WordPress details. The brand assets are late
+│   ├── 3 Backend emulator spike (T-01.4 skeleton, T-03.6 and T-07.1 rule tests)
+│   │   ├── Rules deny by default; saveProfile; getIssueFile with its six checks; requestUpload and onUploadFinalized; the admin record with the last-admin guard
+│   │   └── Accept: the tests run locally, and the work is labelled a spike until the agreement is filed. No cloud resource is created
+│   ├── 4 T-01.6 Admin panel skeleton                  [a spike; the React sign-in page]
+│   └── 5 T-09.7 Admin management in the operation list and the screens [after MFW confirms OQ-58]
+└── Not to begin until approved
+    ├── Any cloud resource in MFW's name, and the region or bucket (DEC-031)
+    ├── Google Sign-In set-up, push credentials, app identifiers and store records
+    ├── The edition-update sign-up, which is dropped on the working position and needs MFW's written agreement (OQ-31)
+    ├── Final M2 screens and store assets, because the brand assets have not been received
+    └── Production data of any kind
+```
 
 ## 5. Milestone Gates
 
@@ -210,7 +253,7 @@ Owner: WS-B. Estimate: 4–6 developer-days.
 
 ### WP-09 Admin panel and content pipeline
 
-Owner: WS-A. Estimate: 7–10 developer-days.
+Owner: WS-A. Estimate: 7–10 developer-days, set before T-09.7 was added. T-09.7 has not been estimated.
 
 | Task | Description | Blocked by | Exit criterion |
 |---|---|---|---|
@@ -218,8 +261,9 @@ Owner: WS-A. Estimate: 7–10 developer-days.
 | T-09.2 | Upload and validation (RS FR-ADMIN-005 to 008, NFR-SEC-008) | OQ-22, OQ-30 | AC-8.3 to AC-8.5 pass |
 | T-09.3 | Issue details, categories, publish and unpublish (RS FR-ADMIN-009 to 011) | None | AC-8.6, AC-8.7 and IC-07 pass |
 | T-09.4 | News controls (RS FR-ADMIN-013 to 015) | None | AC-8.8 passes |
-| T-09.5 | Registered-user list and export (PROVISIONAL); subscriber export | OQ-29, OQ-31 | AC-8.9 and PAC-03 pass |
+| T-09.5 | Registered-user list and export (PROVISIONAL). The subscriber export is dropped on the working position (GS-Q49) | OQ-29, OQ-31 | AC-8.9 and PAC-03 pass |
 | T-09.6 | Deleting an issue or replacing its file | OQ-21 | Behaviour matches the OQ-21 decision |
+| T-09.7 | Admin management: find a registered reader by email, add and remove admins, the last-admin guard and the change record (OP-34 to OP-39, SCR-W-11; GS-Q44) | OQ-58, DEC-003, DEC-004 | PAC-19 passes |
 
 ### WP-10 Notifications
 
@@ -228,7 +272,7 @@ Owner: WS-A. Support: WS-B. Estimate: 3–5 developer-days.
 | Task | Owner | Description | Blocked by | Exit criterion |
 |---|---|---|---|---|
 | T-10.1 | WS-A | Push set-up in MFW's accounts (RS INT-PUSH-001, INT-PUSH-002) | Active Apple Developer account (S1: by the end of Week 4); DEC-003 | A test notification reaches an Android and an iOS test device |
-| T-10.2 | WS-A | Permission explanation and preferences (RS FR-NOTIF-001 to 003) | OQ-09, OQ-18 | AC-9.1 passes |
+| T-10.2 | WS-A | Permission explanation and preferences (RS FR-NOTIF-001 to 003) | OQ-09, OQ-18 (working positions GS-Q46, GS-Q47) | AC-9.1 passes |
 | T-10.3 | WS-A | Dispatch, category targeting and send log (RS FR-NOTIF-004, FR-ADMIN-015 to 018) | OQ-19 | AC-9.2, AC-9.4 and AC-9.5 pass |
 | T-10.4 | WS-B | Tap routing (RS FR-NOTIF-005, BR-005) | T-10.1 | AC-9.3 and IC-05 pass |
 
@@ -301,7 +345,7 @@ M3 at the end of W4 needs sign-up, login, catalogue and a first reader. M4 at th
 **Capacity check (illustrative, not a confirmed resource plan):**
 
 - Eight weeks at five working days, with both developers full time, is 80 developer-days. Six weeks is 60.
-- Neither developer's availability is recorded (OQ-38).
+- YG reports that both developers are full time (GS-Q53). It is not filed, and no document records it yet (OQ-38).
 - The upper estimate exceeds full-time capacity over eight weeks. The six-week internal target fits only the lower estimate at full-time availability.
 - Client review periods [S2 Responsibilities] and public holidays are not included.
 

@@ -7,9 +7,9 @@
 | Document | Task Ownership Matrix |
 | File | `Documentation/TASK_OWNERSHIP_MATRIX.md` |
 | Phase | 3 — Development Planning and Collaboration (document 22) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. Every assignment is PROPOSED (DEC-011). |
-| Date | 25 October 2026 |
+| Date | 27 October 2026 |
 | Approval required | Both developers (CH §19.3 D9; OQ-38). No MFW approval. |
 
 **Change history**
@@ -20,6 +20,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Document map, retired names and unwritten documents added (section 13). Phase 2 document ownership updated for the five design drafts. Stale statements corrected. |
 | 0.3 | 24 October 2026 | Tracking edit, see `CHANGELOG.md`. The document map (section 13.1) lists the four documents added on 24 October 2026 and `README.md`. Section 13.3 no longer lists `PDF_READER_AND_OFFLINE_DESIGN.md` as unwritten. Section 8.2 records the proposed editors of the new documents. No decision, requirement or status label changed. |
 | 0.4 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The document map (section 13.1) lists `CLOUD_INFRASTRUCTURE_AND_COSTS.md`. Section 13.3 now says that a draft comparison of candidates exists and that a single-provider cost model is still blocked by DEC-003. Section 8.2 records the proposed editor. No decision, requirement or status label changed. |
+| 0.5 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). WP-09 includes admin management (T-09.7). YG accepts the proposed workstream split and reports both developers as full time (GS-Q53). Neither is filed, and Sanika has not recorded hers. The document map shows the new versions. Section 13.4 now says five unnumbered documents, as there are five. No assignment, decision or requirement changed. |
 
 ### 1.1 Related documents
 
@@ -110,7 +111,7 @@ Work packages are defined in `DEVELOPMENT_ROADMAP.md` §6. All rows are PROPOSED
 | WP-06 | Issue access and offline downloads | WS-B | WS-A (OP-FILE-01) | Both developers |
 | WP-07 | Bookmarks and favourites | WS-B | WS-A (server rules) | Both developers |
 | WP-08 | News and sharing | WS-B | WS-A (news controls) | Both developers |
-| WP-09 | Admin panel and content pipeline | WS-A | — | Both developers |
+| WP-09 | Admin panel, content pipeline and admin management (T-09.7) | WS-A | — | Both developers |
 | WP-10 | Notifications | WS-A | WS-B (tap routing) | Both developers |
 | WP-11 | Integration, hardening, testing | WS-B (test coordination) | WS-A | MFW, through acceptance testing |
 | WP-12 | Release, acceptance, handover | WS-A | WS-B | MFW, at M5 |
@@ -193,7 +194,7 @@ The criteria are defined in S2 and detailed in `ACCEPTANCE_CRITERIA.md`. All row
 | Item | Reference |
 |---|---|
 | Both developers agree the workstreams and mapping | DEC-011; OQ-38 |
-| Each developer's availability is not recorded, so capacity cannot be checked | OQ-38; `DEVELOPMENT_ROADMAP.md` §8 |
+| YG reports that both developers are full time (GS-Q53). No document records it, so capacity cannot yet be checked from one | OQ-38; `DEVELOPMENT_ROADMAP.md` §8 |
 | Primary editor of CH and RS | Section 8.2 |
 | Two-developer delivery recorded with MFW | OQ-34; DEC-018 |
 
@@ -227,8 +228,8 @@ Design
 ├── API_AND_BACKEND_CONTRACT         the single catalogue of backend operations (OP-nn) and their errors
 ├── API_AND_MODULE_CONTRACTS         app modules (MOD-nn), integration contracts (IC-nn), app-side errors
 ├── SECURITY_AND_ACCESS_CONTROL      access rules, threats, controls, security tests
-├── PDF_READER_AND_OFFLINE_DESIGN    device-side reader and offline design (draft 0.1, 24 October 2026)
-├── SCREEN_INVENTORY_AND_NAVIGATION  screens and states the requirements imply; input to the M2 designs (draft 0.1)
+├── PDF_READER_AND_OFFLINE_DESIGN    device-side reader and offline design (draft 0.2, 27 October 2026)
+├── SCREEN_INVENTORY_AND_NAVIGATION  screens and states the requirements imply; input to the M2 designs (draft 0.2)
 └── CLOUD_INFRASTRUCTURE_AND_COSTS   candidate clouds and a parameterised cost model; no provider chosen (draft 0.1, 25 October 2026)
 
 Plans, tests and process
@@ -236,8 +237,8 @@ Plans, tests and process
 ├── ACCEPTANCE_CRITERIA, TESTING_STRATEGY, TEST_DATA_AND_FIXTURES, CI_CD_AND_QUALITY_GATES
 ├── DEPENDENCY_REGISTER, DEPLOYMENT_PLAN, BACKUP_AND_RECOVERY, MAINTENANCE_AND_HANDOVER
 ├── APP_STORE_RELEASE_CHECKLIST, CLAUDE_CODE_WORKING_RULES
-├── SECURITY_INCIDENT_PROCEDURE      security incident steps (draft 0.1)
-├── REQUIREMENT_COVERAGE_MATRIX      which rows and plans name each requirement; derived, not a source (draft 0.1)
+├── SECURITY_INCIDENT_PROCEDURE      security incident steps (draft 0.2)
+├── REQUIREMENT_COVERAGE_MATRIX      which rows and plans name each requirement; derived, not a source (draft 0.2)
 └── CHANGELOG
 
 Entry point
@@ -265,8 +266,8 @@ The change is of names only. It does not make the content of either set authorit
 |---|---|---|
 | `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Cloud cost model once DEC-003 is decided (R14) | A draft comparison of candidates and a parameterised model was written on 25 October 2026 (version 0.1, not reviewed, no provider chosen). The single-provider cost model is not written and stays BLOCKED by DEC-003. First scenarios also exist in `TECHNOLOGY_DECISIONS.md` section 9 and `SYSTEM_ARCHITECTURE.md` section 13 |
 
-`PDF_READER_AND_OFFLINE_DESIGN.md` was planned here and was written as a draft on 24 October 2026 (version 0.1, not reviewed). It is listed in section 13.1. Its review is part of T-00.7 in `DEVELOPMENT_ROADMAP.md`.
+`PDF_READER_AND_OFFLINE_DESIGN.md` was planned here and was written as a draft on 24 October 2026 (version 0.1) and revised on 27 October 2026 (version 0.2). It has not been reviewed by a second person. It is listed in section 13.1. Its review is part of T-00.7 in `DEVELOPMENT_ROADMAP.md`.
 
 ### 13.4 Numbers in document control
 
-The Phase 3 and Phase 4 documents carry the numbers 21 to 40 in their document-control tables. No document in the repository is assigned the numbers 1 to 20, and the numbers do not define an order of reading or approval. The four documents added on 24 October 2026 carry no number.
+The Phase 3 and Phase 4 documents carry the numbers 21 to 40 in their document-control tables. No document in the repository is assigned the numbers 1 to 20, and the numbers do not define an order of reading or approval. The five documents added on 24 and 25 October 2026 carry no number.

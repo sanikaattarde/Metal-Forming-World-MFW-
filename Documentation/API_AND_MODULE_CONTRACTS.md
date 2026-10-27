@@ -7,9 +7,9 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
-| Date | 25 October 2026 |
+| Date | 27 October 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
 
 **Change history**
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft. 14 modules, 31 backend operations, 8 integration contracts. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 8 gains a column with the main identifier in `API_AND_BACKEND_CONTRACT.md` and notes on OP-ADM-11, OP-ADM-12 and OP-ACC-01. Section 4.2 error table gains the category and reason, with GONE and RATE_LIMITED added. Registration and sign-in messages stated. Compatibility and paging requirements added (4.5). Guest-reading rule labelled as a working position. Planned names replaced by the existing documents. |
 | 0.3 | 25 October 2026 | The related-documents row for `PDF_READER_AND_OFFLINE_DESIGN.md` now says the draft exists. No contract changed. |
+| 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). MOD-06 notes the two reading actions (Read is temporary, Download is kept) and foreground-only downloads. MOD-12 notes in-panel add and remove of admins, which has no alias. The edition-update sign-up (OP-EML-01, OP-ADM-10) is dropped on the working position. OP-13 and the grace window are withdrawn. The catalogue keeps its 31 identifiers. No decision is approved. |
 
 ### 1.1 Related documents
 
@@ -212,7 +213,7 @@ These are conceptual shapes for interfaces, not a database schema. `DATABASE_AND
 | `NotificationTarget` | `type` (`issue` or `article`), `targetId` | RS FR-NOTIF-005 | CONFIRMED | MOD-11 |
 | `NotificationSendRecord` | `sendId`, `sentAt`, `category`, `target` | RS DATA-008 | CONFIRMED (fields: OQ-19) | MOD-12 |
 | `IssueFileGrant` | `issueId`, opaque access descriptor, `expiresAt`, `sizeBytes`, `contentHash` | DEC-020 | PROPOSED | MOD-13 |
-| `DownloadedIssue` (device only) | `issueId`, local file reference, `sizeBytes`, `downloadedAt`, `contentHash` | RS DATA-013 | CONFIRMED (behaviour after sign-out: OQ-11) | MOD-06 |
+| `DownloadedIssue` (device only) | `issueId`, local file reference, `sizeBytes`, `downloadedAt`, `contentHash`, `retention` (kept or temporary; proposed, GS-Q43) | RS DATA-013 | CONFIRMED (behaviour after sign-out: OQ-11) | MOD-06 |
 | `RegisteredUserRow` (admin) | Email, profile fields, registration date | RS FR-USER-002 | PROVISIONAL | MOD-12 (reads MOD-04 data) |
 | `EditionUpdateSubscription` | Email, opted in | RS DATA-010 | CONFLICT C-02 (OQ-31) | MOD-04 |
 
@@ -390,7 +391,7 @@ abstract interface class AuthService {
 | Purpose | Mandatory reader profile, the settings screen, and consent to MFW's privacy policy and terms |
 | Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B. |
 | Responsibilities | Profile capture and validation (RS FR-PROF-001 to 004, PROVISIONAL); profile screen (FR-PROF-006); profile editing (FR-PROF-007, ASSUMPTION); consent at registration (FR-PRIV-001); links to the policy and terms (FR-PRIV-002); delete-account confirmation (FR-PRIV-004); the settings screen, which hosts MOD-11 preferences and sign-out |
-| Excludes | Age gate or parental consent (none, FR-PROF-005); edition-update sign-up until C-02 is resolved |
+| Excludes | Age gate or parental consent (none, FR-PROF-005); edition-update sign-up (dropped on the working position, GS-Q49; C-02 and OQ-31 stay open) |
 | Depends on | OP-PRF-01 to 03; MOD-11 preferences widget |
 | Errors | `invalidInput` (missing or invalid field), `unauthenticated`, `network` |
 | Authorization | Own profile only (RS NFR-SEC-006) |
@@ -498,7 +499,7 @@ final class DownloadPlan {
 abstract interface class DownloadManager {
   Stream<DownloadStatus> watch(String issueId);
   Future<Result<DownloadPlan>> prepare(String issueId);
-  Future<Result<void>> start(String issueId, {required bool mobileDataAccepted});
+  Future<Result<void>> start(String issueId, {required bool mobileDataAccepted}); // a copy kind, kept or temporary, is proposed: GS-Q43, OQ-08
   Future<Result<void>> cancel(String issueId);
   Future<Result<void>> delete(String issueId);
   Future<List<DownloadedIssue>> listDownloaded();
@@ -512,6 +513,8 @@ abstract interface class DownloadManager {
 2. If the grant has expired, the manager requests a new one through OP-FILE-01 and continues from the same offset.
 3. When the transfer completes, the manager checks the size and `contentHash`. On a mismatch it deletes the partial file and reports `fileCorrupt` with a retry (RS FR-READ-010, FR-STATE-006).
 4. A partial file is never listed as downloaded (RS FR-STATE-004).
+5. On the working position there are two actions (GS-Q43, reported as MFW's answer and not filed). Read downloads a complete copy that is temporary and is removed when the reader leaves the issue, or at the next start of the app after a crash. Download keeps the copy until the reader deletes it. `listDownloaded` returns only kept copies. The `kind` parameter on `start` waits for MFW's written answer to OQ-08.
+6. Downloads run only while the app is in the foreground. A stopped download resumes the next time the app is open (GS-Q60).
 
 ### 6.7 MOD-07 Reader
 
@@ -661,9 +664,9 @@ abstract interface class NotificationService {
 |---|---|
 | Purpose | Let MFW's editors run the app without developer help (S2 Objectives) |
 | Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B. |
-| Responsibilities | Admin sign-in and the single admin role (RS FR-ADMIN-002 to 004); issue upload with validation (FR-ADMIN-005 to 008); issue details (FR-ADMIN-009); categories (FR-ADMIN-010); publish and unpublish (FR-ADMIN-011); news controls (FR-ADMIN-013 to 015); notifications and send log (FR-ADMIN-016 to 018); registered-user list and export (FR-USER-002, FR-USER-003, PROVISIONAL); subscriber export (FR-USER-001, CONFLICT C-02); result messages (FR-STATE-007) |
-| Excludes | News authoring (FR-ADMIN-019); editorial roles, drafts, scheduled publishing and audit log (S2 "Later-phase features"); readership analytics (FR-USER-004) |
-| Interface | OP-ADM-01 to OP-ADM-11 (Section 8). OP-ADM-12 is a note: sign-in is the identity provider's job, and the role lookup is OP-14 in `API_AND_BACKEND_CONTRACT.md` |
+| Responsibilities | Admin sign-in and the single admin role (RS FR-ADMIN-002 to 004), with in-panel add and remove of admins (GS-Q44, OQ-58); issue upload with validation (FR-ADMIN-005 to 008); issue details (FR-ADMIN-009); categories (FR-ADMIN-010); publish and unpublish (FR-ADMIN-011); news controls (FR-ADMIN-013 to 015); notifications and send log (FR-ADMIN-016 to 018); registered-user list and export (FR-USER-002, FR-USER-003, PROVISIONAL); subscriber export (FR-USER-001, CONFLICT C-02, dropped on the working position, GS-Q49); result messages (FR-STATE-007) |
+| Excludes | News authoring (FR-ADMIN-019); editorial roles, drafts, scheduled publishing and audit log (S2 "Later-phase features"), apart from the narrow record of admin adds and removes (GS-Q44); readership analytics (FR-USER-004) |
+| Interface | OP-ADM-01 to OP-ADM-11 (Section 8). OP-ADM-12 is a note: sign-in is the identity provider's job, and the role lookup is OP-14 in `API_AND_BACKEND_CONTRACT.md`. Adding and removing admins is OP-35 and OP-37 in section 5.2 of that document and has no alias (DEC-026) |
 | Authorization | The admin role is checked on the server for every operation. |
 | Data owned | Issues, categories, news controls, send records, admin accounts (RS DATA-001, 002, 008, 009, 011) |
 | Blocked | DEC-003, DEC-004, OQ-20, OQ-21, OQ-22, OQ-30, OQ-31 |
@@ -702,12 +705,12 @@ These are technology-neutral operations. Each row is a contract: who may call it
 | OP-LIB-04 | `listFavourites` | App | Signed in; own records | None | Issue ID list | `UNAUTHENTICATED` | FR-BKM-006 | OP-08 |
 | OP-LIB-05 | `setFavourite` | App | Full access (incomplete access: OQ-12); idempotent | `issueId`, `favourite` | None | `NOT_FOUND` | FR-BKM-003 | OP-08 |
 | OP-NWS-01 | `getNewsControls` | App | Public | None | Hidden and breaking post IDs | `UNAVAILABLE` | FR-NEWS-008, FR-NEWS-009 | OP-04 |
-| OP-NTF-01 | `registerDevice` | App | Signed in (logged out: OQ-09); idempotent | Device token, platform | None | `INVALID_ARGUMENT` | DATA-007 | none (open) |
+| OP-NTF-01 | `registerDevice` | App | Signed in, or a logged-out visitor on the working position (GS-Q46; OQ-09 stays open); idempotent | Device token, platform | None | `INVALID_ARGUMENT` | DATA-007 | none (open) |
 | OP-NTF-02 | `unregisterDevice` | App | Own device | Device token | None | None | DATA-007 | none (open) |
 | OP-NTF-03 | `getPreferences` | App | Own record | None | `NotificationPreferences` | `UNAUTHENTICATED` | FR-NOTIF-002 | OP-09 |
 | OP-NTF-04 | `savePreferences` | App | Own record | `NotificationPreferences` | None | `INVALID_ARGUMENT` | FR-NOTIF-002, FR-NOTIF-003 | OP-09 |
-| OP-EML-01 | `setEditionUpdateSubscription` | App | OQ-09 | Opt in or out | None | None | FR-EMAIL-001, FR-EMAIL-002 (CONFLICT C-02) | none (conditional, C-02) |
-| OP-ACC-01 | `deleteOwnAccount` | App | Signed in; own account; recent sign-in if the provider requires it | None | None | `UNAUTHENTICATED` | FR-AUTH-009, FR-PRIV-003 | OP-12 (OP-13 only under PRC-02) |
+| OP-EML-01 | `setEditionUpdateSubscription` | App | OQ-09 | Opt in or out | None | None | FR-EMAIL-001, FR-EMAIL-002 (CONFLICT C-02) | none (conditional, C-02; dropped on the working position, GS-Q49) |
+| OP-ACC-01 | `deleteOwnAccount` | App | Signed in; own account; recent sign-in if the provider requires it | None | None | `UNAUTHENTICATED` | FR-AUTH-009, FR-PRIV-003 | OP-12 (OP-13 is withdrawn) |
 | OP-ADM-01 | `uploadIssue` | Admin panel | Admin role | PDF, cover, issue details | `issueId` (unpublished) | `FORBIDDEN`, `NOT_A_PDF`, `FILE_TOO_LARGE`, `INVALID_ARGUMENT` | FR-ADMIN-005 to 009, NFR-SEC-008 | OP-19, OP-20, OP-40 |
 | OP-ADM-02 | `updateIssueDetails` | Admin panel | Admin role | `issueId`, details | None | `NOT_FOUND`, `INVALID_ARGUMENT` | FR-ADMIN-009 | OP-16 |
 | OP-ADM-03 | `setIssuePublished` | Admin panel | Admin role | `issueId`, `published` | None | `NOT_FOUND` | FR-ADMIN-011 | OP-21, OP-22 |
@@ -717,16 +720,16 @@ These are technology-neutral operations. Each row is a contract: who may call it
 | OP-ADM-07 | `listSendLog` | Admin panel | Admin role | Paging | `NotificationSendRecord` list | `FORBIDDEN` | FR-ADMIN-018 | OP-27 |
 | OP-ADM-08 | `listRegisteredUsers` | Admin panel | Admin role | Paging | `RegisteredUserRow` list | `FORBIDDEN` | FR-USER-002 (PROVISIONAL) | OP-31 |
 | OP-ADM-09 | `exportRegisteredUsersCsv` | Admin panel | Admin role | None | CSV file | `FORBIDDEN` | FR-USER-003, NFR-PRIV-004 | OP-32 |
-| OP-ADM-10 | `exportSubscriberListCsv` | Admin panel | Admin role | None | CSV file | `FORBIDDEN` | FR-USER-001 (CONFLICT C-02, OQ-31) | OP-33 |
+| OP-ADM-10 | `exportSubscriberListCsv` | Admin panel | Admin role | None | CSV file | `FORBIDDEN` | FR-USER-001 (CONFLICT C-02, OQ-31). Dropped on the working position (GS-Q49) | OP-33 |
 | OP-ADM-11 | `deleteIssue` or `replaceIssueFile` | Admin panel | Admin role | `issueId` | None | `NOT_FOUND` | FR-ADMIN-012 (OPEN, OQ-21) | OP-30 (delete); a replacement is OP-19 with OP-40 |
 | OP-ADM-12 | `adminSignIn` | Admin panel | Valid credentials and admin role | Credentials | Admin session | `UNAUTHENTICATED`, `FORBIDDEN` | FR-ADMIN-002, FR-ADMIN-003, NFR-SEC-011 (OQ-20) | OP-14 |
 
 **Notes on the table**
 
-- "Admin role" means the one admin role of the baseline (RS FR-ADMIN-004). Two roles are the labelled change PRC-01 (`API_AND_BACKEND_CONTRACT.md` section 3.2).
+- "Admin role" means the one admin role (RS FR-ADMIN-004). Every admin has the same permissions (GS-Q44). The two-role model (PRC-01) is withdrawn (`API_AND_BACKEND_CONTRACT.md` section 3.2).
 - OP-ADM-11 joins two different things, deleting an issue and replacing its PDF. They need different safeguards (a typed confirmation, an atomic swap, the effect on copies already downloaded). The split waits for OQ-21. One rule applies now, whatever OQ-21 decides: a replacement file is validated before the old file is removed.
 - OP-ADM-12 is not a backend operation: sign-in is the identity provider's job, and the role lookup is OP-14 in the catalogue.
-- OP-ACC-01 is an immediate deletion in the baseline. A grace window with undo is the labelled change PRC-02.
+- OP-ACC-01 is an immediate deletion (GS-Q50). The grace window with undo (PRC-02) is withdrawn.
 
 ## 9. External Interfaces
 

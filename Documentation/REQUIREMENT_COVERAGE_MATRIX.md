@@ -6,9 +6,9 @@
 |---|---|
 | Document | Requirement Coverage Matrix |
 | File | `Documentation/REQUIREMENT_COVERAGE_MATRIX.md` |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. **DERIVED: this matrix repeats what other documents say and is not a source of truth. Nothing has been tested.** |
-| Date | 24 October 2026 |
+| Date | 27 October 2026 |
 | Audience | The two developers, when they plan tests and review the acceptance criteria. |
 | Proposed owner | Yuvraj (WS-B), PROPOSED and not agreed. Reviewer: Sanika Attarde (WS-A). |
 | Approval required | Both developers. MFW only if a candidate check later becomes a numbered PAC row, because a PAC row is not contractual until MFW approves it in writing. |
@@ -19,6 +19,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 24 October 2026 | Initial draft. Read from the documents of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
+| 0.2 | 27 October 2026 | Rows for FR-ADMIN-004, FR-USER-001, FR-USER-005, FR-PRIV-003, FR-DL-010 and NFR-COMP-003 updated by hand for the positions of 26 and 27 October 2026 (PAC-19 and PAC-20 added, OP-13 withdrawn, OP-33 and the edition-update rows dropped on the working position). The matrix was not regenerated, so other rows still show the identifiers of the earlier documents. The stale sentence about pull request 3 in section 6 is corrected. No requirement status changed. |
 
 ### 1.1 Related documents
 
@@ -223,7 +224,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | FR-DL-007 | Read a downloaded issue offline | CONFIRMED | AC-4.2 | none | MOD-06 | COVERED | - |
 | FR-DL-008 | Downloads screen | CONFIRMED | AC-4.7 | none | MOD-06 | COVERED | - |
 | FR-DL-009 | Delete a download and free its space | CONFIRMED | AC-4.6 | none | MOD-06 | COVERED | - |
-| FR-DL-010 | Downloads after sign-out, deletion or unpublishing | OPEN | PAC-14 | none | OP-03, MOD-06 | COVERED | - |
+| FR-DL-010 | Downloads after sign-out, deletion or unpublishing | OPEN | PAC-14, PAC-20 | none | OP-03, MOD-06 | COVERED | - |
 
 ### 5.7 Bookmarks and favourites
 
@@ -279,8 +280,8 @@ Lists longer than a few items show the first items and a count, for example "(+3
 
 | ID | Requirement | Status | AC or PAC | Test plan | Design | State | Note |
 |---|---|---|---|---|---|---|---|
-| FR-EMAIL-001 | Optional edition-update email sign-up | CONFLICT | PAC-11 | none | OP-33 | COVERED | - |
-| FR-EMAIL-002 | Withdraw from the edition-update list | ASSUMPTION | PAC-11 | none | none | COVERED | - |
+| FR-EMAIL-001 | Optional edition-update email sign-up | CONFLICT | PAC-11 | none | OP-33 | COVERED | Dropped on the working position (GS-Q49) |
+| FR-EMAIL-002 | Withdraw from the edition-update list | ASSUMPTION | PAC-11 | none | none | COVERED | Dropped on the working position (GS-Q49) |
 | FR-EMAIL-003 | No email sending or email-marketing integration | ASSUMPTION | none | none | none | REVIEW | RS method: I |
 
 ### 5.12 Admin panel and content management
@@ -290,7 +291,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | FR-ADMIN-001 | Admin panel is the only web interface | CONFIRMED | none | none | none | REVIEW | RS method: I |
 | FR-ADMIN-002 | Admin sign-in refuses wrong passwords | CONFIRMED | AC-8.1 | TS 9, SEC-CHK-08, ST-01 | MOD-12, SC-01 | COVERED | - |
 | FR-ADMIN-003 | Non-admin accounts refused | CONFIRMED | AC-8.2 | TS 9, SEC-CHK-06, SEC-CHK-18, ST-02 (+1) | OP-14, OP-35, MOD-12, SC-02 (+1) | COVERED | - |
-| FR-ADMIN-004 | One admin role | CONFIRMED | none | none | OP-35, MOD-12 | REVIEW | RS method: I |
+| FR-ADMIN-004 | One admin role | CONFIRMED | PAC-19 | ST-02 (+1) | OP-35, OP-37, MOD-12, SC-09 | COVERED | Updated by hand for GS-Q44 |
 | FR-ADMIN-005 | Upload PDF and cover | CONFIRMED | AC-8.3 | none | OP-19, MOD-12 | COVERED | - |
 | FR-ADMIN-006 | Reject non-PDF files | CONFIRMED | AC-8.4 | ST-13 | OP-20, OP-40, MOD-12, SC-08 | COVERED | - |
 | FR-ADMIN-007 | Reject PDFs over the size limit | CONFIRMED | AC-8.5 | none | OP-19, OP-40, MOD-12 | COVERED | - |
@@ -311,11 +312,11 @@ Lists longer than a few items show the first items and a count, for example "(+3
 
 | ID | Requirement | Status | AC or PAC | Test plan | Design | State | Note |
 |---|---|---|---|---|---|---|---|
-| FR-USER-001 | Export the subscriber list to CSV | CONFLICT | AC-8.9 | none | OP-33, MOD-12 | COVERED | - |
+| FR-USER-001 | Export the subscriber list to CSV | CONFLICT | AC-8.9 | none | OP-33, MOD-12 | COVERED | Dropped on the working position (GS-Q49) |
 | FR-USER-002 | View registered users with profiles | PROVISIONAL | PAC-03 | ST-15 | OP-31, MOD-12, SC-15 | COVERED | - |
 | FR-USER-003 | Export registered users to CSV | PROVISIONAL | PAC-03 | ST-15 | OP-32, MOD-12, SC-15 | COVERED | - |
 | FR-USER-004 | No readership analytics dashboard | CONFIRMED | none | none | MOD-12 | REVIEW | RS method: I |
-| FR-USER-005 | Admin account creation and removal | OPEN | none | none | OP-34, OP-35, OP-42 | REVIEW | RS method: R: resolve OQ-20 |
+| FR-USER-005 | Admin account creation and removal | OPEN | PAC-19 | ST-07 (+1) | OP-34, OP-35, OP-37 to OP-39, OP-42, SC-09 | COVERED | Updated by hand for GS-Q44. Waiting for OQ-58 |
 
 ### 5.14 Error, empty, loading and recovery states
 
@@ -335,7 +336,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 |---|---|---|---|---|---|---|---|
 | FR-PRIV-001 | Consent at registration | CONFIRMED | PAC-08 | TS 8.3 | OP-10, MOD-04 | COVERED | - |
 | FR-PRIV-002 | Policy and terms reachable in the app | ASSUMPTION | PAC-08 | none | MOD-04 | COVERED | - |
-| FR-PRIV-003 | Account deletion removes reader data | CONFIRMED | AC-3.7, PAC-06 | TS 8.3, TS 9, SEC-CHK-11, ST-14 | OP-12, OP-13, OP-41, MOD-13 (+1) | COVERED | - |
+| FR-PRIV-003 | Account deletion removes reader data | CONFIRMED | AC-3.7, PAC-06 | TS 8.3, TS 9, SEC-CHK-11, ST-14 | OP-12, OP-41, MOD-13 (+1) | COVERED | OP-13 is withdrawn (GS-Q50) |
 | FR-PRIV-004 | Confirm before account deletion | ASSUMPTION | none | ST-14 | OP-12, MOD-04, SC-17 | PLAN ONLY | In a test plan or security test. No AC or PAC row |
 
 ### 6.1 and 6.2 Performance and reliability
@@ -391,7 +392,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 |---|---|---|---|---|---|---|---|
 | NFR-COMP-001 | Android and iOS from one codebase | CONFIRMED | RS: AC-10 | none | none | RS CLAIM | RS §13 cites AC-10. No row names this requirement |
 | NFR-COMP-002 | Reader on phones and tablets, both orientations | CONFIRMED | RS: AC-2 | none | none | RS CLAIM | RS §13 cites AC-2. No row names this requirement |
-| NFR-COMP-003 | Agreed test device set | CONFIRMED | AC-10.2 | none | none | COVERED | - |
+| NFR-COMP-003 | Agreed test device set | CONFIRMED | AC-10.2 | none | none | COVERED | The team has a mid-range Android phone and a current iPhone only (GS-Q54, R25) |
 | NFR-COMP-004 | Minimum OS versions | OPEN | none | none | none | REVIEW | RS method: R: resolve OQ-26 |
 | NFR-COMP-005 | Admin panel browsers | OPEN | none | none | none | REVIEW | RS method: R: resolve OQ-26 |
 
@@ -425,7 +426,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 
 ## 6. Open Items
 
-These items are local to this document. They are not yet in the registers. After pull request 3 is merged they are to be registered in `OPEN_QUESTIONS.md`, with the owner and the evidence that would close each.
+These items are local to this document. They are not yet in the registers. Pull request 3 has reached `main` (by a direct push on 2026-10-25), so they are still to be registered in `OPEN_QUESTIONS.md`, with the owner and the evidence that would close each.
 
 | Ref | Item | Owner | Depends on |
 |---|---|---|---|
@@ -442,7 +443,7 @@ No new question for MFW is raised here.
 This document to its sources
 ├── RS §13: FR-AUTH, FR-PROF, FR-MAG, FR-SRCH, FR-READ, FR-DL, FR-BKM, FR-NEWS, FR-SHR, FR-NOTIF, FR-EMAIL, FR-ADMIN, FR-USER, FR-STATE, FR-PRIV
 ├── RS §13: NFR-PERF, NFR-REL, NFR-SEC, NFR-PRIV, NFR-UX, NFR-COMP, NFR-STOR, NFR-MAINT, NFR-OBS, NFR-OFF
-├── Acceptance: AC-1 to AC-12 rows, PAC-01 to PAC-18
+├── Acceptance: AC-1 to AC-12 rows, PAC-01 to PAC-20
 ├── Tests: TESTING_STRATEGY §7, §8, §9, §16; SEC-CHK-nn; ST-nn; SC-nn
 └── Design: OP-nn, MOD-nn
 ```

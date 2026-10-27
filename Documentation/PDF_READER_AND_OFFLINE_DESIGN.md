@@ -6,9 +6,9 @@
 |---|---|
 | Document | PDF Reader and Offline Design |
 | File | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. Every rule below is PROPOSED unless it quotes a CONFIRMED requirement. Nothing is built, and nothing has been tested or measured. |
-| Date | 24 October 2026 |
+| Date | 27 October 2026 |
 | Audience | The two developers. MFW's authorised approver only for the reader approach and library at M2. |
 | Proposed owner | Yuvraj (WS-B), PROPOSED and not agreed. Reviewer: Sanika Attarde (WS-A). |
 | Approval required | Both developers. MFW at M2 for the reader approach and library (DEC-005, TD-10). No other MFW approval is sought. |
@@ -19,6 +19,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 24 October 2026 | Initial draft. This is the document planned as T-00.7 in `DEVELOPMENT_ROADMAP.md`. It is written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
+| 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). The reading model is two actions: Read opens a temporary copy and Download keeps one (GS-Q43, reported as MFW's answer and not filed). Downloads are foreground-only (GS-Q60). Page-turn is the default mode and the reader can switch (GS-Q55). The test devices are a mid-range Android phone and a current iPhone (GS-Q54). No decision is approved. |
 
 ### 1.1 Related documents
 
@@ -81,13 +82,13 @@ The decisions that bound this design are below. For each, the design assumes one
 
 | Decision | What this design assumes | If the answer differs |
 |---|---|---|
-| OQ-08 and DEC-008, reading model. Conflict C-03. MFW's answer is reported by YG and not filed | Opening an issue keeps the full copy until the reader deletes it (GS-Q6). The registry field `retention_mode` defaults to "kept" | A temporary-copy mode is added by setting `retention_mode`. Sections 4 and 6.2 gain one removal rule. No other section changes |
+| OQ-08 and DEC-008, reading model. Conflict C-03. MFW's answer is reported by YG and not filed, and an earlier report said otherwise (GS-Q43) | Two actions. Read opens a temporary full copy that is removed when the reader leaves the issue. Download keeps the copy until the reader deletes it. The registry field `retention_mode` records "temporary" or "kept" | If MFW answers one action, `retention_mode` has one value. Sections 4 and 6.2 lose one rule. No other section changes |
 | OQ-11, sign-out, account deletion, unpublish | The working design of `DATABASE_AND_DATA_MODEL.md` §7.3 (GS-Q24), restated in Section 6.2 | Only the table in Section 6.2 changes |
 | OQ-36 and DEC-005, reader library | Not chosen. Section 7 states what any candidate must show | Section 11 changes. Sections 4 to 6 do not |
 | OQ-37 and DEC-020, delivery mechanism | A function-issued signed link with byte ranges (TD-09). Resume on it is unproven (AR-01) | If resume fails, the download restarts from the beginning after a break. FR-DL-006 is then not met, so this is a requirement-level risk and not only a design one |
-| OQ-54, background downloads | The minimum design needs the app in the foreground. Background continuation is an enhancement | Section 4.4 and two edge cases in Section 8 change |
-| OQ-14, mode switching and default | Both modes exist. Switching and default are not fixed | Section 7 only |
-| OQ-30 and OQ-26, size limit, devices | 150 MB per file. Test devices as NFR-COMP-003 | Section 9 and the fixtures |
+| OQ-54, background downloads | Downloads run in the foreground only, and a stopped download resumes later (GS-Q60). Background continuation is not proposed | If a test or MFW shows that foreground-only is not enough, Section 4.4 and two edge cases in Section 8 change |
+| OQ-14, mode switching and default | Page-turn is the default, and the reader can switch to the plain swipe mode in settings. The choice is remembered (GS-Q55) | Section 7 only |
+| OQ-30 and OQ-26, size limit, devices | 150 MB per file as a design assumption. The website's PDFs are 7.7 to 15.3 MB (GS-Q42). The test devices are a mid-range Android phone and a current iPhone (GS-Q54). NFR-COMP-003 names a low-cost Android phone and an older iPhone as well, which the team does not have | Section 9 and the fixtures |
 
 ## 4. The Local Copy Lifecycle
 
@@ -202,7 +203,7 @@ Local storage
 │   └── A partial download is kept apart from completed files (CODING_STANDARDS §8.2, item 2)
 ├── File names derive from opaque issue identifiers and not from titles. The name carries no email address or other personal data (CODING_STANDARDS §8.2, item 3)
 ├── The registry is a small local table in the same private storage (DATA-013; DATABASE_AND_DATA_MODEL §7.1)
-│   └── Fields: owner_user_id, issue_id, file_revision, local_path, size_bytes, checksum, state (partial or complete), retention_mode (default kept)
+│   └── Fields: owner_user_id, issue_id, file_revision, local_path, size_bytes, checksum, state (partial or complete), retention_mode (kept after a Download, temporary after a Read)
 ├── Nothing in the registry is sent to the server. A server record of what a reader downloaded would amount to reading activity (NFR-PRIV-003)
 ├── Free space is checked before a download starts and shown to the reader if it is too low (FR-STATE-004)
 │   └── The margin to keep above the file size is not set (RD-02)
@@ -223,7 +224,7 @@ This is the working design of `DATABASE_AND_DATA_MODEL.md` §7.3. It is PROPOSED
 | Account deletion | The reader's files, rows and caches are deleted | FR-PRIV-003; IC-08 |
 | The issue is unpublished | Kept. New downloads stop | GS-Q24 |
 | The issue is permanently deleted (if OQ-21 allows) | Removed when the app next sees it on the deleted-issue list | GS-Q24, GS-Q25 |
-| `retention_mode` is "temporary" (only if OQ-08 chooses it) | Removed when the reader leaves the issue | OQ-08 |
+| A temporary copy (a Read, GS-Q43) | Removed when the reader leaves the issue, or at the next start of the app after a crash | GS-Q43; OQ-08 |
 | The operating system clears the storage | The repair in Section 4.4 removes the rows | Section 4.4 |
 
 ### 6.3 What this does not promise
@@ -244,14 +245,14 @@ Open an issue
 ├── MOD-06 openLocal returns the local file only for MOD-07
 ├── MOD-07 PdfRenderer.open returns a handle with the page count, or fileCorrupt for a damaged file
 ├── Modes: page-turn effect and a plain swipe-and-zoom mode. The swipe mode is always built as the fallback (FR-READ-006, FR-READ-007)
-│   └── Whether the reader can switch, and the default, is OQ-14
+│   └── Page-turn is the default, and the reader can switch to the plain swipe mode in settings. The choice is remembered (GS-Q55). OQ-14 stays open
 ├── Two pages side by side on tablets and in landscape (FR-READ-009). Zoom to 300% (FR-READ-005)
 ├── A damaged file (FX-PDF-10, FX-PDF-11): an error with a retry option, no crash (FR-READ-010, AC-2.6)
 │   └── Retrying a reopen cannot repair a damaged local file, so PROPOSED: retry deletes the copy and downloads it again (RD-06)
 └── A bookmark action calls MOD-08 with the page and revision
 ```
 
-**What any reader library must show.** Section 11 lists the candidates. Whatever is chosen has to pass the M2 reader test on MFW's largest sample PDF, on the low-cost Android phone and the older iPhone (TD-10, NFR-COMP-003). The test covers the CONFIRMED targets: first page within 3 seconds, sharp text at 300%, twenty page turns without a crash, and two pages in landscape. This document proposes three further checks for that test, none of them a requirement:
+**What any reader library must show.** Section 11 lists the candidates. Whatever is chosen has to pass the M2 reader test on MFW's largest sample PDF, on the devices the team has: a mid-range Android phone and a current iPhone (GS-Q54). NFR-COMP-003 also names a low-cost Android phone and an older iPhone, which the team does not have, so the test cannot cover them until MFW provides them or accepts the gap (TD-10, OQ-26). The test covers the CONFIRMED targets: first page within 3 seconds, sharp text at 300%, twenty page turns without a crash, and two pages in landscape. This document proposes three further checks for that test, none of them a requirement:
 
 ```text
 Proposed additions to the M2 reader test (PROPOSED, not requirements)
@@ -270,7 +271,7 @@ Rules marked PROPOSED are new in this document. The others quote the source name
 | Grant expires during a download | Ask OP-11 for a new grant and continue from the same offset | DEC-020; FX-NET-05 |
 | The reader's sign-in expires during a long download | PROPOSED: pause as WaitingForNetwork with a prompt to sign in. After sign-in, continue | `TESTING_STRATEGY.md` §16 proposed line; RD-07 |
 | Storage is full before or during a download | Clear message. No partial file is listed | FR-STATE-004; FX-NET-06 |
-| The app is killed, or the device restarts, mid-download | The partial file stays. After restart the reader can resume from its length. A partial is never listed as downloaded | FX-NET-03, FX-NET-04; Section 4.4. Background continuation is OQ-54 |
+| The app is killed, or the device restarts, mid-download | The partial file stays. After restart the reader can resume from its length. A partial is never listed as downloaded | FX-NET-03, FX-NET-04; Section 4.4. Downloads are foreground-only (GS-Q60); OQ-54 stays open |
 | Wi-Fi switches to mobile data mid-download | PROPOSED: pause and ask before continuing on mobile data | `TESTING_STRATEGY.md` §7.5; FX-NET-02 |
 | Server error or connection reset mid-transfer | A retryable failure. A retry continues or restarts cleanly | FX-NET-07 |
 | Size or checksum mismatch | Delete the partial. `fileCorrupt` with a retry | FR-READ-010; MOD-06 |
@@ -336,7 +337,7 @@ Nothing here is chosen. It records the proposals and their open conditions.
 Mapping (PROVISIONAL)
 ├── Grant and delivery: a function-issued signed link on the file store (TD-09, PROPOSED)
 │   └── Condition: the TD-09 proof plan passes on a real Android device and a real iPhone with a 150 MB file (AR-01, OQ-37)
-├── Download client: background_downloader 9.6.4, or a plain HTTP client with Range handling written by the team (TD-11, OPEN)
+├── Download client: background_downloader 9.6.4, or a plain HTTP client with Range handling written by the team (TD-11, OPEN). Foreground-only downloads (GS-Q60) remove the need for background execution
 │   ├── Decided in the M3 spike. The package's behaviour with an expiring link must be shown
 │   └── Version figures are as recorded in version 0.3 of `TECHNOLOGY_DECISIONS.md`. They were not re-checked for this document
 ├── Reader library: shortlist pdfrx 2.10.0 and pdfx 2.11.0, both MIT (TD-10, OPEN)
@@ -348,7 +349,7 @@ Mapping (PROVISIONAL)
 
 ## 12. Open Items
 
-These items are local to this document. They are not yet in the registers. After pull request 3 is merged they are to be registered in `OPEN_QUESTIONS.md`, with the owner and the evidence that would close each.
+These items are local to this document. They are not yet in the registers. Pull request 3 has reached `main` (by a direct push on 2026-10-25), so they are still to be registered in `OPEN_QUESTIONS.md`, with the owner and the evidence that would close each.
 
 | Ref | Item | Owner | Depends on |
 |---|---|---|---|

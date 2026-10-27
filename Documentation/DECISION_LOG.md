@@ -7,9 +7,9 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. |
-| Date | 23 October 2026 |
+| Date | 27 October 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft. 24 entries recorded. No entry is AGREED or APPROVED. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. DEC-025 to DEC-031 added, with the TD crosswalk. Approver lines that read as a record of agreement reworded. Status notes for reported, unfiled agreement and for S3. No entry is AGREED or APPROVED. |
+| 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded (`TECHNOLOGY_DECISIONS.md` section 10.5, GS-Q35 to GS-Q65). DEC-027 now states one Admin role with in-panel add and remove, and PRC-01 is withdrawn. DEC-029 states immediate deletion only, and PRC-02 is withdrawn. DEC-008 records a reported two-action reading model that conflicts with the earlier record. DEC-031 records a region proposal. DEC-032 and DEC-033 added. Position rows added to DEC-005, DEC-006, DEC-011, DEC-013, DEC-014, DEC-016, DEC-017, DEC-019 and DEC-020. Section 5.3 added. No entry is AGREED or APPROVED. |
 
 ### 1.1 Related documents
 
@@ -111,11 +112,13 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 | DEC-024 | Test data policy | PROPOSED | ASSUMPTION | No |
 | DEC-025 | Server-side language and runtime | PROPOSED | ASSUMPTION | No |
 | DEC-026 | API style, operation catalogue and error scheme | PROPOSED | ASSUMPTION | No |
-| DEC-027 | Admin roles and role management | PROPOSED (baseline: one Admin role; change PRC-01 not approved) | Baseline CONFIRMED; change PROVISIONAL, CONFLICT with S2 and EXC-07 | Yes, for PRC-01 (CHG-01) |
+| DEC-027 | Admin roles and role management | PROPOSED (one Admin role with in-panel add and remove; PRC-01 withdrawn) | One role CONFIRMED. In-panel add and remove: PROPOSED, not in S2 (OQ-58) | Yes, to confirm in-panel add and remove and the narrow record (OQ-20, OQ-58) |
 | DEC-028 | Logging, monitoring and crash reporting | PROPOSED | CONFLICT C-07 | Yes (C-07, OQ-23) |
-| DEC-029 | Account deletion, retention and backups | PROPOSED (baseline: immediate deletion; change PRC-02 not approved) | Baseline CONFIRMED; change PROVISIONAL | Yes, for PRC-02 (MFW and its legal adviser) |
+| DEC-029 | Account deletion, retention and backups | PROPOSED (immediate deletion; PRC-02 withdrawn) | Immediate deletion CONFIRMED (FR-PRIV-003). Retention periods OPEN | Yes, for retention (MFW and its legal adviser, OQ-24) |
 | DEC-030 | Search and filters | PROPOSED | ASSUMPTION | No |
-| DEC-031 | Data location | OPEN | OPEN (OQ-41) | Yes (MFW and its legal adviser) |
+| DEC-031 | Data location | OPEN (region proposal recorded) | OPEN (OQ-41) | Yes (MFW and its legal adviser) |
+| DEC-032 | Subscriber list and the edition-update sign-up | PROPOSED | CONFLICT C-02 | Yes (MFW's written agreement to drop a feature S1 and S2 list) |
+| DEC-033 | Reading and downloading: temporary and kept copies | PROPOSED | CONFLICT C-03 (MFW's answer reported, not filed) | Yes (MFW's written answer, OQ-08) |
 
 ### 5.1 Charter open decisions
 
@@ -159,6 +162,26 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | TD-20 | Offline data | DEC-008 (part) |
 | TD-21 | Search and filters | DEC-030 |
 | TD-22 | Data location | DEC-031 |
+
+### 5.3 Positions recorded on 26 and 27 October 2026
+
+A questioning session on those dates, with the same skill as before, recorded the positions below. The full record is in `TECHNOLOGY_DECISIONS.md` section 10.5 (GS-Q35 to GS-Q65). Every position was given by YG. No entry changes status because of it. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Where a position is about MFW, it is reported by YG and no MFW record is filed.
+
+| Position | Entry | Record |
+|---|---|---|
+| Sanika agrees verbally and will put it in writing. Not filed | DEC-010 to DEC-015, DEC-025 to DEC-030 | GS-Q38 |
+| The workstream split is accepted by YG. Both developers are reported as full time | DEC-011 | GS-Q53 |
+| Riverpod and go_router are accepted by YG | DEC-013, DEC-014 | GS-Q58 |
+| The TD-06 rule for Google accounts is accepted by YG | DEC-006 | GS-Q41 |
+| One Admin role with equal permissions, with in-panel add and remove | DEC-027 | GS-Q44, GS-Q45, GS-Q51 |
+| Immediate account deletion | DEC-029 | GS-Q50 |
+| Region proposal: everything in Mumbai, after checking that the console offers it | DEC-031 | GS-Q52 |
+| Reading model: a temporary copy for Read and a kept copy for Download (reported, not filed) | DEC-008, DEC-033 | GS-Q43 |
+| The registered-user list is the one admin CSV, and the edition-update sign-up is dropped | DEC-032 | GS-Q49 |
+| Downloads run in the foreground only and resume later | DEC-020 | GS-Q60 |
+| The reader opens in the page-turn mode and the reader can switch | DEC-005 | GS-Q55 |
+| S3 summary in the Charter is faithful, the approver and deputy are named, and signed or accepted S1 and S2 are held (all reported, none filed) | DEC-019 | GS-Q35 to GS-Q37 |
+| No action on the M2 date and no delay notice | DEC-017 | GS-Q64 |
 
 ## 6. Entries
 
@@ -224,6 +247,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Context | S2 "Why this design" describes a native page-turn reader with a plain swipe mode as its fallback. S2 Risks and RS FR-READ-007 state that a swipe-and-zoom reader is always built as the fallback. No paid component is used without MFW's written approval (RS NFR-MAINT-006). S2 M2 requires the result of the reader test on MFW's PDFs, and MFW confirms the reader approach or records an alternative. |
 | Options considered | None assessed in the repository. The test needs MFW's sample PDFs (CH §12 inputs). |
 | Working position | MOD-07 places the rendering library behind an interface, so the library can change after the M2 test without changing other modules. |
+| Position of 27 October 2026 | The reader opens in the page-turn mode, the reader can switch to the plain swipe mode in settings, and the choice is remembered on the device (GS-Q55, OQ-14). The library is still open. The developers have a mid-range Android phone and a current iPhone. They have no low-cost Android phone, no older iPhone and no tablet (GS-Q54, OQ-26). |
 | Decision | None |
 | Approver and evidence | Requires agreement by both developers after the reader test. Requires approval by MFW at M2 [S2 Milestones], and in writing for any paid licence [S1 Costs outside the fee]. |
 | Affects | MOD-07; `DEPENDENCY_REGISTER.md`; WP-02 and WP-05 in `DEVELOPMENT_ROADMAP.md` |
@@ -236,6 +260,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Status | OPEN. Recorded 23 October 2026. |
 | Evidence class | Email and password: CONFIRMED (S2 Scope included: Accounts; RS FR-AUTH-001 to FR-AUTH-004). Google Sign-In: PROVISIONAL, CONFLICT C-04 (S1 Annex A line 27 and S2 "Later-phase features" exclude it; CH §8 and §17.3 record it as in scope [S3]). Sign in with Apple: excluded, CONFIRMED (S2; CH §17.3), with risk R9. |
 | Working position | Plan and build both email and password, and Google Sign-In (RS FR-AUTH-005), behind the MOD-03 interface. How verification applies to Google accounts (OQ-04) and the rule for an email address used with both methods (OQ-05) stay open. |
+| Position of 27 October 2026 | YG accepts the TD-06 rule as the working default: one account per email address, Google's verified-email result is trusted, and Google links to a password account only when that account's email is verified (GS-Q41). It stays PROPOSED. The linking spike (AOQ-08, AOQ-09) and MFW's approval are still needed. |
 | Decision | None beyond the S2 baseline for email and password |
 | Approver and evidence | MFW's written confirmation of Google Sign-In scope (OQ-29) and written acceptance of risk R9 (OQ-06) |
 | Affects | MOD-03, MOD-04; `APP_STORE_RELEASE_CHECKLIST.md`; PAC-01 and PAC-12 in `ACCEPTANCE_CRITERIA.md` |
@@ -260,8 +285,8 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Status | OPEN. Recorded 23 October 2026. |
 | Evidence class | CONFLICT C-03 |
 | Context | S2 Assumptions and S2 Flow 3 say readers download an issue before reading it, and S2 "Scope not included" excludes reading before the full download finishes. RS FR-READ-002 (CONFIRMED) follows S2. CH §8 lists "Online reading". |
-| Working position | A full issue opens only from a complete local copy obtained through an authorized download (MOD-06). Whether a copy opened while online is kept as an offline download, or held temporarily, is OQ-08. Page-by-page streaming is not planned. |
-| Reported answer (not filed) | MFW's answer is reported by YG: opening an issue keeps the full copy until the reader deletes it. Source, date and wording are not in the repository. The status stays OPEN until the written decision is filed (OQ-08). S2 AC-4 (progress, offline reading, resume after a network break, deleting a download frees its space) remains a requirement to test. |
+| Working position | A full issue opens only from a complete local copy obtained through an authorized download (MOD-06). Page-by-page streaming is not planned. Read opens a temporary complete copy, and Download keeps a copy for offline use (DEC-033). |
+| Reported answer (not filed) | Version 0.2 recorded a reported answer from MFW: opening an issue keeps the full copy until the reader deletes it. On 27 October 2026 YG reported a later MFW answer: two actions, a Read that opens a temporary complete copy and a separate Download that keeps it. YG gave no date or channel for it (GS-Q43). The two reports disagree and neither is filed. The status stays OPEN until the written decision is filed (OQ-08). S2 AC-4 (progress, offline reading, resume after a network break, deleting a download frees its space) remains a requirement to test. |
 | Decision | None |
 | Approver and evidence | MFW's answer to OQ-08 |
 | Affects | MOD-06, MOD-07; AC-2, AC-4 |
@@ -299,6 +324,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Evidence class | ASSUMPTION. CH §19.3 D9 is open. |
 | Proposal | WS-A Platform and Publishing, and WS-B Reader Experience, as defined in `TASK_OWNERSHIP_MATRIX.md`. Proposed mapping: WS-A to Sanika Attarde (`SA`), WS-B to Yuvraj (`YG`). The mapping can be swapped as a whole without changing module boundaries. |
 | Approver and evidence | Requires agreement by both developers. No MFW approval. |
+| Position of 27 October 2026 | YG accepts the mapping, and reports that both developers are full time (GS-Q53). Sanika's agreement is reported as verbal, to be put in writing (GS-Q38). It stays PROPOSED until her note or approving PR review is filed. |
 | Affects | `TASK_OWNERSHIP_MATRIX.md`, `DEVELOPMENT_ROADMAP.md`, `RISK_REGISTER.md` owners |
 | Follow-up | OQ-38 |
 
@@ -324,6 +350,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Criteria | Logic can be tested without widgets. Fakes can be injected for every interface in `API_AND_MODULE_CONTRACTS.md`. Streams are supported (authentication state, download progress). Each developer's familiarity is not recorded and should be weighed. |
 | Proposal and rationale | Riverpod. Provider overrides make it straightforward to inject fakes in tests and to replace backend implementations behind the module interfaces, which supports RS NFR-MAINT-005. |
 | Approver and evidence | Requires agreement by both developers. The licence is recorded in `DEPENDENCY_REGISTER.md` before the package is added. |
+| Position of 27 October 2026 | YG accepts Riverpod (GS-Q58). Sanika's written agreement is not filed. The Flutter and Dart versions are still to be pinned when the scaffold is created (OQ-50). |
 | Affects | `CODING_STANDARDS.md` §5 |
 
 ### DEC-014 Navigation and route guarding
@@ -335,6 +362,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Options considered | go_router; the Navigator 2.0 API used directly; auto_route |
 | Proposal and rationale | go_router. Its declarative route table and redirect hook suit the access gate in DEC-007, and routes addressed by issue or article ID support notification taps (RS FR-NOTIF-005). Shared links that open the app are out of scope (RS FR-SHR-005), so no app-link domain set-up is planned. |
 | Approver and evidence | Requires agreement by both developers |
+| Position of 27 October 2026 | YG accepts go_router (GS-Q58). Sanika's written agreement is not filed. |
 | Affects | MOD-01; `CODING_STANDARDS.md` §5 |
 
 ### DEC-015 Commit, changelog and version conventions
@@ -355,6 +383,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Evidence class | CONFLICT |
 | Context | S1 (unsigned): fixed fee ₹85,000; 30% advance ₹25,500; M2 ₹12,750, M3 ₹17,000, M4 ₹17,000, M5 ₹12,750; no GST [S1 Proposal at a glance; Milestone-based payment schedule]. CH §13 and §17.3 [S3]: fee ₹91,000; ₹28,000 received; M2 ₹12,750, M3 ₹17,000, M4 ₹17,000, M5 ₹16,250. Neither S3 nor any invoice or receipt is in the repository. GST at the revised fee is CH §19.3 D6. |
 | Working position | None. Phase 3 and Phase 4 documents make no commercial commitment and quote figures only with their source. |
+| Position of 27 October 2026 | YG reports that signed or accepted copies of S1 and S2 are held. Nothing is filed (GS-Q35). The status and the figures stay as recorded. |
 | Reported by YG | Order of authority: the Charter's fee and payment schedule take precedence over S1 and S2 for the points S3 amends (CH §1). The S3 client emails exist and support the amendments, per YG. They are not in the repository and were not seen by the reviewer. The status stays OPEN and the figures stay PROVISIONAL. |
 | Approver and evidence | A signed revised proposal, or MFW's written confirmation, plus a payment record |
 | Follow-up | OQ-32, OQ-33 |
@@ -367,6 +396,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Evidence class | CONFLICT C-08 |
 | Context | S1 and S2: kickoff 16 November 2026, store submission 8 January 2027. CH §12 [S3]: start 21 October 2026; M2 4 November, M3 18 November, M4 2 December, M5 16 December 2026. Six weeks is an internal target, not a commitment (CH §12). |
 | Working position | `DEVELOPMENT_ROADMAP.md` plans in weeks relative to the project start, using the S2 two-week milestone cadence, and shows the CH dates as PROVISIONAL. Following YG's order of authority (the Charter's dates take precedence over S1 and S2 for the points S3 amends), the CH dates are the working baseline for planning. They stay PROVISIONAL and the conflict stays open. YG states that the S3 client emails exist and support these amendments. They are not in the repository and were not seen by the reviewer. |
+| Position of 27 October 2026 | YG decided to take no action on the M2 date and to send MFW no delay notice. On the CH dates, the brand assets were due on 21 October 2026 and the sample PDFs, the WordPress details and the cloud project on 28 October 2026, and YG reports that none has arrived (GS-Q35, GS-Q64). S2 says the developer tells MFW in writing as soon as a delay is expected, and moves later dates by one working day for each working day a key input is late. The decision is recorded as an accepted risk under R7 and R15. No date is changed here. |
 | Follow-up | OQ-29 |
 
 ### DEC-018 Delivery team composition
@@ -388,6 +418,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Context | CH §17.1 calls S1, S2 and the S3 amendments "the approved baseline", and CH §19.1 lists the S3 items as confirmed facts. RS §1.2 classifies the same items as PROVISIONAL until the S3 emails are filed. |
 | Working position | Phase 3 and Phase 4 documents follow RS: S3 items are PROVISIONAL. |
 | Reported by YG | The S3 client emails exist and support the amendments. They are not in the repository and were not seen by the reviewer. The items stay PROVISIONAL until the emails are filed or MFW confirms in writing. |
+| Position of 27 October 2026 | YG states that CH section 17.3 is a faithful summary of the S3 emails, that the emails add nothing the table omits, and that MFW named its authorised approver and deputy. YG did not say which person holds which role (GS-Q36, GS-Q37). Nothing is filed, so the items stay PROVISIONAL. A reference (date, sender role, subject) can be filed without the text, because the repository is public. |
 | Follow-up | OQ-29. At its next revision, CH should align its wording. That is a Phase 1 change and is not made here. |
 
 ### DEC-020 Protected issue-file delivery mechanism
@@ -399,6 +430,7 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Options (technology-neutral) | (a) A download through an authenticated SDK, evaluated against storage access rules. (b) A short-lived download authorization bound to the reader, issued by server logic after an access check (for example, a signed URL with a short expiry). (c) An authenticated streaming endpoint that serves byte ranges. |
 | Constraints | DEC-009. Resume after a network break without restarting (RS FR-DL-006, S2 AC-4). Files of up to 150 MB (RS FR-ADMIN-007). A profile-completeness check if BR-003 is confirmed. No CDN at launch (RS ASM-15). |
 | Working position | The MOD-06 operation `requestIssueFile` returns an opaque grant with an expiry. The mechanism is chosen in the architecture document, and resume behaviour is proven in the WP-02 spike. |
+| Position of 27 October 2026 | Downloads run while the app is open. If the reader leaves, the download pauses and resumes from the bytes held. No background-download plugin is planned for the first release (GS-Q60, OQ-54). |
 | Follow-up | OQ-37 |
 
 ### DEC-021 News retrieval path
@@ -470,14 +502,14 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. Mirrors TD-15. |
-| Evidence class | Baseline: CONFIRMED (RS FR-ADMIN-004: one admin role, every admin has the same permissions). Change PRC-01: PROVISIONAL, and in CONFLICT with S2 "Scope not included" (editorial roles, audit log), EXC-07 and CHG-01. |
-| Context | S2 excludes editorial roles and an audit log. How admin accounts are created and removed is OQ-20, and deleting or replacing an issue is OQ-21. Both are OPEN for MFW. |
-| Proposal | Every document states the baseline: one Admin role. Super Admin and Content Admin, in-panel role management, revocation, an audit log of role changes and a first-Super-Admin step are the labelled change PRC-01, which applies only if MFW approves it through the S2 change process. Whichever model applies: the server reads the current role record on each privileged call and refuses if it cannot; there is a test for a removed admin; the first admin is a named step; a replacement file is validated before the old one is removed. |
-| Not decided | Whether and when to raise PRC-01 with MFW (CHG-01). The 7 to 11 person-day figure in `TECHNOLOGY_DECISIONS.md` is a development-team estimate and not a change order. |
-| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's written approval before any work on PRC-01 (CH §17.4). |
+| Status | PROPOSED. Recorded 23 October 2026. Revised 27 October 2026. Mirrors TD-15. |
+| Evidence class | One Admin role with the same permissions for every admin: CONFIRMED (RS FR-ADMIN-004). In-panel add and remove of admins, and the narrow record of who added or removed whom: PROPOSED. S2 does not list them, and S2 excludes an audit log (EXC-07), so MFW must say whether they are a clarification or a change (OQ-20, OQ-58). |
+| Context | S2 excludes editorial roles and an audit log. How admin accounts are created and removed is OQ-20, and deleting or replacing an issue is OQ-21. Both are OPEN for MFW. The two-role model PRC-01 (Super Admin and Content Admin) was proposed on 23 October 2026. |
+| Proposal | One Admin role, and every admin has the same permissions (GS-Q44). The developers create the first admin securely at set-up and hand access to MFW. After that any admin can add an admin, by granting the role to a registered reader whose email is verified, and can remove an admin, in the admin panel and without a developer. Removal asks for a confirmation that names the person. The last remaining admin cannot be removed, including when two admins act at once. Add and remove need a recent sign-in. A small record keeps who added or removed whom, and when, and nothing else. The server reads the current role record on each privileged call and refuses if it cannot, so a removed admin is refused on the next call. There is a test for a removed admin. A replacement file is validated before the old one is removed. There are no Super Admin and Content Admin roles. PRC-01 is withdrawn. Its guard record, request identifier, session-ending and first-admin steps carry over to the single role. Its wider audit set, role-specific permissions, Super-Admin-only exports and Super-Admin-only issue deletion do not. |
+| Not decided | Whether MFW treats in-panel add and remove, and the narrow record, as a clarification or as a change request (OQ-58). The effort for in-panel add and remove has not been estimated. The 7 to 11 person-day figure in `TECHNOLOGY_DECISIONS.md` was for PRC-01 and does not apply. The window for a recent sign-in (AOQ-14). |
+| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's written confirmation of in-panel add and remove before it is built as agreed scope (CH §17.4, S2 Changes). |
 | Affects | `API_AND_BACKEND_CONTRACT.md`; `SECURITY_AND_ACCESS_CONTROL.md`; `DATABASE_AND_DATA_MODEL.md`; `SYSTEM_ARCHITECTURE.md`; `TESTING_STRATEGY.md`; `ACCEPTANCE_CRITERIA.md` |
-| Follow-up | OQ-20, OQ-21, OQ-51, OQ-56 |
+| Follow-up | OQ-20, OQ-21, OQ-51, OQ-56, OQ-58 |
 
 ### DEC-028 Logging, monitoring and crash reporting
 
@@ -495,11 +527,11 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. Mirrors TD-19. |
-| Evidence class | Baseline: CONFIRMED (RS FR-PRIV-003 and S2 AC-3.7: the account and the reader's data are deleted). Change PRC-02: PROVISIONAL. |
-| Context | Immediate deletion is the baseline. A grace window with undo is a development-team proposal that departs from the wording of FR-PRIV-003. Apple and Google rules on a grace window are not verified. |
-| Proposal | Every document states the baseline: deletion is immediate. The grace window with undo, the immediate option and the scheduled purge are the labelled change PRC-02, which applies only if MFW and its legal adviser agree. No window length is proposed. Backups keep deleted data until they expire, and a restore re-applies deletions, in both modes. |
-| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's decision and its legal adviser's view on PRC-02 (OQ-24). |
+| Status | PROPOSED. Recorded 23 October 2026. Revised 27 October 2026. Mirrors TD-19. |
+| Evidence class | Immediate deletion: CONFIRMED (RS FR-PRIV-003 and S2 AC-3.7: the account and the reader's data are deleted). Retention periods and records kept after deletion: OPEN (OQ-24). |
+| Context | Immediate deletion is the S2 wording. A grace window with undo (PRC-02) was proposed on 23 October 2026 and departs from the wording of FR-PRIV-003. Apple and Google rules on a grace window are not verified. |
+| Proposal | Deletion is immediate: the reader confirms, then the account and the reader's data are removed at once, and a step that fails is retried until it finishes (GS-Q50). There is no grace window, no undo, no pending-deletion state and no purge window. PRC-02 is withdrawn. Backups keep deleted data until they expire, and a restore re-applies deletions. That needs a short-lived list of purged identifiers, which is a privacy question for MFW (OQ-24). |
+| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's decision and its legal adviser's view on retention and on the purged-identifier list (OQ-24). |
 | Affects | `DATABASE_AND_DATA_MODEL.md`; `SECURITY_AND_ACCESS_CONTROL.md`; `API_AND_BACKEND_CONTRACT.md`; `BACKUP_AND_RECOVERY.md` section 9; `ACCEPTANCE_CRITERIA.md` |
 | Follow-up | OQ-24, OQ-45, OQ-46 |
 
@@ -522,7 +554,34 @@ The charter's open decisions (CH §19.3) are tracked here and in `OPEN_QUESTIONS
 | Status | OPEN. Recorded 23 October 2026. Mirrors TD-22. |
 | Evidence class | OPEN |
 | Context | A database location and a bucket location are chosen when each is created and cannot be changed afterwards (TECHNOLOGY_DECISIONS section 9, VS-21 and VS-23). No source requires a location. The legal position on where personal data is held was not assessed. |
-| Working position | None. The development team's leaning, which is not a decision, is to keep the database and functions in Mumbai and to decide the PDF bucket after MFW has seen the cost scenarios. |
+| Working position | None. The proposal to put to MFW, which is not a decision, is to keep everything in Mumbai (asia-south1): the database, the functions and the PDF bucket (GS-Q52). A Mumbai bucket has no free download allowance, so egress is billed from the first byte (`CLOUD_INFRASTRUCTURE_AND_COSTS.md` section 10). Whether the Firebase console offers Mumbai for these services is NOT VERIFIED and is checked before anything is created. The earlier leaning was Mumbai for the database and functions, with the bucket decided after MFW saw the cost scenarios. MFW and its legal adviser decide. |
 | Approver and evidence | MFW's written decision, with its legal adviser for personal data (OQ-41). Billing in MFW's name, the plan and the region are not approved. |
 | Affects | `TECHNOLOGY_DECISIONS.md` TD-22; `DEPLOYMENT_PLAN.md`; `BACKUP_AND_RECOVERY.md` section 6 |
 | Follow-up | OQ-41, OQ-53 |
+
+### DEC-032 Subscriber list and the edition-update sign-up
+
+| Field | Detail |
+|---|---|
+| Status | PROPOSED. Recorded 27 October 2026. |
+| Evidence class | CONFLICT C-02. S1 and S2 include an optional sign-up for edition-update emails and a subscriber list with a CSV export (S2 Scope: Accounts, Scope: Admin panel, AC-8). CH section 8 describes a list of registered users with a CSV export and leaves the sign-up out. |
+| Context | AC-8 requires "the subscriber list" to export to CSV. S1 defines "subscription" in Annex A lines 10 and 19 as the optional email-update sign-up. CH section 17.3 does not list the removal of the sign-up as an amendment. |
+| Options considered | (a) The registered-user export only, with no edition-update sign-up. (b) Both lists. (c) The edition-update list only, as S2 reads literally. |
+| Proposal and rationale | (a) (GS-Q49). One CSV of registered readers with their profile fields meets AC-8 on that reading and gives MFW the visibility that objective O6 asks for. Registration already captures the email address, and MFW can write to its registered readers with its own tools (EXC-14). Any admin can export it (DEC-027). |
+| Effect on scope | The sign-up is a feature that S1 and S2 list. Dropping it removes a deliverable, so it needs MFW's written agreement. It is not decided here, and until MFW agrees the requirements keep FR-EMAIL-001, FR-USER-001 and DATA-010 as CONFLICT. |
+| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's written agreement (OQ-31). |
+| Affects | `REQUIREMENTS_SPECIFICATION.md` FR-EMAIL-001 to FR-EMAIL-003, FR-USER-001, DATA-010; `DATABASE_AND_DATA_MODEL.md`; `API_AND_BACKEND_CONTRACT.md` OP-33; `SCREEN_INVENTORY_AND_NAVIGATION.md` SCR-A-23 and SCR-W-10; `ACCEPTANCE_CRITERIA.md` AC-8.9 and PAC-11 |
+| Follow-up | OQ-31 |
+
+### DEC-033 Reading and downloading: temporary and kept copies
+
+| Field | Detail |
+|---|---|
+| Status | PROPOSED. Recorded 27 October 2026. |
+| Evidence class | CONFLICT C-03 for the reading model. A full issue is read from a complete downloaded copy: CONFIRMED (FR-READ-002). MFW's answer on keeping the copy is reported by YG, twice, in two different forms, and is not filed (OQ-08). |
+| Context | DEC-008 records the reading model. Version 0.2 of this log recorded a reported answer that opening an issue keeps the copy. On 27 October 2026 YG reported a later answer from MFW that there are two actions. YG gave no date or channel (GS-Q43). |
+| Proposal | Read downloads the whole file, opens it once it is complete and verified, and removes it when the reader leaves the issue. Download does the same and keeps the copy in app-private storage, listed on the Downloads screen, until the reader deletes it. Both follow the same access checks and the same size, mobile-data and free-space steps. Reading before the download finishes is not provided (EXC-03). Downloads run in the foreground and resume later (DEC-020). For a kept copy: sign-out hides it until the same reader signs in again, account deletion removes it, unpublishing leaves it, and permanent deletion removes it when the app is online and sees the issue on the deleted-issue list. These four rules carry over from GS-Q24 and were not asked again (OQ-11). |
+| Not decided | What Read does when the reader leaves while the file is still downloading. Whether a reader who taps Download while a temporary copy is open converts the copy or downloads again. Both are for the reader design (`PDF_READER_AND_OFFLINE_DESIGN.md`). |
+| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's written answer to OQ-08 and OQ-11. |
+| Affects | `PDF_READER_AND_OFFLINE_DESIGN.md`; `DATABASE_AND_DATA_MODEL.md` MA-4 and section 7; `SYSTEM_ARCHITECTURE.md` section 7.5; MOD-06, MOD-07; AC-4 |
+| Follow-up | OQ-08, OQ-11 |

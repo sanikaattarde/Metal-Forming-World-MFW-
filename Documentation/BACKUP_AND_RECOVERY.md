@@ -7,9 +7,9 @@
 | Document | Backup and Recovery |
 | File | `Documentation/BACKUP_AND_RECOVERY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 36) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. **No backup exists. No provider backup is assumed. Every frequency, retention period, RPO and RTO below is PROPOSED and needs MFW's approval.** |
-| Date | 25 October 2026 |
+| Date | 27 October 2026 |
 | Approval required | Both developers, then MFW (cost and data obligations) |
 
 **Change history**
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Backup set-up, restore tests, RPO and RTO and monitoring marked as proposed additions. Section 13 added: status of the proposals and who does what. Planned names replaced by the existing document. |
 | 0.3 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` now says it exists as a draft. No backup frequency, retention period, RPO or RTO changed, and none is approved. |
+| 0.4 | 27 October 2026 | One sentence in section 9 updated: deletion is immediate (GS-Q50) and the grace window (PRC-02) is withdrawn. No backup, restore or retention rule changed. |
 
 ### 1.1 Related documents
 
@@ -123,7 +124,7 @@ No restore has been tested on 23 October 2026.
 
 ## 9. Account Deletion and Backups
 
-RS FR-PRIV-003 requires that deleting an account removes the reader's data. Backups keep the data until they expire. This holds in the baseline (immediate deletion) and under the labelled change PRC-02 (a grace window with undo).
+RS FR-PRIV-003 requires that deleting an account removes the reader's data. Backups keep the data until they expire. This holds for the immediate deletion of the baseline (FR-PRIV-003, GS-Q50). The grace window with undo (PRC-02) is withdrawn.
 
 1. A deleted reader's data remains only in backups, until their retention ends (Section 4).
 2. A restore must not bring back deleted accounts. Step RP-7 re-applies deletions made after the restore point. That needs a minimal record of deleted account IDs and deletion times, which may conflict with "is any record kept after account deletion?" (OQ-24).

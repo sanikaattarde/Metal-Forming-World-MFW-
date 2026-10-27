@@ -6,9 +6,9 @@
 |---|---|
 | Document | Cloud Infrastructure and Costs |
 | File | `Documentation/CLOUD_INFRASTRUCTURE_AND_COSTS.md` |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. A comparison of candidates and a parameterised cost model. No provider is chosen, because DEC-003 is OPEN. Every price is a vendor figure read on the date shown. Every amount is planning arithmetic, not a quotation. |
-| Date | 25 October 2026 |
+| Date | 27 October 2026 |
 | Audience | The two developers. MFW's authorised approver only for the decisions in section 22. |
 | Proposed owner | Yuvraj, as drafter and primary editor. PROPOSED and not agreed. Reviewer: Sanika Attarde, whose workstream (WS-A) holds MFW's cloud project and accounts (`TASK_OWNERSHIP_MATRIX.md` section 5). |
 | Approval required | Both developers (CH §17.4). MFW's written approval for any cost, scope or contract effect: the provider, the region, the cost ceiling and any content delivery network. This document asks MFW for nothing. |
@@ -19,6 +19,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 25 October 2026 | Initial draft. This is the document that `TASK_OWNERSHIP_MATRIX.md` section 13.3 lists as planned and blocked by DEC-003. It is written while DEC-003 is still OPEN, as a comparison of candidates and a parameterised model. It does not decide DEC-003, and it does not lift the block on a single-provider cost model. It is written on top of commit 4769de3, so the identifiers it cites are those of that commit. |
+| 0.2 | 27 October 2026 | Three stale mentions updated: the stored data no longer lists an audit log, the scheduled job covers maintenance and not only the withdrawn purge window (PRC-02), and the effort note names the withdrawn two-role figure (PRC-01) and the unestimated in-panel add and remove (GS-Q44). No price, scenario or provider choice changed. |
 
 ### 1.1 Related documents
 
@@ -135,7 +136,7 @@ What the requirements call for, whatever the provider
 │   ├── Email and password sign-in, Google Sign-In, verified email, account deletion from the app (FR-AUTH-001 to FR-AUTH-004, FR-AUTH-009)
 │   └── One trusted source for reader and admin identities (TD-06)
 ├── Data
-│   ├── Catalogue, profiles, bookmarks, favourites, preferences, send records, admin roles, audit log (DATA-001 to DATA-012)
+│   ├── Catalogue, profiles, bookmarks, favourites, preferences, send records, admin roles, the narrow change record (DATA-001 to DATA-012)
 │   └── Access enforced on the backend (NFR-SEC-002, NFR-SEC-005, NFR-SEC-007)
 ├── Files
 │   ├── Private issue PDFs of up to 150 MB, with five to twelve issues live (NFR-SEC-003, NFR-STOR-001, NFR-STOR-002)
@@ -205,7 +206,7 @@ flowchart LR
 | Crash reports | NFR-OBS-001, TD-16 | Crashlytics | Crashlytics needs a Firebase project (CL-02) | Required |
 | Usage events | NFR-OBS-002, OQ-23 | Analytics, off until OQ-23 | Not mapped | Required by S2, held back by OQ-23 |
 | Logs | TD-16 | Cloud Logging | CloudWatch Logs, rate NOT VERIFIED | Required in practice |
-| Scheduled purge | TD-19 | Cloud Scheduler, one job | A scheduler service, not researched | Required if PRC-02 is approved |
+| Scheduled maintenance | TD-19 | Cloud Scheduler, one job | A scheduler service, not researched | Required for orphan clean-up and for finishing a deletion that stopped part-way (OP-41, GS-Q50) |
 | Secrets | TD-18 | Secret Manager | Not researched | Required in practice |
 | Backups | OQ-46 | Firestore scheduled backups, point-in-time recovery | DynamoDB point-in-time recovery, on-demand backup | PROPOSED |
 | Admin multi-factor | AOQ-03 | Identity Platform upgrade | Cognito, SMS rate not read | OPEN |
@@ -289,7 +290,7 @@ Cost of sign-in and access checks
     └── At fewer than 1,000 monthly active users both free tiers are far from used. The sign-in decisions are not cost decisions.
 ```
 
-Dependencies. The provider decision (DEC-003) sets the sign-in product (TD-06). OQ-04, OQ-05 and OQ-06 (account linking, App Store sign-in rule) are not cost questions and are not answered here. The two-role admin model (PRC-01) adds about 7 to 11 person-days of development-team effort (estimate in AR-05). That is not a cloud cost and is not counted here.
+Dependencies. The provider decision (DEC-003) sets the sign-in product (TD-06). OQ-04, OQ-05 and OQ-06 (account linking, App Store sign-in rule) are not cost questions and are not answered here. The earlier two-role admin model (PRC-01, withdrawn) was estimated at about 7 to 11 person-days of development-team effort (AR-05). In-panel add and remove of admins (GS-Q44) has not been estimated. Neither is a cloud cost, and neither is counted here.
 
 ## 8. Database and Metadata Storage
 

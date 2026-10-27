@@ -7,9 +7,9 @@
 | Document | Acceptance Criteria |
 | File | `Documentation/ACCEPTANCE_CRITERIA.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 31) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. No criterion has been tested. |
-| Date | 25 October 2026 |
+| Date | 27 October 2026 |
 | Approval required | Both developers for the verification detail. MFW in writing for every PAC criterion before it becomes contractual. |
 
 **Change history**
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft. AC-1 to AC-12 broken into verification checks. PAC-01 to PAC-11 carried from RS. PAC-12 to PAC-15 proposed. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Rule 1 reworded to state which rows are proposed checks. AC-9.7 added for FR-ADMIN-014 and FR-ADMIN-015. PAC-16 (conditional on PRC-02), PAC-17 (account-existence messages) and PAC-18 (conditional on PRC-01) added. Coverage table updated. |
 | 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No criterion changed. |
+| 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). PAC-16 and PAC-18 are withdrawn with PRC-02 and PRC-01. PAC-11 is dropped on the working position. PAC-19 (admin add and remove) and PAC-20 (Read and Download) are added as proposals. No AC row changed, except that the clarification of AC-7.4 and AC-8.9 names the working positions. No criterion is approved. |
 
 ### 1.1 Related documents
 
@@ -29,7 +30,7 @@
 | `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist (draft) |
 | `OPEN_QUESTIONS.md` | Exists (draft). Questions linked below. |
 | `DEFINITION_OF_DONE.md`, `API_AND_MODULE_CONTRACTS.md` | Exist (draft) |
-| `REQUIREMENT_COVERAGE_MATRIX.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Exist (draft, version 0.1, dated 24 October 2026). The matrix shows which requirements have an AC or PAC row and lists eight proposed checks that are not rows. A new PAC row needs MFW's written approval. The reader design cites AC-2 and AC-4. |
+| `REQUIREMENT_COVERAGE_MATRIX.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Exist (draft, version 0.2, dated 27 October 2026). The matrix shows which requirements have an AC or PAC row and lists eight proposed checks that are not rows. A new PAC row needs MFW's written approval. The reader design cites AC-2 and AC-4. |
 
 ## 2. Purpose, Scope and Status
 
@@ -39,7 +40,7 @@ This matrix makes each acceptance criterion testable and traceable. It covers au
 
 1. The S2 criteria AC-1 to AC-12 keep their IDs and wording. The rows **AC-n.m** split each criterion into separate checks, quoting or closely following the S2 text. **They do not add or change contractual conditions.** A row whose Status or Clarification says it is not in the AC text (AC-2.7, AC-4.7, AC-7.5, AC-9.7) or that adds a precondition (AC-3.2) is a proposed check, and it adds no contractual condition until MFW approves it. The priority P1 on such a row refers to the S2 criterion it belongs to and not to the check. If a check and the S2 text ever differ, S2 prevails.
 2. PAC-01 to PAC-11 are the RS §10.2 proposals, unchanged in meaning.
-3. PAC-12 to PAC-18 are new proposals.
+3. PAC-12 to PAC-20 are new proposals. PAC-11, PAC-16 and PAC-18 are dropped or withdrawn, and their identifiers stay.
 4. No PAC is contractual until MFW approves it in writing.
 5. No result is recorded. Section 9 is the place for results once testing starts.
 
@@ -143,7 +144,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | AC-7.1 | S2 AC-7; RS FR-NEWS-001 | News list shows the latest posts | MFW's site reachable (OQ-39), or FX-WP-01 | T: open News | Posts show image, title, date and category, newest first | P1 | CONFIRMED | — |
 | AC-7.2 | S2 AC-7; RS FR-NEWS-004 | A new post appears after a refresh | A new post published on WordPress (by MFW), or a fixture update | T: refresh | The new post is listed | P1 | CONFIRMED | Needs MFW cooperation on the live site |
 | AC-7.3 | S2 AC-7; RS FR-NEWS-003 | Category filters work | At least two categories with posts | T: select each category | Only that category's posts | P1 | CONFIRMED | Categories selected by MFW (RS INT-WP-003) |
-| AC-7.4 | S2 AC-7; RS FR-NEWS-005 | Loaded articles stay readable offline, with a notice | Articles opened online | T: airplane mode; open the same articles | Readable, with an offline notice | P1 | CONFIRMED | Save model: OQ-16 |
+| AC-7.4 | S2 AC-7; RS FR-NEWS-005 | Loaded articles stay readable offline, with a notice | Articles opened online | T: airplane mode; open the same articles | Readable, with an offline notice | P1 | CONFIRMED | Recently opened articles are cached automatically and a Save button keeps one (GS-Q48). Save model: OQ-16 |
 | AC-7.5 | S2 Scope included: News; RS FR-NEWS-002 | An article page shows the post's content | Online | T: open an article | Content shown; scripts do not run (SEC-CHK-15) | P1 | CONFIRMED (scope item) | Embedded media: OQ-16 |
 
 ### AC-8 Admin panel
@@ -158,7 +159,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | AC-8.6 | S2 AC-8; RS FR-ADMIN-010 | Categories show correctly in the app | Admin creates or renames a category | T: refresh the app | The change shows | P1 | CONFIRMED | — |
 | AC-8.7 | S2 AC-8; RS FR-ADMIN-011, FR-MAG-008 | Publishing and unpublishing show correctly | FX-ISS-08 | T: publish, refresh, unpublish, refresh | Appears, then disappears | P1 | CONFIRMED | Downloaded copies after unpublishing: OQ-11 |
 | AC-8.8 | S2 AC-8; RS FR-ADMIN-013, FR-NEWS-008 | Hidden news posts are not shown | A post visible in the app | T: hide it in the admin panel; refresh the app | The post is gone | P1 | CONFIRMED | — |
-| AC-8.9 | S2 AC-8; RS FR-USER-001 | The subscriber list exports to CSV | FX-USR set with sign-ups | T: export | CSV with the expected rows and only the approved fields | P1 | **CONFLICT C-02** | What "subscriber list" means: OQ-31 |
+| AC-8.9 | S2 AC-8; RS FR-USER-001 | The subscriber list exports to CSV | FX-USR set with sign-ups | T: export | CSV with the expected rows and only the approved fields | P1 | **CONFLICT C-02** | What "subscriber list" means: OQ-31. On the working position the export is the registered-user list and the sign-up is dropped (GS-Q49), which MFW must agree in writing |
 
 ### AC-9 Notifications
 
@@ -214,14 +215,16 @@ PAC-01 to PAC-11 are from RS §10.2. They are summarised here, and RS holds the 
 | PAC-08 | RS §10.2; FR-PRIV-001, FR-PRIV-002 | Registration links the policy and terms and requires agreement. Both can be opened later. | T | P2 | PROPOSED | OQ-27 |
 | PAC-09 | RS §10.2; NFR-PRIV-003 | No configured usage event records which reader opened which issue or page | I | P2 | PROPOSED; PROVISIONAL | OQ-23 |
 | PAC-10 | RS §10.2; FR-STATE-001 to 007 | Loading, empty and error states match the screens approved at M2 | D | P3 | PROPOSED | ASM-13 |
-| PAC-11 | RS §10.2; FR-EMAIL-001, FR-EMAIL-002 | If kept: opt in, appear in the export, opt out, disappear | T | P3 | PROPOSED; CONFLICT C-02 | OQ-31 |
+| PAC-11 | RS §10.2; FR-EMAIL-001, FR-EMAIL-002 | If kept: opt in, appear in the export, opt out, disappear. Dropped on the working position (GS-Q49), so there is nothing to test unless MFW keeps the sign-up | T | P3 | PROPOSED; CONFLICT C-02; dropped on the working position | OQ-31 |
 | PAC-12 | New. RS FR-AUTH-006, FR-AUTH-007 | The rule for an email address used with both sign-in methods, and the verification rule for Google accounts, behave as decided. Test with FX-USR-11. | T | P2 | PROPOSED; BLOCKED | OQ-04, OQ-05 |
 | PAC-13 | New. RS NFR-SEC-002; DEC-009 | An issue-file request is refused when signed out, unverified, profile incomplete, using another reader's grant, using an expired grant, or using a guessed storage path. A valid grant for a full-access reader succeeds. (SEC-CHK-02, SEC-CHK-03) | T | P2 | PROPOSED | DEC-020, OQ-37 |
 | PAC-14 | New. RS FR-DL-010 | Downloaded issues after sign-out, account deletion, or unpublishing behave as decided | T | P2 | PROPOSED; BLOCKED | OQ-11 |
 | PAC-15 | New. Store policy | If confirmed as required, readers can request account deletion through a web link outside the app, as declared to Google Play | I | P2 | PROPOSED; BLOCKED | OQ-45 |
-| PAC-16 | New. PRC-02 | Only if MFW approves the grace window (PRC-02): a deletion request puts the account in a pending state, the reader can undo during the window, and the purge at the end removes the data. The baseline checks AC-3.7 and PAC-06 are unchanged | T | P3 | PROPOSED; conditional on PRC-02 | OQ-24, AOQ-02 |
+| PAC-16 | New. PRC-02 | Withdrawn with PRC-02. Deletion is immediate (GS-Q50), so there is no pending state and no undo to test. AC-3.7 and PAC-06 apply, and a deletion that stops part-way is finished by the cleanup task | T | P3 | Withdrawn | OQ-24, AOQ-02 |
 | PAC-17 | New. RS FR-AUTH-001 to FR-AUTH-004 | Registering with an address that already has an account shows that an account exists and offers sign-in or reset. A wrong-credential sign-in and a password reset give the same messages for a known and an unknown address. Test with FX-USR-13 (SEC-CHK-17). It adds no contractual condition | T | P3 | PROPOSED; the provider's behaviour is NOT VERIFIED | OQ-05, DEC-006 |
-| PAC-18 | New. PRC-01 | Only if MFW approves two admin roles (PRC-01): a Content Admin can do content work and cannot grant or revoke roles, delete an issue permanently or view the reader list; a Super Admin can; the last Super Admin cannot be removed; each audited action writes one audit event. The baseline checks AC-8.1 and AC-8.2 are unchanged. Tests ST-02 and ST-07 to ST-11 in `SECURITY_AND_ACCESS_CONTROL.md` section 14 | T | P3 | PROPOSED; conditional on PRC-01 | OQ-20, AOQ-03, AOQ-04 |
+| PAC-18 | New. PRC-01 | Withdrawn with PRC-01. The two-role checks are dropped. PAC-19 tests the one-role admin management that replaces them | T | P3 | Withdrawn | OQ-20, AOQ-03, AOQ-04 |
+| PAC-19 | New. RS FR-ADMIN-004, FR-USER-005; GS-Q44 | Only if MFW confirms in-panel add and remove (OQ-58): an admin finds a registered reader with a verified email and adds the person, and the new admin can use the panel. An admin removes another admin after a confirmation that names the person, and the removed admin is refused on the next call. The last admin cannot be removed, including when two admins remove each other at once. The change record shows who added or removed whom and nothing else. The checks AC-8.1 and AC-8.2 are unchanged. Tests ST-02, ST-03 and ST-07 to ST-10 in `SECURITY_AND_ACCESS_CONTROL.md` section 14 | T | P2 | PROPOSED; conditional on OQ-58 | OQ-20, OQ-58, AOQ-03, AOQ-04 |
+| PAC-20 | New. RS FR-DL-007 to FR-DL-010; GS-Q43, GS-Q60 | Read opens a temporary copy that is removed when the reader leaves the issue and is not listed on the Downloads screen. Download keeps the copy, lists it, and it reads in airplane mode. A temporary copy left behind by a crash is removed at the next start of the app. A download stopped by leaving the app resumes when the app is open again. AC-4.1 to AC-4.7 are unchanged | T | P2 | PROPOSED; BLOCKED (MFW's two-action answer is reported and not filed) | OQ-08, OQ-54 |
 
 ## 7. Ambiguous or Conflicting Criteria
 
@@ -244,16 +247,16 @@ PAC-01 to PAC-11 are from RS §10.2. They are summarised here, and RS holds the 
 | §5.3 Catalogue | AC-1.1, AC-1.4, AC-8.7, PAC-04 |
 | §5.4 Search and filters | AC-1.2, AC-1.3, PAC-07 |
 | §5.5 Reading | AC-2.1 to AC-2.7, AC-3.2 |
-| §5.6 Downloads | AC-4.1 to AC-4.7, PAC-13, PAC-14 |
+| §5.6 Downloads | AC-4.1 to AC-4.7, PAC-13, PAC-14, PAC-20 |
 | §5.7 Bookmarks and favourites | AC-5.1 to AC-5.4 |
 | §5.8 News | AC-7.1 to AC-7.5, AC-8.8 |
 | §5.9 Sharing | AC-6.1, AC-6.2, PAC-05 |
 | §5.10 Notifications | AC-9.1 to AC-9.7 |
-| §5.11 Edition-update emails | AC-8.9, PAC-11 (CONFLICT) |
-| §5.12 Admin | AC-8.1 to AC-8.8, AC-9.7 (FR-ADMIN-014, FR-ADMIN-015), PAC-18 (conditional on PRC-01) |
+| §5.11 Edition-update emails | AC-8.9, PAC-11 (CONFLICT; dropped on the working position) |
+| §5.12 Admin | AC-8.1 to AC-8.8, AC-9.7 (FR-ADMIN-014, FR-ADMIN-015), PAC-19 (conditional on OQ-58) |
 | §5.13 User administration | AC-8.9, PAC-03, PAC-06 |
 | §5.14 States | PAC-10 |
-| §5.15 Privacy and deletion | AC-3.7, PAC-06, PAC-08, PAC-15, PAC-16 |
+| §5.15 Privacy and deletion | AC-3.7, PAC-06, PAC-08, PAC-15 |
 | §6.3 Security | AC-3.5, AC-5.4, AC-8.2, AC-9.5, AC-10.3, PAC-13 |
 | §6.1 and §6.2 Performance and reliability | AC-2.1, AC-2.3, AC-2.5, AC-10.4 |
 | §6.6 Compatibility | AC-10.2 |

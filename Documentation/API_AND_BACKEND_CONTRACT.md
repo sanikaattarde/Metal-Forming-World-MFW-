@@ -7,12 +7,12 @@
 | Document title | API and Backend Contract |
 | File | `API_AND_BACKEND_CONTRACT.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for Review |
-| Last updated | 23 October 2026 |
+| Last updated | 27 October 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The architecture is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.3; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.3; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.3; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.2; `PROJECT_CHARTER.md` v0.2 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.4; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.4; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.4; `PROJECT_CHARTER.md` v0.2 |
 
 **Purpose.** This document says what the backend does for the app and the admin panel. For each operation it gives the caller, the inputs and outputs, the checks, the errors, the writes, the audit entry and the requirements behind it. It also fixes the conventions that every operation follows, the contract for reading MFW's WordPress site, the rules for changing a contract without breaking installed apps, and the tests that guard the contract.
 
@@ -26,6 +26,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft. Written after the 17-question interview (GS-Q17 to GS-Q33) and a read-only review of MFW's public website (WEB). Decisions recorded here are team-accepted, with the requirement label PROVISIONAL and MFW written approval pending (GS-Q30). No requirement status in the specification changed. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Error scheme changed to upper-case categories with reason codes (GONE, RATE_LIMITED and FAILED_PRECONDITION added; DEADLINE_EXCEEDED a reason under UNAVAILABLE). Section 3.1 to 3.4 added: aliases for the 31 app-side operation identifiers, the baseline and PRC-01 privileges, the baseline and PRC-02 deletion, and the open design differences. OP-12, OP-13 and the grace-window text marked PRC-02. "Team-accepted" replaced by PROPOSED with the agreement note. Registration and sign-in message rule added. Website check updated. |
+| 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). One Admin role: the callers, Sections 3.2, 5.1 and 5.2 are rewritten, and OP-30 to OP-39 and OP-42 are open to any admin. OP-36 is withdrawn. OP-35, OP-37, OP-39 and OP-42 are named addAdmin, removeAdmin, listAdminChanges and bootstrapAdmin. The audit set is narrowed to adds and removes of admins, so the denied entries are dropped and INV-16 is withdrawn. Immediate deletion: OP-13 is withdrawn and OP-12 and OP-41 are simplified. OP-33 is dropped with the edition-update sign-up. Section 3.3 is rewritten. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
 
 ### 1.1 Sources and authority
 
@@ -88,9 +89,7 @@ OP-nn operationName                              [kind; who may call it]
 Callers
 ├── Logged-out visitor        no sign-in. May use the public direct reads and the WordPress site
 ├── Reader                    signed in. May use the public reads, the operations on their own records, and the reader operations
-├── Admin (baseline)          a reader with an active admin role record: the one admin role of RS FR-ADMIN-004. May use the admin operations (Section 3.2)
-├── Content Admin             a reader with an active Content Admin role record (PRC-01). May use the admin operations
-├── Super Admin               a reader with an active Super Admin role record (PRC-01). May use every admin operation and the Super Admin operations
+├── Admin                     a reader with an active admin role record: the one admin role of RS FR-ADMIN-004. May use every admin operation, including adding and removing admins (Section 3.2)
 ├── Storage event, schedule   the backend's own triggers. No human caller
 └── Developer-run step        the controlled bootstrap and recovery step. Not an operation a client can call
 ```
@@ -100,9 +99,9 @@ Callers
 1. Every server operation authenticates the caller first.
 2. An admin operation reads the caller's role record and account status on this call. It does not trust a role claim, a cached role or anything held by the client (GS-Q20, INV-08). The panel hides controls by role as a convenience only.
 3. If the backend cannot verify the caller's current authorisation, the operation is refused and nothing changes. This is fail closed.
-4. A reader whose account is being deleted is refused by every server operation. Under PRC-02 (the grace window, not approved), the same applies to an account that is pending deletion, except `cancelAccountDeletion` and `requestAccountDeletion`, and the reader may still read their own account (OP-06) (GS-Q28). The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status (whether they could is NOT VERIFIED, Section 11). Under PRC-02 the app shows only the undo screen. Those records are removed at the purge.
-5. Whichever role model applies, the intended guarantee is that an admin whose role record is removed is refused on the next privileged call, once the removal is visible to the check. How long a token stays valid and whether a read made right after the change always sees it are NOT VERIFIED (Section 11). A test for a removed admin is proposed (CT-07; `TESTING_STRATEGY.md` section 9).
-6. A privileged operation is an admin or Super Admin operation. A refusal of one for a signed-in caller writes a denied audit entry on a best-effort basis (GS-Q26, SEC §8).
+4. A reader whose account is being deleted is refused by every server operation. The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status (whether they could is NOT VERIFIED, Section 11). Those records are removed with the account.
+5. The intended guarantee is that an admin whose role record is removed is refused on the next privileged call, once the removal is visible to the check. How long a token stays valid and whether a read made right after the change always sees it are NOT VERIFIED (Section 11). A test for a removed admin is proposed (CT-07; `TESTING_STRATEGY.md` section 9).
+6. A privileged operation is an admin operation. A refusal writes nothing, because the change record covers only admin adds and removes (GS-Q44).
 
 ```mermaid
 sequenceDiagram
@@ -111,22 +110,20 @@ sequenceDiagram
   participant F as Server operation
   participant R as Role record
   participant D as Data
-  participant A as Audit log
   C->>F: Call with a request identifier and the sign-in token
   F->>F: Authenticate the caller
   F->>R: Read the current role and account status
   alt cannot read, or not permitted
-    F->>A: Denied entry for a signed-in caller, best effort
     F-->>C: Refused, fail closed
   else permitted
-    F->>D: Do the work, with the audit event in the same transaction
+    F->>D: Do the work. An admin add or remove writes its change record in the same transaction
     F-->>C: Result
   end
 ```
 
 ### 2.4 Request identifiers and repeats
 
-Every write operation carries a `request_id` that the client creates once per user action and reuses on every retry. The backend remembers it for a period (the length is OPEN) and returns the earlier result for a repeat, so a retry after a lost reply changes nothing and adds no second audit event (GS-D14, INV-07, M6). Direct writes are made repeat-safe by their keys (DM §10.1). Reads need no request identifier.
+Every write operation carries a `request_id` that the client creates once per user action and reuses on every retry. The backend remembers it for a period (the length is OPEN) and returns the earlier result for a repeat, so a retry after a lost reply changes nothing and adds no second change record (GS-D14, INV-07, M6). Direct writes are made repeat-safe by their keys (DM §10.1). Reads need no request identifier.
 
 ### 2.5 Errors
 
@@ -138,13 +135,13 @@ Error categories
 ├── FORBIDDEN              signed in, but not allowed: wrong role, or not the owner
 ├── FAILED_PRECONDITION    a rule is not met. The reason code says which: ACCOUNT_CLOSED, EMAIL_NOT_VERIFIED,
 │                          PROFILE_INCOMPLETE, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, NO_ACCEPTED_FILE, NOT_UNPUBLISHED,
-│                          CONFIRMATION_MISMATCH, IN_USE, NOT_RETRYABLE, ALREADY_DELETING, TARGET_NOT_AVAILABLE, and, only if
-│                          PRC-01 is approved, LAST_SUPER_ADMIN, RECENT_SIGN_IN_REQUIRED, TARGET_ACCOUNT_CLOSED, ALREADY_HAS_ROLE,
-│                          and, only if PRC-02 is approved, NOT_PENDING
+│                          CONFIRMATION_MISMATCH, IN_USE, NOT_RETRYABLE, ALREADY_DELETING, TARGET_NOT_AVAILABLE,
+│                          LAST_ADMIN, RECENT_SIGN_IN_REQUIRED, TARGET_ACCOUNT_CLOSED, TARGET_EMAIL_NOT_VERIFIED,
+│                          ALREADY_ADMIN, NOT_AN_ADMIN
 ├── INVALID_ARGUMENT       a value is missing or malformed. The reply names the fields
 ├── NOT_FOUND              the thing does not exist
 ├── GONE                   the issue was permanently deleted. Returned only for an identifier on the deleted-issue list (GS-Q24, GS-Q25)
-├── CONFLICT               a stale screen: the record is not what the caller saw (STALE_RECORD), or, under PRC-01, the role is not (STALE_ROLE)
+├── CONFLICT               a stale screen: the record is not what the caller saw (STALE_RECORD), or the target's admin state is not (STALE_ADMIN_STATE)
 ├── RATE_LIMITED           a rate or size limit. The reply may carry a retry-after value
 ├── UNAVAILABLE            a dependency cannot be reached, such as the WordPress site or the push service. Retry later.
 │                          The reason DEADLINE_EXCEEDED means a call took too long. It is retryable
@@ -167,12 +164,11 @@ A limit is stated as a requirement for each class of operation. The mechanism is
 Operation classes that need a limit             [mechanism OPEN (AOQ-10); no value is set]
 ├── Sign-in, registration, password reset      through the identity provider. Whether the provider limits them is NOT VERIFIED
 ├── File-link requests (getIssueFile)           a cap per reader per day, signed_url_requests_per_reader (ASSUMPTION)
-├── Profile saves, deletion requests, undo
+├── Profile saves and deletion requests
 ├── Admin writes and uploads
-├── Reader-data lists and exports               Super Admin only
+├── Reader-data lists and exports               admins only
 ├── Notification sends and retries
-├── Searching for a reader by email address     Super Admin only
-└── Denied-attempt audit entries                a cap per caller, denied_audit_cap (GS-Q26)
+└── Searching for a reader by email address     admins only
 ```
 
 ### 2.8 Logging
@@ -190,8 +186,7 @@ flowchart LR
   subgraph callers["Callers"]
     v["Logged-out visitor"]
     r["Signed-in reader"]
-    ca["Content Admin"]
-    sa["Super Admin"]
+    ad["Admin"]
     dev["Developer-run step"]
     sys["Storage events and the schedule"]
   end
@@ -200,9 +195,9 @@ flowchart LR
     d2["Own records: bookmarks, favourites, notification preferences, own account and profile"]
   end
   subgraph srv["Server operations, each checks the caller on every call"]
-    f1["Reader: saveProfile, getIssueFile, account deletion and undo"]
+    f1["Reader: saveProfile, getIssueFile, account deletion"]
     f2["Admin: issues, uploads, publish, news controls, notifications"]
-    f3["Super Admin: delete issue, reader lists and exports, admin roles, audit history"]
+    f3["Admin: delete issue, reader list and export, add and remove admins, change history"]
     f4["Triggers and scheduled tasks"]
   end
   wp["WordPress REST API, read only"]
@@ -212,9 +207,8 @@ flowchart LR
   r --> d2
   r --> f1
   r --> wp
-  ca --> f2
-  sa --> f2
-  sa --> f3
+  ad --> f2
+  ad --> f3
   dev -->|bootstrap and recovery| f3
   sys --> f4
   f2 -->|post picker| wp
@@ -236,8 +230,8 @@ Operations                                                   [PROPOSED, PROVISIO
 │   ├── OP-10 saveProfile
 │   ├── OP-11 getIssueFile
 │   ├── OP-12 requestAccountDeletion
-│   └── OP-13 cancelAccountDeletion
-├── Admin operations, Content Admin and Super Admin (Section 5)
+│   └── OP-13 cancelAccountDeletion        [withdrawn with PRC-02. The identifier stays, so earlier references resolve]
+├── Admin operations (Section 5)
 │   ├── OP-14 getMyAdminRole
 │   ├── OP-15 listIssuesForAdmin
 │   ├── OP-16 saveIssue
@@ -250,16 +244,16 @@ Operations                                                   [PROPOSED, PROVISIO
 │   ├── OP-25 sendNotification and OP-26 retryNotification
 │   ├── OP-27 listNotificationSends
 │   └── OP-28 saveSegment and OP-29 saveNotificationCategory   [conditional on AOQ-16 and OQ-18]
-├── Super Admin operations (Section 5)
+├── Further admin operations: issue deletion, reader data and admin management (Section 5.2)
 │   ├── OP-30 deleteIssue
-│   ├── OP-31 listRegisteredUsers, OP-32 exportRegisteredUsers and OP-33 exportSubscribers [conditional, CONFLICT]
+│   ├── OP-31 listRegisteredUsers and OP-32 exportRegisteredUsers. OP-33 exportSubscribers is dropped on the working position [CONFLICT, OQ-31]
 │   ├── OP-34 searchUsersByEmail
-│   ├── OP-35 grantAdminRole, OP-36 changeAdminRole and OP-37 revokeAdminRole
-│   └── OP-38 listAdmins and OP-39 listAuditEvents
+│   ├── OP-35 addAdmin and OP-37 removeAdmin. OP-36 changeAdminRole is withdrawn, because there is one role
+│   └── OP-38 listAdmins and OP-39 listAdminChanges
 └── Triggered, scheduled and operator steps (Section 6)
     ├── OP-40 onUploadFinalized
     ├── OP-41 scheduledMaintenance
-    └── OP-42 bootstrapSuperAdmin
+    └── OP-42 bootstrapAdmin
 ```
 
 The bracket after each operation ("direct" or "server") is its access path. The access paths are a PROVISIONAL mapping onto Firebase (Section 11). The rules that enforce them are in [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) Section 12.
@@ -287,8 +281,8 @@ The bracket after each operation ("direct" or "server") is its access path. The 
 | OP-NTF-02 | unregisterDevice | none | As OP-NTF-01 |
 | OP-NTF-03 | getPreferences | OP-09 | managePreferences (and OP-05 for the category list) |
 | OP-NTF-04 | savePreferences | OP-09 | managePreferences |
-| OP-EML-01 | setEditionUpdateSubscription | none | Conditional on conflict C-02 (OQ-31). Open in both documents |
-| OP-ACC-01 | deleteOwnAccount | OP-12 | requestAccountDeletion. In the baseline the deletion is immediate. OP-13 and the scheduled purge in OP-41 exist only under PRC-02 |
+| OP-EML-01 | setEditionUpdateSubscription | none | Conditional on conflict C-02 (OQ-31). Dropped on the working position (GS-Q49). Open in both documents |
+| OP-ACC-01 | deleteOwnAccount | OP-12 | requestAccountDeletion. The deletion is immediate (GS-Q50). OP-13 is withdrawn, and the cleanup task in OP-41 only finishes a deletion that stopped part-way |
 | OP-ADM-01 | uploadIssue | OP-19, OP-20, OP-40 | requestUpload, listUploadJobs, onUploadFinalized. The upload is staged and validated afterwards (open, Section 3.4) |
 | OP-ADM-02 | updateIssueDetails | OP-16 | saveIssue |
 | OP-ADM-03 | setIssuePublished | OP-21, OP-22 | publishIssue, unpublishIssue. One operation with a flag against two (open, Section 3.4) |
@@ -298,47 +292,52 @@ The bracket after each operation ("direct" or "server") is its access path. The 
 | OP-ADM-07 | listSendLog | OP-27 | listNotificationSends |
 | OP-ADM-08 | listRegisteredUsers | OP-31 | listRegisteredUsers |
 | OP-ADM-09 | exportRegisteredUsersCsv | OP-32 | exportRegisteredUsers |
-| OP-ADM-10 | exportSubscriberListCsv | OP-33 | exportSubscribers (conditional on C-02) |
+| OP-ADM-10 | exportSubscriberListCsv | OP-33 | exportSubscribers (conditional on C-02, and dropped on the working position, GS-Q49) |
 | OP-ADM-11 | deleteIssue or replaceIssueFile | OP-30, and OP-19 with OP-40 | OP-30 deleteIssue. A replacement is a new revision through OP-19 and OP-40, so delete and replace are separate operations here |
 | OP-ADM-12 | adminSignIn | OP-14 | getMyAdminRole. Sign-in itself is the identity provider's job; the operation is the role lookup |
 
 Local-only operations, with no alias: OP-02, OP-03, OP-15, OP-24, OP-28, OP-29, OP-34 to OP-39, OP-41 and OP-42.
 
-### 3.2 Minimum privilege by operation: the baseline and PRC-01
+### 3.2 Minimum privilege by operation
 
-The baseline is one admin role (RS FR-ADMIN-004, CONFIRMED). Super Admin and Content Admin, in-panel role management and an audit log are the labelled change PRC-01, which applies only if MFW approves it (S2 excludes editorial roles and an audit log). The headers of the operations in Sections 5 and 6 name the PRC-01 callers. In the baseline, read "Content Admin or Super Admin" as "Admin". The audit entries written by the operations are part of PRC-01. No audit log exists in the baseline.
+There is one admin role (RS FR-ADMIN-004, CONFIRMED), and every admin has the same permissions (GS-Q44). In-panel add and remove of admins and a narrow change record are a proposed addition that MFW has not confirmed (OQ-58). S2 excludes editorial roles and an audit log (EXC-07). The two-role model of the version 0.2 text (PRC-01) is withdrawn.
 
-| Operations | Baseline (one Admin role) | Under PRC-01 (not approved) |
+| Operations | S2 baseline | Working position (proposed) |
 |---|---|---|
-| OP-14 getMyAdminRole | Admin | Any signed-in reader; returns the role |
-| OP-15 to OP-27 (issues, categories, uploads, publish, news controls, WordPress posts, notifications, send log) | Admin | Content Admin or Super Admin |
-| OP-28, OP-29 | Admin, conditional (AOQ-16, OQ-18) | Same |
-| OP-30 deleteIssue | Admin, only if OQ-21 allows | Super Admin only, after unpublishing, with a typed confirmation and an audit event |
-| Replacing an issue file (a new revision through OP-19 and OP-40) | Admin, only if OQ-21 allows | Content Admin or Super Admin. The old file is kept until the new one is validated |
-| OP-31 to OP-33 (registered-reader list and exports) | Admin. The list and export are PROVISIONAL; the subscriber export is conditional on C-02 | Super Admin only |
-| OP-34 searchUsersByEmail | Not in the baseline | Super Admin only |
-| OP-35 to OP-37 (grant, change, revoke an admin role) | Not in the baseline (OQ-20) | Super Admin only |
-| OP-38 listAdmins, OP-39 listAuditEvents | Not in the baseline (S2 excludes an audit log) | Super Admin only |
-| OP-42 bootstrapSuperAdmin | Not in the baseline. The first admin is a named step from MFW's admin list (OQ-20) | MFW's authorised approver names the person in writing. One developer runs the step and the other verifies it. An audit event records the written reference |
+| OP-14 getMyAdminRole | Admin | Any signed-in reader. It returns whether the caller is an admin |
+| OP-15 to OP-27 (issues, categories, uploads, publish, news controls, WordPress posts, notifications, send log) | Admin | Admin |
+| OP-28, OP-29 | Admin, conditional (AOQ-16, OQ-18) | Not built. Segments and notification categories are seeded by the developers (GS-Q47, GS-Q56) |
+| OP-30 deleteIssue | Admin, only if OQ-21 allows | Admin, only after unpublishing and with a typed confirmation (GS-Q45) |
+| Replacing an issue file (a new revision through OP-19 and OP-40) | Admin, only if OQ-21 allows | Admin. The old file is kept until the new one is validated (GS-Q45) |
+| OP-31, OP-32 (registered-reader list and export) | Admin. PROVISIONAL | Admin (GS-Q49) |
+| OP-33 exportSubscribers | Conditional on C-02 | Dropped (GS-Q49) |
+| OP-34 searchUsersByEmail | Not in S2 | Admin |
+| OP-35 addAdmin, OP-37 removeAdmin | Not in S2 (OQ-20). Admin access is granted by a developer-run step from MFW's admin list | Admin, with a recent sign-in, the last-admin rule and a change record (GS-Q44) |
+| OP-36 changeAdminRole | Not in S2 | Withdrawn. There is one role |
+| OP-38 listAdmins, OP-39 listAdminChanges | Not in S2 (S2 excludes an audit log) | Admin |
+| OP-42 bootstrapAdmin | The first admin is a named step from MFW's admin list (OQ-20) | MFW's authorised approver names the person in writing. One developer runs the step and the other verifies it. The change record holds the written reference |
 
-**Whichever role model applies**
+**Whichever model applies**
 
 1. The server reads the current role record on each privileged call and refuses if it cannot (Section 2.3). The intended guarantee is "refused once the change is visible to the check". Token lifetime and read-after-write visibility stay NOT VERIFIED.
 2. There is a proposed test and a fixture for a removed admin (`TESTING_STRATEGY.md` section 9, `TEST_DATA_AND_FIXTURES.md`).
 3. The first admin is a named step, even in the baseline (`DEPLOYMENT_PLAN.md` section 7.5).
 4. A replacement file never destroys the existing file before the new one is validated (OP-19, OP-40).
 
-### 3.3 Account deletion: the baseline and PRC-02
+### 3.3 Account deletion
 
-| | Baseline | Under PRC-02 (not approved) |
-|---|---|---|
-| Request | OP-12 deletes the account and the reader's data at once. A recent sign-in is required if the provider requires one. The app asks for confirmation (FR-PRIV-004, ASSUMPTION) | OP-12 starts a grace window unless the reader chooses the immediate option |
-| Undo | None | OP-13 during the window |
-| States | active, deleting | active, pending_deletion, deleting. Moves forward only, except undo (INV-18) |
-| Removal | Immediate | A scheduled purge at the end of the window (part of OP-41). The immediate option stays available |
-| Length of the window | Not applicable | OPEN (AOQ-02, OQ-24). No length is proposed here |
+Deletion is immediate (RS FR-PRIV-003, CONFIRMED; GS-Q50). The grace window with undo (PRC-02) is withdrawn.
 
-Backups keep deleted data until they expire, and a restore re-applies deletions made after the restore point, in both modes (`BACKUP_AND_RECOVERY.md` section 9).
+```text
+Account deletion
+├── Request    OP-12 deletes the account and the reader's data at once. A recent sign-in is required if the provider requires one.
+│              The app asks for confirmation (FR-PRIV-004, ASSUMPTION)
+├── Undo       None. OP-13 is withdrawn
+├── States     active, deleting. Moves forward only (INV-18)
+└── Removal    Immediate. The cleanup task in OP-41 finishes a deletion that stopped part-way
+```
+
+Backups keep deleted data until they expire, and a restore re-applies deletions made after the restore point (`BACKUP_AND_RECOVERY.md` section 9).
 
 ### 3.4 Open design differences
 
@@ -348,7 +347,7 @@ These differences between this document and the app-side contract are listed and
 Open design differences
 ├── Device tokens or topics     the app-side contract stores device registrations (OP-NTF-01, OP-NTF-02); this contract uses one push topic per category (TD-13)
 ├── Upload                      one call (OP-ADM-01) or a staged upload that is validated afterwards (OP-19, OP-20, OP-40)
-├── Publish and unpublish       one operation with a flag (OP-ADM-03) or two operations (OP-21, OP-22), which the audit treats as different actions
+├── Publish and unpublish       one operation with a flag (OP-ADM-03) or two operations (OP-21, OP-22)
 └── Single-issue read           OP-CAT-02 getIssue has no counterpart here; the catalogue is fetched whole and filtered on the device (GS-D3, GS-D15)
 ```
 
@@ -378,8 +377,8 @@ Direct operations
 │   ├── Out: wp_post_id, is_hidden and is_breaking for each controlled post
 │   └── Requirements: DATA-009, FR-NEWS-008 (CONFIRMED); FR-NEWS-009 (OPEN)
 ├── OP-05 listNotificationCategories                 [direct; anyone]
-│   ├── Out: the notification categories
-│   └── Requirements: FR-NOTIF-002, FR-NOTIF-006 (CONFIRMED); OQ-18
+│   ├── Out: the three fixed notification categories (GS-Q47)
+│   └── Requirements: FR-NOTIF-002, FR-NOTIF-006 (CONFIRMED); OQ-18; GS-Q47
 ├── OP-06 getMyAccount                               [direct; Reader, own records]
 │   ├── Out: the account status and deletion dates, the profile, and the policy versions accepted
 │   ├── Checks: the rules allow only the owner
@@ -397,7 +396,7 @@ Direct operations
 │   ├── Repeat: harmless. The key is (user, issue)
 │   └── Requirements: FR-BKM-003, FR-BKM-004 to FR-BKM-006, NFR-SEC-005 (CONFIRMED); OQ-12
 └── OP-09 managePreferences                          [direct; Reader, own records]
-    ├── In: add or remove a notification category, or list. The app also subscribes the device to the matching push topics (TD-13)
+    ├── In: add or remove a notification category, or list. The app also subscribes the device to the matching push topics (TD-13). A logged-out visitor can subscribe the device to the same topics without an account, and the backend stores nothing (GS-Q46)
     ├── Checks: owner only (INV-11). The category exists and is active
     ├── Repeat: harmless. The key is (user, category)
     └── Requirements: DATA-007, FR-NOTIF-002, FR-NOTIF-003 (CONFIRMED); FR-NOTIF-007 (OPEN); OQ-09
@@ -425,7 +424,7 @@ Reader server operations
 │   ├── Checks, in this order
 │   │   ├── 0. If the identifier is on the deleted-issue list, the answer is GONE
 │   │   ├── 1. The caller is signed in
-│   │   ├── 2. The account is active, not pending deletion or being deleted
+│   │   ├── 2. The account is active and not being deleted
 │   │   ├── 3. The email is verified. Required for password accounts. For Google accounts it depends on AOQ-09
 │   │   ├── 4. The profile is complete, checked only when the gate is on (BR-003)
 │   │   ├── 5. The issue exists and is published
@@ -434,42 +433,36 @@ Reader server operations
 │   │   or NO_CURRENT_FILE; GONE; RATE_LIMITED
 │   ├── Writes: none. The link is neither stored nor logged
 │   ├── Repeat: each call issues a new link. A resumed or expired download calls again
-│   ├── Also used when: a notification or a shared link leads to a full issue (BR-005)
+│   ├── Also used when: a notification or a shared link leads to a full issue (BR-005). Read and Download both call it. The backend cannot tell them apart and stores nothing about either (GS-Q43, NFR-PRIV-003)
 │   └── Requirements: BR-002, FR-READ-001, FR-DL-002, FR-AUTH-010, NFR-SEC-002, INT-FILE-001 (CONFIRMED); BR-003, FR-PROF-004 (PROVISIONAL);
 │       BR-005 (ASSUMPTION); AC-3; Section 8
 ├── OP-12 requestAccountDeletion                     [server; Reader, the account owner]
-│   ├── In: request_id; a confirmation flag (FR-PRIV-004). In the baseline the deletion is immediate. Under PRC-02 (not approved) a mode is added, either grace (the default under PRC-02) or immediate
-│   ├── Out: a confirmation that deletion has started (baseline). Under PRC-02, for grace, the new state with the purge date
-│   ├── Checks: authenticated; the account is the caller's own; not already deleting. If the caller is an active Super Admin, the
-│   │   last-Super-Admin rule applies (INV-03; PRC-01 only)
-│   ├── Effects, in one transaction: set APP_USER.status to deleting (baseline, immediate) or, under PRC-02, to pending_deletion (grace); take the account out of
-│   │   the active Super Admin count if it was one; remove any edition-update entry if that feature exists. Then end the caller's sessions
-│   ├── Refuses: FAILED_PRECONDITION LAST_SUPER_ADMIN (PRC-01 only) or ALREADY_DELETING; UNAUTHENTICATED
-│   ├── Repeat: harmless. A repeat returns the same state, and, under PRC-02, immediate is allowed from pending_deletion
+│   ├── In: request_id; a confirmation flag (FR-PRIV-004). The deletion is immediate (GS-Q50)
+│   ├── Out: a confirmation that deletion has started or is done
+│   ├── Checks: authenticated; the account is the caller's own; not already deleting. If the caller is an active admin, the
+│   │   last-admin rule applies (INV-03)
+│   ├── Effects, in one transaction: set APP_USER.status to deleting, and take the account out of the active admin count if it was one.
+│   │   Then end the caller's sessions, delete the profile, bookmarks, favourites, preferences, consent record and user record, and delete
+│   │   the sign-in account
+│   ├── Refuses: FAILED_PRECONDITION LAST_ADMIN or ALREADY_DELETING; UNAUTHENTICATED
+│   ├── Repeat: harmless. A repeat returns the same state, and a deletion that stopped part-way is finished by the cleanup task (OP-41)
 │   ├── After: the app removes its notification subscriptions and clears local data
-│   └── Requirements: FR-AUTH-009, FR-PRIV-003 (CONFIRMED); FR-PRIV-004 (ASSUMPTION); NFR-PRIV-005 (OPEN); PRC-02; AOQ-02; GS-Q28
-└── OP-13 cancelAccountDeletion                      [server; Reader, account pending deletion; exists only under PRC-02]
-    ├── In: request_id
-    ├── Out: the account is active again
-    ├── Checks: authenticated; the status is pending_deletion
-    ├── Refuses: FAILED_PRECONDITION NOT_PENDING or ALREADY_DELETING
-    ├── Writes: APP_USER (active, deletion fields cleared); the Super Admin count if the account was one
-    ├── Repeat: harmless
-    └── Requirements: FR-AUTH-009, FR-PRIV-003 (CONFIRMED); PRC-02; GS-Q28
+│   └── Requirements: FR-AUTH-009, FR-PRIV-003 (CONFIRMED); FR-PRIV-004 (ASSUMPTION); NFR-PRIV-005 (OPEN); AOQ-02; GS-Q50
+└── OP-13 cancelAccountDeletion                      [withdrawn with PRC-02. The identifier stays, so earlier references resolve]
 ```
 
-**Under PRC-02 only: sign-in during the grace window.** The reader must be able to sign in during the window to undo, so the backend does not disable the sign-in account then. The app's own status closes access instead: every server operation except `cancelAccountDeletion` and `requestAccountDeletion` is refused with `ACCOUNT_CLOSED`, and the reader can still read their own account (OP-06). System Architecture §7.10 and TD-19 said that sign-in is disabled at the request. Version 0.2 of each corrects that wording (GS-Q28). The immediate option disables or deletes the sign-in account as the deletion proceeds.
+**Sign-in during deletion.** There is no undo, so there is no window in which the reader signs in again. The deletion removes the sign-in account as it proceeds. A server operation for an account marked deleting is refused with `ACCOUNT_CLOSED` (GS-Q50).
 
 ## 5. Admin Operations
 
-Every operation in this section follows Section 2.3: it authenticates the caller, reads the current role record and the account status on this call, and fails closed. Under the baseline, "Admin" is the one admin role (RS FR-ADMIN-004, CONFIRMED). Under PRC-01, "Admin" means a Content Admin or a Super Admin. A refusal for a signed-in caller writes a denied audit entry (GS-Q26). The panel never reads admin data directly. Every read is an operation here (GS-Q20).
+Every operation in this section follows Section 2.3: it authenticates the caller, reads the current role record and the account status on this call, and fails closed. "Admin" is the one admin role (RS FR-ADMIN-004, CONFIRMED). A refusal writes nothing (GS-Q44). The panel never reads admin data directly. Every read is an operation here (GS-Q20).
 
-### 5.1 Operations for both admin roles
+### 5.1 Admin operations
 
 ```text
-Admin operations                                      [Content Admin and Super Admin]
+Admin operations                                      [any admin]
 ├── OP-14 getMyAdminRole                              [server; any signed-in reader]
-│   ├── Out: role (none, content_admin or super_admin) and is_active
+│   ├── Out: whether the caller is an admin, and is_active
 │   ├── Use: the panel shows or hides controls. It is never an authorisation. Every privileged operation checks again (GS-D20)
 │   └── Requirements: FR-ADMIN-003 (CONFIRMED); GS-Q20
 ├── OP-15 listIssuesForAdmin
@@ -482,7 +475,7 @@ Admin operations                                      [Content Admin and Super A
 │   ├── Checks: title and description are present; the category and segments exist; year defaults to the year of publication_date.
 │   │   It cannot change publication_state, current_revision or the file facts
 │   ├── Refuses: INVALID_ARGUMENT; NOT_FOUND; CONFLICT STALE_RECORD
-│   ├── Writes: ISSUE, ISSUE_SEGMENT. Audit: none, because routine edits are not audited (GS-Q26)
+│   ├── Writes: ISSUE, ISSUE_SEGMENT. Audit: none (GS-Q44)
 │   ├── Repeat: harmless
 │   └── Requirements: FR-ADMIN-009, FR-MAG-002 to FR-MAG-005, NFR-SEC-007 (CONFIRMED); OQ-13
 ├── OP-17 saveCategory and OP-18 deleteCategory
@@ -495,9 +488,9 @@ Admin operations                                      [Content Admin and Super A
 │   ├── In: request_id; kind (pdf or cover); issue_id; declared_size_bytes; content_type
 │   ├── Out: job_id, upload_url (signed, resumable, short-lived) and expires_at. The URL points to a holding area
 │   ├── Checks: the issue exists; the size is within max_upload_bytes (150 MB by default); the content type is allowed. It serves a
-│   │   first upload and a replacement (GS-Q21)
+│   │   first upload and a replacement (GS-Q45)
 │   ├── Refuses: INVALID_ARGUMENT (size or type); NOT_FOUND; RATE_LIMITED
-│   ├── Writes: UPLOAD_JOB (pending). Audit: none here. A replacement is audited when it is accepted (OP-40)
+│   ├── Writes: UPLOAD_JOB (pending). Audit: none (GS-Q44)
 │   ├── Repeat: harmless. The same request_id returns the same job
 │   └── Requirements: FR-ADMIN-005, FR-ADMIN-007, NFR-SEC-008 (CONFIRMED); FR-ADMIN-008, FR-ADMIN-012 (OPEN); OQ-21, OQ-22, OQ-30
 ├── OP-20 listUploadJobs
@@ -510,7 +503,7 @@ Admin operations                                      [Content Admin and Super A
 │   ├── Checks: for publish, in one transaction, the issue has an accepted current revision and has its title, description and
 │   │   category (INV-02). A repeat of the same state succeeds and changes nothing
 │   ├── Refuses: NOT_FOUND; FAILED_PRECONDITION NO_ACCEPTED_FILE
-│   ├── Writes: ISSUE. Audit: issue_publish or issue_unpublish (INV-16)
+│   ├── Writes: ISSUE. Audit: none (GS-Q44)
 │   └── Requirements: FR-ADMIN-011, FR-MAG-007, FR-MAG-008, NFR-SEC-007 (CONFIRMED); INV-02
 ├── OP-23 setNewsControl
 │   ├── In: request_id; wp_post_id; is_hidden; is_breaking
@@ -539,68 +532,66 @@ Admin operations                                      [Content Admin and Super A
 │   ├── In: an optional outcome filter, page_size, cursor
 │   ├── Out: a page of send records, newest first
 │   └── Requirements: FR-ADMIN-018 (CONFIRMED); OQ-19; GS-Q20
-└── OP-28 saveSegment and OP-29 saveNotificationCategory      [conditional on AOQ-16 and OQ-18]
+└── OP-28 saveSegment and OP-29 saveNotificationCategory      [conditional on AOQ-16 and OQ-18. Not built on the working position: segments and categories are seeded by the developers (GS-Q47, GS-Q56)]
     ├── In: request_id; id (absent to create); name; display_order; is_active
     ├── Checks: the name is unique ignoring case. A value in use cannot be deleted, only made inactive
     ├── Writes: INDUSTRY_SEGMENT or NOTIFICATION_CATEGORY. Audit: none
     └── Requirements: FR-SRCH-003, FR-NOTIF-006 (CONFIRMED); AOQ-16; OQ-18
 ```
 
-### 5.2 Operations for Super Admins only
+### 5.2 Further admin operations: issue deletion, reader data and admin management
 
-These operations exist as Super Admin operations only under PRC-01 (Section 3.2 gives the baseline). A Content Admin who calls one of these is refused with `FORBIDDEN` and a denied audit entry is written.
+These operations are open to any admin (GS-Q44, GS-Q45, GS-Q49). A caller who is not an admin is refused with `FORBIDDEN`.
 
 ```text
-Super Admin operations
+Further admin operations
 ├── OP-30 deleteIssue
-│   ├── In: request_id; issue_id; confirmation, the value the Super Admin typed. The rule is that it equals the issue's title (a proposal)
+│   ├── In: request_id; issue_id; confirmation, the value the admin typed. The rule is that it equals the issue's title (a proposal)
 │   ├── Out: confirmation of the deletion
-│   ├── Checks: the caller is a Super Admin; the issue exists; it is unpublished (INV-15); the confirmation matches
-│   ├── One transaction: delete the issue and its segment links, write the deleted-issue record, write the audit event
+│   ├── Checks: the caller is an admin; the issue exists; it is unpublished (INV-15); the confirmation matches
+│   ├── One transaction: delete the issue and its segment links, write the deleted-issue record
 │   ├── Afterwards: remove the file revisions, the cover and the upload jobs. Orphan cleanup removes the readers' bookmarks and
 │   │   favourites (DM §10.3)
 │   ├── Refuses: FORBIDDEN; NOT_FOUND; GONE (already deleted); FAILED_PRECONDITION NOT_UNPUBLISHED or CONFIRMATION_MISMATCH
-│   ├── Audit: issue_delete. Repeat: the same request_id returns the first result
-│   └── Requirements: FR-ADMIN-012 (OPEN); OQ-21; OQ-11; INV-15, INV-16; GS-Q21, GS-Q22
+│   ├── Audit: none (GS-Q44). Repeat: the same request_id returns the first result
+│   └── Requirements: FR-ADMIN-012 (OPEN); OQ-21; OQ-11; INV-15; GS-Q45
 ├── OP-31 listRegisteredUsers
 │   ├── In: page_size, cursor
-│   ├── Out: a page of readers: user_id, email (from the sign-in provider), the profile fields and created_at. Accounts pending deletion are hidden
-│   ├── Audit: reader_list_view, once per call, with result_count and no reader data
-│   └── Requirements: FR-USER-002 (PROVISIONAL); NFR-PRIV-004 (ASSUMPTION); AOQ-05; GS-D6
+│   ├── Out: a page of readers: user_id, email (from the sign-in provider), the profile fields and created_at. Accounts being deleted are hidden
+│   ├── Audit: none (GS-Q44)
+│   └── Requirements: FR-USER-002 (PROVISIONAL); NFR-PRIV-004 (ASSUMPTION); AOQ-05; GS-D6, GS-Q49
 ├── OP-32 exportRegisteredUsers
 │   ├── Out: a CSV built in memory and not stored. Cells that start with a formula character are neutralised
-│   ├── Audit: reader_export, with result_count and no reader data
-│   └── Requirements: FR-USER-003 (PROVISIONAL); NFR-PRIV-004 (ASSUMPTION); AOQ-05
-├── OP-33 exportSubscribers                           [conditional; the list does not exist if OQ-31 drops it]
+│   ├── Audit: none (GS-Q44)
+│   └── Requirements: FR-USER-003 (PROVISIONAL); NFR-PRIV-004 (ASSUMPTION); AOQ-05; GS-Q49
+├── OP-33 exportSubscribers                           [dropped on the working position (GS-Q49); the list does not exist unless OQ-31 keeps it]
 │   ├── Out: a CSV built in memory
-│   ├── Audit: reader_export
 │   └── Requirements: FR-USER-001 (CONFLICT); FR-EMAIL-001 (CONFLICT); DATA-010 (CONFLICT); OQ-31
 ├── OP-34 searchUsersByEmail
 │   ├── In: an email address
-│   ├── Out: the matching user_id, and the person's current role
+│   ├── Out: the matching user_id, whether the person is already an admin, and whether the email is verified
 │   ├── Audit: none (GS-D19). Rate limited (Section 2.7)
-│   └── Requirements: PRC-01; FR-USER-005 (OPEN)
-├── OP-35 grantAdminRole, OP-36 changeAdminRole and OP-37 revokeAdminRole
-│   ├── In: request_id; target_user_id; the new role for grant and change; expected_previous_role for change and revoke
+│   └── Requirements: FR-USER-005 (OPEN); OQ-58; GS-Q44
+├── OP-35 addAdmin and OP-37 removeAdmin              [OP-36 changeAdminRole is withdrawn: there is one role]
+│   ├── In: request_id; target_user_id; expected_state (admin or not); for a removal, a confirmation that names the person
 │   ├── Out: the role record
-│   ├── Checks: the caller is a Super Admin by the record; the token is not revoked; the sign-in is recent (AOQ-14); for grant and
-│   │   change the target is a registered reader whose account is active
-│   ├── One transaction: read the guard record; check the last-Super-Admin rule (INV-03); check expected_previous_role (INV-07); write the
-│   │   role record, the audit event and the guard record (INV-04)
-│   ├── After the commit: end the target's sessions, with retry (INV-09). A failure there does not undo the change
-│   ├── Refuses: FORBIDDEN; NOT_FOUND; FAILED_PRECONDITION RECENT_SIGN_IN_REQUIRED, TARGET_ACCOUNT_CLOSED or LAST_SUPER_ADMIN;
-│   │   CONFLICT STALE_ROLE
-│   ├── Audit: role_grant, role_change or role_revoke. Repeat: the same request_id returns the first result
-│   └── Requirements: FR-ADMIN-003 (CONFIRMED); FR-ADMIN-004 (CONFIRMED, in conflict with PRC-01); FR-USER-005, NFR-SEC-011 (OPEN);
-│       EXC-07; PRC-01; INV-03 to INV-09; GS-Q19, GS-Q33
+│   ├── Checks: the caller is an admin by the record; the token is not revoked; the sign-in is recent (AOQ-14); for an addition the
+│   │   target is a registered reader whose account is active and whose email is verified; for a removal the target is an admin
+│   ├── One transaction: read the guard record; check the last-admin rule for a removal (INV-03); check expected_state (INV-07); write the
+│   │   role record, the change record and the guard record (INV-04)
+│   ├── After a removal commits: end the target's sessions, with retry (INV-09). A failure there does not undo the change
+│   ├── Refuses: FORBIDDEN; NOT_FOUND; INVALID_ARGUMENT (a removal with no confirmation); FAILED_PRECONDITION RECENT_SIGN_IN_REQUIRED,
+│   │   TARGET_ACCOUNT_CLOSED, TARGET_EMAIL_NOT_VERIFIED, ALREADY_ADMIN, NOT_AN_ADMIN or LAST_ADMIN; CONFLICT STALE_ADMIN_STATE
+│   ├── Audit: admin_add or admin_remove. Repeat: the same request_id returns the first result
+│   └── Requirements: FR-ADMIN-003, FR-ADMIN-004 (CONFIRMED); FR-USER-005, NFR-SEC-011 (OPEN); EXC-07; OQ-58; INV-03 to INV-09; GS-Q33, GS-Q44
 ├── OP-38 listAdmins
 │   ├── Out: every admin role record
-│   └── Requirements: PRC-01; GS-Q19
-└── OP-39 listAuditEvents
-    ├── In: optional filters (action, actor, dates), page_size, cursor
-    ├── Out: a page of audit events, newest first
+│   └── Requirements: OQ-58; GS-Q44
+└── OP-39 listAdminChanges
+    ├── In: page_size, cursor
+    ├── Out: a page of change records, newest first
     ├── Audit: none
-    └── Requirements: PRC-01; NFR-SEC-011 (OPEN); AOQ-04; GS-Q26
+    └── Requirements: NFR-SEC-011 (OPEN); OQ-58; AOQ-04; GS-Q44
 ```
 
 ## 6. Triggered, Scheduled and Operator Operations
@@ -614,28 +605,28 @@ Triggered, scheduled and operator operations
 │   │   ├── 2. Check that the file is a genuine PDF, not only by its name, and within the size limit. A cover goes through its own checks (OQ-22)
 │   │   ├── 3. Move the file to the private path and remove it from the holding area
 │   │   └── 4. In one transaction mark the old current revision superseded, write the new revision as current, set current_revision, the
-│   │       size and the page count on the issue, and set the job to accepted (INV-01). For a replacement, write the audit event
-│   │       file_replace in the same transaction (INV-16)
+│   │       size and the page count on the issue, and set the job to accepted (INV-01)
 │   ├── Rejects (job rejected, object removed): upload_rejected, with the reason NOT_A_PDF, OVER_LIMIT, UPLOADER_NOT_AUTHORISED or COVER_INVALID
 │   ├── Failure: if the database write fails after the move, an orphan file remains and cleanup removes it
-│   └── Requirements: FR-ADMIN-006, FR-ADMIN-007, NFR-SEC-007, NFR-SEC-008 (CONFIRMED); FR-ADMIN-008, FR-ADMIN-012 (OPEN); INV-01, INV-08, INV-16
+│   └── Requirements: FR-ADMIN-006, FR-ADMIN-007, NFR-SEC-007, NFR-SEC-008 (CONFIRMED); FR-ADMIN-008, FR-ADMIN-012 (OPEN); INV-01, INV-08
 ├── OP-41 scheduledMaintenance                        [schedule; runs under the backend's own credentials]
 │   ├── Every task is repeatable. A run that stops part-way continues on the next run
-│   ├── Daily: account purge, including deletions left in the deleting state (TD-19, GS-Q28); the holding area and finished upload
+│   ├── Daily: account deletion cleanup, which finishes deletions left in the deleting state (TD-19, GS-Q50); the holding area and finished upload
 │   │   jobs; superseded revisions after their retention period
-│   ├── Hourly (ASSUMPTION): the Super Admin count repair (INV-03); marking stale pending sends as unknown (INV-17)
+│   ├── Hourly (ASSUMPTION): the admin count repair (INV-03); marking stale pending sends as unknown (INV-17)
 │   ├── Weekly: orphaned reader records; orphaned user records
 │   ├── Monthly: orphaned news controls; deleted-issue records past their retention period, if MFW sets one (AOQ-19)
-│   └── Requirements: FR-PRIV-003 (CONFIRMED); PRC-02; DM §10.3
-└── OP-42 bootstrapSuperAdmin                         [developer-run step; not an operation a client can call]
+│   └── Requirements: FR-PRIV-003 (CONFIRMED); GS-Q50; DM §10.3
+└── OP-42 bootstrapAdmin                              [developer-run step; not an operation a client can call]
     ├── Who: MFW's authorised approver names the person in writing (the approver is not yet named, OQ-28). One developer runs the
-    │   documented step under role-based access (NFR-SEC-012). The other developer verifies it (GS-Q33)
+    │   documented step under role-based access (NFR-SEC-012). The other developer verifies it (GS-Q33). The developers then hand
+    │   access to MFW (GS-Q44)
     ├── Precondition: the person has registered an ordinary reader account
-    ├── Effects: create the Super Admin role record with a fixed marker as granted_by; create the guard record with a count of 1; write
-    │   an audit event bootstrap_super_admin that holds the written reference
-    ├── Guard: the step refuses to run while an active Super Admin exists, unless it is declared a recovery and carries the written
+    ├── Effects: create the admin role record with a fixed marker as granted_by; create the guard record with a count of 1; write
+    │   a change record bootstrap_admin that holds the written reference
+    ├── Guard: the step refuses to run while an active admin exists, unless it is declared a recovery and carries the written
     │   reference. A recovery follows the same two-person procedure (GS-Q33)
-    └── Requirements: FR-USER-005, NFR-SEC-011 (OPEN); NFR-SEC-012 (CONFIRMED); PRC-01; INV-03; GS-D4, GS-Q33; the procedure is in
+    └── Requirements: FR-USER-005, NFR-SEC-011 (OPEN); NFR-SEC-012 (CONFIRMED); INV-03; GS-D4, GS-Q33, GS-Q44; the procedure is in
         [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) Section 7
 ```
 
@@ -823,7 +814,7 @@ Status of this policy
 ├── Not CONFIRMED: no source document or MFW approval establishes it
 ├── Built: nothing. The repository holds no code, because the project is in the documentation stage
 ├── Does not exist yet: a versioning scheme, contract tests, deprecation records, the update gate and any enforcement of a minimum version
-└── Effort: the PRC-01 estimate and any other estimate do not include this policy
+└── Effort: no estimate, including the earlier PRC-01 figure, covers this policy
 ```
 
 ## 10. Contract Tests
@@ -841,8 +832,8 @@ Contract tests                                         [proposed; none exists]
 │                                   generic case for its category
 ├── CT-05 Error stability           each refusal returns its documented category and reason code
 ├── CT-06 Repeats                   replaying a write with the same request_id returns the first result, adds no record and adds no
-│                                   second audit event
-├── CT-07 Authorisation             for every operation, a signed-out caller, a reader, a Content Admin, a Super Admin and a revoked admin
+│                                   second change record
+├── CT-07 Authorisation             for every operation, a signed-out caller, a reader, an admin and a removed admin
 │                                   each get the documented answer
 ├── CT-08 Update gate               an app below the minimum version shows the update-required screen. An app at or above it does not. With
 │                                   no value set, nothing is gated
@@ -915,31 +906,36 @@ Firebase constraints and verification gaps
 ```text
 Decisions to operations
 ├── GS-Q18 Neutral core with a Firebase mapping        Sections 2 to 10 are neutral. Section 11 is the mapping
-├── GS-Q19 Two admin roles                             OP-14, OP-35 to OP-39, OP-42
+├── GS-Q19 Two admin roles (replaced by GS-Q44)        OP-14, OP-35 to OP-39, OP-42
 ├── GS-Q20 Admin reads through functions               OP-14, OP-15, OP-20, OP-24, OP-27, OP-31, OP-38, OP-39
 ├── GS-Q21 Replace a PDF, delete an issue              OP-19, OP-30, OP-40
-├── GS-Q22 Only a Super Admin deletes                  OP-30
+├── GS-Q22 Only a Super Admin deletes (replaced by GS-Q45)   OP-30
 ├── GS-Q23 Working profile list (partly reversed by GS-Q34)                        OP-10
 ├── GS-Q24 Downloaded copies                           OP-03, OP-11
 ├── GS-Q25 Deleted-issue list, opaque identifiers      OP-03, OP-11, OP-30
-├── GS-Q26 Audit set                                   OP-21, OP-22, OP-30 to OP-33, OP-35 to OP-37, OP-40, OP-42, and a denied entry on every privileged operation
+├── GS-Q26 Audit set (narrowed by GS-Q44)              OP-35, OP-37 and OP-42 only
 ├── GS-Q27 Notification send                           OP-25, OP-26, OP-27, OP-41
-├── GS-Q28 Account deletion with a window              OP-12, OP-13, OP-41
+├── GS-Q28 Account deletion with a window (replaced by GS-Q50)   OP-12, OP-41
 ├── GS-Q29 Compatibility and the update gate           Sections 9 and 10, and OP-02
 ├── GS-Q30 Labels                                      Section 1.2
 ├── GS-Q31 Taxonomy                                    OP-01, OP-17, OP-28, Section 7 and Appendix A
 ├── GS-Q32 Channel policy                              OP-11, Section 8 and Appendix A
-└── GS-Q33 Bootstrap and recovery                      OP-42
+├── GS-Q33 Bootstrap and recovery                      OP-42
+├── GS-Q43 Read and Download                           OP-11
+├── GS-Q44 One Admin role, in-panel add and remove     OP-14, OP-30 to OP-32, OP-34 to OP-39, OP-42
+├── GS-Q45 Any admin: unpublish, replace, delete       OP-19, OP-21, OP-22, OP-30, OP-40
+├── GS-Q49 Registered-user export only                 OP-31, OP-32
+└── GS-Q50 Immediate account deletion                  OP-12, OP-41
 ```
 
 ```text
 S2 acceptance criteria and the operations behind them
 ├── AC-1 Publish and find an issue                     OP-01, OP-16, OP-19, OP-21
-├── AC-3 Sign-in gate and account deletion             OP-10, OP-11, OP-12, OP-13
+├── AC-3 Sign-in gate and account deletion             OP-10, OP-11, OP-12
 ├── AC-4 Download, resume, read offline                OP-11 and Section 8
 ├── AC-5 Bookmarks and favourites                      OP-07, OP-08
 ├── AC-7 News                                          Section 7, OP-04
-├── AC-8 Admin panel                                   OP-14 to OP-27, OP-31 to OP-33
+├── AC-8 Admin panel                                   OP-14 to OP-27, OP-31, OP-32
 ├── AC-9 Notifications                                 OP-05, OP-09, OP-25 to OP-27
 └── AC-12 Handover                                     This document and the other documents in the set
 ```
@@ -951,7 +947,7 @@ Open items
 ├── For MFW
 │   ├── OQ-09, OQ-11, OQ-13, OQ-16, OQ-17, OQ-18, OQ-19, OQ-21, OQ-22, OQ-24, OQ-27, OQ-30, OQ-31
 │   ├── FR-USER-005 and NFR-SEC-011 (OQ-20), AOQ-04, AOQ-05, AOQ-16, AOQ-18 (OQ-57), AOQ-19
-│   ├── PRC-01, PRC-02, PRC-03 and PRC-04, which need MFW's written approval
+│   ├── OQ-58 (in-panel add and remove), and PRC-03 and PRC-04, which need MFW's written approval. PRC-01 and PRC-02 are withdrawn
 │   └── Which news categories the app shows (INT-WP-003, REG-043), and the host's capacity (REG-042)
 ├── For the development team
 │   ├── AOQ-07 (link lifetime), AOQ-09 and AOQ-08 (linking), AOQ-10 (App Check), AOQ-13, AOQ-14 (recent sign-in), AOQ-20 (covers)

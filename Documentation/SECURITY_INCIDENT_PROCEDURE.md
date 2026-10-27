@@ -6,9 +6,9 @@
 |---|---|
 | Document | Security Incident Procedure |
 | File | `Documentation/SECURITY_INCIDENT_PROCEDURE.md` |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not approved. **PLANNED: no incident has occurred, no contact is named, and no drill has been run.** Nothing here is implemented. |
-| Date | 24 October 2026 |
+| Date | 27 October 2026 |
 | Audience | The two developers during the build. MFW's named contacts after handover, once MFW names them (OQ-47). |
 | Proposed owner | Sanika Attarde (WS-A), PROPOSED and not agreed. Reviewer: Yuvraj (WS-B). |
 | Approval required | Both developers. MFW for the contacts and for any step that involves MFW (OQ-47, OQ-28). MFW's legal adviser for anything legal. |
@@ -19,6 +19,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 24 October 2026 | Initial draft. Written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
+| 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). The admin steps use the one Admin role with in-panel removal (GS-Q44) instead of the withdrawn Super Admin steps (PRC-01). The record of who added or removed whom replaces the audit log, and it does not say what an admin did to issues or exports. Permanent deletion is open to any admin (GS-Q45). No decision is approved. |
 
 ### 1.1 Related documents
 
@@ -32,7 +33,7 @@
 | `API_AND_BACKEND_CONTRACT.md` | Exists (draft). Owns the operations named below |
 | `OPEN_QUESTIONS.md` | Exists (draft). OQ-47 (contacts and channel), OQ-28 (MFW's approver), OQ-20, OQ-24, OQ-57 |
 
-Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal in this document. In RS terms it is an ASSUMPTION (DEV). **NOT VERIFIED** means that nothing has checked the claim. The baseline is one Admin role with no audit log (FR-ADMIN-004, EXC-07). Steps that need a Super Admin or an audit log belong to the labelled change **PRC-01**, which MFW has not approved, and each such step says so.
+Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal in this document. In RS terms it is an ASSUMPTION (DEV). **NOT VERIFIED** means that nothing has checked the claim. The baseline is one Admin role with no audit log (FR-ADMIN-004, EXC-07). The working position adds in-panel removal of an admin and a narrow record of who added or removed whom (GS-Q44), which MFW has not confirmed (OQ-58), and each step that depends on it says so. PRC-01 is withdrawn.
 
 ## 2. Purpose, Scope and Status
 
@@ -120,21 +121,21 @@ Credential or secret exposed                           [T3, T4, T12; SC-16, SC-1
 ### 6.2 An admin account is compromised, or an admin must lose access
 
 ```text
-Admin compromise or removal                            [T4, T5, T18; SC-02, SC-12; both models]
+Admin compromise or removal                            [T4, T5, T18, T27; SC-02, SC-12]
 ├── Contain
-│   ├── Baseline (one Admin role, FR-ADMIN-004): a developer removes the single admin role from the account. A revocation in the baseline is the removal of that role (SC-12)
-│   ├── PRC-01 (not approved): a Super Admin revokes the role with OP-37. A recent sign-in is required, and the last Super Admin cannot be removed (SC-10)
-│   └── Either way, the decision comes from the role record read on each call and not from the person's token (INV-08)
+│   ├── Working position (GS-Q44, OQ-58): another admin removes the account in the panel with OP-37. A recent sign-in is required, the removal asks for a confirmation that names the person, and the last admin cannot be removed (SC-10)
+│   ├── If in-panel removal is not approved: a developer removes the admin role from the account. A removal in the S2 baseline is the removal of that role (SC-12)
+│   └── In both cases, the decision comes from the role record read on each call and not from the person's token (INV-08)
 ├── Known limits
-│   ├── A signed upload URL issued before the revocation works until it expires. It can write to the holding area only, and finalising the upload rejects it because the uploader no longer holds the role (SC-08, OP-40)
-│   ├── How soon an issued sign-in token stops working after a revocation is NOT VERIFIED (TECHNOLOGY_DECISIONS §9.4, item 12)
+│   ├── A signed upload URL issued before the removal works until it expires. It can write to the holding area only, and finalising the upload rejects it because the uploader no longer holds the role (SC-08, OP-40)
+│   ├── How soon an issued sign-in token stops working after a removal is NOT VERIFIED (TECHNOLOGY_DECISIONS §9.4, item 12)
 │   └── Whether a read made right after the commit always sees the change is NOT VERIFIED (item 21). ST-03 is the test that would show it
 ├── Find what the account did
-│   ├── Baseline: there is no audit log (EXC-07). What the account did can be learned only from platform logs (SI-04)
-│   └── PRC-01: the audit log records role changes, publish and unpublish, deletes, replacements, list views and exports (OP-39, SECURITY_AND_ACCESS_CONTROL §8)
+│   ├── There is no audit log (EXC-07). The change record shows who added or removed an admin (OP-39), and nothing else the account did. What it did to issues, files or exports can be learned only from platform logs (SI-04)
+│   └── A compromised admin can also add an attacker or remove the other admins (T27). Check the change record first, and remove any admin that nobody can account for
 ├── If the last admin is locked out or removed
-│   ├── Baseline: the developers create the admin account again from MFW's admin list, as in the first deployment (DEPLOYMENT_PLAN §7.5)
-│   └── PRC-01: the recovery step of §7.6, with MFW's written naming, one developer running it and the other verifying
+│   ├── The developers create the admin account again from MFW's admin list, as in the first deployment (DEPLOYMENT_PLAN §7.5)
+│   └── With in-panel management: the recovery step of `SECURITY_AND_ACCESS_CONTROL.md` §7.6, with MFW's written naming, one developer running it and the other verifying
 └── Tell MFW: always. The admin account belongs to MFW's staff
 ```
 
@@ -160,7 +161,7 @@ Personal data exposed                                  [T6, T10 to T13; AR-15; S
 Wrongful access or publication                         [T1, T2, T21, T23; AR-06, AR-19; OQ-11, OQ-57]
 ├── Contain
 │   ├── Unpublish the issue (OP-22). New downloads stop at once, and OP-11 answers ISSUE_NOT_AVAILABLE
-│   ├── Delete it only if MFW's answer to OQ-21 allows permanent deletion (OP-30, after unpublishing; Super Admin only under PRC-01). Its identifier then goes on the deleted-issue list (OP-03)
+│   ├── Delete it only if MFW's answer to OQ-21 allows permanent deletion (OP-30, after unpublishing; any admin, with a typed confirmation, GS-Q45). Its identifier then goes on the deleted-issue list (OP-03)
 │   └── Shorten the link lifetime for new links if the configuration allows it (60 minutes is an ASSUMPTION, AOQ-07)
 ├── What cannot be undone
 │   ├── A link already issued works until it expires (AR-06, T2)
@@ -243,8 +244,8 @@ How this would be checked
 ├── A paper drill of each scenario in Section 6 by both developers. Not run
 ├── A rehearsal of admin removal and recovery in a throwaway project (ST-09), once the platform is chosen. Not run
 ├── The security tests that cover the controls named above
-│   ├── ST-03 revoked-role access (SC-02, SC-12)
-│   ├── ST-09 bootstrap and recovery (SC-14), PRC-01 only
+│   ├── ST-03 removed-admin access (SC-02, SC-12)
+│   ├── ST-09 bootstrap and recovery (SC-14), when in-panel management is approved
 │   ├── ST-16 notification records (T24), ST-17 deleted-issue copies (T23), ST-18 limits (SC-18)
 │   └── SEC-CHK-02 and SEC-CHK-03 direct requests for a protected file
 └── Everything marked NOT VERIFIED above stays so until a test shows it
@@ -252,14 +253,14 @@ How this would be checked
 
 ## 11. Open Items
 
-These items are local to this document. They are not yet in the registers. After pull request 3 is merged they are to be registered in `OPEN_QUESTIONS.md`, with the owner and the evidence that would close each.
+These items are local to this document. They are not yet in the registers. Pull request 3 has reached `main` (by a direct push on 2026-10-25), so they are still to be registered in `OPEN_QUESTIONS.md`, with the owner and the evidence that would close each.
 
 | Ref | Item | Owner | Depends on |
 |---|---|---|---|
 | SI-01 | Who leads an incident during the build and after handover, who is the second person, and who is reachable out of hours | Both developers, then MFW | OQ-47 |
 | SI-02 | The private channel for security reports, because the repository is public | Both developers, with MFW | OQ-47 |
 | SI-03 | The time targets for telling MFW (same working day proposed) | Both developers, with MFW | S2 Warranty |
-| SI-04 | Which platform logs exist and how long they are kept. The baseline has no audit log, so these are the only record of what an admin did | Development team | DEC-003 |
+| SI-04 | Which platform logs exist and how long they are kept. There is no audit log, so these are the only record of what an admin did to issues, files and exports | Development team | DEC-003 |
 | SI-05 | Whether and how readers are told after an exposure. User-facing wording and a legal question | MFW and its legal adviser | OQ-24, OQ-27 |
 | SI-06 | Whether a sent push notification can be corrected or recalled | Development team | TD-13 |
 
@@ -269,12 +270,12 @@ Questions for MFW stay in the register as they are: OQ-20, OQ-24, OQ-28, OQ-47 a
 
 ```text
 This document to its sources
-├── Threats: T1 to T7, T10 to T14, T18 to T26; AR-06, AR-15, AR-19
+├── Threats: T1 to T7, T10 to T14, T18 to T27; AR-06, AR-15, AR-19
 ├── Controls: SC-02, SC-05, SC-06, SC-08, SC-10, SC-12, SC-13, SC-15, SC-16, SC-18, SC-19, SC-21
 ├── Tests: ST-03, ST-09, ST-16, ST-17, ST-18, SEC-CHK-02, SEC-CHK-03
 ├── Operations: OP-03, OP-11, OP-22, OP-25 to OP-27, OP-30, OP-32, OP-33, OP-37, OP-39, OP-40
 ├── Requirements: FR-ADMIN-004, NFR-PRIV-003, NFR-SEC-012; EXC-07
 ├── Decisions and questions: DEC-003, OQ-11, OQ-20, OQ-21, OQ-24, OQ-27, OQ-28, OQ-47, OQ-57; AOQ-07, AOQ-10
-├── Labelled change: PRC-01 (not approved)
+├── Open: OQ-58. PRC-01 is withdrawn
 └── Handover: HO-04
 ```

@@ -7,9 +7,9 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
-| Date | 25 October 2026 |
+| Date | 27 October 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
 
 **Change history**
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft, including the proposed security checklist required by RS NFR-SEC-010 |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. SEC-CHK-17 to SEC-CHK-19 added (account-existence messages, removed admin, abuse and throttling). SEC-CHK-03 limited to the app's storage. Registration wording corrected. Test lines for breaking news and for a failed replacement. Section 16 added: protected files and offline copies, intended and tested. |
 | 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No test, gate or checklist item changed. |
+| 0.4 | 27 October 2026 | Section 7.9 updated: the admin tests follow in-panel add and remove (OQ-58, PAC-19) instead of the withdrawn two-role model (PRC-01, PAC-18). No gate or other test changed. |
 
 ### 1.1 Related documents
 
@@ -186,7 +187,7 @@ Network scenarios come from `TEST_DATA_AND_FIXTURES.md` §8 (FX-NET-01 to FX-NET
 ### 7.9 Admin permissions and upload validation
 
 - A wrong password and a non-admin account are refused (AC-8.1, AC-8.2), and admin operations called directly by a non-admin are refused on the server (SEC-CHK-06).
-- Only if MFW approves two admin roles (PRC-01): the role matrix, role changes, the last-Super-Admin rule, the bootstrap step and the audit events are tested as ST-02 and ST-07 to ST-11 (`SECURITY_AND_ACCESS_CONTROL.md` section 14; PAC-18). None of this applies to the baseline.
+- Only if MFW confirms in-panel add and remove of admins (OQ-58): the add and remove operations, the last-admin rule, the bootstrap step and the change records are tested as ST-02 and ST-07 to ST-10 (`SECURITY_AND_ACCESS_CONTROL.md` section 14; PAC-19). ST-11 and PAC-18 are withdrawn. None of this applies if MFW declines.
 - An admin whose role record is removed is refused on the next privileged call, including from a session opened before the removal (SEC-CHK-18, FX-ADM-08). How long a token stays valid is NOT VERIFIED.
 - A replacement file that fails validation leaves the current revision in place (FX-ADM-09). Whether an issue can be deleted or replaced at all is OQ-21.
 - A valid PDF and cover upload (AC-8.3).
