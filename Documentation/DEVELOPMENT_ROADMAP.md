@@ -157,13 +157,13 @@ On the S1 dates, kickoff is Monday 16 November 2026, so Week 1 ends on Friday 20
 
 PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4 (tracked in section 4.2), and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
 
-All of it relies on decisions that are OPEN or PROPOSED (DEC-003, DEC-004, DEC-005, DEC-013, DEC-014), so it is spike work on `spike/` branches. It is not merged as production code until Sanika's written agreement is filed and those decisions move (`DEFINITION_OF_DONE.md` section 5 check 2; `DEVELOPMENT_WORKFLOW.md` section 13). Several tasks below are listed in section 9 as blocked by such a decision or by an open question (for example T-01.1, T-01.6, T-03.1, T-06.2, T-04.1 and T-08.1). Here only the part that does not depend on the answer is started, and the block on production use stays. The split follows the PROPOSED mapping of `TASK_OWNERSHIP_MATRIX.md` section 5. Use local emulators and placeholder visuals, and create no cloud resource. No estimate is given for any item, and the estimates in section 8 are unchanged.
+All of it relies on decisions that are OPEN or PROPOSED (DEC-003, DEC-004, DEC-005, DEC-013, DEC-014), so it is spike work on `spike/` branches. It is not merged as production code until both developers' written positions are filed (Sanika's is, in `DECISION_LOG.md` section 5.4; Yuvraj's is not) and those decisions move (`DEFINITION_OF_DONE.md` section 5 check 2; `DEVELOPMENT_WORKFLOW.md` section 13). Several tasks below are marked as blocked in section 6 or section 9 by such a decision or by an open question (for example T-01.1, T-01.6, T-03.1, T-06.2, T-04.1 and T-08.1). Here only the part that does not depend on the answer is started, and the block on production use stays. The split follows the PROPOSED mapping of `TASK_OWNERSHIP_MATRIX.md` section 5. Use local emulators and placeholder visuals, and create no cloud resource. No estimate is given for any item, and the estimates in section 8 are unchanged.
 
 ```text
 Modules that can start before the inputs arrive                [PROPOSED]
 ├── WS-A (Sanika)
-│   ├── 0 Record agreement                                     [first; it lets the scaffold count as production code]
-│   │   └── A written note that names DEC-010 to DEC-015, DEC-025 to DEC-030 and the work split
+│   ├── 0 Record agreement                                     [her side is filed in DECISION_LOG section 5.4 (pull request 4); the open half is Yuvraj's own written note]
+│   │   └── Her positions cover DEC-010 to DEC-015, DEC-022 and DEC-024 to DEC-030. No entry is AGREED until both sides are filed
 │   ├── 1 MOD-13 Backend authorization and data rules          [local emulator only]
 │   │   ├── T-03.6 and T-07.1: deny-by-default rules and own-records-only access, with allowed and refused tests (SEC-CHK-05)
 │   │   ├── saveProfile; getIssueFile with its six checks; requestUpload and onUploadFinalized; the admin record with the last-admin guard
@@ -185,7 +185,7 @@ Modules that can start before the inputs arrive                [PROPOSED]
 │       ├── T-09.7 admin management: OQ-58
 │       └── T-10.1 push set-up: an active Apple Developer account. T-10.3 dispatch: OQ-19
 ├── WS-B (Yuvraj)
-│   ├── 1 T-01.1 Flutter scaffold                              [first; a spike until Sanika's agreement on DEC-013 and DEC-014 is filed]
+│   ├── 1 T-01.1 Flutter scaffold                              [first; a spike until both developers' written positions on DEC-013 and DEC-014 are filed. Sanika's is; Yuvraj's is not]
 │   │   └── The app modules of both workstreams live in it
 │   ├── 2 MOD-00 Shared contracts and fakes                    [after 1]
 │   │   └── AccessState, Result, AppFailure, IssueSummary, DownloadStatus, and a fake for each provider in IC-01 to IC-08, so both workstreams can build in parallel
