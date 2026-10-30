@@ -7,7 +7,7 @@
 | Document | Development Roadmap |
 | File | `Documentation/DEVELOPMENT_ROADMAP.md` |
 | Phase | 3 — Development Planning and Collaboration (document 23) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
 | Date | 30 October 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
@@ -21,7 +21,8 @@
 | 0.3 | 24 October 2026 | Tracking edit, see `CHANGELOG.md`. Four documents added on 24 October 2026 are listed as existing drafts. T-00.7 now covers their review and keeps `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as the one document still to write. No date, estimate or milestone changed. |
 | 0.4 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. `CLOUD_INFRASTRUCTURE_AND_COSTS.md` is listed as an existing draft, and T-00.7 now covers its review. The single-provider cost model is still blocked by DEC-003. No date, estimate or milestone changed. |
 | 0.5 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). Section 4.1 added: the proposed plan for 27 October 2026. WP-09 gains T-09.7 (admin management), and the subscriber export leaves T-09.5. Availability is noted as reported (GS-Q53). The status table notes the reported late inputs and the chat message about M1. The related-documents row shows the new versions. No date, estimate or milestone changed, and T-09.7 has no estimate. |
-| 0.6 | 30 October 2026 | Section 4.2 added: a proposed plan for the days before the reported inputs, with the modules each workstream can start, the work that waits, and what each input unlocks. The MFW inputs row of the status table notes the report of 30 October 2026 and the expected date. No date, estimate or milestone changed. |
+| 0.6 | 27 October 2026 | Section 4.2 added: a tracker of the inputs MFW owes, with the S1 and Charter due dates side by side. It records no date received, because the repository holds no evidence of any. No date, estimate, milestone or task changed. |
+| 0.7 | 30 October 2026 | Section 4.3 added: a proposed plan for the days before the reported inputs, with the modules each workstream can start, the work that waits, and what each input unlocks. The MFW inputs row of the status table notes the report of 30 October 2026 and the expected date. No date, estimate or milestone changed. Renumbered from 4.2 after merging the MFW input tracker (section 4.2, version 0.6). |
 
 ### 1.1 Related documents
 
@@ -126,9 +127,35 @@ Plan for 27 October 2026                               [PROPOSED]
     └── Production data of any kind
 ```
 
-### 4.2 Plan for the days before the reported inputs (30 October 2026)
+### 4.2 MFW input tracker
 
-PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4, and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
+PROPOSED. The inputs are the items in S1 "What we need from MFW", which S2 Responsibilities makes MFW's job to supply "by the dates shown there". S1 and S2 are the issued baseline, and the repository copies are unsigned (OQ-28). The Charter dates rest on the S3 emails, which are not filed (C-08, DEC-017), so they are PROVISIONAL. The two date columns are shown side by side and neither is chosen.
+
+On the S1 dates, kickoff is Monday 16 November 2026, so Week 1 ends on Friday 20 November and Week 4 on Friday 11 December 2026. Those two end dates are worked out from S1's kickoff, and S1 does not print them.
+
+| # | Input (S1 wording) | S1 due | Charter due (PROVISIONAL) | Needed for | Status on 27 October 2026 | Received |
+|---|---|---|---|---|---|---|
+| 1 | Logo files, brand colours and fonts | Kickoff, 16 Nov 2026 | 21 Oct 2026 | T-02.1, T-01.1 | Past due on the Charter date, not due on the S1 date. Reported not received (GS-Q35). Not filed. | None recorded |
+| 2 | Named approver and deputy, and written confirmation that MFW owns or may use the magazine content | Before kickoff | Before 21 Oct 2026 | T-00.1, T-00.5, every approval | Reported named, without saying who holds which role (GS-Q37). No written confirmation filed (OQ-28). | None recorded |
+| 3 | Two to three sample PDFs, including the largest expected issue | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-02.3, T-05.1 | Not due yet on either schedule. Reported not received (GS-Q35). | None recorded |
+| 4 | WordPress site address, confirmation that its API is reachable, and the news categories to show | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-08.1 | Not due yet on either schedule. Reported not received (GS-Q35). | None recorded |
+| 5 | A Firebase and Google Cloud project in MFW's name, with billing switched on | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-01.3, T-01.4 | Not due yet on either schedule. Reported not received (GS-Q35). Also needs DEC-003 and the region (DEC-031). | None recorded |
+| 6 | Apple Developer Program (organisation) and Google Play accounts in MFW's name | Enrolment in Week 1, active by end of Week 4 (11 Dec 2026) | Active by 18 Nov 2026 | T-10.1, T-12.1 to T-12.3 | Not due yet. Reported not received (GS-Q35). Apple verification can take weeks (R8). | None recorded |
+| 7 | Privacy policy and terms of use at a public web address | End of Week 4 (11 Dec 2026) | 18 Nov 2026 | T-03.3, T-12.1 | Not due yet on either schedule. | None recorded |
+| 8 | Launch content: latest issue and four to six archive issues, with their details | End of Week 4 (11 Dec 2026) | 18 Nov 2026 | T-04.1, T-11.5 | Not due yet on either schedule. | None recorded |
+| 9 | Admin user list and store listing text | Weeks 5 and 6 | 18 Nov to 2 Dec 2026 | T-09.1, T-12.1 | Not due yet on either schedule. | None recorded |
+| 10 | Testers from MFW's team for acceptance testing | From 28 Dec 2026 | From 2 Dec 2026 | T-11.5 | Not due yet on either schedule. | None recorded |
+
+**How to keep this table**
+
+1. When an input arrives, add the date and a reference to the evidence (the date and the sender's role, not their name or message text, because the repository is public) in a pull request.
+2. A request to MFW is recorded here with its date when it is sent. GS-Q35 reports that a request has gone out, with no date or channel, so none is recorded above.
+3. S2 Responsibilities: a delay of one working day on a key item, such as brand assets, sample PDFs, WordPress access, the Firebase project, store accounts or launch content, moves later dates by one working day. A delay longer than five working days is a schedule change agreed in writing. The developer tells MFW in writing as soon as a delay is expected.
+4. Which dates apply is C-08. Until it is settled, a late input is described by its date and its source, not as late without a source.
+
+### 4.3 Plan for the days before the reported inputs (30 October 2026)
+
+PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4 (tracked in section 4.2), and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
 
 All of it relies on decisions that are OPEN or PROPOSED (DEC-003, DEC-004, DEC-005, DEC-013, DEC-014), so it is spike work on `spike/` branches. It is not merged as production code until Sanika's written agreement is filed and those decisions move (`DEFINITION_OF_DONE.md` section 5 check 2; `DEVELOPMENT_WORKFLOW.md` section 13). Several tasks below are listed in section 9 as blocked by such a decision or by an open question (for example T-01.1, T-01.6, T-03.1, T-06.2, T-04.1 and T-08.1). Here only the part that does not depend on the answer is started, and the block on production use stays. The split follows the PROPOSED mapping of `TASK_OWNERSHIP_MATRIX.md` section 5. Use local emulators and placeholder visuals, and create no cloud resource. No estimate is given for any item, and the estimates in section 8 are unchanged.
 
