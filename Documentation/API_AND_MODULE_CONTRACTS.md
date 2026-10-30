@@ -7,9 +7,9 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
-| Date | 27 October 2026 |
+| Date | 30 October 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
 
 **Change history**
@@ -20,6 +20,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 8 gains a column with the main identifier in `API_AND_BACKEND_CONTRACT.md` and notes on OP-ADM-11, OP-ADM-12 and OP-ACC-01. Section 4.2 error table gains the category and reason, with GONE and RATE_LIMITED added. Registration and sign-in messages stated. Compatibility and paging requirements added (4.5). Guest-reading rule labelled as a working position. Planned names replaced by the existing documents. |
 | 0.3 | 25 October 2026 | The related-documents row for `PDF_READER_AND_OFFLINE_DESIGN.md` now says the draft exists. No contract changed. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). MOD-06 notes the two reading actions (Read is temporary, Download is kept) and foreground-only downloads. MOD-12 notes in-panel add and remove of admins, which has no alias. The edition-update sign-up (OP-EML-01, OP-ADM-10) is dropped on the working position. OP-13 and the grace window are withdrawn. The catalogue keeps its 31 identifiers. No decision is approved. |
+| 0.5 | 30 October 2026 | Two fixes from the design-draft review (findings F-01 and F-02). `IssueSummary` holds a list of industry segment identifiers, and `IssueQuery` filters on one segment identifier (`industrySegment` is renamed in both). `DownloadedIssue` and `IssueFileGrant` gain the owner and revision fields that `DATABASE_AND_DATA_MODEL.md` section 7.1 and `PDF_READER_AND_OFFLINE_DESIGN.md` sections 4.3 and 5 already require, and section 6.6 gains behaviour rules 7 and 8. No code exists yet, so nothing is broken by the renames. No decision is approved. |
 
 ### 1.1 Related documents
 
@@ -200,7 +201,7 @@ These are conceptual shapes for interfaces, not a database schema. `DATABASE_AND
 
 | Model | Fields (conceptual) | Source | Status | Written by |
 |---|---|---|---|---|
-| `IssueSummary` | `issueId`, `title`, `description`, `categoryId`, `industrySegment`, `publicationDate`, `year`, `edition`, `coverImage`, `fileSizeBytes` | RS DATA-001, FR-MAG-002 | CONFIRMED fields. Which fields are public is OQ-13. | MOD-12 |
+| `IssueSummary` | `issueId`, `title`, `description`, `categoryId`, `industrySegmentIds` (a list), `publicationDate`, `year`, `edition`, `coverImage`, `fileSizeBytes` | RS DATA-001, FR-MAG-002 | CONFIRMED fields. Which fields are public is OQ-13. An issue can carry several segments (OQ-13 working position; `DATABASE_AND_DATA_MODEL.md` section 4.5), so this field is a list. | MOD-12 |
 | `IssueCategory` | `categoryId`, `name` | RS DATA-002 | CONFIRMED | MOD-12 |
 | `AuthSession` | `userId`, `method` (email or Google), `emailVerified` | RS DATA-003 | CONFIRMED (Google: PROVISIONAL) | MOD-03 |
 | `ReaderProfile` | `name`, `age`, `gender`, `occupation`, `domainOfWork`, further fields | RS DATA-004, §7.2 | PROVISIONAL. Field list OQ-01, age format OQ-02. | MOD-04 |
@@ -212,8 +213,8 @@ These are conceptual shapes for interfaces, not a database schema. `DATABASE_AND
 | `NotificationPreferences` | `optedIn`, `categoryIds` | RS DATA-007 | CONFIRMED (categories: OQ-18) | MOD-11 |
 | `NotificationTarget` | `type` (`issue` or `article`), `targetId` | RS FR-NOTIF-005 | CONFIRMED | MOD-11 |
 | `NotificationSendRecord` | `sendId`, `sentAt`, `category`, `target` | RS DATA-008 | CONFIRMED (fields: OQ-19) | MOD-12 |
-| `IssueFileGrant` | `issueId`, opaque access descriptor, `expiresAt`, `sizeBytes`, `contentHash` | DEC-020 | PROPOSED | MOD-13 |
-| `DownloadedIssue` (device only) | `issueId`, local file reference, `sizeBytes`, `downloadedAt`, `contentHash`, `retention` (kept or temporary; proposed, GS-Q43) | RS DATA-013 | CONFIRMED (behaviour after sign-out: OQ-11) | MOD-06 |
+| `IssueFileGrant` | `issueId`, opaque access descriptor, `expiresAt`, `sizeBytes`, `contentHash`, `revision` (the file revision the grant is for; OP-11 returns it, `API_AND_BACKEND_CONTRACT.md` section 4.2) | DEC-020 | PROPOSED | MOD-13 |
+| `DownloadedIssue` (device only) | `issueId`, `ownerUserId` (the reader who downloaded it), `fileRevision` (the revision downloaded), local file reference, `sizeBytes`, `downloadedAt`, `contentHash`, `retention` (kept or temporary; proposed, GS-Q43) | RS DATA-013 | CONFIRMED (behaviour after sign-out: OQ-11). The owner and revision fields match the file registry in `DATABASE_AND_DATA_MODEL.md` section 7.1. There is no `state` field: a `DownloadedIssue` exists only for a complete, verified copy (section 6.6 rule 4). | MOD-06 |
 | `RegisteredUserRow` (admin) | Email, profile fields, registration date | RS FR-USER-002 | PROVISIONAL | MOD-12 (reads MOD-04 data) |
 | `EditionUpdateSubscription` | Email, opted in | RS DATA-010 | CONFLICT C-02 (OQ-31) | MOD-04 |
 
@@ -227,7 +228,7 @@ final class IssueSummary {
     required this.categoryId,
     required this.publicationDate,
     required this.year,
-    this.industrySegment,
+    this.industrySegmentIds = const [],
     this.edition,
     this.coverImageUrl,
     this.fileSizeBytes,
@@ -239,7 +240,7 @@ final class IssueSummary {
   final String categoryId;
   final DateTime publicationDate;
   final int year;
-  final String? industrySegment; // meaning: OQ-13
+  final List<String> industrySegmentIds; // several per issue; meaning of "industry segment": OQ-13
   final String? edition;         // meaning: OQ-13
   final Uri? coverImageUrl;
   final int? fileSizeBytes;      // shown before sign-in? OQ-13
@@ -253,6 +254,7 @@ final class IssueFileGrant {
     required this.expiresAt,
     required this.sizeBytes,
     required this.contentHash,
+    required this.revision,
   });
 
   final String issueId;
@@ -260,6 +262,7 @@ final class IssueFileGrant {
   final DateTime expiresAt;
   final int sizeBytes;
   final String contentHash;   // for integrity checking after download
+  final int revision;         // file revision this grant is for; stored with the copy as fileRevision
 }
 ```
 
@@ -429,10 +432,10 @@ abstract interface class ProfileRepository {
 
 ```dart
 final class IssueQuery {
-  const IssueQuery({this.text, this.categoryId, this.industrySegment, this.year, this.edition});
+  const IssueQuery({this.text, this.categoryId, this.industrySegmentId, this.year, this.edition});
   final String? text;
   final String? categoryId;
-  final String? industrySegment;
+  final String? industrySegmentId; // matches an issue whose industrySegmentIds contains it
   final int? year;
   final String? edition;
 }
@@ -446,6 +449,8 @@ abstract interface class CatalogueRepository {
 /// Metadata-only search and filtering (RS FR-SRCH-001 to 007).
 List<IssueSummary> applyQuery(List<IssueSummary> issues, IssueQuery query);
 ```
+
+A segment filter takes one segment and matches an issue whose `industrySegmentIds` contains it. RS FR-SRCH-003 does not ask for several segments to be selected at once. If that is added, whether the filter means any or all of them is decided then. The segment names come from the catalogue read (OP-01 returns issues, categories and segments, `API_AND_BACKEND_CONTRACT.md` section 3.1). This contract does not yet define the model, or the method, that gives the app those names. PROPOSED.
 
 With five to twelve issues at launch (RS ASM-02), filtering on the device is enough. A server-side query can be added later as an additive change. This is PROPOSED.
 
@@ -515,6 +520,8 @@ abstract interface class DownloadManager {
 4. A partial file is never listed as downloaded (RS FR-STATE-004).
 5. On the working position there are two actions (GS-Q43, reported as MFW's answer and not filed). Read downloads a complete copy that is temporary and is removed when the reader leaves the issue, or at the next start of the app after a crash. Download keeps the copy until the reader deletes it. `listDownloaded` returns only kept copies. The `kind` parameter on `start` waits for MFW's written answer to OQ-08.
 6. Downloads run only while the app is in the foreground. A stopped download resumes the next time the app is open (GS-Q60).
+7. Each stored copy records the reader who downloaded it (`ownerUserId`). `openLocal` and `listDownloaded` return only copies owned by the signed-in reader, and refuse any other (`PDF_READER_AND_OFFLINE_DESIGN.md` invariant I-2). On the OQ-11 working position, sign-out hides a reader's copies until the same reader signs in again. Whether a second reader on the same device downloads a second copy is RD-05 in that document.
+8. Each stored copy records the file revision it was downloaded at (`fileRevision`), and the grant carries the current revision. A copy at an older revision still opens, and the app shows an updated badge. The app never replaces a copy silently (`PDF_READER_AND_OFFLINE_DESIGN.md` section 5; the space and display questions are RD-03). If MFW does not allow replacement (OQ-21), only revision 1 exists.
 
 ### 6.7 MOD-07 Reader
 
