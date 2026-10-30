@@ -37,7 +37,7 @@ Follows pull request #7, merged as `842a52f`. Its review asked whether `Bookmark
 
 | Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
 |---|---|---|---|---|---|---|
-| 2026-10-30 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.6: `Bookmark` gains `fileRevision`, `addBookmark` takes `(issueId, page, fileRevision)`, and the OP-LIB-02 row adds `fileRevision` to its inputs. Section 6.8 gains behaviour rules 1 to 3 (the uniqueness key, where the revision comes from, and what opening an older bookmark does) | The review of pull request #7 | FR-BKM-001, DATA-005, OP-07, OP-LIB-02, GS-Q16, OQ-21 | Both developers (not agreed) | No scope effect: RS DATA-005 is unchanged |
+| 2026-10-30 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.6: `Bookmark` gains `fileRevision`, `addBookmark` takes `(issueId, page, fileRevision)`, and the OP-LIB-02 row adds `fileRevision` to its inputs. Section 6.8 gains behaviour rules 1 to 4 (the uniqueness key and the derived identifier, a repeated add, where the revision comes from, and what opening an older bookmark does) | The review of pull request #7, and Sanika Attarde's review of pull request #9 for rules 1 and 2 | FR-BKM-001, DATA-005, OP-07, OP-LIB-02, GS-Q16, OQ-21, DEC-003 | Both developers (not agreed) | No scope effect: RS DATA-005 is unchanged |
 | 2026-10-30 | `Documentation/CHANGELOG.md` | Version 0.9: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
 | 2026-10-30 | `README.md` | The version column reads 0.4 for `DECISION_LOG` (was 0.3), 0.6 for `API_AND_MODULE_CONTRACTS` (was 0.4) and 0.9 for `CHANGELOG` (was 0.7) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
