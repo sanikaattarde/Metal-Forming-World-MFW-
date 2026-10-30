@@ -1,5 +1,6 @@
 // SPIKE helper (DEC-003 OPEN). Local emulators only. Results are "emulator only".
 import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { ref, uploadString } from 'firebase/storage';
@@ -50,6 +51,38 @@ export async function deleteAccount(idToken) {
     body: JSON.stringify({ idToken }),
   });
   if (!reply.ok) throw new Error(`could not delete the account: ${reply.status}`);
+}
+
+// The Admin SDK from the functions folder, pointed at the emulators by emulators:exec. It bypasses
+// the rules, so a test can seed and inspect records and call the server code directly.
+const requireFromFunctions = createRequire(new URL('../functions/package.json', import.meta.url));
+
+export function adminBackend() {
+  const { getApps, initializeApp } = requireFromFunctions('firebase-admin/app');
+  const { getAuth } = requireFromFunctions('firebase-admin/auth');
+  const { getFirestore } = requireFromFunctions('firebase-admin/firestore');
+  const app = getApps()[0] ?? initializeApp({ projectId: PROJECT_ID });
+  return { db: getFirestore(app), auth: getAuth(app) };
+}
+
+// A token nobody signed, for a real account, carrying whatever claims the test wants. The Functions
+// emulator accepts it (04-save-profile-notes.md, B-1), so it can show that the code ignores claims.
+// It says nothing about whether a real platform would accept it.
+export function forgedToken(uid, claims = {}) {
+  const part = (value) => Buffer.from(JSON.stringify(value)).toString('base64url');
+  const issuedAt = Math.floor(Date.now() / 1000);
+  const body = {
+    iss: `https://securetoken.google.com/${PROJECT_ID}`,
+    aud: PROJECT_ID,
+    auth_time: issuedAt,
+    iat: issuedAt,
+    exp: issuedAt + 3600,
+    sub: uid,
+    user_id: uid,
+    firebase: { identities: {}, sign_in_provider: 'password' },
+    ...claims,
+  };
+  return `${part({ alg: 'none', typ: 'JWT' })}.${part(body)}.`;
 }
 
 // Calls a callable function the way the client SDK does. Returns the HTTP status, the parsed reply

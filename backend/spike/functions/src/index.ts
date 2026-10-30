@@ -4,4 +4,5 @@ import { getApps, initializeApp } from 'firebase-admin/app';
 
 if (getApps().length === 0) initializeApp();
 
+export { getMyAdminRole } from './getMyAdminRole.js';
 export { saveProfile } from './saveProfile.js';

@@ -5,10 +5,8 @@ import { getAuth } from 'firebase-admin/auth';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import * as logger from 'firebase-functions/logger';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
+import { accountClosed, cannotVerify, unauthenticated } from './errors.js';
 import { checkProfile, ConfigError, consentId, parsePublicConfig, versionsMatch } from './profile.js';
-
-const accountClosed = () =>
-  new HttpsError('failed-precondition', 'This account is closed.', { reason: 'ACCOUNT_CLOSED' });
 
 // The reply names the fields and never repeats a value (SC-16).
 const invalidArgument = (fields: string[]) =>
@@ -19,7 +17,7 @@ const isObject = (value: unknown): value is Record<string, unknown> =>
 
 export const saveProfile = onCall(async (request) => {
   const uid = request.auth?.uid;
-  if (!uid) throw new HttpsError('unauthenticated', 'Sign-in is required.');
+  if (!uid) throw unauthenticated();
 
   const data: unknown = request.data;
   if (!isObject(data)) throw invalidArgument(['request_id', 'profile']);
@@ -53,7 +51,7 @@ export const saveProfile = onCall(async (request) => {
     } catch (error) {
       if (!(error instanceof ConfigError)) throw error;
       logger.error('saveProfile refused: public configuration is not usable', { problem: error.message });
-      throw new HttpsError('internal', 'The request could not be completed. Nothing was changed.');
+      throw cannotVerify();
     }
 
     const check = checkProfile(profileInput, config.requiredFields);
