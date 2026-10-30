@@ -7,9 +7,9 @@
 | Document | Development Roadmap |
 | File | `Documentation/DEVELOPMENT_ROADMAP.md` |
 | Phase | 3 — Development Planning and Collaboration (document 23) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
-| Date | 27 October 2026 |
+| Date | 30 October 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
 
 **Change history**
@@ -22,6 +22,7 @@
 | 0.4 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. `CLOUD_INFRASTRUCTURE_AND_COSTS.md` is listed as an existing draft, and T-00.7 now covers its review. The single-provider cost model is still blocked by DEC-003. No date, estimate or milestone changed. |
 | 0.5 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). Section 4.1 added: the proposed plan for 27 October 2026. WP-09 gains T-09.7 (admin management), and the subscriber export leaves T-09.5. Availability is noted as reported (GS-Q53). The status table notes the reported late inputs and the chat message about M1. The related-documents row shows the new versions. No date, estimate or milestone changed, and T-09.7 has no estimate. |
 | 0.6 | 27 October 2026 | Section 4.2 added: a tracker of the inputs MFW owes, with the S1 and Charter due dates side by side. It records no date received, because the repository holds no evidence of any. No date, estimate, milestone or task changed. |
+| 0.7 | 30 October 2026 | Section 4.3 added: a proposed plan for the days before the reported inputs, with the modules each workstream can start, the work that waits, and what each input unlocks. The MFW inputs row of the status table notes the report of 30 October 2026 and the expected date. No date, estimate or milestone changed. Renumbered from 4.2 after merging the MFW input tracker (section 4.2, version 0.6). |
 
 ### 1.1 Related documents
 
@@ -82,7 +83,7 @@ Evidence from the repository on 23 October 2026.
 | Phase 3 and Phase 4 documents | Merged into `main` by pull request #1 (merge commit 56c6d97) on 23 October 2026. Drafts. No review is recorded on the pull request. |
 | Application code | None |
 | M1 | No evidence of MFW's written approval of a requirements and architecture note. No architecture note exists. YG reports a chat message from MFW that says "go ahead" and names no note (GS-Q63, OQ-59). It is not filed, and it is weak evidence of approval. |
-| MFW inputs (S1 "What we need from MFW") | The repository holds no record of any input being received, other than the S1 and S2 PDFs themselves. YG reports on 27 October 2026 that the brand assets, sample PDFs, WordPress details, cloud project and store accounts have not been received, and that the request for them has been sent (GS-Q35). Not filed |
+| MFW inputs (S1 "What we need from MFW") | The repository holds no record of any input being received, other than the S1 and S2 PDFs themselves. YG reports on 27 October 2026 that the brand assets, sample PDFs, WordPress details, cloud project and store accounts have not been received, and that the request for them has been sent (GS-Q35). Not filed. On 30 October 2026 YG reports that they are still not received and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed |
 
 ### 4.1 Plan for 27 October 2026
 
@@ -151,6 +152,70 @@ On the S1 dates, kickoff is Monday 16 November 2026, so Week 1 ends on Friday 20
 2. A request to MFW is recorded here with its date when it is sent. GS-Q35 reports that a request has gone out, with no date or channel, so none is recorded above.
 3. S2 Responsibilities: a delay of one working day on a key item, such as brand assets, sample PDFs, WordPress access, the Firebase project, store accounts or launch content, moves later dates by one working day. A delay longer than five working days is a schedule change agreed in writing. The developer tells MFW in writing as soon as a delay is expected.
 4. Which dates apply is C-08. Until it is settled, a late input is described by its date and its source, not as late without a source.
+
+### 4.3 Plan for the days before the reported inputs (30 October 2026)
+
+PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4 (tracked in section 4.2), and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
+
+All of it relies on decisions that are OPEN or PROPOSED (DEC-003, DEC-004, DEC-005, DEC-013, DEC-014), so it is spike work on `spike/` branches. It is not merged as production code until both developers' written positions are filed (Sanika's is, in `DECISION_LOG.md` section 5.4; Yuvraj's is not) and those decisions move (`DEFINITION_OF_DONE.md` section 5 check 2; `DEVELOPMENT_WORKFLOW.md` section 13). Several tasks below are marked as blocked in section 6 or section 9 by such a decision or by an open question (for example T-01.1, T-01.6, T-03.1, T-06.2, T-04.1 and T-08.1). Here only the part that does not depend on the answer is started, and the block on production use stays. The split follows the PROPOSED mapping of `TASK_OWNERSHIP_MATRIX.md` section 5. Use local emulators and placeholder visuals, and create no cloud resource. No estimate is given for any item, and the estimates in section 8 are unchanged.
+
+```text
+Modules that can start before the inputs arrive                [PROPOSED]
+├── WS-A (Sanika)
+│   ├── 0 Record agreement                                     [her side is filed in DECISION_LOG section 5.4 (pull request 4); the open half is Yuvraj's own written note]
+│   │   └── Her positions cover DEC-010 to DEC-015, DEC-022 and DEC-024 to DEC-030. No entry is AGREED until both sides are filed
+│   ├── 1 MOD-13 Backend authorization and data rules          [local emulator only]
+│   │   ├── T-03.6 and T-07.1: deny-by-default rules and own-records-only access, with allowed and refused tests (SEC-CHK-05)
+│   │   ├── saveProfile; getIssueFile with its six checks; requestUpload and onUploadFinalized; the admin record with the last-admin guard
+│   │   └── T-03.5 account deletion on the working position of immediate deletion, labelled PROVISIONAL. OQ-24 stays open
+│   ├── 2 MOD-03 Authentication, email only                    [after the scaffold]
+│   │   └── T-03.1 against the Auth emulator: register, verify, sign in, reset, sign out and the AccessState provider
+│   ├── 3 MOD-02 Errors, logging and monitoring               [after the scaffold; no other dependency]
+│   │   ├── Message mapping, log redaction and the event allowlist (PAC-09)
+│   │   └── Agree with Yuvraj which file holds Result and AppFailure
+│   ├── 4 MOD-12 Admin and content management                 [DEC-004 is PROVISIONAL]
+│   │   ├── T-01.6 React skeleton with a sign-in page
+│   │   └── T-09.3 publish and unpublish, and T-09.4 news controls
+│   ├── 5 MOD-11 Notifications, preferences only
+│   │   └── T-10.2 the three fixed categories and the permission explanation (working positions GS-Q46 and GS-Q47). No dispatch and no push
+│   └── Waits
+│       ├── MOD-04 Profile, settings and consent: OQ-01 to OQ-03, OQ-07, OQ-27
+│       ├── T-03.2 Google Sign-In: OQ-04, OQ-05, OQ-29, and the OAuth set-up in MFW's accounts
+│       ├── T-09.2 upload: OQ-22, OQ-30. T-09.5 export: OQ-29, OQ-31. T-09.6 delete and replace: OQ-21
+│       ├── T-09.7 admin management: OQ-58
+│       └── T-10.1 push set-up: an active Apple Developer account. T-10.3 dispatch: OQ-19
+├── WS-B (Yuvraj)
+│   ├── 1 T-01.1 Flutter scaffold                              [first; a spike until both developers' written positions on DEC-013 and DEC-014 are filed. Sanika's is; Yuvraj's is not]
+│   │   └── The app modules of both workstreams live in it
+│   ├── 2 MOD-00 Shared contracts and fakes                    [after 1]
+│   │   └── AccessState, Result, AppFailure, IssueSummary, DownloadStatus, and a fake for each provider in IC-01 to IC-08, so both workstreams can build in parallel
+│   ├── 3 MOD-07 Reader
+│   │   ├── The PdfRenderer interface, T-05.3 zoom and two-page spread, T-05.4 damaged-file handling
+│   │   └── T-02.3 spike: compare pdfrx and pdfx with public PDFs and a generated 150 MB, 120-page file. Do not use MFW's samples. The library choice stays OPEN
+│   ├── 4 MOD-06 Issue access and downloads, app side
+│   │   ├── T-06.4 integrity check, Downloads screen and deletion
+│   │   └── T-06.2 size, progress and free-space check, against a fake file grant
+│   ├── 5 MOD-05 Catalogue, search and home
+│   │   └── T-04.1 and T-04.2 list, detail and text search on seeded fake data. The category filter waits for OQ-13
+│   ├── 6 MOD-01 App shell and navigation
+│   │   └── The shell and route guards against a fake AccessState, with placeholder theme tokens
+│   ├── 7 MOD-09 News from WordPress
+│   │   └── T-08.1 client and fixture tests, and T-08.2 news list. The live read waits for MFW's confirmed address (OQ-39)
+│   ├── 8 T-01.5 CI skeleton                                   [after 1]
+│   │   └── Verify first: Actions availability and the macOS runner cost (DEC-022, NOT VERIFIED)
+│   └── Waits
+│       ├── MOD-08 Bookmarks and favourites: T-05.1 and OQ-12
+│       ├── MOD-10 Sharing: MOD-05, MOD-09 and OQ-15
+│       ├── T-05.1 library integration: DEC-005 AGREED. T-05.5 tuning: the OQ-26 devices
+│       ├── T-06.3 resume: T-02.4. T-06.5 offline rules: OQ-08 and OQ-11
+│       └── T-04.3 home screen and the final screens: the M2 designs, which wait for the brand assets
+└── What each input unlocks
+    ├── Sample PDFs: the reader library choice (DEC-005) and the T-02.3 report on MFW's PDFs
+    ├── WordPress details: the live read in T-08.1 (OQ-39)
+    ├── Cloud project in MFW's name: T-01.3 access, T-01.4 deploy to ENV-TEST, the region and bucket (DEC-031)
+    ├── Brand assets: T-02.1 prototype and final screens, T-04.3 home screen
+    └── Store accounts: T-03.2 Google Sign-In, T-10.1 push set-up, T-12.2 signing
+```
 
 ## 5. Milestone Gates
 

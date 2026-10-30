@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.7 |
+| Version | 0.8 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 27 October 2026 |
+| Date | 30 October 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,16 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: plan for the days before the reported MFW inputs added to the roadmap, 2026-10-30, on topic branch `docs/yg-remaining-docs` on top of `bd2db98`, then merged with `origin/main` at `8083595`, not reviewed
+
+Follows the entry below, whose edits were committed as `bd2db98` and pushed to `main`. On 2026-10-30 YG reported that MFW has still not provided the inputs and expects them by Monday 2026-11-02, and asked which modules each developer can start in the meantime. The answer is recorded as section 4.3 of the roadmap. Section 4.2 there is the MFW input tracker that came in with pull request #5. It is a development-team proposal. The date is YG's expectation, not an MFW commitment, and it is not filed. Sanika Attarde has not reviewed it, and every item in it is spike work until her written agreement is filed. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW. The edits were committed locally and merged with `origin/main` when this entry was written. Nothing was pushed.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-10-30 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.7: section 4.3 added. It lists the modules each workstream can start before the inputs arrive, the work that waits, and what each input unlocks. The MFW inputs row of the status table notes the report of 2026-10-30 and the expected date | A request from YG on 2026-10-30 | MOD-00 to MOD-13; T-01.1, T-01.5, T-01.6, T-02.3, T-03.1, T-03.5, T-03.6, T-07.1, T-08.1, T-09.3, T-09.4, T-10.2 | Both developers (not agreed) | No scope effect: no date, estimate or milestone changed |
+| 2026-10-30 | `Documentation/CHANGELOG.md` | Version 0.8: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-10-30 | `README.md` | The version column of the roadmap row reads 0.7 | Follows the roadmap's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: positions from the questioning session of 26 and 27 October 2026 applied to the registers, the design documents and the plans, 2026-10-27, on topic branch `docs/yg-remaining-docs` on top of `8ba8760`, not reviewed
 
