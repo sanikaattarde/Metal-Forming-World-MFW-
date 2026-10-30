@@ -1,0 +1,12 @@
+rules_version = '2';
+
+// SPIKE (DEC-003 and DEC-020 OPEN). Baseline for the harness check only, not the final rules.
+// Every direct client read and write is refused (DM section 9, item 4). An issue file is
+// released only through getIssueFile.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

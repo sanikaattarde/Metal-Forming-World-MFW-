@@ -1,0 +1,18 @@
+rules_version = '2';
+
+// SPIKE (DEC-003 OPEN). Baseline for the harness check only, not the final rules.
+// Deny by default (SC-05): every path not listed is refused. The path layout below is a
+// spike choice and is not fixed by any document.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // An owner-only record, used to show the harness can tell the owner from anyone else.
+    match /users/{uid}/bookmarks/{bookmarkId} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
