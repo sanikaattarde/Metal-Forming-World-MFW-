@@ -1,0 +1,141 @@
+# Metal Forming World (MFW) mobile application
+#
+# This repository is public. This file keeps secrets, reader data, MFW's
+# confidential files and generated output out of Git (CODING_STANDARDS.md
+# section 13; DEC-012, DEC-024; SEC-CHK-09). It is a safety net: it hides
+# files from `git status`, but it does not remove a file that is already
+# tracked. Run the secrets scan (QG-11, once it exists) as well.
+#
+# The folders app/, backend/ and admin/ do not exist yet (DEC-012). Entries
+# for tools whose choice is still open (DEC-003, DEC-004) are marked
+# PROVISIONAL and are to be confirmed when that tooling is first run.
+
+# ---------------------------------------------------------------------------
+# Secrets and credentials (CODING_STANDARDS.md section 13, item 1)
+# ---------------------------------------------------------------------------
+
+# Android signing
+*.jks
+*.keystore
+key.properties
+**/key.properties
+
+# Apple signing and push keys, provisioning profiles
+*.p12
+*.p8
+*.mobileprovision
+*.provisionprofile
+
+# Service-account key files
+*service-account*.json
+*serviceAccount*.json
+*firebase-adminsdk*.json
+# PROVISIONAL (TD-03): local server configuration written by the platform tooling
+.runtimeconfig.json
+
+# Environment files with values. Only the example files are tracked.
+.env
+.env.*
+!.env.example
+
+# Configuration for each environment (DEPLOYMENT_PLAN.md section 5). Everything
+# in config/ is ignored except the example, so a new file there is never
+# committed by accident.
+/config/*
+!/config/config.example.env
+
+# Provider mobile configuration files are not secrets, but they are specific
+# to an environment. Whether they are committed is decided with DEC-003 and
+# DEC-023 (CODING_STANDARDS.md section 13, item 3). Until then they stay out.
+# PROVISIONAL: delete these two lines if that decision says to commit them.
+google-services.json
+GoogleService-Info.plist
+
+# ---------------------------------------------------------------------------
+# MFW files and reader data (DEC-024)
+# ---------------------------------------------------------------------------
+
+# MFW's sample PDFs are confidential, and no reader data may be committed.
+# Where large fixtures and MFW samples are stored is not decided (DEC-024), so
+# a PDF is ignored everywhere except in Documentation/, which already holds the
+# proposal and the statement of work. When a fixtures folder is decided, add a
+# negation for that folder's path in the same pull request. Fixtures are
+# generated or public files, never MFW's samples.
+*.pdf
+!/Documentation/*.pdf
+
+# ---------------------------------------------------------------------------
+# Operating system and editor files
+# ---------------------------------------------------------------------------
+
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.history/
+
+# ---------------------------------------------------------------------------
+# Logs and general output
+# ---------------------------------------------------------------------------
+
+*.log
+build/
+dist/
+coverage/
+
+# ---------------------------------------------------------------------------
+# Flutter and Dart (app/). pubspec.lock is tracked (QG-10 reads it).
+# `flutter create` also writes its own .gitignore inside app/.
+# ---------------------------------------------------------------------------
+
+.dart_tool/
+.pub-cache/
+.pub/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.gradle/
+.cxx/
+.kotlin/
+**/android/local.properties
+**/android/captures/
+**/android/**/GeneratedPluginRegistrant.java
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/flutter_assets/
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/macos/Flutter/ephemeral/
+xcuserdata/
+DerivedData/
+
+# ---------------------------------------------------------------------------
+# Node.js and TypeScript (backend/ and admin/). The layouts are blocked by
+# DEC-003 and DEC-004. package-lock.json is tracked.
+# ---------------------------------------------------------------------------
+
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.npm/
+.eslintcache
+*.tsbuildinfo
+
+# ---------------------------------------------------------------------------
+# Local emulator output. PROVISIONAL (TD-03): confirm the file names when the
+# emulators are first run, and add the folder that holds any exported
+# emulator data once its name is chosen.
+# ---------------------------------------------------------------------------
+
+.firebase/
+# *.log above already covers the emulator logs. This covers rotated copies.
+*-debug.log.*
