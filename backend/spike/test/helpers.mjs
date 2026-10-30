@@ -10,6 +10,61 @@ const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url), 'utf
 // A "demo-" project name is meant to keep the emulators offline. NOT VERIFIED here.
 export const PROJECT_ID = 'demo-mfw-spike';
 export const AUTH_BASE = `http://${config.emulators.auth.host}:${config.emulators.auth.port}`;
+const FUNCTIONS_BASE = `http://${config.emulators.functions.host}:${config.emulators.functions.port}`;
+
+const JSON_HEADERS = { 'content-type': 'application/json' };
+
+export async function clearAuthAccounts() {
+  const reply = await fetch(`${AUTH_BASE}/emulator/v1/projects/${PROJECT_ID}/accounts`, {
+    method: 'DELETE',
+    headers: { authorization: 'Bearer owner' },
+  });
+  if (!reply.ok) throw new Error(`could not clear accounts: ${reply.status}`);
+}
+
+// Test accounts on the local Auth emulator, which holds no real account.
+export async function signUp(email) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=fake-key`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ email, password: 'spike-password-1', returnSecureToken: true }),
+  });
+  const body = await reply.json();
+  if (!reply.ok) throw new Error(`sign-up failed: ${JSON.stringify(body)}`);
+  return { uid: body.localId, idToken: body.idToken };
+}
+
+export async function disableAccount(uid) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:update`, {
+    method: 'POST',
+    headers: { ...JSON_HEADERS, authorization: 'Bearer owner' },
+    body: JSON.stringify({ localId: uid, disableUser: true }),
+  });
+  if (!reply.ok) throw new Error(`could not disable the account: ${reply.status}`);
+}
+
+export async function deleteAccount(idToken) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/accounts:delete?key=fake-key`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ idToken }),
+  });
+  if (!reply.ok) throw new Error(`could not delete the account: ${reply.status}`);
+}
+
+// Calls a callable function the way the client SDK does. Returns the HTTP status, the parsed reply
+// and the raw text, so a test can check what the reply does not contain.
+export async function callFunction(name, data, idToken) {
+  const headers = { ...JSON_HEADERS };
+  if (idToken) headers.authorization = `Bearer ${idToken}`;
+  const reply = await fetch(`${FUNCTIONS_BASE}/${PROJECT_ID}/us-central1/${name}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ data }),
+  });
+  const raw = await reply.text();
+  return { status: reply.status, raw, ...JSON.parse(raw) };
+}
 
 export async function newTestEnv() {
   return initializeTestEnvironment({

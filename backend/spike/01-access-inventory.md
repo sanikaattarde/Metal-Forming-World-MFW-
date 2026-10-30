@@ -5,7 +5,7 @@
 | Branch | `spike/sa-backend-rules` (a spike: not merged to `main`; findings merge later as a document, `DEVELOPMENT_WORKFLOW.md` section 13) |
 | Task | Backend spike for T-01.4 (spike part), T-03.6 and T-07.1 in `DEVELOPMENT_ROADMAP.md` |
 | Date | 30 October 2026 |
-| Status | Working notes. PROPOSED. Not reviewed. Written from the documents only. The rules and tests that follow from it are in `03-rules-notes.md` (290 tests, emulator only) |
+| Status | Working notes. PROPOSED. Not reviewed. Written from the documents only. What was built from it is in `03-rules-notes.md` and `04-save-profile-notes.md` (emulator only) |
 | Rests on | DEC-003 and DEC-020 (OPEN); DEC-026, DEC-027, DEC-029 (PROPOSED). The Firebase mapping is PROVISIONAL (TD-03) |
 
 **Purpose.** Deny-by-default (SC-05) needs a list to deny against. This file lists every entity and operation with who may do what, and records where the sources disagree, so that the rules and their tests are written against one agreed table.

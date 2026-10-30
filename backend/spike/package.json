@@ -5,7 +5,8 @@
   "type": "module",
   "description": "SPIKE (DEC-003 and DEC-020 are OPEN). Local emulators only. Not production code and not merged to main.",
   "scripts": {
-    "test": "sh scripts/run-with-env.sh firebase emulators:exec --only auth,firestore,storage --project demo-mfw-spike \"node --test --test-concurrency=1 test/*.test.mjs\""
+    "pretest": "npm --prefix functions run build",
+    "test": "sh scripts/run-with-env.sh firebase emulators:exec --only auth,functions,firestore,storage --project demo-mfw-spike \"node --test --test-concurrency=1 test/*.test.mjs\""
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "6.0.0",
