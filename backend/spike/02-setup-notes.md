@@ -41,7 +41,7 @@ Run on 30 October 2026, twice (the second time after adding a positive control t
 | Storage, private path | With rules switched off the file exists and can be read back (positive control). A visitor and a signed-in reader are then refused a read, and a signed-in reader is refused a write |
 | Auth emulator | Sign-up works, and the verification code for the new account can be read back from the emulator |
 
-These are a check of the harness, not the product's access tests. The rules in `firestore.rules` and `storage.rules` are a baseline, and the path layout in them is a spike choice.
+These four were a check of the harness. They were replaced by the access tests described in `03-rules-notes.md` (290 tests), which also cover the Auth emulator check.
 
 ## 4. Assumptions tested
 

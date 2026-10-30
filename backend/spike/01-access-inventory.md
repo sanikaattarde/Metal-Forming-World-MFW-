@@ -5,7 +5,7 @@
 | Branch | `spike/sa-backend-rules` (a spike: not merged to `main`; findings merge later as a document, `DEVELOPMENT_WORKFLOW.md` section 13) |
 | Task | Backend spike for T-01.4 (spike part), T-03.6 and T-07.1 in `DEVELOPMENT_ROADMAP.md` |
 | Date | 30 October 2026 |
-| Status | Working notes. PROPOSED. Not reviewed. Written from the documents only. Nothing here has been run or tested |
+| Status | Working notes. PROPOSED. Not reviewed. Written from the documents only. The rules and tests that follow from it are in `03-rules-notes.md` (290 tests, emulator only) |
 | Rests on | DEC-003 and DEC-020 (OPEN); DEC-026, DEC-027, DEC-029 (PROPOSED). The Firebase mapping is PROVISIONAL (TD-03) |
 
 **Purpose.** Deny-by-default (SC-05) needs a list to deny against. This file lists every entity and operation with who may do what, and records where the sources disagree, so that the rules and their tests are written against one agreed table.
@@ -32,7 +32,7 @@ Expected result of a **direct client access** (rules), by actor. "Refuse" is wha
 | ISSUE_CATEGORY | read | read | read | read | Client write refused for everyone. Writes through OP-17 and OP-18 |
 | ISSUE, published | read | read | read | read | Client write refused. No file location in the record (finding A-9) |
 | ISSUE, unpublished | refuse | refuse | refuse | refuse | Admin reads through OP-15 only (GS-Q20) |
-| ISSUE_SEGMENT | read, published issues only | same | same | same | Finding A-3 |
+| ISSUE_SEGMENT | read, published issues only | same | same | same | The `segment_ids` array on the issue (DM section 12), so it follows the issue's rule. Finding A-3 (resolved) |
 | ISSUE_FILE | refuse | refuse | refuse | refuse | No client access at all. Release only through OP-11 |
 | BOOKMARK | refuse | create, read, update, delete | refuse | refuse | Finding A-4 |
 | FAVOURITE | refuse | create, read, update, delete | refuse | refuse | Finding A-4. Below full access: OQ-12 |
@@ -86,13 +86,16 @@ None of these is settled here. Each is recorded so that the spike tests the docu
 |---|---|---|---|
 | A-1 | The backend stores no device token. The app-side contract's `registerDevice` assumes stored registrations. This is the open difference about device tokens or topics | DM section 2.1 (M3) and section 3.2; API contract section 3.4 and section 11 (TD-13); `API_AND_MODULE_CONTRACTS.md` OP-NTF-01 | Account deletion (OP-12) has no device record to delete. Nothing about registration is built |
 | A-2 | The data model gives an admin create and update on INDUSTRY_SEGMENT (AOQ-16). The API says OP-28 is not built on the working position, and segments are seeded | DM section 19; API contract OP-28; GS-Q47, GS-Q56 | Tests assert there is no write path for anyone. The conditional case is not built |
-| A-3 | ISSUE_SEGMENT is readable by anyone only for published issues. A rule cannot see the parent issue's state unless it reads the parent or the link record carries the state | DM section 19 | The spike tries both ways and reports which works |
+| A-3 | **Resolved.** ISSUE_SEGMENT is readable by anyone only for published issues. The data model keeps the links as the `segment_ids` array on the issue, so the issue's rule covers them | DM section 19 and section 12 | Tested in G2. No cross-document read is needed |
 | A-4 | RS section 9.2 says bookmarks need full access. OP-07 lists ownership and the page number as its checks, and the security design says rules do not look up account status | RS section 9.2; API contract OP-07; `SECURITY_AND_ACCESS_CONTROL.md` section 4.3, T25 | Tests cover ownership. Whether the server also refuses creation below full access is raised with Yuvraj |
 | A-5 | A reader whose account is being deleted can still use the direct operations on their own records. Every function is refused with `ACCOUNT_CLOSED` | `SECURITY_AND_ACCESS_CONTROL.md` section 4.3, T25 | Tests assert the documented behaviour and name it |
 | A-6 | ADMIN_ROLE changes by function exist only if OQ-58 is approved. Without it a developer-run step grants admin access. INV-03 applies in both cases | DM section 4.17 and section 10; API contract section 5.2 | Records and the last-admin rule are built. In-panel add and remove are not |
-| A-7 | An admin can upload a file to the holding area. The storage rules must allow that write only through an upload address from OP-19, and deny every read | API contract OP-19, OP-40; DM section 9 | The spike works out the holding-area rule and reports it |
+| A-7 | An admin can upload a file to the holding area. The data model says the write is only through the uploader's signed upload URL. A signed URL is checked by the file store, not by the rules, so the rules can deny every client read and write there | API contract OP-19, OP-40; DM sections 8 and 9 | The rules deny the holding area (G4). The signed upload URL is not tested, because emulator support for signed URLs was not researched |
 | A-8 | The deleted-issue list is read by OP-11 (check 0) and is public (OP-03). Its writer is OP-30, which waits for OQ-21 | API contract OP-11, OP-03, OP-30 | Tests seed an entry. No writer is built |
-| A-9 | The public ISSUE record must carry no file location. The location lives in ISSUE_FILE, which has no client access | DM section 9, item 1; SC-07 | A test reads a published issue as a visitor and checks that no location field is present |
+| A-9 | The public ISSUE record must carry no file location. The location lives in ISSUE_FILE, which has no client access | DM section 9, item 1; SC-07 | The rules deny `issues/{id}/files/*` for every actor (G1). Whether the function that writes an issue keeps the location out of it is tested with `saveIssue` |
+| A-10 | Rules cannot check that a referenced issue or category exists (no rule reads another document), although the data model's validation for a favourite and a preference says it must | DM sections 4.11 and 4.13; `SECURITY_AND_ACCESS_CONTROL.md` section 13 | The tests show the gap and name it. A decision for both developers (see `03-rules-notes.md`) |
+| A-11 | A query on `issues` is allowed only with the published filter. An unfiltered list is refused, even for a visitor | `SECURITY_AND_ACCESS_CONTROL.md` section 12.1 | Tested in G2. The app's catalogue query must carry the filter |
+| A-12 | Paths under `users/{uid}` that no rule lists are refused, even for the owner | `SECURITY_AND_ACCESS_CONTROL.md` section 12.1 | Tested in G1. A new subcollection needs a rule |
 
 ## 5. Test groups
 
