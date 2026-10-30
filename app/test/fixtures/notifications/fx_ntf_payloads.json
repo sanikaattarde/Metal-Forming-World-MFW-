@@ -1,0 +1,11 @@
+{
+  "note": "Payloads in the PROPOSED shape of API_AND_MODULE_CONTRACTS section 6.11, from TEST_DATA_AND_FIXTURES section 11. FX-NTF-03 uses the article shape (presentation: OQ-17). FX-NTF-06 and FX-NTF-07 are routing cases for MOD-01. The size limit for an oversized FX-NTF-08 is not defined, so only the malformed case is here.",
+  "FX-NTF-01": { "type": "issue", "targetId": "fx-iss-01", "sendId": "fx-send-01" },
+  "FX-NTF-02": { "type": "article", "targetId": "101", "sendId": "fx-send-02" },
+  "FX-NTF-03": { "type": "article", "targetId": "102", "sendId": "fx-send-03" },
+  "FX-NTF-04": { "type": "podcast", "targetId": "fx-pod-01", "sendId": "fx-send-04" },
+  "FX-NTF-05": { "type": "issue", "sendId": "fx-send-05" },
+  "FX-NTF-06": { "type": "issue", "targetId": "fx-iss-08", "sendId": "fx-send-06" },
+  "FX-NTF-07": { "type": "issue", "targetId": "fx-iss-01", "sendId": "fx-send-07" },
+  "FX-NTF-08": { "type": ["issue"], "targetId": 42, "sendId": null }
+}

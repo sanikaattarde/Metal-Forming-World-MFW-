@@ -1,0 +1,134 @@
+{
+  "note": "Synthetic placeholders from TEST_DATA_AND_FIXTURES section 6. Not MFW's categories or issues. Segment IDs and dates are fixed synthetic values.",
+  "categories": [
+    { "fixtureId": "FX-CAT-01", "categoryId": "fx-cat-01", "name": "Test Category A" },
+    { "fixtureId": "FX-CAT-02", "categoryId": "fx-cat-02", "name": "Test Category B" },
+    { "fixtureId": "FX-CAT-03", "categoryId": "fx-cat-03", "name": "Test Category C" },
+    { "fixtureId": "FX-CAT-04", "categoryId": "fx-cat-04", "name": "Test Category D" }
+  ],
+  "issues": [
+    {
+      "fixtureId": "FX-ISS-01",
+      "issueId": "fx-iss-01",
+      "title": "Test Issue 01",
+      "description": "Latest synthetic issue, linked to FX-PDF-01.",
+      "categoryId": "fx-cat-01",
+      "industrySegmentIds": ["fx-seg-01"],
+      "publicationDate": "2026-10-01",
+      "year": 2026,
+      "edition": "E1",
+      "coverImageUrl": "https://storage.example/covers/fx-iss-01.jpg",
+      "fileSizeBytes": 800000,
+      "published": true
+    },
+    {
+      "fixtureId": "FX-ISS-02",
+      "issueId": "fx-iss-02",
+      "title": "Test Issue 02",
+      "description": "Synthetic archive issue.",
+      "categoryId": "fx-cat-02",
+      "industrySegmentIds": ["fx-seg-02"],
+      "publicationDate": "2026-07-01",
+      "year": 2026,
+      "edition": "E2",
+      "published": true
+    },
+    {
+      "fixtureId": "FX-ISS-03",
+      "issueId": "fx-iss-03",
+      "title": "Test Issue 03",
+      "description": "Synthetic archive issue with two segments.",
+      "categoryId": "fx-cat-03",
+      "industrySegmentIds": ["fx-seg-01", "fx-seg-02"],
+      "publicationDate": "2026-04-01",
+      "year": 2026,
+      "edition": "E3",
+      "published": true
+    },
+    {
+      "fixtureId": "FX-ISS-04",
+      "issueId": "fx-iss-04",
+      "title": "Test Issue 04",
+      "description": "Synthetic archive issue.",
+      "categoryId": "fx-cat-04",
+      "industrySegmentIds": ["fx-seg-01"],
+      "publicationDate": "2026-01-01",
+      "year": 2026,
+      "edition": "E1",
+      "published": true
+    },
+    {
+      "fixtureId": "FX-ISS-05",
+      "issueId": "fx-iss-05",
+      "title": "Test Issue 05",
+      "description": "Synthetic archive issue.",
+      "categoryId": "fx-cat-01",
+      "industrySegmentIds": ["fx-seg-02"],
+      "publicationDate": "2025-10-01",
+      "year": 2025,
+      "edition": "E2",
+      "published": true
+    },
+    {
+      "fixtureId": "FX-ISS-06",
+      "issueId": "fx-iss-06",
+      "title": "Test Issue 06",
+      "description": "Synthetic archive issue.",
+      "categoryId": "fx-cat-02",
+      "industrySegmentIds": ["fx-seg-01"],
+      "publicationDate": "2025-07-01",
+      "year": 2025,
+      "edition": "E3",
+      "published": true
+    },
+    {
+      "fixtureId": "FX-ISS-07",
+      "issueId": "fx-iss-07",
+      "title": "Test Issue 07",
+      "description": "Synthetic archive issue.",
+      "categoryId": "fx-cat-03",
+      "industrySegmentIds": ["fx-seg-02"],
+      "publicationDate": "2025-04-01",
+      "year": 2025,
+      "edition": "E1",
+      "published": true
+    },
+    {
+      "fixtureId": "FX-ISS-08",
+      "issueId": "fx-iss-08",
+      "title": "Test Issue 08",
+      "description": "Unpublished synthetic issue, for publish and unpublish tests.",
+      "categoryId": "fx-cat-04",
+      "industrySegmentIds": ["fx-seg-01"],
+      "publicationDate": "2026-10-15",
+      "year": 2026,
+      "edition": "E2",
+      "published": false
+    },
+    {
+      "fixtureId": "FX-ISS-09",
+      "issueId": "fx-iss-09",
+      "title": "Test Issue 09: \"Forming\" & Pressing - ₹ prices, Café notes and Größe tables, a deliberately long title for layout and search tests",
+      "description": "Synthetic issue with special characters.",
+      "categoryId": "fx-cat-04",
+      "industrySegmentIds": ["fx-seg-02"],
+      "publicationDate": "2025-01-01",
+      "year": 2025,
+      "edition": "E2",
+      "published": true
+    },
+    {
+      "fixtureId": "FX-ISS-10",
+      "issueId": "fx-iss-10",
+      "title": "Test Issue 10",
+      "description": "Synthetic issue linked to FX-PDF-05, the near-limit file.",
+      "categoryId": "fx-cat-01",
+      "industrySegmentIds": ["fx-seg-01"],
+      "publicationDate": "2025-02-01",
+      "year": 2025,
+      "edition": "E3",
+      "fileSizeBytes": 145000000,
+      "published": true
+    }
+  ]
+}
