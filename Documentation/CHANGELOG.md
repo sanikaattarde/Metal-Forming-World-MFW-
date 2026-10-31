@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.8 |
+| Version | 0.9 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 30 October 2026 |
 
@@ -30,6 +30,16 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: file revision added to the bookmark contract, 2026-10-30, on topic branch `docs/yg-bookmark-file-revision` on top of `d966027`, not reviewed
+
+Follows pull request #7, merged as `842a52f`. Its review asked whether `Bookmark` and `addBookmark` should carry the file revision. Four places already require it: `DATABASE_AND_DATA_MODEL.md` section 4.10, OP-07 in `API_AND_BACKEND_CONTRACT.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` sections 5 and 7, and GS-Q16. Only the app contract left it out. This entry makes the contract follow them. The uniqueness key of a bookmark stays the reader, the issue and the page, without the revision. That is a working position of YG. It is PROPOSED, and Sanika Attarde has not agreed it. Three README version cells were behind their files and are corrected. Pull requests #4, #5 and #7 added no changelog line, and this entry does not add them. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-10-30 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.6: `Bookmark` gains `fileRevision`, `addBookmark` takes `(issueId, page, fileRevision)`, and the OP-LIB-02 row adds `fileRevision` to its inputs. Section 6.8 gains behaviour rules 1 to 4 (the uniqueness key and the derived identifier, a repeated add, where the revision comes from, and what opening an older bookmark does) | The review of pull request #7, and Sanika Attarde's review of pull request #9 for rules 1 and 2 | FR-BKM-001, DATA-005, OP-07, OP-LIB-02, GS-Q16, OQ-21, DEC-003 | Both developers (not agreed) | No scope effect: RS DATA-005 is unchanged |
+| 2026-10-30 | `Documentation/CHANGELOG.md` | Version 0.9: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-10-30 | `README.md` | The version column reads 0.4 for `DECISION_LOG` (was 0.3), 0.6 for `API_AND_MODULE_CONTRACTS` (was 0.4) and 0.9 for `CHANGELOG` (was 0.7) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: plan for the days before the reported MFW inputs added to the roadmap, 2026-10-30, on topic branch `docs/yg-remaining-docs` on top of `bd2db98`, then merged with `origin/main` at `8083595`, not reviewed
 
