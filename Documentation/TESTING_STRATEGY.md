@@ -7,9 +7,9 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
-| Date | 27 October 2026 |
+| Date | 31 October 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
 
 **Change history**
@@ -20,6 +20,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. SEC-CHK-17 to SEC-CHK-19 added (account-existence messages, removed admin, abuse and throttling). SEC-CHK-03 limited to the app's storage. Registration wording corrected. Test lines for breaking news and for a failed replacement. Section 16 added: protected files and offline copies, intended and tested. |
 | 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No test, gate or checklist item changed. |
 | 0.4 | 27 October 2026 | Section 7.9 updated: the admin tests follow in-panel add and remove (OQ-58, PAC-19) instead of the withdrawn two-role model (PRC-01, PAC-18). No gate or other test changed. |
+| 0.5 | 31 October 2026 | Section 7.6 gains a proposed test line for the bookmark rules in `API_AND_MODULE_CONTRACTS.md` section 6.8. No gate or other test changed. |
 
 ### 1.1 Related documents
 
@@ -164,6 +165,7 @@ Network scenarios come from `TEST_DATA_AND_FIXTURES.md` §8 (FX-NET-01 to FX-NET
 - Add, open and remove a bookmark; mark and unmark a favourite (AC-5.1, AC-5.2).
 - Items appear after signing in on a second device (AC-5.3).
 - Reader A cannot see or change reader B's items, both in the app and through direct server calls (AC-5.4, SEC-CHK-05).
+- PROPOSED, from `API_AND_MODULE_CONTRACTS.md` section 6.8 rules 1 to 4, and not an AC-5 criterion: a repeated add returns the stored bookmark and changes nothing, the identifier comes from the issue and the page, a refusal for another cause stays an error, and a bookmark opened on another revision shows the notice.
 - Offline behaviour decided under OQ-10.
 
 ### 7.7 WordPress integration
