@@ -220,25 +220,32 @@ class _ReaderPagesState extends State<_ReaderPages> {
     final int index = viewIndexOf(page, layout);
     return Scaffold(
       appBar: AppBar(title: const Text(ReaderText.title)),
-      body: PageView.builder(
-        key: ValueKey<ReaderLayout>(layout),
-        controller: pageController,
-        physics: _zoomed ? const NeverScrollableScrollPhysics() : null,
-        itemCount: views.length,
-        onPageChanged: (int view) => _showPage(views[view].first),
-        itemBuilder: (BuildContext context, int view) => ZoomablePage(
-          onZoomedChanged: (bool zoomed) => setState(() => _zoomed = zoomed),
-          child: Row(
-            children: <Widget>[
-              for (final int shown in views[view])
-                Expanded(
-                  child: widget.pages.buildPage(
-                    context,
-                    widget.document,
-                    shown,
+      // Pages keep clear of side insets, such as a status cluster on the
+      // side of the screen; the app bar and the page bar take the top and
+      // the bottom.
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: PageView.builder(
+          key: ValueKey<ReaderLayout>(layout),
+          controller: pageController,
+          physics: _zoomed ? const NeverScrollableScrollPhysics() : null,
+          itemCount: views.length,
+          onPageChanged: (int view) => _showPage(views[view].first),
+          itemBuilder: (BuildContext context, int view) => ZoomablePage(
+            onZoomedChanged: (bool zoomed) => setState(() => _zoomed = zoomed),
+            child: Row(
+              children: <Widget>[
+                for (final int shown in views[view])
+                  Expanded(
+                    child: widget.pages.buildPage(
+                      context,
+                      widget.document,
+                      shown,
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

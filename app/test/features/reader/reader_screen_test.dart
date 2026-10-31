@@ -221,5 +221,29 @@ void main() {
         expect(size.height, greaterThanOrEqualTo(48));
       }
     });
+
+    for (final Size size in <Size>[phonePortrait, phoneLandscape]) {
+      testWidgets('pages and page buttons stay clear of side insets at '
+          '${size.width.toInt()} by ${size.height.toInt()} (safe area)', (
+        WidgetTester tester,
+      ) async {
+        // 40 and 60 logical pixels at a device pixel ratio of 3.
+        tester.view.padding = const FakeViewPadding(left: 120, right: 180);
+        await pumpReader(tester, renderer: twelvePages(), size: size);
+        await tester.pumpAndSettle();
+
+        for (final Finder part in <Finder>[
+          find.byType(PageView),
+          find.byTooltip(ReaderText.previousPage),
+          find.byTooltip(ReaderText.nextPage),
+        ]) {
+          expect(tester.getTopLeft(part).dx, greaterThanOrEqualTo(40));
+          expect(
+            tester.getTopRight(part).dx,
+            lessThanOrEqualTo(size.width - 60),
+          );
+        }
+      });
+    }
   });
 }
