@@ -42,7 +42,7 @@ Reading order
 | [SCOPE_AND_EXCLUSIONS](Documentation/SCOPE_AND_EXCLUSIONS.md) | What is in scope, excluded, or needs a change request | Authoritative: scope | 0.1 | Not assigned | Not stated in the document |
 | [ASSUMPTIONS_AND_CONSTRAINTS](Documentation/ASSUMPTIONS_AND_CONSTRAINTS.md) | Assumptions, constraints and dependencies | Authoritative: assumptions | 0.2 | Not assigned | Not stated in the document |
 | [GLOSSARY](Documentation/GLOSSARY.md) | Terms used in the documents | Supporting | 0.1 | Not assigned | Not stated in the document |
-| [DECISION_LOG](Documentation/DECISION_LOG.md) | Decisions and the evidence each status needs | Authoritative: decisions | 0.4 | Sanika (interim) | Both developers for the structure |
+| [DECISION_LOG](Documentation/DECISION_LOG.md) | Decisions and the evidence each status needs | Authoritative: decisions | 0.5 | Sanika (interim) | Both developers for the structure |
 | [OPEN_QUESTIONS](Documentation/OPEN_QUESTIONS.md) | Questions for MFW and for the developers | Authoritative: questions | 0.3 | Sanika (interim) | Both developers |
 | [RISK_REGISTER](Documentation/RISK_REGISTER.md) | Risks, ratings and owners | Authoritative: risks | 0.4 | Sanika (interim) | Both developers; MFW for risks it must accept |
 | [SYSTEM_ARCHITECTURE](Documentation/SYSTEM_ARCHITECTURE.md) | Components, data flows, trust boundaries | Authoritative: logical architecture | 0.4 | Joint | Both developers; MFW for cost, scope or contract effects |
