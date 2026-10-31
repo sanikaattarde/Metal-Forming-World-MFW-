@@ -7,9 +7,9 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. |
-| Date | 27 October 2026 |
+| Date | 31 October 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -20,6 +20,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. DEC-025 to DEC-031 added, with the TD crosswalk. Approver lines that read as a record of agreement reworded. Status notes for reported, unfiled agreement and for S3. No entry is AGREED or APPROVED. |
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded (`TECHNOLOGY_DECISIONS.md` section 10.5, GS-Q35 to GS-Q65). DEC-027 now states one Admin role with in-panel add and remove, and PRC-01 is withdrawn. DEC-029 states immediate deletion only, and PRC-02 is withdrawn. DEC-008 records a reported two-action reading model that conflicts with the earlier record. DEC-031 records a region proposal. DEC-032 and DEC-033 added. Position rows added to DEC-005, DEC-006, DEC-011, DEC-013, DEC-014, DEC-016, DEC-017, DEC-019 and DEC-020. Section 5.3 added. No entry is AGREED or APPROVED. |
 | 0.4 | 27 October 2026 | Section 5.4 added: Sanika Attarde's written positions on 14 PROPOSED entries (task MOD20-P1-T01 in `SANIKA_IMPLEMENTATION_ROADMAP.md`). It is one half of the evidence section 3.1 needs. No entry changes status, and no entry is AGREED or APPROVED. |
+| 0.5 | 31 October 2026 | Section 5.5 added: Yuvraj Gaykhe's written positions on DEC-010 to DEC-015, DEC-022 and DEC-024, the other half of the evidence for those eight entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED. |
 
 ### 1.1 Related documents
 
@@ -212,6 +213,28 @@ Sanika Attarde gave these positions in chat on 27 October 2026, one decision at 
 | DEC-028 | Logging, monitoring and crash reporting | Accepts as an internal position. | MFW's confirmation of C-07 and its answer to OQ-23 are still needed. |
 | DEC-029 | Account deletion, retention and backups | Accepts as an internal position: immediate deletion. | MFW and its legal adviser still decide retention and the purged-identifier list (OQ-24). |
 | DEC-030 | Search and filters | Accepts. | MFW answers OQ-13. |
+
+### 5.5 Written positions of Yuvraj Gaykhe, 31 October 2026
+
+Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a time, and they are recorded here at their instruction. This section is Yuvraj Gaykhe's written note under section 3.1, the other side of section 5.4 for the eight entries below.
+
+**What this section is and is not**
+
+- Once this section is merged, both developers' written notes are filed for these eight entries.
+- No entry changes status because of it. Each entry is set to AGREED in a follow-up edit that cites sections 5.4 and 5.5 (section 4, step 3). Where a condition below is not yet met, that edit says so.
+- It does not cover the other entries of section 5.4 (DEC-025 to DEC-030) or any OPEN entry. DEC-005, the reader library, stays OPEN.
+- It records no MFW approval. Where an entry needs MFW, the condition column says what is still outstanding.
+
+| Entry | Subject | Position of Yuvraj Gaykhe | Condition or limit |
+|---|---|---|---|
+| DEC-010 | Branching and integration model | Accepts option (a), with merge commits. | Branch protection is turned on for `main`, requiring one approving review by the other developer. Sanika Attarde, as the repository owner, turns it on. Until then the rule is a convention only, as section 5.4 notes. |
+| DEC-011 | Two workstreams | Accepts as recorded: WS-A for Sanika Attarde, WS-B for Yuvraj Gaykhe. Confirms in writing the position of 27 October 2026 that both developers are full time (GS-Q53). | Availability is still to be filed (OQ-38). |
+| DEC-012 | Repository layout | Accepts one repository with `app/`, `backend/` and `admin/`, kept public. | The condition of section 5.4: secrets, reader data and MFW's sample PDFs stay out of Git (DEC-024), and the code stays publicly visible until handover. |
+| DEC-013 | Flutter state management | Accepts Riverpod. | Riverpod is used in the app shell only (`app/lib/app/`, the composition root). Feature code takes its dependencies through constructors and does not import Riverpod. Plus the condition of section 5.4: versions pinned at the scaffold (OQ-50) and a `DEPENDENCY_REGISTER.md` entry before the package. |
+| DEC-014 | Navigation and route guarding | Accepts go_router. | The route guard steers screens only; access is enforced on the server (DEC-009). Plus the condition of section 5.4. |
+| DEC-015 | Commit, changelog and version conventions | Accepts. | Commits, merge commits and repository files carry no tool attribution lines and no co-author trailers (`DEVELOPMENT_WORKFLOW.md` section 11, PROPOSED). Existing history is not rewritten. |
+| DEC-022 | CI service | Accepts GitHub Actions, conditional on the cost check in task MOD15-P1-T01, as in section 5.4. | Plan limits and macOS runner cost are NOT VERIFIED. Nothing is billed to MFW without MFW's approval. For the record, runs 41105986987 and 41186813401 on draft pull request #10 passed all three jobs, including the iOS build on a macOS runner. |
+| DEC-024 | Test data policy | Accepts. | MFW still confirms where its sample PDFs may be kept. Public PDFs used for the reader comparison (T-02.3) are not MFW content, and are kept outside Git too. |
 
 ## 6. Entries
 
