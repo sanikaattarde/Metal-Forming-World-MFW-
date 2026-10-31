@@ -134,15 +134,24 @@ export const EVERY_ACTOR = ['visitor', 'readerA', 'readerB', 'admin', 'forged', 
 
 export const now = () => Timestamp.now();
 
-export const bookmark = (uid, id, over = {}) => ({
-  bookmark_id: id,
-  user_id: uid,
-  issue_id: 'i-pub',
-  page_number: 7,
-  file_revision: 1,
-  created_at: now(),
-  ...over,
-});
+export const SEED_BOOKMARK = 'i-pub_7';
+
+// The document key of a bookmark, derived from the issue and the page (firestore.rules).
+export const bookmarkKey = (issueId, page) => `${issueId}_${page}`;
+
+// `id` is the document key, and the issue and page are read from it unless a test overrides them.
+export const bookmark = (uid, id, over = {}) => {
+  const split = id.lastIndexOf('_');
+  return {
+    bookmark_id: id,
+    user_id: uid,
+    issue_id: id.slice(0, split),
+    page_number: Number(id.slice(split + 1)),
+    file_revision: 1,
+    created_at: now(),
+    ...over,
+  };
+};
 
 export const favourite = (uid, issueId, over = {}) => ({
   user_id: uid,
@@ -179,7 +188,7 @@ export async function seedFirestore(env) {
       await put(`users/${uid}`, { user_id: uid, status: 'active', created_at: now() });
       await put(`users/${uid}/profile/current`, { user_id: uid, full_name: 'Test Reader' });
       await put(`users/${uid}/consents/c1`, { consent_id: 'c1', user_id: uid, document_type: 'privacy_policy' });
-      await put(`users/${uid}/bookmarks/b-seed`, bookmark(uid, 'b-seed'));
+      await put(`users/${uid}/bookmarks/${SEED_BOOKMARK}`, bookmark(uid, SEED_BOOKMARK));
       await put(`users/${uid}/favourites/i-pub`, favourite(uid, 'i-pub'));
       await put(`users/${uid}/notification_preferences/n1`, preference(uid, 'n1'));
     }

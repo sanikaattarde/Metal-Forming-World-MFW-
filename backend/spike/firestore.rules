@@ -67,6 +67,9 @@ service cloud.firestore {
 
       // BOOKMARK (DATABASE_AND_DATA_MODEL.md section 4.10). The owner reads and writes.
       // A write carries only the fields the entity allows (INV-05, INV-11).
+      // A bookmark is unique on the reader, the issue and the page. A direct write has no function to
+      // check that, so the document key is derived from the issue and the page (section 12), and the
+      // rule requires it. The format "<issue_id>_<page_number>" is a spike choice.
       match /bookmarks/{bookmarkId} {
         function validBookmark() {
           let d = request.resource.data;
@@ -77,15 +80,16 @@ service cloud.firestore {
             && d.issue_id is string && d.issue_id.size() > 0
             && d.page_number is int && d.page_number >= 1
             && d.file_revision is int && d.file_revision >= 1
-            && d.created_at is timestamp;
+            && d.created_at is timestamp
+            && bookmarkId == d.issue_id + '_' + string(d.page_number);
         }
 
         allow read: if isOwner(uid);
         allow create: if isOwner(uid) && validBookmark();
-        // The key fields (issue and page) do not change on an update.
-        allow update: if isOwner(uid) && validBookmark()
-          && request.resource.data.issue_id == resource.data.issue_id
-          && request.resource.data.page_number == resource.data.page_number;
+        // Bookmarking a page that is already bookmarked changes nothing, so the bookmark keeps the
+        // revision it was first made on (section 10.1). A replayed write with the same values passes.
+        // Any other change is refused.
+        allow update: if isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().size() == 0;
         allow delete: if isOwner(uid);
       }
 

@@ -4,16 +4,10 @@
 import { getAuth } from 'firebase-admin/auth';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import * as logger from 'firebase-functions/logger';
-import { HttpsError, onCall } from 'firebase-functions/v2/https';
-import { accountClosed, cannotVerify, unauthenticated } from './errors.js';
+import { onCall } from 'firebase-functions/v2/https';
+import { accountClosed, cannotVerify, invalidArgument, unauthenticated } from './errors.js';
 import { checkProfile, ConfigError, consentId, parsePublicConfig, versionsMatch } from './profile.js';
-
-// The reply names the fields and never repeats a value (SC-16).
-const invalidArgument = (fields: string[]) =>
-  new HttpsError('invalid-argument', 'One or more values are missing or not valid.', { fields });
-
-const isObject = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
+import { isObject } from './validation.js';
 
 export const saveProfile = onCall(async (request) => {
   const uid = request.auth?.uid;

@@ -18,7 +18,7 @@ Written from `SECURITY_AND_ACCESS_CONTROL.md` section 12 and the entity sections
 | `issues/{id}` | Read by anyone if published. No write | `publication_state == 'published'`. A query must carry the same filter. The segment links are the `segment_ids` array on the issue, so they follow the same rule |
 | `issues/{id}/files/{revision}` | None | Not listed |
 | `users/{uid}`, `users/{uid}/profile/*`, `users/{uid}/consents/*` | Read by the owner. No client write | `request.auth.uid == uid` for read only |
-| `users/{uid}/bookmarks/{id}` | The owner reads, creates, updates and deletes | Owner, plus a field check: exactly the six fields of the entity, `bookmark_id` equal to the key, `user_id` equal to the path, `page_number` and `file_revision` whole numbers from 1, `issue_id` a non-empty string, `created_at` a timestamp. An update cannot change the issue or the page |
+| `users/{uid}/bookmarks/{id}` | The owner reads, creates, updates and deletes | Owner, plus a field check: exactly the six fields of the entity, `bookmark_id` equal to the key, `user_id` equal to the path, `page_number` and `file_revision` whole numbers from 1, `issue_id` a non-empty string, `created_at` a timestamp. Corrected in `06-admin-operations-notes.md` section 3: the key must come from the issue and the page, and an update must change nothing |
 | `users/{uid}/favourites/{issue_id}` | The owner | Owner, plus exactly `user_id`, `issue_id` (equal to the key), `created_at` |
 | `users/{uid}/notification_preferences/{category_id}` | The owner | Owner, plus exactly `user_id`, `category_id` (equal to the key), `created_at` |
 | `admin_roles`, `admin_audit`, `admin_guard`, `upload_jobs`, `notification_sends`, `edition_updates`, `config/private` | None | Not listed |

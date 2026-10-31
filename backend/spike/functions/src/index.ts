@@ -4,5 +4,8 @@ import { getApps, initializeApp } from 'firebase-admin/app';
 
 if (getApps().length === 0) initializeApp();
 
+export { deleteCategory, saveCategory } from './categories.js';
 export { getMyAdminRole } from './getMyAdminRole.js';
+export { listIssuesForAdmin, publishIssue, saveIssue, unpublishIssue } from './issues.js';
+export { setNewsControl } from './newsControls.js';
 export { saveProfile } from './saveProfile.js';
