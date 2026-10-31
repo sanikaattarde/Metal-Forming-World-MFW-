@@ -92,6 +92,10 @@ class _ResultsScreenState extends State<ResultsScreen> {
         config: config,
         engines: engines,
         inputs: inputs,
+        repairCheck: RepairCheck(
+          reference: inputs.firstWhere((input) => input.id == 'FX-PDF-01'),
+          subject: inputs.firstWhere((input) => input.id == 'FX-PDF-11'),
+        ),
         sampler: RssSampler(),
         environment: _environment(config, inputs),
         log: _log,

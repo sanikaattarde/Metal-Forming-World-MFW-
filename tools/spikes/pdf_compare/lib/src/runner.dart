@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'config.dart';
 import 'engines.dart';
@@ -26,6 +27,16 @@ class PdfInput {
   final String? skipReason;
 }
 
+/// Two inputs with the same content, one of them damaged. Every page of the
+/// [subject] is drawn and compared pixel by pixel with the same page of the
+/// [reference] (FX-PDF-11, repaired by the library, against FX-PDF-01).
+class RepairCheck {
+  const RepairCheck({required this.reference, required this.subject});
+
+  final PdfInput reference;
+  final PdfInput subject;
+}
+
 /// Runs the same scenarios on each engine and each input, and builds the
 /// result map that is written as JSON. Nothing here throws on a PDF problem:
 /// every exception becomes an entry in the result.
@@ -38,6 +49,7 @@ class HarnessRunner {
     required this.environment,
     required this.log,
     required this.onSnapshot,
+    this.repairCheck,
     this.uncaughtErrors = const <Map<String, Object?>>[],
   });
 
@@ -50,6 +62,9 @@ class HarnessRunner {
 
   /// Called with the whole result after each file, so a crash keeps what ran.
   final void Function(Map<String, Object?> snapshot) onSnapshot;
+
+  /// When set, run the repair check on each engine after its files.
+  final RepairCheck? repairCheck;
 
   /// Errors that reached the Flutter error hooks instead of a try block.
   final List<Map<String, Object?>> uncaughtErrors;
@@ -90,6 +105,12 @@ class HarnessRunner {
       for (final input in inputs) {
         log('${engine.name} ${input.id}: start');
         files.add(await _runFile(engine, input));
+        onSnapshot(result);
+      }
+      final check = repairCheck;
+      if (check != null) {
+        log('${engine.name} repair check ${check.subject.id}: start');
+        entry['repairCheck'] = await _repairCheck(engine, check);
         onSnapshot(result);
       }
       entry['processMaxRssMiBAfterThisEngine'] = round1(sampler.processMaxMiB);
@@ -361,6 +382,154 @@ class HarnessRunner {
       rep['rssAfterMiB'] = round1(sampler.currentMiB);
     }
     return rep;
+  }
+
+  /// Draws every page of the subject and of the reference at the base width
+  /// and compares them (no sampling: every pixel). A page that fails to render
+  /// is recorded and the other pages still run.
+  Future<Map<String, Object?>> _repairCheck(
+    PdfEngine engine,
+    RepairCheck check,
+  ) async {
+    final out = <String, Object?>{
+      'reference': check.reference.id,
+      'subject': check.subject.id,
+      'widthPx': config.baseWidthPx,
+    };
+    final skipReason = check.reference.skipReason ?? check.subject.skipReason;
+    if (skipReason != null) {
+      out['skipReason'] = skipReason;
+      out['pagesCompared'] = 0;
+      out['allPagesIdentical'] = false;
+      return out;
+    }
+    EngineDocument? reference;
+    EngineDocument? subject;
+    var compared = 0;
+    var identical = 0;
+    var different = 0;
+    var failed = 0;
+    var subjectDrawn = 0;
+    final pages = <Map<String, Object?>>[];
+    try {
+      try {
+        reference = await engine.open(check.reference.path);
+        out['referencePageCount'] = reference.pageCount;
+      } on Object catch (error, stack) {
+        out['referenceOpenError'] = errorRecord('open reference', error, stack);
+      }
+      try {
+        subject = await engine.open(check.subject.path);
+        out['subjectPageCount'] = subject.pageCount;
+      } on Object catch (error, stack) {
+        out['subjectOpenError'] = errorRecord('open subject', error, stack);
+      }
+      if (reference != null && subject != null) {
+        out['pageCountsMatch'] = reference.pageCount == subject.pageCount;
+        final shared = reference.pageCount < subject.pageCount
+            ? reference.pageCount
+            : subject.pageCount;
+        for (var number = 1; number <= shared; number++) {
+          final page = await _comparePage(reference, subject, number);
+          pages.add(page);
+          if (page['ok'] != true) {
+            failed++;
+          } else {
+            compared++;
+            final comparison = page['comparison']! as Map<String, Object?>;
+            if (comparison['identical'] == true) {
+              identical++;
+            } else {
+              different++;
+            }
+          }
+          if (page['subjectDrawn'] == true) {
+            subjectDrawn++;
+          }
+        }
+        out['pages'] = pages;
+      }
+    } finally {
+      await _closeQuietly(reference, out);
+      await _closeQuietly(subject, out);
+    }
+    out['pagesCompared'] = compared;
+    out['pagesIdentical'] = identical;
+    out['pagesDifferent'] = different;
+    out['pagesFailed'] = failed;
+    out['subjectPagesDrawn'] = subjectDrawn;
+    out['allPagesIdentical'] =
+        out['pageCountsMatch'] == true &&
+        failed == 0 &&
+        identical == (out['referencePageCount'] as int?);
+    log(
+      '${engine.name} repair check ${check.subject.id}: $identical of '
+      '${out['referencePageCount']} pages identical, $different different, '
+      '$failed failed',
+    );
+    return out;
+  }
+
+  Future<Map<String, Object?>> _comparePage(
+    EngineDocument reference,
+    EngineDocument subject,
+    int number,
+  ) async {
+    final record = <String, Object?>{'page': number};
+    final width = config.baseWidthPx;
+    PageRender? referencePage;
+    PageRender? subjectPage;
+    Uint8List? referencePixels;
+    Uint8List? subjectPixels;
+    try {
+      try {
+        referencePage = await reference.render(number, widthPx: width);
+        referencePixels = await referencePage.readRgba();
+        record['referencePixelSize'] =
+            '${referencePage.width}x${referencePage.height}';
+        record['referenceNonWhiteFraction'] = _round3(
+          nonWhiteFraction(referencePixels, stride: 1),
+        );
+        record['referenceDrawn'] =
+            (record['referenceNonWhiteFraction']! as double) > 0;
+      } on Object catch (error, stack) {
+        record['referenceError'] = errorRecord(
+          'reference page $number',
+          error,
+          stack,
+        );
+      }
+      try {
+        subjectPage = await subject.render(number, widthPx: width);
+        subjectPixels = await subjectPage.readRgba();
+        record['subjectPixelSize'] =
+            '${subjectPage.width}x${subjectPage.height}';
+        record['subjectNonWhiteFraction'] = _round3(
+          nonWhiteFraction(subjectPixels, stride: 1),
+        );
+        record['subjectDrawn'] =
+            (record['subjectNonWhiteFraction']! as double) > 0;
+      } on Object catch (error, stack) {
+        record['subjectError'] = errorRecord(
+          'subject page $number',
+          error,
+          stack,
+        );
+      }
+      if (referencePixels != null && subjectPixels != null) {
+        record['comparison'] = compareRgba(
+          referencePixels,
+          subjectPixels,
+        ).toJson();
+        record['ok'] = true;
+      } else {
+        record['ok'] = false;
+      }
+    } finally {
+      referencePage?.dispose();
+      subjectPage?.dispose();
+    }
+    return record;
   }
 
   Future<void> _closeQuietly(
