@@ -1,0 +1,14 @@
+{
+  "files": [
+    {
+      "id": "FX-PDF-05",
+      "file": "fx_pdf_05.pdf",
+      "bytes": 144657028,
+      "sha256": "91f1df488800e803e59d805a86ec3979e94fd4a4c17127872891d48bd3a0fb81",
+      "pages": 120,
+      "generator": "tools/fixtures/make_pdfs.py",
+      "seed": 20261031,
+      "stored": "outside Git (loop folder out/)"
+    }
+  ]
+}
