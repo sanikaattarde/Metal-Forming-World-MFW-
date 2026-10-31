@@ -516,3 +516,23 @@ test('G8 at the same moment: two new categories with the same name, repeated. On
     assert.equal((await db.collection('categories').where('name', '==', name).get()).size, 1, `round ${round}`);
   }
 });
+
+// ---- An identifier is one key. A slash would reach a record in another collection ----
+
+for (const [label, name, data, fields] of [
+  ['unpublishIssue on a file record', 'unpublishIssue', { request_id: 'r1', issue_id: 'i-live/files/1' }, ['issue_id']],
+  ['publishIssue on a file record', 'publishIssue', { request_id: 'r1', issue_id: 'i-ready/files/1' }, ['issue_id']],
+  ['saveIssue on a file record', 'saveIssue', { request_id: 'r1', issue_id: 'i-live/files/1', expected_updated_at: 1, ...ISSUE_INPUT }, ['issue_id']],
+  ['saveIssue with a category path', 'saveIssue', { request_id: 'r1', ...ISSUE_INPUT, category_id: 'c1/x/y' }, ['category_id']],
+  ['saveIssue with a two-part category path', 'saveIssue', { request_id: 'r1', ...ISSUE_INPUT, category_id: 'c1/x' }, ['category_id']],
+  ['saveIssue with a segment path', 'saveIssue', { request_id: 'r1', ...ISSUE_INPUT, segment_ids: ['s1/x'] }, ['segment_ids']],
+  ['saveCategory on a path', 'saveCategory', { request_id: 'r1', category_id: 'c1/x/y', name: 'A name', display_order: 1 }, ['category_id']],
+  ['deleteCategory on a path', 'deleteCategory', { request_id: 'r1', category_id: 'c1/x' }, ['category_id']],
+  ['listIssuesForAdmin with a cursor path', 'listIssuesForAdmin', { cursor: 'i-live/files/1' }, ['cursor']],
+]) {
+  test(`G8 one key: ${label} is refused by name, and nothing changes`, async () => {
+    const before = await dump();
+    invalid(await call(name, data), fields);
+    assert.equal(await dump(), before);
+  });
+}

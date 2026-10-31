@@ -3,7 +3,7 @@
 // are seeded by the developers, so OP-28 and OP-29 are not built (GS-Q47, GS-Q56).
 import { adminCall } from './adminCall.js';
 import { inUse, invalidArgument, nameTaken, notFound } from './errors.js';
-import { derivedId, isNonEmptyText, unknownFields } from './validation.js';
+import { derivedId, isDocumentId, isNonEmptyText, unknownFields } from './validation.js';
 
 // PLACEHOLDER. No document sets a length (DATABASE_AND_DATA_MODEL.md MA-6). Not a decided value.
 export const PLACEHOLDER_MAX_CATEGORY_NAME_LENGTH = 200;
@@ -16,7 +16,7 @@ const nameKey = (name: string) => name.trim().toLowerCase();
 export const saveCategory = adminCall(async ({ uid, db, data }) => {
   const invalid = unknownFields(data, SAVE_FIELDS);
   if (!isNonEmptyText(data.request_id)) invalid.push('request_id');
-  if (data.category_id !== undefined && !isNonEmptyText(data.category_id)) invalid.push('category_id');
+  if (data.category_id !== undefined && !isDocumentId(data.category_id)) invalid.push('category_id');
   if (!isNonEmptyText(data.name) || data.name.trim().length > PLACEHOLDER_MAX_CATEGORY_NAME_LENGTH) invalid.push('name');
   if (!Number.isInteger(data.display_order)) invalid.push('display_order');
   if (invalid.length > 0) throw invalidArgument(invalid.sort());
@@ -46,7 +46,7 @@ export const saveCategory = adminCall(async ({ uid, db, data }) => {
 export const deleteCategory = adminCall(async ({ db, data }) => {
   const invalid = unknownFields(data, DELETE_FIELDS);
   if (!isNonEmptyText(data.request_id)) invalid.push('request_id');
-  if (!isNonEmptyText(data.category_id)) invalid.push('category_id');
+  if (!isDocumentId(data.category_id)) invalid.push('category_id');
   if (invalid.length > 0) throw invalidArgument(invalid.sort());
 
   const ref = db.collection('categories').doc(data.category_id as string);

@@ -7,7 +7,7 @@ import * as logger from 'firebase-functions/logger';
 import { onCall } from 'firebase-functions/v2/https';
 import { accountClosed, cannotVerify, invalidArgument, unauthenticated } from './errors.js';
 import { checkProfile, ConfigError, consentId, parsePublicConfig, versionsMatch } from './profile.js';
-import { isObject } from './validation.js';
+import { isDocumentId, isObject } from './validation.js';
 
 export const saveProfile = onCall(async (request) => {
   const uid = request.auth?.uid;
@@ -63,8 +63,8 @@ export const saveProfile = onCall(async (request) => {
     // A server write checks its reference inside the transaction (INV-13).
     const segmentId = check.values.industry_segment_id;
     if (typeof segmentId === 'string') {
-      const segmentSnap = await tx.get(db.collection('segments').doc(segmentId));
-      if (!segmentSnap.exists) invalid.push('industry_segment_id');
+      const segmentSnap = isDocumentId(segmentId) ? await tx.get(db.collection('segments').doc(segmentId)) : null;
+      if (!segmentSnap?.exists) invalid.push('industry_segment_id');
     }
 
     if (invalid.length > 0) throw invalidArgument(invalid.sort());

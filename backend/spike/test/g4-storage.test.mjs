@@ -5,8 +5,9 @@
 // Not tested here: another reader's grant and an expired grant. They need a real signed link (UA-3).
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
+import { dirname } from 'node:path';
 import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
-import { deleteObject, getBytes, ref, uploadString } from 'firebase/storage';
+import { deleteObject, getBytes, listAll, ref, uploadString } from 'firebase/storage';
 import { actors, EVERY_ACTOR, newTestEnv, seedStorage, STORAGE_FILES } from './helpers.mjs';
 
 let env;
@@ -46,6 +47,31 @@ for (const [label, path] of NO_CLIENT_ACCESS) {
       await assertFails(getBytes(ref(storage, path)));
       await assertFails(uploadString(ref(storage, path), 'x'));
       await assertFails(deleteObject(ref(storage, path)));
+    });
+  }
+}
+
+// Listing is its own permission. SEC-CHK-03 says "readable or listable".
+const PRIVATE_FOLDER = dirname(STORAGE_FILES.privatePdf);
+
+test('G4 control: with the rules switched off, listing the folder finds the private file', async () => {
+  await env.withSecurityRulesDisabled(async (context) => {
+    const { items } = await listAll(ref(context.storage(), PRIVATE_FOLDER));
+    assert.deepEqual(items.map((item) => item.fullPath), [STORAGE_FILES.privatePdf]);
+  });
+});
+
+const NO_CLIENT_LISTING = [
+  ['the whole file store', ''],
+  ['the private area', 'issues'],
+  ['the folder of an issue', PRIVATE_FOLDER],
+  ['the holding area', dirname(STORAGE_FILES.holding)],
+];
+
+for (const [label, folder] of NO_CLIENT_LISTING) {
+  for (const who of EVERY_ACTOR) {
+    test(`G4 listing ${label}: refused for ${who}`, async () => {
+      await assertFails(listAll(ref(actors[who](env).storage(), folder)));
     });
   }
 }

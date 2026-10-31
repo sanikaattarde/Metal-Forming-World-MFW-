@@ -6,7 +6,7 @@ import type { DocumentSnapshot, Timestamp } from 'firebase-admin/firestore';
 import { adminCall } from './adminCall.js';
 import { gone, invalidArgument, noAcceptedFile, notFound, staleRecord } from './errors.js';
 import { checkIssueInput, sameIssueValues } from './issueChecks.js';
-import { derivedId, isNonEmptyText } from './validation.js';
+import { derivedId, isDocumentId, isNonEmptyText } from './validation.js';
 
 // PLACEHOLDER. "The largest page size is OPEN" (section 2.6). Not a decided value.
 export const PLACEHOLDER_MAX_PAGE_SIZE = 100;
@@ -50,7 +50,7 @@ export const listIssuesForAdmin = adminCall(async ({ db, data }) => {
 
   let after: DocumentSnapshot | undefined;
   if (data.cursor !== undefined) {
-    const cursor = isNonEmptyText(data.cursor) ? await db.collection('issues').doc(data.cursor).get() : null;
+    const cursor = isDocumentId(data.cursor) ? await db.collection('issues').doc(data.cursor).get() : null;
     if (cursor?.exists) after = cursor;
     else invalid.push('cursor');
   }
@@ -120,7 +120,7 @@ export const saveIssue = adminCall(async ({ uid, db, data }) => {
 const issueRef = (db: FirebaseFirestore.Firestore, data: Record<string, unknown>) => {
   const invalid: string[] = [];
   if (!isNonEmptyText(data.request_id)) invalid.push('request_id');
-  if (!isNonEmptyText(data.issue_id)) invalid.push('issue_id');
+  if (!isDocumentId(data.issue_id)) invalid.push('issue_id');
   if (invalid.length > 0) throw invalidArgument(invalid);
   return db.collection('issues').doc(data.issue_id as string);
 };

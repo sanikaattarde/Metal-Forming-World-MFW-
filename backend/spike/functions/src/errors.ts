@@ -32,6 +32,18 @@ export const noAcceptedFile = () =>
 export const accountClosed = () =>
   new HttpsError('failed-precondition', 'This account is closed.', { reason: 'ACCOUNT_CLOSED' });
 
+export const emailNotVerified = () =>
+  new HttpsError('failed-precondition', 'Verify your email address to continue.', { reason: 'EMAIL_NOT_VERIFIED' });
+
+export const profileIncomplete = () =>
+  new HttpsError('failed-precondition', 'Complete your profile to continue.', { reason: 'PROFILE_INCOMPLETE' });
+
+export const issueNotAvailable = () =>
+  new HttpsError('failed-precondition', 'That issue is not available.', { reason: 'ISSUE_NOT_AVAILABLE' });
+
+export const noCurrentFile = () =>
+  new HttpsError('failed-precondition', 'That issue has no file to open.', { reason: 'NO_CURRENT_FILE' });
+
 export const lastAdmin = () =>
   new HttpsError('failed-precondition', 'At least one active admin must remain.', { reason: 'LAST_ADMIN' });
 

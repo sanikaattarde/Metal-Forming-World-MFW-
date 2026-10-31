@@ -1,6 +1,6 @@
 // SPIKE (DEC-003 OPEN). Input checks for OP-16 saveIssue, with no database access, so they can be
 // tested without the emulators. API_AND_BACKEND_CONTRACT.md section 5.1; DATABASE_AND_DATA_MODEL.md section 4.7.
-import { isNonEmptyText, unknownFields } from './validation.js';
+import { isDocumentId, isNonEmptyText, unknownFields } from './validation.js';
 
 // PLACEHOLDERS. No document sets these ("Length limits and formats are proposals",
 // DATABASE_AND_DATA_MODEL.md MA-6). They are not decided values.
@@ -61,7 +61,7 @@ export function checkIssueInput(data: Record<string, unknown>): IssueCheck {
   let issueId: string | undefined;
   let expectedUpdatedAt: number | undefined;
   if (data.issue_id !== undefined) {
-    if (isNonEmptyText(data.issue_id)) issueId = data.issue_id;
+    if (isDocumentId(data.issue_id)) issueId = data.issue_id;
     else invalid.push('issue_id');
     // An edit says which version of the record the screen showed, so a stale screen can be refused.
     if (Number.isInteger(data.expected_updated_at)) expectedUpdatedAt = data.expected_updated_at as number;
@@ -76,12 +76,12 @@ export function checkIssueInput(data: Record<string, unknown>): IssueCheck {
   const description = text(data.description, PLACEHOLDER_MAX_DESCRIPTION_LENGTH);
   if (description === null) invalid.push('description');
 
-  if (!isNonEmptyText(data.category_id)) invalid.push('category_id');
+  if (!isDocumentId(data.category_id)) invalid.push('category_id');
 
   // Segments are optional here: the contract asks only that those named exist. OQ-13 stays open.
   let segmentIds: string[] = [];
   if (data.segment_ids !== undefined) {
-    if (Array.isArray(data.segment_ids) && data.segment_ids.every(isNonEmptyText)) {
+    if (Array.isArray(data.segment_ids) && data.segment_ids.every(isDocumentId)) {
       segmentIds = [...new Set(data.segment_ids as string[])].sort();
     } else {
       invalid.push('segment_ids');
@@ -114,7 +114,7 @@ export function checkIssueInput(data: Record<string, unknown>): IssueCheck {
     values: {
       title: title ?? '',
       description: description ?? '',
-      category_id: isNonEmptyText(data.category_id) ? data.category_id : '',
+      category_id: isDocumentId(data.category_id) ? data.category_id : '',
       segment_ids: segmentIds,
       publication_date: publicationDate ?? '',
       year,

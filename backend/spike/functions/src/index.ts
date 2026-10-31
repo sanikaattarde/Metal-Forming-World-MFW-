@@ -6,6 +6,7 @@ if (getApps().length === 0) initializeApp();
 
 export { deleteCategory, saveCategory } from './categories.js';
 export { getMyAdminRole } from './getMyAdminRole.js';
+export { getIssueFile } from './issueFile.js';
 export { listIssuesForAdmin, publishIssue, saveIssue, unpublishIssue } from './issues.js';
 export { setNewsControl } from './newsControls.js';
 export { saveProfile } from './saveProfile.js';

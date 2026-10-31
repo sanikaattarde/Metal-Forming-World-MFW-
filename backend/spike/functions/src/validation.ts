@@ -7,6 +7,16 @@ export const isObject = (value: unknown): value is Record<string, unknown> =>
 export const isNonEmptyText = (value: unknown): value is string =>
   typeof value === 'string' && value.trim().length > 0;
 
+// A value that is one document key. A slash would make it a path, so that `collection('issues').doc(x)`
+// reaches a record in another collection, or throws. The platform's own limits on a key are the rest.
+export const isDocumentId = (value: unknown): value is string =>
+  isNonEmptyText(value) &&
+  !value.includes('/') &&
+  value !== '.' &&
+  value !== '..' &&
+  !/^__.*__$/.test(value) &&
+  Buffer.byteLength(value) <= 1500;
+
 // Field names in the input that the operation does not take, for a refusal that names them.
 export const unknownFields = (data: Record<string, unknown>, allowed: ReadonlySet<string>): string[] =>
   Object.keys(data).filter((name) => !allowed.has(name));

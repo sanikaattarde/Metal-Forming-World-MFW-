@@ -279,6 +279,15 @@ test('G6 a segment that does not exist: refused and named, nothing written (INV-
   await assertNothingWritten(reader.uid);
 });
 
+// A slash makes the value a path, which either throws or reaches a record that is not a segment.
+for (const value of ['a/b', 's1/x/y', '..', '__name__']) {
+  test(`G6 a segment that is not one key, ${value}: refused and named, nothing written`, async () => {
+    await put('segments/s1/x/y', { name: 'Not a segment' });
+    assertInvalid(await save(firstCall({ profile: { ...PROFILE, industry_segment_id: value } })), ['industry_segment_id']);
+    await assertNothingWritten(reader.uid);
+  });
+}
+
 // ---- Refused: consent ----
 
 test('G6 the first call without accepted versions: refused and named, nothing written', async () => {

@@ -97,6 +97,13 @@ export function checkProfile(input: Record<string, unknown>, requiredFields: str
   return { values, invalid: invalid.sort(), missing };
 }
 
+// A profile is complete when the configured required fields are present (INV-10). No flag is stored,
+// so changing the required set changes the answer at once.
+export function isProfileComplete(profile: Record<string, unknown> | undefined, requiredFields: string[]): boolean {
+  if (!profile) return false;
+  return requiredFields.every((name) => profile[name] !== undefined && profile[name] !== null && profile[name] !== '');
+}
+
 export function versionsMatch(accepted: unknown, current: PublicConfig['policyVersions']): boolean {
   if (typeof accepted !== 'object' || accepted === null) return false;
   const given = accepted as Record<string, unknown>;
