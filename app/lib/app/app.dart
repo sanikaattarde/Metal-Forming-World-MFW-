@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mfw_app/app/app_services.dart';
 import 'package:mfw_app/app/placeholder_screens.dart';
 import 'package:mfw_app/app/router.dart';
 import 'package:mfw_app/app/router_app_navigator.dart';
@@ -8,8 +9,8 @@ import 'package:mfw_app/app/theme.dart';
 import 'package:mfw_app/app/unavailable_auth_service.dart';
 import 'package:mfw_app/contracts/contracts.dart';
 
-export 'placeholder_screens.dart'
-    show PlaceholderShellScreen, placeholderShellLabel;
+export 'app_services.dart';
+export 'unavailable_services.dart';
 
 /// MOD-03's AuthService. WS-A provides the real one; until then
 /// [UnavailableAuthService]. Tests override it with a fake.
@@ -29,7 +30,7 @@ final StreamProvider<AccessState> accessStateProvider =
 Duration? _noAutomaticRetry(int retryCount, Object error) => null;
 
 /// The router: the route table and the access guard on the latest access
-/// state.
+/// state, with the routed screens reading [appServicesProvider].
 final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
   final ValueNotifier<AccessState> accessState = ValueNotifier<AccessState>(
     AccessState.signedOut,
@@ -43,7 +44,10 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       accessState.value = value;
     }
   }, fireImmediately: true);
-  final GoRouter router = buildRouter(accessState);
+  final GoRouter router = buildRouter(
+    accessState,
+    ref.watch(appServicesProvider),
+  );
   ref.onDispose(() {
     router.dispose();
     accessState.dispose();

@@ -2,6 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mfw_app/app/shell_text.dart';
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/features/catalogue/catalogue.dart';
+import 'package:mfw_app/features/downloads/downloads.dart';
+import 'package:mfw_app/features/news/news.dart';
+import 'package:mfw_app/features/reader/reader.dart';
 
 import '../fakes/fake_auth_service.dart';
 import '../fakes/fake_server.dart';
@@ -14,7 +18,7 @@ void main() {
       AccessState.signedOut: ShellText.signIn,
       AccessState.emailUnverified: ShellText.verifyEmail,
       AccessState.profileIncomplete: ShellText.completeProfile,
-      AccessState.fullAccess: ShellText.reader,
+      AccessState.fullAccess: ReaderText.title,
     };
 
     for (final TestUser? user in <TestUser?>[
@@ -53,19 +57,19 @@ void main() {
       auth.signInAs(fxUsr01);
       await tester.pumpAndSettle();
 
-      expect(find.text(ShellText.reader), findsOneWidget);
+      expect(find.text(ReaderText.title), findsOneWidget);
       expect(router.state.uri.toString(), '/issues/fx-iss-01/read?page=4');
     });
 
     for (final (String route, TestUser? user, String title)
         in <(String, TestUser?, String)>[
-          ('/', null, ShellText.home),
-          ('/issues/fx-iss-01', null, ShellText.issueDetails),
-          ('/issues/fx-iss-01/read?page=2', fxUsr01, ShellText.reader),
-          ('/downloads', null, ShellText.downloads),
+          ('/', null, CatalogueText.title),
+          ('/issues/fx-iss-01', null, CatalogueText.details),
+          ('/issues/fx-iss-01/read?page=2', fxUsr01, ReaderText.title),
+          ('/downloads', null, DownloadsText.title),
           ('/library', fxUsr01, ShellText.library),
-          ('/news', null, ShellText.news),
-          ('/news/101', null, ShellText.article),
+          ('/news', null, NewsText.title),
+          ('/news/101', null, NewsText.article),
           ('/sign-in', null, ShellText.signIn),
           ('/register', null, ShellText.register),
           ('/verify-email', fxUsr02, ShellText.verifyEmail),

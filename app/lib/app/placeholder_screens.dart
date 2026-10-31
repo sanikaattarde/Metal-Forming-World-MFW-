@@ -1,26 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mfw_app/app/shell_text.dart';
 
-/// Text shown by the placeholder home screen.
-///
-/// PLACEHOLDER: brand assets not received. No MFW name, logo, colour or font
-/// is used until they arrive.
-const String placeholderShellLabel = 'Placeholder shell';
-
-/// The home screen (SCR-A-10). Its content waits for the M2 designs.
-class PlaceholderShellScreen extends StatelessWidget {
-  /// Creates the placeholder home screen.
-  const PlaceholderShellScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text(ShellText.home)),
-      body: const Center(child: Text(placeholderShellLabel)),
-    );
-  }
-}
-
 /// A screen whose design waits for M2 (SCREEN_INVENTORY_AND_NAVIGATION
 /// section 5).
 class PlaceholderScreen extends StatelessWidget {

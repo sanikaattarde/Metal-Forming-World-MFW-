@@ -2,26 +2,14 @@
 ///
 /// PLACEHOLDER wording: the M2 designs set the real text.
 abstract final class ShellText {
-  /// Title of SCR-A-10.
-  static const String home = 'Home';
-
-  /// Title of SCR-A-12.
-  static const String issueDetails = 'Issue details';
-
-  /// Title of SCR-A-14.
-  static const String reader = 'Reader';
-
-  /// Title of SCR-A-15.
-  static const String downloads = 'Downloads';
-
   /// Title of SCR-A-16 and SCR-A-17.
   static const String library = 'Library';
 
-  /// Title of SCR-A-18.
-  static const String news = 'News';
+  /// The issue action for a reader without full access (SCR-A-12).
+  static const String readOrDownload = 'Read or download';
 
-  /// Title of SCR-A-19.
-  static const String article = 'News article';
+  /// Opens a kept copy in the reader (SCR-A-12).
+  static const String read = 'Read';
 
   /// Title of SCR-A-01.
   static const String signIn = 'Sign in';
@@ -55,8 +43,4 @@ abstract final class ShellText {
 
   /// The retry action.
   static const String retry = 'Retry';
-
-  /// Reader placeholder body for [issueId] at [page].
-  static String readerPlaceholder(String issueId, String page) =>
-      '$issueId, page $page';
 }

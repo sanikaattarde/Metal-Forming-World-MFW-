@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mfw_app/app/app.dart';
 import 'package:mfw_app/app/shell_text.dart';
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/features/catalogue/catalogue.dart';
 
 /// An AuthService whose access state the test controls. The shell uses only
 /// [watchAccessState].
@@ -72,7 +73,7 @@ void main() {
 
       auth.states.add(AccessState.signedOut);
       await tester.pumpAndSettle();
-      expect(find.text(ShellText.home), findsOneWidget);
+      expect(find.text(CatalogueText.title), findsOneWidget);
     });
 
     testWidgets('an access-state failure shows an error with Retry, and '
@@ -91,7 +92,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(auth.listens, 2);
-      expect(find.text(ShellText.home), findsOneWidget);
+      expect(find.text(CatalogueText.title), findsOneWidget);
     });
 
     testWidgets('the Retry control is at least 48 by 48 [OQ-25]', (
