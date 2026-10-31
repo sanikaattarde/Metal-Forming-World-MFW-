@@ -7,9 +7,9 @@
 | Document | Test Data and Fixtures |
 | File | `Documentation/TEST_DATA_AND_FIXTURES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 32) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. |
-| Date | 23 October 2026 |
+| Date | 31 October 2026 |
 | Approval required | Both developers. MFW confirms where its sample PDFs may be stored (DEC-024). |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. FX-USR-13, FX-ADM-08 and FX-ADM-09 added. Planned name replaced by the existing document. |
+| 0.3 | 31 October 2026 | FX-LIB-01 to FX-LIB-03 name the file revision of each bookmark, because the bookmark contract requires one. No other fixture changed. |
 
 ### 1.1 Related documents
 
@@ -139,9 +140,9 @@ These are procedures, not files. They are run with OS airplane mode, the platfor
 
 | ID | Content | Used by |
 |---|---|---|
-| FX-LIB-01 | Reader A (FX-USR-01): bookmarks FX-ISS-01 page 7 and FX-ISS-02 page 12; favourite FX-ISS-03 | AC-5.1, AC-5.3 |
-| FX-LIB-02 | Reader B (FX-USR-06): bookmark FX-ISS-01 page 3; favourite FX-ISS-04 | AC-5.4 |
-| FX-LIB-03 | A bookmark on FX-ISS-08, which is then unpublished | Behaviour per OQ-11 and OQ-21 |
+| FX-LIB-01 | Reader A (FX-USR-01): bookmarks FX-ISS-01 page 7 and FX-ISS-02 page 12, both on revision 1; favourite FX-ISS-03 | AC-5.1, AC-5.3 |
+| FX-LIB-02 | Reader B (FX-USR-06): bookmark FX-ISS-01 page 3 on revision 1; favourite FX-ISS-04 | AC-5.4 |
+| FX-LIB-03 | A bookmark on revision 1 of FX-ISS-08, which is then unpublished | Behaviour per OQ-11 and OQ-21 |
 
 ## 10. WordPress API Responses
 
