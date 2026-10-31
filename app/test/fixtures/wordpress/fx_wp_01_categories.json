@@ -1,0 +1,29 @@
+{
+  "fixtureId": "FX-WP-01",
+  "note": "Synthetic WordPress REST response for TEST_DATA_AND_FIXTURES section 10. Not MFW content.",
+  "request": "GET /wp-json/wp/v2/categories?include=11,12,13",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "body": [
+    {
+      "id": 11,
+      "count": 13,
+      "name": "Test News A",
+      "slug": "test-news-a"
+    },
+    {
+      "id": 12,
+      "count": 12,
+      "name": "Test News B &amp; Events",
+      "slug": "test-news-b"
+    },
+    {
+      "id": 13,
+      "count": 0,
+      "name": "Test News C",
+      "slug": "test-news-c"
+    }
+  ]
+}

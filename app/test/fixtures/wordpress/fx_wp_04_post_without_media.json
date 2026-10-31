@@ -1,0 +1,31 @@
+{
+  "fixtureId": "FX-WP-04",
+  "note": "Synthetic WordPress REST response for TEST_DATA_AND_FIXTURES section 10. Not MFW content.",
+  "request": "GET /wp-json/wp/v2/posts/202?_embed",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "body": {
+    "id": 202,
+    "date": "2026-03-02T15:00:00",
+    "date_gmt": "2026-03-02T09:30:00",
+    "link": "https://wordpress.example/news/test-post-202/",
+    "title": {
+      "rendered": "Test post 202"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body text for post 202.</p>\n<p>Second synthetic paragraph.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 202.</p>\n",
+      "protected": false
+    },
+    "categories": [
+      11
+    ],
+    "featured_media": 0,
+    "status": "publish"
+  }
+}

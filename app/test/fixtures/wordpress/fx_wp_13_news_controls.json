@@ -1,0 +1,10 @@
+{
+  "fixtureId": "FX-WP-13",
+  "note": "Synthetic news controls (RS DATA-009): one FX-WP-01 post hidden and one marked breaking.",
+  "hiddenPostIds": [
+    "124"
+  ],
+  "breakingPostIds": [
+    "123"
+  ]
+}

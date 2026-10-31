@@ -1,0 +1,163 @@
+{
+  "fixtureId": "FX-WP-02",
+  "note": "Synthetic WordPress REST response for TEST_DATA_AND_FIXTURES section 10. Not MFW content.",
+  "request": "GET /wp-json/wp/v2/posts?categories=11,12,13&per_page=10&page=3&_embed",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-WP-Total": "25",
+    "X-WP-TotalPages": "3"
+  },
+  "body": [
+    {
+      "id": 105,
+      "date": "2026-03-05T15:00:00",
+      "date_gmt": "2026-03-05T09:30:00",
+      "link": "https://wordpress.example/news/test-post-105/",
+      "title": {
+        "rendered": "Test post 105"
+      },
+      "content": {
+        "rendered": "<p>Synthetic body text for post 105.</p>\n<p>Second synthetic paragraph.</p>\n",
+        "protected": false
+      },
+      "excerpt": {
+        "rendered": "<p>Synthetic excerpt 105.</p>\n",
+        "protected": false
+      },
+      "categories": [
+        11
+      ],
+      "featured_media": 105,
+      "status": "publish",
+      "_embedded": {
+        "wp:featuredmedia": [
+          {
+            "id": 105,
+            "source_url": "https://wordpress.example/img/105.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "id": 104,
+      "date": "2026-03-04T15:00:00",
+      "date_gmt": "2026-03-04T09:30:00",
+      "link": "https://wordpress.example/news/test-post-104/",
+      "title": {
+        "rendered": "Test post 104"
+      },
+      "content": {
+        "rendered": "<p>Synthetic body text for post 104.</p>\n<p>Second synthetic paragraph.</p>\n",
+        "protected": false
+      },
+      "excerpt": {
+        "rendered": "<p>Synthetic excerpt 104.</p>\n",
+        "protected": false
+      },
+      "categories": [
+        12
+      ],
+      "featured_media": 104,
+      "status": "publish",
+      "_embedded": {
+        "wp:featuredmedia": [
+          {
+            "id": 104,
+            "source_url": "https://wordpress.example/img/104.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "id": 103,
+      "date": "2026-03-03T15:00:00",
+      "date_gmt": "2026-03-03T09:30:00",
+      "link": "https://wordpress.example/news/test-post-103/",
+      "title": {
+        "rendered": "Test post 103"
+      },
+      "content": {
+        "rendered": "<p>Synthetic body text for post 103.</p>\n<p>Second synthetic paragraph.</p>\n",
+        "protected": false
+      },
+      "excerpt": {
+        "rendered": "<p>Synthetic excerpt 103.</p>\n",
+        "protected": false
+      },
+      "categories": [
+        11
+      ],
+      "featured_media": 103,
+      "status": "publish",
+      "_embedded": {
+        "wp:featuredmedia": [
+          {
+            "id": 103,
+            "source_url": "https://wordpress.example/img/103.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "id": 102,
+      "date": "2026-03-02T15:00:00",
+      "date_gmt": "2026-03-02T09:30:00",
+      "link": "https://wordpress.example/news/test-post-102/",
+      "title": {
+        "rendered": "Test post 102"
+      },
+      "content": {
+        "rendered": "<p>Synthetic body text for post 102.</p>\n<p>Second synthetic paragraph.</p>\n",
+        "protected": false
+      },
+      "excerpt": {
+        "rendered": "<p>Synthetic excerpt 102.</p>\n",
+        "protected": false
+      },
+      "categories": [
+        12
+      ],
+      "featured_media": 102,
+      "status": "publish",
+      "_embedded": {
+        "wp:featuredmedia": [
+          {
+            "id": 102,
+            "source_url": "https://wordpress.example/img/102.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "id": 101,
+      "date": "2026-03-01T15:00:00",
+      "date_gmt": "2026-03-01T09:30:00",
+      "link": "https://wordpress.example/news/test-post-101/",
+      "title": {
+        "rendered": "Test post 101"
+      },
+      "content": {
+        "rendered": "<p>Synthetic body text for post 101.</p>\n<p>Second synthetic paragraph.</p>\n",
+        "protected": false
+      },
+      "excerpt": {
+        "rendered": "<p>Synthetic excerpt 101.</p>\n",
+        "protected": false
+      },
+      "categories": [
+        11
+      ],
+      "featured_media": 101,
+      "status": "publish",
+      "_embedded": {
+        "wp:featuredmedia": [
+          {
+            "id": 101,
+            "source_url": "https://wordpress.example/img/101.jpg"
+          }
+        ]
+      }
+    }
+  ]
+}

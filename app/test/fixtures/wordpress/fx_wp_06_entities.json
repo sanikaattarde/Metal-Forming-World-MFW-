@@ -1,0 +1,39 @@
+{
+  "fixtureId": "FX-WP-06",
+  "note": "Synthetic WordPress REST response for TEST_DATA_AND_FIXTURES section 10. Not MFW content.",
+  "request": "GET /wp-json/wp/v2/posts/203?_embed",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "body": {
+    "id": 203,
+    "date": "2026-03-03T15:00:00",
+    "date_gmt": "2026-03-03T09:30:00",
+    "link": "https://wordpress.example/news/test-post-203/",
+    "title": {
+      "rendered": "Test post 203 &#8211; &#8216;Quoted&#8217; &#038; &#x20B9; prices, Café notes and Größe tables"
+    },
+    "content": {
+      "rendered": "<p>Prices in &#8377; &amp; notes&nbsp;in Café style&hellip;</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 203.</p>\n",
+      "protected": false
+    },
+    "categories": [
+      12
+    ],
+    "featured_media": 203,
+    "status": "publish",
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 203,
+          "source_url": "https://wordpress.example/img/203.jpg"
+        }
+      ]
+    }
+  }
+}

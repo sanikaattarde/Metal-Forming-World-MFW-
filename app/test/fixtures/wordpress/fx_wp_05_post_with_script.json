@@ -1,0 +1,39 @@
+{
+  "fixtureId": "FX-WP-05",
+  "note": "Synthetic WordPress REST response for TEST_DATA_AND_FIXTURES section 10. Not MFW content.",
+  "request": "GET /wp-json/wp/v2/posts/201?_embed",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "body": {
+    "id": 201,
+    "date": "2026-03-01T15:00:00",
+    "date_gmt": "2026-03-01T09:30:00",
+    "link": "https://wordpress.example/news/test-post-201/",
+    "title": {
+      "rendered": "Test post 201"
+    },
+    "content": {
+      "rendered": "<p>Synthetic text before the script.</p>\n<script>document.title = \"fx-wp-05-script-ran\";</script>\n<SCRIPT type=\"text/javascript\">alert(\"fx-wp-05\")</SCRIPT>\n<style>p { color: red; }</style>\n<figure><img src=\"https://wordpress.example/img/201-inline.jpg\" onerror=\"alert('fx-wp-05-onerror')\" alt=\"\"></figure>\n<iframe src=\"https://video.example/embed/fx-wp-05\">fx-wp-05-iframe</iframe>\n<p>Synthetic text after the script &amp; the embed.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 201.</p>\n",
+      "protected": false
+    },
+    "categories": [
+      11
+    ],
+    "featured_media": 201,
+    "status": "publish",
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 201,
+          "source_url": "https://wordpress.example/img/201.jpg"
+        }
+      ]
+    }
+  }
+}

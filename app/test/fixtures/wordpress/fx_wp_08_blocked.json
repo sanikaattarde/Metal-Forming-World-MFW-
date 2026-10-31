@@ -1,0 +1,16 @@
+{
+  "fixtureId": "FX-WP-08",
+  "note": "Synthetic WordPress REST response for TEST_DATA_AND_FIXTURES section 10. Not MFW content.",
+  "request": "GET /wp-json/wp/v2/posts?categories=11,12,13&per_page=10&page=1&_embed",
+  "status": 403,
+  "headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "body": {
+    "code": "rest_forbidden",
+    "message": "Synthetic: the REST API is blocked.",
+    "data": {
+      "status": 403
+    }
+  }
+}
