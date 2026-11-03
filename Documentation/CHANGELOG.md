@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.9 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 30 October 2026 |
+| Date | 31 October 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -31,9 +31,21 @@ PROPOSED (DEC-015).
 
 ## Unreleased
 
-### Documentation: file revision added to the bookmark contract, 2026-10-30, on topic branch `docs/yg-bookmark-file-revision` on top of `d966027`, not reviewed
+### Documentation: review fixes to the app contract, 2026-10-31, on topic branch `docs/sa-bookmark-contract-review-fixes` on top of `8daa413`, not reviewed
 
-Follows pull request #7, merged as `842a52f`. Its review asked whether `Bookmark` and `addBookmark` should carry the file revision. Four places already require it: `DATABASE_AND_DATA_MODEL.md` section 4.10, OP-07 in `API_AND_BACKEND_CONTRACT.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` sections 5 and 7, and GS-Q16. Only the app contract left it out. This entry makes the contract follow them. The uniqueness key of a bookmark stays the reader, the issue and the page, without the revision. That is a working position of YG. It is PROPOSED, and Sanika Attarde has not agreed it. Three README version cells were behind their files and are corrected. Pull requests #4, #5 and #7 added no changelog line, and this entry does not add them. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+Follows the re-review of pull request #9, merged as `2a5476c`, whose tree matches `8daa413`. It also takes three comments left open from the review of pull request #7. The contract now shows a conflict with the data model's identifier rule and says more about a refused add, offline writes and opening a bookmark. The entry below and the 0.6 row of the contract are corrected: the key stays PROPOSED, and Sanika Attarde's review agreed it as the working position. `ACCEPTANCE_CRITERIA.md`, `DATABASE_AND_DATA_MODEL.md` and `DECISION_LOG.md` are not changed. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-10-31 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.7: section 6.8 rules 1 to 4, the `Bookmark` status, the MOD-08 tests row, the `addBookmark` idempotent marker, the correction to the 0.6 row, the `IssueSummary` citation (section 4.8), the wording of the 0.5 row, and section 6.6 rule 7 | The re-review of pull request #9, and the review of pull request #7 | FR-BKM-002, FR-BKM-004, FR-BKM-007, DATA-005, OP-07, OP-LIB-02, OQ-10, OQ-13, TD-20, INV-14 | Both developers (not agreed) | No scope effect |
+| 2026-10-31 | `Documentation/TESTING_STRATEGY.md` | Version 0.5: a proposed test line in section 7.6 | The bookmark rules had no planned test | FR-BKM-002, OQ-10 | Both developers (not agreed) | No scope effect |
+| 2026-10-31 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.3: FX-LIB-01 to FX-LIB-03 name the file revision | The bookmark contract requires a revision | FX-LIB-01, FX-LIB-02, FX-LIB-03 | Both developers (not agreed) | No scope effect |
+| 2026-10-31 | `Documentation/CHANGELOG.md` | Version 0.10: this entry, and the heading and key wording of the entry below | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-10-31 | `README.md` | The version column reads 0.7 for `API_AND_MODULE_CONTRACTS` (was 0.6), 0.5 for `TESTING_STRATEGY` (was 0.4), 0.3 for `TEST_DATA_AND_FIXTURES` (was 0.2) and 0.10 for `CHANGELOG` (was 0.9) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: file revision added to the bookmark contract, 2026-10-30, on topic branch `docs/yg-bookmark-file-revision` on top of `d966027`, reviewed in pull request #9
+
+Follows pull request #7, merged as `842a52f`. Its review asked whether `Bookmark` and `addBookmark` should carry the file revision. Four places already require it: `DATABASE_AND_DATA_MODEL.md` section 4.10, OP-07 in `API_AND_BACKEND_CONTRACT.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` sections 5 and 7, and GS-Q16. Only the app contract left it out. This entry makes the contract follow them. The uniqueness key of a bookmark stays the reader, the issue and the page, without the revision. That is a working position of YG, and Sanika Attarde's review of pull request #9 agreed it as the working position. It stays PROPOSED. Three README version cells were behind their files and are corrected. Pull requests #4, #5 and #7 added no changelog line, and this entry does not add them. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
 
 | Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
 |---|---|---|---|---|---|---|
