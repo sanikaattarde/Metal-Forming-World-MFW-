@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { ref, uploadString } from 'firebase/storage';
+import { seedDocuments } from '../seed/seed.mjs';
 
 const config = JSON.parse(readFileSync(new URL('../firebase.json', import.meta.url), 'utf8'));
 const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url), 'utf8');
@@ -137,6 +138,9 @@ export const now = () => Timestamp.now();
 export const SEED_BOOKMARK = 'i-pub_7';
 
 // The document key of a bookmark, derived from the issue and the page (firestore.rules).
+// The notification categories come from the real seed (MOD13-P1-T10), not from test values.
+export const SEED_CATEGORIES = seedDocuments().map(({ data }) => data.category_id);
+
 export const bookmarkKey = (issueId, page) => `${issueId}_${page}`;
 
 // `id` is the document key, and the issue and page are read from it unless a test overrides them.
@@ -178,7 +182,7 @@ export async function seedFirestore(env) {
     await put('issues/i-pub/files/1', { storage_path: 'issues/i-pub/1.pdf', status: 'current' });
     await put('segments/s1', { name: 'Segment one' });
     await put('categories/c1', { name: 'Category one' });
-    await put('notification_categories/n1', { name: 'new issues', is_active: true });
+    for (const { path, data } of seedDocuments()) await put(path, data);
     await put('news_controls/101', { is_hidden: true, is_breaking: false });
     await put('deleted_issues/i-gone', { deleted_at: now() });
     await put('config/public', { policy_versions: { privacy_policy: 'test' } });
@@ -190,7 +194,7 @@ export async function seedFirestore(env) {
       await put(`users/${uid}/consents/c1`, { consent_id: 'c1', user_id: uid, document_type: 'privacy_policy' });
       await put(`users/${uid}/bookmarks/${SEED_BOOKMARK}`, bookmark(uid, SEED_BOOKMARK));
       await put(`users/${uid}/favourites/i-pub`, favourite(uid, 'i-pub'));
-      await put(`users/${uid}/notification_preferences/n1`, preference(uid, 'n1'));
+      await put(`users/${uid}/notification_preferences/${SEED_CATEGORIES[0]}`, preference(uid, SEED_CATEGORIES[0]));
     }
 
     await put('admin_roles/admin-1', { user_id: 'admin-1', is_active: true });

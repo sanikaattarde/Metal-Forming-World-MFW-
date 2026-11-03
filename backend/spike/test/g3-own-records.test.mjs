@@ -14,6 +14,7 @@ import {
   now,
   preference,
   SEED_BOOKMARK,
+  SEED_CATEGORIES,
   seedFirestore,
 } from './helpers.mjs';
 
@@ -36,7 +37,7 @@ beforeEach(async () => {
 const OWNED = [
   { name: 'bookmarks', existing: SEED_BOOKMARK, fresh: 'i-pub_8', make: bookmark },
   { name: 'favourites', existing: 'i-pub', fresh: 'i-other', make: favourite },
-  { name: 'notification_preferences', existing: 'n1', fresh: 'n2', make: preference },
+  { name: 'notification_preferences', existing: SEED_CATEGORIES[0], fresh: SEED_CATEGORIES[2], make: preference },
 ];
 
 for (const { name, existing, fresh, make } of OWNED) {

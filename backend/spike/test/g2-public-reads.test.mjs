@@ -3,7 +3,7 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
-import { actors, EVERY_ACTOR, newTestEnv, seedFirestore } from './helpers.mjs';
+import { actors, EVERY_ACTOR, newTestEnv, SEED_CATEGORIES, seedFirestore } from './helpers.mjs';
 
 let env;
 
@@ -21,7 +21,7 @@ after(async () => {
 const PUBLIC = [
   ['segments/s1', 'segments/new'],
   ['categories/c1', 'categories/new'],
-  ['notification_categories/n1', 'notification_categories/new'],
+  [`notification_categories/${SEED_CATEGORIES[0]}`, 'notification_categories/new'],
   ['news_controls/101', 'news_controls/999'],
   ['deleted_issues/i-gone', 'deleted_issues/new'],
   ['config/public', 'config/public-new'],
