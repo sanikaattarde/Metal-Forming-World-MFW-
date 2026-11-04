@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.10 |
+| Version | 0.11 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 31 October 2026 |
+| Date | 4 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,16 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: eight decision log entries set to AGREED, 2026-11-04, on topic branch `docs/yg-g4-agreed-follow-up` on top of `eebcdb7`, not reviewed
+
+Follows pull request #12, merged as `eebcdb7`. Its approving review by Sanika Attarde on 2026-11-03 completes the evidence that `DECISION_LOG.md` section 3.1 needs for DEC-010 to DEC-015, DEC-022 and DEC-024, beside the written notes of sections 5.4 and 5.5. The log sets those eight entries to AGREED, with DEC-022 conditional on the cost check. It adds section 5.6: the evidence, the conditions still open for each entry, a limit on the public PDFs of DEC-024 that Sanika Attarde's review asked for (OQ-57), and the documents that still call the entries PROPOSED. Those documents are not changed here. No entry is APPROVED, and no MFW approval is recorded. DEC-025 to DEC-030 stay PROPOSED, and DEC-005 stays OPEN. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-04 | `Documentation/DECISION_LOG.md` | Version 0.6: eight entries AGREED, section 5.6, the DEC-024 limit row, and update sentences in the DEC-011, DEC-013 and DEC-014 position rows | Both developers' notes are filed and the approving review is on record (section 3.1) | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024, OQ-38, OQ-50, OQ-57 | Both developers (agreed for these eight entries) | No scope effect |
+| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.11: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `README.md` | The version column reads 0.6 for `DECISION_LOG` (was 0.5) and 0.11 for `CHANGELOG` (was 0.10) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: review fixes to the app contract, 2026-10-31, on topic branch `docs/sa-bookmark-contract-review-fixes` on top of `8daa413`, not reviewed
 
