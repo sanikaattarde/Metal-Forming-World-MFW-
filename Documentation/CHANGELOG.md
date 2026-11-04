@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.10 |
+| Version | 0.11 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 31 October 2026 |
+| Date | 4 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,16 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: dependency register with review entries and licence reads, 2026-11-04, on topic branch `docs/yg-dependency-register-ws-b` on top of `2a5476c`, then merged with `origin/main` at `eebcdb7`, under review in pull request #13
+
+Adds section 8.1 to the dependency register, with review entries for six packages read from pub.dev and their LICENSE files on 2026-10-30, and records YG's licence reads of 2026-11-01. After Sanika Attarde's review of pull request #13 on 2026-11-03, it also records YG's re-read of PDFium's LICENSE file on 2026-11-04 (a BSD-3-Clause notice followed by the Apache License 2.0 text), points DEP-43 and DEP-44 to `DECISION_LOG.md` section 5.5, and adds a sentence to section 2 about the section 8.1 labels. No package is added, no version is pinned, and `app/pubspec.yaml` is not changed. Nothing is agreed or approved, and DEC-005 stays OPEN. Pull request #12 (written positions, merged as `eebcdb7`) added no changelog line, and this entry does not add one. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-04 | `Documentation/DEPENDENCY_REGISTER.md` | Versions 0.3 and 0.4: section 8.1 (review entries for DEP-43, DEP-44, DEP-58, DEP-64, DEP-65 and DEP-66), DEP-64 to DEP-66 in section 8, six rows in section 10, YG's licence reads, the PDFium licence as two notices, and the pointers to section 5.5 | The PDF libraries for the DEC-005 comparison need a register entry before any package goes into a spike, and the review of pull request #13 asked for the PDFium and DEP-43 and DEP-44 corrections | DEC-005, DEC-013, DEC-014, OQ-36, DEP-43, DEP-44, DEP-54, DEP-58, DEP-64, DEP-65, DEP-66 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.11: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `README.md` | The version column reads 0.4 for `DEPENDENCY_REGISTER` (was 0.2) and 0.11 for `CHANGELOG` (was 0.10) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: review fixes to the app contract, 2026-10-31, on topic branch `docs/sa-bookmark-contract-review-fixes` on top of `8daa413`, not reviewed
 
