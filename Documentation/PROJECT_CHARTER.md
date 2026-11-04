@@ -9,7 +9,7 @@
 | Project name | Metal Forming World (MFW) mobile application |
 | Version | 0.2 |
 | Status | Draft for review |
-| Date | 22 October 2026 |
+| Date | 23 October 2026 |
 | Purpose | Establish the purpose, scope boundaries, stakeholders, constraints, success criteria and governance of the MFW project. This is the foundational reference for the requirements, architecture, task assignment, development workflow, testing and deployment documents that follow. |
 
 **Revision history**
