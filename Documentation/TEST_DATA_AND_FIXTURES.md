@@ -7,9 +7,9 @@
 | Document | Test Data and Fixtures |
 | File | `Documentation/TEST_DATA_AND_FIXTURES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 32) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. |
-| Date | 31 October 2026 |
+| Date | 4 November 2026 |
 | Approval required | Both developers. MFW confirms where its sample PDFs may be stored (DEC-024). |
 
 **Change history**
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. FX-USR-13, FX-ADM-08 and FX-ADM-09 added. Planned name replaced by the existing document. |
 | 0.3 | 31 October 2026 | FX-LIB-01 to FX-LIB-03 name the file revision of each bookmark, because the bookmark contract requires one. No other fixture changed. |
+| 0.4 | 4 November 2026 | FX-PDF-11 is no longer an AC-2.6 fixture. Its "Used by" cell gives a PROPOSED repair-tolerance expectation, and a note under the table records the basis, which is YG's report of a simulator spike result that is not filed. FX-PDF-10 stays the AC-2.6 fixture. No other fixture changed. |
 
 ### 1.1 Related documents
 
@@ -118,9 +119,11 @@ The upload limit is 150 MB by default (RS FR-ADMIN-007). Whether exactly 150 MB 
 | FX-PDF-08 | Non-PDF renamed with a `.pdf` extension (for example PNG bytes) | Small | Generated | Yes | AC-8.4 |
 | FX-PDF-09 | Starts with the `%PDF-` header but is not a valid PDF | Small | Generated | Yes | AC-8.4 (depth of the "genuine PDF" check) |
 | FX-PDF-10 | Truncated PDF (valid first half only) | Small | Generated | Yes | AC-2.6 |
-| FX-PDF-11 | PDF with a corrupted cross-reference table | Small | Generated | Yes | AC-2.6 |
+| FX-PDF-11 | PDF with a corrupted cross-reference table | Small | Generated | Yes | Repair tolerance (PROPOSED, not an AC row): the library opens the repaired file, or gives an error with a retry option, and does not crash. See the note below |
 | FX-PDF-12 | Password-protected PDF | Small | Generated | Yes | Upload behaviour (OQ-30) |
 | FX-PDF-13 | Zero-byte file named `.pdf` | 0 bytes | Generated | Yes | Upload validation |
+
+**Note on FX-PDF-10 and FX-PDF-11.** FX-PDF-10 (truncated) is the AC-2.6 fixture: a damaged file shows an error with a retry option, as S2 AC-2 and FR-READ-010 say. FX-PDF-11 has wrong cross-reference offsets, and a reader library may rebuild them and open the file. YG reports (1 November 2026, iOS simulator, debug build, not filed in the repository) that pdfrx opened and drew the pages of FX-PDF-11, that pdfx gave an error at open, and that both gave an error on FX-PDF-10. YG accepts a repaired open of FX-PDF-11. This is a position and not a decision. It ranks no library, and DEC-005 stays OPEN. A result on the agreed test phones is still needed (OQ-26).
 
 ## 8. Download and Network Scenarios
 

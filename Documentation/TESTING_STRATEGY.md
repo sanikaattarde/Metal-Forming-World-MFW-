@@ -7,9 +7,9 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
-| Date | 31 October 2026 |
+| Date | 4 November 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
 
 **Change history**
@@ -21,6 +21,7 @@
 | 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No test, gate or checklist item changed. |
 | 0.4 | 27 October 2026 | Section 7.9 updated: the admin tests follow in-panel add and remove (OQ-58, PAC-19) instead of the withdrawn two-role model (PRC-01, PAC-18). No gate or other test changed. |
 | 0.5 | 31 October 2026 | Section 7.6 gains a proposed test line for the bookmark rules in `API_AND_MODULE_CONTRACTS.md` section 6.8. No gate or other test changed. |
+| 0.6 | 4 November 2026 | The damaged-file line of section 7.4 follows AC-2.6: FX-PDF-10 gives an error with a retry option, and FX-PDF-11 either opens repaired or gives that error, without a crash (PROPOSED). No gate, threshold or other test changed. |
 
 ### 1.1 Related documents
 
@@ -136,7 +137,7 @@ Subject to the account rules still open (OQ-04, OQ-05) and to scope confirmation
 - Pinch zoom to 300% with sharp text (AC-2.3).
 - Two-page spread on a tablet and in landscape (AC-2.4).
 - Twenty consecutive page turns without a crash (AC-2.5).
-- Damaged files (FX-PDF-10, FX-PDF-11) show an error with a retry option (AC-2.6).
+- A damaged file (FX-PDF-10) shows an error with a retry option (AC-2.6). PROPOSED, and not an AC-2 criterion: FX-PDF-11 either opens repaired or shows that error, and never crashes (`TEST_DATA_AND_FIXTURES.md` section 7).
 - Opening a bookmark goes to its page (AC-5.1).
 - First-page time measured as in Section 8.1 (AC-2.1).
 

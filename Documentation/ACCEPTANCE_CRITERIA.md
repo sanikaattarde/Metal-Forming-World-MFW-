@@ -7,9 +7,9 @@
 | Document | Acceptance Criteria |
 | File | `Documentation/ACCEPTANCE_CRITERIA.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 31) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. No criterion has been tested. |
-| Date | 27 October 2026 |
+| Date | 4 November 2026 |
 | Approval required | Both developers for the verification detail. MFW in writing for every PAC criterion before it becomes contractual. |
 
 **Change history**
@@ -20,6 +20,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Rule 1 reworded to state which rows are proposed checks. AC-9.7 added for FR-ADMIN-014 and FR-ADMIN-015. PAC-16 (conditional on PRC-02), PAC-17 (account-existence messages) and PAC-18 (conditional on PRC-01) added. Coverage table updated. |
 | 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No criterion changed. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). PAC-16 and PAC-18 are withdrawn with PRC-02 and PRC-01. PAC-11 is dropped on the working position. PAC-19 (admin add and remove) and PAC-20 (Read and Download) are added as proposals. No AC row changed, except that the clarification of AC-7.4 and AC-8.9 names the working positions. No criterion is approved. |
+| 0.5 | 4 November 2026 | The fixture cell of AC-2.6 names FX-PDF-10 only (was "FX-PDF-10 or FX-PDF-11"). The criterion, the pass condition and the CONFIRMED status are unchanged, and still follow S2 AC-2 and FR-READ-010. FX-PDF-11 is kept for a separate PROPOSED expectation in `TEST_DATA_AND_FIXTURES.md`, because a reader library may repair it and open it. No criterion is approved. |
 
 ### 1.1 Related documents
 
@@ -92,7 +93,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | AC-2.3 | S2 AC-2; RS FR-READ-005, NFR-PERF-002 | Zoom to 300% keeps text sharp | Issue open on the test phone | T and I: pinch to 300% on agreed text-heavy pages | Text is sharp to the tester | P1 | CONFIRMED | "Sharp" is judged by inspection |
 | AC-2.4 | S2 AC-2; RS FR-READ-009 | Two pages side by side on tablets and in landscape | Tablet (if available); phone in landscape | T: open an issue in each case | Two pages are shown together | P1 | CONFIRMED | Tablet model: OQ-26 |
 | AC-2.5 | S2 AC-2; RS NFR-REL-001 | Reading is stable | Issue open | T: 20 consecutive page turns on each test device | No crash | P1 | CONFIRMED | — |
-| AC-2.6 | S2 AC-2; RS FR-READ-010 | A damaged file is handled | FX-PDF-10 or FX-PDF-11 placed as the local file | T: open it | An error with a retry option; no crash | P1 | CONFIRMED | — |
+| AC-2.6 | S2 AC-2; RS FR-READ-010 | A damaged file is handled | FX-PDF-10 placed as the local file | T: open it | An error with a retry option; no crash | P1 | CONFIRMED | FX-PDF-11 is not used here. A reader library may repair it and open it (`TEST_DATA_AND_FIXTURES.md` section 7, PROPOSED). |
 | AC-2.7 | S2 Scope included: Reader; S1 What MFW receives; RS FR-READ-006, FR-READ-007 | Page-turn effect and plain swipe mode are both available | Issue open | D: show both modes | Both modes work | P1 | CONFIRMED (scope item; not in the AC-2 text) | Switching and default: OQ-14. Reader approach confirmed at M2. |
 
 ### AC-3 Accounts

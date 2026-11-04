@@ -6,9 +6,9 @@
 |---|---|
 | Document | PDF Reader and Offline Design |
 | File | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. Every rule below is PROPOSED unless it quotes a CONFIRMED requirement. Nothing is built, and nothing has been tested or measured. |
-| Date | 27 October 2026 |
+| Date | 4 November 2026 |
 | Audience | The two developers. MFW's authorised approver only for the reader approach and library at M2. |
 | Proposed owner | Yuvraj (WS-B), PROPOSED and not agreed. Reviewer: Sanika Attarde (WS-A). |
 | Approval required | Both developers. MFW at M2 for the reader approach and library (DEC-005, TD-10). No other MFW approval is sought. |
@@ -20,6 +20,7 @@
 |---|---|---|
 | 0.1 | 24 October 2026 | Initial draft. This is the document planned as T-00.7 in `DEVELOPMENT_ROADMAP.md`. It is written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). The reading model is two actions: Read opens a temporary copy and Download keeps one (GS-Q43, reported as MFW's answer and not filed). Downloads are foreground-only (GS-Q60). Page-turn is the default mode and the reader can switch (GS-Q55). The test devices are a mid-range Android phone and a current iPhone (GS-Q54). No decision is approved. |
+| 0.3 | 4 November 2026 | Two statements about the damaged-file fixtures corrected (section 5 and the M2 reader test in section 7). FX-PDF-10 (truncated) must give an error with a retry option, as FR-READ-010 and AC-2.6 say. FX-PDF-11 (wrong cross-reference offsets) may be repaired by a library and opened, and that is accepted as a PROPOSED expectation, on YG's report of a simulator spike result that is not filed (see `TEST_DATA_AND_FIXTURES.md` section 7). No decision is approved, and DEC-005 stays OPEN. |
 
 ### 1.1 Related documents
 
@@ -247,7 +248,7 @@ Open an issue
 ├── Modes: page-turn effect and a plain swipe-and-zoom mode. The swipe mode is always built as the fallback (FR-READ-006, FR-READ-007)
 │   └── Page-turn is the default, and the reader can switch to the plain swipe mode in settings. The choice is remembered (GS-Q55). OQ-14 stays open
 ├── Two pages side by side on tablets and in landscape (FR-READ-009). Zoom to 300% (FR-READ-005)
-├── A damaged file (FX-PDF-10, FX-PDF-11): an error with a retry option, no crash (FR-READ-010, AC-2.6)
+├── A damaged file (FX-PDF-10): an error with a retry option, no crash (FR-READ-010, AC-2.6). FX-PDF-11 may be repaired by the library and opened, which is accepted (PROPOSED, `TEST_DATA_AND_FIXTURES.md` section 7)
 │   └── Retrying a reopen cannot repair a damaged local file, so PROPOSED: retry deletes the copy and downloads it again (RD-06)
 └── A bookmark action calls MOD-08 with the page and revision
 ```
@@ -258,7 +259,8 @@ Open an issue
 Proposed additions to the M2 reader test (PROPOSED, not requirements)
 ├── The library opens a file of about 150 MB and about 120 pages (FX-PDF-05) without reading the whole file into memory at once
 ├── Memory use stays steady over a long run of page turns, and closing the reader releases the file
-└── The library fails on a damaged file (FX-PDF-10, FX-PDF-11) by returning an error, not by crashing
+├── The library fails on a damaged file (FX-PDF-10) by returning an error, not by crashing
+└── On FX-PDF-11 the library either opens the file or returns an error, and does not crash
 ```
 
 ## 8. Failure and Edge Cases
