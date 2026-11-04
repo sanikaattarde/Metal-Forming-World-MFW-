@@ -7,9 +7,9 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. **PLANNED: no CI/CD exists and no check runs automatically.** |
-| Date | 23 October 2026 |
+| Date | 4 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. QG-12 states that its script is not in the repository. Planned name replaced by the existing document. |
+| 0.3 | 4 November 2026 | Gate QG-14 added for the contract tests (suite TS-14 in `TESTING_STRATEGY.md`), and the pull-request pipeline names it. It is PROPOSED, blocked by DEC-003 and DEC-026, and not available. No existing gate changed. |
 
 ### 1.1 Related documents
 
@@ -63,6 +64,7 @@ This document proposes the automated checks that guard pull requests, integratio
 | QG-11 | Secrets scan | Candidate: gitleaks, or GitHub secret scanning if the plan includes it | Every pull request and push | Yes | [CI] | SEC-CHK-09 |
 | QG-12 | Documentation checks | A check of IDs, references, file names, status labels and links. The script that was used when the documents were drafted is not in the repository, so the check cannot be reproduced from the repository and is PLANNED, not available; link check | Pull requests that touch `Documentation/` | Yes | [NOW] (manual until CI exists) | DoD-DOC |
 | QG-13 | Release build and signing | Tag-triggered signed Android App Bundle and iOS archive; manual approval | Release tags `v*` | Not a merge gate | [STORE] | AC-11.1 |
+| QG-14 | Contract tests | Blocked by DEC-003 and DEC-026. Candidate: the emulators in CI (TD-17). Runs CT-01 to CT-11 of `API_AND_BACKEND_CONTRACT.md` §10 | Pull requests that touch `backend/` or the contract reference file (CT-01, not yet created); every merge to `main` | Yes | [BACKEND] | TS-14 |
 
 ## 5. Pipelines
 
@@ -74,6 +76,7 @@ pull request opened or updated
   → QG-01 format → QG-02 analyze → QG-03 tests (+ QG-04 report)
   → QG-05 Android build, QG-06 iOS build      (if app/ changed)
   → QG-08 backend tests                       (if backend/ changed)
+  → QG-14 contract tests                      (if backend/ or the contract reference file changed)
   → QG-09 admin build                         (if admin/ changed)
   → QG-10 dependency check                    (if dependency files changed)
   → QG-12 documentation check                 (if Documentation/ changed)

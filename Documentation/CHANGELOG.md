@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.10 |
+| Version | 0.11 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 31 October 2026 |
+| Date | 4 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,18 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: contract tests named in the test plan, the quality gates and the definition of done, 2026-11-04, on topic branch `docs/yg-contract-tests-in-plans` on top of `eebcdb7`, not reviewed
+
+Follows a review of the documentation set. `API_AND_BACKEND_CONTRACT.md` section 10 proposes eleven contract tests, CT-01 to CT-11, and no test plan, quality gate or definition-of-done check named them. `TESTING_STRATEGY.md` gains suite TS-14 for them, with a proposed split between the backend side (WS-A) and the app side (WS-B) that is not agreed, and the regression, ownership and blocked-items tables name it. `CI_CD_AND_QUALITY_GATES.md` gains gate QG-14. `DEFINITION_OF_DONE.md` gains DoD-TASK check 11. Everything is PROPOSED and blocked by DEC-003 and DEC-026, and no tool is chosen. `REQUIREMENT_COVERAGE_MATRIX.md` is not changed, because the contract tests guard the API contract and the proposed update gate (PRC-04), not a requirement. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-04 | `Documentation/TESTING_STRATEGY.md` | Version 0.6: suite TS-14, and a line each in the regression table, the ownership table and the blocked items | No test plan named the contract tests | CT-01 to CT-11, TS-14, DEC-003, DEC-026, PRC-04 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.3: gate QG-14 and its line in the pull-request pipeline | No gate ran the contract tests | QG-14, TS-14, TD-17 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/DEFINITION_OF_DONE.md` | Version 0.3: DoD-TASK check 11 | A changed operation had to update its contract snapshot | CT-01, TS-14 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.11: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `README.md` | The version column reads 0.6 for `TESTING_STRATEGY` (was 0.5), 0.3 for `CI_CD_AND_QUALITY_GATES` (was 0.2), 0.3 for `DEFINITION_OF_DONE` (was 0.2) and 0.11 for `CHANGELOG` (was 0.10) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: review fixes to the app contract, 2026-10-31, on topic branch `docs/sa-bookmark-contract-review-fixes` on top of `8daa413`, not reviewed
 
