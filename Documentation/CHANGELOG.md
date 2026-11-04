@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.10 |
+| Version | 0.11 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 31 October 2026 |
+| Date | 4 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,19 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: bookmark follow-up to pull request #11, 2026-11-04, on topic branch `docs/yg-bookmark-inv14-read` on top of `eebcdb7`, not reviewed
+
+Follows YG's review of pull request #11, merged as `cdd5b8c`, which left three changes for YG's own pull request. `bookmark_id` is named as a second exception to the never-reused identifier rule beside `user_id`, in the data model, the backend contract and the app contract. The exception is YG's position and stays PROPOSED until both developers agree. Opening a bookmark with no local copy gets the current revision with the Read action, a temporary copy, so that no kept copy results. That split is a reported working position (OQ-08). MOD-08 checks that `page` and `fileRevision` are at least 1 before it writes, and returns `invalidInput`. No check is added to OP-07 on the server. The proposed test line in `TESTING_STRATEGY.md` section 7.6 follows. `spike/yg-ws-b` still carries the old bookmark shape and is not changed here. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-04 | `Documentation/DATABASE_AND_DATA_MODEL.md` | Version 0.5: `bookmark_id` as an exception in section 4.1, the section 4.10 field note, section 10.4 rule 8, INV-14 and its test, and the section 12 row. Section 6.3 step 2 uses the Read action | The review of pull request #11 left the conflict with INV-14 and the unstated copy kind | INV-14, DATA-005, FR-BKM-002, OQ-08, GS-Q43 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/API_AND_BACKEND_CONTRACT.md` | Version 0.4: the identifier rule in section 3 names the bookmark exception. OP-07 says it does not check `file_revision` | Follows the data model | INV-14, OP-07, FR-BKM-001 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.8: section 6.8 rule 1 (the exception), rule 4 (Read action), new rule 5 (pre-check), and the MOD-08 errors, tests and `OP-LIB-02` rows | The review of pull request #11 | FR-BKM-001, FR-BKM-002, INV-14, OP-07, OP-LIB-02, OQ-08 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/TESTING_STRATEGY.md` | Version 0.6: the section 7.6 test line is extended for rules 4 and 5 and the exception | The new rules had no planned test | FR-BKM-001, FR-BKM-002, INV-14 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.11: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `README.md` | The version column reads 0.5 for `DATABASE_AND_DATA_MODEL` (was 0.4), 0.4 for `API_AND_BACKEND_CONTRACT` (was 0.3), 0.8 for `API_AND_MODULE_CONTRACTS` (was 0.7), 0.6 for `TESTING_STRATEGY` (was 0.5) and 0.11 for `CHANGELOG` (was 0.10) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: review fixes to the app contract, 2026-10-31, on topic branch `docs/sa-bookmark-contract-review-fixes` on top of `8daa413`, not reviewed
 
