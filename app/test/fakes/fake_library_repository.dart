@@ -9,8 +9,11 @@ import 'fake_streams.dart';
 /// Two devices on one server see the same items (RS FR-BKM-004). A reader
 /// reads and changes only their own items. Bookmarks and favourites follow
 /// the `fullAccess` column of section 4.1; favourites for incomplete access
-/// are OQ-12. The fake does not know page counts, so only a page below 1 is
-/// out of range.
+/// are OQ-12. The fake does not know page counts, so only a page or a file
+/// revision below 1 is out of range (section 6.8, rule 5). It keeps no
+/// bookmark list of its own, so it does not make the contract's check of the
+/// list before an add. Every add goes to the server, and a repeat on another
+/// revision takes the refusal path of rule 2.
 final class FakeLibraryRepository implements LibraryRepository {
   /// Creates the repository over [_server], for the reader signed in on
   /// [_auth].
@@ -26,7 +29,11 @@ final class FakeLibraryRepository implements LibraryRepository {
   }, <Stream<void>>[_auth.changes, _server.changes]);
 
   @override
-  Future<Result<Bookmark>> addBookmark(String issueId, int page) async {
+  Future<Result<Bookmark>> addBookmark(
+    String issueId,
+    int page,
+    int fileRevision,
+  ) async {
     final String? userId = _auth.currentUserId;
     if (userId == null) {
       return const Err<Bookmark>(AppFailure(FailureCode.unauthenticated));
@@ -34,10 +41,31 @@ final class FakeLibraryRepository implements LibraryRepository {
     if (_auth.currentAccessState != AccessState.fullAccess) {
       return const Err<Bookmark>(AppFailure(FailureCode.forbidden));
     }
-    if (page < 1) {
+    // Rule 5: checked before the write, so that a refusal below can come
+    // only from ownership or a repeated add.
+    if (page < 1 || fileRevision < 1) {
       return const Err<Bookmark>(AppFailure(FailureCode.invalidInput));
     }
-    return Ok<Bookmark>(_server.addBookmark(userId, issueId, page));
+    final Result<Bookmark> written = _server.addBookmark(
+      userId,
+      issueId,
+      page,
+      fileRevision,
+    );
+    if (written is Ok<Bookmark>) {
+      return written;
+    }
+    // Rule 2: a refusal looks the same for every cause, so read the record
+    // to tell them apart. A record that exists is the stored bookmark, none
+    // means the write was refused for ownership, and a failed read returns
+    // its own failure.
+    return switch (_server.readBookmark(userId, issueId, page)) {
+      Ok<Bookmark?>(:final Bookmark? value) =>
+        value == null
+            ? const Err<Bookmark>(AppFailure(FailureCode.forbidden))
+            : Ok<Bookmark>(value),
+      Err<Bookmark?>(:final AppFailure failure) => Err<Bookmark>(failure),
+    };
   }
 
   @override

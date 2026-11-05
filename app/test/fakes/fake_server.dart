@@ -65,7 +65,8 @@ final class FakeServer {
   final Map<String, ReaderProfile> _profiles = <String, ReaderProfile>{};
   final Map<String, List<ConsentRecord>> _consents =
       <String, List<ConsentRecord>>{};
-  final Map<String, List<Bookmark>> _bookmarks = <String, List<Bookmark>>{};
+  final Map<String, Map<String, Bookmark>> _bookmarks =
+      <String, Map<String, Bookmark>>{};
   final Map<String, Map<String, Favourite>> _favourites =
       <String, Map<String, Favourite>>{};
   final Map<String, NotificationPreferences> _preferences =
@@ -74,10 +75,23 @@ final class FakeServer {
     sync: true,
   );
   int _nextAccount = 1;
-  int _nextBookmark = 1;
+  int _bookmarkWriteRequests = 0;
+
+  /// When true, OP-07 refuses every bookmark write that passes its checks,
+  /// as it would for a write the owner rules deny. The refusal is the same
+  /// whatever the cause (API_AND_MODULE_CONTRACTS section 6.8, rule 2).
+  bool refuseBookmarkWrites = false;
+
+  /// When set, every read of a single bookmark record fails with it, such as
+  /// a `network` failure.
+  AppFailure? bookmarkReadFailure;
 
   /// Fires after every change.
   Stream<void> get changes => _changes.stream;
+
+  /// How many bookmark writes have reached OP-07, counting the invalid and
+  /// the refused ones, so a test can tell that a check ran before the write.
+  int get bookmarkWriteRequests => _bookmarkWriteRequests;
 
   /// The account with [userId], if any.
   FakeAccount? accountById(String userId) => _accounts[userId];
@@ -132,29 +146,66 @@ final class FakeServer {
   }
 
   /// The reader's bookmarks.
-  List<Bookmark> bookmarksOf(String userId) =>
-      List<Bookmark>.unmodifiable(_bookmarks[userId] ?? const <Bookmark>[]);
+  List<Bookmark> bookmarksOf(String userId) => List<Bookmark>.unmodifiable(
+    _bookmarks[userId]?.values ?? const <Bookmark>[],
+  );
 
-  /// Adds a bookmark for the reader with a new ID.
-  Bookmark addBookmark(String userId, String issueId, int page) {
+  /// OP-07 add. The record's ID is derived from the issue and the page, so
+  /// a repeated add reaches the same record (rule 1). The server keeps the
+  /// first record: a write with the same values changes nothing and returns
+  /// the stored record, and a write that would change it is refused with
+  /// `forbidden`, which looks the same as every other refusal (rule 2). A
+  /// page or revision below 1 fails with `invalidInput`
+  /// (`INVALID_ARGUMENT`; the revision check is PROPOSED).
+  Result<Bookmark> addBookmark(
+    String userId,
+    String issueId,
+    int page,
+    int fileRevision,
+  ) {
+    _bookmarkWriteRequests++;
+    if (page < 1 || fileRevision < 1) {
+      return const Err<Bookmark>(AppFailure(FailureCode.invalidInput));
+    }
+    if (refuseBookmarkWrites) {
+      return const Err<Bookmark>(AppFailure(FailureCode.forbidden));
+    }
+    final String bookmarkId = _bookmarkIdFor(issueId, page);
+    final Map<String, Bookmark> own = _bookmarks[userId] ??=
+        <String, Bookmark>{};
+    final Bookmark? stored = own[bookmarkId];
+    if (stored != null) {
+      return stored.fileRevision == fileRevision
+          ? Ok<Bookmark>(stored)
+          : const Err<Bookmark>(AppFailure(FailureCode.forbidden));
+    }
     final Bookmark bookmark = Bookmark(
-      bookmarkId: 'fx-bkm-${_twoDigits(_nextBookmark++)}',
+      bookmarkId: bookmarkId,
       issueId: issueId,
       page: page,
+      fileRevision: fileRevision,
       createdAt: clock(),
     );
-    (_bookmarks[userId] ??= <Bookmark>[]).add(bookmark);
+    own[bookmarkId] = bookmark;
     _notify();
-    return bookmark;
+    return Ok<Bookmark>(bookmark);
+  }
+
+  /// OP-07 read of the reader's bookmark for [issueId] and [page]: the
+  /// record, or null if there is none. Fails with [bookmarkReadFailure]
+  /// when that is set.
+  Result<Bookmark?> readBookmark(String userId, String issueId, int page) {
+    final AppFailure? failure = bookmarkReadFailure;
+    if (failure != null) {
+      return Err<Bookmark?>(failure);
+    }
+    return Ok<Bookmark?>(_bookmarks[userId]?[_bookmarkIdFor(issueId, page)]);
   }
 
   /// Removes the reader's own bookmark; false if the reader has none with
   /// that ID.
   bool removeBookmark(String userId, String bookmarkId) {
-    final List<Bookmark> own = _bookmarks[userId] ?? <Bookmark>[];
-    final int before = own.length;
-    own.removeWhere((Bookmark bookmark) => bookmark.bookmarkId == bookmarkId);
-    if (own.length == before) {
+    if (_bookmarks[userId]?.remove(bookmarkId) == null) {
       return false;
     }
     _notify();
@@ -213,3 +264,8 @@ final class FakeServer {
 }
 
 String _twoDigits(int value) => value.toString().padLeft(2, '0');
+
+/// The bookmark ID for an issue and a page. The format is a placeholder: the
+/// real one is settled in the backend spike (DEC-003). The page comes last,
+/// so two different pairs never give the same ID.
+String _bookmarkIdFor(String issueId, int page) => 'fx-bkm-$issueId-$page';

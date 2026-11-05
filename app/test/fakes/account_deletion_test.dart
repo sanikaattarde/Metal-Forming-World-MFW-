@@ -33,7 +33,7 @@ void main() {
             FakeIssueFileService(auth, files: fxIssueFiles),
             afterAccountDeletion: policy,
           )..seedCopy(ownerUserId: fxUsr07.userId, issueId: 'fx-iss-01');
-          valueOf(await library.addBookmark('fx-iss-01', 5));
+          valueOf(await library.addBookmark('fx-iss-01', 5, 1));
           expect(
             await library.setFavourite('fx-iss-02', true),
             isA<Ok<void>>(),
