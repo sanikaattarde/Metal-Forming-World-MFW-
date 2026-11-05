@@ -9,7 +9,7 @@
 | Phase | 3 — Development Planning and Collaboration (document 23) |
 | Version | 0.8 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
 
 **Change history**
@@ -23,7 +23,7 @@
 | 0.5 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). Section 4.1 added: the proposed plan for 27 October 2026. WP-09 gains T-09.7 (admin management), and the subscriber export leaves T-09.5. Availability is noted as reported (GS-Q53). The status table notes the reported late inputs and the chat message about M1. The related-documents row shows the new versions. No date, estimate or milestone changed, and T-09.7 has no estimate. |
 | 0.6 | 27 October 2026 | Section 4.2 added: a tracker of the inputs MFW owes, with the S1 and Charter due dates side by side. It records no date received, because the repository holds no evidence of any. No date, estimate, milestone or task changed. |
 | 0.7 | 30 October 2026 | Section 4.3 added: a proposed plan for the days before the reported inputs, with the modules each workstream can start, the work that waits, and what each input unlocks. The MFW inputs row of the status table notes the report of 30 October 2026 and the expected date. No date, estimate or milestone changed. Renumbered from 4.2 after merging the MFW input tracker (section 4.2, version 0.6). |
-| 0.8 | 4 November 2026 | Two statements corrected that gave `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 (the related-documents row and task T-00.7). That document is at a later version, so both lines now say it exists as a draft, and the README index gives its version. T-00.7 gives no version for the other four drafts. No date, estimate, milestone or task changed. |
+| 0.8 | 4 and 5 November 2026 | Two statements corrected that gave `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 (the related-documents row and task T-00.7). That document is at a later version, so both lines now say it exists as a draft, and the README index gives its version. T-00.7 gives no version for the other four drafts. Revised on 5 November 2026 after the review of pull request #16: the related-documents row for those four drafts gives no version either, and the Phase 1 row in section 4 gives the charter as v0.3. No date, estimate, milestone or task changed. |
 
 ### 1.1 Related documents
 
@@ -36,7 +36,7 @@
 | `TASK_OWNERSHIP_MATRIX.md`, `DECISION_LOG.md`, `OPEN_QUESTIONS.md`, `DEFINITION_OF_DONE.md`, `ACCEPTANCE_CRITERIA.md` | Exist (draft) |
 | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md` | Exist on `main` (drafts, merged by pull request #2). Needed for M1. `TECHNOLOGY_DECISIONS.md` was planned as `TECH_STACK_DECISIONS.md` (document map: `TASK_OWNERSHIP_MATRIX.md` section 13). |
 | `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md`, `SECURITY_AND_ACCESS_CONTROL.md` | Exist on `main` (drafts, merged by pull request #2). Not yet reviewed against this roadmap. |
-| `PDF_READER_AND_OFFLINE_DESIGN.md`, `SECURITY_INCIDENT_PROCEDURE.md`, `REQUIREMENT_COVERAGE_MATRIX.md`, `SCREEN_INVENTORY_AND_NAVIGATION.md` | Exist (drafts, version 0.2, 27 October 2026). Not reviewed by a second person (T-00.7). |
+| `PDF_READER_AND_OFFLINE_DESIGN.md`, `SECURITY_INCIDENT_PROCEDURE.md`, `REQUIREMENT_COVERAGE_MATRIX.md`, `SCREEN_INVENTORY_AND_NAVIGATION.md` | Exist (drafts). Not reviewed by a second person (T-00.7). |
 | `CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Exists (draft; the README index gives its version). A comparison of candidates and a parameterised cost model. The single-provider cost model is still BLOCKED by DEC-003 (T-00.7). |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal. **INTERNAL ESTIMATE** marks an unvalidated planning figure that is not a commitment.
@@ -79,7 +79,7 @@ Evidence from the repository on 23 October 2026.
 | Item | State |
 |---|---|
 | Project week | On the working baseline (the CH start date, 21 October 2026, PROVISIONAL) the project is in Week 1. On the S2 date it has not started. (C-08) |
-| Phase 1 documents | `PROJECT_CHARTER.md` (v0.2) and `REQUIREMENTS_SPECIFICATION.md` (v0.1) exist as drafts. `SCOPE_AND_EXCLUSIONS.md`, `ASSUMPTIONS_AND_CONSTRAINTS.md` and `GLOSSARY.md` also exist as drafts (merged by pull request #2). |
+| Phase 1 documents | `PROJECT_CHARTER.md` (v0.3) and `REQUIREMENTS_SPECIFICATION.md` (v0.1) exist as drafts. `SCOPE_AND_EXCLUSIONS.md`, `ASSUMPTIONS_AND_CONSTRAINTS.md` and `GLOSSARY.md` also exist as drafts (merged by pull request #2). |
 | Phase 2 documents | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md` and `SECURITY_AND_ACCESS_CONTROL.md` exist as drafts (merged by pull request #2). `PDF_READER_AND_OFFLINE_DESIGN.md` exists as a draft (24 October 2026). `CLOUD_INFRASTRUCTURE_AND_COSTS.md` exists as a draft (25 October 2026), written while DEC-003 is open. |
 | Phase 3 and Phase 4 documents | Merged into `main` by pull request #1 (merge commit 56c6d97) on 23 October 2026. Drafts. No review is recorded on the pull request. |
 | Application code | None |

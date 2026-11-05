@@ -37,7 +37,7 @@ Reading order
 |---|---|---|---|---|---|
 | [MFW_Commercial_Proposal-2.pdf](Documentation/MFW_Commercial_Proposal-2.pdf) | S1, the commercial proposal | Source | Issued, unsigned (OQ-28) | None (issued document) | Not applicable |
 | [MFW_Statement_of_Work.pdf](Documentation/MFW_Statement_of_Work.pdf) | S2, the statement of work | Source | Issued, unsigned (OQ-28) | None (issued document) | Not applicable |
-| [PROJECT_CHARTER](Documentation/PROJECT_CHARTER.md) | Project framing, stakeholders, governance | Authoritative: framing | 0.2 | Yuvraj (proposed, not agreed) | Not stated in the document |
+| [PROJECT_CHARTER](Documentation/PROJECT_CHARTER.md) | Project framing, stakeholders, governance | Authoritative: framing | 0.3 | Yuvraj (proposed, not agreed) | Not stated in the document |
 | [REQUIREMENTS_SPECIFICATION](Documentation/REQUIREMENTS_SPECIFICATION.md) | Functional and non-functional requirements | Authoritative: requirements | 0.1 | Yuvraj (proposed, not agreed) | Not stated in the document |
 | [SCOPE_AND_EXCLUSIONS](Documentation/SCOPE_AND_EXCLUSIONS.md) | What is in scope, excluded, or needs a change request | Authoritative: scope | 0.1 | Not assigned | Not stated in the document |
 | [ASSUMPTIONS_AND_CONSTRAINTS](Documentation/ASSUMPTIONS_AND_CONSTRAINTS.md) | Assumptions, constraints and dependencies | Authoritative: assumptions | 0.2 | Not assigned | Not stated in the document |
@@ -55,7 +55,7 @@ Reading order
 | [SCREEN_INVENTORY_AND_NAVIGATION](Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md) | Screens and states the requirements imply; input to the M2 designs | Authoritative: screen list (proposed) | 0.2 | Yuvraj for app, Sanika for admin (proposed) | Both developers; MFW approves the screens at M2 |
 | [CLOUD_INFRASTRUCTURE_AND_COSTS](Documentation/CLOUD_INFRASTRUCTURE_AND_COSTS.md) | Candidate clouds and a parameterised cost model; no provider chosen | Authoritative: cloud cost model (proposed) | 0.2 | Yuvraj (proposed, not agreed) | Both developers; MFW for the provider, region, cost ceiling and any CDN |
 | [DEVELOPMENT_ROADMAP](Documentation/DEVELOPMENT_ROADMAP.md) | Work packages, tasks, internal estimates | Planning, not a commitment | 0.8 | Sanika (interim) | Both developers; MFW approves milestones, not the plan |
-| [TASK_OWNERSHIP_MATRIX](Documentation/TASK_OWNERSHIP_MATRIX.md) | Who owns what, and the document map | Authoritative: ownership and map | 0.5 | Sanika (interim) | Both developers |
+| [TASK_OWNERSHIP_MATRIX](Documentation/TASK_OWNERSHIP_MATRIX.md) | Who owns what, and the document map | Authoritative: ownership and map | 0.6 | Sanika (interim) | Both developers |
 | [DEVELOPMENT_WORKFLOW](Documentation/DEVELOPMENT_WORKFLOW.md) | Branches, reviews, merges | Authoritative: process | 0.2 | Sanika (interim) | Both developers. No MFW approval |
 | [CODING_STANDARDS](Documentation/CODING_STANDARDS.md) | Coding rules and on-device storage rules | Authoritative: standards | 0.2 | Sanika (interim) | Both developers |
 | [DEFINITION_OF_DONE](Documentation/DEFINITION_OF_DONE.md) | What done means for each kind of work | Authoritative: done | 0.2 | Sanika (interim) | Both developers |
@@ -67,7 +67,7 @@ Reading order
 | [TEST_DATA_AND_FIXTURES](Documentation/TEST_DATA_AND_FIXTURES.md) | Test users, files and network scenarios | Authoritative: fixtures | 0.3 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW for where its sample PDFs are stored |
 | [CI_CD_AND_QUALITY_GATES](Documentation/CI_CD_AND_QUALITY_GATES.md) | Planned checks on each change | Authoritative: quality gates (planned) | 0.2 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW if a cost is billed to MFW |
 | [REQUIREMENT_COVERAGE_MATRIX](Documentation/REQUIREMENT_COVERAGE_MATRIX.md) | Which rows and plans name each requirement | Derived, not a source of truth | 0.2 | Yuvraj (proposed, not agreed) | Both developers |
-| [DEPLOYMENT_PLAN](Documentation/DEPLOYMENT_PLAN.md) | Environments, configuration, release sequence | Authoritative: deployment (planned) | 0.3 | Sanika (interim) | Both developers; MFW for environments and costs |
+| [DEPLOYMENT_PLAN](Documentation/DEPLOYMENT_PLAN.md) | Environments, configuration, release sequence | Authoritative: deployment (planned) | 0.4 | Sanika (interim) | Both developers; MFW for environments and costs |
 | [BACKUP_AND_RECOVERY](Documentation/BACKUP_AND_RECOVERY.md) | Proposed backup, restore and escalation | Authoritative: backup (proposed) | 0.5 | Sanika (interim) | Both developers, then MFW for cost and data obligations |
 | [APP_STORE_RELEASE_CHECKLIST](Documentation/APP_STORE_RELEASE_CHECKLIST.md) | What must be true before store submission | Authoritative: store release | 0.2 | Sanika (interim) | Both developers; MFW for the listing and submission |
 | [MAINTENANCE_AND_HANDOVER](Documentation/MAINTENANCE_AND_HANDOVER.md) | Handover items, warranty, after the warranty | Authoritative: handover | 0.3 | Sanika (interim) | Both developers; MFW agrees the handover at M5 |

@@ -6,7 +6,7 @@
 | Phase | 3 — Development Planning and Collaboration (document 29) |
 | Version | 0.14 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -31,18 +31,20 @@ PROPOSED (DEC-015).
 
 ## Unreleased
 
-### Documentation: statements that gave a draft as version 0.1 corrected, 2026-11-04, on topic branch `docs/yg-stale-version-statements` on top of `eebcdb7`, not reviewed
+### Documentation: statements that gave a draft as version 0.1 corrected, 2026-11-04, revised 2026-11-05, on topic branch `docs/yg-stale-version-statements` on top of `eebcdb7`, then merged with `origin/main` at `157a9a9`, under review in pull request #16
 
-Follows a review of the documentation set. Three statements read as current but gave `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 of 25 October 2026, although it is at a later version: the related-documents row and task T-00.7 of `DEVELOPMENT_ROADMAP.md`, the mitigation of R14 in `RISK_REGISTER.md`, and a row of `BACKUP_AND_RECOVERY.md`. They now say the draft exists, and the README index gives its version. T-00.7 also gives no version for the other four drafts. The control date of `PROJECT_CHARTER.md` read 22 October 2026 for version 0.2, which its own history row dates 23 October 2026, and the commit that last changed it (`5a436a3`) is dated 23 October 2026. The date is corrected to 23 October 2026 with no version bump, because no content changed and other documents cite its version 0.2. The citations of other documents' versions in the related-documents rows of the other documents are dated snapshots of the version each document was written against, and are not changed. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+Follows a review of the documentation set. Five statements read as current but gave `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 of 25 October 2026, although it is at a later version: the related-documents row and task T-00.7 of `DEVELOPMENT_ROADMAP.md`, the mitigation of R14 in `RISK_REGISTER.md`, a row of `BACKUP_AND_RECOVERY.md`, a row of `DEPLOYMENT_PLAN.md` and the document map of `TASK_OWNERSHIP_MATRIX.md`. They now say the draft exists, and the README index gives its version. The last two were found in Sanika Attarde's review of this pull request on 2026-11-05. T-00.7 and the roadmap's related-documents row also give no version for the other four drafts. The control date of `PROJECT_CHARTER.md` read 22 October 2026 for version 0.2, which its own history row dates 23 October 2026, and the commit that last changed it (`5a436a3`) is dated 23 October 2026. The charter goes to version 0.3 with a history row that says only the control date was corrected, because each change updates the version (`DEVELOPMENT_WORKFLOW.md` section 12 item 2). The citations of version 0.2 in other documents record the version each was written against, so they stay. The remaining pinned versions in related-documents rows are left for a cleanup after pull requests #14 to #18 merge, which the same review proposes. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
 
 | Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
 |---|---|---|---|---|---|---|
-| 2026-11-04 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.8: the CLOUD row of the related documents and task T-00.7 give no version | The version had moved on | T-00.7 | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/RISK_REGISTER.md` | Version 0.5: the R14 mitigation gives no version for the cost document | The version had moved on | R14 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.8: the CLOUD row of the related documents, task T-00.7 and the row for the four other drafts give no version. The Phase 1 row in section 4 gives the charter as v0.3 | The version had moved on | T-00.7 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/RISK_REGISTER.md` | Version 0.5: the R14 mitigation gives no version for the cost document, and says the README index gives it | The version had moved on | R14 | Both developers (not agreed) | No scope effect |
 | 2026-11-04 | `Documentation/BACKUP_AND_RECOVERY.md` | Version 0.5: the CLOUD row of the related documents gives no version | The version had moved on | None | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/PROJECT_CHARTER.md` | The control date reads 23 October 2026 (was 22 October 2026). The version stays 0.2 and no content changed | The control date disagreed with the history row and the commit date | None | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.14: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `README.md` | The version column reads 0.8 for `DEVELOPMENT_ROADMAP` (was 0.7), 0.5 for `RISK_REGISTER` (was 0.4), 0.5 for `BACKUP_AND_RECOVERY` (was 0.4) and 0.14 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEPLOYMENT_PLAN.md` | Version 0.4: the CLOUD row of the related documents gives no version | The version had moved on, and the review of pull request #16 found the row | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/TASK_OWNERSHIP_MATRIX.md` | Version 0.6: the document map (section 13.1) gives no version for the cost document | The version had moved on, and the review of pull request #16 found the line | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/PROJECT_CHARTER.md` | Version 0.3: the history row says that the control date of version 0.2 is corrected from 22 to 23 October 2026. No content changed | The control date disagreed with the history row and the commit date, and each change updates the version | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.14: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column reads 0.8 for `DEVELOPMENT_ROADMAP` (was 0.7), 0.5 for `RISK_REGISTER` (was 0.4), 0.5 for `BACKUP_AND_RECOVERY` (was 0.4), 0.4 for `DEPLOYMENT_PLAN` (was 0.3), 0.6 for `TASK_OWNERSHIP_MATRIX` (was 0.5), 0.3 for `PROJECT_CHARTER` (was 0.2) and 0.14 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: dependency register with review entries and licence reads, 2026-11-04, on topic branch `docs/yg-dependency-register-ws-b` on top of `2a5476c`, then merged with `origin/main` at `eebcdb7`, under review in pull request #13
 
