@@ -1,0 +1,42 @@
+/* SPIKE. Placeholder visuals only: no brand assets have been received and there is no M2 design. */
+:root {
+  font-family: system-ui, sans-serif;
+  color: #1f2328;
+  background: #f6f8fa;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  max-width: 24rem;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+input {
+  font: inherit;
+  padding: 0.5rem;
+  border: 1px solid #8c959f;
+  border-radius: 4px;
+}
+
+button {
+  font: inherit;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #cf222e;
+  border-radius: 4px;
+  background: #ffebe9;
+}
