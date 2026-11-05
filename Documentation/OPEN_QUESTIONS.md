@@ -7,7 +7,7 @@
 | Document | Open Questions |
 | File | `Documentation/OPEN_QUESTIONS.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 40) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. **Every question is OPEN. None has been answered.** |
 | Date | 5 November 2026 |
 | Approval required | Both developers for the register. Each answer needs the evidence listed against it. |
@@ -21,6 +21,7 @@
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded as working positions and reported statements in the evidence column of 28 questions (`TECHNOLOGY_DECISIONS.md` section 10.5). OQ-58 and OQ-59 added. OQ-20, OQ-51 and OQ-56 reworded because PRC-01 is withdrawn. No question is answered or closed. |
 | 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.5 | 5 November 2026 | The OQ-38 row records that DEC-011 is AGREED and that Sanika Attarde's written note is filed. Only the availability of both developers is still open, and the question stays OPEN. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.6 | 5 November 2026 | OQ-60 added (P2, both developers): the controls and the sign-in token handling of the admin panel's web surface. The summary reads 60 questions. Revised on 5 November 2026 after the review of pull request #22: OQ-60 cites TD-14 and not TD-12, follows the new wording of objective (c), and asks that the DEC-004 comparison say whether each hosting option can set the response headers for the framing and script objectives. No requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -161,6 +162,7 @@ This is the single, actionable register of unresolved questions about client app
 | OQ-51 | Which roles may see the registered-reader list and export it? Under the one-role baseline every admin can (RS FR-USER-002, FR-USER-003, PROVISIONAL). "Super Admin only" was inferred under PRC-01, which is withdrawn. | P1 | RS FR-USER-002, FR-USER-003, NFR-PRIV-004; OP-ADM-08, OP-ADM-09 (OP-31, OP-32) | AOQ-05; DEC-027 | MFW | Written decision Working position of 27 October 2026 (PROPOSED, reported by YG, not filed; Sanika's written agreement not filed) (DEC-027): any admin, because there is one Admin role. | OPEN |
 | OQ-56 | How recent must a sign-in be before an admin can add or remove an admin? The same window can apply to other sensitive admin actions. This was conditional on PRC-01, which is withdrawn. | P2 | DEC-027 | AOQ-14; TD-15 | Both developers, with MFW's approval | AGREED entry. A recent-sign-in check is part of the working position (GS-Q51). The window is not set. | OPEN |
 | OQ-58 | Does MFW treat the in-panel adding and removing of admins by any admin, and the small record of who added or removed whom, as a clarification of the S2 admin panel or as a change request? S2 lists admin sign-in and the refusal of non-admins and no audit log (EXC-07), and S1 says MFW supplies the admin user list. | P1 | DEC-027; OQ-20; T-09.1; the admin panel screens | DEC-027; EXC-07; S2 AC-8 | MFW and Sanika Attarde | MFW's written answer | OPEN |
+| OQ-60 | Which controls does the admin panel need on its web surface, and how does it hold its sign-in token? The objectives are that a page on another website cannot make a signed-in admin's browser act (cross-site request forgery), that the panel cannot be shown inside another website's frame, that only the scripts the panel loads on purpose run in it (a content security policy), and that only allowed origins call the functions from a browser (cross-origin access). None of this is researched, and the panel's technology is not chosen. The DEC-004 comparison should say whether each hosting option can set the response headers that the framing and script objectives need. | P2 | DEC-004; SC-22, ST-22 and SEC-CHK-20 | OQ-20; NFR-SEC-011; TD-14 | Both developers | A written choice of mechanism, and a test of each objective on the chosen hosting | OPEN |
 
 ### 5.10 Privacy and data
 
@@ -208,9 +210,9 @@ This is the single, actionable register of unresolved questions about client app
 | Priority | Count | IDs |
 |---|---|---|
 | P1 | 40 | OQ-01 to OQ-05, OQ-07 to OQ-10, OQ-12 to OQ-14, OQ-16 to OQ-18, OQ-24 to OQ-29, OQ-31 to OQ-42, OQ-50, OQ-51, OQ-53, OQ-54, OQ-57 to OQ-59 |
-| P2 | 15 | OQ-06, OQ-11, OQ-15, OQ-19 to OQ-23, OQ-30, OQ-45, OQ-46, OQ-48, OQ-52, OQ-55, OQ-56 |
+| P2 | 16 | OQ-06, OQ-11, OQ-15, OQ-19 to OQ-23, OQ-30, OQ-45, OQ-46, OQ-48, OQ-52, OQ-55, OQ-56, OQ-60 |
 | P3 | 4 | OQ-43, OQ-44, OQ-47, OQ-49 |
-| **Total** | **59** | All OPEN |
+| **Total** | **60** | All OPEN |
 
 Questions waiting on MFW, which the contracting developer sends (`TASK_OWNERSHIP_MATRIX.md` §10), make up most of the P1 list. Sending them early is task T-00.2 in `DEVELOPMENT_ROADMAP.md`.
 

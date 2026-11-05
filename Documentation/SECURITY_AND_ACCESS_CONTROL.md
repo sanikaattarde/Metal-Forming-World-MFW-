@@ -7,7 +7,7 @@
 | Document title | Security and Access Control |
 | File | `SECURITY_AND_ACCESS_CONTROL.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for Review |
 | Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
@@ -29,6 +29,7 @@
 | 0.3 | 25 October 2026 | `SECURITY_INCIDENT_PROCEDURE.md` added to the related documents. No role, control, threat or test changed. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). One Admin role with in-panel add and remove, a last-admin guard and a narrow record of who added or removed whom (GS-Q44). Sections 6 to 8 rewritten. Section 9.4 rewritten for immediate deletion. Threat T27 added (a compromised admin account). Controls SC-09 to SC-15 and SC-17 and tests ST-02, ST-03, ST-06 to ST-11, ST-14 and ST-15 reworded. ST-11 and PRC-01 and PRC-02 are withdrawn. The audit set is narrowed, so who deleted an issue, replaced a file or exported the reader list is no longer recorded. No decision is approved. |
 | 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
+| 0.6 | 5 November 2026 | Threat T28, control SC-22 and test ST-22 added for the admin panel's web surface (a request forged by another website, framing, a script that the panel did not load on purpose, and cross-origin calls to the functions). They state objectives only. The mechanism is OPEN and NOT VERIFIED, blocked by DEC-004 and OQ-60, and no requirement names them, so they are a development-team safeguard (ASSUMPTION). Sections 4.3, 6.1a, 6.3, 14, 15 and 16 follow. Revised on 5 November 2026 after the review of pull request #22: T28 and OQ-60 cite TD-14, the admin panel entry, and not TD-12, and objective (c) reads "only the scripts the panel loads on purpose can run in it". No requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Sources and authority
 
@@ -218,7 +219,7 @@ Assets and what protects them
 
 ### 4.3 Threats
 
-Threats T1 to T17 are in [System Architecture](SYSTEM_ARCHITECTURE.md) §12.1 and are not repeated. This section adds T18 to T27. Each control and test is proposed. None is built, and no test is written.
+Threats T1 to T17 are in [System Architecture](SYSTEM_ARCHITECTURE.md) §12.1 and are not repeated. This section adds T18 to T28. Each control and test is proposed. None is built, and no test is written.
 
 | Ref | Threat | Control | Residual risk | Tests |
 |---|---|---|---|---|
@@ -232,6 +233,7 @@ Threats T1 to T17 are in [System Architecture](SYSTEM_ARCHITECTURE.md) §12.1 an
 | T25 | An account that is being deleted is used to act | Every server operation is refused once the account is marked deleting. The account leaves the active admin count (SC-17) | The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status. Those records are removed with the account | ST-14 |
 | T26 | Someone tests which email addresses have an account, through registration, sign-in or password reset | Sign-in gives one message for any wrong email or password. Password reset gives the same message whether or not the address has an account. All three are rate limited (SC-18, SC-21) | Registration tells the visitor that an account exists, by design (PROPOSED), so an address can be tested there, limited by the rate limit. The identity provider's behaviour is NOT VERIFIED | ST-21 |
 | T27 | A compromised admin account adds an attacker as an admin, or removes the other admins | A verified email on the person added, a recent sign-in, a confirmation that names the person before a removal, the last-admin guard, the change record, and a small number of admins (SC-09 to SC-11, SC-13) | Every admin has the same power, so one compromised account can add or remove admins. The change record shows it only afterwards. There is no second factor on the working position (GS-Q51, AOQ-03) | ST-02, ST-08 |
+| T28 | The admin panel's web surface is abused. Another website makes a signed-in admin's browser send a request, another website shows the panel inside its own frame to trick an admin into a click, a script that the panel did not load on purpose runs in it, or a browser call from an origin that should not reach the functions is allowed | SC-22 states the objectives. The server checks the admin role on every call (SC-02), but that does not stop a request made with an admin's own session, so the panel has to hold the objectives itself. The mechanism is OPEN | NOT VERIFIED. How the panel holds its sign-in token, what response headers the hosting allows and how the functions treat a cross-origin call were not researched (TD-14, OQ-60). The panel is a React web app on Firebase Hosting only as S2 proposes (DEC-004, OPEN) | ST-22 |
 
 ## 5. Authentication and Account Status
 
@@ -287,6 +289,7 @@ Roles
 Classification of controls and tests
 ├── Part of the S2 baseline        SC-01 to SC-08, SC-12 (a removal of an admin), SC-15 to SC-21
 │                                  ST-01 to ST-06, ST-12 to ST-21
+├── Development-team safeguard     SC-22, ST-22, threat T28 (no requirement names it; PROPOSED, NOT VERIFIED; DEC-004, OQ-60)
 ├── Proposed addition (OQ-58)      SC-09, SC-10, SC-11, SC-13, SC-14
 │                                  ST-07, ST-08, ST-09, ST-10; threats T19, T20, T22, T27
 ├── Withdrawn                      ST-11 (denied entries), and the grace window in T25 (PRC-01 and PRC-02 are withdrawn)
@@ -341,6 +344,7 @@ The register is proposed. Nothing in it is implemented and no test is written.
 | SC-19 | The app and the repository hold no secret, and developers use role-based access | TD-17, TD-18 | NFR-SEC-012 (CONFIRMED) | ST-19 |
 | SC-20 | News HTML runs no script | The sanitising renderer | TD-12; ARCH T9 | ST-20 |
 | SC-21 | Sign-in gives one message for any wrong email or password, and password reset gives the same message whether or not the address has an account. Registration may say that an account exists. All three are rate limited | The identity provider and the app's message mapping; SC-18 | FR-AUTH-001 to FR-AUTH-004 (CONFIRMED); PAC-17 (PROPOSED). The provider's behaviour is NOT VERIFIED | ST-21 |
+| SC-22 | The admin panel's web surface holds four objectives. (a) A page on another website cannot make a signed-in admin's browser perform an admin operation. (b) The panel cannot be shown inside another website's frame. (c) Only the scripts the panel loads on purpose can run in it. (d) A browser call to the functions from an origin that is not allowed is refused. The mechanism for each is OPEN | Not decided. The panel, its hosting and the functions (DEC-004, OQ-60) | No requirement names these objectives. A development-team safeguard (ASSUMPTION), PROPOSED and NOT VERIFIED. NFR-SEC-011 (OPEN) covers admin sign-in measures, and CODING_STANDARDS §15 covers the panel | ST-22 |
 
 ### 6.4 Enforcement rules
 
@@ -794,8 +798,10 @@ Security tests                                         [proposed; none is writte
 │   └── No key, token or credential is in the repository, the app or CI. Developers use role-based access
 ├── ST-20 News rendering                        [SC-20]
 │   └── A post with a script, a form and an embedded frame is shown without running them
-└── ST-21 Account-existence messages            [SC-21, T26]
-    └── Compare sign-in and password reset for a known and an unknown address: the same message and the same error category. Registration for an address that has an account shows the account-exists prompt. Repeated attempts are limited. Timing is not tested
+├── ST-21 Account-existence messages            [SC-21, T26]
+│   └── Compare sign-in and password reset for a known and an unknown address: the same message and the same error category. Registration for an address that has an account shows the account-exists prompt. Repeated attempts are limited. Timing is not tested
+└── ST-22 Admin panel web surface               [SC-22, T28]
+    └── Blocked by DEC-004. Once the panel exists: from a page on another origin, try to make a signed-in admin's browser run an admin operation, and try to load the panel in a frame of another origin. Try to run a script that the panel does not load on purpose. Call the functions from an origin that is not allowed. Each is refused. Which of these can be tested depends on the mechanism that OQ-60 chooses
 ```
 
 ## 15. Risks, Open Questions and Verification Gaps
@@ -819,9 +825,11 @@ Risks and open items
 ├── Open for the development team
 │   ├── AOQ-03 second factor for admins, AOQ-10 App Check, AOQ-14 the recent-sign-in window, AOQ-20 covers before publication
 │   ├── The rate-limit values, how long a request identifier is remembered
+│   ├── OQ-60 the admin panel's web controls (SC-22)
 │   └── The rule for the typed confirmation in OP-30
 └── Not verified
-    └── Technology Decisions §9.4 items 3, 6, 7, 12, 16, 20 and 21, and the new items 22 and 23
+    ├── Technology Decisions §9.4 items 3, 6, 7, 12, 16, 20 and 21, and the new items 22 and 23
+    └── SC-22: how the panel holds its sign-in token, what response headers the hosting allows, and how the functions treat a cross-origin call (OQ-60)
 ```
 
 ## 16. Traceability
@@ -871,7 +879,7 @@ Decisions to sections
 ```text
 S2 acceptance criteria and the tests behind them
 ├── AC-3 Sign-in gate, direct file request refused, account deletion     ST-01, ST-12, ST-14
-├── AC-8 Admin panel                                                      ST-02, ST-03, ST-06
+├── AC-8 Admin panel                                                      ST-02, ST-03, ST-06, and ST-22 (SC-22 is a development-team safeguard, not an S2 requirement)
 ├── AC-10 Security checklist                                              Section 14
 └── AC-12 Handover                                                        This document and the other documents in the set
 ```
