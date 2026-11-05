@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.11 |
+| Version | 0.14 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 4 November 2026 |
 
@@ -41,8 +41,18 @@ Follows a review of the documentation set. Three statements read as current but 
 | 2026-11-04 | `Documentation/RISK_REGISTER.md` | Version 0.5: the R14 mitigation gives no version for the cost document | The version had moved on | R14 | Both developers (not agreed) | No scope effect |
 | 2026-11-04 | `Documentation/BACKUP_AND_RECOVERY.md` | Version 0.5: the CLOUD row of the related documents gives no version | The version had moved on | None | Both developers (not agreed) | No scope effect |
 | 2026-11-04 | `Documentation/PROJECT_CHARTER.md` | The control date reads 23 October 2026 (was 22 October 2026). The version stays 0.2 and no content changed | The control date disagreed with the history row and the commit date | None | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.11: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `README.md` | The version column reads 0.8 for `DEVELOPMENT_ROADMAP` (was 0.7), 0.5 for `RISK_REGISTER` (was 0.4), 0.5 for `BACKUP_AND_RECOVERY` (was 0.4) and 0.11 for `CHANGELOG` (was 0.10) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.14: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `README.md` | The version column reads 0.8 for `DEVELOPMENT_ROADMAP` (was 0.7), 0.5 for `RISK_REGISTER` (was 0.4), 0.5 for `BACKUP_AND_RECOVERY` (was 0.4) and 0.14 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: dependency register with review entries and licence reads, 2026-11-04, on topic branch `docs/yg-dependency-register-ws-b` on top of `2a5476c`, then merged with `origin/main` at `eebcdb7`, under review in pull request #13
+
+Adds section 8.1 to the dependency register, with review entries for six packages read from pub.dev and their LICENSE files on 2026-10-30, and records YG's licence reads of 2026-11-01. After Sanika Attarde's review of pull request #13 on 2026-11-03, it also records YG's re-read of PDFium's LICENSE file on 2026-11-04 (a BSD-3-Clause notice followed by the Apache License 2.0 text), points DEP-43 and DEP-44 to `DECISION_LOG.md` section 5.5, and adds a sentence to section 2 about the section 8.1 labels. No package is added, no version is pinned, and `app/pubspec.yaml` is not changed. Nothing is agreed or approved, and DEC-005 stays OPEN. Pull request #12 (written positions, merged as `eebcdb7`) added no changelog line, and this entry does not add one. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-04 | `Documentation/DEPENDENCY_REGISTER.md` | Versions 0.3 and 0.4: section 8.1 (review entries for DEP-43, DEP-44, DEP-58, DEP-64, DEP-65 and DEP-66), DEP-64 to DEP-66 in section 8, six rows in section 10, YG's licence reads, the PDFium licence as two notices, and the pointers to section 5.5 | The PDF libraries for the DEC-005 comparison need a register entry before any package goes into a spike, and the review of pull request #13 asked for the PDFium and DEP-43 and DEP-44 corrections | DEC-005, DEC-013, DEC-014, OQ-36, DEP-43, DEP-44, DEP-54, DEP-58, DEP-64, DEP-65, DEP-66 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.11: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `README.md` | The version column reads 0.4 for `DEPENDENCY_REGISTER` (was 0.2) and 0.11 for `CHANGELOG` (was 0.10) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: review fixes to the app contract, 2026-10-31, on topic branch `docs/sa-bookmark-contract-review-fixes` on top of `8daa413`, not reviewed
 
