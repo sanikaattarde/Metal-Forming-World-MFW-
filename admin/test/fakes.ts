@@ -1,5 +1,6 @@
 // SPIKE. Hand-written stand-ins for the provider and the server, for the tests that need no emulator.
 import type { CallFn } from '../src/adminApi';
+import type { Reads } from '../src/data';
 import type { Services } from '../src/services';
 import type { SignedInUser } from '../src/signIn';
 
@@ -11,6 +12,7 @@ interface Options {
   signIn?: (email: string, password: string) => Promise<SignedInUser>;
   isAdmin?: boolean | (() => Promise<boolean>);
   call?: CallFn;
+  read?: Reads;
 }
 
 export const providerError = (code: string) => Object.assign(new Error(`Firebase: Error (${code}).`), { code });
@@ -19,7 +21,7 @@ export const providerError = (code: string) => Object.assign(new Error(`Firebase
 export const serverError = (code: string, reason?: string) =>
   Object.assign(new Error(code), { code: `functions/${code}`, details: reason ? { reason } : undefined });
 
-export function fakeDeps({ signIn, isAdmin = false, call }: Options = {}): FakeDeps {
+export function fakeDeps({ signIn, isAdmin = false, call, read }: Options = {}): FakeDeps {
   const calls = { signIn: 0, signOut: 0, roleCheck: 0, call: [] as string[] };
   return {
     calls,
@@ -36,7 +38,8 @@ export function fakeDeps({ signIn, isAdmin = false, call }: Options = {}): FakeD
     },
     call: async (name, data) => {
       calls.call.push(name);
-      return call ? call(name, data) : {};
+      return call ? call(name, data) : { items: [], next_cursor: null };
     },
+    read: read ?? { categories: async () => [], segments: async () => [] },
   };
 }

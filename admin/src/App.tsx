@@ -1,8 +1,13 @@
-// SPIKE (DEC-004 OPEN). The admin panel: the sign-in page, and the admin area after sign-in. The role check
+// SPIKE (DEC-004 OPEN). The admin panel: the sign-in page, and the admin screens after sign-in. The role check
 // calls OP-14 (MOD12-P2-T01). The session ends when access is lost: when any server operation refuses the
 // account as no longer an admin, and when the panel comes back into focus and OP-14 says so.
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router';
+import { AdminLayout } from './AdminLayout';
 import { adminApi } from './adminApi';
+import { CategoriesPage } from './CategoriesPage';
+import { IssueEditorRoute } from './IssueEditor';
+import { IssuesPage } from './IssuesPage';
 import { MESSAGES } from './messages';
 import type { Services } from './services';
 import { SignInPage } from './SignInPage';
@@ -57,13 +62,15 @@ export function App({ services }: Props) {
 
   if (signedIn) {
     return (
-      <main className="page">
-        <h1>Admin panel</h1>
-        <p>Signed in. The admin screens come in the next step.</p>
-        <button type="button" onClick={() => endSession(null)}>
-          Sign out
-        </button>
-      </main>
+      <Routes>
+        <Route element={<AdminLayout onSignOut={() => endSession(null)} />}>
+          <Route path="/issues" element={<IssuesPage api={api} />} />
+          <Route path="/issues/new" element={<IssueEditorRoute api={api} read={services.read} />} />
+          <Route path="/issues/:issueId" element={<IssueEditorRoute api={api} read={services.read} />} />
+          <Route path="/categories" element={<CategoriesPage api={api} read={services.read} />} />
+          <Route path="*" element={<Navigate to="/issues" replace />} />
+        </Route>
+      </Routes>
     );
   }
 

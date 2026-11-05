@@ -1,21 +1,17 @@
 // @vitest-environment jsdom
 // SPIKE (DEC-004 OPEN). The admin session in a simulated browser, with stand-ins: it ends when the role is
 // found removed (MOD12-P2-T01 step 4), and signing out ends it without a notice.
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import { afterEach, expect, test } from 'vitest';
-import { App } from '../src/App';
 import { MESSAGES } from '../src/messages';
 import { fakeDeps } from './fakes';
+import { signedInApp } from './render';
 
 afterEach(cleanup);
 
 async function signInAsAdmin(stillAdmin: { value: boolean }) {
   const deps = fakeDeps({ isAdmin: async () => stillAdmin.value });
-  render(<App services={deps} />);
-  fireEvent.change(screen.getByLabelText('Email address'), { target: { value: 'admin@example.test' } });
-  fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'a-password' } });
-  fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
-  await screen.findByRole('heading', { name: 'Admin panel' });
+  await signedInApp(deps);
   return deps;
 }
 

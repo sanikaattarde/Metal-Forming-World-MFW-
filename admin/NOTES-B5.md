@@ -43,6 +43,30 @@ Sanika Attarde chose these on 5 November 2026, before any code was written:
 
 **The tests** now start the Auth, Functions and Firestore emulators from the backend spike's configuration, after building its functions. `admin/firebase.json` is removed. Test data goes in through the emulators' own REST interfaces (`test/emulator.ts`).
 
+## 2a. B5.2: the issue and category screens (T-09.3)
+
+### 2a.1 What was built
+
+| Part | What it does |
+|---|---|
+| Navigation | `react-router` 8.5.0 (DEP-73). Each screen has its own address: `/issues`, `/issues/new`, `/issues/:issueId` and `/categories`. Any other address goes to the issues list. A menu links the screens, beside sign-out |
+| SCR-W-02 Issues list | Published and unpublished issues through OP-15, newest publication date first, 20 at a time with "Show more" (PLACEHOLDER page size). A filter for all, published or unpublished |
+| SCR-W-03 Issue editor | The details through OP-16: title, description, category, segments when any exist, publication date, and optionally year and edition. A new issue keeps one request identifier while its form is open, so a retry after a lost reply makes no second issue. An edit sends the record version the screen showed, so a stale screen is refused and told to reload. Publish and unpublish (OP-21, OP-22) each ask for confirmation first (`CODING_STANDARDS.md` §15 item 7). The state and the current file revision are shown. **No upload control** (W3), so publishing needs a file accepted some other way |
+| SCR-W-05 Categories | Issue categories only, in display order, through OP-17 and OP-18. Add (after the last one unless an order is typed), rename or reorder, and delete with a confirmation. A category in use is refused, and the screen says why. Segments and notification categories are seeded by the developers (GS-Q47, GS-Q56) |
+| `data.ts` | The screens' calls in one place. The emulator tests run these same calls against the real operations |
+| `describeError.ts` | Turns each refusal into a PLACEHOLDER message. Missing fields are named by their labels. The server's own message, and any value the admin typed, are never shown |
+| Public reads | Categories and segments are read the way the app reads them, through the lite Firestore client in `firebase` (`firebase/firestore/lite`). It has no live updates or offline cache, which the panel does not need. The full client made the bundle 820 kB; the lite one makes it 465 kB |
+
+### 2a.2 The browser check
+
+Done by hand on 5 November 2026 in an embedded Chromium 152 browser on macOS, against `vite preview` and the Auth, Functions and Firestore emulators. The emulators held a generated admin, two categories and one issue with an accepted file.
+
+1. Sign-in went through the real OP-14 to the issues list, which showed the issue after one OP-15 call.
+2. Opening the issue and confirming "Publish" made it published. A visitor's read of it through the rules then returned 200.
+3. On the categories screen, deleting the category the issue uses was refused with the "in use" message.
+4. The page contacted only 127.0.0.1 on ports 4173, 9099, 5001 and 8080. Local and session storage stayed empty, and IndexedDB held only `firebase-heartbeat-database`.
+5. The Functions emulator logged `"app": "MISSING"` beside `"auth": "VALID"` for each call: App Check is not used (OQ-52).
+
 ## 3. Results
 
 ### 3.1 B5.1, on 5 November 2026
@@ -76,6 +100,31 @@ All 18 were caught, and none failed to compile. They include:
 - a session ending without signing out, or without the notice;
 - a manual sign-out showing the notice.
 
+### 3.2 B5.2, on 5 November 2026
+
+- `npm --prefix admin test`: **67 tests, 67 passed, 0 failed.** Emulator only: 19 screen tests with the stand-in server and 10 against the real operations.
+- `npm --prefix admin run build`: passes. 465 kB (146 kB compressed).
+- The backend was not changed in B5.2, and its suite was not run again.
+
+**Do the tests catch broken code?** 21 deliberate breaks of the panel were tried one at a time, each type-checked and run against the whole admin suite with the emulators.
+
+**First round:**
+
+- 16 were caught.
+- 4 did not compile (Q06, Q15, Q19, Q20), because each left an import or a variable unused.
+- 1 got through.
+
+| Break | Why it got through | What changed |
+|---|---|---|
+| Q08: the state shown is not updated after publishing | The stand-in server handed the screen its own stored records, not copies. Publishing changed the stored record, so the screen's copy changed with it, and the test saw "Published" without the screen ever updating | The stand-in now replies with copies, as a real server does. Then Q08 was caught |
+
+**Second round:**
+
+- The four rewritten breaks and Q08 were run again, and all five were caught.
+- Q20 now orders categories by name instead of by display order.
+
+**Final run.** Fixing the stand-in could change other results, so all 21 were run again from a clean baseline. **All 21 were caught.**
+
 ## 4. Findings
 
 | ID | Finding | What it means |
@@ -87,6 +136,13 @@ All 18 were caught, and none failed to compile. They include:
 | J-5 | A session ends on the next server call or when the panel comes back into focus. A panel left open shows what it showed until then, but the server refuses every call. There is no timer, because OQ-20 sets no session length | To settle with OQ-20 |
 | J-6 | At sign-in, an admin whose email is not verified gets the one refusal message, so the panel never says "verify your email" | Spike choice. It keeps one message for every refusal (SEC-CHK-17). To agree with the M2 designs |
 | J-7 | `npm test` in `admin/` builds and runs the backend spike's functions, so `admin/` depends on that folder being installed | As I-8 in `NOTES.md`. Decide at promotion |
+| K-1 | The lite Firestore client is used for the public reads (section 2a.1) | Spike choice, within DEP-34 |
+| K-2 | No operation returns one issue to an admin. Opening an issue by its address pages through OP-15 until it is found, so it costs more as issues grow. Opening it from the list costs nothing, because the list hands it over | To agree: OP-15 could take an `issue_id`, or a "get one issue" operation could be added |
+| K-3 | The panel lists 20 issues at a time. That is a PLACEHOLDER (D-5) | To set with the M2 designs |
+| K-4 | The editor has no upload control (W3), so an admin cannot publish an issue from the panel until a file has been accepted through OP-19 and OP-40 some other way | Waits for the upload screen (T-09.2, OQ-22, OQ-30) |
+| K-5 | Confirmations are inline buttons, not dialogs, and every message and label is a PLACEHOLDER | To settle with the M2 designs |
+| K-6 | App Check is not used, as the Functions emulator's own log shows | OQ-52 |
+| K-7 | No segment list is seeded (OQ-13), so the editor shows no segment choice. Its checkboxes are built but no test covers them | Test when segments are seeded |
 
 ## 5. Not tested
 

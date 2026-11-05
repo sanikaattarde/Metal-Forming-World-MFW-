@@ -3,11 +3,11 @@
 // cases run against the Auth emulator in sign-in.emulator.test.ts.
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, expect, test } from 'vitest';
-import { App } from '../src/App';
 import { MESSAGES } from '../src/messages';
 import { SignInPage } from '../src/SignInPage';
 import { fakeDeps, providerError } from './fakes';
 import type { FakeDeps } from './fakes';
+import { renderApp } from './render';
 
 afterEach(cleanup);
 
@@ -101,11 +101,11 @@ test('B3: the page sends the password as typed, spaces included (the browser its
   expect(seen).toEqual(['admin@example.test', ' pass word ']);
 });
 
-test('B3: an admin reaches the placeholder, and signing out returns to the sign-in page', async () => {
+test('B3: an admin reaches the issues list, and signing out returns to the sign-in page', async () => {
   const deps = fakeDeps({ isAdmin: true });
-  render(<App services={deps} />);
+  renderApp(deps);
   fillAndSubmit();
-  await screen.findByText('Signed in. The admin screens come in the next step.');
+  await screen.findByRole('heading', { name: 'Issues' });
   expect(deps.calls.signOut).toBe(0);
   fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
   await waitFor(() => expect(screen.getByRole('heading', { name: 'Admin sign-in' })).toBeTruthy());
