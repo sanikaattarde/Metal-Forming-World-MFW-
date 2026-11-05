@@ -6,7 +6,7 @@
 | Phase | 3 — Development Planning and Collaboration (document 29) |
 | Version | 0.15 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -31,17 +31,17 @@ PROPOSED (DEC-015).
 
 ## Unreleased
 
-### Documentation: contract tests named in the test plan, the quality gates and the definition of done, 2026-11-04, on topic branch `docs/yg-contract-tests-in-plans` on top of `eebcdb7`, not reviewed
+### Documentation: contract tests named in the test plan, the quality gates and the definition of done, 2026-11-04, revised 2026-11-05, on topic branch `docs/yg-contract-tests-in-plans` on top of `eebcdb7`, then merged with `origin/main` at `157a9a9`, under review in pull request #17
 
-Follows a review of the documentation set. `API_AND_BACKEND_CONTRACT.md` section 10 proposes eleven contract tests, CT-01 to CT-11, and no test plan, quality gate or definition-of-done check named them. `TESTING_STRATEGY.md` gains suite TS-14 for them, with a proposed split between the backend side (WS-A) and the app side (WS-B) that is not agreed, and the regression, ownership and blocked-items tables name it. `CI_CD_AND_QUALITY_GATES.md` gains gate QG-14. `DEFINITION_OF_DONE.md` gains DoD-TASK check 11. Everything is PROPOSED and blocked by DEC-003 and DEC-026, and no tool is chosen. `REQUIREMENT_COVERAGE_MATRIX.md` is not changed, because the contract tests guard the API contract and the proposed update gate (PRC-04), not a requirement. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+Follows a review of the documentation set. `API_AND_BACKEND_CONTRACT.md` section 10 proposes eleven contract tests, CT-01 to CT-11, and no test plan, quality gate or definition-of-done check named them. `TESTING_STRATEGY.md` gains suite TS-14 for them, with a split between the backend side (WS-A) and the app side (WS-B), and the regression, ownership and blocked-items tables name it. Sanika Attarde's review of this pull request on 2026-11-05 agreed the split as the working position, and it stays PROPOSED with the task split (OQ-38). `CI_CD_AND_QUALITY_GATES.md` gains gate QG-14 for the backend side, and the app side (CT-04, CT-08 to CT-10) runs with the app tests in QG-03, so an app change cannot pass without it. Section 5.2 lists QG-14 for every merge to `main`. `DEFINITION_OF_DONE.md` gains DoD-TASK check 11, worded to follow `API_AND_BACKEND_CONTRACT.md` section 9.1 and 9.2: an additive change updates the snapshot, and only a breaking change carries the compatibility record. CT-02 and CT-10 compare with a released app version, so they start at the first release. Everything is PROPOSED, the backend side is blocked by DEC-003 and DEC-026, and no tool is chosen. `REQUIREMENT_COVERAGE_MATRIX.md` is not changed, because the contract tests guard the API contract and the proposed update gate (PRC-04), not a requirement. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
 
 | Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
 |---|---|---|---|---|---|---|
-| 2026-11-04 | `Documentation/TESTING_STRATEGY.md` | Version 0.6: suite TS-14, and a line each in the regression table, the ownership table and the blocked items | No test plan named the contract tests | CT-01 to CT-11, TS-14, DEC-003, DEC-026, PRC-04 | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.3: gate QG-14 and its line in the pull-request pipeline | No gate ran the contract tests | QG-14, TS-14, TD-17 | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/DEFINITION_OF_DONE.md` | Version 0.3: DoD-TASK check 11 | A changed operation had to update its contract snapshot | CT-01, TS-14 | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.15: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `README.md` | The version column reads 0.6 for `TESTING_STRATEGY` (was 0.5), 0.3 for `CI_CD_AND_QUALITY_GATES` (was 0.2), 0.3 for `DEFINITION_OF_DONE` (was 0.2) and 0.15 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/TESTING_STRATEGY.md` | Version 0.6: suite TS-14 with the app side labelled [SCAFFOLD] and the backend side [BACKEND], and a line each in the regression table, the ownership table and the blocked items | No test plan named the contract tests | CT-01 to CT-11, TS-14, DEC-003, DEC-026, PRC-04 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.3: gate QG-14 (backend side) and its line in the pull-request pipeline, the app side in QG-03, and QG-14 in section 5.2 | No gate ran the contract tests, and the review of pull request #17 found that an app change would skip them | QG-14, TS-14, TD-17 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/DEFINITION_OF_DONE.md` | Version 0.3: DoD-TASK check 11, worded to follow section 9.1 and 9.2 of the backend contract | A changed operation had to update its contract snapshot, and only a breaking change needs the compatibility record | CT-01, TS-14 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.15: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column reads 0.6 for `TESTING_STRATEGY` (was 0.5), 0.3 for `CI_CD_AND_QUALITY_GATES` (was 0.2), 0.3 for `DEFINITION_OF_DONE` (was 0.2) and 0.15 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: dependency register with review entries and licence reads, 2026-11-04, on topic branch `docs/yg-dependency-register-ws-b` on top of `2a5476c`, then merged with `origin/main` at `eebcdb7`, under review in pull request #13
 
