@@ -7,12 +7,12 @@
 | Document title | Database and Data Model |
 | File | `DATABASE_AND_DATA_MODEL.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for Review |
-| Last updated | 27 October 2026 |
+| Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The data model is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.4; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.3; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.4; `PROJECT_CHARTER.md` v0.2 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.4; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.4; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.4; `PROJECT_CHARTER.md` v0.2 |
 
 **Purpose.** This document defines what data the MFW product keeps, how the pieces relate, who may read and change each piece, and when each piece is deleted. S2 lists the data model as a handover deliverable [S2 Handover], and the charter leaves it to a recorded decision (CH §17.4). The access rules for each entity are summarised in Section 19 and defined in the [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) document. The operations that read and write the entities are defined in the [API and Backend Contract](API_AND_BACKEND_CONTRACT.md).
 
@@ -28,6 +28,7 @@
 | 0.2 | 23 October 2026 | Revised after the 17-question interview (GS-Q17 to GS-Q33) and a read-only review of MFW's public website (WEB). Admin reads go through functions only and no role is copied into the sign-in claim (GS-Q20): INV-08 is rewritten and INV-09 is narrowed to sessions. The audit event covers the audit set (GS-Q26). New: the DELETED_ISSUE entity (Section 4.22), the account deletion states, the notification send states, invariants INV-14 to INV-18, website-based seed values for segments and categories (GS-Q31), Sections 17 to 19 (issue lifecycle, query patterns, access by entity and actor) and Appendix B. Decisions in this version are team-accepted, with the requirement label PROVISIONAL and MFW written approval pending (GS-Q30). No requirement status in the specification changed. |
 | 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Profile: the requirements-specification list is required by default and gender is added; mobile number, company and country become optional candidates (GS-Q34). Deletion states and fields marked PRC-02 (immediate deletion is the baseline). ADMIN_ROLE, the guard record and the audit event marked PRC-01 (one admin role is the baseline). "Team-accepted" replaced by PROPOSED with the agreement note. References to the website question extended to OQ-57. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). ADMIN_ROLE has one role and the guard record counts admins. ADMIN_AUDIT_EVENT is narrowed to adds and removes of admins, and keeps its name so that references stay stable. INV-03 to INV-09 are rewritten, INV-16 is withdrawn, and INV-15 and INV-18 are simplified. The deletion state `pending_deletion` and the field `purge_after` are withdrawn. EDITION_UPDATE_SIGNUP stays conditional and is dropped on the working position. `retention_mode` records Read as temporary and Download as kept. Section 15.4 added. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
+| 0.5 | 4 and 5 November 2026 | Bookmark follow-up to pull request #11. `bookmark_id` is named as a second exception to the never-reused identifier rule, beside `user_id` (Section 4.1, the Section 4.10 field note, Section 10.4 rule 8, INV-14 and the Section 12 row). Opening a bookmark with no local copy gets the current revision with the Read action, a temporary copy (Section 6.3 step 2). The exception is YG's position and stays PROPOSED until both developers agree. Revised on 5 November 2026 after the review of pull request #15: Section 4.1 and INV-14 say "no other stored record" and name the queued remove, M10 points to Section 4.1, and the Section 4.10 Validation row adds the server's check that `file_revision` is at least 1 (PROPOSED). No decision is approved. |
 
 ### 1.1 Sources and authority
 
@@ -89,7 +90,7 @@ The status legend is the specification's (spec §1.2): CONFIRMED, PROVISIONAL, A
 | M7 | Keep the logical model independent of the vendor. Vendor-specific detail is marked provisional. | NFR-MAINT-005 (ASSUMPTION) |
 | M8 | Do not record which reader opened which issue or page. | NFR-PRIV-003 (PROVISIONAL); EXC-06 |
 | M9 | Do not expose an admin's identity to the public through public-read data. | Design |
-| M10 | Identifiers are opaque, generated by the server and never reused, so a reader's old copy or bookmark can never point at a different issue. | GS-Q25 |
+| M10 | Identifiers are opaque, generated by the server and never reused, so a reader's old copy or bookmark can never point at a different issue. Two identifiers are exceptions (Section 4.1). | GS-Q25 |
 | M11 | The record of a deleted issue holds an identifier and a time and no content. | GS-Q25 |
 
 ### 2.2 Assumptions
@@ -187,7 +188,7 @@ flowchart LR
 | Convention | Rule |
 |---|---|
 | Types | `text`, `integer`, `boolean`, `timestamp` (UTC), `date`, `enum(...)`, and `text list`. They are logical types, not a vendor's types. |
-| Identifiers | Opaque, generated by the server and never reused, except `user_id`, which is the sign-in provider's user identifier (M10, INV-14). |
+| Identifiers | Opaque, generated by the server and never reused, with two exceptions. `user_id` is the sign-in provider's user identifier. `bookmark_id` is derived from the issue and the page within the reader's own records, so it comes back when the reader removes a bookmark and adds it again. No other stored record points at a bookmark, so reuse cannot misdirect a stored reference. A remove queued on a device while it is offline also carries the identifier (`API_AND_MODULE_CONTRACTS.md` section 6.8, rule 2). The `bookmark_id` exception is YG's position and stays PROPOSED until both developers agree (M10, INV-14). |
 | Required | The record is invalid without the value. For PROVISIONAL requirements, required means required in the working position (MA-5). |
 | Lengths and formats | Proposals for testing and not requirements (MA-6). |
 | Client access | Whether the reader's app or the admin panel can read or write the entity directly under rules. Writes that the table says go "through a function" are made by a server function only (System Architecture §10). |
@@ -449,7 +450,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Foreign keys | `user_id` refers to APP_USER. `issue_id` refers to ISSUE. |
 | Uniqueness | `(user_id, issue_id, page_number)`. Bookmarking a page that is already bookmarked changes nothing, so a repeated tap or a replayed offline write creates no duplicate. |
 | Indexing | `(user_id, issue_id)` and `(user_id, created_at)` |
-| Validation | `page_number` is at least 1. The app checks it against the page count it knows, and the stored value is clamped on opening if the file changed (Section 6). |
+| Validation | `page_number` is at least 1, and so is `file_revision`, because revisions start at 1 (Section 4.9). The server checks both when the bookmark is added (OP-07; the revision check is PROPOSED). The app checks the page against the page count it knows, and the stored value is clamped on opening if the file changed (Section 6). |
 | Retention and deletion | Kept with the reader. Removed by the reader (FR-BKM-007). Removed with the account. Removed by orphan cleanup if the issue is permanently deleted. |
 | Privacy class | Pseudonymous. It reveals a reader's interest, so it is treated as personal data. |
 | Client access | Read and written by the owner only (NFR-SEC-005). |
@@ -457,7 +458,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `bookmark_id` | text | Yes | |
+| `bookmark_id` | text | Yes | Derived from the issue and the page, not generated, so a repeated add reaches the same record (an exception to INV-14, PROPOSED). The format is settled in the backend spike (DEC-003). |
 | `user_id` | text | Yes | |
 | `issue_id` | text | Yes | |
 | `page_number` | integer | Yes | The position of the page in the PDF, counted from 1. It is not a printed page label. |
@@ -814,7 +815,7 @@ A bookmark names the issue, the page number and the file revision. The page numb
 ### 6.3 Opening a bookmark
 
 1. Find the local copy in the device's file registry for the issue.
-2. If there is none, download the current revision (the normal flow, System Architecture §7.5).
+2. If there is none, get the current revision with the Read action, which makes a temporary copy (`API_AND_MODULE_CONTRACTS.md` section 6.6 rule 5; System Architecture §7.5). Opening a bookmark does not leave a kept copy that the reader did not ask for. Read and Download are a reported working position, not filed (GS-Q43), and the split waits for MFW's answer to OQ-08.
 3. Open the page number, clamped to the page count of the file that opens.
 4. If the file's revision differs from the bookmark's revision, show the notice above.
 
@@ -975,7 +976,7 @@ The database engine is not assumed to enforce references or uniqueness (TD-07). 
 5. A profile is complete when the configured required fields are present. It is worked out and not stored.
 6. User-owned records are written only under the owner's identifier.
 7. Public-read records carry no admin identity (M9).
-8. An identifier is never reused (INV-14).
+8. An identifier is never reused (INV-14), except `user_id` and `bookmark_id` (Section 4.1).
 9. An issue is deleted only by an admin and only while unpublished, with its deleted-issue record written in the same transaction (INV-15).
 10. Withdrawn: the audit set is narrowed to adds and removes of admins, which rule 4 covers (INV-16).
 11. A notification send is recorded before it is sent, and a retry reuses the record (INV-17).
@@ -1086,12 +1087,17 @@ Invariant enforcement register           [all mechanisms proposed; nothing imple
 │   ├── Open: whether rules should check that the issue exists, which adds a billed read to every such write
 │   └── Test: write a bookmark for a removed issue and check the cleanup
 ├── INV-14 Identifiers are opaque, unique and never reused                [Section 10.4, rule 8; M10]
-│   ├── Enforced by: the server generates every identifier except user_id. A create that finds the identifier
-│   │   already used, or already on the deleted-issue list, is refused and retried with a new one
+│   ├── Enforced by: the server generates every identifier except user_id and bookmark_id. A create that finds
+│   │   the identifier already used, or already on the deleted-issue list, is refused and retried with a new one
+│   ├── Exception: bookmark_id is derived from the issue and the page, so a bookmark added again after a remove
+│   │   has the same identifier. No other stored record points at a bookmark. A remove queued on a device while
+│   │   it is offline carries the identifier too (API_AND_MODULE_CONTRACTS.md section 6.8, rule 2). PROPOSED (YG),
+│   │   until both developers agree
 │   ├── When broken: not possible by design for server-created records. A reused identifier would let an old
 │   │   copy or bookmark point at a different issue
 │   └── Test: create many records and check there is no collision. Try to create an issue with the identifier
-│       of a deleted one
+│       of a deleted one. Add a bookmark, remove it and add it again, and check that the identifier is the same
+│       and that no second record exists
 ├── INV-15 An issue is deleted only by an admin, only while unpublished   [Section 10.4, rule 9; GS-Q45]
 │   ├── Enforced by: deleteIssue checks the admin role and the unpublished state in one transaction that
 │   │   also writes the deleted-issue record. The call must carry the typed confirmation
@@ -1236,7 +1242,7 @@ Cloud Firestore                                   [PROVISIONAL; applies only if 
 | Admin reads | Rules allow no direct admin read of unpublished issues, upload jobs or the send log. Functions read them with the Admin SDK after checking the caller. The Admin SDK bypasses rules, so each function must check the caller itself (TD-03). |
 | Transactions | The guard record, the issue deletion and the notification retry rely on database transactions. Their behaviour under concurrency is NOT VERIFIED (Technology Decisions §9.4, item 20). |
 | Deleted-issue list | One small collection that the app reads in full when it is online. Its retention is OPEN (AOQ-19). |
-| Opaque identifiers | The function generates the identifier. The generator and the collision check are confirmed at implementation (INV-14). |
+| Opaque identifiers | The function generates the identifier, except for `user_id` and `bookmark_id`. A bookmark identifier is derived from the issue and the page (Section 4.1). The generator and the collision check are confirmed at implementation (INV-14). |
 
 ## 13. Entity Dictionary, Relationships and Data Lifecycle
 
