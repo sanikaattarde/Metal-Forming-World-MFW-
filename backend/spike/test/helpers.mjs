@@ -36,6 +36,17 @@ export async function signUp(email) {
   return { uid: body.localId, idToken: body.idToken };
 }
 
+// Signs in with the test password. Returns the provider's error code, or null when sign-in works.
+export async function signInError(email) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=fake-key`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ email, password: 'spike-password-1', returnSecureToken: true }),
+  });
+  if (reply.ok) return null;
+  return (await reply.json()).error?.message ?? String(reply.status);
+}
+
 export async function disableAccount(uid) {
   const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:update`, {
     method: 'POST',

@@ -44,6 +44,9 @@ export const issueNotAvailable = () =>
 export const noCurrentFile = () =>
   new HttpsError('failed-precondition', 'That issue has no file to open.', { reason: 'NO_CURRENT_FILE' });
 
+export const alreadyDeleting = () =>
+  new HttpsError('failed-precondition', 'This account is already being deleted.', { reason: 'ALREADY_DELETING' });
+
 export const lastAdmin = () =>
   new HttpsError('failed-precondition', 'At least one active admin must remain.', { reason: 'LAST_ADMIN' });
 
