@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.16 |
+| Version | 0.18 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 5 November 2026 |
 
@@ -12,7 +12,7 @@
 
 **Related documents**
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `DECISION_LOG.md` DEC-015 | Exists (draft). Commit, changelog and version conventions (PROPOSED). |
 | `DEVELOPMENT_WORKFLOW.md` §8, §11 | Exists (draft). How pull requests add changelog lines. |
@@ -30,6 +30,48 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: pinned versions and dated headers removed from related-document rows, 2026-11-05, on topic branch `docs/yg-pinned-version-cleanup` on top of `0310d15`, not reviewed
+
+Follows the review of pull request #16 by Sanika Attarde, which proposed this cleanup after pull requests #14 to #18 merged. Rows that list related documents gave the version and sometimes the date of other documents, and 25 of the 73 pinned citations were no longer current. The header "Status on 23 October 2026" was not a snapshot date either, because the tables name drafts of later dates. Those rows now name the document and whether it exists, with no version or date, and the README index holds each version. The source rows marked Read keep the version that was read, because they record what was read. The two that gave the charter's version 0.2 with the date 22 October 2026 now read 23 October 2026. `DEVELOPMENT_WORKFLOW.md` section 12 item 2 states the convention (PROPOSED). The four earliest drafts (`GLOSSARY.md`, `REQUIREMENTS_SPECIFICATION.md`, `SCOPE_AND_EXCLUSIONS.md` and `ASSUMPTIONS_AND_CONSTRAINTS.md`) change only in these rows. Each of the 33 changed documents goes up one version, with a history row, as section 12 item 2 asks. No requirement, scope item, exclusion, decision, status label, estimate or milestone changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-05 | `Documentation/ACCEPTANCE_CRITERIA.md` | Version 0.6: the header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/API_AND_BACKEND_CONTRACT.md` | Version 0.5: the control-table row of related documents gives the names only, because versions are in the README index. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.9: the header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/APP_STORE_RELEASE_CHECKLIST.md` | Version 0.3: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/ASSUMPTIONS_AND_CONSTRAINTS.md` | Version 0.3: the control-table row of related documents gives the names only, because versions are in the README index. The source row that gives the charter's version 0.2 reads 23 October 2026 (was 22 October 2026). | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/BACKUP_AND_RECOVERY.md` | Version 0.6: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.4: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CLAUDE_CODE_WORKING_RULES.md` | Version 0.3: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Version 0.3: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CODING_STANDARDS.md` | Version 0.3: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DATABASE_AND_DATA_MODEL.md` | Version 0.6: the control-table row of related documents gives the names only, because versions are in the README index. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DECISION_LOG.md` | Version 0.7: the header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEFINITION_OF_DONE.md` | Version 0.4: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.6: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEPLOYMENT_PLAN.md` | Version 0.5: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.9: the header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEVELOPMENT_WORKFLOW.md` | Version 0.3: the header of the related-documents table reads "Status", with no date. Section 12 item 2 states the convention for rows that list related documents (PROPOSED). | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/GLOSSARY.md` | Version 0.2: the control-table row of related documents gives the names only, because versions are in the README index. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/MAINTENANCE_AND_HANDOVER.md` | Version 0.4: the header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/OPEN_QUESTIONS.md` | Version 0.4: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` | Version 0.4: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/REQUIREMENTS_SPECIFICATION.md` | Version 0.2: the control-table row of related documents gives the names only, because versions are in the README index. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/REQUIREMENT_COVERAGE_MATRIX.md` | Version 0.3: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/RISK_REGISTER.md` | Version 0.6: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/SCOPE_AND_EXCLUSIONS.md` | Version 0.2: the control-table row of related documents gives the names only, because versions are in the README index. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md` | Version 0.3: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/SECURITY_AND_ACCESS_CONTROL.md` | Version 0.5: the control-table row of related documents gives the names only, because versions are in the README index. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/SECURITY_INCIDENT_PROCEDURE.md` | Version 0.3: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/SYSTEM_ARCHITECTURE.md` | Version 0.5: the control-table row of related documents gives the names only, because versions are in the README index. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/TASK_OWNERSHIP_MATRIX.md` | Version 0.7: the header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/TECHNOLOGY_DECISIONS.md` | Version 0.5: the control-table row of related documents gives the names only, because versions are in the README index. The source row that gives the charter's version 0.2 reads 23 October 2026 (was 22 October 2026). | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/TESTING_STRATEGY.md` | Version 0.9: the header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.5: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.18: this entry, and the related-documents header reads "Status" | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column follows the control table of each of the 33 changed documents, one step up, and reads 0.18 for `CHANGELOG` (was 0.16) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: FX-PDF-11 expectation separated from AC-2.6, 2026-11-04, revised 2026-11-05, on topic branch `docs/yg-fx-pdf-11-tolerance` on top of `eebcdb7`, then merged with `origin/main` at `157a9a9` and again at `178325e`, under review in pull request #18
 

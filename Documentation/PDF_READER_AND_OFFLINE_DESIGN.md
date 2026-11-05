@@ -6,7 +6,7 @@
 |---|---|
 | Document | PDF Reader and Offline Design |
 | File | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. Every rule below is PROPOSED unless it quotes a CONFIRMED requirement. Nothing is built, and nothing has been tested or measured. |
 | Date | 5 November 2026 |
 | Audience | The two developers. MFW's authorised approver only for the reader approach and library at M2. |
@@ -21,10 +21,11 @@
 | 0.1 | 24 October 2026 | Initial draft. This is the document planned as T-00.7 in `DEVELOPMENT_ROADMAP.md`. It is written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). The reading model is two actions: Read opens a temporary copy and Download keeps one (GS-Q43, reported as MFW's answer and not filed). Downloads are foreground-only (GS-Q60). Page-turn is the default mode and the reader can switch (GS-Q55). The test devices are a mid-range Android phone and a current iPhone (GS-Q54). No decision is approved. |
 | 0.3 | 4 and 5 November 2026 | Two statements about the damaged-file fixtures corrected (section 5 and the M2 reader test in section 7). FX-PDF-10 (truncated) must give an error with a retry option, as FR-READ-010 and AC-2.6 say. FX-PDF-11 (wrong cross-reference offsets) may be repaired by a library and opened, and that is accepted as a PROPOSED expectation, on YG's report of a simulator spike result that is not filed (see `TEST_DATA_AND_FIXTURES.md` section 7). No decision is approved, and DEC-005 stays OPEN. Revised on 5 November 2026 after the review of pull request #18: a repaired open must show every page of the PDF it was made from, in order, and section 12 adds RD-08, the reading of FR-READ-010 behind the expectation, as an ASSUMPTION for MFW with the reader approach at M2. |
+| 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 24 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Scope included: Reader", AC-2, AC-4, Flow 3 | Exists, issued, unsigned. **The S2 text is authoritative.** |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft. Requirements are quoted by ID and not restated. |

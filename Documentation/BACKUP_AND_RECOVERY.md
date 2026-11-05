@@ -7,9 +7,9 @@
 | Document | Backup and Recovery |
 | File | `Documentation/BACKUP_AND_RECOVERY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 36) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. **No backup exists. No provider backup is assumed. Every frequency, retention period, RPO and RTO below is PROPOSED and needs MFW's approval.** |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers, then MFW (cost and data obligations) |
 
 **Change history**
@@ -21,10 +21,11 @@
 | 0.3 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` now says it exists as a draft. No backup frequency, retention period, RPO or RTO changed, and none is approved. |
 | 0.4 | 27 October 2026 | One sentence in section 9 updated: deletion is immediate (GS-Q50) and the grace window (PRC-02) is withdrawn. No backup, restore or retention rule changed. |
 | 0.5 | 4 November 2026 | The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` no longer gives version 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. No backup frequency, retention period, RPO or RTO changed, and none is approved. |
+| 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) | Exists, issued, unsigned. Contains no backup requirement. |
 | `MFW_Commercial_Proposal-2.pdf` (S1) "Costs outside the fee" | Exists, issued, unsigned. Cloud usage is billed to MFW. |

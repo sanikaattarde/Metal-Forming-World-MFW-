@@ -7,9 +7,9 @@
 | Document | Acceptance Criteria |
 | File | `Documentation/ACCEPTANCE_CRITERIA.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 31) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. No criterion has been tested. |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers for the verification detail. MFW in writing for every PAC criterion before it becomes contractual. |
 
 **Change history**
@@ -21,17 +21,18 @@
 | 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No criterion changed. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). PAC-16 and PAC-18 are withdrawn with PRC-02 and PRC-01. PAC-11 is dropped on the working position. PAC-19 (admin add and remove) and PAC-20 (Read and Download) are added as proposals. No AC row changed, except that the clarification of AC-7.4 and AC-8.9 names the working positions. No criterion is approved. |
 | 0.5 | 4 November 2026 | The fixture cell of AC-2.6 names FX-PDF-10 only (was "FX-PDF-10 or FX-PDF-11"). The criterion, the pass condition and the CONFIRMED status are unchanged, and still follow S2 AC-2 and FR-READ-010. FX-PDF-11 is kept for a separate PROPOSED expectation in `TEST_DATA_AND_FIXTURES.md`, because a reader library may repair it and open it. No criterion is approved. |
+| 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Acceptance criteria", "Deliverables and milestones", "How acceptance testing works" | Exists, issued, unsigned. **The S2 text is authoritative.** |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §10, §13 | Exists, draft. Summary of AC-1 to AC-12 and the PAC-01 to PAC-11 proposals. |
 | `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist (draft) |
 | `OPEN_QUESTIONS.md` | Exists (draft). Questions linked below. |
 | `DEFINITION_OF_DONE.md`, `API_AND_MODULE_CONTRACTS.md` | Exist (draft) |
-| `REQUIREMENT_COVERAGE_MATRIX.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Exist (draft, version 0.2, dated 27 October 2026). The matrix shows which requirements have an AC or PAC row and lists eight proposed checks that are not rows. A new PAC row needs MFW's written approval. The reader design cites AC-2 and AC-4. |
+| `REQUIREMENT_COVERAGE_MATRIX.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Exist (draft). The matrix shows which requirements have an AC or PAC row and lists eight proposed checks that are not rows. A new PAC row needs MFW's written approval. The reader design cites AC-2 and AC-4. |
 
 ## 2. Purpose, Scope and Status
 

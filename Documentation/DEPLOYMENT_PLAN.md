@@ -7,7 +7,7 @@
 | Document | Deployment Plan |
 | File | `Documentation/DEPLOYMENT_PLAN.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 34) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. **The architecture is not approved (DEC-003, DEC-004).** Component-specific steps are BLOCKED. Nothing has been deployed. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW for environments and costs (DEC-023). |
@@ -20,10 +20,11 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Backup steps marked as proposed additions. First-admin step named. Planned names replaced by the existing documents. |
 | 0.3 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` now says it exists as a draft. No environment, configuration item or step changed. |
 | 0.4 | 5 November 2026 | The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` no longer gives version 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. No environment, configuration item or step changed. |
+| 0.5 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Proposed technical architecture", "Responsibilities", "Handover" | Exists, issued, unsigned. The architecture is a proposal. |
 | `DECISION_LOG.md` | Exists (draft). DEC-003, DEC-004, DEC-020, DEC-021, DEC-023. |

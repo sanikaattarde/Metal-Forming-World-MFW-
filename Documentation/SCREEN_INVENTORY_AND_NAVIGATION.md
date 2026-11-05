@@ -6,9 +6,9 @@
 |---|---|
 | Document | Screen Inventory and Navigation |
 | File | `Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md` |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. **Every screen below is PROPOSED. MFW approves the screens at M2 (NFR-UX-002), and has not seen this list.** This is an input to the designs and not a design. |
-| Date | 27 October 2026 |
+| Date | 5 November 2026 |
 | Audience | The two developers, and whoever prepares the screen designs for M2. MFW sees the designs at M2 and not this list. |
 | Proposed owner | Joint, by workstream and PROPOSED: app screens Yuvraj (WS-B), admin panel screens Sanika Attarde (WS-A). Not agreed. The other developer reviews. |
 | Approval required | Both developers for the list. MFW at M2 for the screens themselves (S2 Scope: Design; S2 Milestones). |
@@ -20,10 +20,11 @@
 |---|---|---|
 | 0.1 | 24 October 2026 | Initial draft. Written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). SCR-W-11 is the admin management screen on the one-role position, and it also shows the change record. SCR-A-09, SCR-A-23, SCR-W-10 and SCR-W-12 are withdrawn or dropped, and their identifiers stay. Two reading actions, the default reader mode, visitor notifications, fixed categories and the news Save control are noted on the screens they touch. No decision is approved. |
+| 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 24 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Scope included: Design", "Deliverables and milestones" | Exists, issued, unsigned. **The S2 text is authoritative.** |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft. Requirements are cited by ID and not restated |

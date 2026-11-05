@@ -6,9 +6,9 @@
 |---|---|
 | Document | Requirement Coverage Matrix |
 | File | `Documentation/REQUIREMENT_COVERAGE_MATRIX.md` |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. **DERIVED: this matrix repeats what other documents say and is not a source of truth. Nothing has been tested.** |
-| Date | 27 October 2026 |
+| Date | 5 November 2026 |
 | Audience | The two developers, when they plan tests and review the acceptance criteria. |
 | Proposed owner | Yuvraj (WS-B), PROPOSED and not agreed. Reviewer: Sanika Attarde (WS-A). |
 | Approval required | Both developers. MFW only if a candidate check later becomes a numbered PAC row, because a PAC row is not contractual until MFW approves it in writing. |
@@ -20,10 +20,11 @@
 |---|---|---|
 | 0.1 | 24 October 2026 | Initial draft. Read from the documents of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Rows for FR-ADMIN-004, FR-USER-001, FR-USER-005, FR-PRIV-003, FR-DL-010 and NFR-COMP-003 updated by hand for the positions of 26 and 27 October 2026 (PAC-19 and PAC-20 added, OP-13 withdrawn, OP-33 and the edition-update rows dropped on the working position). The matrix was not regenerated, so other rows still show the identifiers of the earlier documents. The stale sentence about pull request 3 in section 6 is corrected. No requirement status changed. |
+| 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 24 October 2026 |
+| Document | Status |
 |---|---|
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §13 | Exists, draft. **Owns** the requirement list, each status and each verification method. This matrix does not replace it |
 | `ACCEPTANCE_CRITERIA.md` | Exists (draft). **Owns** the AC and PAC rows |

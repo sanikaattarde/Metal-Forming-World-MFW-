@@ -7,12 +7,12 @@
 | Document title | Assumptions and Constraints Register |
 | File | `ASSUMPTIONS_AND_CONSTRAINTS.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for Review |
-| Last updated | 23 October 2026 |
+| Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Glossary](GLOSSARY.md) v0.1; `PROJECT_CHARTER.md` v0.2 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Glossary](GLOSSARY.md); `PROJECT_CHARTER.md` |
 
 **Purpose.** This register records the project's assumptions, constraints, dependencies, open questions and conflicts in one place. For each entry it gives the evidence, the current status, what happens if the entry is wrong or stays unresolved, who owns it, and what evidence or decision would settle it. It does not answer any open question or resolve any conflict. It changes no requirement, status or acceptance criterion in the specification.
 
@@ -22,6 +22,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft for internal review |
 | 0.2 | 23 October 2026 | Remediation note on REG-001 (YG's statement about the S3 emails). No assumption, constraint, status or priority changed. |
+| 0.3 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. The source row that gives the charter's version 0.2 reads 23 October 2026 (was 22 October 2026). No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Source documents and authority
 
@@ -30,7 +31,7 @@
 | S1 | MFW Mobile App Commercial Proposal, `MFW_Commercial_Proposal-2.pdf`, 17 October 2026, 7 pages | Read for this register. Unsigned. Acceptance, approver and sign-off sections blank. | Shows what the proposal says. Its acceptance is unverified (REG-002). |
 | S2 | MFW Mobile App Statement of Work, `MFW_Statement_of_Work.pdf`, 17 October 2026, 8 pages | Read for this register. Unsigned. | Shows what the SOW says. Its acceptance is unverified (REG-002). |
 | S3 | Client emails received after S1 and S2 | Not available. Not in the repository. | Missing evidence. Not reconstructed from summaries or any other secondary record (REG-001). |
-| CH | Project Charter, `PROJECT_CHARTER.md` v0.2, 22 October 2026 | Read for this register. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
+| CH | Project Charter, `PROJECT_CHARTER.md` v0.2, 23 October 2026 | Read for this register. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
 | SPEC | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1, 22 October 2026 | Read for this register. Draft for Review. | Detailed requirements reference. Its IDs, statuses and acceptance criteria are used as written. |
 
 S1, S2 and CH are named by file name and not linked, because they are not in the folder where this register was prepared. Fee and payment amounts and personal names are left out. Where the revised commercial terms matter (REG-004), the register refers to the CH sections that hold them.

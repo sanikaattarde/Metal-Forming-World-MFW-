@@ -7,7 +7,7 @@
 | Document | Definition of Done |
 | File | `Documentation/DEFINITION_OF_DONE.md` |
 | Phase | 3 — Development Planning and Collaboration (document 27) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. |
 | Date | 5 November 2026 |
 | Approval required | Both developers |
@@ -19,10 +19,11 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Access-rule wording labelled (working position, baseline). Decision wording aligned with the status model. Handover gating: HO-13 and HO-14 gate only if MFW agrees them. |
 | 0.3 | 4 and 5 November 2026 | DoD-TASK gains check 11 for the contract tests (suite TS-14 in `TESTING_STRATEGY.md`). No existing check changed or renumbered. Revised on 5 November 2026 after the review of pull request #17: the check follows `API_AND_BACKEND_CONTRACT.md` section 9.1 and 9.2, so an additive change updates the snapshot and passes the tests, and only a breaking change carries the compatibility record. |
+| 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Acceptance criteria" and "How acceptance testing works" | Exists, issued, unsigned. Contractual acceptance. Not changed here. |
 | `ACCEPTANCE_CRITERIA.md` | Exists (draft). Detailed verification of AC-1 to AC-12 and PAC-01 to PAC-15. |

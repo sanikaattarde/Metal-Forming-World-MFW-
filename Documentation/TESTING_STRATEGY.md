@@ -7,7 +7,7 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.8 |
+| Version | 0.9 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
@@ -24,10 +24,11 @@
 | 0.6 | 4 and 5 November 2026 | The section 7.6 test line is extended for the bookmark follow-up: the pre-check of rule 5, the temporary copy of rule 4, the identifier exception, and the server's check of the revision in OP-07 (PROPOSED). No gate or other test changed. |
 | 0.7 | 4 and 5 November 2026 | Suite TS-14 added for the contract tests CT-01 to CT-11 of `API_AND_BACKEND_CONTRACT.md` section 10, which no test plan named. The regression table (section 11), the ownership table (section 14) and the blocked items (section 15) name it. The split between the backend side and the app side is a proposal made here, and Sanika Attarde's review of pull request #17 agreed it as the working position. It stays PROPOSED with the rest of the task split (OQ-38). Revised on 5 November 2026 after that review: the app side runs with the app tests (QG-03, [SCAFFOLD]) and the backend side keeps [BACKEND], the regression row follows the trigger of QG-14, and CT-02 and CT-10 start at the first release. No existing suite, threshold or checklist item changed. |
 | 0.8 | 4 and 5 November 2026 | The damaged-file line of section 7.4 follows AC-2.6: FX-PDF-10 gives an error with a retry option, and FX-PDF-11 either opens repaired or gives that error, without a crash (PROPOSED). Revised on 5 November 2026 after the review of pull request #18: a repaired open shows every page of the PDF it was made from, in order, and the line names the reading of FR-READ-010 as an ASSUMPTION (RD-08). No gate, threshold or other test changed. |
+| 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) AC-1 to AC-12, "How acceptance testing works" | Exists, issued, unsigned. Contractual criteria and severity definitions. |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §10, §13 | Exists, draft. NFR-SEC-010 places the security checklist in this document. |
@@ -36,7 +37,7 @@
 | `CI_CD_AND_QUALITY_GATES.md` | Exists (draft). Gates QG-* that run these suites. |
 | `API_AND_MODULE_CONTRACTS.md`, `DEFINITION_OF_DONE.md`, `DEPLOYMENT_PLAN.md` | Exist (draft) |
 | `OPEN_QUESTIONS.md`, `RISK_REGISTER.md` | Exist (draft) |
-| `REQUIREMENT_COVERAGE_MATRIX.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Exist (draft, version 0.1, dated 24 October 2026). The matrix is derived from this document, `ACCEPTANCE_CRITERIA.md` and RS §13, and reports gaps without adding tests. The reader design cites sections 7.5 and 16 below for download rules. |
+| `REQUIREMENT_COVERAGE_MATRIX.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` | Exist (draft). The matrix is derived from this document, `ACCEPTANCE_CRITERIA.md` and RS §13, and reports gaps without adding tests. The reader design cites sections 7.5 and 16 below for download rules. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal. **PLANNED** means designed but not implemented. Availability labels ([NOW], [SCAFFOLD], [BACKEND], [CI], [DEVICES], [STORE]) are defined in `DEFINITION_OF_DONE.md` §3.
 

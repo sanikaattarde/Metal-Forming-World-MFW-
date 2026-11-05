@@ -7,12 +7,12 @@
 | Document title | API and Backend Contract |
 | File | `API_AND_BACKEND_CONTRACT.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for Review |
 | Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The architecture is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.4; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.5; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.4; `PROJECT_CHARTER.md` v0.2 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [System Architecture](SYSTEM_ARCHITECTURE.md); [Technology Decisions](TECHNOLOGY_DECISIONS.md); [Database and Data Model](DATABASE_AND_DATA_MODEL.md); [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md); `PROJECT_CHARTER.md` |
 
 **Purpose.** This document says what the backend does for the app and the admin panel. For each operation it gives the caller, the inputs and outputs, the checks, the errors, the writes, the audit entry and the requirements behind it. It also fixes the conventions that every operation follows, the contract for reading MFW's WordPress site, the rules for changing a contract without breaking installed apps, and the tests that guard the contract.
 
@@ -28,6 +28,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Error scheme changed to upper-case categories with reason codes (GONE, RATE_LIMITED and FAILED_PRECONDITION added; DEADLINE_EXCEEDED a reason under UNAVAILABLE). Section 3.1 to 3.4 added: aliases for the 31 app-side operation identifiers, the baseline and PRC-01 privileges, the baseline and PRC-02 deletion, and the open design differences. OP-12, OP-13 and the grace-window text marked PRC-02. "Team-accepted" replaced by PROPOSED with the agreement note. Registration and sign-in message rule added. Website check updated. |
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). One Admin role: the callers, Sections 3.2, 5.1 and 5.2 are rewritten, and OP-30 to OP-39 and OP-42 are open to any admin. OP-36 is withdrawn. OP-35, OP-37, OP-39 and OP-42 are named addAdmin, removeAdmin, listAdminChanges and bootstrapAdmin. The audit set is narrowed to adds and removes of admins, so the denied entries are dropped and INV-16 is withdrawn. Immediate deletion: OP-13 is withdrawn and OP-12 and OP-41 are simplified. OP-33 is dropped with the edition-update sign-up. Section 3.3 is rewritten. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
 | 0.4 | 4 and 5 November 2026 | Bookmark follow-up to pull request #11. The identifier rule in section 3 names the bookmark identifier as an exception beside the user identifier (PROPOSED). OP-07 first said that it does not check `file_revision`. After the review of pull request #15 on 5 November 2026, OP-07 checks that `file_revision` is at least 1, beside the page check (PROPOSED), and the app's own check runs first. No decision is approved. |
+| 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Sources and authority
 
