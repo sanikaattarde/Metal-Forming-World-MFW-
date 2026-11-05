@@ -6,7 +6,7 @@
 | Phase | 3 — Development Planning and Collaboration (document 29) |
 | Version | 0.16 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -31,18 +31,18 @@ PROPOSED (DEC-015).
 
 ## Unreleased
 
-### Documentation: FX-PDF-11 expectation separated from AC-2.6, 2026-11-04, on topic branch `docs/yg-fx-pdf-11-tolerance` on top of `eebcdb7`, not reviewed
+### Documentation: FX-PDF-11 expectation separated from AC-2.6, 2026-11-04, revised 2026-11-05, on topic branch `docs/yg-fx-pdf-11-tolerance` on top of `eebcdb7`, then merged with `origin/main` at `157a9a9`, under review in pull request #18
 
-Follows a review of the documentation set and YG's position of 2026-11-01. Four documents gave FX-PDF-11 (wrong cross-reference offsets) the same expectation as FX-PDF-10 (truncated): an error with a retry option. YG reports a simulator spike result that is not filed: pdfrx opens and draws FX-PDF-11, pdfx gives an error at open, and both give an error on FX-PDF-10. `ACCEPTANCE_CRITERIA.md` AC-2.6 now names FX-PDF-10 only, and keeps S2's wording, its pass condition and its CONFIRMED status. FX-PDF-11 keeps a separate PROPOSED expectation in `TEST_DATA_AND_FIXTURES.md`, `TESTING_STRATEGY.md` and `PDF_READER_AND_OFFLINE_DESIGN.md`: it opens repaired, or gives that error, and never crashes. The `API_AND_MODULE_CONTRACTS.md` MOD-07 tests row names both fixtures with no expectation, so it is unchanged. The result ranks no library, and DEC-005 stays OPEN. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+Follows a review of the documentation set and YG's reported position. Four documents gave FX-PDF-11 (wrong cross-reference offsets) the same expectation as FX-PDF-10 (truncated): an error with a retry option. YG reports a simulator spike result that is not filed: pdfrx opens and draws FX-PDF-11, pdfx gives an error at open, and both give an error on FX-PDF-10. `ACCEPTANCE_CRITERIA.md` AC-2.6 now names FX-PDF-10 only, and keeps S2's wording, its pass condition and its CONFIRMED status. FX-PDF-11 keeps a separate PROPOSED expectation in `TEST_DATA_AND_FIXTURES.md`, `TESTING_STRATEGY.md` and `PDF_READER_AND_OFFLINE_DESIGN.md`: it opens repaired, or gives that error, and never crashes. After Sanika Attarde's review of this pull request on 2026-11-05, a repaired open must show every page of the PDF it was made from, in order, and the reading of FR-READ-010 behind the expectation is recorded as an ASSUMPTION of the development team (RD-08 in `PDF_READER_AND_OFFLINE_DESIGN.md` section 12), for MFW with the reader approach at M2 (DEC-005). The `API_AND_MODULE_CONTRACTS.md` MOD-07 tests row names both fixtures with no expectation, so it is unchanged. The result ranks no library, and DEC-005 stays OPEN. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
 
 | Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
 |---|---|---|---|---|---|---|
 | 2026-11-04 | `Documentation/ACCEPTANCE_CRITERIA.md` | Version 0.5: the AC-2.6 fixture cell reads FX-PDF-10, with a clarification | A library may repair FX-PDF-11 | AC-2.6, FR-READ-010, FX-PDF-10, FX-PDF-11 | Both developers (not agreed) | No scope effect: S2 AC-2 is unchanged |
-| 2026-11-04 | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` | Version 0.3: the damaged-file line of section 5 and the M2 reader test line in section 7 | Same | FR-READ-010, AC-2.6, DEC-005 | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/TESTING_STRATEGY.md` | Version 0.6: the damaged-file line of section 7.4 | Same | AC-2.6, FX-PDF-10, FX-PDF-11 | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.4: the FX-PDF-11 row, and a note under the PDF table that records the basis | Same | FX-PDF-10, FX-PDF-11, OQ-26 | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `Documentation/CHANGELOG.md` | Version 0.16: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-04 | `README.md` | The version column reads 0.5 for `ACCEPTANCE_CRITERIA` (was 0.4), 0.3 for `PDF_READER_AND_OFFLINE_DESIGN` (was 0.2), 0.6 for `TESTING_STRATEGY` (was 0.5), 0.4 for `TEST_DATA_AND_FIXTURES` (was 0.3) and 0.16 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` | Version 0.3: the damaged-file line of section 5 and the M2 reader test line in section 7, the page rule for a repaired open, and RD-08 in section 12 | Same, and the review of pull request #18 asked for the page rule and the ASSUMPTION | FR-READ-010, AC-2.6, DEC-005 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/TESTING_STRATEGY.md` | Version 0.6: the damaged-file line of section 7.4, with the page rule and the ASSUMPTION | Same | AC-2.6, FX-PDF-10, FX-PDF-11 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.4: the FX-PDF-11 row with the page rule, and a note under the PDF table that records the basis and names the reading of FR-READ-010 as an ASSUMPTION | Same | FX-PDF-10, FX-PDF-11, OQ-26 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.16: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column reads 0.5 for `ACCEPTANCE_CRITERIA` (was 0.4), 0.3 for `PDF_READER_AND_OFFLINE_DESIGN` (was 0.2), 0.6 for `TESTING_STRATEGY` (was 0.5), 0.4 for `TEST_DATA_AND_FIXTURES` (was 0.3) and 0.16 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: dependency register with review entries and licence reads, 2026-11-04, on topic branch `docs/yg-dependency-register-ws-b` on top of `2a5476c`, then merged with `origin/main` at `eebcdb7`, under review in pull request #13
 
