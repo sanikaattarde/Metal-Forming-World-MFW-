@@ -12,6 +12,10 @@ afterEach(cleanup);
 async function signInAsAdmin(stillAdmin: { value: boolean }) {
   const deps = fakeDeps({ isAdmin: async () => stillAdmin.value });
   await signedInApp(deps);
+  // The panel attaches its focus listener in an effect that runs after the first paint. The issues list
+  // calls the server from an effect in the same update, so once that call is made, the listener is in
+  // place. Without this wait, a focus event sent at once could arrive first and be missed (M-1).
+  await waitFor(() => expect(deps.calls.call).toContain('listIssuesForAdmin'));
   return deps;
 }
 

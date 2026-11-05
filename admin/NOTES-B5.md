@@ -110,7 +110,7 @@ Done by hand on 5 November 2026 in the same embedded Chromium 152 browser. It ra
   - G5: 4 tests. An unverified admin is refused with `EMAIL_NOT_VERIFIED`, and passes once verified. A reader still gets `FORBIDDEN`. A closed account is refused as closed first. OP-14 reports the flag.
   - G8: 7 tests, one for each admin operation, refusing an admin whose email is not verified, with nothing written.
   - G10: 3 tests. The same caller is refused on OP-19 and OP-20, and the trigger rejects a file whose uploader's email stopped being verified.
-  - Five existing test set-ups now verify their admins' emails, because the gate requires it: G5, G7 (one test), G8 and G10.
+  - The admin set-ups in four existing test groups now verify their admins' emails, because the gate requires it: G5, G7 (one test), G8 and G10.
 - `npm --prefix admin test`: **38 tests, 38 passed, 0 failed.** Emulator only.
   - Against the emulators: a verified admin signs in through OP-14. Refused, and left signed out: a wrong password, an unknown address, a reader, an unverified admin, a removed admin, an account marked deleting, and a disabled account. An unreachable provider is "unavailable". An unreachable OP-14 is a refusal. Removing the role, or un-verifying the email, ends the session on the next call. A refusal about the input does not.
   - With stand-ins: which refusals end a session, the wrapper, the role check's three conditions, and the focus check.
@@ -212,7 +212,7 @@ The 23 include:
 - the site's message lost;
 - no News link.
 
-**A flaky run.** One admin baseline run failed one test on unchanged code. Three repeat runs and the next baseline all passed. The failing test was not named, because the script printed counts only; it now names one. The cause is NOT VERIFIED. A likely one is a slow first call to the Functions emulator running into Vitest's 5-second limit for a test (M-1).
+**A flaky run.** One admin baseline run failed one test on unchanged code, and the repeats passed. It recurred on 6 November 2026 and was then named, explained and fixed: see M-1. It was not the emulator.
 
 ## 4. Findings
 
@@ -239,7 +239,7 @@ The 23 include:
 | L-5 | Titles are made plain text on the server: tags dropped and a small set of named character references decoded. Other named references stay as written | Spike choice |
 | L-6 | The news screen has no category filter, although OP-24 accepts one. The categories shown in the app are `news_category_ids` (CFG-04, OPEN) | Add when CFG-04 is set |
 | L-7 | Whether the live site is reachable from the backend, with no security plugin or firewall in the way (OQ-39), is NOT VERIFIED. Only the stand-in was read | OQ-39 |
-| M-1 | One admin test run failed one test on unchanged code, and was not repeatable (section 3.3) | Watch for it. If it recurs, name the test and raise the time limit for the emulator tests |
+| M-1 | **Found and fixed on 6 November 2026.** The failing test was the session test "coming back to the panel after the role was removed". The panel attaches its focus listener in an effect that runs just after the first paint, and the test sent the focus event as soon as the heading appeared, so it sometimes arrived first. It failed 3 times in 40 runs. The test now waits until the issues list has called the server, which happens in the same update as the listener, and it then passed 40 runs out of 40. Removing the focus check, or ignoring its answer, is still caught. The emulator guess in section 3.3 was wrong | A test defect, not the panel's. In the panel, a focus missed in that moment is harmless, because the role was checked at sign-in |
 
 ## 5. Not tested
 
