@@ -7,7 +7,7 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.8 |
+| Version | 0.9 |
 | Status | Draft for review. Not approved. |
 | Date | 5 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
@@ -24,6 +24,7 @@
 | 0.6 | 4 and 5 November 2026 | DEC-010 to DEC-015, DEC-022 and DEC-024 set to AGREED, the follow-up that sections 5.4 and 5.5 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.5) and Sanika Attarde's approving review of pull request #12 on 3 November 2026. Section 5.6 added: the evidence, the conditions still open for each entry, a limit on the public PDFs of DEC-024 (OQ-57), and the documents that still call these entries PROPOSED. Update sentences added to the position rows of DEC-011, DEC-013 and DEC-014. No entry is APPROVED. DEC-025 to DEC-030 stay PROPOSED. Revised on 5 November 2026 after the review of pull request #14: section 5.6 links the approving review, the list of documents adds the related-documents row of `CHANGELOG.md`, and `DEPENDENCY_REGISTER.md` is struck from the list because its DEP-43 and DEP-44 rows are updated in the same pull request. |
 | 0.7 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 | 0.8 | 5 November 2026 | Section 5.6 records that the DEC-010 condition is met (branch protection on `main`), that section 11 of the workflow reads AGREED (DEC-015), and that the documents on the follow-up list are updated. The DEC-010 context follows. Revised on 5 November 2026 after the review of pull request #21: the follow-up list adds section 5 of the matrix and the OQ-38 row, and names the sections that DEC-010 and DEC-015 cover. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.9 | 5 November 2026 | Section 4 step 2 says where the options and the consequences are recorded: in the entry's Context, Proposal and Options considered rows, with the affected documents and modules in the Affects row. The entries have no Consequences row, and none is added. No entry changed, so no AGREED entry is touched. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
@@ -82,7 +83,7 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 ## 4. Decision Process
 
 1. **Raise.** Add an entry with status OPEN or PROPOSED in a documentation pull request.
-2. **Assess.** Record the options, consequences, third-party cost, and affected documents and modules.
+2. **Assess.** Record the options and the consequences of the proposal in the entry (the Context, Proposal and Options considered rows), the third-party cost where there is any, and the affected documents and modules in the Affects row. There is no separate Consequences row.
 3. **Agree.** The other developer reviews the pull request. When both developers approve, set AGREED and cite the review.
 4. **Approve with MFW where required.** If CH §17.4 applies, the contracting developer (Sanika Attarde, CH §14) sends the decision to MFW's approver. Set APPROVED only when the written reply is filed or referenced.
 5. **Propagate.** Update every affected document in the same or a follow-up pull request, and add a `CHANGELOG.md` entry.
