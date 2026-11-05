@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.13 |
+| Version | 0.12 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 5 November 2026 |
 
@@ -41,8 +41,8 @@ Follows YG's review of pull request #11, merged as `cdd5b8c`, which left three c
 | 2026-11-04 | `Documentation/API_AND_BACKEND_CONTRACT.md` | Version 0.4: the identifier rule in section 3 names the bookmark exception. OP-07 checks that `file_revision` is at least 1, beside the page check (PROPOSED) | Follows the data model, and the review of pull request #15 asked for the server check | INV-14, OP-07, FR-BKM-001 | Both developers (not agreed) | No scope effect |
 | 2026-11-04 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.8: section 6.8 rule 1 (the exception, "no other stored record"), rule 2 (the queued remove), rule 4 (Read action), new rule 5 (pre-check, and the server's revision check), and the MOD-08 errors, tests and `OP-LIB-02` rows | The review of pull request #11 | FR-BKM-001, FR-BKM-002, INV-14, OP-07, OP-LIB-02, OQ-08 | Both developers (not agreed) | No scope effect |
 | 2026-11-04 | `Documentation/TESTING_STRATEGY.md` | Version 0.6: the section 7.6 test line is extended for rules 4 and 5, the exception and the server's revision check | The new rules had no planned test | FR-BKM-001, FR-BKM-002, INV-14 | Both developers (not agreed) | No scope effect |
-| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.13: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-05 | `README.md` | The version column reads 0.5 for `DATABASE_AND_DATA_MODEL` (was 0.4), 0.4 for `API_AND_BACKEND_CONTRACT` (was 0.3), 0.8 for `API_AND_MODULE_CONTRACTS` (was 0.7), 0.6 for `TESTING_STRATEGY` (was 0.5) and 0.13 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.12: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column reads 0.5 for `DATABASE_AND_DATA_MODEL` (was 0.4), 0.4 for `API_AND_BACKEND_CONTRACT` (was 0.3), 0.8 for `API_AND_MODULE_CONTRACTS` (was 0.7), 0.6 for `TESTING_STRATEGY` (was 0.5) and 0.12 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: dependency register with review entries and licence reads, 2026-11-04, on topic branch `docs/yg-dependency-register-ws-b` on top of `2a5476c`, then merged with `origin/main` at `eebcdb7`, under review in pull request #13
 
