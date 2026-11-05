@@ -7,9 +7,9 @@
 | Document title | Project Charter |
 | Repository file | `PROJECT_CHARTER.md` |
 | Project name | Metal Forming World (MFW) mobile application |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review |
-| Date | 22 October 2026 |
+| Date | 5 November 2026 |
 | Purpose | Establish the purpose, scope boundaries, stakeholders, constraints, success criteria and governance of the MFW project. This is the foundational reference for the requirements, architecture, task assignment, development workflow, testing and deployment documents that follow. |
 
 **Revision history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 22 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation note on S3 added after the table in section 17.3. No requirement, date or fee changed. |
+| 0.3 | 5 November 2026 | Only the control date is corrected: version 0.2 read 22 October 2026 there, and its own row above and the last commit (5a436a3) both give 23 October 2026. No requirement, date or fee changed. |
 
 **Source documents**
 
