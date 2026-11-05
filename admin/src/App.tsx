@@ -1,20 +1,50 @@
-// SPIKE (DEC-004 OPEN). The admin panel skeleton: the sign-in page, and a placeholder after sign-in. No admin
-// screen is built here (B5). With the role check not built, the built panel refuses every account, so the
-// placeholder is reached only in tests that pass in a role check of their own.
-import { useState } from 'react';
+// SPIKE (DEC-004 OPEN). The admin panel: the sign-in page, and the admin area after sign-in. The role check
+// calls OP-14 (MOD12-P2-T01). The session ends when access is lost: when any server operation refuses the
+// account as no longer an admin, and when the panel comes back into focus and OP-14 says so.
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { adminApi } from './adminApi';
 import { MESSAGES } from './messages';
+import type { Services } from './services';
 import { SignInPage } from './SignInPage';
-import type { SignInDeps } from './signIn';
 
 interface Props {
   // null: the page is not served from a local address, so no services exist.
-  services: SignInDeps | null;
+  services: Services | null;
 }
 
 export function App({ services }: Props) {
   const [signedIn, setSignedIn] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
-  if (!services) {
+  const endSession = useCallback(
+    (reason: string | null) => {
+      if (!services) return;
+      void services.signOut().finally(() => {
+        setNotice(reason);
+        setSignedIn(false);
+      });
+    },
+    [services],
+  );
+
+  const api = useMemo(() => (services ? adminApi(services.call, () => endSession(MESSAGES.accessEnded)) : null), [services, endSession]);
+
+  // Coming back to the panel checks the role again, so an admin removed while away is signed out.
+  useEffect(() => {
+    if (!signedIn || !services) return;
+    const recheck = () => {
+      services.roleCheck({ uid: '' }).then(
+        (stillAdmin) => {
+          if (!stillAdmin) endSession(MESSAGES.accessEnded);
+        },
+        () => undefined,
+      );
+    };
+    window.addEventListener('focus', recheck);
+    return () => window.removeEventListener('focus', recheck);
+  }, [signedIn, services, endSession]);
+
+  if (!services || !api) {
     return (
       <main className="page">
         <h1>Admin panel</h1>
@@ -29,13 +59,23 @@ export function App({ services }: Props) {
     return (
       <main className="page">
         <h1>Admin panel</h1>
-        <p>Signed in. No admin screen is built in this spike.</p>
-        <button type="button" onClick={() => services.signOut().finally(() => setSignedIn(false))}>
+        <p>Signed in. The admin screens come in the next step.</p>
+        <button type="button" onClick={() => endSession(null)}>
           Sign out
         </button>
       </main>
     );
   }
 
-  return <SignInPage deps={services} onSignedIn={() => setSignedIn(true)} />;
+  return (
+    <SignInPage
+      key={notice ?? 'sign-in'}
+      deps={services}
+      notice={notice}
+      onSignedIn={() => {
+        setNotice(null);
+        setSignedIn(true);
+      }}
+    />
+  );
 }

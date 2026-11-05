@@ -1,45 +1,29 @@
-// SPIKE (DEC-004 OPEN). The sign-in decision against the local Auth emulator, with the real provider SDK.
-// Every result is "emulator only". Run through `npm test`, which starts the emulator.
-import type { Auth } from 'firebase/auth';
+// SPIKE (DEC-004 OPEN). Sign-in and the role check against the local emulators, with the real SDK and the
+// backend spike's OP-14 (MOD12-P2-T01). Every result is "emulator only". Run through `npm test`.
 import { beforeAll, beforeEach, expect, test } from 'vitest';
-import { roleCheckNotBuilt } from '../src/roleCheck';
-import { authDeps, createServices, EMULATOR, emulatorAuth, isLocalHost } from '../src/services';
+import { AccessLost, adminApi } from '../src/adminApi';
+import { createServices, emulatorBackend, isLocalHost, servicesFor } from '../src/services';
+import type { Backend } from '../src/services';
 import { signInAdmin } from '../src/signIn';
-import type { RoleCheck } from '../src/signIn';
+import { AUTH_URL, clearAll, createAccount, createAdmin, PASSWORD, removeRole, requireEmulators, setDoc, updateAccount } from './emulator';
 
-// Set by `firebase emulators:exec`. Vitest passes the environment through import.meta.env.
-const host: string | undefined = import.meta.env.FIREBASE_AUTH_EMULATOR_HOST;
-const base = `http://${host}`;
-const PASSWORD = 'admin-spike-password-1';
-const admitAll: RoleCheck = async () => true;
-
-let auth: Auth;
-let email: string;
-let uid: string;
-
-async function rest(path: string, body?: unknown, method = 'POST') {
-  const reply = await fetch(`${base}${path}`, {
-    method,
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer owner' },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
-  return reply.json();
-}
+let backend: Backend;
+let n = 0;
 
 beforeAll(() => {
-  if (!host) throw new Error('FIREBASE_AUTH_EMULATOR_HOST is not set: run these tests with `npm test`, which starts the emulator');
-  auth = emulatorAuth(base, 'b3-emulator-tests');
+  requireEmulators();
+  backend = emulatorBackend(AUTH_URL, 'b5-emulator-tests');
 });
 
 beforeEach(async () => {
-  await rest(`/emulator/v1/projects/${EMULATOR.projectId}/accounts`, undefined, 'DELETE');
-  email = `admin-${Date.now()}@example.test`;
-  const account = await rest(`/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${EMULATOR.apiKey}`, { email, password: PASSWORD, returnSecureToken: true });
-  uid = account.localId;
-  expect(uid).toBeTruthy();
+  await clearAll();
+  n += 1;
 });
 
-test('B3 emulator: the panel serves services only on a local address', async () => {
+const email = (who: string) => `${who}-${n}@example.test`;
+const signIn = (address: string, password = PASSWORD) => signInAdmin(servicesFor(backend), address, password);
+
+test('B5 emulator: the panel serves services only on a local address', async () => {
   expect(isLocalHost('127.0.0.1')).toBe(true);
   expect(isLocalHost('localhost')).toBe(true);
   for (const name of ['example.com', 'admin.example.com', '127.0.0.1.example.com', '0.0.0.0', '']) {
@@ -48,53 +32,104 @@ test('B3 emulator: the panel serves services only on a local address', async () 
   }
 });
 
-test('B3 emulator AC-8.1: a wrong password is refused, and no one is signed in', async () => {
-  expect(await signInAdmin(authDeps(auth, admitAll), email, 'not-the-password')).toBe('refused');
-  expect(auth.currentUser).toBeNull();
+test('B5 emulator: an admin with a verified email signs in, through OP-14 (MOD12-P2-T01)', async () => {
+  const uid = await createAdmin(email('admin'));
+  expect(await signIn(email('admin'))).toBe('signed-in');
+  expect(backend.auth.currentUser?.uid).toBe(uid);
+  await backend.auth.signOut();
 });
 
-test('B3 emulator SEC-CHK-17: an unknown address gets the same outcome as a wrong password', async () => {
-  const deps = authDeps(auth, admitAll);
-  const unknown = await signInAdmin(deps, `nobody-${Date.now()}@example.test`, PASSWORD);
-  const wrong = await signInAdmin(deps, email, 'not-the-password');
-  expect(unknown).toBe('refused');
-  expect(unknown).toBe(wrong);
+test('B5 emulator AC-8.1: a wrong password is refused, and no one is signed in', async () => {
+  await createAdmin(email('admin'));
+  expect(await signIn(email('admin'), 'not-the-password')).toBe('refused');
+  expect(backend.auth.currentUser).toBeNull();
 });
 
-test('B3 emulator AC-8.2: the right password on an account without the admin role is refused, and the account is signed out', async () => {
-  const deny: RoleCheck = async (user) => (expect(user.uid).toBe(uid), false);
-  expect(await signInAdmin(authDeps(auth, deny), email, PASSWORD)).toBe('refused');
-  expect(auth.currentUser).toBeNull();
+test('B5 emulator AC-8.2: a reader without the role is refused by OP-14, and signed out', async () => {
+  await createAccount(email('reader'));
+  expect(await signIn(email('reader'))).toBe('refused');
+  expect(backend.auth.currentUser).toBeNull();
 });
 
-test('B3 emulator: the built panel refuses every account, because its role check is not built (B5)', async () => {
-  expect(await signInAdmin(authDeps(auth, roleCheckNotBuilt), email, PASSWORD)).toBe('refused');
-  expect(await signInAdmin(authDeps(auth), email, PASSWORD)).toBe('refused');
-  expect(auth.currentUser).toBeNull();
+test('B5 emulator SEC-CHK-17: an unknown address gets the same outcome as a wrong password and a reader', async () => {
+  await createAccount(email('reader'));
+  const outcomes = [await signIn(email('nobody')), await signIn(email('reader'), 'not-the-password'), await signIn(email('reader'))];
+  expect(new Set(outcomes)).toEqual(new Set(['refused']));
 });
 
-test('B3 emulator: with a role check that says admin, the account is signed in', async () => {
-  expect(await signInAdmin(authDeps(auth, admitAll), email, PASSWORD)).toBe('signed-in');
-  expect(auth.currentUser?.uid).toBe(uid);
-  await auth.signOut();
+test('B5 emulator OQ-20: an admin whose email is not verified is refused, and signed out', async () => {
+  await createAdmin(email('admin'), { verified: false });
+  expect(await signIn(email('admin'))).toBe('refused');
+  expect(backend.auth.currentUser).toBeNull();
 });
 
-test('B3 emulator: a role check that fails is a refusal, and the account is signed out', async () => {
-  const broken: RoleCheck = async () => {
-    throw new Error('the check could not be made');
-  };
-  expect(await signInAdmin(authDeps(auth, broken), email, PASSWORD)).toBe('refused');
-  expect(auth.currentUser).toBeNull();
+test('B5 emulator: a removed admin is refused (FX-ADM-08)', async () => {
+  const uid = await createAdmin(email('admin'));
+  await removeRole(uid);
+  expect(await signIn(email('admin'))).toBe('refused');
 });
 
-test('B3 emulator: an account the provider has disabled is refused with the same outcome', async () => {
-  await rest(`/identitytoolkit.googleapis.com/v1/projects/${EMULATOR.projectId}/accounts:update`, { localId: uid, disableUser: true });
-  expect(await signInAdmin(authDeps(auth, admitAll), email, PASSWORD)).toBe('refused');
-  expect(auth.currentUser).toBeNull();
+test('B5 emulator: an admin whose account is marked deleting is refused', async () => {
+  const uid = await createAdmin(email('admin'));
+  await setDoc(`users/${uid}`, { user_id: uid, status: 'deleting' });
+  expect(await signIn(email('admin'))).toBe('refused');
+  expect(backend.auth.currentUser).toBeNull();
 });
 
-test('B3 emulator: when the provider cannot be reached, the outcome is "unavailable"', async () => {
+test('B5 emulator: an account the provider has disabled is refused', async () => {
+  const uid = await createAdmin(email('admin'));
+  await updateAccount(uid, { disableUser: true });
+  expect(await signIn(email('admin'))).toBe('refused');
+});
+
+test('B5 emulator: when the sign-in provider cannot be reached, the outcome is "unavailable"', async () => {
   // Port 9 (discard) has nothing listening on it here.
-  const unreachable = emulatorAuth('http://127.0.0.1:9', 'b3-unreachable');
-  expect(await signInAdmin(authDeps(unreachable, admitAll), email, PASSWORD)).toBe('unavailable');
+  const unreachable = emulatorBackend('http://127.0.0.1:9', 'b5-no-auth');
+  expect(await signInAdmin(servicesFor(unreachable), 'anyone@example.test', PASSWORD)).toBe('unavailable');
+});
+
+test('B5 emulator: when OP-14 cannot be reached, the account is refused and signed out (fails closed)', async () => {
+  await createAdmin(email('admin'));
+  const noFunctions = emulatorBackend(AUTH_URL, 'b5-no-functions', 9);
+  expect(await signInAdmin(servicesFor(noFunctions), email('admin'), PASSWORD)).toBe('refused');
+  expect(noFunctions.auth.currentUser).toBeNull();
+});
+
+test('B5 emulator SEC-CHK-18: removing the role ends the session on the next call (MOD12-P2-T01 step 4)', async () => {
+  const uid = await createAdmin(email('admin'));
+  const services = servicesFor(backend);
+  expect(await signInAdmin(services, email('admin'), PASSWORD)).toBe('signed-in');
+  let ended = 0;
+  const api = adminApi(services.call, () => (ended += 1));
+
+  await api('listIssuesForAdmin', {});
+  expect(ended).toBe(0);
+
+  await removeRole(uid);
+  await expect(api('listIssuesForAdmin', {})).rejects.toBeInstanceOf(AccessLost);
+  expect(ended).toBe(1);
+  await backend.auth.signOut();
+});
+
+test('B5 emulator: an admin whose email stops being verified loses the session on the next call', async () => {
+  const uid = await createAdmin(email('admin'));
+  const services = servicesFor(backend);
+  expect(await signInAdmin(services, email('admin'), PASSWORD)).toBe('signed-in');
+  let ended = 0;
+  const api = adminApi(services.call, () => (ended += 1));
+  await updateAccount(uid, { emailVerified: false });
+  await expect(api('listIssuesForAdmin', {})).rejects.toBeInstanceOf(AccessLost);
+  expect(ended).toBe(1);
+  await backend.auth.signOut();
+});
+
+test('B5 emulator: a refusal about the input does not end the session', async () => {
+  await createAdmin(email('admin'));
+  const services = servicesFor(backend);
+  expect(await signInAdmin(services, email('admin'), PASSWORD)).toBe('signed-in');
+  let ended = 0;
+  const api = adminApi(services.call, () => (ended += 1));
+  await expect(api('publishIssue', { request_id: 'r1', issue_id: 'no-such-issue' })).rejects.toMatchObject({ code: 'functions/not-found' });
+  expect(ended).toBe(0);
+  await backend.auth.signOut();
 });

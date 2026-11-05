@@ -16,6 +16,7 @@ import {
   forgedToken,
   newTestEnv,
   signUp,
+  verifyEmail,
 } from './helpers.mjs';
 
 let env;
@@ -89,6 +90,7 @@ beforeEach(async () => {
   otherAdmin = await signUp('admin-b@example.test');
   reader = await signUp('reader@example.test');
   for (const account of [admin, otherAdmin]) {
+    await verifyEmail(account.uid);
     await db.doc(`admin_roles/${account.uid}`).set({ user_id: account.uid, is_active: true, granted_by: 'test-seed', granted_at: NOW });
   }
   await db.doc('admin_guard/current').set({ guard_id: 'current', active_admin_count: 2, version: 1, updated_at: NOW });
@@ -134,6 +136,14 @@ const CALLERS = {
     },
     status: 'FAILED_PRECONDITION',
     reason: 'ACCOUNT_CLOSED',
+  },
+  'an admin whose email is not verified (OQ-20)': {
+    token: async () => {
+      await verifyEmail(otherAdmin.uid, false);
+      return otherAdmin.idToken;
+    },
+    status: 'FAILED_PRECONDITION',
+    reason: 'EMAIL_NOT_VERIFIED',
   },
   'an admin the provider has disabled': {
     token: async () => {

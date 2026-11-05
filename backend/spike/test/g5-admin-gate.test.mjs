@@ -24,6 +24,7 @@ import {
   forgedToken,
   newTestEnv,
   signUp,
+  verifyEmail,
 } from './helpers.mjs';
 
 let env;
@@ -49,6 +50,7 @@ const admins = async (count) => {
   const accounts = [];
   for (let i = 0; i < count; i += 1) {
     const account = await signUp(`admin-${i}@example.test`);
+    await verifyEmail(account.uid);
     await makeAdmin(account.uid);
     accounts.push(account);
   }
@@ -181,13 +183,13 @@ test('G5 OP-14: no sign-in token is refused', async () => {
 test('G5 OP-14: a reader is told they are not an admin', async () => {
   const reader = await signUp('reader@example.test');
   const reply = await callFunction('getMyAdminRole', {}, reader.idToken);
-  assert.deepEqual(reply.result, { is_admin: false, is_active: false });
+  assert.deepEqual(reply.result, { is_admin: false, is_active: false, email_verified: false });
 });
 
 test('G5 OP-14: an active admin is told so', async () => {
   const [admin] = await admins(1);
   const reply = await callFunction('getMyAdminRole', {}, admin.idToken);
-  assert.deepEqual(reply.result, { is_admin: true, is_active: true });
+  assert.deepEqual(reply.result, { is_admin: true, is_active: true, email_verified: true });
 });
 
 test('G5 OP-14: a removed admin holding a token from before the removal is told the role is not active', async () => {
@@ -196,14 +198,14 @@ test('G5 OP-14: a removed admin holding a token from before the removal is told 
   assert.equal(before.result.is_active, true);
   await removeAdminRole(backend, first.uid);
   const after = await callFunction('getMyAdminRole', {}, first.idToken);
-  assert.deepEqual(after.result, { is_admin: true, is_active: false });
+  assert.deepEqual(after.result, { is_admin: true, is_active: false, email_verified: true });
 });
 
 test('G5 OP-14: admin claims in the token give a reader nothing (SC-04)', async () => {
   const reader = await signUp('reader@example.test');
   const token = forgedToken(reader.uid, { admin: true, role: 'admin', is_admin: true, is_active: true });
   const reply = await callFunction('getMyAdminRole', {}, token);
-  assert.deepEqual(reply.result, { is_admin: false, is_active: false });
+  assert.deepEqual(reply.result, { is_admin: false, is_active: false, email_verified: false });
 });
 
 test('G5 OP-14: an account marked deleting is refused', async () => {
@@ -216,7 +218,40 @@ test('G5 OP-14: an account marked deleting is refused', async () => {
 
 test('G5 readStanding: reports the role and the account separately', async () => {
   const [admin] = await admins(1);
-  assert.deepEqual(await readStanding(backend, admin.uid), { accountClosed: false, hasRole: true, roleActive: true });
+  assert.deepEqual(await readStanding(backend, admin.uid), { accountClosed: false, hasRole: true, roleActive: true, emailVerified: true });
+});
+
+// ---- A verified email (OQ-20 working position, B5) ----
+
+test('G5 gate: an active admin whose email is not verified is refused with EMAIL_NOT_VERIFIED (OQ-20)', async () => {
+  const [admin] = await admins(1);
+  await verifyEmail(admin.uid, false);
+  await assert.rejects(requireAdmin(backend, admin.uid), (error) => {
+    assert.equal(error.code, 'failed-precondition');
+    assert.equal(error.details?.reason, 'EMAIL_NOT_VERIFIED');
+    return true;
+  });
+  await verifyEmail(admin.uid);
+  await requireAdmin(backend, admin.uid);
+});
+
+test('G5 gate: a reader whose email is not verified gets FORBIDDEN, so the gate says nothing about the email', async () => {
+  const reader = await signUp('reader@example.test');
+  await assert.rejects(requireAdmin(backend, reader.uid), refusedWith('permission-denied'));
+});
+
+test('G5 gate: a closed account is refused as closed before the email is looked at', async () => {
+  const [admin] = await admins(1);
+  await verifyEmail(admin.uid, false);
+  await db.doc(`users/${admin.uid}`).set({ user_id: admin.uid, status: 'deleting' });
+  await assert.rejects(requireAdmin(backend, admin.uid), (error) => error.details?.reason === 'ACCOUNT_CLOSED');
+});
+
+test('G5 OP-14: an admin whose email is not verified is told so, and the role stays active', async () => {
+  const [admin] = await admins(1);
+  await verifyEmail(admin.uid, false);
+  const reply = await callFunction('getMyAdminRole', {}, admin.idToken);
+  assert.deepEqual(reply.result, { is_admin: true, is_active: true, email_verified: false });
 });
 
 // ---- The last-admin guard (INV-03, SC-10) ----

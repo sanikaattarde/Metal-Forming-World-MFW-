@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "SPIKE (DEC-004 OPEN). The admin panel skeleton and its sign-in page, against the local Auth emulator only. Not production code and not merged to main.",
+  "description": "SPIKE (DEC-004 OPEN). The admin panel, against the local emulators only. Not production code and not merged to main.",
   "engines": {
     "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   },
@@ -11,7 +11,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "sh ../backend/spike/scripts/run-with-env.sh ../backend/spike/node_modules/.bin/firebase emulators:exec --only auth --project demo-mfw-spike \"vitest run\"",
+    "pretest": "npm --prefix ../backend/spike/functions run build",
+    "test": "sh ../backend/spike/scripts/run-with-env.sh ../backend/spike/node_modules/.bin/firebase emulators:exec --config ../backend/spike/firebase.json --only auth,functions,firestore --project demo-mfw-spike \"vitest run\"",
     "test:smoke": "vitest run test/smoke.test.tsx"
   },
   "dependencies": {

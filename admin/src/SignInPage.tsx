@@ -8,13 +8,15 @@ import type { SignInDeps } from './signIn';
 interface Props {
   deps: SignInDeps;
   onSignedIn: () => void;
+  // Shown when the page opens, for example after the session was ended because access was lost.
+  notice?: string | null;
 }
 
-export function SignInPage({ deps, onSignedIn }: Props) {
+export function SignInPage({ deps, onSignedIn, notice = null }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(notice);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

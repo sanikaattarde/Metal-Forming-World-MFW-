@@ -67,7 +67,7 @@ export async function finalizeUpload({ db, auth, bucket }: UploadBackend, object
 
   // 1. The uploader's role and account, read again now (INV-08).
   const standing = isDocumentId(uploader) ? await readStanding({ db, auth }, uploader) : null;
-  if (!standing || standing.accountClosed || !standing.roleActive) return reject('UPLOADER_NOT_AUTHORISED');
+  if (!standing || standing.accountClosed || !standing.roleActive || !standing.emailVerified) return reject('UPLOADER_NOT_AUTHORISED');
 
   // 2. The size the store reports, then the bytes themselves. The name and the declared type count for nothing.
   const limit = await readUploadLimit(db);

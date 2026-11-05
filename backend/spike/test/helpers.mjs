@@ -56,6 +56,16 @@ export async function disableAccount(uid) {
   if (!reply.ok) throw new Error(`could not disable the account: ${reply.status}`);
 }
 
+// Sets the provider's email-verified flag. An admin needs it on every admin operation (OQ-20, B5).
+export async function verifyEmail(uid, verified = true) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:update`, {
+    method: 'POST',
+    headers: { ...JSON_HEADERS, authorization: 'Bearer owner' },
+    body: JSON.stringify({ localId: uid, emailVerified: verified }),
+  });
+  if (!reply.ok) throw new Error(`could not set the email flag: ${reply.status}`);
+}
+
 export async function deleteAccount(idToken) {
   const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/accounts:delete?key=fake-key`, {
     method: 'POST',

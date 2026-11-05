@@ -8,7 +8,7 @@ import type { Auth } from 'firebase-admin/auth';
 import { FieldValue } from 'firebase-admin/firestore';
 import type { DocumentReference, Firestore, Transaction } from 'firebase-admin/firestore';
 import * as logger from 'firebase-functions/logger';
-import { accountClosed, cannotVerify, forbidden, lastAdmin, notAnAdmin } from './errors.js';
+import { accountClosed, cannotVerify, emailNotVerified, forbidden, lastAdmin, notAnAdmin } from './errors.js';
 
 const GUARD_PATH = 'admin_guard/current';
 const roleRef = (db: Firestore, uid: string) => db.collection('admin_roles').doc(uid);
@@ -23,6 +23,8 @@ export interface Standing {
   accountClosed: boolean;
   hasRole: boolean;
   roleActive: boolean;
+  // The provider's flag, read on this call. OQ-20's working position asks for a verified email (B5).
+  emailVerified: boolean;
 }
 
 // Reads the current role record and the account status on this call. Trusts no claim and no
@@ -43,6 +45,7 @@ export async function readStanding({ db, auth }: Backend, uid: string): Promise<
       accountClosed: !providerUser || providerUser.disabled || (user.exists && user.get('status') !== 'active'),
       hasRole: role.exists,
       roleActive: role.exists && role.get('is_active') === true,
+      emailVerified: providerUser?.emailVerified === true,
     };
   } catch {
     logger.error('admin check refused: the role record or the account could not be read');
@@ -55,6 +58,8 @@ export async function requireAdmin(backend: Backend, uid: string): Promise<void>
   const standing = await readStanding(backend, uid);
   if (standing.accountClosed) throw accountClosed();
   if (!standing.roleActive) throw forbidden();
+  // After the role check, so that a caller who is not an admin learns nothing more.
+  if (!standing.emailVerified) throw emailNotVerified();
 }
 
 export interface RemovalPlan {

@@ -1,19 +1,26 @@
-// SPIKE. Hand-written stand-ins for the provider, for the component tests that need no emulator.
-import type { SignInDeps, SignedInUser } from '../src/signIn';
+// SPIKE. Hand-written stand-ins for the provider and the server, for the tests that need no emulator.
+import type { CallFn } from '../src/adminApi';
+import type { Services } from '../src/services';
+import type { SignedInUser } from '../src/signIn';
 
-export interface FakeDeps extends SignInDeps {
-  calls: { signIn: number; signOut: number; roleCheck: number };
+export interface FakeDeps extends Services {
+  calls: { signIn: number; signOut: number; roleCheck: number; call: string[] };
 }
 
 interface Options {
   signIn?: (email: string, password: string) => Promise<SignedInUser>;
   isAdmin?: boolean | (() => Promise<boolean>);
+  call?: CallFn;
 }
 
 export const providerError = (code: string) => Object.assign(new Error(`Firebase: Error (${code}).`), { code });
 
-export function fakeDeps({ signIn, isAdmin = false }: Options = {}): FakeDeps {
-  const calls = { signIn: 0, signOut: 0, roleCheck: 0 };
+// A server refusal as the callable SDK reports it.
+export const serverError = (code: string, reason?: string) =>
+  Object.assign(new Error(code), { code: `functions/${code}`, details: reason ? { reason } : undefined });
+
+export function fakeDeps({ signIn, isAdmin = false, call }: Options = {}): FakeDeps {
+  const calls = { signIn: 0, signOut: 0, roleCheck: 0, call: [] as string[] };
   return {
     calls,
     signIn: async (email, password) => {
@@ -26,6 +33,10 @@ export function fakeDeps({ signIn, isAdmin = false }: Options = {}): FakeDeps {
     roleCheck: async () => {
       calls.roleCheck += 1;
       return typeof isAdmin === 'function' ? isAdmin() : isAdmin;
+    },
+    call: async (name, data) => {
+      calls.call.push(name);
+      return call ? call(name, data) : {};
     },
   };
 }

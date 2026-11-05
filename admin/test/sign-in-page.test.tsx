@@ -105,7 +105,7 @@ test('B3: an admin reaches the placeholder, and signing out returns to the sign-
   const deps = fakeDeps({ isAdmin: true });
   render(<App services={deps} />);
   fillAndSubmit();
-  await screen.findByText('Signed in. No admin screen is built in this spike.');
+  await screen.findByText('Signed in. The admin screens come in the next step.');
   expect(deps.calls.signOut).toBe(0);
   fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
   await waitFor(() => expect(screen.getByRole('heading', { name: 'Admin sign-in' })).toBeTruthy());

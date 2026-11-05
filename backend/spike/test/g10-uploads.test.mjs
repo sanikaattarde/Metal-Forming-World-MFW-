@@ -23,6 +23,7 @@ import {
   PROJECT_ID,
   signUp,
   TRIGGER_BUCKET,
+  verifyEmail,
 } from './helpers.mjs';
 import {
   brokenPageTreePdf,
@@ -137,6 +138,7 @@ beforeEach(async () => {
   reader = await signUp('reader@example.test');
   await auth.updateUser(reader.uid, { emailVerified: true });
   for (const account of [admin, otherAdmin]) {
+    await verifyEmail(account.uid);
     await db.doc(`admin_roles/${account.uid}`).set({ user_id: account.uid, is_active: true, granted_by: 'test-seed', granted_at: NOW });
   }
   await db.doc('admin_guard/current').set({ guard_id: 'current', active_admin_count: 2, version: 1, updated_at: NOW });
@@ -175,6 +177,13 @@ const CALLERS = {
   'an admin whose account is marked deleting': {
     token: async () => {
       await db.doc(`users/${otherAdmin.uid}`).set({ user_id: otherAdmin.uid, status: 'deleting' });
+      return otherAdmin.idToken;
+    },
+    status: 'FAILED_PRECONDITION',
+  },
+  'an admin whose email is not verified (OQ-20)': {
+    token: async () => {
+      await verifyEmail(otherAdmin.uid, false);
       return otherAdmin.idToken;
     },
     status: 'FAILED_PRECONDITION',
@@ -422,6 +431,7 @@ const LOST_STANDING = {
   'the role removed (FX-ADM-08)': () => removeAdminRole(backend, admin.uid),
   'the account marked deleting': () => db.doc(`users/${admin.uid}`).set({ user_id: admin.uid, status: 'deleting' }),
   'the account disabled by the provider': () => disableAccount(admin.uid),
+  'the email no longer verified (OQ-20)': () => verifyEmail(admin.uid, false),
 };
 
 for (const [name, change] of Object.entries(LOST_STANDING)) {
