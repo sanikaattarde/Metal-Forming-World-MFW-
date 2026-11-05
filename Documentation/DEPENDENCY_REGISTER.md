@@ -22,7 +22,7 @@
 | 0.4 | 1 and 4 November 2026 | YG's LICENSE-file reads of 1 November 2026 recorded for DEP-64, DEP-65 and DEP-66 (all MIT), with YG's reports of the PDFium licence (Apache License 2.0) and of the pdfx native engines. Section 8, section 8.1 and section 10 updated to say so. The prebuilt PDFium binaries that the pdfrx build downloads are recorded as not read. Revised on 4 November 2026 after the review of pull request 13: PDFium's LICENSE file is recorded as a BSD-3-Clause notice followed by the Apache License 2.0 text (YG's re-read of 4 November 2026, matching the review's reading) in DEP-64, DEP-65 and section 10. DEP-43 and DEP-44 point to `DECISION_LOG.md` section 5.5. Section 2 points to the section 8.1 labels. No package is added and no version is pinned. |
 | 0.5 | 5 November 2026 | DEP-43 and DEP-44: the Decision rows follow `DECISION_LOG.md` 0.6, which sets DEC-013 and DEC-014 to AGREED (section 5.6) and keeps the conditions listed there. The review of pull request #14 asked for it, because the rows said "Not AGREED" after pull request #13 merged. The status of both entries stays CANDIDATE. The DEP-43 row gives the section 5.6 conditions in full, as the re-review of 5 November 2026 asked. No package is added and no version is pinned. |
 | 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
-| 0.7 | 5 November 2026 | The DEP-60 row records that branch protection on `main` is on. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.7 | 5 November 2026 | The DEP-60 row records that branch protection on `main` is on. Revised on 5 November 2026 after the review of pull request #21: the DEP-60 row records the visibility as public (GitHub API). No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -270,7 +270,7 @@ Section 8.1 holds review entries for the candidates the WS-B scaffold needs, and
 
 | ID | Name | Category | Purpose | Owner | Licence and security | Cost | Status | Required action |
 |---|---|---|---|---|---|---|---|---|
-| DEP-60 | GitHub repository `sanikaattarde/Metal-Forming-World-MFW-` | Source hosting | All code and documents | Currently the `sanikaattarde` account; MFW after transfer (OQ-48) | Plan and visibility not verified. Branch protection on `main` is on (`DEVELOPMENT_WORKFLOW.md` section 3) | Depends on the plan; verify | CONFIRMED | Verify plan features; OQ-48 |
+| DEP-60 | GitHub repository `sanikaattarde/Metal-Forming-World-MFW-` | Source hosting | All code and documents | Currently the `sanikaattarde` account; MFW after transfer (OQ-48) | Plan not verified. Visibility: public (GitHub API, 5 November 2026). Branch protection on `main` is on (`DEVELOPMENT_WORKFLOW.md` section 3) | Depends on the plan; verify | CONFIRMED | Verify plan features; OQ-48 |
 | DEP-61 | GitHub Actions | CI | QG-01 to QG-13 | Repository owner | Secrets per environment (`CI_CD_AND_QUALITY_GATES.md` §7) | Minutes depend on the plan; macOS minutes cost more; verify | CANDIDATE (DEC-022) | DEC-022 |
 | DEP-62 | Secrets scanner (gitleaks, or GitHub secret scanning) | CI security | QG-11 | Repository owner | Verify the licence or plan availability | Verify | CANDIDATE | Choose at T-01.5 |
 | DEP-63 | Documentation check script | CI | QG-12 | Both | Written by the team | None | CANDIDATE | Write at T-01.5 |

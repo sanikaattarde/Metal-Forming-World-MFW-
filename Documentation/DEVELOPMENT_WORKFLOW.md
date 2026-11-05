@@ -8,7 +8,7 @@
 | File | `Documentation/DEVELOPMENT_WORKFLOW.md` |
 | Phase | 3 — Development Planning and Collaboration (document 21) |
 | Version | 0.4 |
-| Status | Draft for review. Not approved. The branching model (DEC-010) and the commit conventions (DEC-015) are AGREED (`DECISION_LOG.md` section 5.6). Every other rule is PROPOSED. |
+| Status | Draft for review. Not approved. The branching model (DEC-010, sections 4 to 7) and the commit conventions (DEC-015, section 11) are AGREED (`DECISION_LOG.md` section 5.6). Every other rule is PROPOSED. |
 | Date | 5 November 2026 |
 | Approval required | Both developers (AGREED in `DECISION_LOG.md`). No MFW approval: process only. |
 
@@ -19,7 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 3 updated to the state after the two merges. Section 16 states what happened to each action. The co-author trailer requirement replaced by the proposed no-attribution rule. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Section 12 item 2 states the convention for rows that list related documents (PROPOSED). Revised on 5 November 2026 after the review of pull request #20: the sentence says that a source row keeps the version and date of the source it records, and that the convention is PROPOSED. No requirement, scope item, decision or status label changed. |
-| 0.4 | 5 November 2026 | The branching model (DEC-010) and the commit conventions (DEC-015) are AGREED, and every other rule stays PROPOSED. Sections 3 and 15 record that branch protection on `main` is on, with what YG observed through the GitHub API and what Sanika Attarde read back. Sections 11, 16 and 17 follow. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.4 | 5 November 2026 | The branching model (DEC-010) and the commit conventions (DEC-015) are AGREED, and every other rule stays PROPOSED. Sections 3 and 15 record that branch protection on `main` is on, with what YG observed through the GitHub API and what Sanika Attarde read back. Sections 11, 16 and 17 follow. Revised on 5 November 2026 after the review of pull request #21: the status line and section 2 name the sections that DEC-010 (4 to 7) and DEC-015 (11) cover, and section 3 labels the protection row CONFIRMED (GitHub API). No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -38,7 +38,7 @@ Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal ma
 
 This document defines how the two developers work in one shared GitHub repository without overwriting each other's work. It covers branches, pull requests, integration order, shared files, testing before review, commit messages, documentation changes and recovery.
 
-It applies to code, configuration and documents. The branching model (DEC-010) and the commit conventions (DEC-015) are AGREED (`DECISION_LOG.md` section 5.6). Every other rule here is PROPOSED until both developers agree. Section 15 lists the repository settings and says which are set.
+It applies to code, configuration and documents. The branching model (DEC-010, sections 4 to 7) and the commit conventions (DEC-015, section 11) are AGREED (`DECISION_LOG.md` section 5.6). Every other rule here is PROPOSED until both developers agree. Section 15 lists the repository settings and says which are set.
 
 ## 3. Current Repository State
 
@@ -53,7 +53,7 @@ Verified with Git and the GitHub API on 23 October 2026, after pull request #1 a
 | Local checkouts | Not verified after the merges. | OPEN |
 | Tags | None | CONFIRMED |
 | CI | None. There is no `.github/` directory. | CONFIRMED |
-| Branch protection on GitHub | On since 5 November 2026. YG observed through the GitHub API on 5 November 2026 that `main` is protected and `SA` and `YG` are not, that a pull request needs an approving review before it merges, and that a later push dismisses an earlier approval (pull request #19). The full rule is not readable with YG's access: the API answers "Not Found" for the protection settings, as it did on 23 October 2026. The settings in section 15 are as Sanika Attarde read them back from GitHub (https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/14#issuecomment-6656886883). | CONFIRMED (GitHub API, YG) for what YG observed. The rest is REPORTED by Sanika Attarde |
+| Branch protection on GitHub | On since 5 November 2026. YG observed through the GitHub API on 5 November 2026 that `main` is protected and `SA` and `YG` are not, that a pull request needs an approving review before it merges, and that a later push dismisses an earlier approval (pull request #19). The full rule is not readable with YG's access: the API answers "Not Found" for the protection settings, as it did on 23 October 2026. The settings in section 15 are as Sanika Attarde read them back from GitHub with owner access (https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/14#issuecomment-6656886883). | CONFIRMED (GitHub API): what YG observed, and the full rule as Sanika Attarde read it with owner access on 5 November 2026 |
 | How `8941964` reached `main` | A single-parent commit by YuvrajGaykhe, with no pull request visible in local metadata. Whether it was reviewed cannot be verified locally. | OPEN |
 | Reviews on the two pull requests | Pull request #1 shows no review. Pull request #2 shows one automated comment saying a review could not be done. No person's review is recorded on either. | CONFIRMED (GitHub API) |
 

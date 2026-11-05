@@ -19,7 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Planned name replaced by the existing document. Access-rule labels. Personal-data term for crash and usage events marked NOT VERIFIED. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
-| 0.4 | 5 November 2026 | Sections 2, 3 and 5.2 give DEC-012, DEC-013 and DEC-014 as AGREED. The rules themselves stay PROPOSED. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.4 | 5 November 2026 | Sections 2, 3 and 5.2 give DEC-012, DEC-013 and DEC-014 as AGREED. The rules themselves stay PROPOSED. Revised on 5 November 2026 after the review of pull request #21: section 5.2 gives the condition of DEC-013 (Riverpod only in `app/lib/app/`, constructors in feature code) in place of the "If both are AGREED" block. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -137,10 +137,11 @@ features/<feature>/
 | State management | Riverpod | DEC-013, AGREED. Used in `app/lib/app/` only |
 | Navigation | go_router | DEC-014, AGREED. The route guard steers screens only, and the server enforces access (DEC-009) |
 
-If both are AGREED:
+State management follows the condition of DEC-013 (`DECISION_LOG.md` section 5.6):
 
-- Providers are declared inside the feature that owns them, and tests override them with fakes.
-- Providers that wire implementations to interfaces live in `app/lib/app/` (MOD-01).
+- Riverpod is used only in `app/lib/app/`, where providers wire implementations to interfaces (MOD-01).
+- Feature code takes its dependencies through constructors and does not import Riverpod.
+- Tests give feature code fakes through its constructors.
 
 ### 5.3 Navigation rules
 
