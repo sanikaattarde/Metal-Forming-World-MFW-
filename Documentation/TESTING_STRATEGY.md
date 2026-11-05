@@ -7,7 +7,7 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
@@ -21,7 +21,8 @@
 | 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No test, gate or checklist item changed. |
 | 0.4 | 27 October 2026 | Section 7.9 updated: the admin tests follow in-panel add and remove (OQ-58, PAC-19) instead of the withdrawn two-role model (PRC-01, PAC-18). No gate or other test changed. |
 | 0.5 | 31 October 2026 | Section 7.6 gains a proposed test line for the bookmark rules in `API_AND_MODULE_CONTRACTS.md` section 6.8. No gate or other test changed. |
-| 0.6 | 4 and 5 November 2026 | Suite TS-14 added for the contract tests CT-01 to CT-11 of `API_AND_BACKEND_CONTRACT.md` section 10, which no test plan named. The regression table (section 11), the ownership table (section 14) and the blocked items (section 15) name it. The split between the backend side and the app side is a proposal made here, and Sanika Attarde's review of pull request #17 agreed it as the working position. It stays PROPOSED with the rest of the task split (OQ-38). Revised on 5 November 2026 after that review: the app side runs with the app tests (QG-03, [SCAFFOLD]) and the backend side keeps [BACKEND], the regression row follows the trigger of QG-14, and CT-02 and CT-10 start at the first release. No existing suite, threshold or checklist item changed. |
+| 0.6 | 4 and 5 November 2026 | The section 7.6 test line is extended for the bookmark follow-up: the pre-check of rule 5, the temporary copy of rule 4, the identifier exception, and the server's check of the revision in OP-07 (PROPOSED). No gate or other test changed. |
+| 0.7 | 4 and 5 November 2026 | Suite TS-14 added for the contract tests CT-01 to CT-11 of `API_AND_BACKEND_CONTRACT.md` section 10, which no test plan named. The regression table (section 11), the ownership table (section 14) and the blocked items (section 15) name it. The split between the backend side and the app side is a proposal made here, and Sanika Attarde's review of pull request #17 agreed it as the working position. It stays PROPOSED with the rest of the task split (OQ-38). Revised on 5 November 2026 after that review: the app side runs with the app tests (QG-03, [SCAFFOLD]) and the backend side keeps [BACKEND], the regression row follows the trigger of QG-14, and CT-02 and CT-10 start at the first release. No existing suite, threshold or checklist item changed. |
 
 ### 1.1 Related documents
 
@@ -167,7 +168,7 @@ Network scenarios come from `TEST_DATA_AND_FIXTURES.md` §8 (FX-NET-01 to FX-NET
 - Add, open and remove a bookmark; mark and unmark a favourite (AC-5.1, AC-5.2).
 - Items appear after signing in on a second device (AC-5.3).
 - Reader A cannot see or change reader B's items, both in the app and through direct server calls (AC-5.4, SEC-CHK-05).
-- PROPOSED, from `API_AND_MODULE_CONTRACTS.md` section 6.8 rules 1 to 4, and not an AC-5 criterion: a repeated add returns the stored bookmark and changes nothing, the identifier comes from the issue and the page, a refusal for another cause stays an error, and a bookmark opened on another revision shows the notice.
+- PROPOSED, from `API_AND_MODULE_CONTRACTS.md` section 6.8 rules 1 to 4, and not an AC-5 criterion: a repeated add returns the stored bookmark and changes nothing, the identifier comes from the issue and the page, a refusal for another cause stays an error, and a bookmark opened on another revision shows the notice. Also PROPOSED, from rules 4 and 5 and the identifier exception in `DATABASE_AND_DATA_MODEL.md` section 4.1: an add with a page or a revision of 0 returns `invalidInput` and writes nothing, the server also refuses a revision of 0 sent by a modified client (OP-07), a bookmark opened with no local copy leaves no kept copy, and a bookmark added, removed and added again has the same identifier and no second record.
 - Offline behaviour decided under OQ-10.
 
 ### 7.7 WordPress integration
