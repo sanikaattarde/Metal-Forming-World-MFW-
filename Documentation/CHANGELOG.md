@@ -31,7 +31,7 @@ PROPOSED (DEC-015).
 
 ## Unreleased
 
-### Documentation: pinned versions and dated headers removed from related-document rows, 2026-11-05, on topic branch `docs/yg-pinned-version-cleanup` on top of `0310d15`, not reviewed
+### Documentation: pinned versions and dated headers removed from related-document rows, 2026-11-05, on topic branch `docs/yg-pinned-version-cleanup` on top of `0310d15`, then merged with `origin/main` at `6ecc23f`, under review in pull request #20
 
 Follows the review of pull request #16 by Sanika Attarde, which proposed this cleanup after pull requests #14 to #18 merged. Rows that list related documents gave the version and sometimes the date of other documents, and 25 of the 73 pinned citations were no longer current. The header "Status on 23 October 2026" was not a snapshot date either, because the tables name drafts of later dates. Those rows now name the document and whether it exists, with no version or date, and the README index holds each version. The source rows marked Read keep the version that was read, because they record what was read. The two that gave the charter's version 0.2 with the date 22 October 2026 now read 23 October 2026. `DEVELOPMENT_WORKFLOW.md` section 12 item 2 states the convention (PROPOSED). The four earliest drafts (`GLOSSARY.md`, `REQUIREMENTS_SPECIFICATION.md`, `SCOPE_AND_EXCLUSIONS.md` and `ASSUMPTIONS_AND_CONSTRAINTS.md`) change only in these rows. Each of the 33 changed documents goes up one version, with a history row, as section 12 item 2 asks. No requirement, scope item, exclusion, decision, status label, estimate or milestone changes. Nothing here has gone to MFW.
 
@@ -71,7 +71,17 @@ Follows the review of pull request #16 by Sanika Attarde, which proposed this cl
 | 2026-11-05 | `Documentation/TESTING_STRATEGY.md` | Version 0.9: the header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
 | 2026-11-05 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.5: the header of the related-documents table reads "Status", with no date. | Version pins and dated headers in related-document rows had gone stale | None | Both developers (not agreed) | No scope effect |
 | 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.18: this entry, and the related-documents header reads "Status" | Records the edits above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-05 | `README.md` | The version column follows the control table of each of the 33 changed documents, one step up, and reads 0.18 for `CHANGELOG` (was 0.16) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column follows the control table of each of the 33 changed documents, one step up, and reads 0.18 for `CHANGELOG` (was 0.17) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: backend rules evidence, emulator only, 2026-11-05, on topic branch `docs/sa-backend-spike-evidence` on top of `157a9a9`, then merged with `origin/main` at `9609a72`, `5f20706` and `0310d15`, under review in pull request #19
+
+Adds the first test evidence report, in `Documentation/test-evidence/`, the location `TESTING_STRATEGY.md` §13 proposes. It records the WS-A backend spike's results on the local emulators against SEC-CHK-02 to SEC-CHK-07, SEC-CHK-11 and SEC-CHK-18. The suite ran on 5 November 2026 at commit `e7d9f37` of branch `spike/sa-backend-rules`, with 907 tests passed and 0 failed. The report also logs the defects and gaps found, lists the cases to run again on ENV-TEST, and gives the command for QG-08. Every result is emulator only, and none is a pass for the concurrency or token cases. The spike's code stays on its branch and is not merged (`DEVELOPMENT_WORKFLOW.md` §13 item 5). QG-08 stays blocked by DEC-003. No decision, requirement, checklist item or status label changes, and `TESTING_STRATEGY.md` §16 is not changed. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-05 | `Documentation/test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md` | Version 0.1: new report | T-11.3 records every SEC-CHK item as passed or as a logged defect, and a spike's findings merge as a document | T-11.3, SEC-CHK-02 to SEC-CHK-07, SEC-CHK-11, SEC-CHK-18, QG-08, DEC-003, DEC-020, DEC-029, OQ-24 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.17: this entry | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | A row for the report in the index of documents. The version column reads 0.17 for `CHANGELOG` (was 0.16) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: FX-PDF-11 expectation separated from AC-2.6, 2026-11-04, revised 2026-11-05, on topic branch `docs/yg-fx-pdf-11-tolerance` on top of `eebcdb7`, then merged with `origin/main` at `157a9a9` and again at `178325e`, under review in pull request #18
 
