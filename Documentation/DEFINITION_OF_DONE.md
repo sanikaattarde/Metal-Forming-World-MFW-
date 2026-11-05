@@ -7,9 +7,9 @@
 | Document | Definition of Done |
 | File | `Documentation/DEFINITION_OF_DONE.md` |
 | Phase | 3 — Development Planning and Collaboration (document 27) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. |
-| Date | 23 October 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers |
 
 **Change history**
@@ -18,6 +18,7 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Access-rule wording labelled (working position, baseline). Decision wording aligned with the status model. Handover gating: HO-13 and HO-14 gate only if MFW agrees them. |
+| 0.3 | 4 and 5 November 2026 | DoD-TASK gains check 11 for the contract tests (suite TS-14 in `TESTING_STRATEGY.md`). No existing check changed or renumbered. Revised on 5 November 2026 after the review of pull request #17: the check follows `API_AND_BACKEND_CONTRACT.md` section 9.1 and 9.2, so an additive change updates the snapshot and passes the tests, and only a breaking change carries the compatibility record. |
 
 ### 1.1 Related documents
 
@@ -79,6 +80,7 @@ Some checks cannot be done until infrastructure exists. Each check is labelled w
 | 8 | CI checks pass | [CI] |
 | 9 | Pull request description complete (`DEVELOPMENT_WORKFLOW.md` §6.1), with test evidence | [NOW] |
 | 10 | Reviewed and merged by the other developer | [NOW] |
+| 11 | When a backend operation changes, its contract snapshot (CT-01) is updated in the same pull request and the contract tests (TS-14) pass. A breaking change also carries the compatibility record of `API_AND_BACKEND_CONTRACT.md` §9.2 | [BACKEND] |
 
 ## 6. DoD-FEAT — Feature
 
