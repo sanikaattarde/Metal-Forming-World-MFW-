@@ -7,7 +7,7 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.9 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
@@ -25,6 +25,7 @@
 | 0.7 | 4 and 5 November 2026 | Suite TS-14 added for the contract tests CT-01 to CT-11 of `API_AND_BACKEND_CONTRACT.md` section 10, which no test plan named. The regression table (section 11), the ownership table (section 14) and the blocked items (section 15) name it. The split between the backend side and the app side is a proposal made here, and Sanika Attarde's review of pull request #17 agreed it as the working position. It stays PROPOSED with the rest of the task split (OQ-38). Revised on 5 November 2026 after that review: the app side runs with the app tests (QG-03, [SCAFFOLD]) and the backend side keeps [BACKEND], the regression row follows the trigger of QG-14, and CT-02 and CT-10 start at the first release. No existing suite, threshold or checklist item changed. |
 | 0.8 | 4 and 5 November 2026 | The damaged-file line of section 7.4 follows AC-2.6: FX-PDF-10 gives an error with a retry option, and FX-PDF-11 either opens repaired or gives that error, without a crash (PROPOSED). Revised on 5 November 2026 after the review of pull request #18: a repaired open shows every page of the PDF it was made from, in order, and the line names the reading of FR-READ-010 as an ASSUMPTION (RD-08). No gate, threshold or other test changed. |
 | 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
+| 0.10 | 5 November 2026 | SEC-CHK-20 added to the security checklist for the objectives of SC-22. It is blocked by DEC-004 and OQ-60. Section 7.9 and the blocked items (section 15) name it. No requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -206,6 +207,7 @@ Network scenarios come from `TEST_DATA_AND_FIXTURES.md` §8 (FX-NET-01 to FX-NET
   - A password-protected PDF (expected behaviour: OQ-30)
   - A zero-byte file
 - Checks also run on the server (SEC-CHK-07).
+- Only once the panel's technology is chosen (DEC-004): the panel's web surface is checked as SEC-CHK-20 and ST-22 (`SECURITY_AND_ACCESS_CONTROL.md` SC-22). The mechanism is OPEN (OQ-60), so nothing here can be run yet.
 - Categories, publishing, unpublishing and hidden posts show correctly in the app after a refresh (AC-8.6 to AC-8.8).
 - CSV exports (AC-8.9, PAC-03): only approved fields; admin-only; formula-injection cells escaped (FX-ADM-07, SEC-CHK-12).
 
@@ -266,6 +268,7 @@ RS NFR-SEC-010 places the contents of the S2 AC-10 security checklist in this do
 | SEC-CHK-17 | Sign-in and password-reset responses are the same for a known and an unknown address (the message and the error category). Registration may reveal that an account exists. Timing is not tested | TS-03 and TS-05 with FX-USR-13 | `API_AND_MODULE_CONTRACTS.md` §6.3; PAC-17 |
 | SEC-CHK-18 | An admin whose role record is removed is refused on the next privileged call, including from a session opened before the removal. The time until the removal is visible to the check is measured and reported, not judged | TS-05 direct calls with FX-ADM-08 | RS NFR-SEC-007, FR-ADMIN-003; OQ-20 |
 | SEC-CHK-19 | Sign-in, registration, password reset, file-link requests and notification sends are limited, and a limited request is refused with RATE_LIMITED. No limit value is set here, and the mechanism is OPEN | TS-05; manual repeated requests | `API_AND_BACKEND_CONTRACT.md` §2.7; OQ-52 |
+| SEC-CHK-20 | The admin panel's web surface holds the four objectives of SC-22: a page on another website cannot make a signed-in admin's browser perform an admin operation, the panel cannot be shown inside another website's frame, a script that is not the panel's cannot run in it, and a browser call to the functions from an origin that is not allowed is refused. The mechanism is OPEN, and the item is blocked by DEC-004 | Requests from a page on another origin; loading the panel in a frame; inspection of the response headers and of the scripts the panel loads (ST-22) | `SECURITY_AND_ACCESS_CONTROL.md` SC-22, T28; OQ-60 |
 
 An independent penetration test is out of scope (S2 "Scope not included").
 
@@ -340,6 +343,7 @@ RS requirement (RS §13) → ACCEPTANCE_CRITERIA.md row (AC-n.m or PAC-nn) → t
 | TS-05 backend and rule tests | DEC-003, DEC-020 |
 | TS-14 contract tests, backend side | DEC-003, DEC-026 |
 | ENV-TEST | DEC-023, OQ-40 |
+| SEC-CHK-20 admin panel web surface | DEC-004, OQ-60 |
 | Device matrix | OQ-26 |
 | Google account rules | OQ-04, OQ-05, OQ-29 |
 | Reader performance on real content | MFW sample PDFs; DEC-005 |

@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.18 |
+| Version | 0.20 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 5 November 2026 |
 
@@ -30,6 +30,19 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: web controls for the admin panel recorded as NOT VERIFIED, 2026-11-05, on topic branch `docs/yg-admin-web-controls` on top of `761e00a`, not reviewed
+
+Follows a review of the documentation set, which found that no document named a request forged by another website (CSRF), framing (clickjacking), a content security policy or cross-origin access for the admin panel, although the panel is a web application and the product's only web interface (RS FR-ADMIN-001). `SECURITY_AND_ACCESS_CONTROL.md` gains threat T28, control SC-22 and test ST-22. `TESTING_STRATEGY.md` gains SEC-CHK-20. `OPEN_QUESTIONS.md` gains OQ-60 for both developers. `CODING_STANDARDS.md` section 15 gains item 8. They state four objectives only. The mechanism for each is OPEN, because the panel's technology is not chosen (DEC-004) and how the panel holds its sign-in token, what response headers the hosting allows and how the functions treat a cross-origin call were not researched. Everything is PROPOSED and NOT VERIFIED. No requirement names these objectives, so they are a development-team safeguard (ASSUMPTION), and no scope item, cost, estimate or MFW approval changes. Sign-in message and rate-limit checks stay as SEC-CHK-17 and SEC-CHK-19. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-05 | `Documentation/CODING_STANDARDS.md` | Version 0.4: section 15 gains item 8: the panel's web surface follows the objectives of SC-22. The mechanism is OPEN until DEC-004 and OQ-60. | No document named CSRF, framing, content security policy or cross-origin controls for the admin panel | T28, SC-22, ST-22, SEC-CHK-20, OQ-60, DEC-004 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/OPEN_QUESTIONS.md` | Version 0.5: oQ-60 added (P2, both developers): the controls and the sign-in token handling of the admin panel's web surface. The summary reads 60 questions. | No document named CSRF, framing, content security policy or cross-origin controls for the admin panel | T28, SC-22, ST-22, SEC-CHK-20, OQ-60, DEC-004 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/SECURITY_AND_ACCESS_CONTROL.md` | Version 0.6: threat T28, control SC-22 and test ST-22 added for the admin panel's web surface (a request forged by another website, framing, a script that is not the panel's, and cross-origin calls to the functions). They state objectives only. The mechanism is OPEN and NOT VERIFIED, blocked by DEC-004 and OQ-60, and no requirement names them, so they are a development-team safeguard (ASSUMPTION). Sections 4.3, 6.1a, 6.3, 14, 15 and 16 follow. | No document named CSRF, framing, content security policy or cross-origin controls for the admin panel | T28, SC-22, ST-22, SEC-CHK-20, OQ-60, DEC-004 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/TESTING_STRATEGY.md` | Version 0.10: sEC-CHK-20 added to the security checklist for the objectives of SC-22. It is blocked by DEC-004 and OQ-60. Section 7.9 and the blocked items (section 15) name it. | No document named CSRF, framing, content security policy or cross-origin controls for the admin panel | T28, SC-22, ST-22, SEC-CHK-20, OQ-60, DEC-004 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.20: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column follows the control table of each of the four changed documents, one step up, and reads 0.20 for `CHANGELOG` (was 0.18) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: pinned versions and dated headers removed from related-document rows, 2026-11-05, on topic branch `docs/yg-pinned-version-cleanup` on top of `0310d15`, then merged with `origin/main` at `6ecc23f`, under review in pull request #20
 
