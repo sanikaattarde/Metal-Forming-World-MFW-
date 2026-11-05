@@ -7,7 +7,7 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.7 |
+| Version | 0.8 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
@@ -23,6 +23,7 @@
 | 0.5 | 31 October 2026 | Section 7.6 gains a proposed test line for the bookmark rules in `API_AND_MODULE_CONTRACTS.md` section 6.8. No gate or other test changed. |
 | 0.6 | 4 and 5 November 2026 | The section 7.6 test line is extended for the bookmark follow-up: the pre-check of rule 5, the temporary copy of rule 4, the identifier exception, and the server's check of the revision in OP-07 (PROPOSED). No gate or other test changed. |
 | 0.7 | 4 and 5 November 2026 | Suite TS-14 added for the contract tests CT-01 to CT-11 of `API_AND_BACKEND_CONTRACT.md` section 10, which no test plan named. The regression table (section 11), the ownership table (section 14) and the blocked items (section 15) name it. The split between the backend side and the app side is a proposal made here, and Sanika Attarde's review of pull request #17 agreed it as the working position. It stays PROPOSED with the rest of the task split (OQ-38). Revised on 5 November 2026 after that review: the app side runs with the app tests (QG-03, [SCAFFOLD]) and the backend side keeps [BACKEND], the regression row follows the trigger of QG-14, and CT-02 and CT-10 start at the first release. No existing suite, threshold or checklist item changed. |
+| 0.8 | 4 and 5 November 2026 | The damaged-file line of section 7.4 follows AC-2.6: FX-PDF-10 gives an error with a retry option, and FX-PDF-11 either opens repaired or gives that error, without a crash (PROPOSED). Revised on 5 November 2026 after the review of pull request #18: a repaired open shows every page of the PDF it was made from, in order, and the line names the reading of FR-READ-010 as an ASSUMPTION (RD-08). No gate, threshold or other test changed. |
 
 ### 1.1 Related documents
 
@@ -139,7 +140,7 @@ Subject to the account rules still open (OQ-04, OQ-05) and to scope confirmation
 - Pinch zoom to 300% with sharp text (AC-2.3).
 - Two-page spread on a tablet and in landscape (AC-2.4).
 - Twenty consecutive page turns without a crash (AC-2.5).
-- Damaged files (FX-PDF-10, FX-PDF-11) show an error with a retry option (AC-2.6).
+- A damaged file (FX-PDF-10) shows an error with a retry option (AC-2.6). PROPOSED, and not an AC-2 criterion: FX-PDF-11 either opens repaired, with every page of the PDF it was made from in order, or shows that error, and never crashes (`TEST_DATA_AND_FIXTURES.md` section 7). The reading of FR-READ-010 behind it is an ASSUMPTION (RD-08 in `PDF_READER_AND_OFFLINE_DESIGN.md`).
 - Opening a bookmark goes to its page (AC-5.1).
 - First-page time measured as in Section 8.1 (AC-2.1).
 
