@@ -7,9 +7,9 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. |
-| Date | 31 October 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -21,6 +21,7 @@
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded (`TECHNOLOGY_DECISIONS.md` section 10.5, GS-Q35 to GS-Q65). DEC-027 now states one Admin role with in-panel add and remove, and PRC-01 is withdrawn. DEC-029 states immediate deletion only, and PRC-02 is withdrawn. DEC-008 records a reported two-action reading model that conflicts with the earlier record. DEC-031 records a region proposal. DEC-032 and DEC-033 added. Position rows added to DEC-005, DEC-006, DEC-011, DEC-013, DEC-014, DEC-016, DEC-017, DEC-019 and DEC-020. Section 5.3 added. No entry is AGREED or APPROVED. |
 | 0.4 | 27 October 2026 | Section 5.4 added: Sanika Attarde's written positions on 14 PROPOSED entries (task MOD20-P1-T01 in `SANIKA_IMPLEMENTATION_ROADMAP.md`). It is one half of the evidence section 3.1 needs. No entry changes status, and no entry is AGREED or APPROVED. |
 | 0.5 | 31 October 2026 | Section 5.5 added: Yuvraj Gaykhe's written positions on DEC-010 to DEC-015, DEC-022 and DEC-024, the other half of the evidence for those eight entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED. |
+| 0.6 | 4 and 5 November 2026 | DEC-010 to DEC-015, DEC-022 and DEC-024 set to AGREED, the follow-up that sections 5.4 and 5.5 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.5) and Sanika Attarde's approving review of pull request #12 on 3 November 2026. Section 5.6 added: the evidence, the conditions still open for each entry, a limit on the public PDFs of DEC-024 (OQ-57), and the documents that still call these entries PROPOSED. Update sentences added to the position rows of DEC-011, DEC-013 and DEC-014. No entry is APPROVED. DEC-025 to DEC-030 stay PROPOSED. Revised on 5 November 2026 after the review of pull request #14: section 5.6 links the approving review, the list of documents adds the related-documents row of `CHANGELOG.md`, and `DEPENDENCY_REGISTER.md` is struck from the list because its DEP-43 and DEP-44 rows are updated in the same pull request. |
 
 ### 1.1 Related documents
 
@@ -97,21 +98,21 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 | DEC-007 | Access rule for full issues; no guest reading | OPEN (working position mandatory) | CONFIRMED and PROVISIONAL, CONFLICT C-01 | Yes |
 | DEC-008 | Reading model: online reading or complete local copy | OPEN | CONFLICT C-03 | Yes |
 | DEC-009 | Content protection and protected file access | BASELINE | CONFIRMED | Already in S2 |
-| DEC-010 | Branching and integration model | PROPOSED | ASSUMPTION | No |
-| DEC-011 | Two workstreams and proposed developer mapping | PROPOSED | ASSUMPTION | No |
-| DEC-012 | Repository layout | PROPOSED | ASSUMPTION | No |
-| DEC-013 | Flutter state management | PROPOSED | ASSUMPTION | No |
-| DEC-014 | Navigation and route guarding | PROPOSED | ASSUMPTION | No |
-| DEC-015 | Commit, changelog and version conventions | PROPOSED | ASSUMPTION | No |
+| DEC-010 | Branching and integration model | AGREED (section 5.6) | ASSUMPTION | No |
+| DEC-011 | Two workstreams and proposed developer mapping | AGREED (section 5.6) | ASSUMPTION | No |
+| DEC-012 | Repository layout | AGREED (section 5.6) | ASSUMPTION | No |
+| DEC-013 | Flutter state management | AGREED (section 5.6) | ASSUMPTION | No |
+| DEC-014 | Navigation and route guarding | AGREED (section 5.6) | ASSUMPTION | No |
+| DEC-015 | Commit, changelog and version conventions | AGREED (section 5.6) | ASSUMPTION | No |
 | DEC-016 | Commercial baseline | OPEN | CONFLICT | Yes (MFW record) |
 | DEC-017 | Schedule baseline | OPEN | CONFLICT C-08 | Yes (MFW record) |
 | DEC-018 | Delivery team composition | OPEN | CONFLICT | Yes (MFW record) |
 | DEC-019 | Evidence status of the S3 amendments | OPEN | CONFLICT | Yes (MFW record) |
 | DEC-020 | Protected issue-file delivery mechanism | OPEN | OPEN | Only if it adds cost |
 | DEC-021 | News retrieval path | OPEN | CONFIRMED (S2 Flow 2), OPEN alternative | Only if it adds cost |
-| DEC-022 | CI service | PROPOSED | ASSUMPTION | Only if it adds cost to MFW |
+| DEC-022 | CI service | AGREED, conditional on the cost check (section 5.6) | ASSUMPTION | Only if it adds cost to MFW |
 | DEC-023 | Environment model | PROPOSED | ASSUMPTION | Yes (cloud cost billed to MFW) |
-| DEC-024 | Test data policy | PROPOSED | ASSUMPTION | No |
+| DEC-024 | Test data policy | AGREED (section 5.6) | ASSUMPTION | No |
 | DEC-025 | Server-side language and runtime | PROPOSED | ASSUMPTION | No |
 | DEC-026 | API style, operation catalogue and error scheme | PROPOSED | ASSUMPTION | No |
 | DEC-027 | Admin roles and role management | PROPOSED (one Admin role with in-panel add and remove; PRC-01 withdrawn) | One role CONFIRMED. In-panel add and remove: PROPOSED, not in S2 (OQ-58) | Yes, to confirm in-panel add and remove and the narrow record (OQ-20, OQ-58) |
@@ -235,6 +236,42 @@ Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a
 | DEC-015 | Commit, changelog and version conventions | Accepts. | Commits, merge commits and repository files carry no tool attribution lines and no co-author trailers (`DEVELOPMENT_WORKFLOW.md` section 11, PROPOSED). Existing history is not rewritten. |
 | DEC-022 | CI service | Accepts GitHub Actions, conditional on the cost check in task MOD15-P1-T01, as in section 5.4. | Plan limits and macOS runner cost are NOT VERIFIED. Nothing is billed to MFW without MFW's approval. For the record, runs 41105986987 and 41186813401 on draft pull request #10 passed all three jobs, including the iOS build on a macOS runner. |
 | DEC-024 | Test data policy | Accepts. | MFW still confirms where its sample PDFs may be kept. Public PDFs used for the reader comparison (T-02.3) are not MFW content, and are kept outside Git too. |
+
+### 5.6 Agreement recorded on 4 November 2026
+
+Eight entries move from PROPOSED to AGREED: DEC-010 to DEC-015, DEC-022 and DEC-024.
+
+**Evidence (section 3.1).** Both developers' written notes are filed: Sanika Attarde's in section 5.4 (27 October 2026) and Yuvraj Gaykhe's in section 5.5 (31 October 2026). Sanika Attarde approved pull request #12, which carries section 5.5, on 3 November 2026 (the review: https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/12#pullrequestreview-5750327816), and it was merged the same day (merge commit `eebcdb7`). That review says it sets no status by itself and records no MFW approval. The evidence was complete on 3 November 2026. This edit is the follow-up that sections 5.4 and 5.5 name (section 4, step 3).
+
+**What this does not do.** It records no MFW approval, and no entry is APPROVED. It does not cover DEC-025 to DEC-030, which have only Sanika Attarde's note (section 5.4), or any OPEN entry. DEC-005, the reader library, stays OPEN.
+
+**Conditions still open.** They come from sections 5.4 and 5.5 and from Sanika Attarde's review of pull request #12.
+
+| Entry | Condition or limit still open |
+|---|---|
+| DEC-010 | Branch protection for `main`, requiring one approving review by the other developer, is not turned on. Sanika Attarde, as the repository owner, will turn it on (review of pull request #12). Until then the rule is a convention that nothing enforces. |
+| DEC-011 | The availability of both developers is still to be filed (OQ-38). |
+| DEC-012 | Secrets, reader data and MFW's sample PDFs stay out of Git (DEC-024). The code stays publicly visible until handover. |
+| DEC-013 | Riverpod is used in `app/lib/app/` only, and feature code takes its dependencies through constructors. The Flutter and Dart versions are pinned at the scaffold (OQ-50). A `DEPENDENCY_REGISTER.md` entry comes before the package (DEP-43). |
+| DEC-014 | The route guard steers screens only, and the server enforces access (DEC-009). The versions are pinned at the scaffold, and a `DEPENDENCY_REGISTER.md` entry comes before the package (DEP-44). |
+| DEC-015 | Commits, merge commits and repository files carry no tool attribution lines and no co-author trailers, from now on. Existing history stays as it is. The rule itself is in `DEVELOPMENT_WORKFLOW.md` section 11, which is still PROPOSED. |
+| DEC-022 | Conditional on the cost check in task MOD15-P1-T01, which is not done. Plan limits and macOS runner cost are NOT VERIFIED. Nothing is billed to MFW without MFW's approval. |
+| DEC-024 | MFW still confirms where its sample PDFs may be kept. The public PDFs for the reader comparison leave out PDFs taken from MFW's own website until OQ-57 is answered (see the DEC-024 entry). |
+
+**Documents that still call these entries PROPOSED.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request. This edit changes this log, and the DEP-43 and DEP-44 rows of `DEPENDENCY_REGISTER.md`, which said "Not AGREED" after pull request #13 merged. The places below still read as before and are for the follow-up. `TECHNOLOGY_DECISIONS.md` section 10.5 is a dated record of 26 and 27 October 2026 and stays as written.
+
+```text
+Follow-up list
+├── API_AND_MODULE_CONTRACTS.md          section 3 (DEC-011)
+├── APP_STORE_RELEASE_CHECKLIST.md       section 8 (DEC-015)
+├── CHANGELOG.md                         the status row, the conventions and the related-documents row (DEC-015)
+├── CI_CD_AND_QUALITY_GATES.md           section 3 (DEC-022)
+├── CODING_STANDARDS.md                  sections 2, 3 and 5.2 (DEC-012, DEC-013, DEC-014)
+├── DEVELOPMENT_ROADMAP.md               sections 4.1 and 4.3, the spike labels for DEC-013 and DEC-014
+├── DEVELOPMENT_WORKFLOW.md              sections 1, 2, 11, 16 and 17 (DEC-010, DEC-015)
+├── TASK_OWNERSHIP_MATRIX.md             sections 1 and 6 (DEC-011)
+└── TEST_DATA_AND_FIXTURES.md            section 1.1 (DEC-024)
+```
 
 ## 6. Entries
 
@@ -361,7 +398,7 @@ Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. |
+| Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION. Based on CH §17.5 (draft). |
 | Context | CH §17.5 says `main` is the stable integration branch, work is done on `SA` and `YG`, and changes reach `main` only through a reviewed integration by the other developer. Commit `8941964` reached `main` with no pull request visible in local Git metadata. GitHub branch protection is not verified. |
 | Options considered | (a) `SA` and `YG` as pull-request sources, with optional short-lived topic branches. (b) Topic branches only, retiring `SA` and `YG`. (c) Direct commits to `main`, which contradicts CH §17.5. |
@@ -373,11 +410,11 @@ Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. |
+| Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION. CH §19.3 D9 is open. |
 | Proposal | WS-A Platform and Publishing, and WS-B Reader Experience, as defined in `TASK_OWNERSHIP_MATRIX.md`. Proposed mapping: WS-A to Sanika Attarde (`SA`), WS-B to Yuvraj (`YG`). The mapping can be swapped as a whole without changing module boundaries. |
 | Approver and evidence | Requires agreement by both developers. No MFW approval. |
-| Position of 27 October 2026 | YG accepts the mapping, and reports that both developers are full time (GS-Q53). Sanika's agreement is reported as verbal, to be put in writing (GS-Q38). It stays PROPOSED until her note or approving PR review is filed. |
+| Position of 27 October 2026 | YG accepts the mapping, and reports that both developers are full time (GS-Q53). Sanika's agreement is reported as verbal, to be put in writing (GS-Q38). It stays PROPOSED until her note or approving PR review is filed. Update of 4 November 2026: Sanika's written note is section 5.4, and the entry is AGREED (section 5.6). |
 | Affects | `TASK_OWNERSHIP_MATRIX.md`, `DEVELOPMENT_ROADMAP.md`, `RISK_REGISTER.md` owners |
 | Follow-up | OQ-38 |
 
@@ -385,7 +422,7 @@ Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. |
+| Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION |
 | Context | Current evidence is one shared GitHub repository. S2 Handover requires the source code for the app, backend and admin panel in a repository owned by MFW. S2 M1 mentions "repositories set up", in the plural. |
 | Options considered | One repository with `Documentation/`, `app/`, `backend/` and `admin/`; or separate repositories per component. |
@@ -397,32 +434,32 @@ Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED for discussion. Recorded 23 October 2026. |
+| Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED for discussion, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION |
 | Options considered | Riverpod; Bloc or Cubit; Provider with ChangeNotifier |
 | Criteria | Logic can be tested without widgets. Fakes can be injected for every interface in `API_AND_MODULE_CONTRACTS.md`. Streams are supported (authentication state, download progress). Each developer's familiarity is not recorded and should be weighed. |
 | Proposal and rationale | Riverpod. Provider overrides make it straightforward to inject fakes in tests and to replace backend implementations behind the module interfaces, which supports RS NFR-MAINT-005. |
 | Approver and evidence | Requires agreement by both developers. The licence is recorded in `DEPENDENCY_REGISTER.md` before the package is added. |
-| Position of 27 October 2026 | YG accepts Riverpod (GS-Q58). Sanika's written agreement is not filed. The Flutter and Dart versions are still to be pinned when the scaffold is created (OQ-50). |
+| Position of 27 October 2026 | YG accepts Riverpod (GS-Q58). Sanika's written agreement is not filed. The Flutter and Dart versions are still to be pinned when the scaffold is created (OQ-50). Update of 4 November 2026: Sanika's written agreement is filed (section 5.4), and the entry is AGREED (section 5.6). |
 | Affects | `CODING_STANDARDS.md` §5 |
 
 ### DEC-014 Navigation and route guarding
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED for discussion. Recorded 23 October 2026. |
+| Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED for discussion, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION |
 | Options considered | go_router; the Navigator 2.0 API used directly; auto_route |
 | Proposal and rationale | go_router. Its declarative route table and redirect hook suit the access gate in DEC-007, and routes addressed by issue or article ID support notification taps (RS FR-NOTIF-005). Shared links that open the app are out of scope (RS FR-SHR-005), so no app-link domain set-up is planned. |
 | Approver and evidence | Requires agreement by both developers |
-| Position of 27 October 2026 | YG accepts go_router (GS-Q58). Sanika's written agreement is not filed. |
+| Position of 27 October 2026 | YG accepts go_router (GS-Q58). Sanika's written agreement is not filed. Update of 4 November 2026: it is filed (section 5.4), and the entry is AGREED (section 5.6). |
 | Affects | MOD-01; `CODING_STANDARDS.md` §5 |
 
 ### DEC-015 Commit, changelog and version conventions
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. |
+| Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION |
 | Proposal | Conventional Commits for commit messages (`DEVELOPMENT_WORKFLOW.md` §11). `CHANGELOG.md` keeps an "Unreleased" section, and version sections appear only once release tags exist. App versions use `MAJOR.MINOR.PATCH+BUILD`, and release tags use `vMAJOR.MINOR.PATCH`. S2 AC-11 requires signed builds made from tagged source code. |
 | Approver and evidence | Requires agreement by both developers |
@@ -500,7 +537,7 @@ Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. |
+| Status | AGREED, conditional on the cost check in task MOD15-P1-T01, which is not done. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION |
 | Context | The repository is hosted on GitHub. No CI exists (no `.github/` directory, verified 23 October 2026). iOS build checks need macOS runners. |
 | Proposal | GitHub Actions, as described in `CI_CD_AND_QUALITY_GATES.md`. Runner minutes, cost and feature availability depend on the account plan and repository visibility, and are not verified. |
@@ -522,10 +559,11 @@ Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. |
+| Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION |
 | Proposal | All test identities and test data are synthetic. MFW's sample PDFs are treated as confidential [S1 Key terms: Confidentiality], are not committed to Git, and are kept only in a location MFW approves. Credentials for test accounts are never committed. Details are in `TEST_DATA_AND_FIXTURES.md`. |
 | Approver and evidence | Requires agreement by both developers. MFW confirms where its sample PDFs may be stored. |
+| Limit stated on 4 November 2026 | Public PDFs used for the reader comparison (T-02.3) are not MFW content only if the set leaves out PDFs taken from MFW's own website, which are MFW's (OQ-57). Until OQ-57 is answered, the comparison set leaves them out. Sanika Attarde's review of pull request #12 asked for this, and Yuvraj Gaykhe accepts it (in chat, 4 November 2026). It adds to section 5.5 and does not rewrite it. |
 
 ### DEC-025 Server-side language and runtime
 

@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.12 |
+| Version | 0.13 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
 | Date | 5 November 2026 |
 
@@ -30,6 +30,17 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: eight decision log entries set to AGREED, 2026-11-04, revised 2026-11-05, on topic branch `docs/yg-g4-agreed-follow-up` on top of `eebcdb7`, then merged with `origin/main` at `157a9a9` and again at `9609a72`, under review in pull request #14
+
+Follows pull request #12, merged as `eebcdb7`. Its approving review by Sanika Attarde on 2026-11-03 completes the evidence that `DECISION_LOG.md` section 3.1 needs for DEC-010 to DEC-015, DEC-022 and DEC-024, beside the written notes of sections 5.4 and 5.5. The log sets those eight entries to AGREED, with DEC-022 conditional on the cost check. It adds section 5.6: the evidence with a link to the approving review, the conditions still open for each entry, a limit on the public PDFs of DEC-024 that Sanika Attarde's review asked for (OQ-57), and the documents that still call the entries PROPOSED. After Sanika Attarde's review of this pull request on 2026-11-05, the DEP-43 and DEP-44 rows of `DEPENDENCY_REGISTER.md` also follow the log (after Sanika Attarde's re-review, the DEP-43 row gives the section 5.6 conditions in full), and the list adds the related-documents row of this file. The other documents on the list are not changed here. No entry is APPROVED, and no MFW approval is recorded. DEC-025 to DEC-030 stay PROPOSED, and DEC-005 stays OPEN. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-04 | `Documentation/DECISION_LOG.md` | Version 0.6: eight entries AGREED, section 5.6, the DEC-024 limit row, and update sentences in the DEC-011, DEC-013 and DEC-014 position rows | Both developers' notes are filed and the approving review is on record (section 3.1) | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024, OQ-38, OQ-50, OQ-57 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.5: the Decision rows of DEP-43 and DEP-44 give DEC-013 and DEC-014 as AGREED, with the conditions of `DECISION_LOG.md` section 5.6 | The review of pull request #14 asked for it, because the rows said "Not AGREED" after pull request #13 merged | DEC-013, DEC-014, DEP-43, DEP-44, OQ-50 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.13: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column reads 0.6 for `DECISION_LOG` (was 0.5), 0.5 for `DEPENDENCY_REGISTER` (was 0.4) and 0.13 for `CHANGELOG` (was 0.12) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: bookmark follow-up to pull request #11, 2026-11-04, revised 2026-11-05, on topic branch `docs/yg-bookmark-inv14-read` on top of `eebcdb7`, then merged with `origin/main` at `157a9a9`, under review in pull request #15
 
