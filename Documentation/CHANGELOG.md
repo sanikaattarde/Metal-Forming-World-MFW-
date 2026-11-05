@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.22 |
+| Version | 0.23 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 5 November 2026 |
+| Date | 6 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: admin panel spike evidence, emulator only, 2026-11-06, on topic branch `docs/sa-admin-spike-report` on top of `ccb5679`, not reviewed
+
+Adds the WS-A admin panel spike's report to `Documentation/test-evidence/`, as `DEVELOPMENT_WORKFLOW.md` §13 item 5 asks for a spike's findings. It covers the skeleton and sign-in page (branch `spike/sa-admin-skeleton` at `d8d10f7`) and the role check, issue and category screens and news controls (branch `spike/sa-admin-content` at `ca31b5a`), with the server changes the panel needed: a verified email at the admin gate, and the new OP-24. It records results against AC-8.1, AC-8.2, AC-8.6 to AC-8.8, SEC-CHK-06, SEC-CHK-08, SEC-CHK-15, SEC-CHK-17 and SEC-CHK-18, and does not claim AC-9.7. It lists the defects and gaps found, what needs ENV-TEST or MFW's inputs, the commands for QG-09, and the choices the spike made that need both developers. Every result is emulator or local only. The panel's code stays on its branches, DEC-004 stays OPEN, and QG-09 stays blocked by it. The register rows for the panel's packages (DEP-31, DEP-34, DEP-67 to DEP-73) are on the spike branches only, and are not added here. No decision, requirement, checklist item or status label changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/test-evidence/ADMIN_PANEL_SPIKE_EVIDENCE.md` | Version 0.1: new report | A spike's findings merge as a document | T-01.6, T-09.1, T-09.3, T-09.4, AC-8.1, AC-8.2, AC-8.6, AC-8.7, AC-8.8, AC-9.7, SEC-CHK-06, SEC-CHK-08, SEC-CHK-15, SEC-CHK-17, SEC-CHK-18, SC-22, QG-09, DEC-004, OQ-20, OQ-39 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.23: this entry | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | A row for the report in the index of documents. The version column reads 0.23 for `CHANGELOG` (was 0.22) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: three follow-ups left by earlier reviews, 2026-11-05, on topic branch `docs/yg-deferred-review-followups` on top of `823eb52`, then merged with `origin/main` at `e5e22e0`, under review in pull request #24
 
