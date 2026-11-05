@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.11 |
+| Version | 0.12 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,16 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: backend rules evidence, emulator only, 2026-11-05, on topic branch `docs/sa-backend-spike-evidence` on top of `157a9a9`, not reviewed
+
+Adds the first test evidence report, in `Documentation/test-evidence/`, the location `TESTING_STRATEGY.md` §13 proposes. It records the WS-A backend spike's results on the local emulators against SEC-CHK-02 to SEC-CHK-07, SEC-CHK-11 and SEC-CHK-18. The suite ran on 5 November 2026 at commit `e7d9f37` of branch `spike/sa-backend-rules`, with 907 tests passed and 0 failed. The report also logs the defects and gaps found, lists the cases to run again on ENV-TEST, and gives the command for QG-08. Every result is emulator only, and none is a pass for the concurrency or token cases. The spike's code stays on its branch and is not merged (`DEVELOPMENT_WORKFLOW.md` §13 item 5). QG-08 stays blocked by DEC-003. No decision, requirement, checklist item or status label changes, and `TESTING_STRATEGY.md` §16 is not changed. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-05 | `Documentation/test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md` | Version 0.1: new report | T-11.3 records every SEC-CHK item as passed or as a logged defect, and a spike's findings merge as a document | T-11.3, SEC-CHK-02 to SEC-CHK-07, SEC-CHK-11, SEC-CHK-18, QG-08, DEC-003, DEC-020, DEC-029, OQ-24 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.12: this entry | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | A row for the report in the index of documents. The version column reads 0.12 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: dependency register with review entries and licence reads, 2026-11-04, on topic branch `docs/yg-dependency-register-ws-b` on top of `2a5476c`, then merged with `origin/main` at `eebcdb7`, under review in pull request #13
 
