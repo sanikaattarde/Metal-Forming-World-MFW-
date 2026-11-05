@@ -9,7 +9,7 @@
 | Project | Metal Forming World (MFW) mobile application |
 | Version | 0.4 |
 | Status | Draft for Review |
-| Last updated | 4 November 2026 |
+| Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The architecture is not approved by the charter (CH §17.4). |
 | Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.4; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.5; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.4; `PROJECT_CHARTER.md` v0.2 |
@@ -27,7 +27,7 @@
 | 0.1 | 23 October 2026 | Initial draft. Written after the 17-question interview (GS-Q17 to GS-Q33) and a read-only review of MFW's public website (WEB). Decisions recorded here are team-accepted, with the requirement label PROVISIONAL and MFW written approval pending (GS-Q30). No requirement status in the specification changed. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Error scheme changed to upper-case categories with reason codes (GONE, RATE_LIMITED and FAILED_PRECONDITION added; DEADLINE_EXCEEDED a reason under UNAVAILABLE). Section 3.1 to 3.4 added: aliases for the 31 app-side operation identifiers, the baseline and PRC-01 privileges, the baseline and PRC-02 deletion, and the open design differences. OP-12, OP-13 and the grace-window text marked PRC-02. "Team-accepted" replaced by PROPOSED with the agreement note. Registration and sign-in message rule added. Website check updated. |
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). One Admin role: the callers, Sections 3.2, 5.1 and 5.2 are rewritten, and OP-30 to OP-39 and OP-42 are open to any admin. OP-36 is withdrawn. OP-35, OP-37, OP-39 and OP-42 are named addAdmin, removeAdmin, listAdminChanges and bootstrapAdmin. The audit set is narrowed to adds and removes of admins, so the denied entries are dropped and INV-16 is withdrawn. Immediate deletion: OP-13 is withdrawn and OP-12 and OP-41 are simplified. OP-33 is dropped with the edition-update sign-up. Section 3.3 is rewritten. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
-| 0.4 | 4 November 2026 | Bookmark follow-up to pull request #11. The identifier rule in section 3 names the bookmark identifier as an exception beside the user identifier (PROPOSED). OP-07 says that it does not check `file_revision`, and that the app checks it. No decision is approved. |
+| 0.4 | 4 and 5 November 2026 | Bookmark follow-up to pull request #11. The identifier rule in section 3 names the bookmark identifier as an exception beside the user identifier (PROPOSED). OP-07 first said that it does not check `file_revision`. After the review of pull request #15 on 5 November 2026, OP-07 checks that `file_revision` is at least 1, beside the page check (PROPOSED), and the app's own check runs first. No decision is approved. |
 
 ### 1.1 Sources and authority
 
@@ -386,11 +386,11 @@ Direct operations
 │   └── Requirements: FR-PROF-006 (CONFIRMED); NFR-SEC-006 (ASSUMPTION)
 ├── OP-07 manageBookmarks                            [direct; Reader, own records]
 │   ├── In: add (issue_id, page_number, file_revision), remove (bookmark_id), or list
-│   ├── Checks: the rules allow only the owner (INV-11). page_number is at least 1. A bookmark for a missing issue is tolerated and
-│   │   cleaned up later (INV-13)
+│   ├── Checks: the rules allow only the owner (INV-11). page_number is at least 1. file_revision is at least 1 (PROPOSED;
+│   │   it needs no extra read). A bookmark for a missing issue is tolerated and cleaned up later (INV-13)
 │   ├── Repeat: harmless. The key is (user, issue, page)
-│   ├── Not checked: file_revision. The app checks that it is at least 1 (`API_AND_MODULE_CONTRACTS.md` section 6.8, rule 5).
-│   │   A check on the server is not proposed here
+│   ├── App check: the bookmark module checks the page and the revision first, so a refusal on the write comes only from
+│   │   ownership or a repeated add (API_AND_MODULE_CONTRACTS.md section 6.8, rule 5)
 │   └── Requirements: FR-BKM-001, FR-BKM-002, FR-BKM-004 to FR-BKM-006, NFR-SEC-005 (CONFIRMED); FR-BKM-007 (ASSUMPTION);
 │       FR-BKM-008 (OPEN); OQ-10
 ├── OP-08 manageFavourites                           [direct; Reader, own records]
