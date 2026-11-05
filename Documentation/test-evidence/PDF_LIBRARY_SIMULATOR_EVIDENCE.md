@@ -10,7 +10,7 @@
 | Version | 0.1 |
 | Status | Draft for review. Not reviewed. **Every result is simulator and debug build.** No result here was taken on a phone, and none is valid for AC-2.1. It ranks no library. DEC-005 stays OPEN. Nothing is AGREED, and nothing here has gone to MFW |
 | Date | 6 November 2026 |
-| Tests run by | Yuvraj Gaykhe (WS-B), through the WB-05 spike session of 31 October and 1 November 2026 |
+| Tests run by | Yuvraj Gaykhe (WS-B), 31 October and 1 November 2026, in the WB-05 spike (T-02.3) |
 | Approval required | Both developers |
 
 **Change history**
