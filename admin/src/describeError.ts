@@ -19,6 +19,7 @@ export const ERRORS = {
   inUse: 'This category is used by at least one issue, so it cannot be deleted.',
   noAcceptedFile: 'This issue has no accepted PDF yet, so it cannot be published.',
   gone: 'This issue was deleted.',
+  siteUnavailable: 'The news site could not be reached. Try again later.',
   notFound: 'This record no longer exists. Reload the list.',
   fields: 'Check these fields: ',
   other: 'The change could not be saved. Try again.',
@@ -36,6 +37,7 @@ export function describeError(error: unknown): string {
   if (reason === 'IN_USE') return ERRORS.inUse;
   if (reason === 'NO_ACCEPTED_FILE') return ERRORS.noAcceptedFile;
   if (reason === 'GONE') return ERRORS.gone;
+  if (reason === 'SITE_UNAVAILABLE') return ERRORS.siteUnavailable;
   if (code === 'functions/not-found') return ERRORS.notFound;
   return ERRORS.other;
 }

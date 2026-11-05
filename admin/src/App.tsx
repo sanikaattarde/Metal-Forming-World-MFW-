@@ -9,6 +9,7 @@ import { CategoriesPage } from './CategoriesPage';
 import { IssueEditorRoute } from './IssueEditor';
 import { IssuesPage } from './IssuesPage';
 import { MESSAGES } from './messages';
+import { NewsPage } from './NewsPage';
 import type { Services } from './services';
 import { SignInPage } from './SignInPage';
 
@@ -68,6 +69,7 @@ export function App({ services }: Props) {
           <Route path="/issues/new" element={<IssueEditorRoute api={api} read={services.read} />} />
           <Route path="/issues/:issueId" element={<IssueEditorRoute api={api} read={services.read} />} />
           <Route path="/categories" element={<CategoriesPage api={api} read={services.read} />} />
+          <Route path="/news" element={<NewsPage api={api} read={services.read} />} />
           <Route path="*" element={<Navigate to="/issues" replace />} />
         </Route>
       </Routes>

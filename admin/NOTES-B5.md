@@ -67,6 +67,41 @@ Done by hand on 5 November 2026 in an embedded Chromium 152 browser on macOS, ag
 4. The page contacted only 127.0.0.1 on ports 4173, 9099, 5001 and 8080. Local and session storage stayed empty, and IndexedDB held only `firebase-heartbeat-database`.
 5. The Functions emulator logged `"app": "MISSING"` beside `"auth": "VALID"` for each call: App Check is not used (OQ-52).
 
+## 2b. B5.3: the news controls (T-09.4)
+
+### 2b.1 What was built
+
+**On the server** (`backend/spike/functions/src/wordpress.ts`), OP-24 `listWordPressPosts`:
+
+| Part | What it does |
+|---|---|
+| The gate | Admin only, through `adminCall`, like every admin operation |
+| Input | `page` (1 by default, up to a PLACEHOLDER 1,000), `per_page` (a PLACEHOLDER 20 by default, up to the API's own 100) and an optional `category`. Anything else is refused, and the site is not asked |
+| The address | `wordpress_base_url` in the private configuration. CFG-03 is OPEN (OQ-39), and the data model's APP_CONFIG has no setting for it, so the name is a spike addition. It must be HTTPS, with no user name, password, query or fragment. Plain HTTP is allowed only to this machine, and only on the emulators, for the stand-in site. A missing or unusable address refuses the call with `INTERNAL`, and no site is asked |
+| The request | It asks for `/wp-json/wp/v2/posts` with only the contract's fields (`_fields=id,title,date,link,categories`). It sends no credentials, refuses a redirect, stops after a PLACEHOLDER 10 seconds, and reads at most a PLACEHOLDER 1 MB |
+| The reply | `posts` (`id`, `title`, `date`, `link`, `categories`), `total_pages` from the site's header (or null without one), and `page` and `per_page`. Titles become plain text. A link must be an `http` or `https` address, so a `javascript:` link from the site never reaches the panel. A page past the last one is an empty page |
+| Failure | Anything the site does wrong becomes `UNAVAILABLE` with the reason `SITE_UNAVAILABLE`, as the contract says, and nothing from the reply is passed on: a server error, a reply that is not JSON or not a list, one bad post, a redirect, a reply too large or too slow, or no answer. The log line holds the operation, the caller and `OK` or `SITE_UNAVAILABLE`, never an address |
+| Stand-in site | `backend/spike/test/wp-standin.mjs` serves generated posts on 127.0.0.1, pages them as the API does, records each request, and can be told to fail in each way above. No test reads MFW's live site |
+
+**In the panel**, SCR-W-06 at `/news`, with a "News" menu link:
+
+| Part | What it does |
+|---|---|
+| The list | Posts through OP-24, 20 at a time (PLACEHOLDER), with Previous and Next and "Page 1 of N". Each row has the title as text, the date, an "Open post" link that opens a new tab with no opener, and Hidden and Breaking checkboxes showing the current flags |
+| The flags | Read from `news_controls`, as the app reads them (OP-04, section 1). A row's Save button is offered only when its flags changed, and saves through OP-23. Clearing both flags removes the record |
+| Breaking | The screen says that marking a post as breaking sends no notification. OP-25 is not built, so AC-9.7 is not claimed |
+
+### 2b.2 The browser check
+
+Done by hand on 5 November 2026 in the same embedded Chromium 152 browser. It ran against `vite preview`, the emulators and the stand-in site on 127.0.0.1. One post was seeded as hidden, and one post's title held encoded characters and an `<em>` tag.
+
+1. Opening `/news` and signing in kept the address and listed the three posts through OP-24, with "Page 1 of 1".
+2. The encoded title showed as "Presses & dies: MFW’s expo preview", with no `<em>` element in the page.
+3. The seeded post showed as hidden.
+4. Each link opened in a new tab with `rel="noopener noreferrer"`.
+5. Marking Post 1 as breaking and saving showed "Saved.". A visitor's read of `news_controls/100` then showed `is_breaking` true.
+6. The browser contacted only 127.0.0.1 on ports 4173, 9099, 5001 and 8080, **never the site**: the posts came through the server, as TD-12 requires. Storage held only `firebase-heartbeat-database`.
+
 ## 3. Results
 
 ### 3.1 B5.1, on 5 November 2026
@@ -125,6 +160,60 @@ All 18 were caught, and none failed to compile. They include:
 
 **Final run.** Fixing the stand-in could change other results, so all 21 were run again from a clean baseline. **All 21 were caught.**
 
+### 3.3 B5.3, on 5 November 2026
+
+- `npm --prefix backend/spike test`: **958 tests, 958 passed, 0 failed.** Emulator only. That is 37 more than B5.1's 921:
+  - G12: 31 tests of OP-24 through the Functions emulator, against the stand-in site.
+  - U6: 6 tests with no emulator: the address check, plain-text titles, and the time and size limits.
+- `npm --prefix admin test`: **79 tests, 79 passed, 0 failed.** Emulator only. That is 12 more:
+  - 8 news-screen tests with the stand-in server.
+  - 4 against the real OP-24 and OP-23, with the backend's stand-in site.
+- `npm --prefix admin run build`: passes. 468 kB (147 kB compressed).
+
+**A defect the tests found while building.** With no page-count header, OP-24 reported 0 pages instead of "unknown", because `Number(null)` is 0. G12 caught it, and it was fixed before any break was run.
+
+**The stand-in site was made stricter before the breaks**, so that a break could not pass for the wrong reason:
+
+- Its redirect now goes to a page on itself that serves posts. Following the redirect would therefore succeed, and a test can tell that OP-24 refused it. Before, the redirect went to an address that does not exist.
+- Its server error now carries a body that looks like a usable empty list, so only the status shows the failure.
+- The time-limit test has its own 5-second limit, so a break that removes OP-24's time limit fails the test instead of hanging the run.
+
+**Do the tests catch broken code?** 23 deliberate breaks were tried one at a time.
+
+| Where | How each break was run | Breaks |
+|---|---|---|
+| OP-24 on the server | Rebuilt, then run against G12 and U6, and the admin suite | 13 |
+| The news screen | Type-checked, then run against the admin suite | 10 |
+
+In the first round, 21 were caught and none got through. Two did not compile: W06 (no time limit) and N07 (Next always offered). They were rewritten as "the time limit is 1,000 times longer" and "Next offered one page past the last", and both were then caught.
+
+W06 was caught by the U6 time-limit test failing at its own 5-second limit. That run did not then finish on its own, because the stand-in's unanswered request kept it open, and the script's 5-minute limit stopped it.
+
+The 23 include:
+
+- every field asked for;
+- a redirect followed;
+- a `javascript:` link passed on;
+- plain HTTP to any host;
+- credentials or a query in the address;
+- no size limit;
+- a page past the last being a failure;
+- a missing pages header counting as 0;
+- a failure status accepted;
+- more than 100 a page;
+- unknown fields accepted;
+- character references not decoded;
+- the saved flags not shown or not updated;
+- Save offered with no change;
+- the breaking box setting hidden;
+- links keeping the opener;
+- the title shown as HTML;
+- the page not sent;
+- the site's message lost;
+- no News link.
+
+**A flaky run.** One admin baseline run failed one test on unchanged code. Three repeat runs and the next baseline all passed. The failing test was not named, because the script printed counts only; it now names one. The cause is NOT VERIFIED. A likely one is a slow first call to the Functions emulator running into Vitest's 5-second limit for a test (M-1).
+
 ## 4. Findings
 
 | ID | Finding | What it means |
@@ -143,6 +232,14 @@ All 18 were caught, and none failed to compile. They include:
 | K-5 | Confirmations are inline buttons, not dialogs, and every message and label is a PLACEHOLDER | To settle with the M2 designs |
 | K-6 | App Check is not used, as the Functions emulator's own log shows | OQ-52 |
 | K-7 | No segment list is seeded (OQ-13), so the editor shows no segment choice. Its checkboxes are built but no test covers them | Test when segments are seeded |
+| L-1 | APP_CONFIG has no setting for the WordPress address. `wordpress_base_url` (private) is a spike addition for CFG-03 | To add to the data model, with OQ-39 |
+| L-2 | The time limit (10 s), size limit (1 MB), default page size (20) and highest page (1,000) are PLACEHOLDERS | To set when MFW's site is known |
+| L-3 | One malformed post makes the whole page `UNAVAILABLE`, rather than being skipped. That fails closed, but one bad post would hide the whole page from the admin | Spike choice. To agree |
+| L-4 | A page past the last one is an empty page, read from the API's documented error code `rest_post_invalid_page_number`. How MFW's site answers is NOT VERIFIED | Check with OQ-39's "successful read-only test" |
+| L-5 | Titles are made plain text on the server: tags dropped and a small set of named character references decoded. Other named references stay as written | Spike choice |
+| L-6 | The news screen has no category filter, although OP-24 accepts one. The categories shown in the app are `news_category_ids` (CFG-04, OPEN) | Add when CFG-04 is set |
+| L-7 | Whether the live site is reachable from the backend, with no security plugin or firewall in the way (OQ-39), is NOT VERIFIED. Only the stand-in was read | OQ-39 |
+| M-1 | One admin test run failed one test on unchanged code, and was not repeatable (section 3.3) | Watch for it. If it recurs, name the test and raise the time limit for the emulator tests |
 
 ## 5. Not tested
 
@@ -151,3 +248,6 @@ All 18 were caught, and none failed to compile. They include:
 | A real project, real tokens, and how soon a removal is seen | No project exists; the Functions emulator does not verify tokens (`backend/spike/04-save-profile-notes.md`, B-1) |
 | The other OQ-20 measures: password rules, session length, a second factor | Not decided |
 | The browser check for this step | Done with the screens in B5.2 |
+| MFW's live WordPress site: whether it is reachable, how fast, how large its pages are, and how it answers a page past the last | OQ-39. Only the stand-in was read (L-4, L-7) |
+| The breaking-news notification | OP-25 is not built. AC-9.7 is not claimed |
+| AC-8.6, AC-8.7 and AC-8.8 in the app itself | The app side is Yuvraj's (MOD-05, MOD-09). Here the public reads the app makes are shown instead |
