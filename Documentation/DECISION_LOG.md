@@ -9,7 +9,7 @@
 | Phase | 3 — Development Planning and Collaboration (document 28) |
 | Version | 0.6 |
 | Status | Draft for review. Not approved. |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -21,7 +21,7 @@
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded (`TECHNOLOGY_DECISIONS.md` section 10.5, GS-Q35 to GS-Q65). DEC-027 now states one Admin role with in-panel add and remove, and PRC-01 is withdrawn. DEC-029 states immediate deletion only, and PRC-02 is withdrawn. DEC-008 records a reported two-action reading model that conflicts with the earlier record. DEC-031 records a region proposal. DEC-032 and DEC-033 added. Position rows added to DEC-005, DEC-006, DEC-011, DEC-013, DEC-014, DEC-016, DEC-017, DEC-019 and DEC-020. Section 5.3 added. No entry is AGREED or APPROVED. |
 | 0.4 | 27 October 2026 | Section 5.4 added: Sanika Attarde's written positions on 14 PROPOSED entries (task MOD20-P1-T01 in `SANIKA_IMPLEMENTATION_ROADMAP.md`). It is one half of the evidence section 3.1 needs. No entry changes status, and no entry is AGREED or APPROVED. |
 | 0.5 | 31 October 2026 | Section 5.5 added: Yuvraj Gaykhe's written positions on DEC-010 to DEC-015, DEC-022 and DEC-024, the other half of the evidence for those eight entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED. |
-| 0.6 | 4 November 2026 | DEC-010 to DEC-015, DEC-022 and DEC-024 set to AGREED, the follow-up that sections 5.4 and 5.5 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.5) and Sanika Attarde's approving review of pull request #12 on 3 November 2026. Section 5.6 added: the evidence, the conditions still open for each entry, a limit on the public PDFs of DEC-024 (OQ-57), and the documents that still call these entries PROPOSED. Update sentences added to the position rows of DEC-011, DEC-013 and DEC-014. No entry is APPROVED. DEC-025 to DEC-030 stay PROPOSED. |
+| 0.6 | 4 and 5 November 2026 | DEC-010 to DEC-015, DEC-022 and DEC-024 set to AGREED, the follow-up that sections 5.4 and 5.5 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.5) and Sanika Attarde's approving review of pull request #12 on 3 November 2026. Section 5.6 added: the evidence, the conditions still open for each entry, a limit on the public PDFs of DEC-024 (OQ-57), and the documents that still call these entries PROPOSED. Update sentences added to the position rows of DEC-011, DEC-013 and DEC-014. No entry is APPROVED. DEC-025 to DEC-030 stay PROPOSED. Revised on 5 November 2026 after the review of pull request #14: section 5.6 links the approving review, the list of documents adds the related-documents row of `CHANGELOG.md`, and `DEPENDENCY_REGISTER.md` is struck from the list because its DEP-43 and DEP-44 rows are updated in the same pull request. |
 
 ### 1.1 Related documents
 
@@ -241,7 +241,7 @@ Yuvraj Gaykhe gave these positions in chat on 31 October 2026, one decision at a
 
 Eight entries move from PROPOSED to AGREED: DEC-010 to DEC-015, DEC-022 and DEC-024.
 
-**Evidence (section 3.1).** Both developers' written notes are filed: Sanika Attarde's in section 5.4 (27 October 2026) and Yuvraj Gaykhe's in section 5.5 (31 October 2026). Sanika Attarde approved pull request #12, which carries section 5.5, on 3 November 2026, and it was merged the same day (merge commit `eebcdb7`). That review says it sets no status by itself and records no MFW approval. The evidence was complete on 3 November 2026. This edit is the follow-up that sections 5.4 and 5.5 name (section 4, step 3).
+**Evidence (section 3.1).** Both developers' written notes are filed: Sanika Attarde's in section 5.4 (27 October 2026) and Yuvraj Gaykhe's in section 5.5 (31 October 2026). Sanika Attarde approved pull request #12, which carries section 5.5, on 3 November 2026 (the review: https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/12#pullrequestreview-5750327816), and it was merged the same day (merge commit `eebcdb7`). That review says it sets no status by itself and records no MFW approval. The evidence was complete on 3 November 2026. This edit is the follow-up that sections 5.4 and 5.5 name (section 4, step 3).
 
 **What this does not do.** It records no MFW approval, and no entry is APPROVED. It does not cover DEC-025 to DEC-030, which have only Sanika Attarde's note (section 5.4), or any OPEN entry. DEC-005, the reader library, stays OPEN.
 
@@ -258,16 +258,15 @@ Eight entries move from PROPOSED to AGREED: DEC-010 to DEC-015, DEC-022 and DEC-
 | DEC-022 | Conditional on the cost check in task MOD15-P1-T01, which is not done. Plan limits and macOS runner cost are NOT VERIFIED. Nothing is billed to MFW without MFW's approval. |
 | DEC-024 | MFW still confirms where its sample PDFs may be kept. The public PDFs for the reader comparison leave out PDFs taken from MFW's own website until OQ-57 is answered (see the DEC-024 entry). |
 
-**Documents that still call these entries PROPOSED.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request. This edit changes only this log. The places below still read as before and are for the follow-up. `TECHNOLOGY_DECISIONS.md` section 10.5 is a dated record of 26 and 27 October 2026 and stays as written.
+**Documents that still call these entries PROPOSED.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request. This edit changes this log, and the DEP-43 and DEP-44 rows of `DEPENDENCY_REGISTER.md`, which said "Not AGREED" after pull request #13 merged. The places below still read as before and are for the follow-up. `TECHNOLOGY_DECISIONS.md` section 10.5 is a dated record of 26 and 27 October 2026 and stays as written.
 
 ```text
 Follow-up list
 ├── API_AND_MODULE_CONTRACTS.md          section 3 (DEC-011)
 ├── APP_STORE_RELEASE_CHECKLIST.md       section 8 (DEC-015)
-├── CHANGELOG.md                         the conventions and the status row (DEC-015)
+├── CHANGELOG.md                         the status row, the conventions and the related-documents row (DEC-015)
 ├── CI_CD_AND_QUALITY_GATES.md           section 3 (DEC-022)
 ├── CODING_STANDARDS.md                  sections 2, 3 and 5.2 (DEC-012, DEC-013, DEC-014)
-├── DEPENDENCY_REGISTER.md               DEP-43 and DEP-44, after pull request #13 merges
 ├── DEVELOPMENT_ROADMAP.md               sections 4.1 and 4.3, the spike labels for DEC-013 and DEC-014
 ├── DEVELOPMENT_WORKFLOW.md              sections 1, 2, 11, 16 and 17 (DEC-010, DEC-015)
 ├── TASK_OWNERSHIP_MATRIX.md             sections 1 and 6 (DEC-011)
