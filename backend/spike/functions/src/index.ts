@@ -9,4 +9,6 @@ export { getMyAdminRole } from './getMyAdminRole.js';
 export { getIssueFile } from './issueFile.js';
 export { listIssuesForAdmin, publishIssue, saveIssue, unpublishIssue } from './issues.js';
 export { setNewsControl } from './newsControls.js';
+export { onUploadFinalized } from './uploadFinalized.js';
+export { listUploadJobs, requestUpload } from './uploads.js';
 export { saveProfile } from './saveProfile.js';

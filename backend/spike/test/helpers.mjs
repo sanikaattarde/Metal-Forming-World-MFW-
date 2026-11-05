@@ -66,6 +66,17 @@ export function adminBackend() {
   return { db: getFirestore(app), auth: getAuth(app) };
 }
 
+// The bucket the Functions emulator's storage trigger listens on. It is not the test library's default
+// bucket (gs://demo-mfw-spike), so a test that needs the trigger names it.
+export const TRIGGER_BUCKET = `${PROJECT_ID}.appspot.com`;
+
+export function adminBucket(name = TRIGGER_BUCKET) {
+  const { getApps, initializeApp } = requireFromFunctions('firebase-admin/app');
+  const { getStorage } = requireFromFunctions('firebase-admin/storage');
+  const app = getApps()[0] ?? initializeApp({ projectId: PROJECT_ID });
+  return getStorage(app).bucket(name);
+}
+
 // A token nobody signed, for a real account, carrying whatever claims the test wants. The Functions
 // emulator accepts it (04-save-profile-notes.md, B-1), so it can show that the code ignores claims.
 // It says nothing about whether a real platform would accept it.

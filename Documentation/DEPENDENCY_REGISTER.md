@@ -107,6 +107,7 @@ All are from the S2 proposal unless noted. None is approved (DEC-003, DEC-004).
 | DEP-30 | AWS-based design | Alternative backend | All backend modules | — | — | — | Considered in S2 and not preferred there | Recorded for completeness |
 | DEP-31 | React | Admin user interface | MOD-12 | Development team | Verify from its LICENSE file | None expected (open source); verify | CANDIDATE (S2) | DEC-004 |
 | DEP-32 | Flutter web | Admin user interface (alternative) | MOD-12 | Development team | As DEP-35 | None expected; verify | CANDIDATE, not assessed (not in S2) | DEC-004 |
+| DEP-33 | pdfjs-dist (Mozilla pdf.js), pinned at 6.4.299 in the backend spike only | PDF parsing on the server | MOD-13: the genuine-PDF check and page count in OP-40 (FR-ADMIN-006, NFR-SEC-008; `SYSTEM_ARCHITECTURE.md` T8 asks for a maintained library). Not the app's reader library (DEC-005) | Development team | Apache-2.0, read from the package's LICENSE file. Publisher: Mozilla (github.com/mozilla/pdf.js). Released monthly; 6.4.299 is from 3 October 2026. Needs Node 22.13 or later. No dependencies, and no code evaluation in its build. Parses untrusted uploads, so it is kept up to date. One optional dependency, @napi-rs/canvas 1.1.0 (MIT, native binaries per platform), is installed and not used. Alternatives considered: pdf-lib (MIT, no release since 2021) and @cantoo/pdf-lib (MIT, a one-company fork with unrelated dependencies) | None (open source) | CANDIDATE. Installed in `backend/spike/functions` on the spike branch only | Both developers at promotion, with DEC-003. See `backend/spike/09-upload-notes.md` |
 
 ## 7. Toolchain and Development Tools
 
@@ -154,7 +155,7 @@ None is added. Each needs the review in Section 3 before it is added.
 | DEP-62 | Secrets scanner (gitleaks, or GitHub secret scanning) | CI security | QG-11 | Repository owner | Verify the licence or plan availability | Verify | CANDIDATE | Choose at T-01.5 |
 | DEP-63 | Documentation check script | CI | QG-12 | Both | Written by the team | None | CANDIDATE | Write at T-01.5 |
 
-Numbers 33 and 34 are not assigned. Sections 7 to 9 start at 35, to leave room for further backend or admin candidates.
+Number 34 is not assigned. Sections 7 to 9 start at 35, to leave room for further backend or admin candidates.
 
 ## 10. Open Items
 
