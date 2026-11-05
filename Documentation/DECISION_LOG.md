@@ -7,7 +7,7 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.9 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. |
 | Date | 5 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
@@ -19,12 +19,13 @@
 | 0.1 | 23 October 2026 | Initial draft. 24 entries recorded. No entry is AGREED or APPROVED. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. DEC-025 to DEC-031 added, with the TD crosswalk. Approver lines that read as a record of agreement reworded. Status notes for reported, unfiled agreement and for S3. No entry is AGREED or APPROVED. |
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded (`TECHNOLOGY_DECISIONS.md` section 10.5, GS-Q35 to GS-Q65). DEC-027 now states one Admin role with in-panel add and remove, and PRC-01 is withdrawn. DEC-029 states immediate deletion only, and PRC-02 is withdrawn. DEC-008 records a reported two-action reading model that conflicts with the earlier record. DEC-031 records a region proposal. DEC-032 and DEC-033 added. Position rows added to DEC-005, DEC-006, DEC-011, DEC-013, DEC-014, DEC-016, DEC-017, DEC-019 and DEC-020. Section 5.3 added. No entry is AGREED or APPROVED. |
-| 0.4 | 27 October 2026 | Section 5.4 added: Sanika Attarde's written positions on 14 PROPOSED entries (task MOD20-P1-T01 in `SANIKA_IMPLEMENTATION_ROADMAP.md`). It is one half of the evidence section 3.1 needs. No entry changes status, and no entry is AGREED or APPROVED. |
+| 0.4 | 27 October 2026 | Section 5.4 added: Sanika Attarde's written positions on 14 PROPOSED entries (task MOD20-P1-T01 in `SANIKA_IMPLEMENTATION_ROADMAP.md`, which is not in this repository). It is one half of the evidence section 3.1 needs. No entry changes status, and no entry is AGREED or APPROVED. |
 | 0.5 | 31 October 2026 | Section 5.5 added: Yuvraj Gaykhe's written positions on DEC-010 to DEC-015, DEC-022 and DEC-024, the other half of the evidence for those eight entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED. |
 | 0.6 | 4 and 5 November 2026 | DEC-010 to DEC-015, DEC-022 and DEC-024 set to AGREED, the follow-up that sections 5.4 and 5.5 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.5) and Sanika Attarde's approving review of pull request #12 on 3 November 2026. Section 5.6 added: the evidence, the conditions still open for each entry, a limit on the public PDFs of DEC-024 (OQ-57), and the documents that still call these entries PROPOSED. Update sentences added to the position rows of DEC-011, DEC-013 and DEC-014. No entry is APPROVED. DEC-025 to DEC-030 stay PROPOSED. Revised on 5 November 2026 after the review of pull request #14: section 5.6 links the approving review, the list of documents adds the related-documents row of `CHANGELOG.md`, and `DEPENDENCY_REGISTER.md` is struck from the list because its DEP-43 and DEP-44 rows are updated in the same pull request. |
 | 0.7 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 | 0.8 | 5 November 2026 | Section 5.6 records that the DEC-010 condition is met (branch protection on `main`), that section 11 of the workflow reads AGREED (DEC-015), and that the documents on the follow-up list are updated. The DEC-010 context follows. Revised on 5 November 2026 after the review of pull request #21: the follow-up list adds section 5 of the matrix and the OQ-38 row, and names the sections that DEC-010 and DEC-015 cover. No MFW approval is recorded, and no entry is APPROVED. |
-| 0.9 | 5 November 2026 | Section 4 step 2 says where the options and the consequences are recorded: in the entry's Context, Proposal and Options considered rows, with the affected documents and modules in the Affects row. The entries have no Consequences row, and none is added. No entry changed, so no AGREED entry is touched. No requirement, scope item, decision or status label changed. |
+| 0.9 | 5 November 2026 | Two corrections. The DEC-030 entry names MOD-05 (catalogue, search, home) as affected, and no longer MOD-04 (profile, settings, consent), following `TASK_OWNERSHIP_MATRIX.md` section 6. The 0.4 row says that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository. No requirement, scope item, decision or status label changed. |
+| 0.10 | 5 November 2026 | Section 4 step 2 says where the options and the consequences are recorded: in the entry's Context, Proposal and Options considered rows, with the affected documents and modules in the Affects row. The entries have no Consequences row, and none is added. No entry changed, so no AGREED entry is touched. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
@@ -640,7 +641,7 @@ Updated on 5 November 2026
 | Context | Users search issue metadata (not PDF text) and filter by category, industry segment, year and edition. The catalogue holds the latest issue and four to six archive issues at launch. |
 | Proposal | Search and filters run on the device over the cached catalogue. This stops being right if the archive grows to about one hundred issues. |
 | Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. MFW answers OQ-13 (the meaning of "industry segment" and "edition"). |
-| Affects | `TECHNOLOGY_DECISIONS.md` TD-21; MOD-04 |
+| Affects | `TECHNOLOGY_DECISIONS.md` TD-21; MOD-05 |
 | Follow-up | OQ-13 |
 
 ### DEC-031 Data location

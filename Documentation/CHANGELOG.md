@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.21 |
+| Version | 0.22 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 5 November 2026 |
 
@@ -31,18 +31,28 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
-### Documentation: three follow-ups left by earlier reviews, 2026-11-05, on topic branch `docs/yg-deferred-review-followups` on top of `823eb52`, not reviewed
+### Documentation: three follow-ups left by earlier reviews, 2026-11-05, on topic branch `docs/yg-deferred-review-followups` on top of `823eb52`, then merged with `origin/main` at `e5e22e0`, not reviewed
 
 Follows Sanika Attarde's reviews of pull requests #9, #15 and #18 and the review of the documentation set. (1) The `OP-LIB-02` row in `API_AND_MODULE_CONTRACTS.md` promised more than OP-07 checks. It now says that the server checks the owner and a page and a revision of at least 1, that full access and the check of the page against the page count are the app's (MOD-08), and that a refused write returns no `INVALID_ARGUMENT`, as section 6.8 rule 2 says. The MOD-08 Authorization row says the same. (2) `OPEN_QUESTIONS.md` gains OQ-61 on how deep the genuine-PDF check goes when an admin uploads a file. FX-PDF-11 had no upload expectation, and a check on the first bytes would accept both it and FX-PDF-09, which AC-8.4 lists as rejected. The two fixture rows in `TEST_DATA_AND_FIXTURES.md` cite OQ-61, and FX-PDF-11 says that its upload expectation is not set. (3) `DECISION_LOG.md` section 4 step 2 asked for options, consequences and third-party cost, and no entry has a Consequences row. It now says where each is recorded and adds no field. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes, and no AGREED entry is touched. Everything stays PROPOSED or OPEN. Nothing here has gone to MFW.
 
 | Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
 |---|---|---|---|---|---|---|
 | 2026-11-05 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.11: the `OP-LIB-02` row and the MOD-08 Authorization row say that full access and the check against the page count are the app's, and that the server checks the owner and a page and a revision of at least 1. The row names no `INVALID_ARGUMENT` for a refused write. | The row promised more than OP-07 checks (review of pull request #9) | OP-LIB-02, OP-07, MOD-08, T25 | Both developers (not agreed) | No scope effect |
-| 2026-11-05 | `Documentation/DECISION_LOG.md` | Version 0.9: section 4 step 2 says where the options and the consequences are recorded and adds no Consequences row. | Step 2 asked for consequences, and no entry has a row for them | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DECISION_LOG.md` | Version 0.10: section 4 step 2 says where the options and the consequences are recorded and adds no Consequences row. | Step 2 asked for consequences, and no entry has a row for them | None | Both developers (not agreed) | No scope effect |
 | 2026-11-05 | `Documentation/OPEN_QUESTIONS.md` | Version 0.7: OQ-61 added (P2, both developers): the depth of the genuine-PDF check on upload. The summary reads 61 questions. | The depth is stated nowhere, and FX-PDF-11 had no upload expectation (review of pull request #18) | OQ-61, AC-8.4, FR-ADMIN-006, FX-PDF-09, FX-PDF-11, OP-40 | Both developers (not agreed) | No scope effect |
 | 2026-11-05 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.7: the FX-PDF-09 row cites OQ-61. The FX-PDF-11 row and the note under the table say that its upload expectation is not set. | FX-PDF-11 had no upload expectation (review of pull request #18) | OQ-61, FX-PDF-09, FX-PDF-11 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.22: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.11 for `API_AND_MODULE_CONTRACTS` (was 0.10), 0.10 for `DECISION_LOG` (was 0.9), 0.7 for `OPEN_QUESTIONS` (was 0.6), 0.7 for `TEST_DATA_AND_FIXTURES` (was 0.6) and 0.22 for `CHANGELOG` (was 0.21) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: two corrections to the decision log, 2026-11-05, on topic branch `docs/yg-decision-log-hygiene` on top of `823eb52`, not reviewed
+
+Follows a review of the documentation set. The `DECISION_LOG.md` entry DEC-030 (search and filters) listed MOD-04 (profile, settings, consent) as affected. Search and filters belong to MOD-05 (catalogue, search, home; `TASK_OWNERSHIP_MATRIX.md` section 6), so the entry now names MOD-05. The 0.4 row of the log's change history cited `SANIKA_IMPLEMENTATION_ROADMAP.md`, which is not in this repository, and now says so. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-05 | `Documentation/DECISION_LOG.md` | Version 0.9: the DEC-030 entry names MOD-05 as affected, and no longer MOD-04. The 0.4 row of the change history says that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository. | MOD-04 is profile, settings and consent, and search and filters are in MOD-05. The roadmap file is not in the repository | DEC-030, TD-21, MOD-05, MOD20-P1-T01 | Both developers (not agreed) | No scope effect |
 | 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.21: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-05 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.11 for `API_AND_MODULE_CONTRACTS` (was 0.10), 0.9 for `DECISION_LOG` (was 0.8), 0.7 for `OPEN_QUESTIONS` (was 0.6), 0.7 for `TEST_DATA_AND_FIXTURES` (was 0.6) and 0.21 for `CHANGELOG` (was 0.20) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column follows the control table of the changed document, one step up, and reads 0.21 for `CHANGELOG` (was 0.20) and 0.9 for `DECISION_LOG` (was 0.8) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: web controls for the admin panel recorded as NOT VERIFIED, 2026-11-05, on topic branch `docs/yg-admin-web-controls` on top of `761e00a`, then merged with `origin/main` at `65d1cdb`, under review in pull request #22
 
