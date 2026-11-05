@@ -7,8 +7,8 @@
 | Document | Task Ownership Matrix |
 | File | `Documentation/TASK_OWNERSHIP_MATRIX.md` |
 | Phase | 3 — Development Planning and Collaboration (document 22) |
-| Version | 0.7 |
-| Status | Draft for review. Not approved. Every assignment is PROPOSED (DEC-011). |
+| Version | 0.8 |
+| Status | Draft for review. Not approved. The two workstreams and the developer mapping are AGREED (DEC-011, `DECISION_LOG.md` section 5.6). Every assignment below stays PROPOSED until OQ-38 is answered. |
 | Date | 5 November 2026 |
 | Approval required | Both developers (CH §19.3 D9; OQ-38). No MFW approval. |
 
@@ -23,6 +23,7 @@
 | 0.5 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). WP-09 includes admin management (T-09.7). YG accepts the proposed workstream split and reports both developers as full time (GS-Q53). Neither is filed, and Sanika has not recorded hers. The document map shows the new versions. Section 13.4 now says five unnumbered documents, as there are five. No assignment, decision or requirement changed. |
 | 0.6 | 5 November 2026 | The document map (section 13.1) no longer gives `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as draft 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. Section 13.3 says when the draft was written and is unchanged. No assignment changed, and every assignment stays PROPOSED. |
 | 0.7 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
+| 0.8 | 5 November 2026 | The control table and section 6 give the two workstreams and the developer mapping as AGREED (DEC-011), with every assignment still PROPOSED until OQ-38 is answered. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -79,7 +80,7 @@ The mapping of people to workstreams can be swapped as a whole without changing 
 
 ## 6. Module Ownership Matrix
 
-All rows: status PROPOSED; approval by both developers (DEC-011).
+All rows: status PROPOSED until OQ-38 is answered. DEC-011 sets the workstreams and the developer mapping AGREED (`DECISION_LOG.md` section 5.6), and approval of each row is by both developers.
 
 | MOD | Module | Primary owner | Reviewer | Paths (`CODING_STANDARDS.md` §3) | Depends on | Shared contracts | Testing responsibility | Integration responsibility |
 |---|---|---|---|---|---|---|---|---|

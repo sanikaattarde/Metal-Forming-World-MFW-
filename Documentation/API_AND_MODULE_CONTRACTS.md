@@ -7,7 +7,7 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.9 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
@@ -25,6 +25,7 @@
 | 0.7 | 31 October 2026 | Fixes from the re-review of pull request #9. Section 6.8 rule 1 shows the conflict with the data model's identifier rule (section 4.1, INV-14). Rule 2 says how MOD-08 tells a repeated add from another refusal, that removal is FR-BKM-007 (ASSUMPTION), and that offline behaviour stays with OQ-10. Rule 3 says where MOD-07 gets the revision: `LocalIssueFile` carries `fileRevision` (PROPOSED). Rule 4 follows `DATABASE_AND_DATA_MODEL.md` sections 6.2 and 6.3. The `Bookmark` row says which fields RS DATA-005 confirms, `addBookmark` is marked idempotent, and the MOD-08 tests name the new rules. The 0.6 row is corrected on the key and on code. Three comments from the review of pull request #7 are applied: the `IssueSummary` row cites `DATABASE_AND_DATA_MODEL.md` section 4.8, the 0.5 row says `IssueFileGrant` gains only `revision`, and section 6.6 rule 7 separates `listDownloaded` from `openLocal`. `spike/yg-ws-b` still carries the old shape (`app/lib/contracts/library.dart`, commit `70acc47`). Section 12 item 2 asks for a `DECISION_LOG.md` entry for a breaking change, and both developers have yet to say whether this needs one. No decision is approved. |
 | 0.8 | 4 and 5 November 2026 | Bookmark follow-up to the review of pull request #11, three changes from YG. Section 6.8 rule 1: the conflict with the data model's identifier rule becomes an exception that YG proposes for `bookmark_id`, in `DATABASE_AND_DATA_MODEL.md` section 4.1 (PROPOSED until both developers agree). Rule 4: with no local copy, opening a bookmark uses the Read action, a temporary copy, so that no kept copy results (the split is a reported working position, OQ-08). New rule 5: before it writes, MOD-08 checks that `page` and `fileRevision` are at least 1 and returns `invalidInput` if not, so that a refusal can only come from ownership or a repeated add. The MOD-08 errors, tests row and the `OP-LIB-02` row follow. Revised on 5 November 2026 after the review of pull request #15: rule 1 says "no other stored record", rule 2 says what a queued remove does when the same page is added again on another device, and rule 5 and the `OP-LIB-02` row follow OP-07 checking that the revision is at least 1 (PROPOSED). No decision is approved. |
 | 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
+| 0.10 | 5 November 2026 | Section 3 gives the workstreams and the developer mapping as AGREED (DEC-011), with each assignment row still PROPOSED until OQ-38 is answered. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -60,7 +61,7 @@ This document sets the boundaries between modules and the contracts each module 
 
 ## 3. Module Map
 
-Workstreams and the proposed developer mapping are in `TASK_OWNERSHIP_MATRIX.md` (DEC-011, PROPOSED): WS-A Platform and Publishing (proposed: Sanika Attarde); WS-B Reader Experience (proposed: Yuvraj).
+Workstreams and the developer mapping are in `TASK_OWNERSHIP_MATRIX.md` (DEC-011, AGREED, `DECISION_LOG.md` section 5.6; each assignment row stays PROPOSED until OQ-38 is answered): WS-A Platform and Publishing (Sanika Attarde); WS-B Reader Experience (Yuvraj).
 
 | ID | Module | Workstream | App path (`CODING_STANDARDS.md` §3) | Backend part | Main requirements |
 |---|---|---|---|---|---|

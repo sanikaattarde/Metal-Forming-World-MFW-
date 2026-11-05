@@ -7,7 +7,7 @@
 | Document | Coding Standards |
 | File | `Documentation/CODING_STANDARDS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 25) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. |
 | Date | 5 November 2026 |
 | Approval required | Both developers |
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Planned name replaced by the existing document. Access-rule labels. Personal-data term for crash and usage events marked NOT VERIFIED. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.4 | 5 November 2026 | Sections 2, 3 and 5.2 give DEC-012, DEC-013 and DEC-014 as AGREED. The rules themselves stay PROPOSED. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -40,7 +41,7 @@ These standards keep code from two developers and two Claude Code sessions consi
 | Area | Status |
 |---|---|
 | Flutter and Dart standards (Sections 3 to 13) | PROPOSED. Flutter itself is CONFIRMED (DEC-002). |
-| State management and navigation (Section 5) | Rules that hold whatever the choice: PROPOSED. Library choices: DEC-013 and DEC-014, PROPOSED. |
+| State management and navigation (Section 5) | Rules that hold whatever the choice: PROPOSED. Library choices: DEC-013 and DEC-014, AGREED (`DECISION_LOG.md` section 5.6). The Flutter and Dart versions are pinned at the scaffold (OQ-50), and a register entry comes before each package (DEP-43, DEP-44). |
 | Backend standards (Section 14) | Technology-neutral principles only. Specifics are blocked by DEC-003. |
 | Admin panel standards (Section 15) | Technology-neutral principles only. Specifics are blocked by DEC-004. |
 
@@ -48,7 +49,7 @@ No package is installed and no configuration file is created by this document. N
 
 ## 3. Project Structure
 
-PROPOSED (DEC-012). The paths below are the boundaries used by `TASK_OWNERSHIP_MATRIX.md` §6.
+AGREED (DEC-012, `DECISION_LOG.md` section 5.6). The paths below are the boundaries used by `TASK_OWNERSHIP_MATRIX.md` §6.
 
 ```
 <repository root>/
@@ -133,8 +134,8 @@ features/<feature>/
 
 | Concern | Proposal | Status |
 |---|---|---|
-| State management | Riverpod | DEC-013, PROPOSED |
-| Navigation | go_router | DEC-014, PROPOSED |
+| State management | Riverpod | DEC-013, AGREED. Used in `app/lib/app/` only |
+| Navigation | go_router | DEC-014, AGREED. The route guard steers screens only, and the server enforces access (DEC-009) |
 
 If both are AGREED:
 

@@ -7,8 +7,8 @@
 | Document | Development Workflow |
 | File | `Documentation/DEVELOPMENT_WORKFLOW.md` |
 | Phase | 3 — Development Planning and Collaboration (document 21) |
-| Version | 0.3 |
-| Status | Draft for review. Not approved. The branching model is DEC-010, PROPOSED. |
+| Version | 0.4 |
+| Status | Draft for review. Not approved. The branching model (DEC-010) and the commit conventions (DEC-015) are AGREED (`DECISION_LOG.md` section 5.6). Every other rule is PROPOSED. |
 | Date | 5 November 2026 |
 | Approval required | Both developers (AGREED in `DECISION_LOG.md`). No MFW approval: process only. |
 
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 3 updated to the state after the two merges. Section 16 states what happened to each action. The co-author trailer requirement replaced by the proposed no-attribution rule. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Section 12 item 2 states the convention for rows that list related documents (PROPOSED). Revised on 5 November 2026 after the review of pull request #20: the sentence says that a source row keeps the version and date of the source it records, and that the convention is PROPOSED. No requirement, scope item, decision or status label changed. |
+| 0.4 | 5 November 2026 | The branching model (DEC-010) and the commit conventions (DEC-015) are AGREED, and every other rule stays PROPOSED. Sections 3 and 15 record that branch protection on `main` is on, with what YG observed through the GitHub API and what Sanika Attarde read back. Sections 11, 16 and 17 follow. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -37,7 +38,7 @@ Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal ma
 
 This document defines how the two developers work in one shared GitHub repository without overwriting each other's work. It covers branches, pull requests, integration order, shared files, testing before review, commit messages, documentation changes and recovery.
 
-It applies to code, configuration and documents. Every rule here is PROPOSED until both developers agree (DEC-010). GitHub settings are not assumed. Section 15 lists the settings proposed for the repository owner.
+It applies to code, configuration and documents. The branching model (DEC-010) and the commit conventions (DEC-015) are AGREED (`DECISION_LOG.md` section 5.6). Every other rule here is PROPOSED until both developers agree. Section 15 lists the repository settings and says which are set.
 
 ## 3. Current Repository State
 
@@ -52,7 +53,7 @@ Verified with Git and the GitHub API on 23 October 2026, after pull request #1 a
 | Local checkouts | Not verified after the merges. | OPEN |
 | Tags | None | CONFIRMED |
 | CI | None. There is no `.github/` directory. | CONFIRMED |
-| Branch protection on GitHub | Not verified. The GitHub API answered "Not Found" for the protection settings of `main` on 23 October 2026, which means either none are set or the account used cannot read them. | OPEN |
+| Branch protection on GitHub | On since 5 November 2026. YG observed through the GitHub API on 5 November 2026 that `main` is protected and `SA` and `YG` are not, that a pull request needs an approving review before it merges, and that a later push dismisses an earlier approval (pull request #19). The full rule is not readable with YG's access: the API answers "Not Found" for the protection settings, as it did on 23 October 2026. The settings in section 15 are as Sanika Attarde read them back from GitHub (https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/14#issuecomment-6656886883). | CONFIRMED (GitHub API, YG) for what YG observed. The rest is REPORTED by Sanika Attarde |
 | How `8941964` reached `main` | A single-parent commit by YuvrajGaykhe, with no pull request visible in local metadata. Whether it was reviewed cannot be verified locally. | OPEN |
 | Reviews on the two pull requests | Pull request #1 shows no review. Pull request #2 shows one automated comment saying a review could not be done. No person's review is recorded on either. | CONFIRMED (GitHub API) |
 
@@ -152,7 +153,7 @@ Topic branches that are deleted after merge may be squash-merged if both develop
 
 ## 11. Commit Message Convention
 
-PROPOSED (DEC-015). This document defines the convention but no commit is made by it.
+AGREED (DEC-015, `DECISION_LOG.md` section 5.6). This document defines the convention but no commit is made by it.
 
 ```
 <type>(<scope>): <summary in the imperative, at most 72 characters>
@@ -168,7 +169,7 @@ Refs: <RS IDs, AC IDs, DEC IDs, roadmap task ID>
   - `feat(downloads): resume interrupted issue downloads` with `Refs: FR-DL-006, AC-4.3, T-06.3`
   - `docs(decision-log): propose DEC-013 state management` with `Refs: DEC-013`
 - Never put secrets, tokens, personal data or real user names from production in a commit.
-- Repository files and commits carry no AI-tool attribution lines and no co-author trailers (team rule, PROPOSED). Existing history is not rewritten.
+- Repository files and commits carry no AI-tool attribution lines and no co-author trailers (team rule, AGREED in DEC-015). Existing history is not rewritten.
 
 ## 12. Documentation Change Workflow
 
@@ -202,31 +203,31 @@ Refs: <RS IDs, AC IDs, DEC IDs, roadmap task ID>
 
 ## 15. Proposed Repository Settings
 
-These settings are proposed for the repository owner (currently the `sanikaattarde` GitHub account). None of them is verified as configured.
+These are the settings proposed for the repository owner (currently the `sanikaattarde` GitHub account). The `main` protection has been on since 5 November 2026 (section 3). The settings for `SA` and `YG` are not set.
 
 | Setting | Proposal |
 |---|---|
-| `main` protection | Require a pull request with one approval. Require approval after the latest push. Block force pushes and deletion. Once CI exists, require its checks to pass. |
-| `SA` and `YG` protection | Block force pushes and deletion |
-| Availability | Branch protection on a private repository depends on the GitHub plan. If it is unavailable, these rules are kept by agreement and by `CLAUDE_CODE_WORKING_RULES.md`. |
+| `main` protection | Require a pull request with one approval. Require approval after the latest push. Block force pushes and deletion. Once CI exists, require its checks to pass. **Set on 5 November 2026**, as Sanika Attarde read it back from GitHub: one approving review required, approval after the latest push with stale approvals dismissed, applies to admins, force pushes and deletion of `main` blocked, linear history not required (merge commits work, section 6.3), and no status checks yet because CI does not exist on `main`. YG observed the first two through the API (section 3). |
+| `SA` and `YG` protection | Block force pushes and deletion. **Not set**: the API shows both branches as not protected (YG, 5 November 2026). |
+| Availability | Branch protection is available on this repository, and `main` is protected (section 3). If it were unavailable, these rules would be kept by agreement and by `CLAUDE_CODE_WORKING_RULES.md`. |
 | Collaborator access | Each developer gets the lowest access that lets them push their own branch and review |
 
 ## 16. Immediate Actions (Not Performed)
 
 These actions change Git state. They are listed for the developers to decide on and are not carried out by this document.
 
-Status on 23 October 2026, after the merges: actions 1 and 2 were done (`SA` was pushed and pull request #1 was merged). Action 3 was done differently: `YG` was pushed with the design drafts on top of `main`, and pull request #2 was merged. Actions 4 and 5 are not done: DEC-010 is still PROPOSED and branch protection is not verified.
+Status on 23 October 2026, after the merges: actions 1 and 2 were done (`SA` was pushed and pull request #1 was merged). Action 3 was done differently: `YG` was pushed with the design drafts on top of `main`, and pull request #2 was merged. Actions 4 and 5 are not done: DEC-010 is still PROPOSED and branch protection is not verified. Status on 5 November 2026: action 4 is done (DEC-010 is AGREED, `DECISION_LOG.md` section 5.6), and action 5 is done for `main` (Section 15).
 
 | # | Action | Who |
 |---|---|---|
 | 1 | Review this document and the other Phase 3 and Phase 4 documents, then commit them on `SA` | Sanika Attarde |
 | 2 | Push `SA`, then open a pull request from `SA` into `main` for the documents | Sanika Attarde |
 | 3 | Fast-forward `YG` to `origin/main` so it holds the Phase 1 documents | Yuvraj |
-| 4 | Agree DEC-010, or record the changes wanted | Both |
-| 5 | Configure the settings in Section 15, if available | Repository owner |
+| 4 | Agree DEC-010, or record the changes wanted. Done: DEC-010 is AGREED (`DECISION_LOG.md` section 5.6) | Both |
+| 5 | Configure the settings in Section 15, if available. Done for `main` on 5 November 2026 (Section 15) | Repository owner |
 
 ## 17. Open Points
 
-- DEC-010 is PROPOSED and needs both developers' agreement.
+- DEC-010 is AGREED (`DECISION_LOG.md` section 5.6). Branch protection on `main` is on (Section 3). No MFW approval is recorded.
 - Whether `8941964` was reviewed before it reached `main` is not recorded. From now on, Section 6 applies.
 - GitHub plan and repository visibility, which decide whether Section 15 is available, are not verified.
