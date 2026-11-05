@@ -7,7 +7,7 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.9 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. |
 | Date | 5 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
@@ -25,6 +25,7 @@
 | 0.7 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 | 0.8 | 5 November 2026 | Section 5.6 records that the DEC-010 condition is met (branch protection on `main`), that section 11 of the workflow reads AGREED (DEC-015), and that the documents on the follow-up list are updated. The DEC-010 context follows. Revised on 5 November 2026 after the review of pull request #21: the follow-up list adds section 5 of the matrix and the OQ-38 row, and names the sections that DEC-010 and DEC-015 cover. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.9 | 5 November 2026 | Two corrections. The DEC-030 entry names MOD-05 (catalogue, search, home) as affected, and no longer MOD-04 (profile, settings, consent), following `TASK_OWNERSHIP_MATRIX.md` section 6. The 0.4 row says that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository. No requirement, scope item, decision or status label changed. |
+| 0.10 | 5 November 2026 | Section 4 step 2 asks for an Options considered row and a Consequences row. An entry assessed before 5 November 2026 keeps its options and consequences in its Context and Proposal rows, and gets the two rows when it is next assessed or changes status. The existing entries are not filled in all at once, as the review of pull request #23 suggested. Revised on 5 November 2026 after the review of pull request #24: step 2 reads as that review worded it. No entry changed, so no AGREED entry is touched. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
@@ -83,7 +84,7 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 ## 4. Decision Process
 
 1. **Raise.** Add an entry with status OPEN or PROPOSED in a documentation pull request.
-2. **Assess.** Record the options, consequences, third-party cost, and affected documents and modules.
+2. **Assess.** Record the options in an Options considered row, the consequences of the proposal in a Consequences row, the third-party cost where there is any, and the affected documents and modules in the Affects row. An entry assessed before 5 November 2026 keeps its options and consequences in its Context and Proposal rows, and gets the two rows when it is next assessed or changes status. The existing entries are not filled in all at once.
 3. **Agree.** The other developer reviews the pull request. When both developers approve, set AGREED and cite the review.
 4. **Approve with MFW where required.** If CH §17.4 applies, the contracting developer (Sanika Attarde, CH §14) sends the decision to MFW's approver. Set APPROVED only when the written reply is filed or referenced.
 5. **Propagate.** Update every affected document in the same or a follow-up pull request, and add a `CHANGELOG.md` entry.

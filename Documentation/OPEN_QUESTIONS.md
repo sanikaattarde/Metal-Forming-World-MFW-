@@ -7,7 +7,7 @@
 | Document | Open Questions |
 | File | `Documentation/OPEN_QUESTIONS.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 40) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. **Every question is OPEN. None has been answered.** |
 | Date | 5 November 2026 |
 | Approval required | Both developers for the register. Each answer needs the evidence listed against it. |
@@ -22,6 +22,7 @@
 | 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.5 | 5 November 2026 | The OQ-38 row records that DEC-011 is AGREED and that Sanika Attarde's written note is filed. Only the availability of both developers is still open, and the question stays OPEN. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.6 | 5 November 2026 | OQ-60 added (P2, both developers): the controls and the sign-in token handling of the admin panel's web surface. The summary reads 60 questions. Revised on 5 November 2026 after the review of pull request #22: OQ-60 cites TD-14 and not TD-12, follows the new wording of objective (c), and asks that the DEC-004 comparison say whether each hosting option can set the response headers for the framing and script objectives. No requirement, scope item, decision or MFW approval changed. |
+| 0.7 | 5 November 2026 | OQ-61 added (P2, both developers): how deep the genuine-PDF check goes when an admin uploads a file. FX-PDF-09 and FX-PDF-11 cite it. The summary reads 61 questions. No question is answered. Revised on 5 November 2026 after the review of pull request #24: OQ-61 starts from the position of the backend spike (`spike/sa-backend-rules`, emulator only, not merged), which rejects FX-PDF-09 and accepts FX-PDF-11. No requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -163,6 +164,7 @@ This is the single, actionable register of unresolved questions about client app
 | OQ-56 | How recent must a sign-in be before an admin can add or remove an admin? The same window can apply to other sensitive admin actions. This was conditional on PRC-01, which is withdrawn. | P2 | DEC-027 | AOQ-14; TD-15 | Both developers, with MFW's approval | AGREED entry. A recent-sign-in check is part of the working position (GS-Q51). The window is not set. | OPEN |
 | OQ-58 | Does MFW treat the in-panel adding and removing of admins by any admin, and the small record of who added or removed whom, as a clarification of the S2 admin panel or as a change request? S2 lists admin sign-in and the refusal of non-admins and no audit log (EXC-07), and S1 says MFW supplies the admin user list. | P1 | DEC-027; OQ-20; T-09.1; the admin panel screens | DEC-027; EXC-07; S2 AC-8 | MFW and Sanika Attarde | MFW's written answer | OPEN |
 | OQ-60 | Which controls does the admin panel need on its web surface, and how does it hold its sign-in token? The objectives are that a page on another website cannot make a signed-in admin's browser act (cross-site request forgery), that the panel cannot be shown inside another website's frame, that only the scripts the panel loads on purpose run in it (a content security policy), and that only allowed origins call the functions from a browser (cross-origin access). None of this is researched, and the panel's technology is not chosen. The DEC-004 comparison should say whether each hosting option can set the response headers that the framing and script objectives need. | P2 | DEC-004; SC-22, ST-22 and SEC-CHK-20 | OQ-20; NFR-SEC-011; TD-14 | Both developers | A written choice of mechanism, and a test of each objective on the chosen hosting | OPEN |
+| OQ-61 | How deep is the genuine-PDF check when an admin uploads a file? The architecture says it reads the first bytes (`SYSTEM_ARCHITECTURE.md`, threat T8), which would accept a file that starts with `%PDF-` but is not a valid PDF (FX-PDF-09), although AC-8.4 lists it as rejected. **Working position (backend spike, emulator only, not merged, DEC-003 OPEN):** the check in `backend/spike/functions/src/pdfCheck.ts` on `spike/sa-backend-rules` (`e7d9f37`) passes a file only if it starts with `%PDF-`, has `%%EOF` near the end, and pdf.js opens it and loads every page. The page count comes from pdf.js (OP-40 step 4). In the emulator tests FX-PDF-08, FX-PDF-09, FX-PDF-10, FX-PDF-12 and FX-PDF-13 are rejected as NOT_A_PDF, and FX-PDF-11 is accepted, because pdf.js repairs a damaged cross-reference table. Finding G-4 in `backend/spike/09-upload-notes.md` records the depth as a spike choice, to agree with the reader work (DEC-005). So the question is whether the chosen backend keeps that depth. T8's "first bytes" is the line that disagrees with it. If the upload accepts FX-PDF-11, readers can meet one, and the repair tolerance of the reader matters (RD-08). If it rejects it, an admin cannot upload a file that opens in a viewer that repairs it. | P2 | AC-8.4; FR-ADMIN-006; FX-PDF-09; FX-PDF-11 | OQ-30; DEC-003; DEC-005; RD-08; OP-40; NFR-SEC-008 | Both developers | A written choice of depth on the chosen backend, and a test of FX-PDF-08 to FX-PDF-13 on it | OPEN |
 
 ### 5.10 Privacy and data
 
@@ -210,9 +212,9 @@ This is the single, actionable register of unresolved questions about client app
 | Priority | Count | IDs |
 |---|---|---|
 | P1 | 40 | OQ-01 to OQ-05, OQ-07 to OQ-10, OQ-12 to OQ-14, OQ-16 to OQ-18, OQ-24 to OQ-29, OQ-31 to OQ-42, OQ-50, OQ-51, OQ-53, OQ-54, OQ-57 to OQ-59 |
-| P2 | 16 | OQ-06, OQ-11, OQ-15, OQ-19 to OQ-23, OQ-30, OQ-45, OQ-46, OQ-48, OQ-52, OQ-55, OQ-56, OQ-60 |
+| P2 | 17 | OQ-06, OQ-11, OQ-15, OQ-19 to OQ-23, OQ-30, OQ-45, OQ-46, OQ-48, OQ-52, OQ-55, OQ-56, OQ-60, OQ-61 |
 | P3 | 4 | OQ-43, OQ-44, OQ-47, OQ-49 |
-| **Total** | **60** | All OPEN |
+| **Total** | **61** | All OPEN |
 
 Questions waiting on MFW, which the contracting developer sends (`TASK_OWNERSHIP_MATRIX.md` §10), make up most of the P1 list. Sending them early is task T-00.2 in `DEVELOPMENT_ROADMAP.md`.
 
