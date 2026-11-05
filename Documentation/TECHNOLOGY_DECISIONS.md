@@ -7,12 +7,12 @@
 | Document title | Technology Decisions |
 | File | `TECHNOLOGY_DECISIONS.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for Review |
-| Last updated | 27 October 2026 |
+| Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. Every decision below is PROPOSED or OPEN, except TD-01, which S2 and the charter confirm. No decision is approved by MFW (Section 1.2). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.4; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.3; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.4; `PROJECT_CHARTER.md` v0.2 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [System Architecture](SYSTEM_ARCHITECTURE.md); [Database and Data Model](DATABASE_AND_DATA_MODEL.md); [API and Backend Contract](API_AND_BACKEND_CONTRACT.md); [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md); `PROJECT_CHARTER.md` |
 
 **Purpose.** This document records the technology choices for the MFW mobile app, its backend and its admin panel, in the form of architecture decision records. For each material choice it states the problem, the realistic options, the evaluation criteria, the recommendation, the evidence, the conditions for approval and the triggers for review. It separates choosing a technology from configuring a provider, and it separates decisions that must be made before implementation from decisions that can wait.
 
@@ -26,6 +26,7 @@
 | 0.2 | 23 October 2026 | Revised after the second interview (GS-Q17 to GS-Q33, GS-D13 to GS-D20) and a read-only review of MFW's website (WEB). TD-15 and TD-19 take the status accepted by the development team, with MFW written approval pending. TD-15 drops the role claim and makes admin reads function-only (GS-Q20), and AOQ-17 is answered by that proposal. TD-19 gains an undo and an immediate option, and no longer disables sign-in during the window. TD-09 gains an approval condition on the website's public PDFs (AOQ-18, now OQ-57). New: PRC-04 (the update gate), AOQ-18, now OQ-57 to AOQ-20, and not-verified items 22 and 23. No requirement status in the specification changed. |
 | 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. TD-15 and TD-19 are proposed (not accepted by the development team), each with a baseline and a labelled change. GS-Q34 added: the requirements-specification profile list is required by default (PRC-03 superseded). Not-verified item 24 added (account-existence behaviour of the provider). The statement that MFW accepted the App Store risk is qualified: S3 is not filed. AOQ numbers carry their OQ aliases. "Team-accepted" replaced by PROPOSED. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded (section 10.5, GS-Q35 to GS-Q65). TD-15 rewritten for one Admin role with in-panel add and remove, and PRC-01 is withdrawn. TD-19 rewritten for immediate deletion, and PRC-02 is withdrawn. TD-09, TD-11, TD-22 and the AOQ table updated. A sentence in the document control that still said TD-15 and TD-19 were accepted by the development team is corrected. No decision is approved. |
+| 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. The source row that gives the charter's version 0.2 reads 23 October 2026 (was 22 October 2026). No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Sources and authority
 
@@ -34,7 +35,7 @@
 | S1 | MFW Mobile App Commercial Proposal, `MFW_Commercial_Proposal-2.pdf`, 17 October 2026 | Read. The copy is unsigned. | Shows what the proposal says. Its formal acceptance is unverified (REG-002). |
 | S2 | MFW Mobile App Statement of Work, `MFW_Statement_of_Work.pdf`, 17 October 2026 | Read. The copy is unsigned. | Source of the proposed architecture and the acceptance criteria. Its formal acceptance is unverified (REG-002). |
 | S3 | Client emails received after S1 and S2 | Not available. Not in the repository. Known only through the charter. | Not used as evidence. Amendments recorded in the charter stay PROVISIONAL (REG-001). |
-| CH | `PROJECT_CHARTER.md` v0.2, 22 October 2026 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
+| CH | `PROJECT_CHARTER.md` v0.2, 23 October 2026 | Read. Draft for review, unsigned. | Working summary. It does not override S1 or S2. |
 | SPEC | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1 | Read. Draft for Review. | Requirement IDs, statuses and acceptance criteria are used exactly as written there. |
 | GS | The architecture questioning session held on 23 October 2026 with a member of the development team, run with the `/grill-me` skill | Answers recorded as GS-Q1 to GS-Q16 in Section 10. A second session on the same day, with the same skill, produced GS-Q17 to GS-Q33 and the defaults GS-D13 to GS-D20. A third session on 26 and 27 October 2026 produced GS-Q35 to GS-Q65 (section 10.5). | Development-team positions. They are not MFW approvals, and the other developer has not yet agreed them (charter §17.4, REG-052). |
 | WEB | MFW's public website, https://metalformingworld.com/, read on 23 October 2026 | Observed. Not an approved source. | A reference for the WordPress contract and the taxonomy seed values. It does not change scope (INT-WP-002) and is not MFW's approval. |

@@ -7,9 +7,9 @@
 | Document | Coding Standards |
 | File | `Documentation/CODING_STANDARDS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 25) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. |
-| Date | 23 October 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers |
 
 **Change history**
@@ -18,10 +18,11 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Planned name replaced by the existing document. Access-rule labels. Personal-data term for crash and usage events marked NOT VERIFIED. |
+| 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft. Requirement IDs cited below. |
 | `DECISION_LOG.md` | Exists (draft). DEC-002, DEC-003, DEC-004, DEC-012, DEC-013, DEC-014. |

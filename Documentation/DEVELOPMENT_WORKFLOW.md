@@ -7,9 +7,9 @@
 | Document | Development Workflow |
 | File | `Documentation/DEVELOPMENT_WORKFLOW.md` |
 | Phase | 3 — Development Planning and Collaboration (document 21) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. The branching model is DEC-010, PROPOSED. |
-| Date | 23 October 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers (AGREED in `DECISION_LOG.md`). No MFW approval: process only. |
 
 **Change history**
@@ -18,10 +18,11 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 3 updated to the state after the two merges. Section 16 states what happened to each action. The co-author trailer requirement replaced by the proposed no-attribution rule. |
+| 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Section 12 item 2 states the convention for rows that list related documents (PROPOSED). Revised on 5 November 2026 after the review of pull request #20: the sentence says that a source row keeps the version and date of the source it records, and that the convention is PROPOSED. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `PROJECT_CHARTER.md` (CH) §17.5 | Exists, draft. States the source-control principle this document expands. |
 | `DECISION_LOG.md` | Exists (draft). DEC-010, DEC-012, DEC-015. |
@@ -172,7 +173,7 @@ Refs: <RS IDs, AC IDs, DEC IDs, roadmap task ID>
 ## 12. Documentation Change Workflow
 
 1. Documentation changes use the same pull-request flow as code, in separate pull requests from code.
-2. Each change updates the document's version and change-history table and keeps its status label accurate. A draft stays "Draft for review" until the approval record shows otherwise.
+2. Each change updates the document's version and change-history table and keeps its status label accurate. A draft stays "Draft for review" until the approval record shows otherwise. Rows that list related documents name the document and whether it exists, and give no version or date. The README index holds each version. A source row keeps the version and date of the source it records. This convention is PROPOSED.
 3. **Phase 1 and Phase 2 documents.** `PROJECT_CHARTER.md`, `REQUIREMENTS_SPECIFICATION.md` and the planned Phase 2 documents need both developers' review. Requirement IDs are never renumbered. RS §14.3 sets the rules for withdrawing an ID.
 4. **Section references.** RS cites CH by section number (for example "CH §17.3"). Renumbering a section in either document breaks those references, so add sections at the end or update every reference in the same pull request.
 5. **MFW-facing documents.** Documents that MFW approves (the M1 note, screens, acceptance evidence) are sent by the contracting developer. MFW's written reply is recorded in `DECISION_LOG.md`, or as the approval record inside the document.

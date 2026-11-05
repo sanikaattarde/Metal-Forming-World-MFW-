@@ -7,9 +7,9 @@
 | Document | Open Questions |
 | File | `Documentation/OPEN_QUESTIONS.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 40) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. **Every question is OPEN. None has been answered.** |
-| Date | 27 October 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers for the register. Each answer needs the evidence listed against it. |
 
 **Change history**
@@ -19,10 +19,11 @@
 | 0.1 | 23 October 2026 | Consolidated register. OQ-01 to OQ-31 carried from RS §12.2 with their IDs. CH D1 to D9 mapped. OQ-32 to OQ-50 added. |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. OQ-51 to OQ-57 added (AOQ crosswalk, section 7). OQ-20 and OQ-25 wording restored. Reported statements recorded as notes on OQ-08 and OQ-29. Backup and monitoring questions marked as proposed additions. No question is answered. |
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded as working positions and reported statements in the evidence column of 28 questions (`TECHNOLOGY_DECISIONS.md` section 10.5). OQ-58 and OQ-59 added. OQ-20, OQ-51 and OQ-56 reworded because PRC-01 is withdrawn. No question is answered or closed. |
+| 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §12.2, §12.3 | Exists, draft. Original wording of OQ-01 to OQ-31 and conflicts C-01 to C-08. |
 | `PROJECT_CHARTER.md` (CH) §19.3 | Exists, draft. Open decisions D1 to D9. |

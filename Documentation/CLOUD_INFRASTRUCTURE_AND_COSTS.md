@@ -6,9 +6,9 @@
 |---|---|
 | Document | Cloud Infrastructure and Costs |
 | File | `Documentation/CLOUD_INFRASTRUCTURE_AND_COSTS.md` |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. A comparison of candidates and a parameterised cost model. No provider is chosen, because DEC-003 is OPEN. Every price is a vendor figure read on the date shown. Every amount is planning arithmetic, not a quotation. |
-| Date | 27 October 2026 |
+| Date | 5 November 2026 |
 | Audience | The two developers. MFW's authorised approver only for the decisions in section 22. |
 | Proposed owner | Yuvraj, as drafter and primary editor. PROPOSED and not agreed. Reviewer: Sanika Attarde, whose workstream (WS-A) holds MFW's cloud project and accounts (`TASK_OWNERSHIP_MATRIX.md` section 5). |
 | Approval required | Both developers (CH §17.4). MFW's written approval for any cost, scope or contract effect: the provider, the region, the cost ceiling and any content delivery network. This document asks MFW for nothing. |
@@ -20,10 +20,11 @@
 |---|---|---|
 | 0.1 | 25 October 2026 | Initial draft. This is the document that `TASK_OWNERSHIP_MATRIX.md` section 13.3 lists as planned and blocked by DEC-003. It is written while DEC-003 is still OPEN, as a comparison of candidates and a parameterised model. It does not decide DEC-003, and it does not lift the block on a single-provider cost model. It is written on top of commit 4769de3, so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Three stale mentions updated: the stored data no longer lists an audit log, the scheduled job covers maintenance and not only the withdrawn purge window (PRC-02), and the effort note names the withdrawn two-role figure (PRC-01) and the unestimated in-panel add and remove (GS-Q44). No price, scenario or provider choice changed. |
+| 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 25 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Proposed technical architecture", "Why this design", AC-12 | Exists, issued, unsigned (OQ-28). Names Firebase. |
 | `MFW_Commercial_Proposal-2.pdf` (S1) "Costs outside the fee" | Exists, issued, unsigned. Cloud usage is billed to MFW directly. |

@@ -7,9 +7,9 @@
 | Document | Claude Code Working Rules |
 | File | `Documentation/CLAUDE_CODE_WORKING_RULES.md` |
 | Phase | 3 — Development Planning and Collaboration (document 26) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. |
-| Date | 23 October 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers |
 
 **Change history**
@@ -18,10 +18,11 @@
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. The no-guest-reading rule labelled as a working position (PROVISIONAL). The file-access rule limited to the app's copy. Decision wording aligned with the status model. |
+| 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `DEVELOPMENT_WORKFLOW.md` | Exists (draft). The Git workflow these rules apply. |
 | `TASK_OWNERSHIP_MATRIX.md` | Exists (draft). Owned paths and shared files. |

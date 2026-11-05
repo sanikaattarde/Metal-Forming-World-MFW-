@@ -7,7 +7,7 @@
 | Document | Dependency Register |
 | File | `Documentation/DEPENDENCY_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 39) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. No package is installed. No version, licence or price below has been verified unless it is quoted from a source document, or is recorded in section 8.1 with the page it was read from. The section 8.1 facts were read on 30 October 2026 by an automated page reader. A developer has read the LICENSE files of DEP-64, DEP-65 and DEP-66 (YG, 1 November 2026; DEP-66 also on 30 October 2026). YG also reports the licence of PDFium and of the pdfx native engines (1 November 2026), and re-read PDFium's LICENSE file on 4 November 2026 after the review of pull request 13: a BSD-3-Clause notice followed by the Apache License 2.0 text. Those reports give licence names only, with no page addresses. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW for any paid component (RS NFR-MAINT-006). |
@@ -21,10 +21,11 @@
 | 0.3 | 30 October 2026 | Section 8.1 added: review entries for DEP-43, DEP-44, DEP-58, and for DEP-64 and DEP-65 (the PDF libraries to be compared under DEC-005) and DEP-66 (an HTML parser, one input to DEP-54), read from pub.dev and the LICENSE files. DEP-64 to DEP-66 added to section 8. Five rows of section 8 point to section 8.1. Six rows added to section 10. No package is added and no version is pinned. |
 | 0.4 | 1 and 4 November 2026 | YG's LICENSE-file reads of 1 November 2026 recorded for DEP-64, DEP-65 and DEP-66 (all MIT), with YG's reports of the PDFium licence (Apache License 2.0) and of the pdfx native engines. Section 8, section 8.1 and section 10 updated to say so. The prebuilt PDFium binaries that the pdfrx build downloads are recorded as not read. Revised on 4 November 2026 after the review of pull request 13: PDFium's LICENSE file is recorded as a BSD-3-Clause notice followed by the Apache License 2.0 text (YG's re-read of 4 November 2026, matching the review's reading) in DEP-64, DEP-65 and section 10. DEP-43 and DEP-44 point to `DECISION_LOG.md` section 5.5. Section 2 points to the section 8.1 labels. No package is added and no version is pinned. |
 | 0.5 | 5 November 2026 | DEP-43 and DEP-44: the Decision rows follow `DECISION_LOG.md` 0.6, which sets DEC-013 and DEC-014 to AGREED (section 5.6) and keeps the conditions listed there. The review of pull request #14 asked for it, because the rows said "Not AGREED" after pull request #13 merged. The status of both entries stays CANDIDATE. The DEP-43 row gives the section 5.6 conditions in full, as the re-review of 5 November 2026 asked. No package is added and no version is pinned. |
+| 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Commercial_Proposal-2.pdf` (S1) "Costs outside the fee", "What we need from MFW" | Exists, issued, unsigned. Source of the cost figures below. |
 | `MFW_Statement_of_Work.pdf` (S2) "Proposed technical architecture" | Exists, issued, unsigned |

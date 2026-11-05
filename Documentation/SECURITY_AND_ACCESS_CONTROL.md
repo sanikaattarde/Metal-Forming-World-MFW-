@@ -7,12 +7,12 @@
 | Document title | Security and Access Control |
 | File | `SECURITY_AND_ACCESS_CONTROL.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for Review |
-| Last updated | 27 October 2026 |
+| Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The architecture is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.4; [Database and Data Model](DATABASE_AND_DATA_MODEL.md) v0.4; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.3; `PROJECT_CHARTER.md` v0.2; [Security Incident Procedure](SECURITY_INCIDENT_PROCEDURE.md) v0.2 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [System Architecture](SYSTEM_ARCHITECTURE.md); [Technology Decisions](TECHNOLOGY_DECISIONS.md); [Database and Data Model](DATABASE_AND_DATA_MODEL.md); [API and Backend Contract](API_AND_BACKEND_CONTRACT.md); `PROJECT_CHARTER.md`; [Security Incident Procedure](SECURITY_INCIDENT_PROCEDURE.md) |
 
 **Purpose.** This document says who may do what in the MFW product, how each rule is enforced, how it is checked, and what it does not promise. It covers the roles and permissions, the administrator lifecycle, the audit policy, the protection of personal data and of the app's issue files, the rules that the database and the file store must apply, and the tests that prove them.
 
@@ -28,6 +28,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Baseline (one admin role, immediate deletion) separated from the labelled changes PRC-01 and PRC-02 (section 6.1a classifies every control and test). Threat T26, control SC-21 and test ST-21 added (account-existence messages). Section 3.2: what the gate and a signed link cannot protect; website check updated. Profile fields aligned with the requirements specification. "Team-accepted" replaced by PROPOSED with the agreement note. Error names upper-case. |
 | 0.3 | 25 October 2026 | `SECURITY_INCIDENT_PROCEDURE.md` added to the related documents. No role, control, threat or test changed. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). One Admin role with in-panel add and remove, a last-admin guard and a narrow record of who added or removed whom (GS-Q44). Sections 6 to 8 rewritten. Section 9.4 rewritten for immediate deletion. Threat T27 added (a compromised admin account). Controls SC-09 to SC-15 and SC-17 and tests ST-02, ST-03, ST-06 to ST-11, ST-14 and ST-15 reworded. ST-11 and PRC-01 and PRC-02 are withdrawn. The audit set is narrowed, so who deleted an issue, replaced a file or exported the reader list is no longer recorded. No decision is approved. |
+| 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Sources and authority
 

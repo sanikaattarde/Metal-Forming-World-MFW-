@@ -7,12 +7,12 @@
 | Document title | Glossary |
 | File | `GLOSSARY.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for Review |
-| Last updated | 23 October 2026 |
+| Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.1; `PROJECT_CHARTER.md` v0.1; `MFW_Statement_of_Work.pdf` (S2); `MFW_Commercial_Proposal-2.pdf` (S1) |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); `PROJECT_CHARTER.md`; `MFW_Statement_of_Work.pdf` (S2); `MFW_Commercial_Proposal-2.pdf` (S1) |
 
 **Purpose.** This glossary explains the terms used in the MFW project documents so that the developers and MFW read them the same way. Definitions use the wording of S1, S2, the charter and the specification wherever possible.
 
@@ -31,6 +31,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft for internal review |
+| 0.2 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 
 ## 2. Source Codes
 
@@ -39,8 +40,8 @@
 | S1 | The commercial proposal, `MFW_Commercial_Proposal-2.pdf`, 17 October 2026. Unsigned. |
 | S2 | The statement of work, `MFW_Statement_of_Work.pdf`, 17 October 2026. Unsigned. |
 | S3 | Client emails received after S1 and S2. Not available in the repository. |
-| CH | The project charter, `PROJECT_CHARTER.md` v0.1. Draft for review. |
-| Spec | The [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1. Draft for Review. |
+| CH | The project charter, `PROJECT_CHARTER.md`. Draft for review. |
+| Spec | The [Requirements Specification](REQUIREMENTS_SPECIFICATION.md). Draft for Review. |
 | DEV | Marks an inference or proposal by the development team that needs approval. |
 | Scope §n | A section of [SCOPE_AND_EXCLUSIONS.md](SCOPE_AND_EXCLUSIONS.md) |
 | Register §n | A section of [ASSUMPTIONS_AND_CONSTRAINTS.md](ASSUMPTIONS_AND_CONSTRAINTS.md) |

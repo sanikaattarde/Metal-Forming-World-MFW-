@@ -7,7 +7,7 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. **PLANNED: no CI/CD exists and no check runs automatically.** |
 | Date | 5 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
@@ -19,10 +19,11 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. QG-12 states that its script is not in the repository. Planned name replaced by the existing document. |
 | 0.3 | 4 and 5 November 2026 | Gate QG-14 added for the contract tests (suite TS-14 in `TESTING_STRATEGY.md`), and the pull-request pipeline names it. It is PROPOSED, blocked by DEC-003 and DEC-026, and not available. No existing gate changed. Revised on 5 November 2026 after the review of pull request #17: QG-14 runs the backend side of TS-14 and stays [BACKEND], the app side runs in QG-03 on every pull request, and section 5.2 lists QG-14 for every merge to `main`. |
+| 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `TESTING_STRATEGY.md` | Exists (draft). The suites these gates run. |
 | `DEFINITION_OF_DONE.md` | Exists (draft). Gates referenced by DoD-TASK, DoD-INT and DoD-RC. |

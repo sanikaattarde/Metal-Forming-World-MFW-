@@ -7,7 +7,7 @@
 | Document | Task Ownership Matrix |
 | File | `Documentation/TASK_OWNERSHIP_MATRIX.md` |
 | Phase | 3 — Development Planning and Collaboration (document 22) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. Every assignment is PROPOSED (DEC-011). |
 | Date | 5 November 2026 |
 | Approval required | Both developers (CH §19.3 D9; OQ-38). No MFW approval. |
@@ -22,10 +22,11 @@
 | 0.4 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The document map (section 13.1) lists `CLOUD_INFRASTRUCTURE_AND_COSTS.md`. Section 13.3 now says that a draft comparison of candidates exists and that a single-provider cost model is still blocked by DEC-003. Section 8.2 records the proposed editor. No decision, requirement or status label changed. |
 | 0.5 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). WP-09 includes admin management (T-09.7). YG accepts the proposed workstream split and reports both developers as full time (GS-Q53). Neither is filed, and Sanika has not recorded hers. The document map shows the new versions. Section 13.4 now says five unnumbered documents, as there are five. No assignment, decision or requirement changed. |
 | 0.6 | 5 November 2026 | The document map (section 13.1) no longer gives `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as draft 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. Section 13.3 says when the draft was written and is unchanged. No assignment changed, and every assignment stays PROPOSED. |
+| 0.7 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `PROJECT_CHARTER.md` (CH) §7, §14, §19.3 D9 | Exists, draft. Names the developers and branches. Says the task split is pending. |
 | `API_AND_MODULE_CONTRACTS.md` | Exists (draft). Module definitions MOD-00 to MOD-13. |
@@ -229,8 +230,8 @@ Design
 ├── API_AND_BACKEND_CONTRACT         the single catalogue of backend operations (OP-nn) and their errors
 ├── API_AND_MODULE_CONTRACTS         app modules (MOD-nn), integration contracts (IC-nn), app-side errors
 ├── SECURITY_AND_ACCESS_CONTROL      access rules, threats, controls, security tests
-├── PDF_READER_AND_OFFLINE_DESIGN    device-side reader and offline design (draft 0.2, 27 October 2026)
-├── SCREEN_INVENTORY_AND_NAVIGATION  screens and states the requirements imply; input to the M2 designs (draft 0.2)
+├── PDF_READER_AND_OFFLINE_DESIGN    device-side reader and offline design (draft)
+├── SCREEN_INVENTORY_AND_NAVIGATION  screens and states the requirements imply; input to the M2 designs (draft)
 └── CLOUD_INFRASTRUCTURE_AND_COSTS   candidate clouds and a parameterised cost model; no provider chosen (draft; the README index gives its version)
 
 Plans, tests and process
@@ -238,8 +239,8 @@ Plans, tests and process
 ├── ACCEPTANCE_CRITERIA, TESTING_STRATEGY, TEST_DATA_AND_FIXTURES, CI_CD_AND_QUALITY_GATES
 ├── DEPENDENCY_REGISTER, DEPLOYMENT_PLAN, BACKUP_AND_RECOVERY, MAINTENANCE_AND_HANDOVER
 ├── APP_STORE_RELEASE_CHECKLIST, CLAUDE_CODE_WORKING_RULES
-├── SECURITY_INCIDENT_PROCEDURE      security incident steps (draft 0.2)
-├── REQUIREMENT_COVERAGE_MATRIX      which rows and plans name each requirement; derived, not a source (draft 0.2)
+├── SECURITY_INCIDENT_PROCEDURE      security incident steps (draft)
+├── REQUIREMENT_COVERAGE_MATRIX      which rows and plans name each requirement; derived, not a source (draft)
 └── CHANGELOG
 
 Entry point

@@ -7,12 +7,12 @@
 | Document title | Scope and Exclusions |
 | File | `SCOPE_AND_EXCLUSIONS.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for Review |
-| Last updated | 23 October 2026 |
+| Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.1; [Glossary](GLOSSARY.md) v0.1; `PROJECT_CHARTER.md` v0.1 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); `PROJECT_CHARTER.md` |
 
 **Purpose.** This document states what the MFW project includes, what it excludes, and what can be added only after MFW's separate written approval. It groups the requirements in the specification into scope items, and it links each item to its requirement IDs and acceptance criteria. It adds no requirements and changes no requirement status or acceptance criterion. Where scope is unsettled, it says so and points to the open question, conflict or register entry.
 
@@ -21,6 +21,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 23 October 2026 | Initial draft for internal review |
+| 0.2 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Source documents and authority
 

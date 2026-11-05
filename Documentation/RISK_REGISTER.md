@@ -7,7 +7,7 @@
 | Document | Risk Register |
 | File | `Documentation/RISK_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 38) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. Ratings are an initial development-team assessment and are unreviewed. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. Risks that MFW must accept need MFW's written acceptance. |
@@ -21,10 +21,11 @@
 | 0.3 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The mitigation of R14 now says that a draft comparison of candidates and a parameterised cost model exists in `CLOUD_INFRASTRUCTURE_AND_COSTS.md`. No rating, trigger or contingency changed, and all ratings remain unreviewed. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). R7 and R15 carry the late-input evidence and the decision to send no delay notice. R21 records that both developers are reported as full time. R24 names the other verbal approvals. R25 added: required test devices are missing. The AR crosswalk wording follows the architecture. All ratings remain unreviewed, and no status changed. |
 | 0.5 | 4 and 5 November 2026 | The R14 mitigation no longer gives `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
+| 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `PROJECT_CHARTER.md` (CH) §18 | Exists, draft. Source of R1 to R11. |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) §12.4 | Exists, draft. Maps CH risks to requirements. |

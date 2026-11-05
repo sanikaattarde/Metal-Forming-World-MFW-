@@ -7,12 +7,12 @@
 | Document title | Database and Data Model |
 | File | `DATABASE_AND_DATA_MODEL.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for Review |
 | Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The data model is not approved by the charter (CH §17.4). |
-| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md) v0.1; [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md) v0.1; [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md) v0.2; [Glossary](GLOSSARY.md) v0.1; [System Architecture](SYSTEM_ARCHITECTURE.md) v0.4; [Technology Decisions](TECHNOLOGY_DECISIONS.md) v0.4; [API and Backend Contract](API_AND_BACKEND_CONTRACT.md) v0.4; [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) v0.4; `PROJECT_CHARTER.md` v0.2 |
+| Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [System Architecture](SYSTEM_ARCHITECTURE.md); [Technology Decisions](TECHNOLOGY_DECISIONS.md); [API and Backend Contract](API_AND_BACKEND_CONTRACT.md); [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md); `PROJECT_CHARTER.md` |
 
 **Purpose.** This document defines what data the MFW product keeps, how the pieces relate, who may read and change each piece, and when each piece is deleted. S2 lists the data model as a handover deliverable [S2 Handover], and the charter leaves it to a recorded decision (CH §17.4). The access rules for each entity are summarised in Section 19 and defined in the [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) document. The operations that read and write the entities are defined in the [API and Backend Contract](API_AND_BACKEND_CONTRACT.md).
 
@@ -29,6 +29,7 @@
 | 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Profile: the requirements-specification list is required by default and gender is added; mobile number, company and country become optional candidates (GS-Q34). Deletion states and fields marked PRC-02 (immediate deletion is the baseline). ADMIN_ROLE, the guard record and the audit event marked PRC-01 (one admin role is the baseline). "Team-accepted" replaced by PROPOSED with the agreement note. References to the website question extended to OQ-57. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). ADMIN_ROLE has one role and the guard record counts admins. ADMIN_AUDIT_EVENT is narrowed to adds and removes of admins, and keeps its name so that references stay stable. INV-03 to INV-09 are rewritten, INV-16 is withdrawn, and INV-15 and INV-18 are simplified. The deletion state `pending_deletion` and the field `purge_after` are withdrawn. EDITION_UPDATE_SIGNUP stays conditional and is dropped on the working position. `retention_mode` records Read as temporary and Download as kept. Section 15.4 added. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
 | 0.5 | 4 and 5 November 2026 | Bookmark follow-up to pull request #11. `bookmark_id` is named as a second exception to the never-reused identifier rule, beside `user_id` (Section 4.1, the Section 4.10 field note, Section 10.4 rule 8, INV-14 and the Section 12 row). Opening a bookmark with no local copy gets the current revision with the Read action, a temporary copy (Section 6.3 step 2). The exception is YG's position and stays PROPOSED until both developers agree. Revised on 5 November 2026 after the review of pull request #15: Section 4.1 and INV-14 say "no other stored record" and name the queued remove, M10 points to Section 4.1, and the Section 4.10 Validation row adds the server's check that `file_revision` is at least 1 (PROPOSED). No decision is approved. |
+| 0.6 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Sources and authority
 

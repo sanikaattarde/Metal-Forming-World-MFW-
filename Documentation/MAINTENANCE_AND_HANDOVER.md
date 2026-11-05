@@ -7,9 +7,9 @@
 | Document | Maintenance and Handover |
 | File | `Documentation/MAINTENANCE_AND_HANDOVER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 37) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. Every handover item is NOT STARTED. |
-| Date | 25 October 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers. MFW agrees the handover at M5. |
 
 **Change history**
@@ -19,16 +19,17 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. HO-13, HO-14 and the section 2 sentence marked as proposed additions. Planned names replaced by the existing documents. Note on the S1 maintenance figures. |
 | 0.3 | 25 October 2026 | Related-documents row added for `SECURITY_INCIDENT_PROCEDURE.md`. No handover item, status or obligation changed. |
+| 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) "Changes, handover and warranty", AC-11, AC-12 | Exists, issued, unsigned |
 | `MFW_Commercial_Proposal-2.pdf` (S1) "Key terms", "Costs outside the fee" | Exists, issued, unsigned |
 | `PROJECT_CHARTER.md` (CH) §10, §11, §13, §19.3 D8 | Exists, draft |
 | `DEPLOYMENT_PLAN.md`, `BACKUP_AND_RECOVERY.md`, `DEPENDENCY_REGISTER.md`, `APP_STORE_RELEASE_CHECKLIST.md`, `TESTING_STRATEGY.md`, `DEFINITION_OF_DONE.md` | Exist (draft) |
-| `SECURITY_INCIDENT_PROCEDURE.md` | Exists (draft, version 0.1, dated 24 October 2026). Steps for security events only. Section 10 below stays the general flow. Contacts stay open under OQ-47. |
+| `SECURITY_INCIDENT_PROCEDURE.md` | Exists (draft). Steps for security events only. Section 10 below stays the general flow. Contacts stay open under OQ-47. |
 
 Status labels follow RS §1.2.
 

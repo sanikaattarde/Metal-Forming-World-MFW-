@@ -7,7 +7,7 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. |
 | Date | 5 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
@@ -22,13 +22,14 @@
 | 0.4 | 27 October 2026 | Section 5.4 added: Sanika Attarde's written positions on 14 PROPOSED entries (task MOD20-P1-T01 in `SANIKA_IMPLEMENTATION_ROADMAP.md`). It is one half of the evidence section 3.1 needs. No entry changes status, and no entry is AGREED or APPROVED. |
 | 0.5 | 31 October 2026 | Section 5.5 added: Yuvraj Gaykhe's written positions on DEC-010 to DEC-015, DEC-022 and DEC-024, the other half of the evidence for those eight entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED. |
 | 0.6 | 4 and 5 November 2026 | DEC-010 to DEC-015, DEC-022 and DEC-024 set to AGREED, the follow-up that sections 5.4 and 5.5 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.5) and Sanika Attarde's approving review of pull request #12 on 3 November 2026. Section 5.6 added: the evidence, the conditions still open for each entry, a limit on the public PDFs of DEC-024 (OQ-57), and the documents that still call these entries PROPOSED. Update sentences added to the position rows of DEC-011, DEC-013 and DEC-014. No entry is APPROVED. DEC-025 to DEC-030 stay PROPOSED. Revised on 5 November 2026 after the review of pull request #14: section 5.6 links the approving review, the list of documents adds the related-documents row of `CHANGELOG.md`, and `DEPENDENCY_REGISTER.md` is struck from the list because its DEP-43 and DEP-44 rows are updated in the same pull request. |
+| 0.7 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
-| `Documentation/PROJECT_CHARTER.md` (CH) | Exists. Draft v0.1, not approved. |
-| `Documentation/REQUIREMENTS_SPECIFICATION.md` (RS) | Exists. Draft v0.1, not approved. |
+| `Documentation/PROJECT_CHARTER.md` (CH) | Exists. Draft, not approved. |
+| `Documentation/REQUIREMENTS_SPECIFICATION.md` (RS) | Exists. Draft, not approved. |
 | `Documentation/MFW_Statement_of_Work.pdf` (S2) | Exists. Issued 17 October 2026. The copy is unsigned. |
 | `Documentation/MFW_Commercial_Proposal-2.pdf` (S1) | Exists. Issued 17 October 2026. The copy is unsigned. |
 | S3, client emails after S1 and S2 | Not in the repository. Known only through CH. |

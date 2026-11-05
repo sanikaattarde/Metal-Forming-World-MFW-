@@ -7,12 +7,12 @@
 | Document title | Requirements Specification |
 | File | `REQUIREMENTS_SPECIFICATION.md`, in the project `Documentation` folder with `PROJECT_CHARTER.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for Review |
-| Last updated | 22 October 2026 |
+| Last updated | 5 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. |
-| Related document | `PROJECT_CHARTER.md` v0.1, Draft for review, 22 October 2026 |
+| Related document | `PROJECT_CHARTER.md`, a draft |
 
 **Purpose.** This document states the functional, non-functional, data, integration and acceptance requirements for the MFW mobile app, its backend services and its web admin panel. It is written so that MFW and the development team can review, test and approve each requirement. It describes what the product must do. It does not choose the architecture, the technology or the implementation plan.
 
@@ -28,6 +28,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 22 October 2026 | Initial draft for internal review |
+| 0.2 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Source documents
 

@@ -6,9 +6,9 @@
 |---|---|
 | Document | Security Incident Procedure |
 | File | `Documentation/SECURITY_INCIDENT_PROCEDURE.md` |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | Draft for review. Not approved. **PLANNED: no incident has occurred, no contact is named, and no drill has been run.** Nothing here is implemented. |
-| Date | 27 October 2026 |
+| Date | 5 November 2026 |
 | Audience | The two developers during the build. MFW's named contacts after handover, once MFW names them (OQ-47). |
 | Proposed owner | Sanika Attarde (WS-A), PROPOSED and not agreed. Reviewer: Yuvraj (WS-B). |
 | Approval required | Both developers. MFW for the contacts and for any step that involves MFW (OQ-47, OQ-28). MFW's legal adviser for anything legal. |
@@ -20,10 +20,11 @@
 |---|---|---|
 | 0.1 | 24 October 2026 | Initial draft. Written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). The admin steps use the one Admin role with in-panel removal (GS-Q44) instead of the withdrawn Super Admin steps (PRC-01). The record of who added or removed whom replaces the audit log, and it does not say what an admin did to issues or exports. Permanent deletion is open to any admin (GS-Q45). No decision is approved. |
+| 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 24 October 2026 |
+| Document | Status |
 |---|---|
 | `MFW_Statement_of_Work.pdf` (S2) Warranty, severities | Exists, issued, unsigned. **The S2 text is authoritative.** |
 | `SECURITY_AND_ACCESS_CONTROL.md` | Exists (draft). Owns the threats T18 to T26, the controls SC-nn and the tests ST-nn |

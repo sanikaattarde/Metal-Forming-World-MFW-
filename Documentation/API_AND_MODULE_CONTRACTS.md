@@ -7,7 +7,7 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.8 |
+| Version | 0.9 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
@@ -24,10 +24,11 @@
 | 0.6 | 30 October 2026 | The bookmark contract carries the file revision, as the review of pull request #7 found. `Bookmark` gains `fileRevision`, `addBookmark` takes `(issueId, page, fileRevision)`, and the `OP-LIB-02` row adds `fileRevision` to its inputs. `DATABASE_AND_DATA_MODEL.md` section 4.10, OP-07 in `API_AND_BACKEND_CONTRACT.md`, `PDF_READER_AND_OFFLINE_DESIGN.md` sections 5 and 7, and GS-Q16 already require it. Section 6.8 gains behaviour rules 1 to 4. They record that a bookmark stays unique on the reader, the issue and the page, without the revision, that its identifier is derived from the issue and the page, and that a repeated add changes nothing and returns the stored bookmark. Rules 1 and 2 follow Sanika Attarde's review of pull request #9. That key is a working position of YG, and Sanika Attarde's review of pull request #9 agreed it as the working position. It stays PROPOSED. No code on `main` uses the old shape. No decision is approved. |
 | 0.7 | 31 October 2026 | Fixes from the re-review of pull request #9. Section 6.8 rule 1 shows the conflict with the data model's identifier rule (section 4.1, INV-14). Rule 2 says how MOD-08 tells a repeated add from another refusal, that removal is FR-BKM-007 (ASSUMPTION), and that offline behaviour stays with OQ-10. Rule 3 says where MOD-07 gets the revision: `LocalIssueFile` carries `fileRevision` (PROPOSED). Rule 4 follows `DATABASE_AND_DATA_MODEL.md` sections 6.2 and 6.3. The `Bookmark` row says which fields RS DATA-005 confirms, `addBookmark` is marked idempotent, and the MOD-08 tests name the new rules. The 0.6 row is corrected on the key and on code. Three comments from the review of pull request #7 are applied: the `IssueSummary` row cites `DATABASE_AND_DATA_MODEL.md` section 4.8, the 0.5 row says `IssueFileGrant` gains only `revision`, and section 6.6 rule 7 separates `listDownloaded` from `openLocal`. `spike/yg-ws-b` still carries the old shape (`app/lib/contracts/library.dart`, commit `70acc47`). Section 12 item 2 asks for a `DECISION_LOG.md` entry for a breaking change, and both developers have yet to say whether this needs one. No decision is approved. |
 | 0.8 | 4 and 5 November 2026 | Bookmark follow-up to the review of pull request #11, three changes from YG. Section 6.8 rule 1: the conflict with the data model's identifier rule becomes an exception that YG proposes for `bookmark_id`, in `DATABASE_AND_DATA_MODEL.md` section 4.1 (PROPOSED until both developers agree). Rule 4: with no local copy, opening a bookmark uses the Read action, a temporary copy, so that no kept copy results (the split is a reported working position, OQ-08). New rule 5: before it writes, MOD-08 checks that `page` and `fileRevision` are at least 1 and returns `invalidInput` if not, so that a refusal can only come from ownership or a repeated add. The MOD-08 errors, tests row and the `OP-LIB-02` row follow. Revised on 5 November 2026 after the review of pull request #15: rule 1 says "no other stored record", rule 2 says what a queued remove does when the same page is added again on another device, and rule 5 and the `OP-LIB-02` row follow OP-07 checking that the revision is at least 1 (PROPOSED). No decision is approved. |
+| 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
-| Document | Status on 23 October 2026 |
+| Document | Status |
 |---|---|
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft. Source of every requirement ID below. |
 | `DECISION_LOG.md` | Exists (draft). DEC-003, DEC-007, DEC-008, DEC-009, DEC-020, DEC-021, DEC-026. |
@@ -35,7 +36,7 @@
 | `TASK_OWNERSHIP_MATRIX.md` | Exists (draft). Module owners. The document map is in section 13. |
 | `ACCEPTANCE_CRITERIA.md`, `TESTING_STRATEGY.md`, `TEST_DATA_AND_FIXTURES.md` | Exist (draft) |
 | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`, `API_AND_BACKEND_CONTRACT.md`, `SECURITY_AND_ACCESS_CONTROL.md` | Exist on `main` (drafts, merged by pull request #2). They were planned as `SYSTEM_ARCHITECTURE.md`, `TECH_STACK_DECISIONS.md`, `DATABASE_DESIGN.md`, `API_SPECIFICATION.md` and `AUTHENTICATION_AND_AUTHORIZATION.md`. `API_AND_BACKEND_CONTRACT.md` is the single catalogue of backend operations (section 8 below holds aliases of its identifiers). These contracts are not yet reconciled line by line with those documents; the differences are listed in `API_AND_BACKEND_CONTRACT.md` section 3.4. |
-| `PDF_READER_AND_OFFLINE_DESIGN.md` | Exists (draft, version 0.1, dated 24 October 2026). The device-side lifecycle of a downloaded issue. It follows the `DownloadStatus` types in section 6.6 below and adds the removal paths. |
+| `PDF_READER_AND_OFFLINE_DESIGN.md` | Exists (draft). The device-side lifecycle of a downloaded issue. It follows the `DownloadStatus` types in section 6.6 below and adds the removal paths. |
 
 Status labels follow RS §1.2. **PROPOSED** marks a development-team proposal in this document. In RS terms it is an ASSUMPTION (DEV).
 
