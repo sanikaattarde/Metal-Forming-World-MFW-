@@ -20,7 +20,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Planned name replaced by the existing document. Access-rule labels. Personal-data term for crash and usage events marked NOT VERIFIED. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.4 | 5 November 2026 | Sections 2, 3 and 5.2 give DEC-012, DEC-013 and DEC-014 as AGREED. The rules themselves stay PROPOSED. Revised on 5 November 2026 after the review of pull request #21: section 5.2 gives the condition of DEC-013 (Riverpod only in `app/lib/app/`, constructors in feature code) in place of the "If both are AGREED" block. No MFW approval is recorded, and no entry is APPROVED. |
-| 0.5 | 5 November 2026 | Section 15 gains item 8: the panel's web surface follows the objectives of SC-22. The mechanism is OPEN until DEC-004 and OQ-60. No requirement, scope item, decision or MFW approval changed. |
+| 0.5 | 5 November 2026 | Section 15 gains item 8: the panel's web surface follows the objectives of SC-22. The mechanism is OPEN until DEC-004 and OQ-60. Revised on 5 November 2026 after the review of pull request #22: item 8 follows the new wording of objective (c). No requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -300,7 +300,7 @@ Specifics are blocked by DEC-004.
 5. No personal data kept in browser storage beyond what the session needs.
 6. Uploads show progress and a clear result (RS FR-STATE-007). Client-side checks are for convenience. The server enforces them.
 7. Publishing, unpublishing and sending a notification ask for confirmation first.
-8. The panel's web surface follows the objectives of `SECURITY_AND_ACCESS_CONTROL.md` SC-22: no request forged by another website, no framing by another website, no script that is not the panel's, and only allowed origins calling the functions from a browser. The mechanism is OPEN until DEC-004 and OQ-60.
+8. The panel's web surface follows the objectives of `SECURITY_AND_ACCESS_CONTROL.md` SC-22: no request forged by another website, no framing by another website, no script that the panel does not load on purpose, and only allowed origins calling the functions from a browser. The mechanism is OPEN until DEC-004 and OQ-60.
 
 ## 16. Review Checklist
 
