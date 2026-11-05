@@ -7,7 +7,7 @@
 | Document | Test Data and Fixtures |
 | File | `Documentation/TEST_DATA_AND_FIXTURES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 32) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW confirms where its sample PDFs may be stored (DEC-024). |
@@ -21,6 +21,7 @@
 | 0.3 | 31 October 2026 | FX-LIB-01 to FX-LIB-03 name the file revision of each bookmark, because the bookmark contract requires one. No other fixture changed. |
 | 0.4 | 4 and 5 November 2026 | FX-PDF-11 is no longer an AC-2.6 fixture. Its "Used by" cell gives a PROPOSED repair-tolerance expectation, and a note under the table records the basis, which is YG's report of a simulator spike result that is not filed. FX-PDF-10 stays the AC-2.6 fixture. No other fixture changed. Revised on 5 November 2026 after the review of pull request #18: a repaired open must show every page of the PDF it was made from, in order, and the reading of FR-READ-010 behind the expectation is recorded as an ASSUMPTION (RD-08 in `PDF_READER_AND_OFFLINE_DESIGN.md`). |
 | 0.5 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.6 | 5 November 2026 | The related-documents row gives DEC-024 as AGREED. Revised on 5 November 2026 after the review of pull request #21: the DEC-024 row names both conditions of section 5.6. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -28,7 +29,7 @@
 |---|---|
 | `TESTING_STRATEGY.md`, `ACCEPTANCE_CRITERIA.md` | Exist (draft). They use the fixture IDs below. |
 | `API_AND_MODULE_CONTRACTS.md` | Exists (draft). Access states and payload shapes. |
-| `DECISION_LOG.md` DEC-024 | Exists (draft). Test data policy (PROPOSED). |
+| `DECISION_LOG.md` DEC-024 | Exists (draft). Test data policy (AGREED, section 5.6; MFW still confirms where its sample PDFs are kept, and the public PDFs for the reader comparison leave out PDFs from MFW's own website until OQ-57 is answered). |
 | `REQUIREMENTS_SPECIFICATION.md` (RS) | Exists, draft |
 | `DATABASE_AND_DATA_MODEL.md` | Exists on `main` (draft; planned as `DATABASE_DESIGN.md`). Seed formats for ENV-TEST wait for the data model to be agreed. |
 

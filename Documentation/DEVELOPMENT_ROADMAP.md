@@ -7,7 +7,7 @@
 | Document | Development Roadmap |
 | File | `Documentation/DEVELOPMENT_ROADMAP.md` |
 | Phase | 3 — Development Planning and Collaboration (document 23) |
-| Version | 0.9 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
@@ -25,6 +25,7 @@
 | 0.7 | 30 October 2026 | Section 4.3 added: a proposed plan for the days before the reported inputs, with the modules each workstream can start, the work that waits, and what each input unlocks. The MFW inputs row of the status table notes the report of 30 October 2026 and the expected date. No date, estimate or milestone changed. Renumbered from 4.2 after merging the MFW input tracker (section 4.2, version 0.6). |
 | 0.8 | 4 and 5 November 2026 | Two statements corrected that gave `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 (the related-documents row and task T-00.7). That document is at a later version, so both lines now say it exists as a draft, and the README index gives its version. T-00.7 gives no version for the other four drafts. Revised on 5 November 2026 after the review of pull request #16: the related-documents row for those four drafts gives no version either, and the Phase 1 row in section 4 gives the charter as v0.3. No date, estimate, milestone or task changed. |
 | 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
+| 0.10 | 5 November 2026 | T-01.1 and section 4.3 no longer call the scaffold a spike for DEC-013 and DEC-014, which are AGREED. DEC-003, DEC-004 and DEC-005 still hold the spike labels. Revised on 5 November 2026 after the review of pull request #21: section 4.3 gives the mapping of the matrix as AGREED. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -94,7 +95,7 @@ PROPOSED, from the questioning session of 26 and 27 October 2026. Nothing in it 
 ```text
 Plan for 27 October 2026                               [PROPOSED]
 ├── WS-B (Yuvraj)
-│   ├── 1 T-01.1 Flutter scaffold                      [a spike until Sanika's agreement on DEC-013 and DEC-014 is filed]
+│   ├── 1 T-01.1 Flutter scaffold                      [DEC-013 and DEC-014 are AGREED (`DECISION_LOG.md` section 5.6). The scaffold pins the versions (OQ-50), and DEP-43 and DEP-44 come first]
 │   │   ├── Pin the current stable Flutter and its matching Dart. Create app/ as in CODING_STANDARDS section 3, with Riverpod and go_router
 │   │   ├── Accept: it builds and runs on an Android emulator and an iOS simulator, and `flutter analyze` and `dart format` are clean
 │   │   └── Verify: command output in the pull request. Sanika approves DEC-013, DEC-014 and OQ-50 in the same pull request
@@ -159,7 +160,7 @@ On the S1 dates, kickoff is Monday 16 November 2026, so Week 1 ends on Friday 20
 
 PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4 (tracked in section 4.2), and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
 
-All of it relies on decisions that are OPEN or PROPOSED (DEC-003, DEC-004, DEC-005, DEC-013, DEC-014), so it is spike work on `spike/` branches. It is not merged as production code until both developers' written positions are filed (Sanika's is, in `DECISION_LOG.md` section 5.4; Yuvraj's is not) and those decisions move (`DEFINITION_OF_DONE.md` section 5 check 2; `DEVELOPMENT_WORKFLOW.md` section 13). Several tasks below are marked as blocked in section 6 or section 9 by such a decision or by an open question (for example T-01.1, T-01.6, T-03.1, T-06.2, T-04.1 and T-08.1). Here only the part that does not depend on the answer is started, and the block on production use stays. The split follows the PROPOSED mapping of `TASK_OWNERSHIP_MATRIX.md` section 5. Use local emulators and placeholder visuals, and create no cloud resource. No estimate is given for any item, and the estimates in section 8 are unchanged.
+All of it relies on decisions that are OPEN or PROPOSED (DEC-003, DEC-004, DEC-005), so it is spike work on `spike/` branches. It is not merged as production code until those decisions move (`DEFINITION_OF_DONE.md` section 5 check 2; `DEVELOPMENT_WORKFLOW.md` section 13). DEC-013 and DEC-014 are AGREED (`DECISION_LOG.md` section 5.6), so they no longer hold the scaffold back. Several tasks below are marked as blocked in section 6 or section 9 by such a decision or by an open question (for example T-01.1, T-01.6, T-03.1, T-06.2, T-04.1 and T-08.1). Here only the part that does not depend on the answer is started, and the block on production use stays. The split follows the mapping of `TASK_OWNERSHIP_MATRIX.md` section 5 (DEC-011, AGREED). Use local emulators and placeholder visuals, and create no cloud resource. No estimate is given for any item, and the estimates in section 8 are unchanged.
 
 ```text
 Modules that can start before the inputs arrive                [PROPOSED]
@@ -187,7 +188,7 @@ Modules that can start before the inputs arrive                [PROPOSED]
 │       ├── T-09.7 admin management: OQ-58
 │       └── T-10.1 push set-up: an active Apple Developer account. T-10.3 dispatch: OQ-19
 ├── WS-B (Yuvraj)
-│   ├── 1 T-01.1 Flutter scaffold                              [first; a spike until both developers' written positions on DEC-013 and DEC-014 are filed. Sanika's is; Yuvraj's is not]
+│   ├── 1 T-01.1 Flutter scaffold                              [first; DEC-013 and DEC-014 are AGREED, so it is no longer a spike for them. It pins the versions (OQ-50), and DEP-43 and DEP-44 come first]
 │   │   └── The app modules of both workstreams live in it
 │   ├── 2 MOD-00 Shared contracts and fakes                    [after 1]
 │   │   └── AccessState, Result, AppFailure, IssueSummary, DownloadStatus, and a fake for each provider in IC-01 to IC-08, so both workstreams can build in parallel

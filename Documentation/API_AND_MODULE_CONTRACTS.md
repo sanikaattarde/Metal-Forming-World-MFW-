@@ -7,7 +7,7 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.9 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
@@ -25,6 +25,7 @@
 | 0.7 | 31 October 2026 | Fixes from the re-review of pull request #9. Section 6.8 rule 1 shows the conflict with the data model's identifier rule (section 4.1, INV-14). Rule 2 says how MOD-08 tells a repeated add from another refusal, that removal is FR-BKM-007 (ASSUMPTION), and that offline behaviour stays with OQ-10. Rule 3 says where MOD-07 gets the revision: `LocalIssueFile` carries `fileRevision` (PROPOSED). Rule 4 follows `DATABASE_AND_DATA_MODEL.md` sections 6.2 and 6.3. The `Bookmark` row says which fields RS DATA-005 confirms, `addBookmark` is marked idempotent, and the MOD-08 tests name the new rules. The 0.6 row is corrected on the key and on code. Three comments from the review of pull request #7 are applied: the `IssueSummary` row cites `DATABASE_AND_DATA_MODEL.md` section 4.8, the 0.5 row says `IssueFileGrant` gains only `revision`, and section 6.6 rule 7 separates `listDownloaded` from `openLocal`. `spike/yg-ws-b` still carries the old shape (`app/lib/contracts/library.dart`, commit `70acc47`). Section 12 item 2 asks for a `DECISION_LOG.md` entry for a breaking change, and both developers have yet to say whether this needs one. No decision is approved. |
 | 0.8 | 4 and 5 November 2026 | Bookmark follow-up to the review of pull request #11, three changes from YG. Section 6.8 rule 1: the conflict with the data model's identifier rule becomes an exception that YG proposes for `bookmark_id`, in `DATABASE_AND_DATA_MODEL.md` section 4.1 (PROPOSED until both developers agree). Rule 4: with no local copy, opening a bookmark uses the Read action, a temporary copy, so that no kept copy results (the split is a reported working position, OQ-08). New rule 5: before it writes, MOD-08 checks that `page` and `fileRevision` are at least 1 and returns `invalidInput` if not, so that a refusal can only come from ownership or a repeated add. The MOD-08 errors, tests row and the `OP-LIB-02` row follow. Revised on 5 November 2026 after the review of pull request #15: rule 1 says "no other stored record", rule 2 says what a queued remove does when the same page is added again on another device, and rule 5 and the `OP-LIB-02` row follow OP-07 checking that the revision is at least 1 (PROPOSED). No decision is approved. |
 | 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
+| 0.10 | 5 November 2026 | Section 3 gives the workstreams and the developer mapping as AGREED (DEC-011), with each assignment row still PROPOSED until OQ-38 is answered. Revised on 5 November 2026 after the review of pull request #21: the module Owner rows read "WS-A (Sanika Attarde), PROPOSED" and "WS-B (Yuvraj), PROPOSED". No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -60,7 +61,7 @@ This document sets the boundaries between modules and the contracts each module 
 
 ## 3. Module Map
 
-Workstreams and the proposed developer mapping are in `TASK_OWNERSHIP_MATRIX.md` (DEC-011, PROPOSED): WS-A Platform and Publishing (proposed: Sanika Attarde); WS-B Reader Experience (proposed: Yuvraj).
+Workstreams and the developer mapping are in `TASK_OWNERSHIP_MATRIX.md` (DEC-011, AGREED, `DECISION_LOG.md` section 5.6; each assignment row stays PROPOSED until OQ-38 is answered): WS-A Platform and Publishing (Sanika Attarde); WS-B Reader Experience (Yuvraj).
 
 | ID | Module | Workstream | App path (`CODING_STANDARDS.md` §3) | Backend part | Main requirements |
 |---|---|---|---|---|---|
@@ -277,7 +278,7 @@ final class IssueFileGrant {
 | Field | Detail |
 |---|---|
 | Purpose | Start the app, wire dependencies, apply MFW branding, own the route table and guards, and provide connectivity information. |
-| Owner | WS-B (proposed: Yuvraj). Reviewer: WS-A. |
+| Owner | WS-B (Yuvraj), PROPOSED. Reviewer: WS-A. |
 | Responsibilities | Entry point; theme with MFW's logo, colours and fonts (RS NFR-UX-001); route table and access guards (DEC-014); home structure from the M2 designs (RS FR-MAG-006); connectivity type for the mobile-data warning (RS FR-DL-004); environment configuration. |
 | Excludes | Feature internals; the authentication logic itself (it consumes `AccessState`); the `app/android/` and `app/ios/` folders (shared, primary editor WS-A, `TASK_OWNERSHIP_MATRIX.md` §8) |
 | Depends on | MOD-03 (`watchAccessState`), every feature's public file |
@@ -322,7 +323,7 @@ PROPOSED routes:
 | Field | Detail |
 |---|---|
 | Purpose | One place for turning failures into user messages, logging, crash reporting and usage events |
-| Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B. |
+| Owner | WS-A (Sanika Attarde), PROPOSED. Reviewer: WS-B. |
 | Responsibilities | `FailureCode` to message mapping; logger; crash-reporting facade (RS NFR-OBS-001); usage events from an approved list only (RS NFR-OBS-002, NFR-PRIV-003) |
 | Excludes | Choosing the crash-reporting or analytics provider (DEC-003) |
 | Depends on | Nothing inside the app |
@@ -356,7 +357,7 @@ String messageFor(AppFailure failure);
 | Field | Detail |
 |---|---|
 | Purpose | Registration, sign-in, verification, password reset, sign-out and account deletion |
-| Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B. |
+| Owner | WS-A (Sanika Attarde), PROPOSED. Reviewer: WS-B. |
 | Responsibilities | Email and password (RS FR-AUTH-001 to 004); Google Sign-In (FR-AUTH-005, PROVISIONAL, C-04); sign-out (FR-AUTH-008); in-app account deletion (FR-AUTH-009); computing `AccessState` |
 | Excludes | Sign in with Apple (excluded); profile fields (MOD-04); admin sign-in (MOD-12) |
 | Depends on | MOD-04 `watchStatus`; identity provider (DEC-003); OP-ACC-01 |
@@ -396,7 +397,7 @@ abstract interface class AuthService {
 | Field | Detail |
 |---|---|
 | Purpose | Mandatory reader profile, the settings screen, and consent to MFW's privacy policy and terms |
-| Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B. |
+| Owner | WS-A (Sanika Attarde), PROPOSED. Reviewer: WS-B. |
 | Responsibilities | Profile capture and validation (RS FR-PROF-001 to 004, PROVISIONAL); profile screen (FR-PROF-006); profile editing (FR-PROF-007, ASSUMPTION); consent at registration (FR-PRIV-001); links to the policy and terms (FR-PRIV-002); delete-account confirmation (FR-PRIV-004); the settings screen, which hosts MOD-11 preferences and sign-out |
 | Excludes | Age gate or parental consent (none, FR-PROF-005); edition-update sign-up (dropped on the working position, GS-Q49; C-02 and OQ-31 stay open) |
 | Depends on | OP-PRF-01 to 03; MOD-11 preferences widget |
@@ -423,7 +424,7 @@ abstract interface class ProfileRepository {
 | Field | Detail |
 |---|---|
 | Purpose | Show published issues and their public metadata to every user, with search and filters |
-| Owner | WS-B (proposed: Yuvraj). Reviewer: WS-A. |
+| Owner | WS-B (Yuvraj), PROPOSED. Reviewer: WS-A. |
 | Responsibilities | Catalogue with the latest issue and the archive (RS FR-MAG-001 to 004); issue details (FR-MAG-005); home screen (FR-MAG-006); pull-to-refresh (FR-MAG-007, FR-MAG-008); search by title, description and category, and filters by category, industry segment, year and edition (FR-SRCH-001 to 005) |
 | Excludes | Searching text inside PDFs (FR-SRCH-007); issue files (MOD-06) |
 | Depends on | OP-CAT-01 to 03 |
@@ -463,7 +464,7 @@ With five to twelve issues at launch (RS ASM-02), filtering on the device is eno
 | Field | Detail |
 |---|---|
 | Purpose | Obtain an authorized, complete, verified local copy of an issue, and manage downloaded issues |
-| Owner | WS-B (proposed: Yuvraj) for the app. WS-A for OP-FILE-01 in MOD-13. |
+| Owner | WS-B (Yuvraj), PROPOSED for the app. WS-A for OP-FILE-01 in MOD-13. |
 | Responsibilities | Size and mobile-data warning before download (RS FR-DL-003, FR-DL-004); download with progress (FR-DL-001, FR-DL-005); resume after a network break (FR-DL-006); integrity check; Downloads screen (FR-DL-008); deletion that frees space (FR-DL-009); offline opening (FR-DL-007); storage checks (FR-STATE-004, FR-STATE-006) |
 | Excludes | Rendering (MOD-07); reading before the download completes (S2 "Scope not included") |
 | Depends on | OP-FILE-01; MOD-01 `ConnectivityService`; MOD-03 `watchAccessState` |
@@ -532,7 +533,7 @@ abstract interface class DownloadManager {
 | Field | Detail |
 |---|---|
 | Purpose | Render a downloaded issue with page-turn and swipe modes |
-| Owner | WS-B (proposed: Yuvraj). Reviewer: WS-A. |
+| Owner | WS-B (Yuvraj), PROPOSED. Reviewer: WS-A. |
 | Responsibilities | Page-turn effect and plain swipe mode (RS FR-READ-006, FR-READ-007); swipe and tap page turns (FR-READ-003, FR-READ-004); zoom to 300% (FR-READ-005); two-page spread on tablets and in landscape (FR-READ-009); damaged-file error with retry (FR-READ-010); bookmark action (calls MOD-08); performance targets (NFR-PERF-001, NFR-PERF-002, NFR-REL-001) |
 | Excludes | Downloading (MOD-06); text search inside PDFs |
 | Depends on | MOD-06 `openLocal`; MOD-08; the rendering library (DEC-005) behind `PdfRenderer` |
@@ -568,7 +569,7 @@ abstract interface class ReaderController {
 | Field | Detail |
 |---|---|
 | Purpose | Page bookmarks and favourite issues stored with the reader's account |
-| Owner | WS-B (proposed: Yuvraj) for the app. WS-A for the server rules in MOD-13. |
+| Owner | WS-B (Yuvraj), PROPOSED for the app. WS-A for the server rules in MOD-13. |
 | Responsibilities | Add, open and remove bookmarks (RS FR-BKM-001, FR-BKM-002, FR-BKM-007); favourites (FR-BKM-003); list screens (FR-BKM-006); second-device availability (FR-BKM-004) |
 | Excludes | Reading-activity tracking (RS NFR-PRIV-003) |
 | Depends on | OP-LIB-01 to 05; MOD-07 for the bookmark action |
@@ -602,7 +603,7 @@ abstract interface class LibraryRepository {
 | Field | Detail |
 |---|---|
 | Purpose | Show MFW's WordPress news in the app, with app-level controls applied |
-| Owner | WS-B (proposed: Yuvraj). Reviewer: WS-A. |
+| Owner | WS-B (Yuvraj), PROPOSED. Reviewer: WS-A. |
 | Responsibilities | News list with image, title, date and category (RS FR-NEWS-001); article page (FR-NEWS-002); category filter (FR-NEWS-003); refresh (FR-NEWS-004); offline reading of loaded articles with a notice (FR-NEWS-005); hidden posts removed (FR-NEWS-008); only MFW-selected categories (INT-WP-003); small pages and caching (INT-WP-004); WordPress unreachable (FR-STATE-005) |
 | Excludes | Writing or editing news (RS FR-ADMIN-019); any change to the WordPress site (INT-WP-002) |
 | Depends on | WordPress REST API (Section 9.1); OP-NWS-01; DEC-021 |
@@ -633,7 +634,7 @@ abstract interface class NewsRepository {
 | Field | Detail |
 |---|---|
 | Purpose | Share an issue or an article through the device's share sheet |
-| Owner | WS-B (proposed: Yuvraj). Reviewer: WS-A. |
+| Owner | WS-B (Yuvraj), PROPOSED. Reviewer: WS-A. |
 | Responsibilities | Issue: title and store-listing link (RS FR-SHR-001, FR-SHR-002). Article: title and WordPress address (FR-SHR-003, FR-SHR-004). |
 | Excludes | Sending files (FR-SHR-006); links that open the app (FR-SHR-005) |
 | Errors | `cancelled`, `unknown` |
@@ -652,7 +653,7 @@ abstract interface class ShareService {
 | Field | Detail |
 |---|---|
 | Purpose | Notification permission, category preferences, device registration, opening notification targets, and dispatch |
-| Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B, who owns tap routing in MOD-01. |
+| Owner | WS-A (Sanika Attarde), PROPOSED. Reviewer: WS-B, who owns tap routing in MOD-01. |
 | Responsibilities | Explanation before the system prompt (RS FR-NOTIF-001); category choice and later changes (FR-NOTIF-002, FR-NOTIF-003); delivery only to opted-in devices for the category (FR-NOTIF-004); tap opens the target, with access rules applied (FR-NOTIF-005, BR-005); dispatch and send log on the server (FR-ADMIN-016 to 018) |
 | Excludes | Scheduled sends, audience segments, delivery and open statistics (S2 "Later-phase features") |
 | Depends on | OP-NTF-01 to 04; OP-ADM-06; MOD-01 `AppNavigator`; platform push services (Section 9.2) |
@@ -682,7 +683,7 @@ abstract interface class NotificationService {
 | Field | Detail |
 |---|---|
 | Purpose | Let MFW's editors run the app without developer help (S2 Objectives) |
-| Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B. |
+| Owner | WS-A (Sanika Attarde), PROPOSED. Reviewer: WS-B. |
 | Responsibilities | Admin sign-in and the single admin role (RS FR-ADMIN-002 to 004), with in-panel add and remove of admins (GS-Q44, OQ-58); issue upload with validation (FR-ADMIN-005 to 008); issue details (FR-ADMIN-009); categories (FR-ADMIN-010); publish and unpublish (FR-ADMIN-011); news controls (FR-ADMIN-013 to 015); notifications and send log (FR-ADMIN-016 to 018); registered-user list and export (FR-USER-002, FR-USER-003, PROVISIONAL); subscriber export (FR-USER-001, CONFLICT C-02, dropped on the working position, GS-Q49); result messages (FR-STATE-007) |
 | Excludes | News authoring (FR-ADMIN-019); editorial roles, drafts, scheduled publishing and audit log (S2 "Later-phase features"), apart from the narrow record of admin adds and removes (GS-Q44); readership analytics (FR-USER-004) |
 | Interface | OP-ADM-01 to OP-ADM-11 (Section 8). OP-ADM-12 is a note: sign-in is the identity provider's job, and the role lookup is OP-14 in `API_AND_BACKEND_CONTRACT.md`. Adding and removing admins is OP-35 and OP-37 in section 5.2 of that document and has no alias (DEC-026) |
@@ -697,7 +698,7 @@ abstract interface class NotificationService {
 | Field | Detail |
 |---|---|
 | Purpose | Enforce the access rules of Section 4.1 on the server, and remove a reader's data on deletion |
-| Owner | WS-A (proposed: Sanika Attarde). Reviewer: WS-B. |
+| Owner | WS-A (Sanika Attarde), PROPOSED. Reviewer: WS-B. |
 | Responsibilities | Authorization for every operation in Section 8; OP-FILE-01; owner-only rules for profiles, bookmarks, favourites and preferences; OP-ACC-01 deletion of the account, profile, bookmarks, favourites, notification preferences and any edition-update sign-up (RS FR-PRIV-003) |
 | Blocked | DEC-003, DEC-020, OQ-24 (records kept after deletion) |
 | Tests | Rule tests for every operation and access state (allowed and refused); SEC-CHK-02 to 06; SEC-CHK-11 |

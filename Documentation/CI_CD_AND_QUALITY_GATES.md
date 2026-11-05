@@ -7,7 +7,7 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | Draft for review. Not approved. **PLANNED: no CI/CD exists and no check runs automatically.** |
 | Date | 5 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
@@ -20,6 +20,7 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. QG-12 states that its script is not in the repository. Planned name replaced by the existing document. |
 | 0.3 | 4 and 5 November 2026 | Gate QG-14 added for the contract tests (suite TS-14 in `TESTING_STRATEGY.md`), and the pull-request pipeline names it. It is PROPOSED, blocked by DEC-003 and DEC-026, and not available. No existing gate changed. Revised on 5 November 2026 after the review of pull request #17: QG-14 runs the backend side of TS-14 and stays [BACKEND], the app side runs in QG-03 on every pull request, and section 5.2 lists QG-14 for every merge to `main`. |
 | 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.5 | 5 November 2026 | Section 3 gives the CI service as AGREED, conditional on the cost check (DEC-022). The GitHub plan row records that branch protection on `main` is on. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -43,7 +44,7 @@ This document proposes the automated checks that guard pull requests, integratio
 
 | Item | Proposal | Status |
 |---|---|---|
-| Service | GitHub Actions, since the repository is hosted on GitHub | DEC-022, PROPOSED |
+| Service | GitHub Actions, since the repository is hosted on GitHub | DEC-022, AGREED, conditional on the cost check (MOD15-P1-T01, not done; `DECISION_LOG.md` section 5.6) |
 | Runners | Linux for formatting, analysis, tests and Android builds. macOS for iOS builds, which need Xcode. | PROPOSED |
 | Constraint | Runner minutes, macOS minute cost, and feature availability (environments, required reviewers) depend on the account plan and repository visibility | Not verified |
 | After handover | CI moves with the repository to MFW's ownership (OQ-48). Secrets are re-created in MFW's account. | PLANNED |
@@ -200,4 +201,4 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 | Toolchain versions | OQ-50 |
 | Backend and admin gates | DEC-003, DEC-004 |
 | Where release signing runs, and who holds the keys | Section 6; `MAINTENANCE_AND_HANDOVER.md` |
-| GitHub plan features (environments, secret scanning, branch protection) | Not verified |
+| GitHub plan features (environments, secret scanning, branch protection) | Branch protection on `main` is on (`DEVELOPMENT_WORKFLOW.md` section 3). Environments and secret scanning: not verified |

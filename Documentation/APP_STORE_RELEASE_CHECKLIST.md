@@ -7,7 +7,7 @@
 | Document | App Store Release Checklist |
 | File | `Documentation/APP_STORE_RELEASE_CHECKLIST.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 35) |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. **No build has been uploaded and no app has been submitted. No item is verified. Compliance with store guidelines is not asserted.** |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW approves the listing text and submission (S2 AC-11, M5). |
@@ -19,6 +19,7 @@
 | 0.1 | 23 October 2026 | Initial draft |
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Stale status wording corrected. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.4 | 5 November 2026 | Section 8 reads AGREED (DEC-015). No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -124,7 +125,7 @@ All items are NOT STARTED, UNVERIFIED or BLOCKED on 23 October 2026.
 
 ## 8. Versioning
 
-PROPOSED (DEC-015).
+AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 | Item | Rule |
 |---|---|

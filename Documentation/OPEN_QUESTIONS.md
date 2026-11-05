@@ -7,7 +7,7 @@
 | Document | Open Questions |
 | File | `Documentation/OPEN_QUESTIONS.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 40) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. **Every question is OPEN. None has been answered.** |
 | Date | 5 November 2026 |
 | Approval required | Both developers for the register. Each answer needs the evidence listed against it. |
@@ -20,7 +20,8 @@
 | 0.2 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. OQ-51 to OQ-57 added (AOQ crosswalk, section 7). OQ-20 and OQ-25 wording restored. Reported statements recorded as notes on OQ-08 and OQ-29. Backup and monitoring questions marked as proposed additions. No question is answered. |
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded as working positions and reported statements in the evidence column of 28 questions (`TECHNOLOGY_DECISIONS.md` section 10.5). OQ-58 and OQ-59 added. OQ-20, OQ-51 and OQ-56 reworded because PRC-01 is withdrawn. No question is answered or closed. |
 | 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
-| 0.5 | 5 November 2026 | OQ-60 added (P2, both developers): the controls and the sign-in token handling of the admin panel's web surface. The summary reads 60 questions. No requirement, scope item, decision or MFW approval changed. |
+| 0.5 | 5 November 2026 | The OQ-38 row records that DEC-011 is AGREED and that Sanika Attarde's written note is filed. Only the availability of both developers is still open, and the question stays OPEN. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.6 | 5 November 2026 | OQ-60 added (P2, both developers): the controls and the sign-in token handling of the admin panel's web surface. The summary reads 60 questions. No requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -200,7 +201,7 @@ This is the single, actionable register of unresolved questions about client app
 
 | ID | Question | Priority | Blocks | Related | Decision owner | Evidence needed | Status |
 |---|---|---|---|---|---|---|---|
-| OQ-38 | Do both developers agree the workstream split and the proposed mapping, and what is each developer's availability? | P1 | DEC-011; `TASK_OWNERSHIP_MATRIX.md`; `DEVELOPMENT_ROADMAP.md` §8 | CH D9; R21 | Both developers | AGREED entry, with availability recorded Reported by YG on 27 October 2026 (GS-Q53): YG accepts the proposed split, and both developers are full time. Sanika's agreement is reported as verbal, to be put in writing. Not filed. | OPEN |
+| OQ-38 | Do both developers agree the workstream split and the proposed mapping, and what is each developer's availability? | P1 | DEC-011; `TASK_OWNERSHIP_MATRIX.md`; `DEVELOPMENT_ROADMAP.md` §8 | CH D9; R21 | Both developers | AGREED entry (DEC-011, `DECISION_LOG.md` section 5.6), with availability recorded Reported by YG on 27 October 2026 (GS-Q53): YG accepts the proposed split, and both developers are full time. Sanika Attarde's written note is filed (`DECISION_LOG.md` section 5.4). Only the availability of both developers is still open. | OPEN |
 | OQ-48 | How and when is the repository transferred to MFW, given that S1 passes ownership when the final invoice is paid and S2 AC-12 requires an MFW-owned repository at handover? | P2 | AC-12.1; HO-01; T-12.6 | CH D8; DEP-60 | MFW and Sanika Attarde | Written agreement on method and order | OPEN |
 | OQ-49 | Will MFW take a maintenance plan after the warranty? | P3 | `MAINTENANCE_AND_HANDOVER.md` §13 | S1 Costs outside the fee | MFW | Written choice | OPEN |
 
