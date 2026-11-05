@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.22 |
+| Version | 0.23 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 5 November 2026 |
+| Date | 6 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,19 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the WB-05 simulator result filed as evidence, 2026-11-06, on topic branch `docs/yg-wb05-evidence` on top of `ccb5679`, not reviewed
+
+Follows Sanika Attarde's review of pull request #18, which said that filing the result would let the note on FX-PDF-11 cite it. The new `test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md` (0.1) files what the WB-05 harness measured for pdfrx and pdfx on the iOS simulator in a debug build on 1 November 2026: time to the first page, 20 page turns, a render at 300%, memory, two damaged files and a repair check. The figures were compared with the result files when the report was prepared. The raw output is not filed, because it holds local paths. No phone has been used, so none of it is valid for AC-2.1, AC-2.3 or AC-2.5, and the report ranks no library and leaves DEC-005 OPEN. The note on FX-PDF-11 in `TEST_DATA_AND_FIXTURES.md`, RD-08 and the status line of `PDF_READER_AND_OFFLINE_DESIGN.md` and OQ-61 in `OPEN_QUESTIONS.md` cite it. OQ-61 says who tests what: WS-A on the chosen backend, and WS-B on the test phones. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/OPEN_QUESTIONS.md` | Version 0.8: OQ-61 cites the filed simulator result and says who tests what. | The reader side of OQ-61 rested on a result that was not filed | OQ-61, RD-08, DEC-005, OQ-26 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` | Version 0.5: the status line says that a spike measured two libraries on a simulator and that no phone has been used. RD-08 cites the result. | The status line said that nothing had been measured, and the result is now filed | RD-08, DEC-005, FX-PDF-11 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.8: the note on FX-PDF-10 and FX-PDF-11 cites the filed result and no longer says that it is not filed. | The result is now filed (review of pull request #18) | FX-PDF-10, FX-PDF-11, RD-08 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md` | Version 0.1: new report of the WB-05 simulator result. | Findings of a spike are merged as a document (`DEVELOPMENT_WORKFLOW.md` §13 item 5) | T-02.3, DEC-005, AC-2.1, AC-2.3, AC-2.5, AC-2.6, FX-PDF-01, FX-PDF-05, FX-PDF-10, FX-PDF-11 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.23: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.8 for `OPEN_QUESTIONS` (was 0.7), 0.5 for `PDF_READER_AND_OFFLINE_DESIGN` (was 0.4), 0.8 for `TEST_DATA_AND_FIXTURES` (was 0.7) and 0.23 for `CHANGELOG` (was 0.22). A row is added for the new evidence report | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: three follow-ups left by earlier reviews, 2026-11-05, on topic branch `docs/yg-deferred-review-followups` on top of `823eb52`, then merged with `origin/main` at `e5e22e0`, under review in pull request #24
 
