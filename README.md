@@ -58,14 +58,14 @@ Reading order
 | [TASK_OWNERSHIP_MATRIX](Documentation/TASK_OWNERSHIP_MATRIX.md) | Who owns what, and the document map | Authoritative: ownership and map | 0.6 | Sanika (interim) | Both developers |
 | [DEVELOPMENT_WORKFLOW](Documentation/DEVELOPMENT_WORKFLOW.md) | Branches, reviews, merges | Authoritative: process | 0.2 | Sanika (interim) | Both developers. No MFW approval |
 | [CODING_STANDARDS](Documentation/CODING_STANDARDS.md) | Coding rules and on-device storage rules | Authoritative: standards | 0.2 | Sanika (interim) | Both developers |
-| [DEFINITION_OF_DONE](Documentation/DEFINITION_OF_DONE.md) | What done means for each kind of work | Authoritative: done | 0.2 | Sanika (interim) | Both developers |
+| [DEFINITION_OF_DONE](Documentation/DEFINITION_OF_DONE.md) | What done means for each kind of work | Authoritative: done | 0.3 | Sanika (interim) | Both developers |
 | (see the document map) | Working rules for AI-assisted drafting. Named in the document map, `TASK_OWNERSHIP_MATRIX.md` section 13.1 | Supporting | 0.2 | Sanika (interim) | Both developers |
 | [DEPENDENCY_REGISTER](Documentation/DEPENDENCY_REGISTER.md) | Packages, services and accounts, with licences | Authoritative: dependencies | 0.5 | Sanika (interim) | Both developers; MFW for any paid component |
-| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.14 | Sanika (interim) | None stated |
+| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.15 | Sanika (interim) | None stated |
 | [ACCEPTANCE_CRITERIA](Documentation/ACCEPTANCE_CRITERIA.md) | S2 criteria AC-1 to AC-12 as checks, and proposed PAC rows | Authoritative: acceptance rows | 0.4 | Sanika (interim) | Both developers; MFW in writing for each PAC row |
-| [TESTING_STRATEGY](Documentation/TESTING_STRATEGY.md) | Test levels, plans, security checklist | Authoritative: test plans | 0.6 | Sanika (interim); move to Yuvraj proposed | Both developers |
+| [TESTING_STRATEGY](Documentation/TESTING_STRATEGY.md) | Test levels, plans, security checklist | Authoritative: test plans | 0.7 | Sanika (interim); move to Yuvraj proposed | Both developers |
 | [TEST_DATA_AND_FIXTURES](Documentation/TEST_DATA_AND_FIXTURES.md) | Test users, files and network scenarios | Authoritative: fixtures | 0.3 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW for where its sample PDFs are stored |
-| [CI_CD_AND_QUALITY_GATES](Documentation/CI_CD_AND_QUALITY_GATES.md) | Planned checks on each change | Authoritative: quality gates (planned) | 0.2 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW if a cost is billed to MFW |
+| [CI_CD_AND_QUALITY_GATES](Documentation/CI_CD_AND_QUALITY_GATES.md) | Planned checks on each change | Authoritative: quality gates (planned) | 0.3 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW if a cost is billed to MFW |
 | [REQUIREMENT_COVERAGE_MATRIX](Documentation/REQUIREMENT_COVERAGE_MATRIX.md) | Which rows and plans name each requirement | Derived, not a source of truth | 0.2 | Yuvraj (proposed, not agreed) | Both developers |
 | [DEPLOYMENT_PLAN](Documentation/DEPLOYMENT_PLAN.md) | Environments, configuration, release sequence | Authoritative: deployment (planned) | 0.4 | Sanika (interim) | Both developers; MFW for environments and costs |
 | [BACKUP_AND_RECOVERY](Documentation/BACKUP_AND_RECOVERY.md) | Proposed backup, restore and escalation | Authoritative: backup (proposed) | 0.5 | Sanika (interim) | Both developers, then MFW for cost and data obligations |

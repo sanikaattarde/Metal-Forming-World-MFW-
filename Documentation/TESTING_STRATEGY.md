@@ -7,7 +7,7 @@
 | Document | Testing Strategy |
 | File | `Documentation/TESTING_STRATEGY.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 30) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. Every test described here is PLANNED. None is implemented or executed. |
 | Date | 5 November 2026 |
 | Approval required | Both developers. MFW sees the results as test evidence under S2 AC-10. |
@@ -22,6 +22,7 @@
 | 0.4 | 27 October 2026 | Section 7.9 updated: the admin tests follow in-panel add and remove (OQ-58, PAC-19) instead of the withdrawn two-role model (PRC-01, PAC-18). No gate or other test changed. |
 | 0.5 | 31 October 2026 | Section 7.6 gains a proposed test line for the bookmark rules in `API_AND_MODULE_CONTRACTS.md` section 6.8. No gate or other test changed. |
 | 0.6 | 4 and 5 November 2026 | The section 7.6 test line is extended for the bookmark follow-up: the pre-check of rule 5, the temporary copy of rule 4, the identifier exception, and the server's check of the revision in OP-07 (PROPOSED). No gate or other test changed. |
+| 0.7 | 4 and 5 November 2026 | Suite TS-14 added for the contract tests CT-01 to CT-11 of `API_AND_BACKEND_CONTRACT.md` section 10, which no test plan named. The regression table (section 11), the ownership table (section 14) and the blocked items (section 15) name it. The split between the backend side and the app side is a proposal made here, and Sanika Attarde's review of pull request #17 agreed it as the working position. It stays PROPOSED with the rest of the task split (OQ-38). Revised on 5 November 2026 after that review: the app side runs with the app tests (QG-03, [SCAFFOLD]) and the backend side keeps [BACKEND], the regression row follows the trigger of QG-14, and CT-02 and CT-10 start at the first release. No existing suite, threshold or checklist item changed. |
 
 ### 1.1 Related documents
 
@@ -74,6 +75,7 @@ This strategy describes how the app, backend and admin panel will be tested agai
 | TS-11 | Store pre-submission | `APP_STORE_RELEASE_CHECKLIST.md` | Manual | WS-A | [STORE] | Release candidate | Checklist complete |
 | TS-12 | Acceptance testing (MFW) | S2 AC-1 to AC-12 | MFW's testers | MFW, supported by both developers | [DEVICES] | Section 12 entry criteria | MFW sign-off |
 | TS-13 | Post-release smoke | Section 6 of `DEPLOYMENT_PLAN.md` | Manual | WS-A | [STORE] | Release live | Smoke checks pass |
+| TS-14 | Contract tests | CT-01 to CT-11 of `API_AND_BACKEND_CONTRACT.md` §10: the contract snapshot, old-client replay, the additive check, the tolerant reader, error stability, repeats, authorisation, the update gate (PRC-04, a proposed addition to S2 scope), the WordPress shape, cached data and deprecation. Each test goes to the side whose code it tests: backend side CT-01 to CT-03, CT-05 to CT-07 and CT-11; app side CT-04 and CT-08 to CT-10. The split is proposed here and agreed as the working position in Sanika Attarde's review of pull request #17. It stays PROPOSED with the rest of the task split (OQ-38). CT-08 exists only if MFW agrees PRC-04 | Backend side: blocked by DEC-003 and DEC-026, candidate the emulators in CI (TD-17). App side: runs with the app tests in QG-03 and needs no backend | WS-A for the backend side, WS-B for the app side | [BACKEND] for the backend side, [SCAFFOLD] for the app side | Backend side: backend skeleton and a first contract snapshot. App side: the app scaffold | All pass. An intended contract change updates the snapshot in the same pull request. CT-02 and CT-10 compare against a released app version, so they start at the first release |
 
 ## 5. Test Environments
 
@@ -282,8 +284,8 @@ Each defect records: ID, title, steps, expected result, actual result, severity,
 
 | Trigger | Regression run |
 |---|---|
-| Every pull request | TS-01, TS-02 and TS-03 for the whole app; TS-05 for changed rules [CI] |
-| Every merge into `main` | TS-01 to TS-04 [CI] |
+| Every pull request | TS-01, TS-02 and TS-03 for the whole app; TS-05 for changed rules; the app side of TS-14 with TS-02, and its backend side when `backend/` or the contract reference file changes [CI] |
+| Every merge into `main` | TS-01 to TS-04 and TS-14 [CI] |
 | Milestone builds (M3, M4) | TS-04, then TS-06 on at least one Android and one iOS device |
 | Release candidate | TS-06 across the full device set, TS-07, TS-08, TS-09, TS-10, TS-11 |
 | Bug fix | The reproducing test, plus the affected feature's suite (DoD-BUG) |
@@ -324,6 +326,7 @@ RS requirement (RS §13) → ACCEPTANCE_CRITERIA.md row (AC-n.m or PAC-nn) → t
 | Test strategy upkeep and test coordination (S2 AC-10) | WS-B |
 | Unit, widget and integration tests for a module | That module's owner |
 | Backend rule tests, security checklist, privacy checks | WS-A |
+| Contract tests (TS-14) | Backend side WS-A, app side WS-B (a split proposed in section 4 here and agreed as the working position in the review of pull request #17, PROPOSED with the task split, OQ-38) |
 | Device performance tests, accessibility | WS-B |
 | Store pre-submission and post-release smoke tests | WS-A |
 | Acceptance test script and the MFW test sessions | Both, with Sanika Attarde as MFW contact |
@@ -333,6 +336,7 @@ RS requirement (RS §13) → ACCEPTANCE_CRITERIA.md row (AC-n.m or PAC-nn) → t
 | Item | Blocked by |
 |---|---|
 | TS-05 backend and rule tests | DEC-003, DEC-020 |
+| TS-14 contract tests, backend side | DEC-003, DEC-026 |
 | ENV-TEST | DEC-023, OQ-40 |
 | Device matrix | OQ-26 |
 | Google account rules | OQ-04, OQ-05, OQ-29 |
