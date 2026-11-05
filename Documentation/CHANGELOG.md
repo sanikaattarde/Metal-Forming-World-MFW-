@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.11 |
+| Version | 0.12 |
 | Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
-| Date | 4 November 2026 |
+| Date | 5 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,19 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: bookmark follow-up to pull request #11, 2026-11-04, revised 2026-11-05, on topic branch `docs/yg-bookmark-inv14-read` on top of `eebcdb7`, then merged with `origin/main` at `157a9a9`, under review in pull request #15
+
+Follows YG's review of pull request #11, merged as `cdd5b8c`, which left three changes for YG's own pull request. `bookmark_id` is named as a second exception to the never-reused identifier rule beside `user_id`, in the data model, the backend contract and the app contract. The exception is YG's position and stays PROPOSED until both developers agree. Opening a bookmark with no local copy gets the current revision with the Read action, a temporary copy, so that no kept copy results. That split is a reported working position (OQ-08). MOD-08 checks that `page` and `fileRevision` are at least 1 before it writes, and returns `invalidInput`. After Sanika Attarde's review of this pull request on 2026-11-05, OP-07 also checks that `file_revision` is at least 1 on the server (PROPOSED), the app contract says what a queued remove does when the same page is added again on another device, and the data model says "no other stored record" and points M10 to section 4.1. The proposed test line in `TESTING_STRATEGY.md` section 7.6 follows. `spike/yg-ws-b` still carries the old bookmark shape and is not changed here. No requirement, scope item, exclusion, date, estimate or milestone changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-04 | `Documentation/DATABASE_AND_DATA_MODEL.md` | Version 0.5: `bookmark_id` as an exception in section 4.1, the section 4.10 field note and Validation row, section 10.4 rule 8, INV-14 and its test, the section 12 row, "no other stored record" in section 4.1 and INV-14, and the M10 pointer. Section 6.3 step 2 uses the Read action | The review of pull request #11 left the conflict with INV-14 and the unstated copy kind | INV-14, DATA-005, FR-BKM-002, OQ-08, GS-Q43 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/API_AND_BACKEND_CONTRACT.md` | Version 0.4: the identifier rule in section 3 names the bookmark exception. OP-07 checks that `file_revision` is at least 1, beside the page check (PROPOSED) | Follows the data model, and the review of pull request #15 asked for the server check | INV-14, OP-07, FR-BKM-001 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.8: section 6.8 rule 1 (the exception, "no other stored record"), rule 2 (the queued remove), rule 4 (Read action), new rule 5 (pre-check, and the server's revision check), and the MOD-08 errors, tests and `OP-LIB-02` rows | The review of pull request #11 | FR-BKM-001, FR-BKM-002, INV-14, OP-07, OP-LIB-02, OQ-08 | Both developers (not agreed) | No scope effect |
+| 2026-11-04 | `Documentation/TESTING_STRATEGY.md` | Version 0.6: the section 7.6 test line is extended for rules 4 and 5, the exception and the server's revision check | The new rules had no planned test | FR-BKM-001, FR-BKM-002, INV-14 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.12: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column reads 0.5 for `DATABASE_AND_DATA_MODEL` (was 0.4), 0.4 for `API_AND_BACKEND_CONTRACT` (was 0.3), 0.8 for `API_AND_MODULE_CONTRACTS` (was 0.7), 0.6 for `TESTING_STRATEGY` (was 0.5) and 0.12 for `CHANGELOG` (was 0.11) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: dependency register with review entries and licence reads, 2026-11-04, on topic branch `docs/yg-dependency-register-ws-b` on top of `2a5476c`, then merged with `origin/main` at `eebcdb7`, under review in pull request #13
 
