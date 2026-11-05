@@ -4,8 +4,8 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.18 |
-| Status | Draft for review. Not approved. The conventions are PROPOSED (DEC-015). |
+| Version | 0.19 |
+| Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 5 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
@@ -14,13 +14,13 @@
 
 | Document | Status |
 |---|---|
-| `DECISION_LOG.md` DEC-015 | Exists (draft). Commit, changelog and version conventions (PROPOSED). |
+| `DECISION_LOG.md` DEC-015 | Exists (draft). Commit, changelog and version conventions (AGREED). |
 | `DEVELOPMENT_WORKFLOW.md` §8, §11 | Exists (draft). How pull requests add changelog lines. |
 | `APP_STORE_RELEASE_CHECKLIST.md` §8 | Exists (draft). When a version section is added. |
 
 ## Conventions
 
-PROPOSED (DEC-015).
+AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 1. **Unreleased** lists changes merged, or prepared for merge, since the last release tag. Each pull request adds its own line (`DEVELOPMENT_WORKFLOW.md` §8).
 2. **Version sections** (`## [1.0.0] - <date>`) are added only when a release tag `vMAJOR.MINOR.PATCH` is created on `main`. No version has been released.
@@ -30,6 +30,26 @@ PROPOSED (DEC-015).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: documents updated after DEC-010 to DEC-015, DEC-022 and DEC-024 became AGREED, 2026-11-05, on topic branch `docs/yg-agreed-propagation` on top of `761e00a`, not reviewed
+
+Follows the pull requests that set eight decision log entries to AGREED (#14) and the review of pull request #20, which asked for the DEC-010 record in the follow-up for the section 5.6 list. The documents on that list no longer call those decisions PROPOSED. DEC-011 is AGREED for the two workstreams and the developer mapping, and each assignment row stays PROPOSED until OQ-38 is answered. DEC-010 and DEC-015 are AGREED for the branching model and the commit conventions, and every other rule in `DEVELOPMENT_WORKFLOW.md` stays PROPOSED. DEC-022 is AGREED, conditional on the cost check that is not done. DEC-013 and DEC-014 no longer make the scaffold a spike, while DEC-003, DEC-004 and DEC-005 still do. Branch protection for `main` is on since 5 November 2026: YG observed through the GitHub API that `main` is protected, that `SA` and `YG` are not, that an approving review is needed and that a later push dismisses an approval. The rest of the settings are as Sanika Attarde read them back from GitHub with owner access, because the full rule is not readable with YG's access. The DEC-010 condition in `DECISION_LOG.md` section 5.6 is met. No MFW approval is recorded, and no entry is APPROVED. Nothing here has gone to MFW. After Sanika Attarde's review of this pull request on 2026-11-05, the workflow names the sections that DEC-010 (4 to 7) and DEC-015 (11) cover, the matrix gives both workstreams as AGREED, the module Owner rows read PROPOSED until OQ-38, section 5.2 of the coding standards gives the condition of DEC-013, and the protection row is labelled CONFIRMED (GitHub API).
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-05 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.10: section 3 gives the workstreams and the developer mapping as AGREED (DEC-011), with each assignment row still PROPOSED until OQ-38 is answered. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/APP_STORE_RELEASE_CHECKLIST.md` | Version 0.4: section 8 reads AGREED (DEC-015). | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.5: section 3 gives the CI service as AGREED, conditional on the cost check (DEC-022). The GitHub plan row records that branch protection on `main` is on. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CODING_STANDARDS.md` | Version 0.4: sections 2, 3 and 5.2 give DEC-012, DEC-013 and DEC-014 as AGREED. The rules themselves stay PROPOSED. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DECISION_LOG.md` | Version 0.8: section 5.6 records that the DEC-010 condition is met (branch protection on `main`), that section 11 of the workflow reads AGREED (DEC-015), and that the documents on the follow-up list are updated. The DEC-010 context follows. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.7: the DEP-60 row records that branch protection on `main` is on. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.10: T-01.1 and section 4.3 no longer call the scaffold a spike for DEC-013 and DEC-014, which are AGREED. DEC-003, DEC-004 and DEC-005 still hold the spike labels. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/DEVELOPMENT_WORKFLOW.md` | Version 0.4: the branching model (DEC-010) and the commit conventions (DEC-015) are AGREED, and every other rule stays PROPOSED. Sections 3 and 15 record that branch protection on `main` is on, with what YG observed through the GitHub API and what Sanika Attarde read back. Sections 11, 16 and 17 follow. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/OPEN_QUESTIONS.md` | Version 0.5: the OQ-38 row records that DEC-011 is AGREED and that Sanika Attarde's written note is filed, and only the availability is still open | The review of pull request #21 | OQ-38, DEC-011 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/TASK_OWNERSHIP_MATRIX.md` | Version 0.8: the control table and section 6 give the two workstreams and the developer mapping as AGREED (DEC-011), with every assignment still PROPOSED until OQ-38 is answered. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.6: the related-documents row gives DEC-024 as AGREED. | The follow-up list of `DECISION_LOG.md` section 5.6, and the review of pull request #20 | DEC-010, DEC-011, DEC-012, DEC-013, DEC-014, DEC-015, DEC-022, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `Documentation/CHANGELOG.md` | Version 0.19: this entry, and the status, conventions and related-documents rows read AGREED (DEC-015) | Records the edits above | DEC-015 | Both developers (not agreed) | No scope effect |
+| 2026-11-05 | `README.md` | The version column follows the control table of each of the 11 changed documents, one step up, and reads 0.19 for `CHANGELOG` (was 0.18) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: pinned versions and dated headers removed from related-document rows, 2026-11-05, on topic branch `docs/yg-pinned-version-cleanup` on top of `0310d15`, then merged with `origin/main` at `6ecc23f`, under review in pull request #20
 

@@ -7,7 +7,7 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.7 |
+| Version | 0.8 |
 | Status | Draft for review. Not approved. |
 | Date | 5 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
@@ -23,6 +23,7 @@
 | 0.5 | 31 October 2026 | Section 5.5 added: Yuvraj Gaykhe's written positions on DEC-010 to DEC-015, DEC-022 and DEC-024, the other half of the evidence for those eight entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED. |
 | 0.6 | 4 and 5 November 2026 | DEC-010 to DEC-015, DEC-022 and DEC-024 set to AGREED, the follow-up that sections 5.4 and 5.5 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.5) and Sanika Attarde's approving review of pull request #12 on 3 November 2026. Section 5.6 added: the evidence, the conditions still open for each entry, a limit on the public PDFs of DEC-024 (OQ-57), and the documents that still call these entries PROPOSED. Update sentences added to the position rows of DEC-011, DEC-013 and DEC-014. No entry is APPROVED. DEC-025 to DEC-030 stay PROPOSED. Revised on 5 November 2026 after the review of pull request #14: section 5.6 links the approving review, the list of documents adds the related-documents row of `CHANGELOG.md`, and `DEPENDENCY_REGISTER.md` is struck from the list because its DEP-43 and DEP-44 rows are updated in the same pull request. |
 | 0.7 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
+| 0.8 | 5 November 2026 | Section 5.6 records that the DEC-010 condition is met (branch protection on `main`), that section 11 of the workflow reads AGREED (DEC-015), and that the documents on the follow-up list are updated. The DEC-010 context follows. Revised on 5 November 2026 after the review of pull request #21: the follow-up list adds section 5 of the matrix and the OQ-38 row, and names the sections that DEC-010 and DEC-015 cover. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -250,27 +251,29 @@ Eight entries move from PROPOSED to AGREED: DEC-010 to DEC-015, DEC-022 and DEC-
 
 | Entry | Condition or limit still open |
 |---|---|
-| DEC-010 | Branch protection for `main`, requiring one approving review by the other developer, is not turned on. Sanika Attarde, as the repository owner, will turn it on (review of pull request #12). Until then the rule is a convention that nothing enforces. |
+| DEC-010 | Met on 5 November 2026: branch protection for `main` is on, requiring one approving review (`DEVELOPMENT_WORKFLOW.md` section 3). YG observed through the GitHub API that `main` is protected, that `SA` and `YG` are not, that a pull request needs an approving review, and that a later push dismisses an earlier approval. The rest of the settings are as Sanika Attarde read them back from GitHub with owner access (https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/14#issuecomment-6656886883): applies to admins, force pushes and deletion blocked, linear history not required, no status checks yet. |
 | DEC-011 | The availability of both developers is still to be filed (OQ-38). |
 | DEC-012 | Secrets, reader data and MFW's sample PDFs stay out of Git (DEC-024). The code stays publicly visible until handover. |
 | DEC-013 | Riverpod is used in `app/lib/app/` only, and feature code takes its dependencies through constructors. The Flutter and Dart versions are pinned at the scaffold (OQ-50). A `DEPENDENCY_REGISTER.md` entry comes before the package (DEP-43). |
 | DEC-014 | The route guard steers screens only, and the server enforces access (DEC-009). The versions are pinned at the scaffold, and a `DEPENDENCY_REGISTER.md` entry comes before the package (DEP-44). |
-| DEC-015 | Commits, merge commits and repository files carry no tool attribution lines and no co-author trailers, from now on. Existing history stays as it is. The rule itself is in `DEVELOPMENT_WORKFLOW.md` section 11, which is still PROPOSED. |
+| DEC-015 | Commits, merge commits and repository files carry no tool attribution lines and no co-author trailers, from now on. Existing history stays as it is. The rule itself is in `DEVELOPMENT_WORKFLOW.md` section 11, which reads AGREED (DEC-015). |
 | DEC-022 | Conditional on the cost check in task MOD15-P1-T01, which is not done. Plan limits and macOS runner cost are NOT VERIFIED. Nothing is billed to MFW without MFW's approval. |
 | DEC-024 | MFW still confirms where its sample PDFs may be kept. The public PDFs for the reader comparison leave out PDFs taken from MFW's own website until OQ-57 is answered (see the DEC-024 entry). |
 
-**Documents that still call these entries PROPOSED.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request. This edit changes this log, and the DEP-43 and DEP-44 rows of `DEPENDENCY_REGISTER.md`, which said "Not AGREED" after pull request #13 merged. The places below still read as before and are for the follow-up. `TECHNOLOGY_DECISIONS.md` section 10.5 is a dated record of 26 and 27 October 2026 and stays as written.
+**Documents that called these entries PROPOSED.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request. The follow-up of 5 November 2026 updated the places below. `TECHNOLOGY_DECISIONS.md` section 10.5 is a dated record of 26 and 27 October 2026 and stays as written. The ENV-TEST rows of `DEPLOYMENT_PLAN.md` and `TESTING_STRATEGY.md` stay PROPOSED, because that status is DEC-023.
 
 ```text
-Follow-up list
-├── API_AND_MODULE_CONTRACTS.md          section 3 (DEC-011)
+Updated on 5 November 2026
+├── API_AND_MODULE_CONTRACTS.md          section 3 and the module Owner rows (DEC-011: the mapping AGREED, each assignment PROPOSED until OQ-38)
 ├── APP_STORE_RELEASE_CHECKLIST.md       section 8 (DEC-015)
 ├── CHANGELOG.md                         the status row, the conventions and the related-documents row (DEC-015)
-├── CI_CD_AND_QUALITY_GATES.md           section 3 (DEC-022)
+├── CI_CD_AND_QUALITY_GATES.md           section 3 (DEC-022, conditional) and the GitHub plan row
 ├── CODING_STANDARDS.md                  sections 2, 3 and 5.2 (DEC-012, DEC-013, DEC-014)
-├── DEVELOPMENT_ROADMAP.md               sections 4.1 and 4.3, the spike labels for DEC-013 and DEC-014
-├── DEVELOPMENT_WORKFLOW.md              sections 1, 2, 11, 16 and 17 (DEC-010, DEC-015)
-├── TASK_OWNERSHIP_MATRIX.md             sections 1 and 6 (DEC-011)
+├── DEPENDENCY_REGISTER.md               the DEP-60 row (branch protection)
+├── DEVELOPMENT_ROADMAP.md               sections 4.1 and 4.3, the spike labels for DEC-013 and DEC-014 dropped
+├── DEVELOPMENT_WORKFLOW.md              sections 1, 2, 3, 11, 15, 16 and 17 (DEC-010 covers sections 4 to 7, DEC-015 covers section 11, branch protection)
+├── OPEN_QUESTIONS.md                    the OQ-38 row (DEC-011 AGREED, Sanika Attarde's note filed, only the availability still open)
+├── TASK_OWNERSHIP_MATRIX.md             sections 1, 5 and 6 (DEC-011: the mapping AGREED, each assignment row PROPOSED until OQ-38)
 └── TEST_DATA_AND_FIXTURES.md            section 1.1 (DEC-024)
 ```
 
@@ -401,7 +404,7 @@ Follow-up list
 |---|---|
 | Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION. Based on CH §17.5 (draft). |
-| Context | CH §17.5 says `main` is the stable integration branch, work is done on `SA` and `YG`, and changes reach `main` only through a reviewed integration by the other developer. Commit `8941964` reached `main` with no pull request visible in local Git metadata. GitHub branch protection is not verified. |
+| Context | CH §17.5 says `main` is the stable integration branch, work is done on `SA` and `YG`, and changes reach `main` only through a reviewed integration by the other developer. Commit `8941964` reached `main` with no pull request visible in local Git metadata. Branch protection for `main` has been on since 5 November 2026 (`DEVELOPMENT_WORKFLOW.md` section 3). |
 | Options considered | (a) `SA` and `YG` as pull-request sources, with optional short-lived topic branches. (b) Topic branches only, retiring `SA` and `YG`. (c) Direct commits to `main`, which contradicts CH §17.5. |
 | Proposal and rationale | (a), with merge commits. Details and rationale are in `DEVELOPMENT_WORKFLOW.md`. |
 | Approver and evidence | Requires agreement by both developers |
