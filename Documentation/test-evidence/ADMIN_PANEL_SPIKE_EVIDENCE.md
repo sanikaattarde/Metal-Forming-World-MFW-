@@ -21,7 +21,7 @@
 
 ### 1.1 Related documents
 
-| Document | Status on 6 November 2026 |
+| Document | Status |
 |---|---|
 | `DEVELOPMENT_WORKFLOW.md` §13 item 5 | A spike is not merged into `main` as production code. Its findings are merged as a document. This report is that document |
 | `Documentation/test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md` | The backend spike's report, at `e7d9f37`. This report adds the server changes the panel needed (section 4.2) |
@@ -117,20 +117,29 @@ These are on `spike/sa-admin-content`. The backend report on `main` was written 
 
 ## 5. Results by Acceptance Row and Checklist Item
 
+The result words are those of the backend report (`BACKEND_RULES_EMULATOR_EVIDENCE.md`, section 5). Every result here is emulator or local only.
+
+- "Met": every case the item names passed, and no open defect in section 6.2 is logged against it.
+- "Partly met": some cases passed, and the rest are NOT TESTED, not built, or have an open defect in section 6.2. The row names which.
+- "Not covered": no test here addresses the item.
+- None of them is a pass for T-11.3.
+
+A row that is scoped to one operation or one side says so, and the item as a whole is marked with the word that fits all of it.
+
 | Item | Result (emulator or local only) | Evidence |
 |---|---|---|
 | AC-8.1: a wrong password is refused | **Met** | Admin tests against the Auth emulator; the browser checks |
-| AC-8.2: a non-admin account is refused, in the panel and on direct calls | **Met** for the panel, through OP-14. Direct calls are refused by the server gate (backend report, SEC-CHK-06) | Admin tests against the Functions emulator |
+| AC-8.2: a non-admin account is refused, in the panel and on direct calls | **Partly met.** Met for the panel, through OP-14. Direct calls are refused by the server gate for the operations built (backend report, SEC-CHK-06), and the rest are not built | Admin tests against the Functions emulator |
 | AC-8.6: categories show correctly in the app | **Partly met.** A category added or renamed in the panel is what the public read returns, in display order. The app itself is not built here | Admin tests against the emulators |
 | AC-8.7: publishing and unpublishing show correctly | **Partly met.** After publishing, a visitor can read the issue through the rules, and after unpublishing cannot. Shown in a browser check too. The app itself is not built here, and an issue needs a file accepted some other way (K-4) | Admin tests; the B5.2 browser check |
 | AC-8.8: hidden news posts are not shown | **Partly met.** A post hidden in the panel is hidden in the public read the app makes. The app itself is not built here | Admin tests; the B5.3 browser check |
-| AC-9.7: a breaking post is flagged and sent | **Not claimed.** The flag is set and readable; nothing is sent | — |
-| SEC-CHK-06: every admin operation is refused for non-admins | **Met for OP-24**, for five kinds of caller, with the site not asked | Backend group G12 |
+| AC-9.7: a breaking post is flagged and sent | **Not claimed.** The flag is set and readable; nothing is sent | None |
+| SEC-CHK-06: every admin operation is refused for non-admins | **Partly met.** Met for OP-24, for five kinds of caller, with the site not asked. That adds to the backend report, which met OP-15 to OP-23. The operations not built yet (OP-25 to OP-27, OP-30 to OP-32, OP-34, OP-35 and OP-37 to OP-39) are not covered | Backend group G12 |
 | SEC-CHK-08: admin sign-in refuses wrong passwords, with the OQ-20 measures | **Partly met.** Wrong passwords are refused, and a verified email is required. The recent-sign-in check is not built (OQ-56 is about adding and removing admins, which wait for OQ-58), and password rules and session length are not decided | Admin and backend tests |
-| SEC-CHK-15: WordPress content is shown without running scripts, and links open outside | **Panel side met.** Titles are plain text on the server and shown as text; links open in a new tab with no opener. The app's rendering is not built here | Backend G12 and U6; admin news tests; the B5.3 browser check |
-| SEC-CHK-17: the same response for a known and an unknown address | **Met** for admin sign-in. Timing is not tested | Admin tests |
-| SEC-CHK-18: a removed admin is refused on the next privileged call | **Met** in the panel: the next call, or coming back to the panel, ends the session. How soon a removal is seen on a real project is not measured | Admin tests |
-| SC-22 and ST-22: the panel's web surface | **Not built.** The session is held in memory and sent as a bearer token on each call, not as a cookie. No frame or script policy is set, and nothing in the spike limits which browser origins may call the functions. These wait for DEC-004 and OQ-60 | Observed only |
+| SEC-CHK-15: WordPress content is shown without running scripts, and links open outside | **Partly met.** The panel side is met: titles are plain text on the server and shown as text; links open in a new tab with no opener. The app's rendering is not built here | Backend G12 and U6; admin news tests; the B5.3 browser check |
+| SEC-CHK-17: the same response for a known and an unknown address | **Partly met.** Met for admin sign-in. Password reset and the app's sign-in are not covered here. Timing is not tested | Admin tests |
+| SEC-CHK-18: a removed admin is refused on the next privileged call | **Partly met.** The refusal is met in the panel: the next call, or coming back to the panel, ends the session. **Delay not measured.** How soon a removal is seen on a real project is not measured, and the item asks for it to be measured and reported | Admin tests |
+| SC-22 and ST-22: the panel's web surface | **Not covered.** Not built. The session is held in memory and sent as a bearer token on each call, not as a cookie. No frame or script policy is set, and nothing in the spike limits which browser origins may call the functions. These wait for DEC-004 and OQ-60 | Observed only |
 
 ### 5.1 The browser checks
 
@@ -155,14 +164,14 @@ In every check the browser contacted only 127.0.0.1. It never contacted the Word
 
 ### 6.2 Open
 
-| Finding | What is open |
-|---|---|
-| I-10 | No automated test here can tell browser storage from an in-memory session. Only the browser check shows it |
-| J-3 | An admin whose email is not verified still counts in the last-admin guard, so the last active admin could be one who cannot act |
-| K-2 | No operation returns one issue to an admin. Opening an issue by its address pages through OP-15 |
-| K-4 | The panel cannot publish an issue on its own until the upload screen exists (T-09.2, OQ-22, OQ-30) |
-| L-3 | One malformed post makes OP-24's whole page `UNAVAILABLE` |
-| I-6 | `npm audit` reports 4 high advisories in `@grpc/grpc-js` inside `firebase`. Releases 13.1.0 and 13.2.0 both pin it at ~1.9.0, and the only fix offered is a downgrade to 9.14.0. None of that code is in the panel's bundle |
+| Finding | Item | What is open |
+|---|---|---|
+| I-10 | None. Bears on `CODING_STANDARDS.md` §15 item 5 | No automated test here can tell browser storage from an in-memory session. Only the browser check shows it |
+| J-3 | None. Bears on INV-03, the last-admin guard | An admin whose email is not verified still counts in the last-admin guard, so the last active admin could be one who cannot act |
+| K-2 | None. Bears on OP-15 | No operation returns one issue to an admin. Opening an issue by its address pages through OP-15 |
+| K-4 | AC-8.7 | The panel cannot publish an issue on its own until the upload screen exists (T-09.2, OQ-22, OQ-30) |
+| L-3 | AC-8.8 | One malformed post makes OP-24's whole page `UNAVAILABLE`, so the admin cannot see the page to hide a post on it |
+| I-6 | SEC-CHK-13 | `npm audit` reports 4 high advisories in `@grpc/grpc-js` inside `firebase`. Releases 13.1.0 and 13.2.0 both pin it at ~1.9.0, and the only fix offered is a downgrade to 9.14.0. None of that code is in the panel's bundle |
 
 ## 7. What Needs ENV-TEST or MFW's Inputs
 
