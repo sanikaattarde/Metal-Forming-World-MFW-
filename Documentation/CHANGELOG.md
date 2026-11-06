@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.22 |
+| Version | 0.23 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 5 November 2026 |
+| Date | 6 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the cost check behind DEC-022 defined in one place, 2026-11-06, on topic branch `docs/yg-cost-check-definition` on top of `ccb5679`, under review in pull request #25
+
+Follows Sanika Attarde's review of pull request #23, which noted that MOD15-P1-T01, the cost check that the condition of DEC-022 rests on, is cited five times and defined nowhere in the repository. The DEC-022 row of `DECISION_LOG.md` section 5.6 now says what it is, as the documents state it: Sanika Attarde's task, in a task list that is not in this repository, which confirms for this repository whether GitHub Actions is available, what the plan allows in runner minutes and what a macOS runner minute costs. It is not done. The passing runs on draft pull request #10 show that a macOS job ran, and they are not the cost check. The wording is for Sanika Attarde to correct. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes, DEC-022 stays AGREED and conditional, and nothing is billed to MFW without its approval. Nothing here has gone to MFW. After Sanika Attarde's review of this pull request on 2026-11-05, the row also says that the answer depends on the repository's visibility and on the account that pays (the repository is public now, and CI is billed to the account that owns it, which changes at the transfer), and that the check is made again if either changes.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/DECISION_LOG.md` | Version 0.11: the DEC-022 row of section 5.6 says what MOD15-P1-T01 is: Sanika Attarde's cost check of GitHub Actions availability, plan minutes and macOS minute cost, in a task list that is not in this repository. The row also says that the answer depends on the visibility and the paying account. | The task is cited five times and defined nowhere (review of pull request #23), and the answer depends on both (review of pull request #25) | DEC-022, MOD15-P1-T01, DEP-60, OQ-48 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.23: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of the changed document, one step up, and reads 0.11 for `DECISION_LOG` (was 0.10) and 0.23 for `CHANGELOG` (was 0.22) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: three follow-ups left by earlier reviews, 2026-11-05, on topic branch `docs/yg-deferred-review-followups` on top of `823eb52`, then merged with `origin/main` at `e5e22e0`, under review in pull request #24
 
