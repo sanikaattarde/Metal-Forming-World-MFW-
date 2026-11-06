@@ -31,7 +31,7 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
-### Added: the shared contracts and test fakes (MOD-00), 2026-11-06, on topic branch `feat/yg-contracts` on top of `250190a`, under review in pull request #34
+### Added: the shared contracts and test fakes (MOD-00), 2026-11-06, on topic branch `feat/yg-contracts` on top of `250190a`, then merged with `origin/main` at `824cd95`, under review in pull request #34
 
 Adds the code form of `API_AND_MODULE_CONTRACTS.md` sections 4 to 6 (version 0.11) under `app/`. `app/lib/contracts/` (13 files, 972 lines) holds the types and interfaces of MOD-00, with `result.dart` where issue 28 agreed that `Result`, `AppFailure` and `FailureCode` live. `app/test/fakes/`, `app/test/fixtures/` and `app/test/contracts/` (29 files, 3,143 lines) hold a fake for each provider of IC-01 to IC-08 and 93 new tests. The code is cut from `spike/yg-ws-b` (commits `70acc47` and `49c6140`). On 2026-11-06, with Flutter 3.47.9 and Dart 3.13.7, `flutter pub get --enforce-lockfile`, `dart format`, `flutter analyze` and `flutter test` (94 tests) passed on YG's report. The iOS and Android builds were not run, and no CI exists on `main` yet (T-01.5). `pubspec.yaml` and `pubspec.lock` are unchanged.
 
@@ -44,7 +44,17 @@ Eight Dart shapes have no shape in `API_AND_MODULE_CONTRACTS.md` and are proposa
 | 2026-11-06 | `app/lib/contracts/` | Added: the types and interfaces of MOD-00 (13 files). | The shared base that both workstreams build on | MOD-00, IC-01 to IC-08, DEC-005, DEC-008, DEC-009, DEC-020, DEC-026, DEC-030, DEC-033, OQ-08, OQ-13, OQ-36, OQ-37 | Both developers (not agreed). The exception to DoD-TASK check 2 is accepted in a review comment, with approval pending | No scope effect |
 | 2026-11-06 | `app/test/fakes/`, `app/test/fixtures/`, `app/test/contracts/` | Added: the fakes, the fixtures and the contract tests (29 files, 93 new tests). | Lets the modules be built and tested before the backend exists | MOD-00, IC-01 to IC-08, TS-14 | Both developers (not agreed) | No scope effect |
 | 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.30: this entry | Records the addition above (`DEVELOPMENT_WORKFLOW.md` section 8) | None | Both developers (not agreed) | No scope effect |
-| 2026-11-06 | `README.md` | The version column follows the control table of the changed document, one step up, and reads 0.30 for `CHANGELOG` (was 0.25) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of the changed document, one step up, and reads 0.30 for `CHANGELOG` (was 0.26) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: the admin panel spike's working position recorded in OQ-60, 2026-11-06, on topic branch `docs/yg-oq60-admin-position` on top of `250190a`, under review in pull request #33
+
+Follows Sanika Attarde's reply on pull request #26, which asked for the admin panel spike's working position to go into OQ-60 once the report merged. OQ-60 in `OPEN_QUESTIONS.md` now says, as OQ-61 does for the backend spike, what the panel on `spike/sa-admin-content` (`ca31b5a`, emulator only, not merged) does: it holds the session in memory and sends it as a bearer token on each call, not as a cookie, it sets no frame policy and no script policy, and nothing limits which browser origins may call the functions. Three browser checks found local and session storage empty, and only a browser check can show that, because no automated test can tell browser storage from an in-memory session (finding I-10). None of the four objectives is tested. The question stays OPEN: the token handling is a spike choice to agree with the DEC-004 comparison, and the three policies are not built. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes, and DEC-004 stays OPEN. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/OPEN_QUESTIONS.md` | Version 0.9: OQ-60 records the admin panel spike's working position, emulator only, not merged, DEC-004 OPEN. | Sanika Attarde asked for it after the review of pull request #26 | OQ-60, DEC-004, SC-22, ST-22, SEC-CHK-20 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.26: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.9 for `OPEN_QUESTIONS` (was 0.8) and 0.26 for `CHANGELOG` (was 0.25) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: admin panel spike evidence, emulator only, 2026-11-06, on topic branch `docs/sa-admin-spike-report` on top of `ccb5679`, then merged with `origin/main` at `bf00632`, under review in pull request #26
 
