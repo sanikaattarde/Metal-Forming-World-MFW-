@@ -29,7 +29,7 @@
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). One Admin role: the callers, Sections 3.2, 5.1 and 5.2 are rewritten, and OP-30 to OP-39 and OP-42 are open to any admin. OP-36 is withdrawn. OP-35, OP-37, OP-39 and OP-42 are named addAdmin, removeAdmin, listAdminChanges and bootstrapAdmin. The audit set is narrowed to adds and removes of admins, so the denied entries are dropped and INV-16 is withdrawn. Immediate deletion: OP-13 is withdrawn and OP-12 and OP-41 are simplified. OP-33 is dropped with the edition-update sign-up. Section 3.3 is rewritten. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
 | 0.4 | 4 and 5 November 2026 | Bookmark follow-up to pull request #11. The identifier rule in section 3 names the bookmark identifier as an exception beside the user identifier (PROPOSED). OP-07 first said that it does not check `file_revision`. After the review of pull request #15 on 5 November 2026, OP-07 checks that `file_revision` is at least 1, beside the page check (PROPOSED), and the app's own check runs first. No decision is approved. |
 | 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
-| 0.6 | 6 November 2026 | Findings of Sanika Attarde's second-person review (issues 29 and 32) that this document holds. Section 2.3 rule 1 excepts check 0 of OP-11, and rule 2 puts the verified-email check at the admin gate (R-7, A-1). OP-14 returns `email_verified`. OP-12 requires a recent sign-in, refuses a repeat with ALREADY_DELETING, removes the admin role record, and deletes the user record last (R-4). OP-24 returns the GMT date (R-8). OP-10 and section 3.4 record that the app-side profile and consent operations differ and that no route accepts a changed policy version (R-3), and section 2.5 records that a category in use and a duplicate name have no agreed code (R-2). Section 11 names the Firebase codes in lower case and says CONFLICT has none (R-2). OP-08, OP-09, OP-41 and section 2.3 item 4 record that rules make no read, so a favourite or preference for a missing target and a write from a deleted account's old session are tolerated and cleaned up (R-5, R-6). All of it is PROPOSED, and the spike facts are emulator only. No requirement, scope item, decision or MFW approval changed. |
+| 0.6 | 6 November 2026 | Findings of Sanika Attarde's second-person review (issues 29 and 32) that this document holds. Section 2.3 rule 1 excepts check 0 of OP-11, and rule 2 puts the verified-email check at the admin gate (R-7, A-1). OP-14 returns `email_verified`. OP-12 requires a recent sign-in, refuses a repeat with ALREADY_DELETING, removes the admin role record, and deletes the user record last (R-4). OP-24 returns the GMT date (R-8). OP-10 and section 3.4 record that the app-side profile and consent operations differ and that no route accepts a changed policy version (R-3), and section 2.5 records that a category in use and a duplicate name have no agreed code (R-2). Section 11 names the Firebase codes in lower case and says CONFLICT has none (R-2). OP-08, OP-09, OP-41 and section 2.3 item 4 record that rules make no read, so a favourite or preference for a missing target and a write from a deleted account's old session are tolerated and cleaned up (R-5, R-6). All of it is PROPOSED, and the spike facts are emulator only. No requirement, scope item, decision or MFW approval changed. Revised on 6 November 2026 after the review of pull request #35: OP-12 has an Open line for the re-authentication step, the failure code and the window of a reader's deletion, and OP-09 says that cleanup removes a preference only for a missing category, so one for an inactive category stays (PROPOSED). |
 
 ### 1.1 Sources and authority
 
@@ -409,8 +409,9 @@ Direct operations
 │   └── Requirements: FR-BKM-003, FR-BKM-004 to FR-BKM-006, NFR-SEC-005 (CONFIRMED); OQ-12
 └── OP-09 managePreferences                          [direct; Reader, own records]
     ├── In: add or remove a notification category, or list. The app also subscribes the device to the matching push topics (TD-13). A logged-out visitor can subscribe the device to the same topics without an account, and the backend stores nothing (GS-Q46)
-    ├── Checks: owner only (INV-11). A preference for a missing or inactive category is tolerated and cleaned up later (INV-13; PROPOSED).
-    │   The backend spike's rules accept one (finding A-10, emulator only)
+    ├── Checks: owner only (INV-11). A preference for a missing or inactive category is tolerated when it is written. Cleanup removes it only
+    │   if the category is missing, so a preference for an inactive category stays (INV-13; PROPOSED). The backend spike's rules accept one
+    │   (finding A-10, emulator only)
     ├── Repeat: harmless. The key is (user, category)
     └── Requirements: DATA-007, FR-NOTIF-002, FR-NOTIF-003 (CONFIRMED); FR-NOTIF-007 (OPEN); OQ-09
 ```
@@ -463,6 +464,15 @@ Reader server operations
 │   ├── Refuses: FAILED_PRECONDITION LAST_ADMIN, ALREADY_DELETING or RECENT_SIGN_IN_REQUIRED; UNAUTHENTICATED
 │   ├── Repeat: a repeat while the account is marked deleting is refused with ALREADY_DELETING. A deletion that stopped part-way is finished
 │   │   by the cleanup task (OP-41), as in the backend spike (emulator only). PROPOSED
+│   ├── Open: the recent sign-in has three parts that are not settled. The positions below are PROPOSED.
+│   │   (1) The re-authentication step. The app re-authenticates before it calls OP-12, so the refusal RECENT_SIGN_IN_REQUIRED is not met in
+│   │   normal use. `AuthService` (`API_AND_MODULE_CONTRACTS.md` section 6.3, and `auth.dart` in #34) has no method for it, and the app
+│   │   contract pull request adds one.
+│   │   (2) The failure code. RECENT_SIGN_IN_REQUIRED has no row in the mapping table of section 4.2 of the app contract. Under the R-1 rule
+│   │   of issue 29 a reason with no row maps to `unknown`, and the reader would see "Something went wrong". The position is a row that maps
+│   │   it to `unauthenticated`, which asks the reader to sign in again, with no new FailureCode.
+│   │   (3) The window. AOQ-14 and OQ-56 ask how recent a sign-in must be for adding and removing an admin, and mention "other sensitive
+│   │   admin actions". No open question names a reader's deletion. The register pull request widens OQ-56 to cover it (not yet open).
 │   ├── After: the app removes its notification subscriptions and clears local data
 │   └── Requirements: FR-AUTH-009, FR-PRIV-003 (CONFIRMED); FR-PRIV-004 (ASSUMPTION); NFR-PRIV-005 (OPEN); AOQ-02; GS-Q50
 └── OP-13 cancelAccountDeletion                      [withdrawn with PRC-02. The identifier stays, so earlier references resolve]
