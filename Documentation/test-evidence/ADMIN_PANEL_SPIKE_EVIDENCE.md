@@ -93,7 +93,7 @@ Each step was checked with deliberate breaks of its code, one at a time, each ty
 
 | Part | What it does |
 |---|---|
-| Technology | React 19.3.1, built and served with Vite 8.3.5 (TD-14 names no build tool). React Router 8.5.0 gives each screen its own address. Firebase's JavaScript SDK 13.1.0 for sign-in, server calls and public reads, using its lite Firestore client. TypeScript. All pinned exactly; register rows DEP-31, DEP-34 and DEP-67 to DEP-73 are on the spike branches only |
+| Technology | React 19.3.1, built and served with Vite 8.3.5 (TD-14 names no build tool). React Router 8.5.0 gives each screen its own address. Firebase's JavaScript SDK 13.1.0 for sign-in, server calls and public reads, using its lite Firestore client. TypeScript. All pinned exactly. The register rows are on the spike branches only: DEP-31 is changed there, and DEP-34 and DEP-67 to DEP-73 are new there |
 | Where it runs | Only against the local emulators. A page served from any address other than `127.0.0.1` or `localhost` shows a notice, because there is no project configuration (CFG-01) |
 | SCR-W-01 Admin sign-in | One message for a wrong password, an unknown address, a disabled account, too many attempts, an account without the role and an admin whose email is not verified. Only an unreachable provider has its own message. A refused account is signed out. The session lives in memory only |
 | The role check | OP-14, after sign-in. Admitted only with an active role and a verified email. A check that fails is a refusal |
@@ -113,7 +113,7 @@ These are on `spike/sa-admin-content`. The backend report on `main` was written 
 | The admin gate | Refuses an admin whose email is not verified, with `EMAIL_NOT_VERIFIED`, after the role check. OQ-20's working position asks for a verified email. The admin set-ups in four earlier test groups (G5, G7, G8, G10) now verify their admins' emails |
 | OP-14 | Also returns `email_verified` |
 | OP-40 | Rejects a file whose uploader's email is no longer verified |
-| OP-24 `listWordPressPosts` (new) | Admin only. Reads one page of posts from the address in a new private setting, `wordpress_base_url` (CFG-03 is OPEN). HTTPS only, no credentials, no redirects, and PLACEHOLDER time and size limits. Titles become plain text, and only web links are accepted. Any failure is `UNAVAILABLE` with the reason `SITE_UNAVAILABLE`. It logs only its outcome. The tests use a stand-in site on 127.0.0.1, and MFW's site is never read |
+| OP-24 `listWordPressPosts` (built here for the first time) | Admin only. Reads one page of posts from the address in a new private setting, `wordpress_base_url` (CFG-03 is OPEN). HTTPS only, no credentials, no redirects, and PLACEHOLDER time and size limits. Titles become plain text, and only web links are accepted. Any failure is `UNAVAILABLE` with the reason `SITE_UNAVAILABLE`. It logs only its outcome. The tests use a stand-in site on 127.0.0.1, and MFW's site is never read |
 
 ## 5. Results by Acceptance Row and Checklist Item
 
@@ -140,7 +140,7 @@ Three checks by hand, on 5 November 2026, in an embedded Chromium 152 browser on
 2. **B5.2:** an admin signed in through OP-14 and published an issue after confirming, which a visitor could then read. Deleting a category in use was refused with its message.
 3. **B5.3:** the news screen listed the stand-in site's posts through OP-24, showed an encoded title as clean text, and saved a breaking flag that a visitor could read.
 
-In every check the browser contacted only 127.0.0.1. It never contacted the WordPress stand-in itself, as TD-12 requires. Local and session storage stayed empty, and IndexedDB held only the Firebase SDK's heartbeat date (I-5).
+In every check the browser contacted only 127.0.0.1. It never contacted the WordPress stand-in itself, as TD-12 proposes. Local and session storage stayed empty, and IndexedDB held only the Firebase SDK's heartbeat date (I-5).
 
 ## 6. Defects and Gaps Logged
 
