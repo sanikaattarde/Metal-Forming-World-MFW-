@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.25 |
+| Version | 0.28 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 6 November 2026 |
 
@@ -30,6 +30,17 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: data model and security changes from the second-person review, 2026-11-06, on topic branch `docs/yg-data-model-r` on top of `250190a`, under review in pull request #36
+
+Follows Sanika Attarde's second-person review of the backend and app contracts (issue 29, findings R-5, R-6, R-8 and R-9), in the parts that `DATABASE_AND_DATA_MODEL.md` and `SECURITY_AND_ACCESS_CONTROL.md` hold. YG replied to the issue on 6 November 2026, and the positions below are YG's, PROPOSED. Rules keep making no read of another document (GS-Q20), so a favourite or a preference for a missing target is tolerated and cleaned up, as INV-13 already said for a bookmark, and the validation rows of sections 4.11 and 4.13 no longer say that the target must exist (R-6). A new cleanup removes records under a missing user, which the old session of a deleted account can create until its token expires. Threat T25 and the rules line of section 13 of the security document record that limit, and the token lifetime stays NOT VERIFIED (R-5). Section 4.20 adds the private setting `wordpress_base_url` (R-8), and section 8 records that the spike put the upload job into the issue file path (R-9). The spike facts are emulator only and not merged. The backend contract lines for R-5 and R-6 (OP-08, OP-09, OP-41 and section 2.3 item 4), the app contract and the open questions follow in their own changes. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/DATABASE_AND_DATA_MODEL.md` | Version 0.7: sections 4.11, 4.13, 4.20, 8, 10.3, INV-13 and the appendix index follow the findings named above. | The second-person review found that the validation rows contradicted INV-13, that no cleanup covered records under a missing user, and that the spike needed a setting and a path the model did not name | INV-13, GS-Q20, OQ-39, DEC-003 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/SECURITY_AND_ACCESS_CONTROL.md` | Version 0.7: threat T25 and the rules line of section 13 record the limit after a deletion. | Same review (R-5) | T25, GS-Q20 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.28: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.7 for `DATABASE_AND_DATA_MODEL` (was 0.6), 0.7 for `SECURITY_AND_ACCESS_CONTROL` (was 0.6) and 0.28 for `CHANGELOG` (was 0.25) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: admin panel spike evidence, emulator only, 2026-11-06, on topic branch `docs/sa-admin-spike-report` on top of `ccb5679`, then merged with `origin/main` at `bf00632`, under review in pull request #26
 

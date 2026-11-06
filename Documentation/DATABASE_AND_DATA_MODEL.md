@@ -7,9 +7,9 @@
 | Document title | Database and Data Model |
 | File | `DATABASE_AND_DATA_MODEL.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for Review |
-| Last updated | 5 November 2026 |
+| Last updated | 6 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The data model is not approved by the charter (CH §17.4). |
 | Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [System Architecture](SYSTEM_ARCHITECTURE.md); [Technology Decisions](TECHNOLOGY_DECISIONS.md); [API and Backend Contract](API_AND_BACKEND_CONTRACT.md); [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md); `PROJECT_CHARTER.md` |
@@ -30,6 +30,7 @@
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). ADMIN_ROLE has one role and the guard record counts admins. ADMIN_AUDIT_EVENT is narrowed to adds and removes of admins, and keeps its name so that references stay stable. INV-03 to INV-09 are rewritten, INV-16 is withdrawn, and INV-15 and INV-18 are simplified. The deletion state `pending_deletion` and the field `purge_after` are withdrawn. EDITION_UPDATE_SIGNUP stays conditional and is dropped on the working position. `retention_mode` records Read as temporary and Download as kept. Section 15.4 added. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
 | 0.5 | 4 and 5 November 2026 | Bookmark follow-up to pull request #11. `bookmark_id` is named as a second exception to the never-reused identifier rule, beside `user_id` (Section 4.1, the Section 4.10 field note, Section 10.4 rule 8, INV-14 and the Section 12 row). Opening a bookmark with no local copy gets the current revision with the Read action, a temporary copy (Section 6.3 step 2). The exception is YG's position and stays PROPOSED until both developers agree. Revised on 5 November 2026 after the review of pull request #15: Section 4.1 and INV-14 say "no other stored record" and name the queued remove, M10 points to Section 4.1, and the Section 4.10 Validation row adds the server's check that `file_revision` is at least 1 (PROPOSED). No decision is approved. |
 | 0.6 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
+| 0.7 | 6 November 2026 | Findings of Sanika Attarde's second-person review (issue 29) that this document holds. Sections 4.11 and 4.13 and INV-13 say that a favourite or a preference for a missing target is tolerated and cleaned up, as a bookmark is, and that rules make no read of another document (R-6). Section 10.3 and the appendix index add a cleanup for records under a missing user (R-5). Section 4.20 adds the private setting `wordpress_base_url` (R-8). Section 8 records that the spike put the upload job into the issue file path (R-9). All of it is PROPOSED, and the spike facts are emulator only. No requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Sources and authority
 
@@ -476,7 +477,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Foreign keys | `user_id` refers to APP_USER. `issue_id` refers to ISSUE. |
 | Uniqueness | The primary key |
 | Indexing | `(user_id, created_at)` |
-| Validation | The issue must exist and be published when the favourite is made. |
+| Validation | A favourite for an issue that does not exist or is not published is tolerated and removed by orphan cleanup (INV-13, Section 10.3), because rules do not read another document (GS-Q20). The backend spike's rules accept one (finding A-10, emulator only, not merged). PROPOSED. |
 | Retention and deletion | As for BOOKMARK. |
 | Privacy class | Pseudonymous, treated as personal data |
 | Client access | Read and written by the owner only (NFR-SEC-005). |
@@ -521,7 +522,7 @@ If OQ-13 decides that size and page count are not shown to logged-out visitors, 
 | Foreign keys | `user_id` refers to APP_USER. `category_id` refers to NOTIFICATION_CATEGORY. |
 | Uniqueness | The primary key. A row means the reader opted in to the category. |
 | Indexing | `(user_id)` through the owner's path |
-| Validation | The category must exist and be active. |
+| Validation | A preference for a category that does not exist or is not active is tolerated and removed by orphan cleanup (INV-13, Section 10.3), because rules do not read another document (GS-Q20). The backend spike's rules accept one (finding A-10, emulator only, not merged). PROPOSED. |
 | Retention and deletion | Kept with the reader. Removed with the account. |
 | Privacy class | Pseudonymous |
 | Client access | Read and written by the owner only. |
@@ -710,6 +711,7 @@ Searching for a reader by email address, when an admin looks for a person to add
 | `profile_gate_enabled` | Private | Whether a complete profile is needed before a full issue (BR-003). |
 | `policy_versions` | Public | The current privacy policy and terms of use versions (OQ-27). |
 | `news_category_ids` | Public | The WordPress categories shown in the app (INT-WP-003). |
+| `wordpress_base_url` | Private | The address of MFW's WordPress site that OP-24 reads (CFG-03). No value is set until MFW confirms the address (OQ-39). The backend spike added it (finding L-1, emulator only, not merged). PROPOSED. |
 | `max_upload_bytes` | Private | The upload limit, 150 MB by default (FR-ADMIN-007, OQ-30). |
 | `signed_url_lifetime` | Private | How long a download link works (TD-09, AOQ-07). |
 | `signed_url_requests_per_reader` | Private | A cap on download-link requests per reader per day (an ASSUMPTION). |
@@ -881,6 +883,10 @@ File store
 ├── Issue PDF
 │   ├── Lives in: the private area of the file store
 │   ├── Path pattern (provisional): issues/{issue_id}/{revision}.pdf
+│   ├── Open: the backend spike put the upload job into the path, issues/{issue_id}/{revision}-{job_id}.pdf, because the storage emulator
+│   │   ignores a write condition, so a revision path alone could not stop two uploads that finish together from writing the same object
+│   │   (finding G-1, emulator only, not merged). Whether the real platform honours the condition is NOT VERIFIED and is a case for the test
+│   │   environment (ENV-TEST). The pattern stays provisional
 │   ├── The database holds: ISSUE_FILE (path, size, page count, checksum, revision, status)
 │   ├── Access: no client read; a signed URL from getIssueFile only
 │   └── Not the website's copy: the same issue may be public on MFW's website as a separate object that
@@ -959,7 +965,8 @@ One scheduled function can run these tasks, so it needs one scheduled job. The j
 | Account deletion cleanup | Accounts left in the `deleting` state (TD-19, GS-Q50) | Daily |
 | Holding area and upload jobs | Unfinished uploads and finished jobs older than the retention period | Daily |
 | Superseded revisions | Old file revisions and their binaries after the retention period | Daily |
-| Orphaned reader records | Bookmarks and favourites that point to a removed issue | Weekly |
+| Orphaned reader records | Bookmarks and favourites that point to a removed issue, and notification preferences that point to a missing or inactive category (INV-13) | Weekly |
+| Records under a missing user | Bookmarks, favourites and notification preferences whose owner has no user record, because a write from the old session of a deleted account is accepted until its token expires (threat T25). They are found by scanning the owner-path collections, because no user record is left to search from (PROPOSED; finding H-2, emulator only, not merged) | Weekly |
 | Orphaned user records | `APP_USER` records with no provider account | Weekly |
 | Orphaned news controls | Controls for WordPress posts that no longer exist | Monthly |
 | Admin guard repair (GS-Q44) | A guard count that differs from the role records. It reports the difference and corrects the count (INV-03). No claim exists to repair (GS-Q20). | Hourly while admin records exist (ASSUMPTION), run by the same scheduled job |
@@ -1083,10 +1090,12 @@ Invariant enforcement register           [all mechanisms proposed; nothing imple
 │   └── Test: check the shape of a published issue, a category and a segment
 ├── INV-13 References point to records that exist when written
 │   ├── Enforced by: functions check the target inside the transaction for server writes (category, issue,
-│   │   user). Rules do not join, so a bookmark or favourite for a missing issue is tolerated and removed by
-│   │   orphan cleanup (Section 10.3)
-│   ├── Open: whether rules should check that the issue exists, which adds a billed read to every such write
-│   └── Test: write a bookmark for a removed issue and check the cleanup
+│   │   user). Rules do not join, so a bookmark or favourite for a missing issue, or a preference for a missing
+│   │   or inactive category, is tolerated and removed by orphan cleanup (Section 10.3)
+│   ├── Position (PROPOSED): rules make no read of another document (GS-Q20), so they do not check that the issue or the category exists.
+│   │   Letting a rule read one document would remove these cases, but it adds a billed read to every such write, how many reads a rule
+│   │   may make is NOT VERIFIED, and the option is specific to one platform (DEC-003 is OPEN)
+│   └── Test: write a bookmark or a favourite for a removed issue and a preference for a missing category, and check the cleanup
 ├── INV-14 Identifiers are opaque, unique and never reused                [Section 10.4, rule 8; M10]
 │   ├── Enforced by: the server generates every identifier except user_id and bookmark_id. A create that finds
 │   │   the identifier already used, or already on the deleted-issue list, is refused and retried with a new one
@@ -1659,7 +1668,7 @@ Query patterns and indexes
 └── Scheduled tasks
     ├── Account deletion cleanup            status
     ├── Stale notification sends            (outcome, last_attempt_at)
-    ├── Orphan cleanup                      bookmarks and favourites by issue_id, news controls by wp_post_id
+    ├── Orphan cleanup                      bookmarks and favourites by issue_id, preferences by category_id, news controls by wp_post_id, and records whose owner has no user record (a scan of the owner paths)
     └── Retention clean-up                  by occurred_at, deleted_at and created_at: to be validated
 ```
 
