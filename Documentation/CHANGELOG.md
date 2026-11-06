@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.23 |
+| Version | 0.25 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 6 November 2026 |
 
@@ -31,15 +31,38 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
-### Documentation: admin panel spike evidence, emulator only, 2026-11-06, on topic branch `docs/sa-admin-spike-report` on top of `ccb5679`, not reviewed
+### Documentation: admin panel spike evidence, emulator only, 2026-11-06, on topic branch `docs/sa-admin-spike-report` on top of `ccb5679`, then merged with `origin/main` at `bf00632`, under review in pull request #26
 
 Adds the WS-A admin panel spike's report to `Documentation/test-evidence/`, as `DEVELOPMENT_WORKFLOW.md` §13 item 5 asks for a spike's findings. It covers the skeleton and sign-in page (branch `spike/sa-admin-skeleton` at `d8d10f7`) and the role check, issue and category screens and news controls (branch `spike/sa-admin-content` at `ca31b5a`), with the server changes the panel needed: a verified email at the admin gate, and OP-24, built here for the first time. It records results against AC-8.1, AC-8.2, AC-8.6 to AC-8.8, SEC-CHK-06, SEC-CHK-08, SEC-CHK-15, SEC-CHK-17 and SEC-CHK-18, and does not claim AC-9.7. It lists the defects and gaps found, what needs ENV-TEST or MFW's inputs, the commands for QG-09, and the choices the spike made that need both developers. Every result is emulator or local only. The panel's code stays on its branches, DEC-004 stays OPEN, and QG-09 stays blocked by it. The register rows for the panel's packages are on the spike branches only, and are not added here: DEP-31 is changed there, and DEP-34 and DEP-67 to DEP-73 are new there. No decision, requirement, checklist item or status label changes. Nothing here has gone to MFW.
 
 | Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
 |---|---|---|---|---|---|---|
 | 2026-11-06 | `Documentation/test-evidence/ADMIN_PANEL_SPIKE_EVIDENCE.md` | Version 0.1: new report | A spike's findings merge as a document | T-01.6, T-09.1, T-09.3, T-09.4, AC-8.1, AC-8.2, AC-8.6, AC-8.7, AC-8.8, AC-9.7, SEC-CHK-06, SEC-CHK-08, SEC-CHK-15, SEC-CHK-17, SEC-CHK-18, SC-22, QG-09, DEC-004, OQ-20, OQ-39 | Both developers (not agreed) | No scope effect |
-| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.23: this entry | Records the addition above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-06 | `README.md` | A row for the report in the index of documents. The version column reads 0.23 for `CHANGELOG` (was 0.22) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.25: this entry | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | A row for the report in the index of documents. The version column reads 0.25 for `CHANGELOG` (was 0.24) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: the WB-05 simulator result filed as evidence, 2026-11-06, on topic branch `docs/yg-wb05-evidence` on top of `ccb5679`, then merged with `origin/main` at `1281229`, under review in pull request #27
+
+Follows Sanika Attarde's review of pull request #18, which said that filing the result would let the note on FX-PDF-11 cite it. The new `test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md` (0.1) files what the WB-05 harness measured for pdfrx and pdfx on the iOS simulator in a debug build on 1 November 2026: time to the first page, 20 page turns, a render at 300%, memory, two damaged files and a repair check. The figures were compared with the result files when the report was prepared. The raw output is not filed, because it holds local paths. No phone has been used, so none of it is valid for AC-2.1, AC-2.3 or AC-2.5, and the report ranks no library and leaves DEC-005 OPEN. The note on FX-PDF-11 in `TEST_DATA_AND_FIXTURES.md`, RD-08 and the status line of `PDF_READER_AND_OFFLINE_DESIGN.md` and OQ-61 in `OPEN_QUESTIONS.md` cite it. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW. After Sanika Attarde's review of this pull request on 2026-11-05, the simulator sentence in OQ-61 follows the sentences about the upload, the evidence column of OQ-61 keeps only the WS-A test on the chosen backend, RD-08 says that the run on the test phones is still to do (OQ-26), and the report names who ran the tests in plain terms.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/OPEN_QUESTIONS.md` | Version 0.8: OQ-61 cites the filed simulator result. | The reader side of OQ-61 rested on a result that was not filed | OQ-61, RD-08, DEC-005, OQ-26 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/PDF_READER_AND_OFFLINE_DESIGN.md` | Version 0.5: the status line says that a spike measured two libraries on a simulator and that no phone has been used. RD-08 cites the result and says that the run on the test phones is still to do. | The status line said that nothing had been measured, and the result is now filed | RD-08, DEC-005, FX-PDF-11, OQ-26 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.8: the note on FX-PDF-10 and FX-PDF-11 cites the filed result and no longer says that it is not filed. | The result is now filed (review of pull request #18) | FX-PDF-10, FX-PDF-11, RD-08 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md` | Version 0.1: new report of the WB-05 simulator result. | Findings of a spike are merged as a document (`DEVELOPMENT_WORKFLOW.md` §13 item 5) | T-02.3, DEC-005, AC-2.1, AC-2.3, AC-2.5, AC-2.6, FX-PDF-01, FX-PDF-05, FX-PDF-10, FX-PDF-11 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.24: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.8 for `OPEN_QUESTIONS` (was 0.7), 0.5 for `PDF_READER_AND_OFFLINE_DESIGN` (was 0.4), 0.8 for `TEST_DATA_AND_FIXTURES` (was 0.7) and 0.24 for `CHANGELOG` (was 0.23). A row is added for the new evidence report | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: the cost check behind DEC-022 defined in one place, 2026-11-06, on topic branch `docs/yg-cost-check-definition` on top of `ccb5679`, under review in pull request #25
+
+Follows Sanika Attarde's review of pull request #23, which noted that MOD15-P1-T01, the cost check that the condition of DEC-022 rests on, is cited five times and defined nowhere in the repository. The DEC-022 row of `DECISION_LOG.md` section 5.6 now says what it is, as the documents state it: Sanika Attarde's task, in a task list that is not in this repository, which confirms for this repository whether GitHub Actions is available, what the plan allows in runner minutes and what a macOS runner minute costs. It is not done. The passing runs on draft pull request #10 show that a macOS job ran, and they are not the cost check. The wording is for Sanika Attarde to correct. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes, DEC-022 stays AGREED and conditional, and nothing is billed to MFW without its approval. Nothing here has gone to MFW. After Sanika Attarde's review of this pull request on 2026-11-05, the row also says that the answer depends on the repository's visibility and on the account that pays (the repository is public now, and CI is billed to the account that owns it, which changes at the transfer), and that the check is made again if either changes.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/DECISION_LOG.md` | Version 0.11: the DEC-022 row of section 5.6 says what MOD15-P1-T01 is: Sanika Attarde's cost check of GitHub Actions availability, plan minutes and macOS minute cost, in a task list that is not in this repository. The row also says that the answer depends on the visibility and the paying account. | The task is cited five times and defined nowhere (review of pull request #23), and the answer depends on both (review of pull request #25) | DEC-022, MOD15-P1-T01, DEP-60, OQ-48 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.23: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of the changed document, one step up, and reads 0.11 for `DECISION_LOG` (was 0.10) and 0.23 for `CHANGELOG` (was 0.22) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: three follow-ups left by earlier reviews, 2026-11-05, on topic branch `docs/yg-deferred-review-followups` on top of `823eb52`, then merged with `origin/main` at `e5e22e0`, under review in pull request #24
 

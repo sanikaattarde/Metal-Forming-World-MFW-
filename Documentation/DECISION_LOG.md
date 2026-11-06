@@ -7,9 +7,9 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.10 |
+| Version | 0.11 |
 | Status | Draft for review. Not approved. |
-| Date | 5 November 2026 |
+| Date | 6 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -26,6 +26,7 @@
 | 0.8 | 5 November 2026 | Section 5.6 records that the DEC-010 condition is met (branch protection on `main`), that section 11 of the workflow reads AGREED (DEC-015), and that the documents on the follow-up list are updated. The DEC-010 context follows. Revised on 5 November 2026 after the review of pull request #21: the follow-up list adds section 5 of the matrix and the OQ-38 row, and names the sections that DEC-010 and DEC-015 cover. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.9 | 5 November 2026 | Two corrections. The DEC-030 entry names MOD-05 (catalogue, search, home) as affected, and no longer MOD-04 (profile, settings, consent), following `TASK_OWNERSHIP_MATRIX.md` section 6. The 0.4 row says that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository. No requirement, scope item, decision or status label changed. |
 | 0.10 | 5 November 2026 | Section 4 step 2 asks for an Options considered row and a Consequences row. An entry assessed before 5 November 2026 keeps its options and consequences in its Context and Proposal rows, and gets the two rows when it is next assessed or changes status. The existing entries are not filled in all at once, as the review of pull request #23 suggested. Revised on 5 November 2026 after the review of pull request #24: step 2 reads as that review worded it. No entry changed, so no AGREED entry is touched. No requirement, scope item, decision or status label changed. |
+| 0.11 | 6 November 2026 | The DEC-022 row of section 5.6 says what MOD15-P1-T01 is, as the review of pull request #23 asked. It is Sanika Attarde's cost check, in a task list that is not in this repository, stated as the documents state it. The wording is for Sanika Attarde to correct. Revised on 6 November 2026 after the review of pull request #25: the row says that the answer depends on the repository's visibility and on the account that pays, and that the check is made again if either changes. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
@@ -259,7 +260,7 @@ Eight entries move from PROPOSED to AGREED: DEC-010 to DEC-015, DEC-022 and DEC-
 | DEC-013 | Riverpod is used in `app/lib/app/` only, and feature code takes its dependencies through constructors. The Flutter and Dart versions are pinned at the scaffold (OQ-50). A `DEPENDENCY_REGISTER.md` entry comes before the package (DEP-43). |
 | DEC-014 | The route guard steers screens only, and the server enforces access (DEC-009). The versions are pinned at the scaffold, and a `DEPENDENCY_REGISTER.md` entry comes before the package (DEP-44). |
 | DEC-015 | Commits, merge commits and repository files carry no tool attribution lines and no co-author trailers, from now on. Existing history stays as it is. The rule itself is in `DEVELOPMENT_WORKFLOW.md` section 11, which reads AGREED (DEC-015). |
-| DEC-022 | Conditional on the cost check in task MOD15-P1-T01, which is not done. Plan limits and macOS runner cost are NOT VERIFIED. Nothing is billed to MFW without MFW's approval. |
+| DEC-022 | Conditional on the cost check in task MOD15-P1-T01, which is not done. MOD15-P1-T01 is Sanika Attarde's task, in the task list `SANIKA_IMPLEMENTATION_ROADMAP.md`, which is not in this repository. As the documents state the check (`DEVELOPMENT_ROADMAP.md`, "Verify first"; the Follow-up of DEC-022), it confirms for this repository whether GitHub Actions is available, what the plan allows in runner minutes, and what a macOS runner minute costs. The answer depends on the repository's visibility and on the account that pays: the repository is public now (DEP-60), and CI is billed to the account that owns it, `sanikaattarde` now and MFW after the transfer (OQ-48; `CI_CD_AND_QUALITY_GATES.md` section 13). So the check is made for the visibility and the paying account at the time, and it is made again if either changes, for example at the transfer. Plan limits and macOS runner cost are NOT VERIFIED. The passing runs on draft pull request #10 (section 5.5) show that a macOS job ran, and they are not the cost check. Nothing is billed to MFW without MFW's approval. |
 | DEC-024 | MFW still confirms where its sample PDFs may be kept. The public PDFs for the reader comparison leave out PDFs taken from MFW's own website until OQ-57 is answered (see the DEC-024 entry). |
 
 **Documents that called these entries PROPOSED.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request. The follow-up of 5 November 2026 updated the places below. `TECHNOLOGY_DECISIONS.md` section 10.5 is a dated record of 26 and 27 October 2026 and stays as written. The ENV-TEST rows of `DEPLOYMENT_PLAN.md` and `TESTING_STRATEGY.md` stay PROPOSED, because that status is DEC-023.
