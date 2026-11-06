@@ -1,0 +1,24 @@
+name: mfw_app
+description: "MFW app scaffold (placeholder identifiers)"
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  # Pinned at the scaffold (OQ-50): Flutter 3.47.9 with Dart 3.13.7. Later
+  # 3.47 patch releases are allowed, and 3.48 needs a deliberate change here.
+  sdk: ^3.13.7
+  flutter: ">=3.47.9 <3.48.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.4.3
+  go_router: ^18.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
