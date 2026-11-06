@@ -29,7 +29,7 @@
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). One Admin role: the callers, Sections 3.2, 5.1 and 5.2 are rewritten, and OP-30 to OP-39 and OP-42 are open to any admin. OP-36 is withdrawn. OP-35, OP-37, OP-39 and OP-42 are named addAdmin, removeAdmin, listAdminChanges and bootstrapAdmin. The audit set is narrowed to adds and removes of admins, so the denied entries are dropped and INV-16 is withdrawn. Immediate deletion: OP-13 is withdrawn and OP-12 and OP-41 are simplified. OP-33 is dropped with the edition-update sign-up. Section 3.3 is rewritten. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
 | 0.4 | 4 and 5 November 2026 | Bookmark follow-up to pull request #11. The identifier rule in section 3 names the bookmark identifier as an exception beside the user identifier (PROPOSED). OP-07 first said that it does not check `file_revision`. After the review of pull request #15 on 5 November 2026, OP-07 checks that `file_revision` is at least 1, beside the page check (PROPOSED), and the app's own check runs first. No decision is approved. |
 | 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
-| 0.6 | 6 November 2026 | Findings of Sanika Attarde's second-person review (issues 29 and 32) that this document holds. Section 2.3 rule 1 excepts check 0 of OP-11, and rule 2 puts the verified-email check at the admin gate (R-7, A-1). OP-14 returns `email_verified`. OP-12 requires a recent sign-in, refuses a repeat with ALREADY_DELETING, removes the admin role record, and deletes the user record last (R-4). OP-24 returns the GMT date (R-8). OP-10 and section 3.4 record that the app-side profile and consent operations differ and that no route accepts a changed policy version (R-3), and section 2.5 records that a category in use and a duplicate name have no agreed code (R-2). Section 11 names the Firebase codes in lower case and says CONFLICT has none (R-2). All of it is PROPOSED, and the spike facts are emulator only. No requirement, scope item, decision or MFW approval changed. |
+| 0.6 | 6 November 2026 | Findings of Sanika Attarde's second-person review (issues 29 and 32) that this document holds. Section 2.3 rule 1 excepts check 0 of OP-11, and rule 2 puts the verified-email check at the admin gate (R-7, A-1). OP-14 returns `email_verified`. OP-12 requires a recent sign-in, refuses a repeat with ALREADY_DELETING, removes the admin role record, and deletes the user record last (R-4). OP-24 returns the GMT date (R-8). OP-10 and section 3.4 record that the app-side profile and consent operations differ and that no route accepts a changed policy version (R-3), and section 2.5 records that a category in use and a duplicate name have no agreed code (R-2). Section 11 names the Firebase codes in lower case and says CONFLICT has none (R-2). OP-08, OP-09, OP-41 and section 2.3 item 4 record that rules make no read, so a favourite or preference for a missing target and a write from a deleted account's old session are tolerated and cleaned up (R-5, R-6). All of it is PROPOSED, and the spike facts are emulator only. No requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Sources and authority
 
@@ -102,7 +102,7 @@ Callers
 1. Every server operation authenticates the caller first, with one exception. Check 0 of OP-11 answers GONE for an identifier on the deleted-issue list before the sign-in check, to a signed-out caller as well. The list is readable by anyone (`SYSTEM_ARCHITECTURE.md` section 10.2), so the answer reveals nothing new. This is PROPOSED. The backend spike follows it (emulator only), and `SYSTEM_ARCHITECTURE.md` sections 7.4 and 10.1 do not yet show check 0.
 2. An admin operation reads the caller's role record and account status on this call. It does not trust a role claim, a cached role or anything held by the client (GS-Q20, INV-08). After the role check it also checks that the caller's email is verified, and refuses with FAILED_PRECONDITION and the reason EMAIL_NOT_VERIFIED if it is not (the OQ-20 working position; PROPOSED). The backend spike builds this check at the gate, and OP-14 returns `email_verified` (emulator only). The recent-sign-in check of OQ-20 is not part of the gate. It applies to adding and removing admins (OP-35, OP-37, AOQ-14, OQ-56). The panel hides controls by role as a convenience only.
 3. If the backend cannot verify the caller's current authorisation, the operation is refused and nothing changes. This is fail closed.
-4. A reader whose account is being deleted is refused by every server operation. The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status (whether they could is NOT VERIFIED, Section 11). Those records are removed with the account.
+4. A reader whose account is being deleted is refused by every server operation. The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status (whether they could is NOT VERIFIED, Section 11). Those records are removed with the account. After a deletion has finished, a write from the old session is still accepted until its token expires, and it creates a record under a user that no longer exists. OP-41 removes such records. This is a known limit, and how long a token lasts is NOT VERIFIED (backend spike finding H-2, emulator only).
 5. The intended guarantee is that an admin whose role record is removed is refused on the next privileged call, once the removal is visible to the check. How long a token stays valid and whether a read made right after the change always sees it are NOT VERIFIED (Section 11). A test for a removed admin is proposed (CT-07; `TESTING_STRATEGY.md` section 9).
 6. A privileged operation is an admin operation. A refusal writes nothing, because the change record covers only admin adds and removes (GS-Q44).
 
@@ -403,12 +403,14 @@ Direct operations
 │       FR-BKM-008 (OPEN); OQ-10
 ├── OP-08 manageFavourites                           [direct; Reader, own records]
 │   ├── In: add (issue_id), remove (issue_id), or list
-│   ├── Checks: owner only (INV-11). Whether a reader without full access may favourite is OQ-12
+│   ├── Checks: owner only (INV-11). Whether a reader without full access may favourite is OQ-12. A favourite for a missing issue is
+│   │   tolerated and cleaned up later, as a bookmark is (INV-13; PROPOSED). The backend spike's rules accept one (finding A-10, emulator only)
 │   ├── Repeat: harmless. The key is (user, issue)
 │   └── Requirements: FR-BKM-003, FR-BKM-004 to FR-BKM-006, NFR-SEC-005 (CONFIRMED); OQ-12
 └── OP-09 managePreferences                          [direct; Reader, own records]
     ├── In: add or remove a notification category, or list. The app also subscribes the device to the matching push topics (TD-13). A logged-out visitor can subscribe the device to the same topics without an account, and the backend stores nothing (GS-Q46)
-    ├── Checks: owner only (INV-11). The category exists and is active
+    ├── Checks: owner only (INV-11). A preference for a missing or inactive category is tolerated and cleaned up later (INV-13; PROPOSED).
+    │   The backend spike's rules accept one (finding A-10, emulator only)
     ├── Repeat: harmless. The key is (user, category)
     └── Requirements: DATA-007, FR-NOTIF-002, FR-NOTIF-003 (CONFIRMED); FR-NOTIF-007 (OPEN); OQ-09
 ```
@@ -631,7 +633,8 @@ Triggered, scheduled and operator operations
 │   ├── Daily: account deletion cleanup, which finishes deletions left in the deleting state (TD-19, GS-Q50); the holding area and finished upload
 │   │   jobs; superseded revisions after their retention period
 │   ├── Hourly (ASSUMPTION): the admin count repair (INV-03); marking stale pending sends as unknown (INV-17)
-│   ├── Weekly: orphaned reader records; orphaned user records
+│   ├── Weekly: orphaned reader records (bookmarks and favourites for a missing issue, preferences for a missing category); records under
+│   │   a missing user, found by scanning the owner paths (PROPOSED; DM §10.3); orphaned user records
 │   ├── Monthly: orphaned news controls; deleted-issue records past their retention period, if MFW sets one (AOQ-19)
 │   └── Requirements: FR-PRIV-003 (CONFIRMED); GS-Q50; DM §10.3
 └── OP-42 bootstrapAdmin                              [developer-run step; not an operation a client can call]
