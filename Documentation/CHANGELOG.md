@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.25 |
+| Version | 0.26 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 6 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the admin panel spike's working position recorded in OQ-60, 2026-11-06, on topic branch `docs/yg-oq60-admin-position` on top of `250190a`, under review in pull request #33
+
+Follows Sanika Attarde's reply on pull request #26, which asked for the admin panel spike's working position to go into OQ-60 once the report merged. OQ-60 in `OPEN_QUESTIONS.md` now says, as OQ-61 does for the backend spike, what the panel on `spike/sa-admin-content` (`ca31b5a`, emulator only, not merged) does: it holds the session in memory and sends it as a bearer token on each call, not as a cookie, it sets no frame policy and no script policy, and nothing limits which browser origins may call the functions. Three browser checks found local and session storage empty, and only a browser check can show that, because no automated test can tell browser storage from an in-memory session (finding I-10). None of the four objectives is tested. The question stays OPEN: the token handling is a spike choice to agree with the DEC-004 comparison, and the three policies are not built. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes, and DEC-004 stays OPEN. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/OPEN_QUESTIONS.md` | Version 0.9: OQ-60 records the admin panel spike's working position, emulator only, not merged, DEC-004 OPEN. | Sanika Attarde asked for it after the review of pull request #26 | OQ-60, DEC-004, SC-22, ST-22, SEC-CHK-20 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.26: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.9 for `OPEN_QUESTIONS` (was 0.8) and 0.26 for `CHANGELOG` (was 0.25) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: admin panel spike evidence, emulator only, 2026-11-06, on topic branch `docs/sa-admin-spike-report` on top of `ccb5679`, then merged with `origin/main` at `bf00632`, under review in pull request #26
 

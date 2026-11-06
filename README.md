@@ -43,7 +43,7 @@ Reading order
 | [ASSUMPTIONS_AND_CONSTRAINTS](Documentation/ASSUMPTIONS_AND_CONSTRAINTS.md) | Assumptions, constraints and dependencies | Authoritative: assumptions | 0.3 | Not assigned | Not stated in the document |
 | [GLOSSARY](Documentation/GLOSSARY.md) | Terms used in the documents | Supporting | 0.2 | Not assigned | Not stated in the document |
 | [DECISION_LOG](Documentation/DECISION_LOG.md) | Decisions and the evidence each status needs | Authoritative: decisions | 0.11 | Sanika (interim) | Both developers for the structure |
-| [OPEN_QUESTIONS](Documentation/OPEN_QUESTIONS.md) | Questions for MFW and for the developers | Authoritative: questions | 0.8 | Sanika (interim) | Both developers |
+| [OPEN_QUESTIONS](Documentation/OPEN_QUESTIONS.md) | Questions for MFW and for the developers | Authoritative: questions | 0.9 | Sanika (interim) | Both developers |
 | [RISK_REGISTER](Documentation/RISK_REGISTER.md) | Risks, ratings and owners | Authoritative: risks | 0.6 | Sanika (interim) | Both developers; MFW for risks it must accept |
 | [SYSTEM_ARCHITECTURE](Documentation/SYSTEM_ARCHITECTURE.md) | Components, data flows, trust boundaries | Authoritative: logical architecture | 0.5 | Joint | Both developers; MFW for cost, scope or contract effects |
 | [TECHNOLOGY_DECISIONS](Documentation/TECHNOLOGY_DECISIONS.md) | Technology options and proposed choices | Authoritative: technology options | 0.5 | Joint | Both developers; MFW for cost, scope or contract effects |
@@ -61,7 +61,7 @@ Reading order
 | [DEFINITION_OF_DONE](Documentation/DEFINITION_OF_DONE.md) | What done means for each kind of work | Authoritative: done | 0.4 | Sanika (interim) | Both developers |
 | (see the document map) | Working rules for AI-assisted drafting. Named in the document map, `TASK_OWNERSHIP_MATRIX.md` section 13.1 | Supporting | 0.3 | Sanika (interim) | Both developers |
 | [DEPENDENCY_REGISTER](Documentation/DEPENDENCY_REGISTER.md) | Packages, services and accounts, with licences | Authoritative: dependencies | 0.7 | Sanika (interim) | Both developers; MFW for any paid component |
-| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.25 | Sanika (interim) | None stated |
+| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.26 | Sanika (interim) | None stated |
 | [ACCEPTANCE_CRITERIA](Documentation/ACCEPTANCE_CRITERIA.md) | S2 criteria AC-1 to AC-12 as checks, and proposed PAC rows | Authoritative: acceptance rows | 0.6 | Sanika (interim) | Both developers; MFW in writing for each PAC row |
 | [TESTING_STRATEGY](Documentation/TESTING_STRATEGY.md) | Test levels, plans, security checklist | Authoritative: test plans | 0.10 | Sanika (interim); move to Yuvraj proposed | Both developers |
 | [TEST_DATA_AND_FIXTURES](Documentation/TEST_DATA_AND_FIXTURES.md) | Test users, files and network scenarios | Authoritative: fixtures | 0.8 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW for where its sample PDFs are stored |
