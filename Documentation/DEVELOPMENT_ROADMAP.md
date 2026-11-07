@@ -9,7 +9,7 @@
 | Phase | 3 — Development Planning and Collaboration (document 23) |
 | Version | 0.11 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
-| Date | 6 November 2026 |
+| Date | 7 November 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
 
 **Change history**
@@ -26,7 +26,7 @@
 | 0.8 | 4 and 5 November 2026 | Two statements corrected that gave `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 (the related-documents row and task T-00.7). That document is at a later version, so both lines now say it exists as a draft, and the README index gives its version. T-00.7 gives no version for the other four drafts. Revised on 5 November 2026 after the review of pull request #16: the related-documents row for those four drafts gives no version either, and the Phase 1 row in section 4 gives the charter as v0.3. No date, estimate, milestone or task changed. |
 | 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 | 0.10 | 5 November 2026 | T-01.1 and section 4.3 no longer call the scaffold a spike for DEC-013 and DEC-014, which are AGREED. DEC-003, DEC-004 and DEC-005 still hold the spike labels. Revised on 5 November 2026 after the review of pull request #21: section 4.3 gives the mapping of the matrix as AGREED. No MFW approval is recorded, and no entry is APPROVED. |
-| 0.11 | 6 November 2026 | The open step under MOD-02, which file holds `Result` and `AppFailure`, is agreed: `app/lib/contracts/result.dart` (MOD-00), issue 28. No requirement, scope item, decision, status label or MFW approval changed. |
+| 0.11 | 6 November 2026 | The open step under MOD-02, which file holds `Result` and `AppFailure`, is agreed: `app/lib/contracts/result.dart` (MOD-00), issue 28. No requirement, scope item, decision, status label or MFW approval changed. Revised on 7 November 2026 after the review of pull request #37: the MOD-02 line of section 4.3 reads "after the scaffold and MOD-00", where it said "no other dependency", because the types live in MOD-00. |
 
 ### 1.1 Related documents
 
@@ -174,7 +174,7 @@ Modules that can start before the inputs arrive                [PROPOSED]
 │   │   └── T-03.5 account deletion on the working position of immediate deletion, labelled PROVISIONAL. OQ-24 stays open
 │   ├── 2 MOD-03 Authentication, email only                    [after the scaffold]
 │   │   └── T-03.1 against the Auth emulator: register, verify, sign in, reset, sign out and the AccessState provider
-│   ├── 3 MOD-02 Errors, logging and monitoring               [after the scaffold; no other dependency]
+│   ├── 3 MOD-02 Errors, logging and monitoring               [after the scaffold and MOD-00]
 │   │   ├── Message mapping, log redaction and the event allowlist (PAC-09)
 │   │   └── Result, AppFailure and FailureCode live in app/lib/contracts/result.dart (MOD-00). Agreed on 6 November 2026, issue 28
 │   ├── 4 MOD-12 Admin and content management                 [DEC-004 is PROVISIONAL]

@@ -9,7 +9,7 @@
 | Phase | 3 — Development Planning and Collaboration (document 24) |
 | Version | 0.12 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
-| Date | 6 November 2026 |
+| Date | 7 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
 
 **Change history**
@@ -27,7 +27,7 @@
 | 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 | 0.10 | 5 November 2026 | Section 3 gives the workstreams and the developer mapping as AGREED (DEC-011), with each assignment row still PROPOSED until OQ-38 is answered. Revised on 5 November 2026 after the review of pull request #21: the module Owner rows read "WS-A (Sanika Attarde), PROPOSED" and "WS-B (Yuvraj), PROPOSED". No MFW approval is recorded, and no entry is APPROVED. |
 | 0.11 | 5 November 2026 | The `OP-LIB-02` row follows the review of pull request #9, which found that it promised more than OP-07 checks. Full access and the check of the page against the page count are the app's (MOD-08), because rules do not look up the account status (`SECURITY_AND_ACCESS_CONTROL.md` T25) and do not know the page count. The server checks the owner and a page and a revision of at least 1, and a refused write returns no `INVALID_ARGUMENT`, as rule 2 says. The MOD-08 Authorization row says the same. Revised on 5 November 2026 after the review of pull request #24: the `OP-LIB-05` row says the same of full access and decides nothing for OQ-12. No requirement, scope item, decision or status label changed. |
-| 0.12 | 6 November 2026 | Where `Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` live is agreed in writing (issue 28): `app/lib/contracts/result.dart`, MOD-00. Section 4.2 says so, section 5 lists them, and section 6.2 says that MOD-02 depends on MOD-00 for `FailureCode` and `AppFailure`, where it said that it depended on nothing inside the app. No type, field or value changed. No requirement, scope item, decision, status label or MFW approval changed. |
+| 0.12 | 6 November 2026 | Where `Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` live is agreed in writing (issue 28): `app/lib/contracts/result.dart`, MOD-00. Section 4.2 says so, section 5 lists them, and section 6.2 says that MOD-02 depends on MOD-00 for `FailureCode` and `AppFailure`, where it said that it depended on nothing inside the app. No type, field or value changed. No requirement, scope item, decision, status label or MFW approval changed. Revised on 7 November 2026 after the review of pull request #37: section 4.2 says that the file is added with the shared contracts code and is not on `main` until that code merges. |
 
 ### 1.1 Related documents
 
@@ -112,7 +112,7 @@ States are evaluated in the order listed: the first one that applies is the stat
 
 ### 4.2 Results and errors
 
-`Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` live in `app/lib/contracts/result.dart` (MOD-00), and the file imports nothing. Both developers agreed this in writing on 6 November 2026 (issue 28). MOD-02 maps a `FailureCode` to a message (`messageFor`, section 6.2) and imports these types. The contracts never import MOD-02.
+`Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` live in `app/lib/contracts/result.dart` (MOD-00), and the file imports nothing. The file is added with the shared contracts code (MOD-00), and is not on `main` until that code merges. Both developers agreed this in writing on 6 November 2026 (issue 28). MOD-02 maps a `FailureCode` to a message (`messageFor`, section 6.2) and imports these types. The contracts never import MOD-02.
 
 ```dart
 sealed class Result<T> {
