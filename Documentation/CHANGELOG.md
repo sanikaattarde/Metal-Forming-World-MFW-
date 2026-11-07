@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.33 |
+| Version | 0.34 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: coverage matrix changes from the second-person review, 2026-11-07, on topic branch `docs/yg-coverage-matrix-r` on top of `2ab56cf`, then merged with `origin/main` at `353c100`, under review in pull request #41
+
+Follows Sanika Attarde's first pass of MOD20-P1-T03 (issue 31, findings M-1 and M-2), in the part that `REQUIREMENT_COVERAGE_MATRIX.md` holds. YG replied to the issue on 6 November 2026, and the positions below are YG's, PROPOSED. (1) The status line no longer says "Nothing has been tested". It says that no result is a pass for T-11.2 or T-11.3, and that the emulator and simulator results are in `test-evidence/`. Section 2 says that the matrix has no evidence column, because a column per row would repeat the reports and drift, and that one can be added when a result that counts exists (M-1). (2) Section 2 says that suite TS-14 is not traced per requirement, because the contract tests cover every operation and a trace per row would repeat the design anchor column, and points to `TESTING_STRATEGY.md` (M-2). No row, state or count changes. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/REQUIREMENT_COVERAGE_MATRIX.md` | Version 0.4: the status line and two new limits in section 2 follow the findings named above. | The first pass of MOD20-P1-T03 found that the status line was out of date and that the matrix did not mention TS-14 | TS-14, CT-01 to CT-11, T-11.2, T-11.3 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.34: this entry. It takes 0.34 because #37 (0.29), #34 (0.30), #38 (0.31), #39 (0.32) and #40 (0.33) merged with those numbers. | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document and reads 0.4 for `REQUIREMENT_COVERAGE_MATRIX` (was 0.3) and 0.34 for `CHANGELOG` (was 0.33) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: technology decisions and cost document changes from the second-person reviews, 2026-11-07, on topic branch `docs/yg-tech-cost-r` on top of `2ab56cf`, then merged with `origin/main` at `765ff84`, under review in pull request #40
 
