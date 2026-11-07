@@ -7,9 +7,9 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.11 |
+| Version | 0.12 |
 | Status | Draft for review. Not approved. |
-| Date | 6 November 2026 |
+| Date | 7 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -27,6 +27,7 @@
 | 0.9 | 5 November 2026 | Two corrections. The DEC-030 entry names MOD-05 (catalogue, search, home) as affected, and no longer MOD-04 (profile, settings, consent), following `TASK_OWNERSHIP_MATRIX.md` section 6. The 0.4 row says that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository. No requirement, scope item, decision or status label changed. |
 | 0.10 | 5 November 2026 | Section 4 step 2 asks for an Options considered row and a Consequences row. An entry assessed before 5 November 2026 keeps its options and consequences in its Context and Proposal rows, and gets the two rows when it is next assessed or changes status. The existing entries are not filled in all at once, as the review of pull request #23 suggested. Revised on 5 November 2026 after the review of pull request #24: step 2 reads as that review worded it. No entry changed, so no AGREED entry is touched. No requirement, scope item, decision or status label changed. |
 | 0.11 | 6 November 2026 | The DEC-022 row of section 5.6 says what MOD15-P1-T01 is, as the review of pull request #23 asked. It is Sanika Attarde's cost check, in a task list that is not in this repository, stated as the documents state it. The wording is for Sanika Attarde to correct. Revised on 6 November 2026 after the review of pull request #25: the row says that the answer depends on the repository's visibility and on the account that pays, and that the check is made again if either changes. No requirement, scope item, decision or status label changed. |
+| 0.12 | 7 November 2026 | Section 5.7 added: Yuvraj Gaykhe's written positions of 6 November 2026 on DEC-025 to DEC-030, the other half of the evidence for those six entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED by this version, and no MFW approval is recorded. |
 
 ### 1.1 Related documents
 
@@ -279,6 +280,26 @@ Updated on 5 November 2026
 ├── TASK_OWNERSHIP_MATRIX.md             sections 1, 5 and 6 (DEC-011: the mapping AGREED, each assignment row PROPOSED until OQ-38)
 └── TEST_DATA_AND_FIXTURES.md            section 1.1 (DEC-024)
 ```
+
+### 5.7 Written positions of Yuvraj Gaykhe, 6 November 2026
+
+Yuvraj Gaykhe gave these positions in chat on 6 November 2026, one decision at a time, and they are recorded here at their instruction. This section is Yuvraj Gaykhe's written note under section 3.1, the other side of section 5.4 for the six entries below.
+
+**What this section is and is not**
+
+- Once this section is merged, both developers' written notes are filed for DEC-025 to DEC-030.
+- No entry changes status because of it. Each entry is set to AGREED in a follow-up edit that cites sections 5.4 and 5.7 and the approving review of the pull request that carries this section (section 4, step 3), as section 5.6 did for the first eight. Where a condition below is not yet met, that edit says so.
+- It does not cover DEC-001, DEC-023, DEC-031, DEC-032, DEC-033 or any OPEN entry. They stay as recorded.
+- It records no MFW approval. Where an entry needs MFW, the condition column says what is still outstanding.
+
+| Entry | Subject | Position of Yuvraj Gaykhe | Condition or limit |
+|---|---|---|---|
+| DEC-025 | Server-side language and runtime | Accepts TypeScript on Node.js. Claims no TypeScript skills of their own: the backend and the admin panel are WS-A, and Yuvraj Gaykhe reviews that code. | Depends on DEC-003, as in section 5.4. |
+| DEC-026 | API style, operation catalogue and error scheme | Accepts the style, the OP-nn catalogue and the category-plus-reason error scheme, as in section 5.4. | The four design points of section 5.4 stay open for the backend spike. App Check is OQ-52. Depends on DEC-003. The exception that pull request #34 made to check 2 of `DEFINITION_OF_DONE.md` section 5 leans on this entry, and pull request #38 adds OQ-62 to track it until the entry is AGREED. |
+| DEC-027 | Admin roles and role management | Accepts as an internal position: one Admin role, with in-panel add and remove. | In-panel add and remove is not built as agreed scope until MFW confirms it in writing (OQ-58). The first admin created by the developers is needed either way. |
+| DEC-028 | Logging, monitoring and crash reporting | Accepts as an internal position. | MFW's confirmation of C-07 and its answer to OQ-23 are still needed. |
+| DEC-029 | Account deletion, retention and backups | Accepts as an internal position: immediate deletion. | MFW and its legal adviser still decide retention and the purged-identifier list (OQ-24). |
+| DEC-030 | Search and filters | Accepts. | MFW answers OQ-13. |
 
 ## 6. Entries
 
