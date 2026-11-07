@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.28 |
+| Version | 0.29 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 6 November 2026 |
+| Date | 7 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,21 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: where Result, AppFailure and FailureCode live, 2026-11-06, on topic branch `docs/sa-result-location` on top of `250190a`, then merged with `origin/main` at `2ab56cf`, under review in pull request #37
+
+Records the position agreed in writing in issue 28: `Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` live in `app/lib/contracts/result.dart` (MOD-00), and MOD-02 keeps the failure-to-message mapping and the logger. The note of Sanika Attarde and the reply of Yuvraj together are the written note from both developers that `DECISION_LOG.md` section 3.1 asks for. Four documents follow: `API_AND_MODULE_CONTRACTS.md` says where the types live (sections 4.2 and 5) and that MOD-02 depends on MOD-00 (section 6.2), `CODING_STANDARDS.md` and `TASK_OWNERSHIP_MATRIX.md` no longer put the types under MOD-02, and `DEVELOPMENT_ROADMAP.md` marks its open step as agreed. The module map of the contract names no types, so its MOD-00 and MOD-02 rows are unchanged. One point is proposed and not agreed: `result.dart` has no writing module, so a change to it needs both developers. No type, field, rule or value changes. No requirement, scope item, decision, status label, cost or estimate changes, and no MFW approval is recorded. Nothing here has gone to MFW.
+
+Revised on 2026-11-07 after YG's review of this pull request, which asked for two changes. The MOD-02 line of `DEVELOPMENT_ROADMAP.md` section 4.3 now reads "after the scaffold and MOD-00", where it said "no other dependency". Section 4.2 of `API_AND_MODULE_CONTRACTS.md` now says that `result.dart` is added with the shared contracts code and is not on `main` until that code merges. The versions do not change.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.12: sections 4.2, 5 and 6.2 say where the types live and what MOD-02 depends on. Section 4.2 also says the file is not on `main` until the contracts code merges. | Issue 28 | MOD-00, MOD-02, DEC-026 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CODING_STANDARDS.md` | Version 0.6: the module tree puts `AppFailure` in `contracts/` and leaves the mapping in `core/errors/`. | Issue 28 | MOD-00, MOD-02 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/TASK_OWNERSHIP_MATRIX.md` | Version 0.9: the MOD-02 row and the row for `app/lib/contracts/` in section 8.1 follow. | Issue 28 | MOD-00, MOD-02 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.11: the open step under MOD-02 is marked agreed, and the MOD-02 line of section 4.3 names MOD-00 as a dependency. | Issue 28 | MOD-02 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.29: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.12 for `API_AND_MODULE_CONTRACTS` (was 0.11), 0.11 for `DEVELOPMENT_ROADMAP` (was 0.10), 0.9 for `TASK_OWNERSHIP_MATRIX` (was 0.8), 0.6 for `CODING_STANDARDS` (was 0.5) and 0.29 for `CHANGELOG` (was 0.28) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: data model and security changes from the second-person review, 2026-11-06, on topic branch `docs/yg-data-model-r` on top of `250190a`, then merged with `origin/main` at `824cd95` and at `5a77910`, under review in pull request #36
 
