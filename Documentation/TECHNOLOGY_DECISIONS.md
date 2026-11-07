@@ -7,9 +7,9 @@
 | Document title | Technology Decisions |
 | File | `TECHNOLOGY_DECISIONS.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for Review |
-| Last updated | 5 November 2026 |
+| Last updated | 7 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. Every decision below is PROPOSED or OPEN, except TD-01, which S2 and the charter confirm. No decision is approved by MFW (Section 1.2). |
 | Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [System Architecture](SYSTEM_ARCHITECTURE.md); [Database and Data Model](DATABASE_AND_DATA_MODEL.md); [API and Backend Contract](API_AND_BACKEND_CONTRACT.md); [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md); `PROJECT_CHARTER.md` |
@@ -27,6 +27,7 @@
 | 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. TD-15 and TD-19 are proposed (not accepted by the development team), each with a baseline and a labelled change. GS-Q34 added: the requirements-specification profile list is required by default (PRC-03 superseded). Not-verified item 24 added (account-existence behaviour of the provider). The statement that MFW accepted the App Store risk is qualified: S3 is not filed. AOQ numbers carry their OQ aliases. "Team-accepted" replaced by PROPOSED. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded (section 10.5, GS-Q35 to GS-Q65). TD-15 rewritten for one Admin role with in-panel add and remove, and PRC-01 is withdrawn. TD-19 rewritten for immediate deletion, and PRC-02 is withdrawn. TD-09, TD-11, TD-22 and the AOQ table updated. A sentence in the document control that still said TD-15 and TD-19 were accepted by the development team is corrected. No decision is approved. |
 | 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. The source row that gives the charter's version 0.2 reads 23 October 2026 (was 22 October 2026). No requirement, scope item, decision or status label changed. |
+| 0.6 | 7 November 2026 | Findings of Sanika Attarde's second-person review (issue 32, T-1 to T-4) that this document holds, with YG's positions of 6 November 2026, PROPOSED. TD-15's enforcement tests no longer say that none exists: some ran on the emulators in the backend spike, and the two evidence reports hold the results, none a pass for the concurrency or token cases (T-1). TD-17's cost and operations row and item 15 of section 9 record the emulator limits the spike met, as spike observations, and TD-15 says the Functions emulator does not verify tokens (T-2). TD-04 records that the spike declares Node 22 and that the deploy runtime is NOT TESTED (T-3). TD-04 no longer says "roughly ten functions" or "a scheduled purge" (T-4). D1 of TD-09 names check 0 of OP-11 (A-1). The spike facts are emulator only and not merged. No requirement, scope item, decision, status label, cost or MFW approval changed. Revised on 7 November 2026 after the review of pull request #40: TD-17's recommendation and cost row, and section 7.5, name GitHub Actions as the CI service that DEC-022 chose (AGREED, conditional on its cost check, which is not done), where they called the CI product open. |
 
 ### 1.1 Sources and authority
 
@@ -217,14 +218,14 @@ Each record uses the same fields. "Approval needed from" names the role that mus
 | Technology or capability | TypeScript on Node.js, in Cloud Functions for Firebase |
 | Decision status | proposed |
 | Evidence label | ASSUMPTION |
-| Problem and context | S2 places upload checks, publishing, notification sending and account deletion in server logic. This design adds access issuing for PDFs, admin role management and a scheduled purge (TD-09, TD-15, TD-19). That is roughly ten functions. S2 names no language. |
+| Problem and context | S2 places upload checks, publishing, notification sending and account deletion in server logic. This design adds access issuing for PDFs, admin role management and scheduled maintenance, OP-41 (TD-09, TD-15, TD-19). S2 names no language. |
 | Options considered | TypeScript on Node.js. Python. |
 | Evaluation criteria used | EC-2, EC-6, EC-10 |
 | Advantages and disadvantages | The documentation lists Node.js 20 and 22 and Python 3.10 to 3.13 as supported, and says TypeScript is supported (VS-13). TypeScript matches the admin panel language (TD-14), so one language covers the server and the admin side. Node 18 is described as deprecated since early 2025 (VS-13), so a supported version must be chosen. |
 | Cost and operational implications | The no-cost allowance is 2 million invocations a month, then USD 0.40 per million. Compute allowances and the outbound-network price are in Section 9 (VS-01). Expected invocations are far below the allowance. |
 | Security and privacy implications | Functions use elevated credentials, so each one authenticates the caller, validates input and avoids logging personal data. Dependencies are pinned and audited. |
 | Vendor lock-in and migration | Low for the language. The trigger and callable wrappers are Firebase-specific. |
-| Recommendation | TypeScript on Node.js, using a supported release at implementation time. This follows GS-Q2. The release is a configuration choice and is not set here. |
+| Recommendation | TypeScript on Node.js, using a supported release at implementation time. This follows GS-Q2. The release is a configuration choice and is not set here. The backend spike declares Node 22, and the emulator ran its functions on Node 26 with a warning that the package asks for 22 (B-10; emulator only, not merged). The deploy runtime is NOT TESTED. VS-13 is read again when TD-04 is decided. This records a spike fact and sets nothing. |
 | Evidence and requirement traceability | FR-ADMIN-006, FR-ADMIN-007, NFR-SEC-008 (upload checks on the backend); FR-PRIV-003; FR-ADMIN-015, FR-ADMIN-016; S2 Architecture: Server logic |
 | Conditions for approval | The developers confirm TypeScript skills (EC-10). |
 | Review triggers | The chosen runtime is deprecated. A skills gap appears. |
@@ -381,8 +382,9 @@ TD-09 proof plan: resumable signed-URL downloads       [proposed plan; nothing h
 │   └── C5 Use short lifetimes for C1 and C2, then choose the production lifetime from slow-network runs.
 │       The 60 minute default is an ASSUMPTION (AOQ-07)
 ├── D. Authorisation
-│   ├── D1 getIssueFile refuses on each of the six checks in System Architecture §7.4: signed out, closed
-│   │   account, unverified email, incomplete profile when the gate is on (BR-003 (PROVISIONAL)),
+│   ├── D1 getIssueFile answers GONE for an issue on the deleted-issue list before the sign-in check
+│   │   (check 0, OP-11), then refuses on each of the six checks in System Architecture §7.4: signed out,
+│   │   closed account, unverified email, incomplete profile when the gate is on (BR-003 (PROVISIONAL)),
 │   │   unpublished issue, and no current file
 │   ├── D2 A new URL cannot be obtained for an unpublished or unauthorised issue
 │   ├── D3 A direct read of the private path with no URL is refused, for signed-out and signed-in clients
@@ -533,14 +535,15 @@ TD-09 proof plan: resumable signed-URL downloads       [proposed plan; nothing h
 | Approval needed from | MFW authorised approver, and Development team |
 | Decide by | Before M2 approval |
 
-**Enforcement tests for TD-15 (proposed, not written).** They check the rules in Database and Data Model §10.8. Every test is proposed and none exists. The wider set is in [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) §14.
+**Enforcement tests for TD-15 (proposed).** They check the rules in Database and Data Model §10.8. Some cases are written in the backend spike and ran on the emulators, and the rest are not written. Which cases ran, and their results, are in `test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md` (the results by checklist item and the list to re-run on ENV-TEST) and `test-evidence/ADMIN_PANEL_SPIKE_EVIDENCE.md`. The results are emulator only and the spike code is not merged. None of them is a pass for the concurrency or token cases, as "Result to record" below says. The wider set is in [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md) §14.
 
 ```text
-TD-15 enforcement tests                 [proposed; none written]
+TD-15 enforcement tests                 [proposed; some written in the backend spike, emulator only]
 ├── Where they run
 │   ├── Rules tests and function tests on the local emulators, on every change (TD-17)
-│   └── The concurrency and token cases once on a test project as well, because how closely the emulators
-│       reproduce transaction conflicts and token behaviour was not researched
+│   └── The concurrency and token cases once on a test project as well, because the Functions emulator does
+│       not verify tokens (B-1, backend spike) and how closely the emulators reproduce transaction conflicts
+│       was not researched
 ├── Server-side validation (INV-04, INV-06, INV-07)
 │   ├── Each add and remove function refuses: a caller who is not an admin by the record, a stale sign-in, a revoked
 │   │   token, an unknown or closed target account, a target whose email is not verified (add only), and a request
@@ -603,10 +606,10 @@ TD-15 enforcement tests                 [proposed; none written]
 | Options considered | A: a hosted CI service runs analysis, unit and widget tests, and rules and function tests against local emulators. Production deployments are made by a developer. B: full continuous deployment to production through a stored service account key. C: manual checks only. |
 | Evaluation criteria used | EC-2, EC-4, EC-6 |
 | Advantages and disadvantages | A catches regressions without putting production credentials in a CI system. B would need a long-lived key, which conflicts with credentials held by MFW and raises the custody question in REG-051. C risks regressions between two developers. |
-| Cost and operational implications | The CI product and its minutes and limits were NOT VERIFIED. The repository is hosted on GitHub, so its built-in CI is a likely candidate. The local emulator suite was not researched in this pass. |
+| Cost and operational implications | DEC-022 chose GitHub Actions, the CI built into GitHub, where the repository is hosted. Its minutes and limits are NOT VERIFIED, and the cost check of DEC-022 is not done. The local emulator suite was not researched in this pass. The backend spike later ran it and met these limits, recorded as spike observations (emulator only, not merged; `test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md` sections 3, 7 and 8): it needs Java 21 or newer, the Functions emulator does not verify tokens (B-1), the Storage emulator ignores a write marked "only if nothing is there" (G-1), queries run without the composite indexes the platform needs (D-4, G-15), and a repeated storage event and a 150 MB file were not reproduced (G-11). The licence of `firebase-tools` and any other limit of the suite are NOT VERIFIED. System Architecture §9 lists the same limits. |
 | Security and privacy implications | No production credential in CI. Test data is fictional. Dependencies are pinned and audited. |
 | Vendor lock-in and migration | Low. |
-| Recommendation | A. The CI product is open. |
+| Recommendation | A, on GitHub Actions, which DEC-022 chose (AGREED, conditional on the cost check in task MOD15-P1-T01, which is not done). The plan limits and the macOS runner cost are NOT VERIFIED, and nothing is billed to MFW without MFW's approval. |
 | Evidence and requirement traceability | AC-10, AC-11, AC-12, NFR-REL-002, NFR-SEC-010, NFR-SEC-012, NFR-MAINT-002, NFR-MAINT-003 (CONFIRMED); REG-051, REG-054; CH R6 |
 | Conditions for approval | Both developers agree the workflow, and the development workflow document is written. |
 | Review triggers | CI cost or limits change. The repository moves to MFW (REG-055). |
@@ -762,7 +765,7 @@ TD-19, AOQ-02 and AOQ-06. OQ-24 and OQ-15 from the specification.
 
 ### 7.5 Can be deferred
 
-The CI product, the build tool and library versions, the React framework version, the secret store, backup schedule details once TD-19 is approved, the Analytics event list after OQ-23, and any content delivery network (CHG-05). Deferring these does not change a decision above.
+The build tool and library versions, the React framework version, the secret store, backup schedule details once TD-19 is approved, the Analytics event list after OQ-23, and any content delivery network (CHG-05). Deferring these does not change a decision above. The CI product is no longer on this list: DEC-022 chose GitHub Actions, conditional on its cost check.
 
 ## 8. Decision Summary and Unresolved Items
 
@@ -973,7 +976,7 @@ These were looked for and not found on an official page, or the page returned on
 12. How soon issued ID tokens stop working after revocation, and a recent-sign-in time window.
 13. The Android default offline cache size.
 14. The Dart version that goes with Flutter 3.47.0.
-15. Prices and limits for PostgreSQL-based or other alternatives, for CI services and for the emulator suite. These were not researched.
+15. Prices and limits for PostgreSQL-based or other alternatives, for CI services and for the emulator suite. These were not researched. The backend spike met some limits of the emulator suite, which TD-17 records as spike observations. They are not research, and the suite's prices and other limits stay unresearched.
 16. App Check cost and enforcement setup.
 17. The full text of the Syncfusion licence.
 18. Apple's and Google's policy pages were extracted by the reading tool and must be re-checked on the live pages (VS-38 to VS-40).

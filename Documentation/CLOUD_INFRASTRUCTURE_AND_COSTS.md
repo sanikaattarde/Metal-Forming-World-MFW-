@@ -6,9 +6,9 @@
 |---|---|
 | Document | Cloud Infrastructure and Costs |
 | File | `Documentation/CLOUD_INFRASTRUCTURE_AND_COSTS.md` |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. A comparison of candidates and a parameterised cost model. No provider is chosen, because DEC-003 is OPEN. Every price is a vendor figure read on the date shown. Every amount is planning arithmetic, not a quotation. |
-| Date | 5 November 2026 |
+| Date | 7 November 2026 |
 | Audience | The two developers. MFW's authorised approver only for the decisions in section 22. |
 | Proposed owner | Yuvraj, as drafter and primary editor. PROPOSED and not agreed. Reviewer: Sanika Attarde, whose workstream (WS-A) holds MFW's cloud project and accounts (`TASK_OWNERSHIP_MATRIX.md` section 5). |
 | Approval required | Both developers (CH §17.4). MFW's written approval for any cost, scope or contract effect: the provider, the region, the cost ceiling and any content delivery network. This document asks MFW for nothing. |
@@ -21,6 +21,7 @@
 | 0.1 | 25 October 2026 | Initial draft. This is the document that `TASK_OWNERSHIP_MATRIX.md` section 13.3 lists as planned and blocked by DEC-003. It is written while DEC-003 is still OPEN, as a comparison of candidates and a parameterised model. It does not decide DEC-003, and it does not lift the block on a single-provider cost model. It is written on top of commit 4769de3, so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Three stale mentions updated: the stored data no longer lists an audit log, the scheduled job covers maintenance and not only the withdrawn purge window (PRC-02), and the effort note names the withdrawn two-role figure (PRC-01) and the unestimated in-panel add and remove (GS-Q44). No price, scenario or provider choice changed. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.4 | 7 November 2026 | Findings of Sanika Attarde's first pass of MOD20-P1-T03 (issue 31, C-1 to C-3), with YG's positions of 6 November 2026, PROPOSED. Section 4 gains WI-14 (uploads per month) and WI-15 (memory and run time of one upload check), both NOT VERIFIED and with no number, and section 11 says that the bytes of a download do not pass through a function and the bytes of an upload do (C-1). WI-08 no longer says "roughly ten functions", because the model prices invocations and not functions (C-2). Sections 5, 6.4 and 15 say "scheduled maintenance" with OP-41 in place of "purge", and section 15 notes that OP-41's four schedules may need more than the three free scheduler jobs, NOT VERIFIED (C-3). No price, formula, scenario figure, provider choice, requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -122,12 +123,14 @@ Evidence, strongest first
 | WI-05 | Downloads per reader per month | In no source. Scenarios A to D carry the values 1, 1, 3 and 7. | `SYSTEM_ARCHITECTURE.md` section 13.3. ASSUMPTION. No scenario is called expected. |
 | WI-06 | Delivery model | Whole-file download, no content delivery network | NFR-STOR-003, ASSUMPTION (S2 ASM-15). A CDN needs MFW's written approval (CHG-05). |
 | WI-07 | Database operations per reader | In no source | Unit rates only (section 8). The design aims to stay inside the free allowance and measures reads in test builds (TD-07). |
-| WI-08 | Function invocations | About one per download, plus sign-in, admin and scheduled actions. Roughly ten functions. | TD-04, TD-09. The count is in no source. |
+| WI-08 | Function invocations | About one per download, plus sign-in, admin and scheduled actions. | TD-04, TD-09. The count is in no source. The model prices invocations and not functions, so the number of functions is not an input. |
 | WI-09 | Push sends | In no source | Unit rates only (section 12). |
 | WI-10 | Log volume | In no source | Unit rates only (section 13). |
 | WI-11 | Environments | ENV-LOCAL, ENV-TEST (the development project), ENV-PROD and a throwaway project for AC-12 | TD-18, DEC-023, `DEPLOYMENT_PLAN.md` section 4. PROPOSED. |
 | WI-12 | Admin panel traffic | Editors only | TD-14. |
 | WI-13 | Billing currency and tax | USD in the pages read. MFW's billing currency and tax treatment are NOT VERIFIED. | CL-01 |
+| WI-14 | Uploads per month | In no source. Only editors upload: an issue PDF, its cover, and a replacement PDF. | FR-ADMIN-005 to FR-ADMIN-007 (CONFIRMED). The count is NOT VERIFIED. |
+| WI-15 | Memory and run time of one upload check | In no source. In the backend spike the check reads the whole uploaded file into memory and parses it, up to 150 MB (issue 31 finding C-1, from the spike code on `spike/sa-backend-rules`; emulator only, not merged). Neither was measured (G-11, FX-PDF-05). | OP-40. NOT VERIFIED. The function's memory setting sets the price of each check, and may set a limit. |
 
 ## 5. Infrastructure Requirements
 
@@ -144,7 +147,7 @@ What the requirements call for, whatever the provider
 │   ├── Public cover images (FR-MAG-002)
 │   └── Resumable, authorised download of a whole file (FR-DL-006, NFR-SEC-002)
 ├── Server logic
-│   └── Upload checks, access issuing, notification sending, account deletion, admin role changes, one scheduled purge (TD-04, TD-09, TD-15, TD-19)
+│   └── Upload checks, access issuing, notification sending, account deletion, admin role changes, scheduled maintenance, OP-41 (TD-04, TD-09, TD-15, TD-19)
 ├── Push                  Category topics to Android and iPhone (INT-PUSH-001, TD-13)
 ├── Admin web hosting     The only web interface (FR-ADMIN-001, TD-14)
 ├── Observability         Crash reports and basic usage events inside NFR-PRIV-003 (NFR-OBS-001, NFR-OBS-002)
@@ -220,7 +223,7 @@ Candidate F
 ├── Required services          Authentication, Firestore, Cloud Storage, Cloud Functions, Cloud Messaging, Hosting, Crashlytics
 ├── Optional or conditional    Analytics (after OQ-23), Identity Platform upgrade for admin multi-factor (AOQ-03),
 │                              Firestore backups and point-in-time recovery (OQ-46), App Check (AOQ-10),
-│                              Secret Manager, Cloud Scheduler (one purge job), a CDN (not researched)
+│                              Secret Manager, Cloud Scheduler (scheduled maintenance, OP-41), a CDN (not researched)
 ├── Known costs (read 25 October 2026)
 │   ├── Internet egress from Cloud Storage to Asia, first 10 TiB     USD 0.12 per GiB (CV-03)
 │   ├── Standard storage, Mumbai                                      USD 0.000027397 per GiB-hour, about USD 0.02 per GiB-month (CV-03)
@@ -414,7 +417,7 @@ function cost = max(0, invocations - 2,000,000) / 1,000,000 x 0.40
 Candidate W, per million calls = 0.20 + 1.05 = 1.25, plus Lambda compute; 100,000 API calls cost USD 0.105 at the API Gateway rate
 ```
 
-The invocation count (WI-08) is in no source. The design keeps functions to privileged actions, about one call per download (TD-09), and the bytes do not pass through a function. Scheduled sends are excluded (EXC-04). The compute allowance question is CL-07.
+The invocation count (WI-08) is in no source. The design keeps functions to privileged actions, about one call per download (TD-09), and the bytes of a download do not pass through a function. The bytes of an upload do: the upload check (OP-40) reads the whole file and parses it, so its memory and run time are compute for each upload and replacement (WI-14, WI-15, NOT VERIFIED). Uploads are few, because only editors upload, so the cost is probably small, but nothing here measures it. Scheduled sends are excluded (EXC-04). The compute allowance question is CL-07.
 
 ## 12. Push Notifications
 
@@ -477,7 +480,7 @@ Environments (PROPOSED, TD-18, DEC-023; needs MFW's approval because a second pr
 Cost effects:
 
 1. Each project that uses Cloud Storage or Cloud Functions needs billing switched on (VS-02, VS-03). Each such project needs a billing account to pay it.
-2. Cloud Scheduler gives 3 jobs a month free per billing account, counted across all projects on the account (CV-06). One purge job in each of three projects is three jobs. Projects on separate billing accounts get separate free jobs. Which billing accounts are used is CL-06.
+2. Cloud Scheduler gives 3 jobs a month free per billing account, counted across all projects on the account (CV-06). One scheduled maintenance job in each of three projects is three jobs. OP-41 lists daily, hourly, weekly and monthly tasks. If each schedule needs its own job, one project needs up to four, which is more than the three free jobs. How the tasks map to jobs is NOT VERIFIED. Projects on separate billing accounts get separate free jobs. Which billing accounts are used is CL-06.
 3. Test traffic is real traffic. Ten test downloads of a 150 MB file are 1.4 GiB, about USD 0.17 on candidate F with a Mumbai bucket. The TD-09 proof plan repeats and breaks downloads, so its cost grows with the number of runs, at about USD 0.0168 for each full 150 MB download.
 4. Real reader data is never held in the development project (TD-18).
 5. The continuous-integration service is a separate cost, not a cloud cost. It is not read (DEP-61, `TECHNOLOGY_DECISIONS.md` section 9.4 item 15).
