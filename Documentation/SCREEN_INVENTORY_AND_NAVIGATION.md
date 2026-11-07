@@ -6,9 +6,9 @@
 |---|---|
 | Document | Screen Inventory and Navigation |
 | File | `Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md` |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. **Every screen below is PROPOSED. MFW approves the screens at M2 (NFR-UX-002), and has not seen this list.** This is an input to the designs and not a design. |
-| Date | 5 November 2026 |
+| Date | 7 November 2026 |
 | Audience | The two developers, and whoever prepares the screen designs for M2. MFW sees the designs at M2 and not this list. |
 | Proposed owner | Joint, by workstream and PROPOSED: app screens Yuvraj (WS-B), admin panel screens Sanika Attarde (WS-A). Not agreed. The other developer reviews. |
 | Approval required | Both developers for the list. MFW at M2 for the screens themselves (S2 Scope: Design; S2 Milestones). |
@@ -21,6 +21,7 @@
 | 0.1 | 24 October 2026 | Initial draft. Written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). SCR-W-11 is the admin management screen on the one-role position, and it also shows the change record. SCR-A-09, SCR-A-23, SCR-W-10 and SCR-W-12 are withdrawn or dropped, and their identifiers stay. Two reading actions, the default reader mode, visitor notifications, fixed categories and the news Save control are noted on the screens they touch. No decision is approved. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.4 | 7 November 2026 | Findings S-1 to S-3 of Sanika Attarde's first pass of MOD20-P1-T03 (issue 31), with YG's positions of 6 November 2026, PROPOSED. Section 6 gains a route column and a paragraph on the routes, the unknown-address rule and sign-in as a state (S-1). SCR-W-01 says that an admin whose email is not verified is refused and that every refusal shows one message (S-3). Section 7 gains a list of the panel's own states beside the app's list (S-2). The panel facts are spike observations: emulator only, not merged, and every route is a spike choice until DEC-004 is agreed. No requirement, scope item, decision, status label or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -149,20 +150,22 @@ Two things are not app screens. Sharing uses the system share sheet, and a share
 
 The panel needs sign-in and refuses accounts without the admin role (FR-ADMIN-002, FR-ADMIN-003). There is one admin role, so every admin sees every screen (GS-Q44). No page list for the panel exists elsewhere (SN-06), so this table is the first.
 
-| ID | Screen | Requirements | Operations | Notes and open points |
-|---|---|---|---|---|
-| SCR-W-01 | Admin sign-in | FR-ADMIN-002, FR-ADMIN-003 | OP-14 | Refuses a wrong password and an account without the role. Sign-in measures: OQ-20 |
-| SCR-W-02 | Issues list | FR-ADMIN-011 | OP-15 | Published and unpublished issues |
-| SCR-W-03 | Issue editor | FR-ADMIN-005 to FR-ADMIN-009, FR-ADMIN-011, FR-STATE-007 | OP-16, OP-19, OP-21, OP-22, OP-40 | Details; PDF and cover upload with a clear rejection message; publish and unpublish. Replace or delete: OQ-21 (OP-30). Cover checks: OQ-22. Size limit: OQ-30 |
-| SCR-W-04 | Upload status | FR-ADMIN-006, FR-ADMIN-007, FR-STATE-007 | OP-20 | Waiting, accepted, or rejected with the reason. May be part of SCR-W-03 |
-| SCR-W-05 | Categories and segments | FR-ADMIN-010 | OP-17, OP-18, OP-28 | Issue categories only. The developers seed segments and notification categories (GS-Q47, GS-Q56), so OP-28 is not built on the working position |
-| SCR-W-06 | News controls | FR-ADMIN-013, FR-ADMIN-014, FR-ADMIN-019 | OP-23, OP-24 | Pick a WordPress post, hide it, mark it breaking. The panel does not write or edit news |
-| SCR-W-07 | Send notification | FR-ADMIN-015, FR-ADMIN-016, FR-ADMIN-017 | OP-25 | Chosen category, linked to an issue or an article, or a post sent as breaking news. Categories: OQ-18 |
-| SCR-W-08 | Send log | FR-ADMIN-018, FR-STATE-007 | OP-26, OP-27 | Fields: OQ-19. An admin can retry a send |
-| SCR-W-09 | Registered users | FR-USER-002, FR-USER-003 | OP-31, OP-32 | PROVISIONAL. Any admin (GS-Q49) |
-| SCR-W-10 | Subscriber export | FR-USER-001 | OP-33 | Dropped on the working position (GS-Q49). CONFLICT (C-02) until MFW agrees in writing. Not drawn |
-| SCR-W-11 | Admin management and change record | FR-USER-005, NFR-SEC-011 | OP-34, OP-35, OP-37, OP-38, OP-39 | PROPOSED (GS-Q44), waiting for MFW's confirmation (OQ-58). Find a registered reader by email, add the person as an admin, remove an admin after a confirmation that names the person, list the admins, and show the record of who added or removed whom. Needs a recent sign-in. If MFW declines, the screen does not exist and the developers set admins up from MFW's admin list (OQ-20) |
-| SCR-W-12 | Audit log | PRC-01 | OP-39 | Withdrawn as a separate screen. The change record is part of SCR-W-11 (GS-Q44). S2 excludes an audit log (EXC-07) |
+| ID | Screen | Route (proposed) | Requirements | Operations | Notes and open points |
+|---|---|---|---|---|---|
+| SCR-W-01 | Admin sign-in | None: sign-in is a state of the panel, not a route | FR-ADMIN-002, FR-ADMIN-003 | OP-14 | Refuses a wrong password, an account without the role, and an admin whose email is not verified (the OQ-20 working position). Every refusal shows one message (SEC-CHK-17), and the message never says "verify your email". Sign-in measures: OQ-20 |
+| SCR-W-02 | Issues list | `/issues` | FR-ADMIN-011 | OP-15 | Published and unpublished issues |
+| SCR-W-03 | Issue editor | `/issues/new`, `/issues/:issueId` | FR-ADMIN-005 to FR-ADMIN-009, FR-ADMIN-011, FR-STATE-007 | OP-16, OP-19, OP-21, OP-22, OP-40 | Details; PDF and cover upload with a clear rejection message; publish and unpublish. Replace or delete: OQ-21 (OP-30). Cover checks: OQ-22. Size limit: OQ-30 |
+| SCR-W-04 | Upload status | Not built in the spike (no upload control, K-4) | FR-ADMIN-006, FR-ADMIN-007, FR-STATE-007 | OP-20 | Waiting, accepted, or rejected with the reason. May be part of SCR-W-03 |
+| SCR-W-05 | Categories and segments | `/categories` | FR-ADMIN-010 | OP-17, OP-18, OP-28 | Issue categories only. The developers seed segments and notification categories (GS-Q47, GS-Q56), so OP-28 is not built on the working position |
+| SCR-W-06 | News controls | `/news` | FR-ADMIN-013, FR-ADMIN-014, FR-ADMIN-019 | OP-23, OP-24 | Pick a WordPress post, hide it, mark it breaking. The panel does not write or edit news |
+| SCR-W-07 | Send notification | Not chosen | FR-ADMIN-015, FR-ADMIN-016, FR-ADMIN-017 | OP-25 | Chosen category, linked to an issue or an article, or a post sent as breaking news. Categories: OQ-18 |
+| SCR-W-08 | Send log | Not chosen | FR-ADMIN-018, FR-STATE-007 | OP-26, OP-27 | Fields: OQ-19. An admin can retry a send |
+| SCR-W-09 | Registered users | Not chosen | FR-USER-002, FR-USER-003 | OP-31, OP-32 | PROVISIONAL. Any admin (GS-Q49) |
+| SCR-W-10 | Subscriber export | Not chosen | FR-USER-001 | OP-33 | Dropped on the working position (GS-Q49). CONFLICT (C-02) until MFW agrees in writing. Not drawn |
+| SCR-W-11 | Admin management and change record | Not chosen | FR-USER-005, NFR-SEC-011 | OP-34, OP-35, OP-37, OP-38, OP-39 | PROPOSED (GS-Q44), waiting for MFW's confirmation (OQ-58). Find a registered reader by email, add the person as an admin, remove an admin after a confirmation that names the person, list the admins, and show the record of who added or removed whom. Needs a recent sign-in. If MFW declines, the screen does not exist and the developers set admins up from MFW's admin list (OQ-20) |
+| SCR-W-12 | Audit log | Not chosen | PRC-01 | OP-39 | Withdrawn as a separate screen. The change record is part of SCR-W-11 (GS-Q44). S2 excludes an audit log (EXC-07) |
+
+**Routes (PROPOSED, S-1).** The panel spike chose five routes: `/issues`, `/issues/new`, `/issues/:issueId`, `/categories` and `/news`. An unknown address goes to the issues list. Sign-in is a state of the panel: a visitor who is not signed in sees the sign-in page, and it has no route of its own. These are spike choices (emulator only, not merged) until DEC-004 is agreed, and the screens without a route above have none chosen.
 
 Two screens must **not** exist. The panel has no readership analytics dashboard (FR-USER-004), and it does not write or edit news (FR-ADMIN-019).
 
@@ -183,6 +186,19 @@ States and where they apply
     ├── Damaged issue file: an error with a retry (FR-READ-010), SCR-A-14
     ├── Offline notice for articles (FR-NEWS-005), SCR-A-18 and SCR-A-19
     └── An unpublished issue: not found (OP-CAT-02), SCR-A-12
+```
+
+**The panel's own states (PROPOSED, S-2).** The list above is the app's list. The panel needs these as well. They are what the admin panel spike showed (emulator only, not merged), tied to the screens of section 6.
+
+```text
+Panel states
+├── Signed out with a notice (any screen): the admin role is removed, the account is closed, or the email is no longer verified. The panel also checks the role again when it comes back into focus
+├── Reload notice (SCR-W-03): a screen that was open while someone else saved the same record is told to reload
+├── In use (SCR-W-05): a category that issues use cannot be deleted
+├── Name taken (SCR-W-05): a category name that already exists is refused
+├── No accepted file (SCR-W-03): an issue with no accepted file cannot be published
+├── Site unreachable (SCR-W-06): the WordPress site cannot be reached, and the screen says so
+└── Panel results (FR-STATE-007): also the save of a category (SCR-W-05), of a news control (SCR-W-06) and of an issue's details (SCR-W-03), which the line above does not name
 ```
 
 ## 8. Open Points That Affect Screens
