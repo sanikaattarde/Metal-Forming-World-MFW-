@@ -7,9 +7,9 @@
 | Document title | API and Backend Contract |
 | File | `API_AND_BACKEND_CONTRACT.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for Review |
-| Last updated | 5 November 2026 |
+| Last updated | 6 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The architecture is not approved by the charter (CH §17.4). |
 | Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [System Architecture](SYSTEM_ARCHITECTURE.md); [Technology Decisions](TECHNOLOGY_DECISIONS.md); [Database and Data Model](DATABASE_AND_DATA_MODEL.md); [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md); `PROJECT_CHARTER.md` |
@@ -29,6 +29,7 @@
 | 0.3 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). One Admin role: the callers, Sections 3.2, 5.1 and 5.2 are rewritten, and OP-30 to OP-39 and OP-42 are open to any admin. OP-36 is withdrawn. OP-35, OP-37, OP-39 and OP-42 are named addAdmin, removeAdmin, listAdminChanges and bootstrapAdmin. The audit set is narrowed to adds and removes of admins, so the denied entries are dropped and INV-16 is withdrawn. Immediate deletion: OP-13 is withdrawn and OP-12 and OP-41 are simplified. OP-33 is dropped with the edition-update sign-up. Section 3.3 is rewritten. PRC-01 and PRC-02 are withdrawn. No decision is approved. |
 | 0.4 | 4 and 5 November 2026 | Bookmark follow-up to pull request #11. The identifier rule in section 3 names the bookmark identifier as an exception beside the user identifier (PROPOSED). OP-07 first said that it does not check `file_revision`. After the review of pull request #15 on 5 November 2026, OP-07 checks that `file_revision` is at least 1, beside the page check (PROPOSED), and the app's own check runs first. No decision is approved. |
 | 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
+| 0.6 | 6 November 2026 | Findings of Sanika Attarde's second-person review (issues 29 and 32) that this document holds. Section 2.3 rule 1 excepts check 0 of OP-11, and rule 2 puts the verified-email check at the admin gate (R-7, A-1). OP-14 returns `email_verified`. OP-12 requires a recent sign-in, refuses a repeat with ALREADY_DELETING, removes the admin role record, and deletes the user record last (R-4). OP-24 returns the GMT date (R-8). OP-10 and section 3.4 record that the app-side profile and consent operations differ and that no route accepts a changed policy version (R-3), and section 2.5 records that a category in use and a duplicate name have no agreed code (R-2). Section 11 names the Firebase codes in lower case and says CONFLICT has none (R-2). OP-08, OP-09, OP-41 and section 2.3 item 4 record that rules make no read, so a favourite or preference for a missing target and a write from a deleted account's old session are tolerated and cleaned up (R-5, R-6). All of it is PROPOSED, and the spike facts are emulator only. No requirement, scope item, decision or MFW approval changed. Revised on 6 November 2026 after the review of pull request #35: OP-12 has an Open line for the re-authentication step, the failure code and the window of a reader's deletion, and OP-09 says that cleanup removes a preference only for a missing category, so one for an inactive category stays (PROPOSED). |
 
 ### 1.1 Sources and authority
 
@@ -98,10 +99,10 @@ Callers
 
 ### 2.3 Identity and authorisation
 
-1. Every server operation authenticates the caller first.
-2. An admin operation reads the caller's role record and account status on this call. It does not trust a role claim, a cached role or anything held by the client (GS-Q20, INV-08). The panel hides controls by role as a convenience only.
+1. Every server operation authenticates the caller first, with one exception. Check 0 of OP-11 answers GONE for an identifier on the deleted-issue list before the sign-in check, to a signed-out caller as well. The list is readable by anyone (`SYSTEM_ARCHITECTURE.md` section 10.2), so the answer reveals nothing new. This is PROPOSED. The backend spike follows it (emulator only), and `SYSTEM_ARCHITECTURE.md` sections 7.4 and 10.1 do not yet show check 0.
+2. An admin operation reads the caller's role record and account status on this call. It does not trust a role claim, a cached role or anything held by the client (GS-Q20, INV-08). After the role check it also checks that the caller's email is verified, and refuses with FAILED_PRECONDITION and the reason EMAIL_NOT_VERIFIED if it is not (the OQ-20 working position; PROPOSED). The backend spike builds this check at the gate, and OP-14 returns `email_verified` (emulator only). The recent-sign-in check of OQ-20 is not part of the gate. It applies to adding and removing admins (OP-35, OP-37, AOQ-14, OQ-56). The panel hides controls by role as a convenience only.
 3. If the backend cannot verify the caller's current authorisation, the operation is refused and nothing changes. This is fail closed.
-4. A reader whose account is being deleted is refused by every server operation. The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status (whether they could is NOT VERIFIED, Section 11). Those records are removed with the account.
+4. A reader whose account is being deleted is refused by every server operation. The direct operations on the reader's own records stay open to the owner, because rules do not look up the account status (whether they could is NOT VERIFIED, Section 11). Those records are removed with the account. After a deletion has finished, a write from the old session is still accepted until its token expires, and it creates a record under a user that no longer exists. OP-41 removes such records. This is a known limit, and how long a token lasts is NOT VERIFIED (backend spike finding H-2, emulator only).
 5. The intended guarantee is that an admin whose role record is removed is refused on the next privileged call, once the removal is visible to the check. How long a token stays valid and whether a read made right after the change always sees it are NOT VERIFIED (Section 11). A test for a removed admin is proposed (CT-07; `TESTING_STRATEGY.md` section 9).
 6. A privileged operation is an admin operation. A refusal writes nothing, because the change record covers only admin adds and removes (GS-Q44).
 
@@ -151,6 +152,8 @@ Error categories
 ```
 
 A rejected upload is not an error to the caller. It is reported on the upload job with the reason NOT_A_PDF, OVER_LIMIT, UPLOADER_NOT_AUTHORISED or COVER_INVALID (OP-40). OVER_LIMIT and NOT_A_PDF are the same conditions as FILE_TOO_LARGE and NOT_A_PDF in `API_AND_MODULE_CONTRACTS.md` section 4.2. The app maps each category and reason to the prompts in System Architecture §7.4 and to the states in FR-STATE-001 to FR-STATE-007 (ASSUMPTION), and the app-side `FailureCode` mapping stays in `API_AND_MODULE_CONTRACTS.md`.
+
+**Open: a category in use, and a duplicate name.** Two cases have no agreed code. The app-side contract calls a category in use `CONFLICT` (OP-ADM-04), while OP-17 and OP-18, which are one entry in section 5.1, list FAILED_PRECONDITION with the reason IN_USE, and CONFLICT for a duplicate name. CONFLICT is defined above only as a stale screen (STALE_RECORD, STALE_ADMIN_STATE), and no reason code names a duplicate name. The backend spike used the reason NAME_TAKEN (finding D-2, emulator only, not merged). Which category an "in use" refusal belongs to, and the name of the duplicate-name reason, are open for both developers. OP-ADM-04 and the `conflict` row of the mapping table in `API_AND_MODULE_CONTRACTS.md` section 4.2 follow when they are settled.
 
 **Registration and sign-in messages (PROPOSED).** A duplicate address at registration arises at the identity provider and is mapped in the app to the conflict case. Registration tells the visitor that an account exists for the address. Sign-in gives one message for any wrong email or password, and password reset gives the same message whether or not the address has an account. All three are rate limited. The provider's behaviour is NOT VERIFIED and is checked when the provider is chosen (DEC-006).
 
@@ -332,7 +335,7 @@ Deletion is immediate (RS FR-PRIV-003, CONFIRMED; GS-Q50). The grace window with
 
 ```text
 Account deletion
-├── Request    OP-12 deletes the account and the reader's data at once. A recent sign-in is required if the provider requires one.
+├── Request    OP-12 deletes the account and the reader's data at once. A recent sign-in is required (RECENT_SIGN_IN_REQUIRED, AOQ-14; PROPOSED).
 │              The app asks for confirmation (FR-PRIV-004, ASSUMPTION)
 ├── Undo       None. OP-13 is withdrawn
 ├── States     active, deleting. Moves forward only (INV-18)
@@ -350,7 +353,11 @@ Open design differences
 ├── Device tokens or topics     the app-side contract stores device registrations (OP-NTF-01, OP-NTF-02); this contract uses one push topic per category (TD-13)
 ├── Upload                      one call (OP-ADM-01) or a staged upload that is validated afterwards (OP-19, OP-20, OP-40)
 ├── Publish and unpublish       one operation with a flag (OP-ADM-03) or two operations (OP-21, OP-22)
-└── Single-issue read           OP-CAT-02 getIssue has no counterpart here; the catalogue is fetched whole and filtered on the device (GS-D3, GS-D15)
+├── Single-issue read           OP-CAT-02 getIssue has no counterpart here; the catalogue is fetched whole and filtered on the device (GS-D3, GS-D15)
+├── Category in use, duplicate  the app-side contract says CONFLICT for a category in use (OP-ADM-04); this contract says FAILED_PRECONDITION IN_USE,
+│   name                        and has no reason for a duplicate name (section 2.5)
+└── Profile and consent         the app-side contract has two operations, saveOwnProfile and recordConsent (OP-PRF-02, OP-PRF-03); this contract has one,
+                                OP-10, which takes the accepted policy versions on the first call and writes the consent record then (OP-10)
 ```
 
 ## 4. Public and Reader Operations
@@ -396,12 +403,15 @@ Direct operations
 │       FR-BKM-008 (OPEN); OQ-10
 ├── OP-08 manageFavourites                           [direct; Reader, own records]
 │   ├── In: add (issue_id), remove (issue_id), or list
-│   ├── Checks: owner only (INV-11). Whether a reader without full access may favourite is OQ-12
+│   ├── Checks: owner only (INV-11). Whether a reader without full access may favourite is OQ-12. A favourite for a missing issue is
+│   │   tolerated and cleaned up later, as a bookmark is (INV-13; PROPOSED). The backend spike's rules accept one (finding A-10, emulator only)
 │   ├── Repeat: harmless. The key is (user, issue)
 │   └── Requirements: FR-BKM-003, FR-BKM-004 to FR-BKM-006, NFR-SEC-005 (CONFIRMED); OQ-12
 └── OP-09 managePreferences                          [direct; Reader, own records]
     ├── In: add or remove a notification category, or list. The app also subscribes the device to the matching push topics (TD-13). A logged-out visitor can subscribe the device to the same topics without an account, and the backend stores nothing (GS-Q46)
-    ├── Checks: owner only (INV-11). The category exists and is active
+    ├── Checks: owner only (INV-11). A preference for a missing or inactive category is tolerated when it is written. Cleanup removes it only
+    │   if the category is missing, so a preference for an inactive category stays (INV-13; PROPOSED). The backend spike's rules accept one
+    │   (finding A-10, emulator only)
     ├── Repeat: harmless. The key is (user, category)
     └── Requirements: DATA-007, FR-NOTIF-002, FR-NOTIF-003 (CONFIRMED); FR-NOTIF-007 (OPEN); OQ-09
 ```
@@ -419,6 +429,8 @@ Reader server operations
 │   ├── Writes: APP_USER (created on the first call, with the caller's identifier), READER_PROFILE, CONSENT_RECORD (first call). The
 │   │   email address is not copied
 │   ├── Repeat: harmless. The profile is replaced, and a consent record is unique per user, document and version
+│   ├── Open: there is no operation that records consent on its own, and no route to accept a changed policy version later (OQ-27).
+│   │   A later save without versions still succeeds after the policy changes (backend spike findings B-8 and B-9, emulator only)
 │   ├── Offline: not queued. The app asks the reader to retry (System Architecture §7.2)
 │   └── Requirements: FR-PROF-001 to FR-PROF-005, DATA-004 (PROVISIONAL); FR-PROF-006, FR-PRIV-001 (CONFIRMED); FR-PROF-007,
 │       DATA-012 (ASSUMPTION); GS-Q23
@@ -443,13 +455,24 @@ Reader server operations
 ├── OP-12 requestAccountDeletion                     [server; Reader, the account owner]
 │   ├── In: request_id; a confirmation flag (FR-PRIV-004). The deletion is immediate (GS-Q50)
 │   ├── Out: a confirmation that deletion has started or is done
-│   ├── Checks: authenticated; the account is the caller's own; not already deleting. If the caller is an active admin, the
-│   │   last-admin rule applies (INV-03)
+│   ├── Checks: authenticated; the sign-in is recent (AOQ-14; PROPOSED); the account is the caller's own; not already deleting. If the
+│   │   caller is an active admin, the last-admin rule applies (INV-03)
 │   ├── Effects, in one transaction: set APP_USER.status to deleting, and take the account out of the active admin count if it was one.
-│   │   Then end the caller's sessions, delete the profile, bookmarks, favourites, preferences, consent record and user record, and delete
-│   │   the sign-in account
-│   ├── Refuses: FAILED_PRECONDITION LAST_ADMIN or ALREADY_DELETING; UNAUTHENTICATED
-│   ├── Repeat: harmless. A repeat returns the same state, and a deletion that stopped part-way is finished by the cleanup task (OP-41)
+│   │   Then end the caller's sessions, delete the profile, bookmarks, favourites, preferences and consent record, remove the admin role
+│   │   record if there is one (DM §13.3, AOQ-04), delete the sign-in account, and delete the user record last, so that a deletion that
+│   │   stops part-way can still be found by the cleanup task (OP-41). The backend spike deletes in this order (emulator only)
+│   ├── Refuses: FAILED_PRECONDITION LAST_ADMIN, ALREADY_DELETING or RECENT_SIGN_IN_REQUIRED; UNAUTHENTICATED
+│   ├── Repeat: a repeat while the account is marked deleting is refused with ALREADY_DELETING. A deletion that stopped part-way is finished
+│   │   by the cleanup task (OP-41), as in the backend spike (emulator only). PROPOSED
+│   ├── Open: the recent sign-in has three parts that are not settled. The positions below are PROPOSED.
+│   │   (1) The re-authentication step. The app re-authenticates before it calls OP-12, so the refusal RECENT_SIGN_IN_REQUIRED is not met in
+│   │   normal use. `AuthService` (`API_AND_MODULE_CONTRACTS.md` section 6.3, and `auth.dart` in #34) has no method for it, and the app
+│   │   contract pull request adds one.
+│   │   (2) The failure code. RECENT_SIGN_IN_REQUIRED has no row in the mapping table of section 4.2 of the app contract. Under the R-1 rule
+│   │   of issue 29 a reason with no row maps to `unknown`, and the reader would see "Something went wrong". The position is a row that maps
+│   │   it to `unauthenticated`, which asks the reader to sign in again, with no new FailureCode.
+│   │   (3) The window. AOQ-14 and OQ-56 ask how recent a sign-in must be for adding and removing an admin, and mention "other sensitive
+│   │   admin actions". No open question names a reader's deletion. The register pull request widens OQ-56 to cover it (not yet open).
 │   ├── After: the app removes its notification subscriptions and clears local data
 │   └── Requirements: FR-AUTH-009, FR-PRIV-003 (CONFIRMED); FR-PRIV-004 (ASSUMPTION); NFR-PRIV-005 (OPEN); AOQ-02; GS-Q50
 └── OP-13 cancelAccountDeletion                      [withdrawn with PRC-02. The identifier stays, so earlier references resolve]
@@ -466,7 +489,7 @@ Every operation in this section follows Section 2.3: it authenticates the caller
 ```text
 Admin operations                                      [any admin]
 ├── OP-14 getMyAdminRole                              [server; any signed-in reader]
-│   ├── Out: whether the caller is an admin, and is_active
+│   ├── Out: whether the caller is an admin, is_active, and email_verified (PROPOSED; the backend spike returns it, emulator only)
 │   ├── Use: the panel shows or hides controls. It is never an authorisation. Every privileged operation checks again (GS-D20)
 │   └── Requirements: FR-ADMIN-003 (CONFIRMED); GS-Q20
 ├── OP-15 listIssuesForAdmin
@@ -516,7 +539,9 @@ Admin operations                                      [any admin]
 │   └── Requirements: FR-ADMIN-013, FR-ADMIN-014, DATA-009 (CONFIRMED); FR-NEWS-009 (OPEN)
 ├── OP-24 listWordPressPosts
 │   ├── In: page, per_page, an optional category filter
-│   ├── Out: a page of posts (id, title, date, link, category identifiers) and the number of pages
+│   ├── Out: a page of posts (id, title, date_gmt, link, category identifiers) and the number of pages
+│   ├── Date: the post's GMT date, which is the field the app maps to `publishedAt` (`API_AND_MODULE_CONTRACTS.md` section 9.1), so the panel
+│   │   and the app show the same time (PROPOSED)
 │   ├── Refuses: UNAVAILABLE when the site cannot be reached
 │   ├── Note: the panel does not call the site itself, because cross-origin access from a browser was not researched (TD-12)
 │   └── Requirements: FR-ADMIN-013 to FR-ADMIN-015, INT-WP-001 (CONFIRMED)
@@ -618,7 +643,8 @@ Triggered, scheduled and operator operations
 │   ├── Daily: account deletion cleanup, which finishes deletions left in the deleting state (TD-19, GS-Q50); the holding area and finished upload
 │   │   jobs; superseded revisions after their retention period
 │   ├── Hourly (ASSUMPTION): the admin count repair (INV-03); marking stale pending sends as unknown (INV-17)
-│   ├── Weekly: orphaned reader records; orphaned user records
+│   ├── Weekly: orphaned reader records (bookmarks and favourites for a missing issue, preferences for a missing category); records under
+│   │   a missing user, found by scanning the owner paths (PROPOSED; DM §10.3); orphaned user records
 │   ├── Monthly: orphaned news controls; deleted-issue records past their retention period, if MFW sets one (AOQ-19)
 │   └── Requirements: FR-PRIV-003 (CONFIRMED); GS-Q50; DM §10.3
 └── OP-42 bootstrapAdmin                              [developer-run step; not an operation a client can call]
@@ -864,9 +890,11 @@ Firebase mapping                                       [PROVISIONAL; TD-03 propo
 │   │   (the scheduler's free allowance is three jobs per account, VS-14)
 │   ├── A callable function receives the caller's sign-in identity. It still reads the role record on every call (INV-08)
 │   ├── The Admin SDK bypasses security rules (TD-03), so each function checks the caller itself
-│   └── Errors map to the callable error codes: UNAUTHENTICATED, permission-denied, failed-precondition, not-found, invalid-argument,
+│   └── Errors map to the callable error codes: unauthenticated, permission-denied, failed-precondition, not-found, invalid-argument,
 │       resource-exhausted, unavailable and internal. The exact names are confirmed at implementation. The reason code travels in
-│       the error details. GONE is carried as not-found with the reason GONE, and RATE_LIMITED as resource-exhausted (assumptions)
+│       the error details. GONE is carried as not-found with the reason GONE, and RATE_LIMITED as resource-exhausted (assumptions).
+│       CONFLICT has no callable code named here. The backend spike used aborted, with the reason in the details (finding D-1,
+│       emulator only, not merged)
 ├── Cloud Storage (TD-08, TD-09)
 │   ├── A private area, a public cover area and a holding area. Rules deny every direct client read of the private area
 │   ├── V4 signed URLs for downloads and for resumable uploads. A storage-finalised event starts OP-40
