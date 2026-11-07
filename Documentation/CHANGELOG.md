@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.32 |
+| Version | 0.33 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,19 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: technology decisions and cost document changes from the second-person reviews, 2026-11-07, on topic branch `docs/yg-tech-cost-r` on top of `2ab56cf`, then merged with `origin/main` at `765ff84`, under review in pull request #40
+
+Follows two of Sanika Attarde's reviews in the parts that `TECHNOLOGY_DECISIONS.md` and `CLOUD_INFRASTRUCTURE_AND_COSTS.md` hold: the review of the architecture and the technology decisions (issue 32, findings T-1 to T-4) and the first pass of MOD20-P1-T03 (issue 31, findings C-1 to C-3). YG replied to both issues on 6 November 2026, and the positions below are YG's, PROPOSED. (1) TD-15's enforcement tests no longer say that none exists. Some cases ran on the emulators in the backend spike, the two evidence reports hold the results, and none of them is a pass for the concurrency or token cases (T-1). (2) TD-17 and item 15 of section 9 record the limits of the emulator suite that the backend spike met, as spike observations, and TD-15 says that the Functions emulator does not verify tokens (T-2). (3) TD-04 records that the spike declares Node 22 and that the deploy runtime is NOT TESTED, and sets nothing (T-3). (4) TD-04 and WI-08 no longer count "roughly ten functions", which priced nothing, and TD-04 and the cost document say "scheduled maintenance" with OP-41 in place of "purge" (T-4, C-2, C-3). (5) The cost document gains WI-14 and WI-15 for uploads and the memory and run time of an upload check, both NOT VERIFIED and with no number, and section 11 says that only the bytes of a download skip the functions (C-1). D1 of TD-09 also names check 0 of OP-11, which the architecture change (#39) adds. The spike facts are emulator only and not merged. No price, formula, scenario figure, requirement, scope item, decision, status label, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+Revised on 2026-11-07 after Sanika Attarde's review of this pull request, which asked for one change. TD-17's recommendation names GitHub Actions, which DEC-022 chose (AGREED, conditional on the cost check in task MOD15-P1-T01, which is not done), where it said "The CI product is open". TD-17's cost row and section 7.5 said the same thing in other words, and follow. The versions do not change.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/TECHNOLOGY_DECISIONS.md` | Version 0.6: TD-04, D1 of TD-09, TD-15's enforcement tests, TD-17 and item 15 of section 9 follow the findings named above. TD-17 and section 7.5 name GitHub Actions as the CI service of DEC-022. | The second-person review found that the document said no test existed, that the emulators were unresearched, and that it counted functions and named a purge. The review of this pull request found that TD-17 still called the CI product open | TD-04, TD-09, TD-15, TD-17, DEC-022, OP-11, OP-41, VS-13, PRC-02 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CLOUD_INFRASTRUCTURE_AND_COSTS.md` | Version 0.4: WI-08, new WI-14 and WI-15, and sections 5, 6.4, 11 and 15 follow the findings named above. | The first pass of MOD20-P1-T03 found that the model had no upload workload, counted functions and named a purge | WI-08, WI-14, WI-15, OP-40, OP-41, CL-06, FX-PDF-05, PRC-02 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.33: this entry. It takes 0.33 because #37 (0.29), #34 (0.30), #38 (0.31) and #39 (0.32) merged with those numbers. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document and reads 0.6 for `TECHNOLOGY_DECISIONS` (was 0.5), 0.4 for `CLOUD_INFRASTRUCTURE_AND_COSTS` (was 0.3) and 0.33 for `CHANGELOG` (was 0.32) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: architecture changes from the second-person review, 2026-11-07, on topic branch `docs/yg-architecture-r` on top of `2ab56cf`, then merged with `origin/main` at `6da4c31` and at `6cc8aa9`, under review in pull request #39
 
