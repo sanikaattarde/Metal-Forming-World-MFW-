@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.36 |
+| Version | 0.37 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: app contract changes from the second-person review, 2026-11-07, on topic branch `docs/sa-app-contract-r` on top of `b5c3fad`, under review in pull request #44
+
+Follows the positions of Yuvraj Gaykhe on issue 29 (R-1, R-2, R-3, R-4 app rows and R-10), which Sanika Attarde opens for the app contract, as agreed on the issue. `API_AND_MODULE_CONTRACTS.md` 0.13 does four things. Section 4.2 says that the error scheme is AGREED with DEC-026, adds six rows for the reasons a reader's app reaches (ACCOUNT_CLOSED, ALREADY_DELETING, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, LAST_ADMIN and RECENT_SIGN_IN_REQUIRED, with no new FailureCode), adds the rule that a reason with no row maps to the code of its category and to `unknown` where there is none, and leaves the code for "in use" and for a duplicate name open. Section 6.3 proposes two re-authentication methods for `AuthService`, because OP-12 requires a recent sign-in. Sections 6.4, 6.6, 6.9 and 6.11 give the eight Dart shapes that only the code of #34 had: `ReaderProfile`, `ConsentRecord`, `IssueFileService`, `LocalIssueFile`, `NewsCategory`, `NewsControls`, `NewsControlsService` and `NotificationTargetType`. Section 8 aligns OP-PRF-02, OP-PRF-03, OP-ACC-01, OP-ADM-01, OP-ADM-03 and OP-ADM-04 with the backend contract and records the staged upload order, and section 11 lists the three open items. The Dart code is not changed here: the two methods and the profile return type come in a code pull request. Every position is PROPOSED, the spike facts are emulator only, and no type, field or value of `result.dart` changes. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.13: sections 4.2, 6.3, 6.4, 6.6, 6.9, 6.11, 8 and 11 follow issue 29 and carry the eight shapes. | Issue 29, R-1 to R-4 and R-10; the code of #34 | R-1, R-2, R-3, R-4, R-10, OP-10, OP-12, DEC-026, OQ-27, OQ-56, AOQ-14 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.37: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document, and reads 0.13 for `API_AND_MODULE_CONTRACTS` (was 0.12) and 0.37 for `CHANGELOG` (was 0.36) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: DEC-025 to DEC-030 set to AGREED, 2026-11-07, on topic branch `docs/yg-dec025-030-agreed` on top of `977de6a`, under review in pull request #43
 
