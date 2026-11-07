@@ -11,11 +11,17 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^3.4.3
   go_router: ^18.1.2
+  # Spike T-02.4 only: SHA-256 for the download check. Already in the lock
+  # file as a transitive package; a register entry comes before main.
+  crypto: ^3.0.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  # Spike T-02.4: runs the resume test on a simulator and an emulator.
+  integration_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true

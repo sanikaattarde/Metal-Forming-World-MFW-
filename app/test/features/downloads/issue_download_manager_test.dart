@@ -202,7 +202,8 @@ void main() {
         );
         expect(failureCodeOf(first), FailureCode.network);
         expect(failureOf(first)!.retryable, isTrue);
-        expect(rig.store.partials, isEmpty);
+        // Spike T-02.4: the partial file is kept, so the retry resumes (I-5).
+        expect(rig.store.partials.values.single, hasLength(500));
         expect(await rig.manager.listDownloaded(), isEmpty);
 
         expect(

@@ -4,9 +4,10 @@ import 'package:mfw_app/contracts/contracts.dart';
 import 'package:mfw_app/features/downloads/domain/download_ports.dart';
 import 'package:mfw_app/features/downloads/domain/file_names.dart';
 
-// TODO(yg): T-06.3 resumes from the partial file's length (I-5), with
-// WaitingForNetwork while the network is down and a new grant after expiry
-// (DEC-020); until then every start begins at byte 0.
+// Spike T-02.4: a broken transfer keeps its partial file and shows
+// WaitingForNetwork, and the next start resumes from the partial file's
+// length (I-5). TODO(yg): a new grant after expiry waits for DEC-020, and
+// T-06.3 decides whether a resume starts on its own (OQ-54).
 // TODO(yg): the copy kind, kept or temporary, waits for OQ-08 (GS-Q43).
 // TODO(yg): offline rules and sign-out behaviour wait for T-06.5 and OQ-11.
 
@@ -48,6 +49,8 @@ final class IssueDownloadManager implements DownloadManager {
   final Map<(String, String), Future<Result<void>>> _running =
       <(String, String), Future<Result<void>>>{};
   final Set<(String, String)> _cancelRequested = <(String, String)>{};
+  final Map<(String, String), String> _waitingPartials =
+      <(String, String), String>{};
   final StreamController<void> _changes = StreamController<void>.broadcast(
     sync: true,
   );
@@ -127,8 +130,8 @@ final class IssueDownloadManager implements DownloadManager {
     return download;
   }
 
-  /// Stops a running download and deletes its partial file (RD-01,
-  /// PROPOSED). Does nothing when none runs.
+  /// Stops a running download, or ends one that waits for the network, and
+  /// deletes its partial file (RD-01, PROPOSED). Does nothing otherwise.
   @override
   Future<Result<void>> cancel(String issueId) async {
     final String? userId = _currentUserId();
@@ -138,6 +141,12 @@ final class IssueDownloadManager implements DownloadManager {
     final (String, String) key = (userId, issueId);
     final Future<Result<void>>? running = _running[key];
     if (running == null) {
+      final String? waiting = _waitingPartials.remove(key);
+      if (waiting != null) {
+        await _store.deletePartial(waiting);
+        _status.remove(key);
+        _notify();
+      }
       return const Ok<void>(null);
     }
     _cancelRequested.add(key);
@@ -242,16 +251,21 @@ final class IssueDownloadManager implements DownloadManager {
     }
     final String fileName = _freeFileName(issueId, grant.revision);
     final String partial = partialFileName(fileName);
-    await _store.deletePartial(partial);
-    if (await _store.freeBytes() < grant.sizeBytes) {
+    _waitingPartials.remove(key);
+    // I-5: the partial file's length is where the transfer resumes.
+    int received = await _store.partialLength(partial);
+    if (received > grant.sizeBytes) {
+      await _store.deletePartial(partial);
+      received = 0;
+    }
+    if (await _store.freeBytes() < grant.sizeBytes - received) {
       return _fail(key, const AppFailure(FailureCode.insufficientStorage));
     }
 
-    int received = 0;
     _setStatus(key, InProgress(received, grant.sizeBytes));
     final Result<void> transfer = await _transport.fetch(
       grant,
-      offset: 0,
+      offset: received,
       onChunk: (List<int> chunk) async {
         if (_cancelRequested.contains(key)) {
           return const Err<void>(AppFailure(FailureCode.cancelled));
@@ -265,6 +279,18 @@ final class IssueDownloadManager implements DownloadManager {
       },
     );
     if (transfer case Err<void>(:final AppFailure failure)) {
+      if (_breaksOnTheNetwork(failure) && !_cancelRequested.contains(key)) {
+        // Keep the partial file, so that the next start resumes from it.
+        _waitingPartials[key] = partial;
+        _setStatus(
+          key,
+          WaitingForNetwork(
+            await _store.partialLength(partial),
+            grant.sizeBytes,
+          ),
+        );
+        return Err<void>(failure);
+      }
       await _store.deletePartial(partial);
       if (failure.code == FailureCode.cancelled) {
         _status.remove(key);
@@ -348,6 +374,11 @@ final class IssueDownloadManager implements DownloadManager {
     _copies.remove((copy.ownerUserId, copy.issueId));
     _notify();
   }
+
+  static bool _breaksOnTheNetwork(AppFailure failure) =>
+      failure.retryable &&
+      (failure.code == FailureCode.network ||
+          failure.code == FailureCode.timeout);
 
   Err<void> _fail((String, String) key, AppFailure failure) {
     _setStatus(key, Failed(failure));
