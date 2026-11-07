@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.35 |
+| Version | 0.36 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,17 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: DEC-025 to DEC-030 set to AGREED, 2026-11-07, on topic branch `docs/yg-dec025-030-agreed` on top of `977de6a`, under review in pull request #43
+
+The follow-up that sections 5.4 and 5.7 of `DECISION_LOG.md` name. Both developers' written notes are filed for DEC-025 to DEC-030 (Sanika Attarde's in section 5.4, Yuvraj Gaykhe's in section 5.7), and Sanika Attarde approved pull request #42, which carries section 5.7, on 7 November 2026. So the six entries move from PROPOSED to AGREED, and a new section 5.8 records the evidence, as section 5.6 did for the first eight. DEC-025 and DEC-026 depend on DEC-003, which is OPEN, and the four design points of DEC-026 stay open for the backend spike. DEC-027, DEC-028 and DEC-029 are AGREED as internal positions, and MFW still decides OQ-58, C-07 and OQ-23, and OQ-24. DEC-030 waits for MFW's answer to OQ-13. Section 5.8 also records Sanika Attarde's answer that EC-10 is met for DEC-025, notes that parts (1) and (5) of the exception of pull request #34 now lean on AGREED entries, and lists `CI_CD_AND_QUALITY_GATES.md` QG-14 as still to update. In `OPEN_QUESTIONS.md`, OQ-62 is ANSWERED (not CLOSED) by the AGREED entry for DEC-026, and OQ-51 and OQ-24 add an update sentence. Two wording fixes come with it: the DEC-026 row of section 5.7 says that pull request #38 "added" OQ-62, as Sanika Attarde's approval of #42 asked, and the DEC-025 context says "scheduled maintenance (OP-41)" in place of "a scheduled purge" (PRC-02). The statuses of the matching TD entries in `TECHNOLOGY_DECISIONS.md` are not changed. No requirement, scope item, cost or estimate changes, no MFW approval is recorded, and no entry is APPROVED. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/DECISION_LOG.md` | Version 0.13: DEC-025 to DEC-030 AGREED in the index and the entries, the "Approver and evidence" rows cite the filed notes, section 5.8 added, and the two wording fixes named above. | Section 3.1: both developers' written notes are filed, and the pull request that carries the second one has an approving review | DEC-025, DEC-026, DEC-027, DEC-028, DEC-029, DEC-030, DEC-003, EC-10, OQ-13, OQ-23, OQ-24, OQ-52, OQ-58, OQ-62, T-00.4 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/OPEN_QUESTIONS.md` | Version 0.11: OQ-62 ANSWERED, an update sentence in OQ-51 and OQ-24, the status row and the summary follow. | The AGREED entries above | OQ-24, OQ-51, OQ-62, DEC-026, DEC-027, DEC-029 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.36: this entry. It takes 0.36 because #42 merged with 0.35. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.13 for `DECISION_LOG` (was 0.12), 0.11 for `OPEN_QUESTIONS` (was 0.10) and 0.36 for `CHANGELOG` (was 0.35) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: Yuvraj Gaykhe's written positions on DEC-025 to DEC-030, 2026-11-07, on topic branch `docs/yg-dec025-030-positions` on top of `2ab56cf`, then merged with `origin/main` at `ffcbf4e`, under review in pull request #42
 

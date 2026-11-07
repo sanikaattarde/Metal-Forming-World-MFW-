@@ -7,7 +7,7 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.12 |
+| Version | 0.13 |
 | Status | Draft for review. Not approved. |
 | Date | 7 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
@@ -28,6 +28,7 @@
 | 0.10 | 5 November 2026 | Section 4 step 2 asks for an Options considered row and a Consequences row. An entry assessed before 5 November 2026 keeps its options and consequences in its Context and Proposal rows, and gets the two rows when it is next assessed or changes status. The existing entries are not filled in all at once, as the review of pull request #23 suggested. Revised on 5 November 2026 after the review of pull request #24: step 2 reads as that review worded it. No entry changed, so no AGREED entry is touched. No requirement, scope item, decision or status label changed. |
 | 0.11 | 6 November 2026 | The DEC-022 row of section 5.6 says what MOD15-P1-T01 is, as the review of pull request #23 asked. It is Sanika Attarde's cost check, in a task list that is not in this repository, stated as the documents state it. The wording is for Sanika Attarde to correct. Revised on 6 November 2026 after the review of pull request #25: the row says that the answer depends on the repository's visibility and on the account that pays, and that the check is made again if either changes. No requirement, scope item, decision or status label changed. |
 | 0.12 | 7 November 2026 | Section 5.7 added: Yuvraj Gaykhe's written positions of 6 November 2026 on DEC-025 to DEC-030, the other half of the evidence for those six entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED by this version, and no MFW approval is recorded. |
+| 0.13 | 7 November 2026 | DEC-025 to DEC-030 set to AGREED, the follow-up that sections 5.4 and 5.7 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.7) and Sanika Attarde's approving review of pull request #42 on 7 November 2026. Section 5.8 added: the evidence, Sanika Attarde's answer on EC-10 for DEC-025, the conditions still open for each entry, and the documents still to update. DEC-025 and DEC-026 depend on DEC-003, which is OPEN. DEC-027, DEC-028 and DEC-029 are agreed as internal positions, and MFW's answers are still needed (OQ-58; C-07 and OQ-23; OQ-24). The DEC-026 row of section 5.7 says that pull request #38 added OQ-62, where it said "adds", as that review asked. The DEC-025 context says "scheduled maintenance (OP-41)" where it said "a scheduled purge", because the purge window is withdrawn (PRC-02). No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -119,12 +120,12 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 | DEC-022 | CI service | AGREED, conditional on the cost check (section 5.6) | ASSUMPTION | Only if it adds cost to MFW |
 | DEC-023 | Environment model | PROPOSED | ASSUMPTION | Yes (cloud cost billed to MFW) |
 | DEC-024 | Test data policy | AGREED (section 5.6) | ASSUMPTION | No |
-| DEC-025 | Server-side language and runtime | PROPOSED | ASSUMPTION | No |
-| DEC-026 | API style, operation catalogue and error scheme | PROPOSED | ASSUMPTION | No |
-| DEC-027 | Admin roles and role management | PROPOSED (one Admin role with in-panel add and remove; PRC-01 withdrawn) | One role CONFIRMED. In-panel add and remove: PROPOSED, not in S2 (OQ-58) | Yes, to confirm in-panel add and remove and the narrow record (OQ-20, OQ-58) |
-| DEC-028 | Logging, monitoring and crash reporting | PROPOSED | CONFLICT C-07 | Yes (C-07, OQ-23) |
-| DEC-029 | Account deletion, retention and backups | PROPOSED (immediate deletion; PRC-02 withdrawn) | Immediate deletion CONFIRMED (FR-PRIV-003). Retention periods OPEN | Yes, for retention (MFW and its legal adviser, OQ-24) |
-| DEC-030 | Search and filters | PROPOSED | ASSUMPTION | No |
+| DEC-025 | Server-side language and runtime | AGREED (section 5.8), depends on DEC-003 | ASSUMPTION | No |
+| DEC-026 | API style, operation catalogue and error scheme | AGREED (section 5.8), depends on DEC-003 | ASSUMPTION | No |
+| DEC-027 | Admin roles and role management | AGREED as an internal position (section 5.8): one Admin role with in-panel add and remove; PRC-01 withdrawn | One role CONFIRMED. In-panel add and remove: PROPOSED, not in S2 (OQ-58) | Yes, to confirm in-panel add and remove and the narrow record (OQ-20, OQ-58) |
+| DEC-028 | Logging, monitoring and crash reporting | AGREED as an internal position (section 5.8) | CONFLICT C-07 | Yes (C-07, OQ-23) |
+| DEC-029 | Account deletion, retention and backups | AGREED as an internal position (section 5.8): immediate deletion; PRC-02 withdrawn | Immediate deletion CONFIRMED (FR-PRIV-003). Retention periods OPEN | Yes, for retention (MFW and its legal adviser, OQ-24) |
+| DEC-030 | Search and filters | AGREED (section 5.8) | ASSUMPTION | No |
 | DEC-031 | Data location | OPEN (region proposal recorded) | OPEN (OQ-41) | Yes (MFW and its legal adviser) |
 | DEC-032 | Subscriber list and the edition-update sign-up | PROPOSED | CONFLICT C-02 | Yes (MFW's written agreement to drop a feature S1 and S2 list) |
 | DEC-033 | Reading and downloading: temporary and kept copies | PROPOSED | CONFLICT C-03 (MFW's answer reported, not filed) | Yes (MFW's written answer, OQ-08) |
@@ -295,11 +296,48 @@ Yuvraj Gaykhe gave these positions in chat on 6 November 2026, one decision at a
 | Entry | Subject | Position of Yuvraj Gaykhe | Condition or limit |
 |---|---|---|---|
 | DEC-025 | Server-side language and runtime | Accepts TypeScript on Node.js. Claims no TypeScript skills of their own: the backend and the admin panel are WS-A, and Yuvraj Gaykhe reviews that code. | Depends on DEC-003, as in section 5.4. |
-| DEC-026 | API style, operation catalogue and error scheme | Accepts the style, the OP-nn catalogue and the category-plus-reason error scheme, as in section 5.4. | The four design points of section 5.4 stay open for the backend spike. App Check is OQ-52. Depends on DEC-003. The exception that pull request #34 made to check 2 of `DEFINITION_OF_DONE.md` section 5 leans on this entry, and pull request #38 adds OQ-62 to track it until the entry is AGREED. |
+| DEC-026 | API style, operation catalogue and error scheme | Accepts the style, the OP-nn catalogue and the category-plus-reason error scheme, as in section 5.4. | The four design points of section 5.4 stay open for the backend spike. App Check is OQ-52. Depends on DEC-003. The exception that pull request #34 made to check 2 of `DEFINITION_OF_DONE.md` section 5 leans on this entry, and pull request #38 added OQ-62 to track it until the entry is AGREED. |
 | DEC-027 | Admin roles and role management | Accepts as an internal position: one Admin role, with in-panel add and remove. | In-panel add and remove is not built as agreed scope until MFW confirms it in writing (OQ-58). The first admin created by the developers is needed either way. |
 | DEC-028 | Logging, monitoring and crash reporting | Accepts as an internal position. | MFW's confirmation of C-07 and its answer to OQ-23 are still needed. |
 | DEC-029 | Account deletion, retention and backups | Accepts as an internal position: immediate deletion. | MFW and its legal adviser still decide retention and the purged-identifier list (OQ-24). |
 | DEC-030 | Search and filters | Accepts. | MFW answers OQ-13. |
+
+### 5.8 Agreement recorded on 7 November 2026
+
+Six entries move from PROPOSED to AGREED: DEC-025 to DEC-030.
+
+**Evidence (section 3.1).** Both developers' written notes are filed: Sanika Attarde's in section 5.4 (27 October 2026) and Yuvraj Gaykhe's in section 5.7 (6 November 2026). Sanika Attarde approved pull request #42, which carries section 5.7, on 7 November 2026 (the review: https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/42#pullrequestreview-5814112388), and it was merged the same day (merge commit `977de6a`). Sanika Attarde's first review of that pull request says that section 5.7 changes no status, and both reviews say that the follow-up edit cites sections 5.4 and 5.7 and the approving review. The evidence was complete on 7 November 2026. This edit is that follow-up (section 4, step 3).
+
+**EC-10 and DEC-025.** TD-04 and the DEC-025 entry ask the developers to confirm their TypeScript skills (EC-10). Sanika Attarde confirms theirs for the backend and the admin panel they write (section 5.4). Yuvraj Gaykhe claims none, because they review that code and do not write it (section 5.7). Sanika Attarde's first review of pull request #42 holds that this is enough, because the condition is met by the developer who writes the code having confirmed it (https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/42#pullrequestreview-5813864301), and the approving review repeats it.
+
+**What this does not do.** It records no MFW approval, and no entry is APPROVED. For DEC-027, DEC-028 and DEC-029, which need MFW, AGREED covers the internal position only, as section 3.1 says, and the table below says what MFW still decides. It does not cover DEC-001, DEC-023, DEC-031, DEC-032, DEC-033 or any OPEN entry. DEC-003, on which DEC-025 and DEC-026 depend, stays OPEN. The statuses of TD-04, TD-05, TD-15, TD-16, TD-19 and TD-21 in `TECHNOLOGY_DECISIONS.md` are not changed, as TD-02 and TD-17 were not changed by section 5.6.
+
+**Conditions still open.** They come from sections 5.4 and 5.7.
+
+| Entry | Condition or limit still open |
+|---|---|
+| DEC-025 | Depends on DEC-003, which is OPEN. A platform choice that rules out TypeScript on Node.js is a new entry that supersedes this one (section 3.3, rule 3). EC-10 is met, as set out above. |
+| DEC-026 | Depends on DEC-003, which is OPEN. Four design points stay open and are settled in the backend spike: device tokens or topics, one upload call or staged, publish and unpublish as one operation or two, and a single-issue read. App Check is OQ-52. OQ-62 is ANSWERED by this entry, with the four design points left to the backend spike. |
+| DEC-027 | In-panel add and remove is not built as agreed scope until MFW confirms it in writing (OQ-58). The first admin created by the developers is needed either way. |
+| DEC-028 | MFW's confirmation of C-07 and its answer to OQ-23 are still needed. |
+| DEC-029 | MFW and its legal adviser still decide retention and the purged-identifier list (OQ-24). |
+| DEC-030 | MFW answers OQ-13. |
+
+**The exception of pull request #34.** Of the five parts that pull request #34 took under an exception to check 2 of `DEFINITION_OF_DONE.md` section 5, part (1) leans on DEC-026 and part (5) on DEC-030. Both entries are now AGREED, and their content does not change. Parts (2) to (4) still lean on entries that are OPEN or PROPOSED (DEC-020, DEC-005, DEC-033 and DEC-008), and OQ-37, OQ-36 and OQ-08 still track them.
+
+**Documents.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request.
+
+```text
+Updated in this edit
+└── OPEN_QUESTIONS.md                    OQ-62 ANSWERED; update sentences in OQ-51 (DEC-027) and OQ-24 (DEC-029)
+
+Still to update
+└── CI_CD_AND_QUALITY_GATES.md           QG-14 says "Blocked by DEC-003 and DEC-026". DEC-026 is AGREED, and DEC-003 still blocks the gate
+
+Dated records, left as written
+├── TECHNOLOGY_DECISIONS.md              section 10.5, GS-Q38
+└── CI_CD_AND_QUALITY_GATES.md           the 0.3 row of the change history
+```
 
 ## 6. Entries
 
@@ -597,11 +635,11 @@ Yuvraj Gaykhe gave these positions in chat on 6 November 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. Mirrors TD-04. |
+| Status | AGREED. Depends on DEC-003, which is OPEN. Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026. Mirrors TD-04. |
 | Evidence class | ASSUMPTION |
-| Context | S2 places upload checks, publishing, notification sending and account deletion in server logic and names no language. The design adds file access issuing, admin role management and a scheduled purge. |
+| Context | S2 places upload checks, publishing, notification sending and account deletion in server logic and names no language. The design adds file access issuing, admin role management and scheduled maintenance (OP-41). |
 | Proposal | TypeScript on Node.js, using a supported release at implementation time. The release is a configuration choice and is not set here. It also matches the admin panel language (TD-14). |
-| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. The developers also confirm their TypeScript skills (TD-04, EC-10). |
+| Approver and evidence | Requires agreement by both developers. Both developers' written notes are filed (sections 5.4 and 5.7), and Sanika Attarde approved the pull request that carries section 5.7 (section 5.8). The developers also confirm their TypeScript skills (TD-04, EC-10). Sanika Attarde, who writes the backend and the admin panel, confirms theirs (section 5.4), Yuvraj Gaykhe, who reviews that code, claims none (section 5.7), and Sanika Attarde's review of pull request #42 holds that this meets the condition (section 5.8). |
 | Affects | `TECHNOLOGY_DECISIONS.md` TD-04; `DEPENDENCY_REGISTER.md`; `CODING_STANDARDS.md` |
 | Follow-up | Depends on DEC-003. |
 
@@ -609,11 +647,11 @@ Yuvraj Gaykhe gave these positions in chat on 6 November 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. Mirrors TD-05. |
+| Status | AGREED. Depends on DEC-003, which is OPEN, and the four design differences in the Proposal row stay open for the backend spike. Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026. Mirrors TD-05. |
 | Evidence class | ASSUMPTION |
 | Context | Two operation catalogues exist: the 31 technology-neutral operations in `API_AND_MODULE_CONTRACTS.md` section 8 (OP-AREA-nn) and the 42 operations in `API_AND_BACKEND_CONTRACT.md` (OP-nn). They use different names, groupings and error vocabularies. |
 | Proposal | Direct database access under rules for per-user data, callable functions for privileged actions, no public REST API (TD-05). One operation catalogue, in `API_AND_BACKEND_CONTRACT.md`, with the OP-nn identifiers as the main ones and the OP-AREA-nn identifiers as aliases. One error scheme: a category plus a reason code, in upper-case names. Open design differences are listed in the catalogue and are not decided here: device tokens or topics, one upload call or staged upload, publish and unpublish as one operation or two, and a single-issue read. |
-| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. No MFW approval: an engineering rule with no cost or scope effect. |
+| Approver and evidence | Requires agreement by both developers. Both developers' written notes are filed (sections 5.4 and 5.7), and Sanika Attarde approved the pull request that carries section 5.7 (section 5.8). No MFW approval: an engineering rule with no cost or scope effect. |
 | Affects | `API_AND_BACKEND_CONTRACT.md`; `API_AND_MODULE_CONTRACTS.md` sections 4.2 and 8; `SECURITY_AND_ACCESS_CONTROL.md`; `TESTING_STRATEGY.md` |
 | Follow-up | OQ-52 (App Check) |
 
@@ -621,12 +659,12 @@ Yuvraj Gaykhe gave these positions in chat on 6 November 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. Revised 27 October 2026. Mirrors TD-15. |
+| Status | AGREED as an internal position. In-panel add and remove is not built as agreed scope until MFW confirms it in writing (OQ-58). Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026, revised 27 October 2026. Mirrors TD-15. |
 | Evidence class | One Admin role with the same permissions for every admin: CONFIRMED (RS FR-ADMIN-004). In-panel add and remove of admins, and the narrow record of who added or removed whom: PROPOSED. S2 does not list them, and S2 excludes an audit log (EXC-07), so MFW must say whether they are a clarification or a change (OQ-20, OQ-58). |
 | Context | S2 excludes editorial roles and an audit log. How admin accounts are created and removed is OQ-20, and deleting or replacing an issue is OQ-21. Both are OPEN for MFW. The two-role model PRC-01 (Super Admin and Content Admin) was proposed on 23 October 2026. |
 | Proposal | One Admin role, and every admin has the same permissions (GS-Q44). The developers create the first admin securely at set-up and hand access to MFW. After that any admin can add an admin, by granting the role to a registered reader whose email is verified, and can remove an admin, in the admin panel and without a developer. Removal asks for a confirmation that names the person. The last remaining admin cannot be removed, including when two admins act at once. Add and remove need a recent sign-in. A small record keeps who added or removed whom, and when, and nothing else. The server reads the current role record on each privileged call and refuses if it cannot, so a removed admin is refused on the next call. There is a test for a removed admin. A replacement file is validated before the old one is removed. There are no Super Admin and Content Admin roles. PRC-01 is withdrawn. Its guard record, request identifier, session-ending and first-admin steps carry over to the single role. Its wider audit set, role-specific permissions, Super-Admin-only exports and Super-Admin-only issue deletion do not. |
 | Not decided | Whether MFW treats in-panel add and remove, and the narrow record, as a clarification or as a change request (OQ-58). The effort for in-panel add and remove has not been estimated. The 7 to 11 person-day figure in `TECHNOLOGY_DECISIONS.md` was for PRC-01 and does not apply. The window for a recent sign-in (AOQ-14). |
-| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's written confirmation of in-panel add and remove before it is built as agreed scope (CH §17.4, S2 Changes). |
+| Approver and evidence | Requires agreement by both developers. Both developers' written notes are filed (sections 5.4 and 5.7), and Sanika Attarde approved the pull request that carries section 5.7 (section 5.8). Requires MFW's written confirmation of in-panel add and remove before it is built as agreed scope (CH §17.4, S2 Changes). |
 | Affects | `API_AND_BACKEND_CONTRACT.md`; `SECURITY_AND_ACCESS_CONTROL.md`; `DATABASE_AND_DATA_MODEL.md`; `SYSTEM_ARCHITECTURE.md`; `TESTING_STRATEGY.md`; `ACCEPTANCE_CRITERIA.md` |
 | Follow-up | OQ-20, OQ-21, OQ-51, OQ-56, OQ-58 |
 
@@ -634,11 +672,11 @@ Yuvraj Gaykhe gave these positions in chat on 6 November 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. Mirrors TD-16. |
+| Status | AGREED as an internal position. MFW's confirmation of C-07 and its answer to OQ-23 are still needed. Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026. Mirrors TD-16. |
 | Evidence class | CONFLICT C-07 (S2 includes crash reporting and basic usage events; the Charter omits them) |
 | Context | Usage events must not record which reader opened which issue or page (NFR-PRIV-003, PROVISIONAL). Analytics adds device identifiers and may need consent (OQ-23). |
 | Proposal | Crash reporting on with no user identifier. Analytics collection off until OQ-23 sets a short list of non-identifying events and the consent design is agreed. Function logs record security events without personal data. |
-| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's confirmation of C-07 and its answer to OQ-23. |
+| Approver and evidence | Requires agreement by both developers. Both developers' written notes are filed (sections 5.4 and 5.7), and Sanika Attarde approved the pull request that carries section 5.7 (section 5.8). Requires MFW's confirmation of C-07 and its answer to OQ-23. |
 | Affects | `TECHNOLOGY_DECISIONS.md` TD-16; `TESTING_STRATEGY.md` section 9; `APP_STORE_RELEASE_CHECKLIST.md` |
 | Follow-up | OQ-23, OQ-44 |
 
@@ -646,11 +684,11 @@ Yuvraj Gaykhe gave these positions in chat on 6 November 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. Revised 27 October 2026. Mirrors TD-19. |
+| Status | AGREED as an internal position: immediate deletion. MFW and its legal adviser still decide retention and the purged-identifier list (OQ-24). Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026, revised 27 October 2026. Mirrors TD-19. |
 | Evidence class | Immediate deletion: CONFIRMED (RS FR-PRIV-003 and S2 AC-3.7: the account and the reader's data are deleted). Retention periods and records kept after deletion: OPEN (OQ-24). |
 | Context | Immediate deletion is the S2 wording. A grace window with undo (PRC-02) was proposed on 23 October 2026 and departs from the wording of FR-PRIV-003. Apple and Google rules on a grace window are not verified. |
 | Proposal | Deletion is immediate: the reader confirms, then the account and the reader's data are removed at once, and a step that fails is retried until it finishes (GS-Q50). There is no grace window, no undo, no pending-deletion state and no purge window. PRC-02 is withdrawn. Backups keep deleted data until they expire, and a restore re-applies deletions. That needs a short-lived list of purged identifiers, which is a privacy question for MFW (OQ-24). |
-| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. Requires MFW's decision and its legal adviser's view on retention and on the purged-identifier list (OQ-24). |
+| Approver and evidence | Requires agreement by both developers. Both developers' written notes are filed (sections 5.4 and 5.7), and Sanika Attarde approved the pull request that carries section 5.7 (section 5.8). Requires MFW's decision and its legal adviser's view on retention and on the purged-identifier list (OQ-24). |
 | Affects | `DATABASE_AND_DATA_MODEL.md`; `SECURITY_AND_ACCESS_CONTROL.md`; `API_AND_BACKEND_CONTRACT.md`; `BACKUP_AND_RECOVERY.md` section 9; `ACCEPTANCE_CRITERIA.md` |
 | Follow-up | OQ-24, OQ-45, OQ-46 |
 
@@ -658,11 +696,11 @@ Yuvraj Gaykhe gave these positions in chat on 6 November 2026, one decision at a
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. Mirrors TD-21. |
+| Status | AGREED. MFW answers OQ-13. Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026. Mirrors TD-21. |
 | Evidence class | ASSUMPTION (RS FR-SRCH-007) |
 | Context | Users search issue metadata (not PDF text) and filter by category, industry segment, year and edition. The catalogue holds the latest issue and four to six archive issues at launch. |
 | Proposal | Search and filters run on the device over the cached catalogue. This stops being right if the archive grows to about one hundred issues. |
-| Approver and evidence | Requires agreement by both developers. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed. MFW answers OQ-13 (the meaning of "industry segment" and "edition"). |
+| Approver and evidence | Requires agreement by both developers. Both developers' written notes are filed (sections 5.4 and 5.7), and Sanika Attarde approved the pull request that carries section 5.7 (section 5.8). MFW answers OQ-13 (the meaning of "industry segment" and "edition"). |
 | Affects | `TECHNOLOGY_DECISIONS.md` TD-21; MOD-05 |
 | Follow-up | OQ-13 |
 
