@@ -7,7 +7,7 @@
 | Document | Dependency Register |
 | File | `Documentation/DEPENDENCY_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 39) |
-| Version | 0.9 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. Three packages are installed on `main`, by pull request #30: DEP-43, DEP-44 and DEP-58, with the Flutter and Dart pin (DEP-35, DEP-36). The first CI workflow, `.github/workflows/pr.yml` (pull request #48), uses DEP-61 and DEP-74 to DEP-77. No version, licence or price below has been verified unless it is quoted from a source document, or is recorded in section 8.1 with the page it was read from. The section 8.1 facts were read on 30 October 2026 by an automated page reader. A developer has read the LICENSE files of DEP-64, DEP-65 and DEP-66 (YG, 1 November 2026; DEP-66 also on 30 October 2026). YG also reports the licence of PDFium and of the pdfx native engines (1 November 2026), and re-read PDFium's LICENSE file on 4 November 2026 after the review of pull request 13: a BSD-3-Clause notice followed by the Apache License 2.0 text. Those reports give licence names only, with no page addresses. On 7 November 2026 an automated reader read the LICENSE files of DEP-35, DEP-43, DEP-44 and DEP-58 at the pinned versions, at YG's request, and YG accepts that reading (in chat, not filed). A developer has not read those four files. |
 | Date | 7 November 2026 |
 | Approval required | Both developers. MFW for any paid component (RS NFR-MAINT-006). |
@@ -24,7 +24,8 @@
 | 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.7 | 5 November 2026 | The DEP-60 row records that branch protection on `main` is on. Revised on 5 November 2026 after the review of pull request #21: the DEP-60 row records the visibility as public (GitHub API). No MFW approval is recorded, and no entry is APPROVED. |
 | 0.8 | 7 November 2026 | The pin and the packages of pull request #30 are recorded: DEP-35 and DEP-36 give Flutter 3.47.9 and Dart 3.13.7 and the range in `app/pubspec.yaml` (OQ-50, now ANSWERED), and DEP-43, DEP-44 and DEP-58 move from CANDIDATE to CONFIRMED with their locked versions. DEP-37 and DEP-39 record what T-01.1 found. The LICENSE files of DEP-35, DEP-43, DEP-44 and DEP-58 are recorded from an automated reading that YG accepts. New rows come ahead of the CI workflow (T-01.5): DEP-74 (Java 17) and DEP-75 to DEP-77 (the three GitHub actions it uses), all CANDIDATE until the workflow merges. DEP-61 reads CONFIRMED, because DEC-022 chose GitHub Actions (AGREED, conditional on the cost check, which stays open in the Cost column). DEP-62 and DEP-63 are chosen and written after T-01.5, because the first workflow covers QG-01 to QG-06 only. Section 10 records a PROPOSED position on transitive packages for QG-10, and the server-side tools that need rows with the first backend or admin code (finding T-5 of issue 32). No MFW approval is recorded, and no entry is APPROVED. |
-| 0.9 | 7 November 2026 | The CI workflow `.github/workflows/pr.yml` comes with this version (T-01.5, pull request #48). DEP-75 to DEP-77 move from CANDIDATE to CONFIRMED, DEP-74 records the CI use as CONFIRMED, and DEP-61 names the pull request. The versions, commits and licence readings of those rows do not change. The cost check of DEC-022 stays in the Cost column of DEP-61. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.9 | 7 November 2026 | Section 4: DEP-02 is PARTLY RECEIVED (the logo file) and DEP-03 is RECEIVED (three issues). Both are recorded in `inputs/README.md`, which lists each file with its size and SHA-256. The files are kept outside Git (DEC-024), and MFW still confirms where its sample PDFs may be kept. Section 2 adds the statuses RECEIVED and PARTLY RECEIVED, and section 4 says where receipt is recorded. No package is added and no version is pinned, and no entry is APPROVED. |
+| 0.10 | 7 November 2026 | The CI workflow `.github/workflows/pr.yml` comes with this version (T-01.5, pull request #48). DEP-75 to DEP-77 move from CANDIDATE to CONFIRMED, DEP-74 records the CI use as CONFIRMED, and DEP-61 names the pull request. The versions, commits and licence readings of those rows do not change. The cost check of DEC-022 stays in the Cost column of DEP-61. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -46,7 +47,7 @@ This register tracks everything the product and the project depend on:
 - Flutter packages
 - Repository and CI services
 
-The register separates confirmed dependencies from candidates and open choices, using four statuses:
+The register separates confirmed dependencies from candidates and open choices, using these statuses. The last three apply only to client inputs (section 4):
 
 | Verification status | Meaning |
 |---|---|
@@ -54,6 +55,8 @@ The register separates confirmed dependencies from candidates and open choices, 
 | CANDIDATE | Proposed, not chosen, and not installed |
 | UNRESOLVED | A choice is needed and no candidate is preferred |
 | NOT RECEIVED | A client input with no record of receipt in the repository |
+| PARTLY RECEIVED | Part of a client input has a record of receipt in the repository, and the "Required action" column says what is missing |
+| RECEIVED | A client input with a record of receipt in the repository. Receipt is not approval, and it does not say that the input is complete or cleared for use. |
 
 **Verification rule.** A version is recorded only once it is pinned in the repository. A licence is recorded only from the dependency's own LICENSE file or official page, read by a developer. A cost is recorded only from a source document, and must still be checked with the provider. Until then, the "Licence and security" and "Cost" columns say what must be verified. Section 8.1 records versions seen and licences shown, and labels each one that way. It pins no version and accepts no licence for use, so it does not conflict with this rule.
 
@@ -66,13 +69,13 @@ The register separates confirmed dependencies from candidates and open choices, 
 
 ## 4. Client-Provided Inputs and Documents
 
-Owner of each input: MFW. Tracking: Sanika Attarde (MFW contact). The "needed by" timing is from S1, relative to project weeks. CH §12 dates are PROVISIONAL.
+Owner of each input: MFW. Tracking: Sanika Attarde (MFW contact). The "needed by" timing is from S1, relative to project weeks. CH §12 dates are PROVISIONAL. Receipt of an input is recorded in `inputs/README.md`, which lists each file with its size and SHA-256. MFW's sample PDFs are confidential, so the files themselves are kept outside Git (DEC-024).
 
 | ID | Dependency | Purpose and dependent work | Needed by [S1] | Status | Required action |
 |---|---|---|---|---|---|
 | DEP-01 | Named approver and deputy; written confirmation of content rights | All approvals; COM-08 | Before kickoff | NOT RECEIVED | Request (OQ-28) |
-| DEP-02 | Logo files, brand colours and fonts | WP-02 designs; RS NFR-UX-001 | Kickoff | NOT RECEIVED | Request |
-| DEP-03 | Two or three sample PDFs, including the largest expected issue | T-02.3 reader test; FX-PDF-03, FX-PDF-04 | End of Week 1 | NOT RECEIVED | Request; agree storage (DEC-024) |
+| DEP-02 | Logo files, brand colours and fonts | WP-02 designs; RS NFR-UX-001 | Kickoff | PARTLY RECEIVED | The logo file is recorded in `inputs/README.md` (7 November 2026). Request the brand colours and fonts. |
+| DEP-03 | Two or three sample PDFs, including the largest expected issue | T-02.3 reader test; FX-PDF-03, FX-PDF-04 | End of Week 1 | RECEIVED | Three issues (April-May, August-September and October-November 2026) are recorded in `inputs/README.md` (7 November 2026). Agree storage with MFW (DEC-024). Ask whether the largest expected issue is among them (FX-PDF-04). |
 | DEP-04 | WordPress site address, API confirmation, news categories | WP-08; CFG-03, CFG-04 | End of Week 1 | NOT RECEIVED | Request (OQ-39) |
 | DEP-05 | Cloud project in MFW's name with billing switched on (S1 names Firebase and Google Cloud) | WP-01; every backend task | End of Week 1 | NOT RECEIVED | Request after DEC-003 and DEC-023 |
 | DEP-06 | Apple Developer Program organisation account | T-10.1; WP-12 | Active by the end of Week 4 | NOT RECEIVED | MFW starts enrolment in Week 1 |

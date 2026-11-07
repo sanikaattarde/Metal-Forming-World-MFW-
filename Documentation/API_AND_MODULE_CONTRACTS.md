@@ -7,7 +7,7 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.12 |
+| Version | 0.13 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
 | Date | 7 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
@@ -28,6 +28,7 @@
 | 0.10 | 5 November 2026 | Section 3 gives the workstreams and the developer mapping as AGREED (DEC-011), with each assignment row still PROPOSED until OQ-38 is answered. Revised on 5 November 2026 after the review of pull request #21: the module Owner rows read "WS-A (Sanika Attarde), PROPOSED" and "WS-B (Yuvraj), PROPOSED". No MFW approval is recorded, and no entry is APPROVED. |
 | 0.11 | 5 November 2026 | The `OP-LIB-02` row follows the review of pull request #9, which found that it promised more than OP-07 checks. Full access and the check of the page against the page count are the app's (MOD-08), because rules do not look up the account status (`SECURITY_AND_ACCESS_CONTROL.md` T25) and do not know the page count. The server checks the owner and a page and a revision of at least 1, and a refused write returns no `INVALID_ARGUMENT`, as rule 2 says. The MOD-08 Authorization row says the same. Revised on 5 November 2026 after the review of pull request #24: the `OP-LIB-05` row says the same of full access and decides nothing for OQ-12. No requirement, scope item, decision or status label changed. |
 | 0.12 | 6 November 2026 | Where `Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` live is agreed in writing (issue 28): `app/lib/contracts/result.dart`, MOD-00. Section 4.2 says so, section 5 lists them, and section 6.2 says that MOD-02 depends on MOD-00 for `FailureCode` and `AppFailure`, where it said that it depended on nothing inside the app. No type, field or value changed. No requirement, scope item, decision, status label or MFW approval changed. Revised on 7 November 2026 after the review of pull request #37: section 4.2 says that the file is added with the shared contracts code and is not on `main` until that code merges. |
+| 0.13 | 7 November 2026 | Findings of Sanika Attarde's second-person review (issue 29) that the app contract holds, with YG's positions of 6 November 2026, PROPOSED. Section 4.2: the scheme is AGREED with DEC-026, and the note that agreement was reported and not filed is gone. Six rows (ACCOUNT_CLOSED, ALREADY_DELETING, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, LAST_ADMIN and RECENT_SIGN_IN_REQUIRED) and the rule for a reason with no row are added (R-1, R-4), and the `conflict` row no longer says "in use" (R-2). Section 6.3: `AuthService` gains two re-authentication methods (R-4 d). Sections 6.4, 6.6, 6.9 and 6.11 give the eight Dart shapes that only the code of #34 had. Section 8: OP-PRF-02, OP-PRF-03, OP-ACC-01, OP-ADM-01, OP-ADM-03 and OP-ADM-04 follow the backend contract (R-2, R-3, R-4, R-10). Section 11 lists the open items. No type, field or value of `result.dart` changed. No requirement, scope item, decision, status label or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -146,24 +147,34 @@ final class AppFailure {
 }
 ```
 
-**Backend error codes** (transport-neutral names) map to app codes as follows. The backend reports a category and a reason code (`API_AND_BACKEND_CONTRACT.md` section 2.5). A name that was a top-level code in earlier text is now a reason under a category, as the second column shows. The scheme is PROPOSED. Agreement between the developers is reported by YG. No date. Sanika's written note or approving PR review is not filed.
+**Backend error codes** (transport-neutral names) map to app codes as follows. The backend reports a category and a reason code (`API_AND_BACKEND_CONTRACT.md` section 2.5). A name that was a top-level code in earlier text is now a reason under a category, as the second column shows. The scheme, a category plus a reason, is AGREED with DEC-026 (`DECISION_LOG.md` section 5.8), and its four design points stay open for the backend spike. The rows of the table are PROPOSED. The rows for ACCOUNT_CLOSED, ALREADY_DELETING, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, LAST_ADMIN and RECENT_SIGN_IN_REQUIRED, and the rule after the table, are the positions of issue 29 (R-1, R-4) and are PROPOSED.
 
 | Backend code | Category and reason | `FailureCode` | Retryable | User-facing meaning (wording set in the M2 designs) |
 |---|---|---|---|---|
 | `UNAUTHENTICATED` | UNAUTHENTICATED | `unauthenticated` | No | Sign in to continue |
 | `EMAIL_NOT_VERIFIED` | FAILED_PRECONDITION, reason EMAIL_NOT_VERIFIED | `emailNotVerified` | No | Verify your email address |
 | `PROFILE_INCOMPLETE` | FAILED_PRECONDITION, reason PROFILE_INCOMPLETE | `profileIncomplete` | No | Complete your profile |
+| `ACCOUNT_CLOSED` | FAILED_PRECONDITION, reason ACCOUNT_CLOSED | `forbidden` | No | You do not have access |
+| `ALREADY_DELETING` | FAILED_PRECONDITION, reason ALREADY_DELETING | `forbidden` | No | You do not have access |
+| `ISSUE_NOT_AVAILABLE` | FAILED_PRECONDITION, reason ISSUE_NOT_AVAILABLE | `notFound` | No | No longer available |
+| `NO_CURRENT_FILE` | FAILED_PRECONDITION, reason NO_CURRENT_FILE | `notFound` | No | No longer available |
+| `LAST_ADMIN` | FAILED_PRECONDITION, reason LAST_ADMIN | `conflict` | No | The last admin account cannot be deleted |
+| `RECENT_SIGN_IN_REQUIRED` | FAILED_PRECONDITION, reason RECENT_SIGN_IN_REQUIRED | `unauthenticated` | No | Sign in again to continue |
 | `FORBIDDEN` | FORBIDDEN | `forbidden` | No | You do not have access |
 | `NOT_FOUND` | NOT_FOUND | `notFound` | No | No longer available |
 | `INVALID_ARGUMENT` | INVALID_ARGUMENT | `invalidInput` | No | Check the highlighted fields |
 | `FILE_TOO_LARGE` | Upload-job reason OVER_LIMIT (a request-level problem is INVALID_ARGUMENT) | `fileTooLarge` | No | File is larger than the limit (admin) |
 | `NOT_A_PDF` | Upload-job reason NOT_A_PDF | `notAPdf` | No | File is not a valid PDF (admin) |
-| `CONFLICT` | CONFLICT | `conflict` | No | Already exists, or in use |
+| `CONFLICT` | CONFLICT | `conflict` | No | Already exists, or the data changed since it was read |
 | `UNAVAILABLE` | UNAVAILABLE | `serviceUnavailable` | Yes | Service unavailable, try again |
 | `DEADLINE_EXCEEDED` | UNAVAILABLE, reason DEADLINE_EXCEEDED | `timeout` | Yes | Taking too long, try again |
 | `INTERNAL` | INTERNAL | `unknown` | Yes | Something went wrong |
 | `GONE` (added) | GONE: the issue was permanently deleted | Not mapped yet (open) | No | No longer available |
 | `RATE_LIMITED` (added) | RATE_LIMITED: a rate or size limit | Not mapped yet (open) | Yes, after the retry-after value (PROPOSED) | Too many requests, try again later |
+
+**A reason with no row (PROPOSED, R-1).** It maps to the `FailureCode` of its category, and to `unknown` where the category has none. FAILED_PRECONDITION has no code of its own, and neither has GONE or RATE_LIMITED until they are mapped. `messageFor` takes only the `FailureCode`, so two reasons that share a code share a message. A separate prompt for one reason, such as an `accountClosed` code, would be an additive change later, if the M2 designs ask for it, and `result.dart` stays at the 17 values agreed in issue 28. Reasons that only an admin operation raises (`NO_ACCEPTED_FILE`, `STALE_RECORD`, `IN_USE`) have no row, because the app does not call those operations.
+
+**Open (R-2).** Whether "in use" is CONFLICT or FAILED_PRECONDITION with the reason `IN_USE`, and the name of the reason for a duplicate category name (the backend spike used `NAME_TAKEN`, finding D-2, emulator only), are not decided. They are recorded in `API_AND_BACKEND_CONTRACT.md` section 2.5 as well.
 
 The retryable flag belongs to the category, with the exceptions listed above. In section 8, a code that the table shows as a reason (`EMAIL_NOT_VERIFIED`, `PROFILE_INCOMPLETE`, `FILE_TOO_LARGE`, `NOT_A_PDF`, `DEADLINE_EXCEEDED`) is read as that category and reason. No rate-limit value is set.
 
@@ -366,7 +377,7 @@ String messageFor(AppFailure failure);
 | Excludes | Sign in with Apple (excluded); profile fields (MOD-04); admin sign-in (MOD-12) |
 | Depends on | MOD-04 `watchStatus`; identity provider (DEC-003); OP-ACC-01 |
 | Errors | `invalidInput`, `conflict` (address already used, shown to the visitor by design; the rule for an address used with another sign-in method is OQ-05), `unauthenticated` (wrong credentials, with a message that does not say which part was wrong), `cancelled` (Google flow cancelled), `network`, `serviceUnavailable` |
-| Authorization | `deleteAccount` requires a signed-in session. PROPOSED: registration tells the visitor that an account exists for the address. Sign-in shows one message for any wrong email or password. Password reset shows the same message whether or not the address has an account. All three are rate limited. The identity provider's behaviour is NOT VERIFIED. |
+| Authorization | `deleteAccount` requires a signed-in session and a recent sign-in (OP-12; PROPOSED, R-4 d). The app calls `reauthenticateWithEmail` or `reauthenticateWithGoogle` first, so the refusal RECENT_SIGN_IN_REQUIRED is not met in normal use. If it comes, it maps to `unauthenticated` (section 4.2) and asks the reader to sign in again. The window is OQ-56. The two methods are added to `auth.dart` and to `FakeAuthService` in a code pull request, which comes before the modules build on `auth.dart`. PROPOSED: registration tells the visitor that an account exists for the address. Sign-in shows one message for any wrong email or password. Password reset shows the same message whether or not the address has an account. All three are rate limited. The identity provider's behaviour is NOT VERIFIED. |
 | Data owned | Reader account (RS DATA-003), held by the identity provider |
 | Blocked | OQ-04 (Google verification), OQ-05 (linking), OQ-06 (guideline 4.8) |
 | Tests | Unit tests with a fake provider; widget tests of each form state; integration register → verify → full access (AC-3.1, AC-3.2); PAC-01; PAC-12 |
@@ -392,6 +403,8 @@ abstract interface class AuthService {
   Future<Result<void>> reloadVerificationStatus();
   Future<Result<void>> sendPasswordReset(String email);
   Future<void> signOut();
+  Future<Result<void>> reauthenticateWithEmail({required String password}); // before deleteAccount (PROPOSED)
+  Future<Result<void>> reauthenticateWithGoogle(); // PROVISIONAL (C-04); before deleteAccount (PROPOSED)
   Future<Result<void>> deleteAccount();    // calls OP-ACC-01
 }
 ```
@@ -414,6 +427,21 @@ abstract interface class AuthService {
 
 ```dart
 enum ProfileStatus { unknown, incomplete, complete }
+
+final class ReaderProfile {
+  const ReaderProfile({this.name, this.age, this.gender, this.occupation, this.domainOfWork});
+  final String? name;          // never logged
+  final Object? age;           // the format is OQ-02; never logged
+  final String? gender;        // the values are OQ-01; never logged
+  final String? occupation;    // never logged
+  final String? domainOfWork;  // never logged
+}
+
+final class ConsentRecord {
+  const ConsentRecord({required this.agreedTo, required this.agreedAt});
+  final String agreedTo;       // which documents, at which version
+  final DateTime agreedAt;     // UTC
+}
 
 abstract interface class ProfileRepository {
   Stream<ProfileStatus> watchStatus();
@@ -480,6 +508,17 @@ With five to twelve issues at launch (RS ASM-02), filtering on the device is eno
 | Integration acceptance | IC-02, IC-03, IC-08 |
 
 ```dart
+abstract interface class IssueFileService {
+  Future<Result<IssueFileGrant>> requestIssueFile(String issueId); // OP-FILE-01
+}
+
+final class LocalIssueFile {
+  const LocalIssueFile({required this.issueId, required this.fileRevision, required this.path});
+  final String issueId;
+  final int fileRevision;
+  final String path;           // in app-private storage; never logged
+}
+
 sealed class DownloadStatus { const DownloadStatus(); }
 final class NotDownloaded extends DownloadStatus { const NotDownloaded(); }
 final class Queued extends DownloadStatus { const Queued(); }
@@ -631,6 +670,22 @@ abstract interface class NewsRepository {
   Future<Result<NewsPost>> getPost(String postId);
   Future<Result<List<NewsCategory>>> listCategories();
 }
+
+final class NewsCategory {
+  const NewsCategory({required this.categoryId, required this.name});
+  final String categoryId;
+  final String name;
+}
+
+final class NewsControls {
+  const NewsControls({required this.hiddenPostIds, required this.breakingPostIds});
+  final Set<String> hiddenPostIds;    // removed from the app (FR-NEWS-008)
+  final Set<String> breakingPostIds;  // marked breaking (FR-NEWS-009)
+}
+
+abstract interface class NewsControlsService {
+  Future<Result<NewsControls>> getNewsControls(); // OP-NWS-01
+}
 ```
 
 ### 6.10 MOD-10 Sharing
@@ -669,6 +724,8 @@ abstract interface class ShareService {
 
 ```dart
 enum PermissionOutcome { granted, denied, notDetermined }
+
+enum NotificationTargetType { issue, article } // what a tapped notification opens (PROPOSED name; the two values are the contract's)
 
 abstract interface class NotificationService {
   Future<Result<PermissionOutcome>> explainAndRequestPermission();
@@ -721,8 +778,8 @@ These are technology-neutral operations. Each row is a contract: who may call it
 | OP-CAT-03 | `listCategories` | App | Public | None | `IssueCategory` list | `UNAVAILABLE` | FR-MAG-003, FR-SRCH-002 | OP-01 |
 | OP-FILE-01 | `requestIssueFile` | App | Signed in; email verified for email accounts (Google: OQ-04); profile complete (PROVISIONAL, BR-003); issue published | `issueId` | `IssueFileGrant` | `UNAUTHENTICATED`, `EMAIL_NOT_VERIFIED`, `PROFILE_INCOMPLETE`, `NOT_FOUND` | FR-READ-001, FR-DL-001, FR-DL-002, NFR-SEC-002, INT-FILE-001 | OP-11 |
 | OP-PRF-01 | `getOwnProfile` | App | Signed in; own record | None | `ReaderProfile` or none | `UNAUTHENTICATED` | FR-PROF-006 | OP-06 |
-| OP-PRF-02 | `saveOwnProfile` | App | Signed in; own record | `ReaderProfile` | None | `INVALID_ARGUMENT` | FR-PROF-001, FR-PROF-002, FR-PROF-007 | OP-10 |
-| OP-PRF-03 | `recordConsent` | App | Signed in; own record | `ConsentRecord` | None | `INVALID_ARGUMENT` | FR-PRIV-001, DATA-012 | OP-10 |
+| OP-PRF-02 | `saveOwnProfile` | App | Signed in; own record | `ReaderProfile`, a `request_id`, and on the first call the accepted policy and terms versions (OP-10; PROPOSED) | The profile status: complete, or the names of the missing fields | `INVALID_ARGUMENT` (field names), `UNAUTHENTICATED`, `ACCOUNT_CLOSED` (a FAILED_PRECONDITION reason) | FR-PROF-001, FR-PROF-002, FR-PROF-007 | OP-10 |
+| OP-PRF-03 | `recordConsent` | App | Signed in; own record | `ConsentRecord` | None | `INVALID_ARGUMENT`. No standalone backend operation exists (see the notes) | FR-PRIV-001, DATA-012 | OP-10 (first call only) |
 | OP-LIB-01 | `listBookmarks` | App | Signed in; own records | None | `Bookmark` list | `UNAUTHENTICATED` | FR-BKM-006 | OP-07 |
 | OP-LIB-02 | `addBookmark` | App | Own record; idempotent. The server checks the owner, and a page and a revision of at least 1 (the revision check is PROPOSED). Full access is checked by the app (MOD-08), because rules do not look up the account status (`SECURITY_AND_ACCESS_CONTROL.md` T25) | `issueId`, `page`, `fileRevision` | `Bookmark` | `UNAUTHENTICATED`, `FORBIDDEN` (a refusal that is not a repeated add; section 6.8, rule 2). A refused write does not say why, so the server returns no `INVALID_ARGUMENT`. MOD-08 returns `invalidInput` for a page or revision below 1 before the write (rule 5). The app, not the server, checks the page against the page count it knows (`DATABASE_AND_DATA_MODEL.md` section 4.10), because rules do not know it | FR-BKM-001 | OP-07 |
 | OP-LIB-03 | `removeBookmark` | App | Own record | `bookmarkId` | None | `NOT_FOUND` | FR-BKM-007 | OP-07 |
@@ -734,11 +791,11 @@ These are technology-neutral operations. Each row is a contract: who may call it
 | OP-NTF-03 | `getPreferences` | App | Own record | None | `NotificationPreferences` | `UNAUTHENTICATED` | FR-NOTIF-002 | OP-09 |
 | OP-NTF-04 | `savePreferences` | App | Own record | `NotificationPreferences` | None | `INVALID_ARGUMENT` | FR-NOTIF-002, FR-NOTIF-003 | OP-09 |
 | OP-EML-01 | `setEditionUpdateSubscription` | App | OQ-09 | Opt in or out | None | None | FR-EMAIL-001, FR-EMAIL-002 (CONFLICT C-02) | none (conditional, C-02; dropped on the working position, GS-Q49) |
-| OP-ACC-01 | `deleteOwnAccount` | App | Signed in; own account; recent sign-in if the provider requires it | None | None | `UNAUTHENTICATED` | FR-AUTH-009, FR-PRIV-003 | OP-12 (OP-13 is withdrawn) |
-| OP-ADM-01 | `uploadIssue` | Admin panel | Admin role | PDF, cover, issue details | `issueId` (unpublished) | `FORBIDDEN`, `NOT_A_PDF`, `FILE_TOO_LARGE`, `INVALID_ARGUMENT` | FR-ADMIN-005 to 009, NFR-SEC-008 | OP-19, OP-20, OP-40 |
+| OP-ACC-01 | `deleteOwnAccount` | App | Signed in; own account; a recent sign-in (OP-12, AOQ-14; PROPOSED) | None | None | `UNAUTHENTICATED`, `LAST_ADMIN`, `ALREADY_DELETING`, `RECENT_SIGN_IN_REQUIRED` (the last three are FAILED_PRECONDITION reasons) | FR-AUTH-009, FR-PRIV-003 | OP-12 (OP-13 is withdrawn) |
+| OP-ADM-01 | `uploadIssue` | Admin panel | Admin role | PDF, cover, issue details, in the staged order of the notes | `issueId` (unpublished), from OP-16 | `FORBIDDEN`, `INVALID_ARGUMENT` (size or type, at the request). A rejected file is a reason on the upload job (`NOT_A_PDF`, `OVER_LIMIT`), not an error to the caller | FR-ADMIN-005 to 009, NFR-SEC-008 | OP-19, OP-20, OP-40 |
 | OP-ADM-02 | `updateIssueDetails` | Admin panel | Admin role | `issueId`, details | None | `NOT_FOUND`, `INVALID_ARGUMENT` | FR-ADMIN-009 | OP-16 |
-| OP-ADM-03 | `setIssuePublished` | Admin panel | Admin role | `issueId`, `published` | None | `NOT_FOUND` | FR-ADMIN-011 | OP-21, OP-22 |
-| OP-ADM-04 | `manageCategory` | Admin panel | Admin role | Create, rename or remove | Category | `CONFLICT` (in use) | FR-ADMIN-010 | OP-17, OP-18 |
+| OP-ADM-03 | `setIssuePublished` | Admin panel | Admin role | `issueId`, `published` | None | `NOT_FOUND`, `FAILED_PRECONDITION` (`NO_ACCEPTED_FILE` when publishing without an accepted file) | FR-ADMIN-011 | OP-21, OP-22 |
+| OP-ADM-04 | `manageCategory` | Admin panel | Admin role | Create, rename or remove | Category | `INVALID_ARGUMENT`, `CONFLICT`, `FAILED_PRECONDITION` with `IN_USE`. Which refusal uses which code is open (R-2) | FR-ADMIN-010 | OP-17, OP-18 |
 | OP-ADM-05 | `setNewsControl` | Admin panel | Admin role | `postId`, `hidden`, `breaking` | None | `INVALID_ARGUMENT` | FR-ADMIN-013, FR-ADMIN-014 | OP-23 |
 | OP-ADM-06 | `sendNotification` | Admin panel | Admin role | Category, target, title, body | `sendId` | `FORBIDDEN`, `INVALID_ARGUMENT` | FR-ADMIN-015 to 017, FR-NOTIF-004 | OP-25, OP-26 |
 | OP-ADM-07 | `listSendLog` | Admin panel | Admin role | Paging | `NotificationSendRecord` list | `FORBIDDEN` | FR-ADMIN-018 | OP-27 |
@@ -754,6 +811,8 @@ These are technology-neutral operations. Each row is a contract: who may call it
 - OP-ADM-11 joins two different things, deleting an issue and replacing its PDF. They need different safeguards (a typed confirmation, an atomic swap, the effect on copies already downloaded). The split waits for OQ-21. One rule applies now, whatever OQ-21 decides: a replacement file is validated before the old file is removed.
 - OP-ADM-12 is not a backend operation: sign-in is the identity provider's job, and the role lookup is OP-14 in the catalogue.
 - OP-ACC-01 is an immediate deletion (GS-Q50). The grace window with undo (PRC-02) is withdrawn.
+- **OP-PRF-02 and OP-PRF-03 (R-3, PROPOSED).** The app rows follow OP-10: the input, the output and the refusals above. The Dart `saveOwnProfile` of section 6.4 and `profile.dart` return nothing today, and are aligned in a code pull request. OP-10 writes the consent record on the first call. The backend spike found no operation that records consent on its own (B-8) and no route to accept a changed policy version later (B-9, OQ-27; emulator only). Whether the `recordConsent` row stays is open.
+- **OP-ADM-01 and OP-ADM-03 (R-10, PROPOSED).** The upload is staged, and the issue must exist first. The panel calls OP-16 to create the issue, OP-19 for an upload job, uploads to the returned address, and reads the result from OP-20 (backend spike findings G-5 and G-6, emulator only). A rejected file is a reason code on the upload job. Publishing without an accepted file is FAILED_PRECONDITION with `NO_ACCEPTED_FILE`, and in the spike missing details are `INVALID_ARGUMENT` naming the fields, which the backend contract does not list for OP-21. The alias table already marks the staging as open (section 3.4 of the backend contract).
 
 ## 9. External Interfaces
 
@@ -812,6 +871,9 @@ Each contract has a provider, a consumer and a pass condition. They are checked 
 | Google verification and linking | `AccessState` for Google accounts; FR-AUTH-006 | OQ-04, OQ-05 |
 | Reading model | MOD-06 copy retention | DEC-008, OQ-08 |
 | Subscriber list | OP-ADM-10, OP-EML-01 | C-02, OQ-31 |
+| A route to accept a changed policy version, and whether `recordConsent` stays | OP-PRF-03; consent after a policy change | OQ-27 (backend spike finding B-9) |
+| The code for "in use" and for a duplicate category name | OP-ADM-04; the `conflict` row of section 4.2 | `API_AND_BACKEND_CONTRACT.md` section 2.5 (R-2) |
+| How recent a sign-in must be before a reader deletes the account | OP-ACC-01; the re-authentication methods of section 6.3 | OQ-56, AOQ-14 |
 
 ## 12. Change Control
 
