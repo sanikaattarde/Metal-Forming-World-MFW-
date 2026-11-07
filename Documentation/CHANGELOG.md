@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.29 |
+| Version | 0.30 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,21 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the shared contracts and test fakes (MOD-00), 2026-11-06, on topic branch `feat/yg-contracts` on top of `250190a`, then merged with `origin/main` at `824cd95` and at `6da4c31`, under review in pull request #34
+
+Adds the code form of `API_AND_MODULE_CONTRACTS.md` sections 4 to 6 (version 0.11) under `app/`. `app/lib/contracts/` (13 files, 972 lines) holds the types and interfaces of MOD-00, with `result.dart` where issue 28 agreed that `Result`, `AppFailure` and `FailureCode` live. `app/test/fakes/`, `app/test/fixtures/` and `app/test/contracts/` (29 files, 3,143 lines) hold a fake for each provider of IC-01 to IC-08 and 93 new tests. The code is cut from `spike/yg-ws-b` (commits `70acc47` and `49c6140`). On 2026-11-06, with Flutter 3.47.9 and Dart 3.13.7, `flutter pub get --enforce-lockfile`, `dart format`, `flutter analyze` and `flutter test` (94 tests) passed on YG's report. The iOS and Android builds were not run, and no CI exists on `main` yet (T-01.5). `pubspec.yaml` and `pubspec.lock` are unchanged.
+
+**Exception to `DEFINITION_OF_DONE.md` section 5 check 2, for this pull request only.** Five parts lean on a decision that is OPEN or PROPOSED. (1) `Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` lean on DEC-026 (PROPOSED). (2) `IssueFileGrant` and `IssueFileService` lean on DEC-020 (OPEN) and DEC-009 (BASELINE). (3) `PdfRenderer`, `PdfDocumentHandle` and `ReaderController` lean on DEC-005 (OPEN). (4) `DownloadManager`, `DownloadedIssue` and `LocalIssueFile` lean on DEC-033 (PROPOSED) and DEC-008 (OPEN). (5) `CatalogueRepository` and `IssueQuery` lean on DEC-030 (PROPOSED). Sanika Attarde's review of 2026-11-06 accepts them as proposals for this pull request only, as a deliberate exception, because the code holds interfaces and fakes with no behaviour of an OPEN decision, a change of shape is a small edit, and blocking them would hold up every app module. Sanika Attarde approved the pull request with the exception on record on 2026-11-07, at `dae718c` and again at `b6a8a87` after merging `main` into the branch. **Review trigger:** any of these decisions changing, or any of these shapes changing, sends the part back for review. The exception covers no later pull request. Section 12 of the same document asks that an open question or a risk entry tracks the gap. OQ-37 tracks DEC-020, OQ-36 tracks DEC-005, OQ-08 tracks DEC-033 and DEC-008, and OQ-13 tracks DEC-030. DEC-026 has no open question of its own on `main` (OQ-52 is about App Check), so its gap is tracked only by its PROPOSED status in `DECISION_LOG.md` until pull request #38 adds OQ-62 for it, as Sanika Attarde's approval of `dae718c` asked.
+
+Eight Dart shapes have no shape in `API_AND_MODULE_CONTRACTS.md` and are proposals in the code only: `NewsCategory`, `NewsControls`, `NewsControlsService`, `IssueFileService`, `LocalIssueFile`, `NotificationTargetType`, `ReaderProfile` and `ConsentRecord`. The next documents pull request adds them to the document. `FakeAuthService`, `FakeProfileRepository` and `FakeNotificationService` pass to the owner of their interfaces when this merges. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `app/lib/contracts/` | Added: the types and interfaces of MOD-00 (13 files). | The shared base that both workstreams build on | MOD-00, IC-01 to IC-08, DEC-005, DEC-008, DEC-009, DEC-020, DEC-026, DEC-030, DEC-033, OQ-08, OQ-13, OQ-36, OQ-37 | Both developers (not agreed). The exception to DoD-TASK check 2 is accepted in Sanika Attarde's review of 2026-11-06 and in the approvals of `dae718c` and `b6a8a87` on 2026-11-07 | No scope effect |
+| 2026-11-06 | `app/test/fakes/`, `app/test/fixtures/`, `app/test/contracts/` | Added: the fakes, the fixtures and the contract tests (29 files, 93 new tests). | Lets the modules be built and tested before the backend exists | MOD-00, IC-01 to IC-08, TS-14 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.30: this entry | Records the addition above (`DEVELOPMENT_WORKFLOW.md` section 8) | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of the changed document, one step up, and reads 0.30 for `CHANGELOG` (was 0.29) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: where Result, AppFailure and FailureCode live, 2026-11-06, on topic branch `docs/sa-result-location` on top of `250190a`, then merged with `origin/main` at `2ab56cf`, under review in pull request #37
 
