@@ -49,10 +49,10 @@ Reading order
 | [TECHNOLOGY_DECISIONS](Documentation/TECHNOLOGY_DECISIONS.md) | Technology options and proposed choices | Authoritative: technology options | 0.7 | Joint | Both developers; MFW for cost, scope or contract effects |
 | [DATABASE_AND_DATA_MODEL](Documentation/DATABASE_AND_DATA_MODEL.md) | Data, relationships, retention | Authoritative: data model | 0.7 | Yuvraj (proposed, not agreed) | Both developers; MFW for cost, scope or contract effects |
 | [API_AND_BACKEND_CONTRACT](Documentation/API_AND_BACKEND_CONTRACT.md) | The single catalogue of backend operations | Authoritative: backend operations | 0.7 | Yuvraj (proposed, not agreed) | Both developers; MFW for cost, scope or contract effects |
-| [API_AND_MODULE_CONTRACTS](Documentation/API_AND_MODULE_CONTRACTS.md) | App modules, integration contracts, app-side errors | Authoritative: app modules | 0.12 | Sanika (interim) | Both developers |
+| [API_AND_MODULE_CONTRACTS](Documentation/API_AND_MODULE_CONTRACTS.md) | App modules, integration contracts, app-side errors | Authoritative: app modules | 0.13 | Sanika (interim) | Both developers |
 | [SECURITY_AND_ACCESS_CONTROL](Documentation/SECURITY_AND_ACCESS_CONTROL.md) | Access rules, threats, controls, security tests | Authoritative: access and security | 0.7 | Yuvraj (proposed, not agreed) | Both developers; MFW for cost, scope or contract effects |
 | [PDF_READER_AND_OFFLINE_DESIGN](Documentation/PDF_READER_AND_OFFLINE_DESIGN.md) | Device-side reader and offline design | Authoritative: reader and offline (proposed) | 0.5 | Yuvraj (proposed, not agreed) | Both developers; MFW at M2 for the reader approach |
-| [SCREEN_INVENTORY_AND_NAVIGATION](Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md) | Screens and states the requirements imply; input to the M2 designs | Authoritative: screen list (proposed) | 0.3 | Yuvraj for app, Sanika for admin (proposed) | Both developers; MFW approves the screens at M2 |
+| [SCREEN_INVENTORY_AND_NAVIGATION](Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md) | Screens and states the requirements imply; input to the M2 designs | Authoritative: screen list (proposed) | 0.4 | Yuvraj for app, Sanika for admin (proposed) | Both developers; MFW approves the screens at M2 |
 | [CLOUD_INFRASTRUCTURE_AND_COSTS](Documentation/CLOUD_INFRASTRUCTURE_AND_COSTS.md) | Candidate clouds and a parameterised cost model; no provider chosen | Authoritative: cloud cost model (proposed) | 0.4 | Yuvraj (proposed, not agreed) | Both developers; MFW for the provider, region, cost ceiling and any CDN |
 | [DEVELOPMENT_ROADMAP](Documentation/DEVELOPMENT_ROADMAP.md) | Work packages, tasks, internal estimates | Planning, not a commitment | 0.13 | Sanika (interim) | Both developers; MFW approves milestones, not the plan |
 | [TASK_OWNERSHIP_MATRIX](Documentation/TASK_OWNERSHIP_MATRIX.md) | Who owns what, and the document map | Authoritative: ownership and map | 0.9 | Sanika (interim) | Both developers |
@@ -74,7 +74,7 @@ Reading order
 | [BACKUP_AND_RECOVERY](Documentation/BACKUP_AND_RECOVERY.md) | Proposed backup, restore and escalation | Authoritative: backup (proposed) | 0.6 | Sanika (interim) | Both developers, then MFW for cost and data obligations |
 | [APP_STORE_RELEASE_CHECKLIST](Documentation/APP_STORE_RELEASE_CHECKLIST.md) | What must be true before store submission | Authoritative: store release | 0.4 | Sanika (interim) | Both developers; MFW for the listing and submission |
 | [MAINTENANCE_AND_HANDOVER](Documentation/MAINTENANCE_AND_HANDOVER.md) | Handover items, warranty, after the warranty | Authoritative: handover | 0.4 | Sanika (interim) | Both developers; MFW agrees the handover at M5 |
-| [SECURITY_INCIDENT_PROCEDURE](Documentation/SECURITY_INCIDENT_PROCEDURE.md) | Steps for security incidents | Authoritative: security incidents (proposed) | 0.3 | Sanika (proposed, not agreed) | Both developers; MFW for contacts; MFW's legal adviser for legal matters |
+| [SECURITY_INCIDENT_PROCEDURE](Documentation/SECURITY_INCIDENT_PROCEDURE.md) | Steps for security incidents | Authoritative: security incidents (proposed) | 0.4 | Sanika (proposed, not agreed) | Both developers; MFW for contacts; MFW's legal adviser for legal matters |
 
 ## Status labels
 
