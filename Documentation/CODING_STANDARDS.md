@@ -7,9 +7,9 @@
 | Document | Coding Standards |
 | File | `Documentation/CODING_STANDARDS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 25) |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. |
-| Date | 5 November 2026 |
+| Date | 6 November 2026 |
 | Approval required | Both developers |
 
 **Change history**
@@ -21,6 +21,7 @@
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.4 | 5 November 2026 | Sections 2, 3 and 5.2 give DEC-012, DEC-013 and DEC-014 as AGREED. The rules themselves stay PROPOSED. Revised on 5 November 2026 after the review of pull request #21: section 5.2 gives the condition of DEC-013 (Riverpod only in `app/lib/app/`, constructors in feature code) in place of the "If both are AGREED" block. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.5 | 5 November 2026 | Section 15 gains item 8: the panel's web surface follows the objectives of SC-22. The mechanism is OPEN until DEC-004 and OQ-60. Revised on 5 November 2026 after the review of pull request #22: item 8 follows the new wording of objective (c). No requirement, scope item, decision or MFW approval changed. |
+| 0.6 | 6 November 2026 | The module tree puts `AppFailure` in `contracts/` (MOD-00, `result.dart`), and leaves `core/errors/` with the failure-to-message mapping. Agreed in writing in issue 28. No rule changed. No requirement, scope item, decision, status label or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -60,11 +61,11 @@ AGREED (DEC-012, `DECISION_LOG.md` section 5.6). The paths below are the boundar
 │   ├── lib/
 │   │   ├── main.dart               Entry point (MOD-01, shared, high-risk)
 │   │   ├── app/                    App widget, router, theme, dependency wiring (MOD-01, shared, high-risk)
-│   │   ├── contracts/              Shared domain models and interfaces (MOD-00, shared, high-risk)
+│   │   ├── contracts/              Shared domain models and interfaces, with Result, AppFailure and FailureCode in result.dart (MOD-00, shared, high-risk)
 │   │   ├── core/
 │   │   │   ├── config/             Environment configuration, no secrets (MOD-01)
 │   │   │   ├── network/            HTTP client wrapper, connectivity (MOD-01)
-│   │   │   ├── errors/             AppFailure, failure-to-message mapping (MOD-02)
+│   │   │   ├── errors/             Failure-to-message mapping (MOD-02). AppFailure is in contracts/
 │   │   │   └── logging/            Logger, crash-reporting and usage-event facades (MOD-02)
 │   │   └── features/
 │   │       ├── auth/               MOD-03
