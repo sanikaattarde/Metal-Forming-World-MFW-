@@ -6,9 +6,9 @@
 |---|---|
 | Document | Security Incident Procedure |
 | File | `Documentation/SECURITY_INCIDENT_PROCEDURE.md` |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. **PLANNED: no incident has occurred, no contact is named, and no drill has been run.** Nothing here is implemented. |
-| Date | 5 November 2026 |
+| Date | 7 November 2026 |
 | Audience | The two developers during the build. MFW's named contacts after handover, once MFW names them (OQ-47). |
 | Proposed owner | Sanika Attarde (WS-A), PROPOSED and not agreed. Reviewer: Yuvraj (WS-B). |
 | Approval required | Both developers. MFW for the contacts and for any step that involves MFW (OQ-47, OQ-28). MFW's legal adviser for anything legal. |
@@ -21,6 +21,7 @@
 | 0.1 | 24 October 2026 | Initial draft. Written on top of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). The admin steps use the one Admin role with in-panel removal (GS-Q44) instead of the withdrawn Super Admin steps (PRC-01). The record of who added or removed whom replaces the audit log, and it does not say what an admin did to issues or exports. Permanent deletion is open to any admin (GS-Q45). No decision is approved. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.4 | 7 November 2026 | SI-04 records as open whether privileged operations log the operation, the caller and the outcome (finding I-1 of Sanika Attarde's first pass of MOD20-P1-T03, issue 31, with YG's position of 6 November 2026). It is an open item and not a proposal, because S2 excludes an audit log (EXC-07). No requirement, scope item, decision, status label or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -261,7 +262,7 @@ These items are local to this document. They are not yet in the registers. Pull 
 | SI-01 | Who leads an incident during the build and after handover, who is the second person, and who is reachable out of hours | Both developers, then MFW | OQ-47 |
 | SI-02 | The private channel for security reports, because the repository is public | Both developers, with MFW | OQ-47 |
 | SI-03 | The time targets for telling MFW (same working day proposed) | Both developers, with MFW | S2 Warranty |
-| SI-04 | Which platform logs exist and how long they are kept. There is no audit log, so these are the only record of what an admin did to issues, files and exports | Development team | DEC-003 |
+| SI-04 | Which platform logs exist and how long they are kept. There is no audit log, so these are the only record of what an admin did to issues, files and exports. **Also open (I-1):** whether privileged operations log the operation, the caller and the outcome. In the backend spike (emulator only, not merged) four operations call the log helper (OP-11, OP-12, OP-24 and OP-40), and the operations that save an issue, publish or unpublish it, change a category or a news control, or request an upload do not. The helper keeps only the operation, the caller's identifier and the outcome, and the identifier is pseudonymous (`SECURITY_AND_ACCESS_CONTROL.md` SC-16; `BACKEND_RULES_EMULATOR_EVIDENCE.md`, SEC-CHK-10). Whether the platform's own log names the caller of a callable function was not checked. No position is taken on logging itself | Development team | DEC-003 |
 | SI-05 | Whether and how readers are told after an exposure. User-facing wording and a legal question | MFW and its legal adviser | OQ-24, OQ-27 |
 | SI-06 | Whether a sent push notification can be corrected or recalled | Development team | TD-13 |
 

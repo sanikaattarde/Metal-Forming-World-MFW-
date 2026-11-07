@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.36 |
+| Version | 0.38 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,17 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: screen inventory and incident procedure changes from the first pass of MOD20-P1-T03, 2026-11-07, on topic branch `docs/sa-screens-incident-r` on top of `b5c3fad`, under review in pull request #45
+
+Follows the positions of Yuvraj Gaykhe on issue 31 (S-1 to S-3 and I-1), which are in text under Sanika Attarde's name, so Sanika Attarde makes the edits. `SCREEN_INVENTORY_AND_NAVIGATION.md` 0.4 adds a route column to section 6 with the five routes of the admin panel spike, the rule that an unknown address goes to the issues list, and sign-in as a state and not a route (S-1). It adds the panel's own states beside the app's list in section 7: the sign-out notice, the reload notice, a category in use, a name already taken, publishing without an accepted file, and an unreachable WordPress site (S-2). It extends the SCR-W-01 note with the refusal of an admin whose email is not verified and the single message for every refusal (S-3). `SECURITY_INCIDENT_PROCEDURE.md` 0.4 records in SI-04 as an open item whether privileged operations log the operation, the caller and the outcome (I-1), with no position on logging, because S2 excludes an audit log (EXC-07). Every panel fact is a spike observation, emulator only and not merged, and every route is a spike choice until DEC-004 is agreed. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md` | Version 0.4: a route column and paragraph in section 6, the panel's own states in section 7, and the SCR-W-01 note. | Issue 31, S-1 to S-3 | S-1, S-2, S-3, SCR-W-01 to SCR-W-06, FR-STATE-007, SEC-CHK-17, OQ-20, DEC-004 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/SECURITY_INCIDENT_PROCEDURE.md` | Version 0.4: SI-04 records the open question on logging by privileged operations. | Issue 31, I-1 | I-1, SI-04, EXC-07, SC-16 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.38: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document, and reads 0.4 for `SCREEN_INVENTORY_AND_NAVIGATION` (was 0.3), 0.4 for `SECURITY_INCIDENT_PROCEDURE` (was 0.3) and 0.38 for `CHANGELOG` (was 0.36) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: DEC-025 to DEC-030 set to AGREED, 2026-11-07, on topic branch `docs/yg-dec025-030-agreed` on top of `977de6a`, under review in pull request #43
 
