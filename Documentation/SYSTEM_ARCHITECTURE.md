@@ -7,9 +7,9 @@
 | Document title | System Architecture |
 | File | `SYSTEM_ARCHITECTURE.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for Review |
-| Last updated | 5 November 2026 |
+| Last updated | 7 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. The architecture is not approved by the charter (CH §17.4). |
 | Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [Technology Decisions](TECHNOLOGY_DECISIONS.md); [Database and Data Model](DATABASE_AND_DATA_MODEL.md); [API and Backend Contract](API_AND_BACKEND_CONTRACT.md); [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md); `PROJECT_CHARTER.md` |
@@ -31,6 +31,7 @@
 | 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. Section 1.3 added: the baseline (one admin role, immediate deletion) and the labelled changes PRC-01 and PRC-02. The deletion flow, the role flow and the function list marked accordingly. Registration and sign-in messages stated (7.1). Error categories aligned with the API and Backend Contract. "Accepted by the development team" replaced by PROPOSED with the agreement note. References to the website question extended to OQ-57. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). Section 1.3 rewritten for one Admin role with in-panel add and remove, immediate deletion, two reading actions and no edition-update sign-up. Sections 7.10 to 7.12, 8.3 and 10.1 and the risk, status, open-question and traceability tables updated. PRC-01 and PRC-02 are withdrawn, and their text stays only as history. No decision is approved. |
 | 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
+| 0.6 | 7 November 2026 | Findings of Sanika Attarde's second-person review (issue 32) that this document holds, with YG's positions of 6 November 2026, PROPOSED. Sections 7.4 and 10.1 show check 0 of `getIssueFile` (OP-11): an issue on the deleted-issue list is answered GONE before the sign-in check, which is the one exception to "authenticates the caller first" (A-1). Section 7.10 and the `requestAccountDeletion` entry follow OP-12 of `API_AND_BACKEND_CONTRACT.md` 0.6: a repeat is refused while the account is marked, the scheduled cleanup alone finishes a stopped deletion, the admin role record is removed, the user record is deleted last, and a recent sign-in is required (A-2). Section 9 records the limits of the local emulators that the backend spike met, labelled as spike observations (T-2). Every mention of a scheduled purge job now reads "scheduled maintenance" with OP-41, because the purge window was withdrawn (PRC-02, T-4). The restore paragraph of section 11.4 keeps "purged identifiers", the term of AOQ-02 and TD-19. The spike facts are emulator only and not merged. No requirement, scope item, decision, status label or MFW approval changed. |
 
 ### 1.1 Sources and authority
 
@@ -204,7 +205,7 @@ flowchart TB
     auth["Authentication"]
     db["Firestore database"]
     fn["Cloud Functions, TypeScript"]
-    sched["Scheduled job for purge"]
+    sched["Scheduled maintenance job"]
     files["Cloud Storage: holding area, private issue files, public covers"]
     fcm["Cloud Messaging"]
     host["Hosting for the admin panel"]
@@ -257,7 +258,7 @@ MFW mobile app system                         [Firebase baseline proposed, TD-03
 │   ├── Cloud Functions (TypeScript)          [proposed, TD-04]
 │   │   ├── Callable functions                [Section 10.1]
 │   │   ├── Storage-event trigger
-│   │   └── Scheduled jobs                    [purge and holding-area cleanup]
+│   │   └── Scheduled jobs                    [scheduled maintenance, OP-41: stopped deletions and cleanup]
 │   ├── Authentication                        [proposed, TD-06]
 │   ├── Firestore database                    [proposed, TD-07]
 │   ├── Cloud Storage                         [proposed, TD-08]
@@ -339,7 +340,7 @@ Backend and API
 │   ├── Record a notification as pending, send it, and mark it accepted or failed (GS-Q27)
 │   ├── Read WordPress posts for the admin post picker
 │   ├── Save and validate profiles and record consent
-│   ├── Run account deletion and the scheduled purge
+│   ├── Run account deletion and the scheduled maintenance (OP-41)
 │   ├── Add and remove admins, and write the narrow record of who added or removed whom (GS-Q44)
 │   └── Produce the registered-user export on request (GS-Q49)
 ├── Does not
@@ -513,11 +514,11 @@ Push notification provider
 Monitoring and operational services
 ├── Status
 │   ├── Crashlytics on and Analytics collection off are proposed (TD-16)
-│   └── Backups and the purge job are proposed (TD-19)
+│   └── Backups and the scheduled maintenance job are proposed (TD-19)
 ├── Responsibilities
 │   ├── Collect crash reports with no reader identity
 │   ├── Record function errors and security-relevant events without personal data
-│   ├── Run the scheduled purge
+│   ├── Run the scheduled maintenance (OP-41)
 │   ├── Keep scheduled database backups
 │   └── Report cost through MFW's billing console
 ├── Does not
@@ -662,7 +663,7 @@ Magazine catalogue browsing
 Authenticated magazine access
 ├── Starts with: A reader opens or downloads a full issue
 ├── Access check
-│   ├── The function getIssueFile runs the six checks in the diagram below, in this order
+│   ├── The function getIssueFile runs check 0 and then the six checks in the diagram below, in this order (OP-11)
 │   └── Storage rules deny every direct client read of the private path
 ├── Data touched: User record, profile completeness, issue and file revision records
 ├── Failure handling: Each failed check returns a distinct reason, and the app shows the matching prompt
@@ -676,6 +677,7 @@ Authenticated magazine access
 ```mermaid
 flowchart TB
   start["Reader taps Read or Download<br/>a stored copy at the current revision opens offline first"]
+  c0{"0. Issue is on the deleted-issue list?<br/>checked before sign-in"}
   c1{"1. Caller is signed in?"}
   c2{"2. Account is active and<br/>not being deleted?"}
   c3{"3. Email is verified?<br/>required for password accounts; for Google accounts it depends on AOQ-09"}
@@ -684,13 +686,16 @@ flowchart TB
   c6{"6. A current file revision exists?"}
   url["Short-lived signed URL<br/>with expiry, revision, size and checksum"]
   dl["App downloads, verifies size and checksum,<br/>moves the file to private storage<br/>resume on a signed URL is unproven, AR-01"]
+  f0["No-longer-available message, GONE"]
   f1["Sign-in prompt, FR-AUTH-010"]
   f2["Message that the account is closed"]
   f3["Verify-your-email prompt"]
   f4["Complete-your-profile prompt, FR-PROF-004"]
   f5["Not-available message"]
   f6["Not-available message"]
-  start --> c1
+  start --> c0
+  c0 -->|no| c1
+  c0 -->|yes| f0
   c1 -->|yes| c2
   c2 -->|yes| c3
   c3 -->|yes| c4
@@ -707,6 +712,8 @@ flowchart TB
 ```
 
 A notification or a link that leads to a full issue goes through the same function (BR-005).
+
+Check 0 comes before the sign-in check, so a signed-out reader who follows a link to a permanently deleted issue is told that it is no longer available, and is not asked to sign in first. The deleted-issue list is readable by anyone (Section 10.2), so the answer reveals nothing new. This follows OP-11 of `API_AND_BACKEND_CONTRACT.md` and is PROPOSED. The backend spike answers this way (emulator only, not merged).
 
 ### 7.5 PDF download and reading
 
@@ -928,14 +935,15 @@ sequenceDiagram
 Account deletion and data removal
 ├── Starts with: A signed-in reader chooses to delete the account and confirms
 ├── Access check
-│   ├── requestAccountDeletion checks that the caller is the account owner
+│   ├── requestAccountDeletion checks that the caller is the account owner and that the sign-in is recent
+│   │   (OP-12, AOQ-14; PROPOSED)
 │   └── The cleanup job runs under the backend's own credentials
 ├── Data touched
-│   ├── The sign-in account, the user record, profile, bookmarks, favourites, notification preferences and the
-│   │   consent record
+│   ├── The sign-in account, the user record, profile, bookmarks, favourites, notification preferences, the
+│   │   consent record, and the admin role record if there is one
 │   └── Downloaded files on the device
-├── Failure handling: The deletion is repeatable: a failure part-way leaves the account marked as being deleted
-│   and a retry or the cleanup job continues it
+├── Failure handling: A failure part-way leaves the account marked as being deleted, and the scheduled cleanup
+│   job continues it (OP-41). A repeat request is refused while the account is marked (OP-12)
 └── Requirements
     ├── FR-AUTH-009, FR-PRIV-003 (CONFIRMED)
     ├── FR-PRIV-004 (ASSUMPTION)
@@ -956,8 +964,9 @@ sequenceDiagram
   App->>Fn: requestAccountDeletion
   Fn->>DB: Mark the account as being deleted
   Fn->>Auth: End the reader's sessions
-  Fn->>DB: Delete profile, bookmarks, favourites, preferences, consent record and the user record
+  Fn->>DB: Delete profile, bookmarks, favourites, preferences, consent record and any admin role record
   Fn->>Auth: Delete the account
+  Fn->>DB: Delete the user record last
   Fn-->>App: Confirmation
   App->>App: Remove notification subscriptions and clear local data
 ```
@@ -968,6 +977,7 @@ sequenceDiagram
 4. Deleted data can remain in database backups until they expire. A restore must re-apply deletions (Section 11.4).
 5. Apple expects deletion to start in the app. Google Play expects an in-app path and a web link for deletion requests (AOQ-06). MFW publishes the web link on its own site (GS-Q57). Both store rules were extracted from policy pages and must be re-checked (AR-02).
 6. If a step fails after the sessions end, the account stays marked as being deleted. The app's own status closes every server operation for it, and the scheduled cleanup job continues the deletion until it finishes. The request is refused for the last admin (INV-03).
+7. The user record is deleted last, after the sign-in account, so that a deletion which stops part-way can still be found by the cleanup job. A repeat request while the account is marked is refused with ALREADY_DELETING, so the cleanup job alone finishes a stopped deletion. Both follow OP-12 and are PROPOSED. The backend spike deletes in this order and refuses a repeat (emulator only, not merged). How the app re-authenticates before the request is open in OP-12.
 
 ### 7.11 Adding and removing admins
 
@@ -1052,7 +1062,7 @@ flowchart TB
   subgraph trusted["Trusted: MFW's cloud project, enforced by rules and functions"]
     rules["Security rules<br/>gate for direct reads"]
     fn["Cloud Functions<br/>all privileged actions"]
-    sched["Scheduled jobs<br/>purge and cleanup"]
+    sched["Scheduled jobs<br/>maintenance and cleanup"]
     auth["Authentication<br/>identity and tokens"]
     db["Firestore<br/>records and metadata"]
     files["Cloud Storage<br/>PDFs and covers"]
@@ -1224,7 +1234,17 @@ Environments
 │   ├── Purpose: daily development and automated rules and function tests
 │   ├── Data: fictional
 │   ├── Owner and payer: the developer's machine
-│   └── Deployed by: the developer
+│   ├── Deployed by: the developer
+│   └── Limits seen in the backend spike       [spike observations, emulator only, not merged]
+│       ├── Source: test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md, sections 3, 7 and 8
+│       ├── Needs Java 21 or newer. The spike ran the emulators from firebase-tools 15.34.2 with OpenJDK 21.0.13
+│       ├── The Functions emulator accepts a forged, an unsigned and an expired token (B-1), so token checks
+│       │   cannot be shown here
+│       ├── The Storage emulator ignores a write marked "only if nothing is there" (G-1)
+│       ├── Queries run without the composite indexes that the platform needs (D-4, G-15)
+│       ├── A repeated storage event and a 150 MB file were not reproduced (G-11)
+│       ├── A result for two requests at the same moment is not a pass here (TD-15)
+│       └── NOT VERIFIED: the licence of firebase-tools, and any other limit of the emulators
 ├── Development project                      [proposed, TD-18]
 │   ├── Purpose: shared testing of builds and functions
 │   ├── Data: fictional only, never real reader data
@@ -1256,7 +1276,7 @@ The backend exposes callable functions and receives events. There is no public R
 
 ### 10.1 Callable functions and triggers
 
-Every function authenticates the caller first. "Admin" means an account that has the Admin role by the server-side role record.
+Every function authenticates the caller first, with one exception: check 0 of `getIssueFile` answers GONE for an issue on the deleted-issue list before the sign-in check (Section 7.4, OP-11; PROPOSED). "Admin" means an account that has the Admin role by the server-side role record.
 
 ```text
 Backend functions (working names)
@@ -1270,12 +1290,13 @@ Backend functions (working names)
 │   ├── getIssueFile
 │   │   ├── In: issue identifier
 │   │   ├── Out: signed URL, expiry, file revision, size, checksum
-│   │   ├── Refuses: the six checks in 7.4
+│   │   ├── Refuses: gone, for an issue on the deleted-issue list (check 0, before sign-in); then the six checks in 7.4
 │   │   └── Requirements: NFR-SEC-002, BR-002, INT-FILE-001 (CONFIRMED); BR-003 (PROVISIONAL)
 │   └── requestAccountDeletion                   [caller: the account owner]
 │       ├── In: a confirmation flag
 │       ├── Out: confirmation that the deletion is done, or has started and will finish
-│       ├── Refuses: not the owner; already deleting; the last admin (INV-03)
+│       ├── Refuses: not the owner; a sign-in that is not recent (AOQ-14; PROPOSED); already deleting; the last
+│       │   admin (INV-03)
 │       └── Requirements: FR-AUTH-009, FR-PRIV-003 (CONFIRMED); GS-Q50
 ├── Admin (by the server-side role record)
 │   ├── getMyAdminRole, listIssuesForAdmin, listUploadJobs, listNotificationSends
@@ -1330,9 +1351,10 @@ Backend functions (working names)
     │   ├── Out: an accepted revision, or a rejected job
     │   ├── Refuses: not a genuine PDF; over the limit
     │   └── Requirements: FR-ADMIN-006, FR-ADMIN-007, NFR-SEC-008 (CONFIRMED)
-    └── purgeDeletedAccounts, cleanupHoldingArea [caller: a schedule]
+    └── scheduledMaintenance (OP-41)             [caller: a schedule]
         ├── In: none
-        ├── Out: a deletion that failed part-way is finished, and the holding area is cleaned
+        ├── Out: a deletion that failed part-way is finished, the holding area is cleaned, and the other
+        │   cleanup tasks listed in OP-41 run
         ├── Refuses: none
         └── Requirements: FR-PRIV-003 (CONFIRMED); GS-Q50
 ```
@@ -1385,7 +1407,7 @@ Installed apps stay on old versions for months, so contracts change only in a ba
 | Upload is not a genuine PDF or is too large | Rejected with a clear message and removed from the holding area. | FR-ADMIN-006, FR-ADMIN-007 (CONFIRMED) |
 | A function fails during publishing | The issue stays unpublished and the panel shows the error. | FR-STATE-007 (ASSUMPTION) |
 | Notification send fails | The panel shows the error and no send record is written. | FR-ADMIN-018 (CONFIRMED) |
-| Purge fails part-way | The account stays marked and the next scheduled run continues. | TD-19 |
+| Account deletion fails part-way | The account stays marked and the next scheduled maintenance run continues it (OP-41). | TD-19 |
 | Writes made offline conflict | The last write wins. | TD-20; OQ-10 |
 | Callable function abused | Rate limits and App Check, if adopted, reduce the effect. | AOQ-10 |
 

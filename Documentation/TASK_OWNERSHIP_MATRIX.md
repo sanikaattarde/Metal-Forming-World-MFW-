@@ -7,9 +7,9 @@
 | Document | Task Ownership Matrix |
 | File | `Documentation/TASK_OWNERSHIP_MATRIX.md` |
 | Phase | 3 — Development Planning and Collaboration (document 22) |
-| Version | 0.8 |
+| Version | 0.9 |
 | Status | Draft for review. Not approved. The two workstreams and the developer mapping are AGREED (DEC-011, `DECISION_LOG.md` section 5.6). Every assignment below stays PROPOSED until OQ-38 is answered. |
-| Date | 5 November 2026 |
+| Date | 6 November 2026 |
 | Approval required | Both developers (CH §19.3 D9; OQ-38). No MFW approval. |
 
 **Change history**
@@ -24,6 +24,7 @@
 | 0.6 | 5 November 2026 | The document map (section 13.1) no longer gives `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as draft 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. Section 13.3 says when the draft was written and is unchanged. No assignment changed, and every assignment stays PROPOSED. |
 | 0.7 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 | 0.8 | 5 November 2026 | The control table and section 6 give the two workstreams and the developer mapping as AGREED (DEC-011), with every assignment still PROPOSED until OQ-38 is answered. Revised on 5 November 2026 after the review of pull request #21: section 5 gives both workstreams as AGREED (DEC-011), without "Proposed" in its heading and its owner column. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.9 | 6 November 2026 | The MOD-02 row no longer lists `AppFailure` and `Result` among what MOD-02 provides, and says that MOD-02 depends on MOD-00. Section 8.1 says that `result.dart` has no writing module, so both developers approve a change to it (PROPOSED). Agreed in writing in issue 28. No requirement, scope item, decision, status label or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -86,7 +87,7 @@ All rows: status PROPOSED until OQ-38 is answered. DEC-011 sets the workstreams 
 |---|---|---|---|---|---|---|---|---|
 | MOD-00 | Shared domain models and interfaces | Joint: per file, the workstream of the module that writes the model (`API_AND_MODULE_CONTRACTS.md` §5) | The other workstream | `app/lib/contracts/`, `app/test/fakes/` | None | All | The provider maintains each fake | Both |
 | MOD-01 | App shell, navigation, platform services | WS-B | WS-A | `app/lib/main.dart`, `app/lib/app/`, `app/lib/core/config/`, `app/lib/core/network/` | MOD-03 | IC-01, IC-05 | Route-guard unit tests; shell widget tests | Consumer for IC-01 and IC-05 |
-| MOD-02 | Errors, logging, monitoring | WS-A | WS-B | `app/lib/core/errors/`, `app/lib/core/logging/` | None | `AppFailure`, `Result`, logger | Message mapping, redaction, event allowlist (PAC-09) | Provider for all modules |
+| MOD-02 | Errors, logging, monitoring | WS-A | WS-B | `app/lib/core/errors/`, `app/lib/core/logging/` | MOD-00 (`FailureCode`, `AppFailure`) | Message mapping (`messageFor`), logger | Message mapping, redaction, event allowlist (PAC-09) | Provider for all modules |
 | MOD-03 | Authentication and account lifecycle | WS-A | WS-B | `app/lib/features/auth/` | MOD-04, MOD-13, DEC-003 | IC-01, IC-08 | Auth flows; AC-3; PAC-01; PAC-12 | Provider for IC-01 |
 | MOD-04 | Profile, settings, consent | WS-A | WS-B | `app/lib/features/profile/` | MOD-11, MOD-13 | IC-01, IC-08 | Validation; PAC-02; PAC-08 | Provider for IC-01 |
 | MOD-05 | Catalogue, search, home | WS-B | WS-A | `app/lib/features/catalogue/` | OP-CAT-01 to 03 | IC-07 | AC-1; PAC-07 | Consumer for IC-07 |
@@ -125,7 +126,7 @@ Work packages are defined in `DEVELOPMENT_ROADMAP.md` §6. All rows are PROPOSED
 
 | Path | Why high-risk | Primary editor | Change rule |
 |---|---|---|---|
-| `app/lib/contracts/` | Every module depends on it | Per file, the writing module's workstream | Shared-file protocol; both developers review |
+| `app/lib/contracts/` | Every module depends on it | Per file, the writing module's workstream. `result.dart` has no writing module, so a change to it needs both developers (PROPOSED, issue 28) | Shared-file protocol; both developers review |
 | Authentication interfaces: `app/lib/features/auth/auth.dart` and `AccessState` | Gates every protected screen | WS-A | Shared-file protocol; both developers review |
 | `app/lib/main.dart`, `app/lib/app/` (entry point, routes, dependency wiring) | Every feature registers here | WS-B | Other features ask for route or wiring changes in a small pull request |
 | `app/pubspec.yaml`, `app/pubspec.lock` | Dependency changes affect everyone | WS-A | Needs a `DEPENDENCY_REGISTER.md` entry first. The lock file is regenerated, never hand-merged. |
