@@ -7,9 +7,9 @@
 | Document | Development Roadmap |
 | File | `Documentation/DEVELOPMENT_ROADMAP.md` |
 | Phase | 3 — Development Planning and Collaboration (document 23) |
-| Version | 0.10 |
+| Version | 0.12 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
-| Date | 5 November 2026 |
+| Date | 7 November 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
 
 **Change history**
@@ -26,6 +26,7 @@
 | 0.8 | 4 and 5 November 2026 | Two statements corrected that gave `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 (the related-documents row and task T-00.7). That document is at a later version, so both lines now say it exists as a draft, and the README index gives its version. T-00.7 gives no version for the other four drafts. Revised on 5 November 2026 after the review of pull request #16: the related-documents row for those four drafts gives no version either, and the Phase 1 row in section 4 gives the charter as v0.3. No date, estimate, milestone or task changed. |
 | 0.9 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 | 0.10 | 5 November 2026 | T-01.1 and section 4.3 no longer call the scaffold a spike for DEC-013 and DEC-014, which are AGREED. DEC-003, DEC-004 and DEC-005 still hold the spike labels. Revised on 5 November 2026 after the review of pull request #21: section 4.3 gives the mapping of the matrix as AGREED. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.12 | 7 November 2026 | The MFW inputs row of the status table and the "Received" column of section 4.2 (rows 1 and 3) record that the logo file and three issues are in hand (`inputs/README.md`, `DEPENDENCY_REGISTER.md` DEP-02 and DEP-03). Section 4.3 says so in one sentence. The reports of 27 and 30 October 2026 stay as dated, and the "Status on 27 October 2026" column is not changed. No date, estimate, milestone, task or status label changed. Version 0.11 is the edit of pull request #37, which is not merged. |
 
 ### 1.1 Related documents
 
@@ -86,7 +87,7 @@ Evidence from the repository on 23 October 2026.
 | Phase 3 and Phase 4 documents | Merged into `main` by pull request #1 (merge commit 56c6d97) on 23 October 2026. Drafts. No review is recorded on the pull request. |
 | Application code | None |
 | M1 | No evidence of MFW's written approval of a requirements and architecture note. No architecture note exists. YG reports a chat message from MFW that says "go ahead" and names no note (GS-Q63, OQ-59). It is not filed, and it is weak evidence of approval. |
-| MFW inputs (S1 "What we need from MFW") | The repository holds no record of any input being received, other than the S1 and S2 PDFs themselves. YG reports on 27 October 2026 that the brand assets, sample PDFs, WordPress details, cloud project and store accounts have not been received, and that the request for them has been sent (GS-Q35). Not filed. On 30 October 2026 YG reports that they are still not received and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed |
+| MFW inputs (S1 "What we need from MFW") | Until 7 November 2026 the repository held no record of any input being received, other than the S1 and S2 PDFs themselves. On 7 November 2026 `inputs/README.md` records the logo file and three issues (section 4.2). YG reports on 27 October 2026 that the brand assets, sample PDFs, WordPress details, cloud project and store accounts have not been received, and that the request for them has been sent (GS-Q35). Not filed. On 30 October 2026 YG reports that they are still not received and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed |
 
 ### 4.1 Plan for 27 October 2026
 
@@ -138,9 +139,9 @@ On the S1 dates, kickoff is Monday 16 November 2026, so Week 1 ends on Friday 20
 
 | # | Input (S1 wording) | S1 due | Charter due (PROVISIONAL) | Needed for | Status on 27 October 2026 | Received |
 |---|---|---|---|---|---|---|
-| 1 | Logo files, brand colours and fonts | Kickoff, 16 Nov 2026 | 21 Oct 2026 | T-02.1, T-01.1 | Past due on the Charter date, not due on the S1 date. Reported not received (GS-Q35). Not filed. | None recorded |
+| 1 | Logo files, brand colours and fonts | Kickoff, 16 Nov 2026 | 21 Oct 2026 | T-02.1, T-01.1 | Past due on the Charter date, not due on the S1 date. Reported not received (GS-Q35). Not filed. | Logo file only, supplied by MFW and recorded on 7 November 2026 in `inputs/README.md` (DEP-02). Brand colours and fonts: none recorded. Sender's role: not recorded. |
 | 2 | Named approver and deputy, and written confirmation that MFW owns or may use the magazine content | Before kickoff | Before 21 Oct 2026 | T-00.1, T-00.5, every approval | Reported named, without saying who holds which role (GS-Q37). No written confirmation filed (OQ-28). | None recorded |
-| 3 | Two to three sample PDFs, including the largest expected issue | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-02.3, T-05.1 | Not due yet on either schedule. Reported not received (GS-Q35). | None recorded |
+| 3 | Two to three sample PDFs, including the largest expected issue | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-02.3, T-05.1 | Not due yet on either schedule. Reported not received (GS-Q35). | Three issues (April-May, August-September and October-November 2026), supplied by MFW and recorded on 7 November 2026 in `inputs/README.md` (DEP-03). Whether the largest expected issue is among them is not confirmed. Sender's role: not recorded. |
 | 4 | WordPress site address, confirmation that its API is reachable, and the news categories to show | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-08.1 | Not due yet on either schedule. Reported not received (GS-Q35). | None recorded |
 | 5 | A Firebase and Google Cloud project in MFW's name, with billing switched on | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-01.3, T-01.4 | Not due yet on either schedule. Reported not received (GS-Q35). Also needs DEC-003 and the region (DEC-031). | None recorded |
 | 6 | Apple Developer Program (organisation) and Google Play accounts in MFW's name | Enrolment in Week 1, active by end of Week 4 (11 Dec 2026) | Active by 18 Nov 2026 | T-10.1, T-12.1 to T-12.3 | Not due yet. Reported not received (GS-Q35). Apple verification can take weeks (R8). | None recorded |
@@ -158,7 +159,7 @@ On the S1 dates, kickoff is Monday 16 November 2026, so Week 1 ends on Friday 20
 
 ### 4.3 Plan for the days before the reported inputs (30 October 2026)
 
-PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4 (tracked in section 4.2), and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
+PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4 (tracked in section 4.2), and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. On 7 November 2026 the logo file and three issues were recorded (section 4.2). The other inputs are still not recorded there. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
 
 All of it relies on decisions that are OPEN or PROPOSED (DEC-003, DEC-004, DEC-005), so it is spike work on `spike/` branches. It is not merged as production code until those decisions move (`DEFINITION_OF_DONE.md` section 5 check 2; `DEVELOPMENT_WORKFLOW.md` section 13). DEC-013 and DEC-014 are AGREED (`DECISION_LOG.md` section 5.6), so they no longer hold the scaffold back. Several tasks below are marked as blocked in section 6 or section 9 by such a decision or by an open question (for example T-01.1, T-01.6, T-03.1, T-06.2, T-04.1 and T-08.1). Here only the part that does not depend on the answer is started, and the block on production use stays. The split follows the mapping of `TASK_OWNERSHIP_MATRIX.md` section 5 (DEC-011, AGREED). Use local emulators and placeholder visuals, and create no cloud resource. No estimate is given for any item, and the estimates in section 8 are unchanged.
 

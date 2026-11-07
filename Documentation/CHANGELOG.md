@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.26 |
+| Version | 0.30 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 6 November 2026 |
+| Date | 7 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,20 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: client inputs recorded in four documents, 2026-11-07, on topic branch `docs/sa-input-register` on top of `824cd95`, under review in pull request #38
+
+MFW supplied the logo file, three issues (April-May, August-September and October-November 2026) and a link to the June-July 2026 issue page on its website. The files are kept in a local `inputs/` folder outside Git, because MFW's sample PDFs are confidential and the repository is public (DEC-024). The root `.gitignore` already excludes every PDF outside `Documentation/`. `inputs/README.md` is the record of receipt: it lists each file with its size and SHA-256, and holds the link only. `DEPENDENCY_REGISTER.md` now marks DEP-02 PARTLY RECEIVED (the logo file is in hand, brand colours and fonts are still to request) and DEP-03 RECEIVED (three issues are in hand, and whether any of them is the largest expected issue is not confirmed). Two statuses are added to the register's list for this. MFW still confirms where its sample PDFs may be kept, and DEC-024 stays PROPOSED. Three other documents carried the report that no input had been received, and now say that the logo file and three issues are recorded: `DEVELOPMENT_ROADMAP.md` (the MFW inputs row, the "Received" column of section 4.2 and one sentence in section 4.3), `RISK_REGISTER.md` (R15) and `TECHNOLOGY_DECISIONS.md` (GS-Q35). The reports of 27 and 30 October 2026 stay as dated, and the "Status on 27 October 2026" column of section 4.2 is not changed. The sender's role, which `DEVELOPMENT_ROADMAP.md` section 4.2 asks for, is not recorded. No requirement, scope item, decision, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.8: DEP-02 is PARTLY RECEIVED and DEP-03 is RECEIVED. Section 2 adds the two statuses, and section 4 says where receipt is recorded. | MFW's logo file and three issues are in hand | DEP-02, DEP-03, DEC-024, FX-PDF-03, FX-PDF-04 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.12: the MFW inputs row, the "Received" column of section 4.2 (rows 1 and 3) and section 4.3 record the logo file and three issues. | Keeps the tracker in step with the dependency register | DEP-02, DEP-03, GS-Q35 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/RISK_REGISTER.md` | Version 0.7: R15 records the logo file and three issues. No rating, trigger or contingency changes. | Keeps the risk evidence true | R15, DEP-02, DEP-03 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/TECHNOLOGY_DECISIONS.md` | Version 0.6: GS-Q35 carries a dated update. The answer of 26 and 27 October 2026 is unchanged. | Keeps the record from reading as current | GS-Q35, DEP-02, DEP-03 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `inputs/README.md` | Added: the list of MFW's inputs with file sizes and SHA-256, and the link to the June-July 2026 issue page. The files are not in Git. | Record of receipt for the register | DEP-02, DEP-03, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.30: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document, and reads 0.8 for `DEPENDENCY_REGISTER` (was 0.7), 0.12 for `DEVELOPMENT_ROADMAP` (was 0.10), 0.7 for `RISK_REGISTER` (was 0.6), 0.6 for `TECHNOLOGY_DECISIONS` (was 0.5) and 0.30 for `CHANGELOG` (was 0.26) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the admin panel spike's working position recorded in OQ-60, 2026-11-06, on topic branch `docs/yg-oq60-admin-position` on top of `250190a`, under review in pull request #33
 

@@ -7,9 +7,9 @@
 | Document title | Technology Decisions |
 | File | `TECHNOLOGY_DECISIONS.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.5 |
+| Version | 0.6 |
 | Status | Draft for Review |
-| Last updated | 5 November 2026 |
+| Last updated | 7 November 2026 |
 | Prepared by | MFW development team |
 | Approval status | Not approved. No MFW or internal approval of this document has been recorded. Every decision below is PROPOSED or OPEN, except TD-01, which S2 and the charter confirm. No decision is approved by MFW (Section 1.2). |
 | Related documents | [Requirements Specification](REQUIREMENTS_SPECIFICATION.md); [Scope and Exclusions](SCOPE_AND_EXCLUSIONS.md); [Assumptions and Constraints Register](ASSUMPTIONS_AND_CONSTRAINTS.md); [Glossary](GLOSSARY.md); [System Architecture](SYSTEM_ARCHITECTURE.md); [Database and Data Model](DATABASE_AND_DATA_MODEL.md); [API and Backend Contract](API_AND_BACKEND_CONTRACT.md); [Security and Access Control](SECURITY_AND_ACCESS_CONTROL.md); `PROJECT_CHARTER.md` |
@@ -27,6 +27,7 @@
 | 0.3 | 23 October 2026 | Remediation edits, see `CHANGELOG.md`. TD-15 and TD-19 are proposed (not accepted by the development team), each with a baseline and a labelled change. GS-Q34 added: the requirements-specification profile list is required by default (PRC-03 superseded). Not-verified item 24 added (account-existence behaviour of the provider). The statement that MFW accepted the App Store risk is qualified: S3 is not filed. AOQ numbers carry their OQ aliases. "Team-accepted" replaced by PROPOSED. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 recorded (section 10.5, GS-Q35 to GS-Q65). TD-15 rewritten for one Admin role with in-panel add and remove, and PRC-01 is withdrawn. TD-19 rewritten for immediate deletion, and PRC-02 is withdrawn. TD-09, TD-11, TD-22 and the AOQ table updated. A sentence in the document control that still said TD-15 and TD-19 were accepted by the development team is corrected. No decision is approved. |
 | 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. The source row that gives the charter's version 0.2 reads 23 October 2026 (was 22 October 2026). No requirement, scope item, decision or status label changed. |
+| 0.6 | 7 November 2026 | GS-Q35 carries a dated update: the logo file and three issues are recorded in `inputs/README.md`. The answer of 26 and 27 October 2026 is unchanged. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Sources and authority
 
@@ -1099,7 +1100,7 @@ A third session was held on 26 and 27 October 2026 with the same `/grill-me` ski
 
 | Ref | Question | Answer recorded | Used in |
 |---|---|---|---|
-| GS-Q35 | What does MFW hold in writing? | Signed or accepted copies of S1 and S2 and the S3 emails are held by YG and are not in the repository. YG reports that MFW has not provided the brand assets, the sample PDFs, the WordPress details, the cloud project or the Apple and Google accounts. The request for those inputs has been sent. The product questions have not been sent | DEC-016, DEC-019, OQ-28, OQ-29 |
+| GS-Q35 | What does MFW hold in writing? | Signed or accepted copies of S1 and S2 and the S3 emails are held by YG and are not in the repository. YG reports that MFW has not provided the brand assets, the sample PDFs, the WordPress details, the cloud project or the Apple and Google accounts. The request for those inputs has been sent. The product questions have not been sent. Update of 7 November 2026: the logo file and three issues are recorded in `inputs/README.md`. The brand colours and fonts, the WordPress details, the cloud project and the Apple and Google accounts are not recorded (`DEPENDENCY_REGISTER.md` section 4) | DEC-016, DEC-019, OQ-28, OQ-29 |
 | GS-Q36 | Is CH section 17.3 a faithful summary of the S3 emails? | Yes. The emails add nothing the table omits | DEC-019, OQ-29 |
 | GS-Q37 | Who is MFW's authorised approver and deputy? | The two people CH section 7 names as the senders of the S3 emails. Which holds which role was not stated | OQ-28 |
 | GS-Q38 | Where does Sanika stand on the proposed decisions? | Agreed verbally. She will put it in writing. Nothing is filed | DEC-010 to DEC-015, DEC-025 to DEC-030 |
