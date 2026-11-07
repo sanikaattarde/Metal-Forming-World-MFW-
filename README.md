@@ -49,7 +49,7 @@ Reading order
 | [TECHNOLOGY_DECISIONS](Documentation/TECHNOLOGY_DECISIONS.md) | Technology options and proposed choices | Authoritative: technology options | 0.7 | Joint | Both developers; MFW for cost, scope or contract effects |
 | [DATABASE_AND_DATA_MODEL](Documentation/DATABASE_AND_DATA_MODEL.md) | Data, relationships, retention | Authoritative: data model | 0.7 | Yuvraj (proposed, not agreed) | Both developers; MFW for cost, scope or contract effects |
 | [API_AND_BACKEND_CONTRACT](Documentation/API_AND_BACKEND_CONTRACT.md) | The single catalogue of backend operations | Authoritative: backend operations | 0.7 | Yuvraj (proposed, not agreed) | Both developers; MFW for cost, scope or contract effects |
-| [API_AND_MODULE_CONTRACTS](Documentation/API_AND_MODULE_CONTRACTS.md) | App modules, integration contracts, app-side errors | Authoritative: app modules | 0.13 | Sanika (interim) | Both developers |
+| [API_AND_MODULE_CONTRACTS](Documentation/API_AND_MODULE_CONTRACTS.md) | App modules, integration contracts, app-side errors | Authoritative: app modules | 0.14 | Sanika (interim) | Both developers |
 | [SECURITY_AND_ACCESS_CONTROL](Documentation/SECURITY_AND_ACCESS_CONTROL.md) | Access rules, threats, controls, security tests | Authoritative: access and security | 0.7 | Yuvraj (proposed, not agreed) | Both developers; MFW for cost, scope or contract effects |
 | [PDF_READER_AND_OFFLINE_DESIGN](Documentation/PDF_READER_AND_OFFLINE_DESIGN.md) | Device-side reader and offline design | Authoritative: reader and offline (proposed) | 0.5 | Yuvraj (proposed, not agreed) | Both developers; MFW at M2 for the reader approach |
 | [SCREEN_INVENTORY_AND_NAVIGATION](Documentation/SCREEN_INVENTORY_AND_NAVIGATION.md) | Screens and states the requirements imply; input to the M2 designs | Authoritative: screen list (proposed) | 0.4 | Yuvraj for app, Sanika for admin (proposed) | Both developers; MFW approves the screens at M2 |
@@ -65,7 +65,7 @@ Reading order
 | [DEFINITION_OF_DONE](Documentation/DEFINITION_OF_DONE.md) | What done means for each kind of work | Authoritative: done | 0.4 | Sanika (interim) | Both developers |
 | (see the document map) | Working rules for AI-assisted drafting. Named in the document map, `TASK_OWNERSHIP_MATRIX.md` section 13.1 | Supporting | 0.3 | Sanika (interim) | Both developers |
 | [DEPENDENCY_REGISTER](Documentation/DEPENDENCY_REGISTER.md) | Packages, services and accounts, with licences | Authoritative: dependencies | 0.9 | Sanika (interim) | Both developers; MFW for any paid component |
-| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.40 | Sanika (interim) | None stated |
+| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.42 | Sanika (interim) | None stated |
 | [ACCEPTANCE_CRITERIA](Documentation/ACCEPTANCE_CRITERIA.md) | S2 criteria AC-1 to AC-12 as checks, and proposed PAC rows | Authoritative: acceptance rows | 0.6 | Sanika (interim) | Both developers; MFW in writing for each PAC row |
 | [TESTING_STRATEGY](Documentation/TESTING_STRATEGY.md) | Test levels, plans, security checklist | Authoritative: test plans | 0.10 | Sanika (interim); move to Yuvraj proposed | Both developers |
 | [TEST_DATA_AND_FIXTURES](Documentation/TEST_DATA_AND_FIXTURES.md) | Test users, files and network scenarios | Authoritative: fixtures | 0.8 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW for where its sample PDFs are stored |

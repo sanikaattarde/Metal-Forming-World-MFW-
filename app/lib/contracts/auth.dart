@@ -29,8 +29,8 @@ final class AuthSession {
   final bool emailVerified;
 }
 
-/// Registration, sign-in, verification, password reset, sign-out and
-/// account deletion (MOD-03, owned by WS-A).
+/// Registration, sign-in, verification, password reset, sign-out,
+/// re-authentication and account deletion (MOD-03, owned by WS-A).
 ///
 /// Failures: `invalidInput`, `conflict` (address already used),
 /// `unauthenticated` (wrong credentials, without saying which part),
@@ -70,7 +70,24 @@ abstract interface class AuthService {
   /// Signs out.
   Future<void> signOut();
 
+  /// Confirms the password of the signed-in email account again, so that
+  /// the sign-in is recent before [deleteAccount] (OP-12; PROPOSED, R-4 d).
+  /// How recent is OQ-56. The password is never logged. Fails with
+  /// `unauthenticated` when signed out, when the session is not an email
+  /// session, or when the password is wrong.
+  Future<Result<void>> reauthenticateWithEmail({required String password});
+
+  /// Runs the Google flow again for the signed-in Google account, so that
+  /// the sign-in is recent before [deleteAccount] (PROVISIONAL, C-04;
+  /// PROPOSED, R-4 d). Fails with `cancelled`, or with `unauthenticated`
+  /// when signed out, when the session is not a Google session, or when
+  /// another Google account is chosen.
+  Future<Result<void>> reauthenticateWithGoogle();
+
   /// Deletes the reader's account; calls OP-ACC-01. Fails with
-  /// `unauthenticated` when signed out.
+  /// `unauthenticated` when signed out or when the sign-in is not recent
+  /// (RECENT_SIGN_IN_REQUIRED), with `conflict` for the last admin
+  /// (LAST_ADMIN) and with `forbidden` while a deletion is running
+  /// (ALREADY_DELETING), as API_AND_MODULE_CONTRACTS section 4.2 maps them.
   Future<Result<void>> deleteAccount();
 }
