@@ -6,9 +6,9 @@
 |---|---|
 | Document | Requirement Coverage Matrix |
 | File | `Documentation/REQUIREMENT_COVERAGE_MATRIX.md` |
-| Version | 0.3 |
-| Status | Draft for review. Not approved. **DERIVED: this matrix repeats what other documents say and is not a source of truth. Nothing has been tested.** |
-| Date | 5 November 2026 |
+| Version | 0.4 |
+| Status | Draft for review. Not approved. **DERIVED: this matrix repeats what other documents say and is not a source of truth. No result is a pass for T-11.2 or T-11.3. Emulator and simulator results are in `test-evidence/`.** |
+| Date | 7 November 2026 |
 | Audience | The two developers, when they plan tests and review the acceptance criteria. |
 | Proposed owner | Yuvraj (WS-B), PROPOSED and not agreed. Reviewer: Sanika Attarde (WS-A). |
 | Approval required | Both developers. MFW only if a candidate check later becomes a numbered PAC row, because a PAC row is not contractual until MFW approves it in writing. |
@@ -21,6 +21,7 @@
 | 0.1 | 24 October 2026 | Initial draft. Read from the documents of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Rows for FR-ADMIN-004, FR-USER-001, FR-USER-005, FR-PRIV-003, FR-DL-010 and NFR-COMP-003 updated by hand for the positions of 26 and 27 October 2026 (PAC-19 and PAC-20 added, OP-13 withdrawn, OP-33 and the edition-update rows dropped on the working position). The matrix was not regenerated, so other rows still show the identifiers of the earlier documents. The stale sentence about pull request 3 in section 6 is corrected. No requirement status changed. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.4 | 7 November 2026 | Findings of Sanika Attarde's first pass of MOD20-P1-T03 (issue 31, M-1 and M-2), with YG's positions of 6 November 2026, PROPOSED. The status line no longer says that nothing has been tested: it says that no result is a pass for T-11.2 or T-11.3, and that the emulator and simulator results are in `test-evidence/` (M-1). Section 2 says that the matrix has no evidence column, and that suite TS-14 is not traced per requirement, and why (M-2). No row, state, count, requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -55,6 +56,8 @@ How the matrix was made
 - Data-model entities and the architecture document are not scanned for design anchors. A requirement with no anchor here may still be anchored there.
 - A row that names a requirement is taken to cover it. Whether its pass condition is enough is a review question and not a matter of identifiers.
 - The program that read the documents is not part of the repository, because this is a documentation stage with no tooling. The rules above are complete enough to repeat the reading by search (RC-03).
+- The matrix has no evidence column. The emulator and simulator results so far are in the reports in `test-evidence/`, and none of them is a pass for T-11.2 or T-11.3. A column per row would repeat those reports and drift from them. It can be added when a result that counts for T-11.2 or T-11.3 exists (PROPOSED).
+- Suite TS-14, the contract tests CT-01 to CT-11 (`TESTING_STRATEGY.md` §4, `API_AND_BACKEND_CONTRACT.md` §10), is not traced per requirement. The contract tests cover every operation, so a trace per row would repeat the design anchor column. `TESTING_STRATEGY.md` says when each side of TS-14 runs (PROPOSED).
 
 ### 2.1 States
 
