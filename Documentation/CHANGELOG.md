@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.29 |
+| Version | 0.32 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,20 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: architecture changes from the second-person review, 2026-11-07, on topic branch `docs/yg-architecture-r` on top of `2ab56cf`, then merged with `origin/main` at `6da4c31`, under review in pull request #39
+
+Follows Sanika Attarde's second-person review of the architecture and the technology decisions (issue 32, findings A-1, A-2, T-2 and T-4), in the parts that `SYSTEM_ARCHITECTURE.md` holds. YG replied to the issue on 6 November 2026, and the positions below are YG's, PROPOSED. (1) Sections 7.4 and 10.1 show check 0 of `getIssueFile`, as OP-11 already does: an issue on the deleted-issue list is answered GONE before the sign-in check, which is the one exception to "authenticates the caller first" (A-1). (2) Section 7.10 and the `requestAccountDeletion` entry of section 10.1 follow OP-12 as pull request #35 left it: a repeat is refused while the account is marked, so the scheduled cleanup alone finishes a stopped deletion; the admin role record is removed; the user record is deleted last; and a recent sign-in is required (A-2). (3) Section 9 records the limits of the local emulators that the backend spike met, from the backend evidence report, labelled as spike observations, with the licence of `firebase-tools` and any other limit NOT VERIFIED (T-2). (4) Every mention of a scheduled purge job reads "scheduled maintenance", with OP-41, in the diagrams, the trees, the function list and the failure table, because the purge window was withdrawn (PRC-02). The glossary row for the withdrawn term stays, and so does "purged identifiers" in the restore paragraph, which is the term of AOQ-02 (T-4). Section 2.3 rule 1 of `API_AND_BACKEND_CONTRACT.md` no longer says that the architecture does not yet show check 0. The parts of T-1 to T-4 that `TECHNOLOGY_DECISIONS.md` holds, and the cost document, follow in their own change. The spike facts are emulator only and not merged. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+Revised on 2026-11-07 after Sanika Attarde's review of this pull request, which asked for one change. `DEVELOPMENT_ROADMAP.md` says "getIssueFile with check 0 and the six checks" in sections 4.1 and 4.3, where it said "with its six checks", so the roadmap agrees with OP-11 and the architecture. The other versions do not change.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/SYSTEM_ARCHITECTURE.md` | Version 0.6: sections 5, 5.1, 6, 7.4, 7.10, 8.1, 9, 10.1 and 11.1 follow the findings named above. | The second-person review found that the architecture showed six checks where OP-11 has seven, kept two differences of R-4, named no emulator limit, and still named a purge | OP-11, OP-12, OP-41, AOQ-14, INV-03, TD-15, TD-17, TD-19, PRC-02 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/API_AND_BACKEND_CONTRACT.md` | Version 0.7: section 2.3 rule 1 says that the architecture shows check 0. | Follows the change above | OP-11 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/DEVELOPMENT_ROADMAP.md` | Version 0.12: sections 4.1 and 4.3 name check 0 beside the six checks of `getIssueFile`. | Sanika Attarde's review of this pull request | OP-11 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.32: this entry. It takes 0.32 because #37 merged with 0.29, and #34 (0.30) and #38 (0.31) are open with those numbers. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document and reads 0.6 for `SYSTEM_ARCHITECTURE` (was 0.5), 0.7 for `API_AND_BACKEND_CONTRACT` (was 0.6), 0.12 for `DEVELOPMENT_ROADMAP` (was 0.11) and 0.32 for `CHANGELOG` (was 0.29) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: where Result, AppFailure and FailureCode live, 2026-11-06, on topic branch `docs/sa-result-location` on top of `250190a`, then merged with `origin/main` at `2ab56cf`, under review in pull request #37
 
