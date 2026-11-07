@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.36 |
+| Version | 0.40 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,20 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the four implementation plan documents committed with a status note, 2026-11-07, on topic branch `docs/sa-plan-docs` on top of `b5c3fad`, under review in pull request #47
+
+Commits the four planning documents that were drafted on 30 October 2026 and have been untracked since: `SANIKA_IMPLEMENTATION_ROADMAP.md`, `SANIKA_WSA_IMPLEMENTATION_PLAN.md`, `YUVRAJ_IMPLEMENTATION_ROADMAP.md` and `IMPLEMENTATION_MODULE_INVENTORY.md`. Each is at version 0.2: unchanged except for a status note after the change history, the version and the date, and a few wording fixes (a tool name in the "Prepared in" row of three of them, one dash, and two statements in the WS-A plan about the toolchain and about files being untracked). The status note says that the sections below describe 30 October 2026 and are not updated, and lists what has changed since. `DECISION_LOG.md` 0.14 changes two places that said that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository. The README index gets four rows. The plans are internal, are not a commitment, approve no decision, requirement or scope item, and start no task. No estimate is added. No requirement, scope item, decision, status label, cost or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/SANIKA_IMPLEMENTATION_ROADMAP.md` | Added, version 0.2: Sanika Attarde's tasks by module, with a status note. | Drafted on 30 October 2026, untracked until now; DECISION_LOG.md cites it | MOD20-P1-T01, MOD15-P1-T01 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/SANIKA_WSA_IMPLEMENTATION_PLAN.md` | Added, version 0.2: the WS-A first-build plan, with a status note. | Drafted on 30 October 2026, untracked until now | B0 to B6, PRE-01, GAP-01 to GAP-10 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/YUVRAJ_IMPLEMENTATION_ROADMAP.md` | Added, version 0.2: Yuvraj Gaykhe's tasks by module, with a status note. | Drafted on 30 October 2026, untracked until now | WS-B | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/IMPLEMENTATION_MODULE_INVENTORY.md` | Added, version 0.2: the inventory of modules MOD-00 to MOD-20, with a status note. | Drafted on 30 October 2026, untracked until now | MOD-00 to MOD-20 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/DECISION_LOG.md` | Version 0.14: two statements that the task list is not in this repository now say that it has been since 7 November 2026. | The task list is committed here | MOD20-P1-T01, MOD15-P1-T01, DEC-022 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.40: this entry | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document, and reads 0.14 for `DECISION_LOG` (was 0.13) and 0.40 for `CHANGELOG` (was 0.36), and four rows are added for the documents of this entry, at version 0.2 | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: DEC-025 to DEC-030 set to AGREED, 2026-11-07, on topic branch `docs/yg-dec025-030-agreed` on top of `977de6a`, under review in pull request #43
 
