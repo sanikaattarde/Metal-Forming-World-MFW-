@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.28 |
+| Version | 0.35 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 6 November 2026 |
+| Date | 7 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: Yuvraj Gaykhe's written positions on DEC-025 to DEC-030, 2026-11-07, on topic branch `docs/yg-dec025-030-positions` on top of `2ab56cf`, under review in pull request #42
+
+Adds section 5.7 to `DECISION_LOG.md`: Yuvraj Gaykhe's written positions of 6 November 2026 on DEC-025 to DEC-030, given in chat one decision at a time. It is the other half of the evidence that section 3.1 asks for, beside Sanika Attarde's note of 27 October 2026 in section 5.4. Yuvraj Gaykhe accepts all six, with the conditions of section 5.4, and claims no TypeScript skills of their own for DEC-025, because the backend and the admin panel are WS-A. The DEC-026 row also notes that the exception of pull request #34 leans on that entry, which OQ-62 tracks. No entry changes status. Setting them to AGREED is a follow-up edit that cites sections 5.4 and 5.7 and the approving review of this pull request. No requirement, scope item, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/DECISION_LOG.md` | Version 0.12: section 5.7 added. | Section 3.1 needs a written note from both developers, and only Sanika Attarde's was filed for these six entries | DEC-025, DEC-026, DEC-027, DEC-028, DEC-029, DEC-030, OQ-13, OQ-23, OQ-24, OQ-52, OQ-58, OQ-62, T-00.4 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.35: this entry. It takes 0.35 because #37 (0.29), #34 (0.30), #38 (0.31) and the three changes from the second-person reviews (0.32 to 0.34) come first. | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document and reads 0.12 for `DECISION_LOG` (was 0.11) and 0.35 for `CHANGELOG` (was 0.28) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: data model and security changes from the second-person review, 2026-11-06, on topic branch `docs/yg-data-model-r` on top of `250190a`, then merged with `origin/main` at `824cd95` and at `5a77910`, under review in pull request #36
 
