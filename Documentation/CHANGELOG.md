@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.26 |
+| Version | 0.27 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 6 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: backend contract changes from the second-person review, 2026-11-06, on topic branch `docs/yg-backend-contract-r` on top of `250190a`, then merged with `origin/main` at `824cd95`, under review in pull request #35
+
+Follows Sanika Attarde's second-person review of the backend and app contracts (issue 29, findings R-2 to R-8) and of the architecture (issue 32, finding A-1), in the parts that `API_AND_BACKEND_CONTRACT.md` holds. YG replied to both issues on 6 November 2026, and the positions below are YG's, PROPOSED. (1) Section 2.3 rule 1 excepts check 0 of OP-11, which answers GONE for a deleted issue before the sign-in check, and rule 2 puts the verified-email check at the admin gate with the reason EMAIL_NOT_VERIFIED. OP-14 returns `email_verified` (R-7, A-1). (2) OP-12 requires a recent sign-in, refuses a repeat with ALREADY_DELETING and leaves a stopped deletion to the cleanup, removes the admin role record, and deletes the user record last (R-4). (3) OP-24 returns the GMT date (R-8). (4) OP-10 and section 3.4 record that the app-side profile and consent operations differ from OP-10 and that no route accepts a changed policy version (R-3, OQ-27). Section 2.5 and section 11 record that a category in use and a duplicate name have no agreed code and that CONFLICT has no callable code (R-2). (5) OP-08, OP-09, OP-41 and section 2.3 item 4 record that rules make no read, so a favourite or a preference for a missing target, and a write from a deleted account's old session, are tolerated and cleaned up (R-5, R-6). The spike facts are emulator only and not merged. The app contract, the data model, the architecture and the open questions follow in their own changes. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW. After Sanika Attarde's review of this pull request on 2026-11-06, OP-12 has an Open line for the three parts of the recent sign-in that are not settled: the re-authentication step in the app (`AuthService` has no method for it), the failure code (RECENT_SIGN_IN_REQUIRED has no row in the mapping table, and the position is a row that maps it to `unauthenticated`, with no new FailureCode), and the window for a reader's deletion (OQ-56 names admins only, and the register pull request widens it). All three are PROPOSED. OP-09 also says that cleanup removes a preference only for a missing category, so a preference for an inactive category stays, as the data model change (#36) now says after its review.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-06 | `Documentation/API_AND_BACKEND_CONTRACT.md` | Version 0.6: section 2.3 (rules 1 and 2 and item 4), OP-08, OP-09, OP-10, OP-12 (with section 3.3), OP-14, OP-24, OP-41, sections 2.5, 3.4 and 11 follow the findings named above. OP-12 has an Open line for the re-authentication step, the failure code and the window. | The second-person review found differences between this contract, the app contract, the architecture and the backend spike | OP-08, OP-09, OP-10, OP-11, OP-12, OP-14, OP-24, OP-35, OP-37, OP-41, INV-13, AOQ-04, AOQ-14, OQ-20, OQ-27, OQ-56 | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `Documentation/CHANGELOG.md` | Version 0.27: this entry | Records the edit above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-06 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.6 for `API_AND_BACKEND_CONTRACT` (was 0.5) and 0.27 for `CHANGELOG` (was 0.26) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the admin panel spike's working position recorded in OQ-60, 2026-11-06, on topic branch `docs/yg-oq60-admin-position` on top of `250190a`, under review in pull request #33
 
