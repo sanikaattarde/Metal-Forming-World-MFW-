@@ -7,9 +7,9 @@
 | Document | Risk Register |
 | File | `Documentation/RISK_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 38) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. Ratings are an initial development-team assessment and are unreviewed. |
-| Date | 5 November 2026 |
+| Date | 7 November 2026 |
 | Approval required | Both developers. Risks that MFW must accept need MFW's written acceptance. |
 
 **Change history**
@@ -22,6 +22,7 @@
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). R7 and R15 carry the late-input evidence and the decision to send no delay notice. R21 records that both developers are reported as full time. R24 names the other verbal approvals. R25 added: required test devices are missing. The AR crosswalk wording follows the architecture. All ratings remain unreviewed, and no status changed. |
 | 0.5 | 4 and 5 November 2026 | The R14 mitigation no longer gives `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
 | 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
+| 0.7 | 7 November 2026 | R15 records that the logo file and three issues are in hand (`inputs/README.md`, `DEPENDENCY_REGISTER.md` DEP-02 and DEP-03). The report of 27 October 2026 stays as dated. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
 
 ### 1.1 Related documents
 
@@ -239,8 +240,8 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 
 | Field | Detail |
 |---|---|
-| Description | Brand assets, sample PDFs, WordPress details, the cloud project, store accounts, the privacy policy, launch content and approvers are MFW inputs [S1 What we need from MFW]. The repository holds no record of any being received. |
-| Current evidence | Reported by YG on 27 October 2026 and not filed: MFW has not provided the brand assets, the sample PDFs, the WordPress details, the cloud project or the Apple and Google accounts. The request for those inputs has been sent. The product questions have not been sent, and no delay notice has been sent (GS-Q35, GS-Q64). The S2 delay rule is not yet invoked. |
+| Description | Brand assets, sample PDFs, WordPress details, the cloud project, store accounts, the privacy policy, launch content and approvers are MFW inputs [S1 What we need from MFW]. Until 7 November 2026 the repository held no record of any being received. It now records the logo file and three issues (`inputs/README.md`). |
+| Current evidence | Reported by YG on 27 October 2026 and not filed: MFW has not provided the brand assets, the sample PDFs, the WordPress details, the cloud project or the Apple and Google accounts. The request for those inputs has been sent. The product questions have not been sent, and no delay notice has been sent (GS-Q35, GS-Q64). The S2 delay rule is not yet invoked. On 7 November 2026 the logo file and three issues are recorded in `inputs/README.md` (`DEPENDENCY_REGISTER.md` DEP-02 and DEP-03). The brand colours and fonts, the WordPress details, the cloud project and the Apple and Google accounts are not recorded (`DEPENDENCY_REGISTER.md` section 4). |
 | Trigger | An input is not received by its relative week (`DEVELOPMENT_ROADMAP.md` §3). |
 | Mitigation | Weekly input tracking. Requests sent by the contracting developer. Use synthetic fixtures until the inputs arrive. |
 | Contingency | The S2 delay rule: dates move one working day per day of delay. A written schedule change beyond five working days. |
