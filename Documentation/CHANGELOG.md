@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.27 |
+| Version | 0.31 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 6 November 2026 |
+| Date | 7 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,17 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the register records the scaffold's pin and the rows for the first CI workflow, 2026-11-07, on topic branch `docs/yg-register-pin` on top of `5a77910`, under review in pull request #38
+
+Records in `DEPENDENCY_REGISTER.md` what pull request #30 (the scaffold, T-01.1) put on `main`: Flutter 3.47.9 and Dart 3.13.7 pinned by the range in `app/pubspec.yaml` (DEP-35, DEP-36), and the three packages it installed, which move from CANDIDATE to CONFIRMED with their locked versions (DEP-43 at 3.4.3, DEP-44 at 18.1.2, DEP-58 at 6.0.0). The LICENSE files of those three and of Flutter were read at the pinned versions on 2026-11-07 by an automated reader at YG's request, and YG accepts the reading. A developer has not read them, and section 10 asks both developers whether that meets the verification rule. DEP-37 and DEP-39 record what T-01.1 found on `main` at `5a77910`: the Android build tool versions, the Android SDK levels as Flutter's defaults and not the answer to OQ-26, and Swift Package Manager as the iOS plugin tooling. Four new rows come ahead of the first CI workflow (T-01.5), which follows in its own pull request: Java 17 (DEP-74) and the three GitHub actions it uses (DEP-75 to DEP-77), CANDIDATE until the workflow merges. DEP-61 reads CONFIRMED, because DEC-022 chose GitHub Actions, AGREED and conditional on the cost check, which stays open. Section 10 records a PROPOSED position that QG-10 needs register entries for direct dependencies only, with the transitive ones in a QG-10 report (Sanika Attarde raised it in the review of #30), and that the server-side tools get their rows with the first backend or admin code (finding T-5 of issue 32). In `OPEN_QUESTIONS.md`, OQ-50 is ANSWERED by #30 and Sanika Attarde's approval of it, the first question to be answered, and is not CLOSED because the other documents that cite it are not all updated. OQ-56 also asks for the window before a reader's own account deletion (OP-12), as the Open line of OP-12 in #35 said this pull request would. OQ-62 is new: whether DEC-026 is agreed. It tracks the exception that #34 made to `DEFINITION_OF_DONE.md` section 5 check 2, as section 12 of that document asks and as Sanika Attarde's approval of #34 asked. No requirement, scope item, decision, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.8: the control table, sections 7, 8, 8.1, 9 and 10 follow the changes named above. New rows DEP-74 to DEP-77. | Pull request #30 pinned the toolchain and installed three packages, T-01.1 recorded the build tools, and the first CI workflow needs its rows first (`CODING_STANDARDS.md` §12) | DEP-35, DEP-36, DEP-37, DEP-39, DEP-43, DEP-44, DEP-58, DEP-59, DEP-61, DEP-62, DEP-63, DEP-74, DEP-75, DEP-76, DEP-77, OQ-50, OQ-26, DEC-013, DEC-014, DEC-022, QG-10, T-01.1, T-01.5 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/OPEN_QUESTIONS.md` | Version 0.10: OQ-50 ANSWERED, OQ-56 widened to a reader's deletion, OQ-62 added, the summary reads 62 questions. | The pin of #30; the Open line of OP-12; `DEFINITION_OF_DONE.md` section 12 and Sanika Attarde's approval of #34 | OQ-50, OQ-56, OQ-62, OP-12, DEC-026, AOQ-14 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.31: this entry. It takes 0.31 because #36 (0.28), #37 (0.29) and #34 (0.30) are open with those numbers. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document and reads 0.8 for `DEPENDENCY_REGISTER` (was 0.7), 0.10 for `OPEN_QUESTIONS` (was 0.9) and 0.31 for `CHANGELOG` (was 0.27) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: backend contract changes from the second-person review, 2026-11-06, on topic branch `docs/yg-backend-contract-r` on top of `250190a`, then merged with `origin/main` at `824cd95`, under review in pull request #35
 
