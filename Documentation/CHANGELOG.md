@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.41 |
+| Version | 0.44 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 7 November 2026 |
+| Date | 8 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,21 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the cost of DEC-022 approved, and Yuvraj Gaykhe's positions on DEC-003, DEC-023 and OQ-38, 2026-11-08, on topic branch `docs/yg-dec022-positions` on top of `9a5654b`, under review in pull request #51
+
+Records Sanika Attarde's approving review of pull request #48 (8 November 2026) as the written approval of the CI cost by the owner of the account that pays, and says how the condition of DEC-022 now reads: met for the repository as it is now, with the plan minutes and the macOS runner cost still NOT VERIFIED (`DECISION_LOG.md` section 5.9). Adds Yuvraj Gaykhe's written positions of 8 November 2026 (section 5.10): Firebase for DEC-003, as S2 proposes; the three environments of DEC-023; and their own availability, full time until handover (OQ-38). DEC-003 stays OPEN and DEC-023 stays PROPOSED, because Sanika Attarde's positions on them are not filed. The DEC-022 row of section 5.6 now names the task list that holds MOD15-P1-T01. No MFW approval is recorded, and no entry is APPROVED.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/DECISION_LOG.md` | Version 0.15: section 5.9 (the cost of DEC-022) and section 5.10 (Yuvraj Gaykhe's positions); the DEC-022 index row, entry and row in section 5.6; position rows in DEC-003 and DEC-023. | Sanika Attarde's approving review of pull request #48; Yuvraj Gaykhe's answers of 8 November 2026 | DEC-022, DEC-003, DEC-023, DEC-011, MOD15-P1-T01, OQ-35, OQ-38, OQ-40, OQ-48 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/OPEN_QUESTIONS.md` | Version 0.12: update sentences in OQ-35, OQ-38 and OQ-40. The three stay OPEN. | Section 5.10 of the decision log | OQ-35, OQ-38, OQ-40 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.7: the Service row of section 3 and section 13 record the cost approval. No gate changed. | Section 5.9 of the decision log | DEC-022, DEP-61 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.11: DEP-61 records the cost approval, and its status reads CONFIRMED (DEC-022, AGREED). | Section 5.9 of the decision log | DEP-61, DEC-022 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/TECHNOLOGY_DECISIONS.md` | Version 0.8: the cost row and the recommendation of TD-17. TD-17 stays proposed. | Section 5.9 of the decision log | TD-17, DEC-022 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `.github/workflows/pr.yml` | The comment at the top says that the cost of the workflow is approved, where it said "conditional on the cost check". No step changed. | Section 5.9 of the decision log | DEC-022 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.44: this entry. It takes 0.44 because #49 (0.42) and #50 (0.43) are under review with those numbers. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | The version column follows the control table of each changed document, and reads 0.15 for `DECISION_LOG` (was 0.14), 0.12 for `OPEN_QUESTIONS` (was 0.11), 0.8 for `TECHNOLOGY_DECISIONS` (was 0.7), 0.11 for `DEPENDENCY_REGISTER` (was 0.10), 0.44 for `CHANGELOG` (was 0.41) and 0.7 for `CI_CD_AND_QUALITY_GATES` (was 0.6) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: the first CI workflow, QG-01 to QG-06 (T-01.5), 2026-11-07, on topic branch `feat/yg-ci-skeleton` on top of `b5c3fad`, then merged with `origin/main` at `d328a7d`, under review in pull request #48
 
