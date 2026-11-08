@@ -1,7 +1,7 @@
 # Pull-request checks for the Flutter app: QG-01 to QG-06 of
 # Documentation/CI_CD_AND_QUALITY_GATES.md section 4.
-# DEC-022 (GitHub Actions) is AGREED, conditional on the cost check
-# MOD15-P1-T01 (Documentation/DECISION_LOG.md).
+# DEC-022 (GitHub Actions) is AGREED, and the repository owner approved
+# the cost of this workflow (Documentation/DECISION_LOG.md section 5.9).
 # FLUTTER_VERSION is the version used for the scaffold. It must sit inside
 # the flutter range in app/pubspec.yaml (>=3.47.9 <3.48.0, OQ-50).
 # GitHub-owned actions only, pinned to full commit SHAs. No secrets.

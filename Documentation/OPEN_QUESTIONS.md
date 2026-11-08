@@ -7,9 +7,9 @@
 | Document | Open Questions |
 | File | `Documentation/OPEN_QUESTIONS.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 40) |
-| Version | 0.11 |
+| Version | 0.12 |
 | Status | Draft for review. Not approved. **Every question is OPEN except OQ-50 and OQ-62, which are ANSWERED. None is CLOSED.** |
-| Date | 7 November 2026 |
+| Date | 8 November 2026 |
 | Approval required | Both developers for the register. Each answer needs the evidence listed against it. |
 
 **Change history**
@@ -27,6 +27,7 @@
 | 0.9 | 6 November 2026 | OQ-60 records the admin panel spike's working position (`spike/sa-admin-content`, emulator only, not merged, DEC-004 OPEN), which Sanika Attarde asked for after the review of pull request #26: the session is held in memory and sent as a bearer token on each call, no frame or script policy is set, and nothing limits the browser origins that may call the functions. None of the four objectives is tested. No question is answered. No requirement, scope item, decision or MFW approval changed. |
 | 0.10 | 7 November 2026 | OQ-50 is ANSWERED: Flutter 3.47.9 and Dart 3.13.7 are pinned in `app/pubspec.yaml` by pull request #30, which Sanika Attarde approved with the pin. It is not CLOSED, because the other documents that cite it are not all updated. OQ-56 also asks for the window before a reader's own account deletion (OP-12), as the Open line of OP-12 says. OQ-62 added (P1, both developers): whether DEC-026 is agreed, which tracks the exception that pull request #34 made to `DEFINITION_OF_DONE.md` section 5 check 2, as section 12 of that document asks and as Sanika Attarde's approval of #34 asked. The summary reads 62 questions. No requirement, scope item, decision or MFW approval changed. |
 | 0.11 | 7 November 2026 | OQ-62 is ANSWERED: DEC-026 is AGREED (`DECISION_LOG.md` section 5.8), which is the evidence the question names. Its four design points stay open in DEC-026 for the backend spike. It is not CLOSED, because the other documents that cite it are not all updated. OQ-51 and OQ-24 add an update sentence: DEC-027 and DEC-029 are AGREED as internal positions, and both questions stay OPEN for MFW. The summary reads two questions ANSWERED. No requirement, scope item or MFW approval changed. |
+| 0.12 | 8 November 2026 | Update sentences in OQ-38 (Yuvraj Gaykhe's availability is filed: full time until handover), OQ-35 (Yuvraj Gaykhe's written position on DEC-003 is Firebase, as S2 proposes) and OQ-40 (Yuvraj Gaykhe accepts the three environments of DEC-023), all from `DECISION_LOG.md` section 5.10. The three questions stay OPEN. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -101,7 +102,7 @@ This is the single, actionable register of unresolved questions about client app
 
 | ID | Question | Priority | Blocks | Related | Decision owner | Evidence needed | Status |
 |---|---|---|---|---|---|---|---|
-| OQ-35 | Which backend platform, admin technology and data model are approved? Is the S2 Firebase proposal kept? | P1 | DEC-003, DEC-004; WP-01 backend tasks; most of WP-03, WP-06, WP-09; ENV-TEST; CI QG-08 and QG-09; deployment; backup | CH D4; RS C-05; R12 | Both developers; MFW if it differs from S2 or adds cost | AGREED entry, plus MFW's approval of the M1 note | OPEN (CONFLICT C-05) |
+| OQ-35 | Which backend platform, admin technology and data model are approved? Is the S2 Firebase proposal kept? | P1 | DEC-003, DEC-004; WP-01 backend tasks; most of WP-03, WP-06, WP-09; ENV-TEST; CI QG-08 and QG-09; deployment; backup | CH D4; RS C-05; R12 | Both developers; MFW if it differs from S2 or adds cost | AGREED entry, plus MFW's approval of the M1 note Update of 8 November 2026: Yuvraj Gaykhe's written position on DEC-003 is Firebase, as S2 proposes (`DECISION_LOG.md` section 5.10). Sanika Attarde's is not filed, and MFW has not approved the M1 note. | OPEN (CONFLICT C-05) |
 | OQ-36 | Which PDF reader library is used, under what licence, and does it meet the AC-2 targets on MFW's PDFs? | P1 | DEC-005; T-02.3, T-05.1 | CH D3; DEP-45; R1 | Both developers; MFW at M2, and for any paid licence | Reader test report; licence record | OPEN |
 | OQ-37 | How are protected issue files delivered (authenticated download, short-lived signed authorization, or authenticated byte-range endpoint), with what grant lifetime, and how is resume achieved for files up to 150 MB? | P1 | DEC-020; OP-FILE-01; T-02.4, T-06.1, T-06.3; CFG-06 | DEC-009; RS FR-DL-006, NFR-SEC-002; R4 | Both developers | AGREED entry; spike evidence from T-02.4 | OPEN |
 | OQ-50 | Which Flutter and Dart versions are pinned, and on what upgrade policy? | P1 | T-01.1; QG-01, QG-02 behaviour; DEP-35 | DEC-002 | Both developers | AGREED entry; versions recorded in the repository Working position of 27 October 2026 (PROPOSED, reported by YG, not filed; Sanika's written agreement not filed): Riverpod and go_router (GS-Q58). The current stable Flutter and its matching Dart are pinned in the repository when the scaffold is created. Still needs Sanika's written agreement in the scaffold pull request. **Answer (7 November 2026):** Flutter 3.47.9 (revision `c197ca5`) and Dart 3.13.7 are pinned in `app/pubspec.yaml` as `flutter: ">=3.47.9 <3.48.0"` and `sdk: ^3.13.7`, by pull request #30 (merged as `250190a`). Sanika Attarde asked for the Flutter constraint in the review of that pull request and approved it with the pin on 6 November 2026. That approving review is Sanika Attarde's written agreement. The upgrade policy is the range: patch releases of 3.47 only. A version outside the range needs a change to `app/pubspec.yaml`. `flutter pub get` refuses a Flutter outside the range. `DEPENDENCY_REGISTER.md` DEP-35 and DEP-36 record the pin. | ANSWERED |
@@ -200,7 +201,7 @@ This is the single, actionable register of unresolved questions about client app
 
 | ID | Question | Priority | Blocks | Related | Decision owner | Evidence needed | Status |
 |---|---|---|---|---|---|---|---|
-| OQ-40 | Will MFW provide a separate non-production cloud project for testing, at its cost? | P1 | DEC-023; ENV-TEST; T-01.3, T-01.4; TS-05, TS-06 | R17; DEP-05 | MFW | Written approval and project access | OPEN |
+| OQ-40 | Will MFW provide a separate non-production cloud project for testing, at its cost? | P1 | DEC-023; ENV-TEST; T-01.3, T-01.4; TS-05, TS-06 | R17; DEP-05 | MFW | Written approval and project access Update of 8 November 2026: Yuvraj Gaykhe's written position on DEC-023 accepts the three environments (`DECISION_LOG.md` section 5.10). MFW's answer is still needed. | OPEN |
 | OQ-46 | What backup and recovery does MFW expect (RPO, RTO, scope, cost)? Does MFW keep master copies of issue PDFs? S1 and S2 do not mention backup or restore, so these are proposed additions and not S2 deliverables. | P2 | `BACKUP_AND_RECOVERY.md` §4 and §5; release step 4; HO-14 | R19 | MFW | Written decision | OPEN |
 | OQ-47 | Who at MFW receives incident reports and monitoring alerts, through which channel, and what is the support contact for the stores? S1 and S2 do not mention monitoring access, so it is a proposed addition and not an S2 deliverable. | P3 | `DEPLOYMENT_PLAN.md` §7.7; `MAINTENANCE_AND_HANDOVER.md` §10; COM-10 | — | MFW | Named contacts | OPEN |
 
@@ -208,7 +209,7 @@ This is the single, actionable register of unresolved questions about client app
 
 | ID | Question | Priority | Blocks | Related | Decision owner | Evidence needed | Status |
 |---|---|---|---|---|---|---|---|
-| OQ-38 | Do both developers agree the workstream split and the proposed mapping, and what is each developer's availability? | P1 | DEC-011; `TASK_OWNERSHIP_MATRIX.md`; `DEVELOPMENT_ROADMAP.md` §8 | CH D9; R21 | Both developers | AGREED entry (DEC-011, `DECISION_LOG.md` section 5.6), with availability recorded Reported by YG on 27 October 2026 (GS-Q53): YG accepts the proposed split, and both developers are full time. Sanika Attarde's written note is filed (`DECISION_LOG.md` section 5.4). Only the availability of both developers is still open. | OPEN |
+| OQ-38 | Do both developers agree the workstream split and the proposed mapping, and what is each developer's availability? | P1 | DEC-011; `TASK_OWNERSHIP_MATRIX.md`; `DEVELOPMENT_ROADMAP.md` §8 | CH D9; R21 | Both developers | AGREED entry (DEC-011, `DECISION_LOG.md` section 5.6), with availability recorded Reported by YG on 27 October 2026 (GS-Q53): YG accepts the proposed split, and both developers are full time. Sanika Attarde's written note is filed (`DECISION_LOG.md` section 5.4). Only the availability of both developers is still open. Update of 8 November 2026: Yuvraj Gaykhe's availability is filed: full time until handover (`DECISION_LOG.md` section 5.10). Sanika Attarde's availability is still to be filed. The question stays OPEN. | OPEN |
 | OQ-48 | How and when is the repository transferred to MFW, given that S1 passes ownership when the final invoice is paid and S2 AC-12 requires an MFW-owned repository at handover? | P2 | AC-12.1; HO-01; T-12.6 | CH D8; DEP-60 | MFW and Sanika Attarde | Written agreement on method and order | OPEN |
 | OQ-49 | Will MFW take a maintenance plan after the warranty? | P3 | `MAINTENANCE_AND_HANDOVER.md` §13 | S1 Costs outside the fee | MFW | Written choice | OPEN |
 
