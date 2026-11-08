@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.41 |
+| Version | 0.42 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 7 November 2026 |
+| Date | 8 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Changed: re-authentication and the save result in the shared contracts (MOD-00), 2026-11-08, on topic branch `feat/yg-auth-reauth` on top of `d328a7d`, then merged with `origin/main` at `9a5654b`, under review in pull request #49
+
+The code that `API_AND_MODULE_CONTRACTS.md` 0.13 (pull request #44) asked for, before the modules build on `auth.dart`. `AuthService` gains `reauthenticateWithEmail` and `reauthenticateWithGoogle`, so that a reader can make the sign-in recent before deleting the account, as OP-12 requires (R-4 d, PROPOSED; the window is OQ-56; the Google one is PROVISIONAL with Google sign-in, C-04). `ProfileRepository.saveOwnProfile` returns a new `ProfileSaveResult` (the status, and the names of the missing fields), a PROPOSED shape for the output of OP-10 (R-3). Its input stays as it is, because the `request_id` and the accepted policy and terms versions wait for OQ-27. `FakeAuthService` treats a sign-in as recent until a test expires it, and then refuses `deleteAccount` with `unauthenticated`, which is how RECENT_SIGN_IN_REQUIRED maps (section 4.2), until the reader re-authenticates. `FakeProfileRepository` returns a complete result, because field validation waits for OQ-01. A new test file checks both, and one existing test expects the new result type. `API_AND_MODULE_CONTRACTS.md` 0.14 records the code. On 2026-11-08, with Flutter 3.47.9 and Dart 3.13.7, `flutter pub get --enforce-lockfile`, `dart format` (0 changed), `flutter analyze` (no issues) and `flutter test` (103 tests, 9 of them new) passed. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `app/lib/contracts/auth.dart`, `app/lib/contracts/profile.dart` | Changed: two re-authentication methods in `AuthService`, and `saveOwnProfile` returns `ProfileSaveResult`. | Pull request #44 (R-4 d, R-3) | MOD-00, MOD-03, MOD-04, OP-12, OP-10, OP-ACC-01, OP-PRF-02, R-3, R-4, OQ-01, OQ-27, OQ-56, C-04 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `app/test/fakes/fake_auth_service.dart`, `app/test/fakes/fake_profile_repository.dart`, `app/test/fakes/reauthentication_test.dart`, `app/test/fakes/fake_auth_service_test.dart` | Changed: the fakes follow the contracts, with 9 new tests. | The fakes model the provider for every module (IC-01, IC-08) | IC-01, IC-08, FR-AUTH-009, FR-PRIV-003 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.14: sections 6.3, 6.4 and 8 record the code. | Keeps the document the record of the shapes | MOD-03, MOD-04, OP-PRF-02 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.42: this entry. It takes 0.42 because #47 (0.40) and #48 (0.41) merged with those numbers. | Records the change above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.14 for `API_AND_MODULE_CONTRACTS` (was 0.13) and 0.42 for `CHANGELOG` (was 0.41) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: the first CI workflow, QG-01 to QG-06 (T-01.5), 2026-11-07, on topic branch `feat/yg-ci-skeleton` on top of `b5c3fad`, then merged with `origin/main` at `d328a7d`, under review in pull request #48
 

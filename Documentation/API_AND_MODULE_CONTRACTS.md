@@ -7,9 +7,9 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.13 |
+| Version | 0.14 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
-| Date | 7 November 2026 |
+| Date | 8 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
 
 **Change history**
@@ -29,6 +29,7 @@
 | 0.11 | 5 November 2026 | The `OP-LIB-02` row follows the review of pull request #9, which found that it promised more than OP-07 checks. Full access and the check of the page against the page count are the app's (MOD-08), because rules do not look up the account status (`SECURITY_AND_ACCESS_CONTROL.md` T25) and do not know the page count. The server checks the owner and a page and a revision of at least 1, and a refused write returns no `INVALID_ARGUMENT`, as rule 2 says. The MOD-08 Authorization row says the same. Revised on 5 November 2026 after the review of pull request #24: the `OP-LIB-05` row says the same of full access and decides nothing for OQ-12. No requirement, scope item, decision or status label changed. |
 | 0.12 | 6 November 2026 | Where `Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` live is agreed in writing (issue 28): `app/lib/contracts/result.dart`, MOD-00. Section 4.2 says so, section 5 lists them, and section 6.2 says that MOD-02 depends on MOD-00 for `FailureCode` and `AppFailure`, where it said that it depended on nothing inside the app. No type, field or value changed. No requirement, scope item, decision, status label or MFW approval changed. Revised on 7 November 2026 after the review of pull request #37: section 4.2 says that the file is added with the shared contracts code and is not on `main` until that code merges. |
 | 0.13 | 7 November 2026 | Findings of Sanika Attarde's second-person review (issue 29) that the app contract holds, with YG's positions of 6 November 2026, PROPOSED. Section 4.2: the scheme is AGREED with DEC-026, and the note that agreement was reported and not filed is gone. Six rows (ACCOUNT_CLOSED, ALREADY_DELETING, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, LAST_ADMIN and RECENT_SIGN_IN_REQUIRED) and the rule for a reason with no row are added (R-1, R-4), and the `conflict` row no longer says "in use" (R-2). Section 6.3: `AuthService` gains two re-authentication methods (R-4 d). Sections 6.4, 6.6, 6.9 and 6.11 give the eight Dart shapes that only the code of #34 had. Section 8: OP-PRF-02, OP-PRF-03, OP-ACC-01, OP-ADM-01, OP-ADM-03 and OP-ADM-04 follow the backend contract (R-2, R-3, R-4, R-10). Section 11 lists the open items. No type, field or value of `result.dart` changed. No requirement, scope item, decision, status label or MFW approval changed. |
+| 0.14 | 8 November 2026 | The code of pull request #49 follows the contract. Section 6.3: `reauthenticateWithEmail` and `reauthenticateWithGoogle` are in `auth.dart` and `FakeAuthService`, and the Authorization row says how the fake refuses and when a sign-in stops being recent. Section 6.4: `saveOwnProfile` returns `ProfileSaveResult`, a PROPOSED shape for the output of OP-10 (the status, and the names of the missing fields). The note on OP-PRF-02 in section 8 says that the input waits for OQ-27. No requirement, scope item, decision, status label or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -377,7 +378,7 @@ String messageFor(AppFailure failure);
 | Excludes | Sign in with Apple (excluded); profile fields (MOD-04); admin sign-in (MOD-12) |
 | Depends on | MOD-04 `watchStatus`; identity provider (DEC-003); OP-ACC-01 |
 | Errors | `invalidInput`, `conflict` (address already used, shown to the visitor by design; the rule for an address used with another sign-in method is OQ-05), `unauthenticated` (wrong credentials, with a message that does not say which part was wrong), `cancelled` (Google flow cancelled), `network`, `serviceUnavailable` |
-| Authorization | `deleteAccount` requires a signed-in session and a recent sign-in (OP-12; PROPOSED, R-4 d). The app calls `reauthenticateWithEmail` or `reauthenticateWithGoogle` first, so the refusal RECENT_SIGN_IN_REQUIRED is not met in normal use. If it comes, it maps to `unauthenticated` (section 4.2) and asks the reader to sign in again. The window is OQ-56. The two methods are added to `auth.dart` and to `FakeAuthService` in a code pull request, which comes before the modules build on `auth.dart`. PROPOSED: registration tells the visitor that an account exists for the address. Sign-in shows one message for any wrong email or password. Password reset shows the same message whether or not the address has an account. All three are rate limited. The identity provider's behaviour is NOT VERIFIED. |
+| Authorization | `deleteAccount` requires a signed-in session and a recent sign-in (OP-12; PROPOSED, R-4 d). The app calls `reauthenticateWithEmail` or `reauthenticateWithGoogle` first, so the refusal RECENT_SIGN_IN_REQUIRED is not met in normal use. If it comes, it maps to `unauthenticated` (section 4.2) and asks the reader to sign in again. The window is OQ-56. The two methods are in `auth.dart` and `FakeAuthService` since pull request #49. Each refuses a signed-out device or a session of the other method with `unauthenticated`, and the Google one also refuses another Google account. The fake treats a sign-in as recent until a test expires it, and then refuses `deleteAccount` with `unauthenticated` until the reader re-authenticates. PROPOSED: registration tells the visitor that an account exists for the address. Sign-in shows one message for any wrong email or password. Password reset shows the same message whether or not the address has an account. All three are rate limited. The identity provider's behaviour is NOT VERIFIED. |
 | Data owned | Reader account (RS DATA-003), held by the identity provider |
 | Blocked | OQ-04 (Google verification), OQ-05 (linking), OQ-06 (guideline 4.8) |
 | Tests | Unit tests with a fake provider; widget tests of each form state; integration register → verify → full access (AC-3.1, AC-3.2); PAC-01; PAC-12 |
@@ -443,11 +444,17 @@ final class ConsentRecord {
   final DateTime agreedAt;     // UTC
 }
 
+final class ProfileSaveResult { // PROPOSED shape (OP-10 output)
+  const ProfileSaveResult({required this.status, this.missingFields = const <String>[]});
+  final ProfileStatus status;        // complete or incomplete, never unknown
+  final List<String> missingFields;  // empty when complete; the mandatory fields are OQ-01
+}
+
 abstract interface class ProfileRepository {
   Stream<ProfileStatus> watchStatus();
-  Future<Result<ReaderProfile?>> getOwnProfile();             // OP-PRF-01
-  Future<Result<void>> saveOwnProfile(ReaderProfile profile); // OP-PRF-02
-  Future<Result<void>> recordConsent(ConsentRecord consent);  // OP-PRF-03
+  Future<Result<ReaderProfile?>> getOwnProfile();                          // OP-PRF-01
+  Future<Result<ProfileSaveResult>> saveOwnProfile(ReaderProfile profile); // OP-PRF-02
+  Future<Result<void>> recordConsent(ConsentRecord consent);               // OP-PRF-03
 }
 ```
 
@@ -811,7 +818,7 @@ These are technology-neutral operations. Each row is a contract: who may call it
 - OP-ADM-11 joins two different things, deleting an issue and replacing its PDF. They need different safeguards (a typed confirmation, an atomic swap, the effect on copies already downloaded). The split waits for OQ-21. One rule applies now, whatever OQ-21 decides: a replacement file is validated before the old file is removed.
 - OP-ADM-12 is not a backend operation: sign-in is the identity provider's job, and the role lookup is OP-14 in the catalogue.
 - OP-ACC-01 is an immediate deletion (GS-Q50). The grace window with undo (PRC-02) is withdrawn.
-- **OP-PRF-02 and OP-PRF-03 (R-3, PROPOSED).** The app rows follow OP-10: the input, the output and the refusals above. The Dart `saveOwnProfile` of section 6.4 and `profile.dart` return nothing today, and are aligned in a code pull request. OP-10 writes the consent record on the first call. The backend spike found no operation that records consent on its own (B-8) and no route to accept a changed policy version later (B-9, OQ-27; emulator only). Whether the `recordConsent` row stays is open.
+- **OP-PRF-02 and OP-PRF-03 (R-3, PROPOSED).** The app rows follow OP-10: the input, the output and the refusals above. The Dart `saveOwnProfile` of section 6.4 and `profile.dart` return a `ProfileSaveResult` (the status, and the names of the missing fields) since pull request #49, a PROPOSED shape. The input is not aligned yet: the `request_id` and the accepted policy and terms versions wait for OQ-27. OP-10 writes the consent record on the first call. The backend spike found no operation that records consent on its own (B-8) and no route to accept a changed policy version later (B-9, OQ-27; emulator only). Whether the `recordConsent` row stays is open.
 - **OP-ADM-01 and OP-ADM-03 (R-10, PROPOSED).** The upload is staged, and the issue must exist first. The panel calls OP-16 to create the issue, OP-19 for an upload job, uploads to the returned address, and reads the result from OP-20 (backend spike findings G-5 and G-6, emulator only). A rejected file is a reason code on the upload job. Publishing without an accepted file is FAILED_PRECONDITION with `NO_ACCEPTED_FILE`, and in the spike missing details are `INVALID_ARGUMENT` naming the fields, which the backend contract does not list for OP-21. The alias table already marks the staging as open (section 3.4 of the backend contract).
 
 ## 9. External Interfaces
