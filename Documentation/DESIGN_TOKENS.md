@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First version: the colour, type, spacing and shape tokens taken from `BRAND_REFERENCE.md` sections 4.3, 5 and 6, the proposed state colours, the contrast check of every pair the theme draws, the mapping onto the Flutter theme, and the three bundled typefaces with their licences. Section 2 also says where the set is in Figma, and that the reader screen designs there are not finished. |
+| 0.1 | 8 November 2026 | First version: the colour, type, spacing and shape tokens taken from `BRAND_REFERENCE.md` sections 4.3, 5 and 6, the proposed state colours, the contrast check of every pair the theme draws, the mapping onto the Flutter theme, and the three bundled typefaces with their licences. Section 2 also says where the set is in Figma, and that the reader screen designs there are not finished. Revised on 8 November 2026: section 2 and section 9 record that YG shared the Figma file with Sanika Attarde. |
 
 ### 1.1 Related documents
 
@@ -34,7 +34,7 @@
 
 One set of colours, type, spacing and shapes that both developers draw with, in Figma and in the app. The code is the reference: `app/lib/app/theme/mfw_tokens.dart` holds the values, `app/lib/app/theme/mfw_theme.dart` turns them into the Flutter theme, and the tests in `app/test/app/theme/` check them against this document.
 
-In Figma, the file "MFW app low-fi prototype (T-02.1)" in Yuvraj Gaykhe's drafts holds the same set since 8 November 2026: the variable collection "MFW tokens" (12 colour and 11 number variables, one mode, each described with its Dart name) and 12 text styles named "MFW/…". One difference: Figma offers no Fraunces Medium, so the "MFW/H5" style uses Fraunces Regular where the app uses weight 500. The file is private until Sanika Attarde is invited. The reader screen designs on these tokens (MOD16-P1-T02) are not finished: a page "Reader designs (MOD16-P1-T02)" holds copies of the low-fi reader screens that are not yet restyled, because the Figma plan's tool call limit stopped the work.
+In Figma, the file "MFW app low-fi prototype (T-02.1)" in Yuvraj Gaykhe's drafts holds the same set since 8 November 2026: the variable collection "MFW tokens" (12 colour and 11 number variables, one mode, each described with its Dart name) and 12 text styles named "MFW/…". One difference: Figma offers no Fraunces Medium, so the "MFW/H5" style uses Fraunces Regular where the app uses weight 500. YG reports that the file was shared with Sanika Attarde on 8 November 2026; the access level is not recorded. The reader screen designs on these tokens (MOD16-P1-T02) are not finished: a page "Reader designs (MOD16-P1-T02)" holds copies of the low-fi reader screens that are not yet restyled, because the Figma plan's tool call limit stopped the work.
 
 Rules:
 
@@ -160,7 +160,7 @@ The licence lets the fonts be bundled with software if each copy carries the cop
 |---|---|
 | MFW's written confirmation of the website values, and of the state colours at M2 | OQ-63 |
 | The three contrast exceptions of section 5 | OQ-25, OQ-63 |
-| Sanika Attarde's confirmation that the WS-A screens can be drawn with this set, after the invitation to the Figma file | MOD16-P1-T01 acceptance |
+| Sanika Attarde's confirmation that the WS-A screens can be drawn with this set; the Figma file is shared with Sanika Attarde | MOD16-P1-T01 acceptance |
 | The reader screen designs on these tokens, unfinished in Figma | MOD16-P1-T02 |
 | How the logo enters the app while the file stays out of the repository | DEC-024, DEP-02 |
 | A developer's reading of the three licence files | DEP-78 |
