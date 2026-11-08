@@ -57,6 +57,26 @@ final class ConsentRecord {
   final DateTime agreedAt;
 }
 
+/// The outcome of saving the reader's own profile (OP-PRF-02, OP-10).
+///
+/// PROPOSED Dart shape for "the profile status: complete, or the names of
+/// the missing fields". Which fields are mandatory is OQ-01.
+final class ProfileSaveResult {
+  /// Creates an outcome. A complete profile has no missing fields, and an
+  /// incomplete one names the fields still missing.
+  const ProfileSaveResult({
+    required this.status,
+    this.missingFields = const <String>[],
+  });
+
+  /// [ProfileStatus.complete] or [ProfileStatus.incomplete], never
+  /// [ProfileStatus.unknown].
+  final ProfileStatus status;
+
+  /// The names of the mandatory fields still missing. Empty when complete.
+  final List<String> missingFields;
+}
+
 /// Mandatory reader profile and consent (MOD-04, owned by WS-A).
 ///
 /// Own profile only (RS NFR-SEC-006). Failures: `invalidInput`,
@@ -68,8 +88,9 @@ abstract interface class ProfileRepository {
   /// Reads the reader's own profile, or null if none is saved (OP-PRF-01).
   Future<Result<ReaderProfile?>> getOwnProfile();
 
-  /// Saves the reader's own profile (OP-PRF-02).
-  Future<Result<void>> saveOwnProfile(ReaderProfile profile);
+  /// Saves the reader's own profile (OP-PRF-02) and says whether the
+  /// mandatory profile is now complete, or which fields are missing.
+  Future<Result<ProfileSaveResult>> saveOwnProfile(ReaderProfile profile);
 
   /// Records consent (OP-PRF-03).
   Future<Result<void>> recordConsent(ConsentRecord consent);

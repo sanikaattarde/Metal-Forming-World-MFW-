@@ -11,6 +11,9 @@ import 'test_users.dart';
 /// Passwords are never checked. The access state follows the order in
 /// API_AND_MODULE_CONTRACTS section 4.1. As with a real provider, the
 /// session sees a verified address only after [reloadVerificationStatus].
+/// A sign-in counts as recent until [expireRecentSignIn]. After that,
+/// [deleteAccount] is refused until the reader re-authenticates (OP-12;
+/// PROPOSED, R-4 d).
 final class FakeAuthService implements AuthService {
   /// Creates a device, signed in as [signedInAs] when given.
   FakeAuthService(this._server, {TestUser? signedInAs}) {
@@ -27,6 +30,7 @@ final class FakeAuthService implements AuthService {
       <void Function(String userId)>[];
   String? _userId;
   bool _sessionEmailVerified = false;
+  bool _recentSignIn = false;
 
   /// The Google account the next [signInWithGoogle] uses; null means the
   /// reader cancels the flow.
@@ -80,6 +84,10 @@ final class FakeAuthService implements AuthService {
     }
     _signIn(account);
   }
+
+  /// Makes the current sign-in no longer recent, as if the window of OQ-56
+  /// had passed.
+  void expireRecentSignIn() => _recentSignIn = false;
 
   /// Runs [hook] with the reader's ID after an account deletion, for
   /// device-side clean-up.
@@ -188,13 +196,49 @@ final class FakeAuthService implements AuthService {
   Future<void> signOut() async {
     _userId = null;
     _sessionEmailVerified = false;
+    _recentSignIn = false;
     _notify();
+  }
+
+  @override
+  Future<Result<void>> reauthenticateWithEmail({
+    required String password,
+  }) async {
+    final AuthSession? session = currentSession;
+    if (session == null ||
+        session.method != SignInMethod.email ||
+        password.isEmpty) {
+      return const Err<void>(AppFailure(FailureCode.unauthenticated));
+    }
+    _recentSignIn = true;
+    return const Ok<void>(null);
+  }
+
+  @override
+  Future<Result<void>> reauthenticateWithGoogle() async {
+    final AuthSession? session = currentSession;
+    if (session == null || session.method != SignInMethod.google) {
+      return const Err<void>(AppFailure(FailureCode.unauthenticated));
+    }
+    final String? email = nextGoogleEmail;
+    if (email == null) {
+      return const Err<void>(AppFailure(FailureCode.cancelled));
+    }
+    if (_server.accountByEmail(email)?.userId != session.userId) {
+      return const Err<void>(AppFailure(FailureCode.unauthenticated));
+    }
+    _recentSignIn = true;
+    return const Ok<void>(null);
   }
 
   @override
   Future<Result<void>> deleteAccount() async {
     final String? userId = currentUserId;
     if (userId == null) {
+      return const Err<void>(AppFailure(FailureCode.unauthenticated));
+    }
+    if (!_recentSignIn) {
+      // RECENT_SIGN_IN_REQUIRED maps to unauthenticated (section 4.2).
       return const Err<void>(AppFailure(FailureCode.unauthenticated));
     }
     _server.deleteUser(userId);
@@ -208,6 +252,7 @@ final class FakeAuthService implements AuthService {
   void _signIn(FakeAccount account) {
     _userId = account.userId;
     _sessionEmailVerified = account.emailVerified;
+    _recentSignIn = true;
     _notify();
   }
 
