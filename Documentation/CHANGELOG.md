@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.42 |
+| Version | 0.43 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 8 November 2026 |
 
@@ -30,6 +30,19 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the T-01.1 run with its screenshots, and the T-02.3 phone test kit, 2026-11-08, on topic branch `docs/yg-t011-t023-evidence` on top of `d328a7d`, then merged with `origin/main` at `4ea70ce`, under review in pull request #50
+
+Two documents in `Documentation/test-evidence/`. `SCAFFOLD_RUN_EVIDENCE.md` 0.1 files the T-01.1 run of 7 November 2026 on `main` at `5a77910` (iOS simulator and Android emulator, debug builds), which was a comment on pull request #30, with the two screenshots the comment could not carry. They are in `test-evidence/scaffold_run/` (95,227 and 33,768 bytes) and show the placeholder app only. `READER_PHONE_TEST_KIT.md` 0.1 is PLANNED and holds no result: the steps to run the comparison harness of `spike/yg-pdf-compare` on the test phones with MFW's three issues (pull request #46), the checks by hand for AC-2.1, AC-2.3 and AC-2.5, the rules that keep MFW's PDFs and any image of their pages out of the repository (DEC-024), and the result tables. The phone steps are NOT TESTED. No MFW file, page image or recording is added. No requirement, scope item, decision, status label, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+Revised on 2026-11-08 after Sanika Attarde's review of this pull request, which asked for four changes. Step 3 of the kit says that the harness does not report its container path on an iPhone, so that step is open. Step 5 takes the numbers from the `PDFCMP` lines of the `flutter run` output, saved to a local file and kept out of Git. The last line of `SCAFFOLD_RUN_EVIDENCE.md` says that the checks run in CI since #48 merged. This entry gives the merge point and says that #48 and #49 merged. The versions do not change.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/test-evidence/SCAFFOLD_RUN_EVIDENCE.md`, `Documentation/test-evidence/scaffold_run/` | Added: the T-01.1 run and two screenshots. | The run was a comment only, and the screenshots were not filed | T-01.1, OQ-26, QG-13 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/test-evidence/READER_PHONE_TEST_KIT.md` | Added: the T-02.3 phone test kit, PLANNED. | MFW's three issues are in hand (#46), and the phone run needs a written method | T-02.3, AC-2.1, AC-2.3, AC-2.5, DEC-005, DEC-024, OQ-26, DEP-03, DEP-64, DEP-65 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.43: this entry. It takes 0.43 because #47 (0.40), #48 (0.41) and #49 (0.42) merged with those numbers. | Records the additions above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | Two rows for the new documents at 0.1, and 0.43 for `CHANGELOG` (was 0.42) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Changed: re-authentication and the save result in the shared contracts (MOD-00), 2026-11-08, on topic branch `feat/yg-auth-reauth` on top of `d328a7d`, then merged with `origin/main` at `9a5654b`, under review in pull request #49
 
