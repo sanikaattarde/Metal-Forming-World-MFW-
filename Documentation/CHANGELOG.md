@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.44 |
+| Version | 0.45 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 8 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the T-02.4 download resume spike results, 2026-11-08, on topic branch `docs/yg-t024-resume-evidence` on top of `8b2c824`, then merged with `origin/main` at `7d66eec`, under review in pull request #52
+
+Adds `test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` 0.1: four integration tests of the MOD-06 download manager with its real adapters on `spike/yg-download-resume` at `262f306`, run on an iOS simulator and an Android emulator against a local range server and a 150,000,000 byte synthetic file. All four passed on both. After two breaks, each resume asked from the bytes kept and no byte was sent twice; a server that ignores the range sent the whole file again. It is not a result for AC-4.3: no phone, no network loss on the device and no candidate file mechanism (DEC-020) were used. No MFW content is involved, and no requirement, decision or status label changed.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` | Added: the T-02.4 resume spike results, simulator and emulator only. | The spike's findings are merged as a document (`DEVELOPMENT_WORKFLOW.md` §13 item 5) | T-02.4, MOD06-P1-T02, AC-4.3, FX-NET-01, FX-NET-07, FX-PDF-05, I-5, DEC-020, OQ-30, OQ-37, OQ-54, R2, DEP-49 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.45: this entry. It takes 0.45 because #51 merged with 0.44. | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | One row for the new document at 0.1, and 0.45 for `CHANGELOG` (was 0.44) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the cost of DEC-022 approved, and Yuvraj Gaykhe's positions on DEC-003, DEC-023 and OQ-38, 2026-11-08, on topic branch `docs/yg-dec022-positions` on top of `9a5654b`, then merged with `origin/main` at `8b2c824`, under review in pull request #51
 
