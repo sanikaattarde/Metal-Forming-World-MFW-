@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.44 |
+| Version | 0.48 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 8 November 2026 |
 
@@ -30,6 +30,17 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the wording of the DEC-022 cost approval, after the review of #51, 2026-11-08, on topic branch `docs/yg-dec022-wording` on top of `7d66eec`, under review in pull request #55
+
+Sanika Attarde's review of pull request #51 asked for two edits in the push that merged `main`, and the merge commit was pushed before the review arrived. `DECISION_LOG.md` 0.16 says "the cost is approved by the repository owner" in the 0.15 row, the Status row of DEC-022 and the update sentence in section 5.6, where they said "the cost condition is met", with "the plan minutes and the macOS runner cost are NOT VERIFIED (MOD15-P1-T01 stays open)" next to it. `OPEN_QUESTIONS.md` 0.13 adds the full stop before the update sentences of OQ-35 and OQ-40. No entry or question changes status.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/DECISION_LOG.md` | Version 0.16: "the cost is approved by the repository owner" in three places, with MOD15-P1-T01 open. | The review of pull request #51 | DEC-022, MOD15-P1-T01 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/OPEN_QUESTIONS.md` | Version 0.13: two full stops, in OQ-35 and OQ-40. | The review of pull request #51 | OQ-35, OQ-40 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.48: this entry. It takes 0.48 because #52 (0.45), #53 (0.46) and #54 (0.47) are under review with those numbers. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | The version column reads 0.16 for `DECISION_LOG` (was 0.15), 0.13 for `OPEN_QUESTIONS` (was 0.12) and 0.48 for `CHANGELOG` (was 0.44) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the cost of DEC-022 approved, and Yuvraj Gaykhe's positions on DEC-003, DEC-023 and OQ-38, 2026-11-08, on topic branch `docs/yg-dec022-positions` on top of `9a5654b`, then merged with `origin/main` at `8b2c824`, under review in pull request #51
 
