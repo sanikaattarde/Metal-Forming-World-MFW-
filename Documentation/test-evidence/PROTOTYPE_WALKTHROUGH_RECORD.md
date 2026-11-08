@@ -11,13 +11,13 @@
 | Status | Draft for review. Not reviewed. **A low-fi prototype, not the M2 design.** It uses no MFW brand asset or content, it has not been shown to MFW, and it approves nothing. MOD16-P1-T05 stays blocked by MFW's brand assets for the final look |
 | Date | 8 November 2026 |
 | Prepared by | Yuvraj Gaykhe (WS-B), 8 November 2026 |
-| Approval required | Both developers. MOD16-P1-T05 is done when it is handed to Sanika Attarde for MOD16-P2-T01 |
+| Approval required | Both developers. This record covers the app screens of MOD16-P1-T05. The admin panel screens (MOD16-P1-T04) and the final look stay open |
 
 **Change history**
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First record: the low-fi clickable prototype of the app screens, its walk-through against the screen inventory, a design critique, and the Figma copy of the screens. |
+| 0.1 | 8 November 2026 | First record: the low-fi clickable prototype of the app screens, its walk-through against the screen inventory, a design critique, and the Figma copy of the screens. Revised on 8 November 2026 after the review of pull request #53: the "Approval required" row says that the record covers the app screens of MOD16-P1-T05, and that the admin panel screens and the final look stay open; section 3.1 counts 21 in-scope app screens; section 2 gives the counts of the whole test suite and says that the drawing tests are golden comparisons; and the prototype's one package beyond the SDK, `flutter_lints`, is named. |
 
 ### 1.1 Related documents
 
@@ -27,7 +27,7 @@
 | `DEVELOPMENT_ROADMAP.md` T-02.1 | Exists, draft. Exit: the prototype covers every in-scope screen and state |
 | `YUVRAJ_IMPLEMENTATION_ROADMAP.md` MOD16-P1-T05 | Exists, a record of the plan. Tests: a walk-through against the inventory, recorded. This document is that record |
 | `DEVELOPMENT_WORKFLOW.md` §13 item 5 | Exists, draft. A spike is not merged into `main`; its findings are merged as a document |
-| Branch `spike/yg-prototype`, commit `c3f2773` | Not merged to `main`. On GitHub. The prototype in `tools/spikes/prototype/`, a separate Flutter app with no package beyond the SDK, and its 24 rendered screens in `test/shots/` |
+| Branch `spike/yg-prototype`, commit `c3f2773` | Not merged to `main`. On GitHub. The prototype in `tools/spikes/prototype/`, a separate Flutter app with no package beyond the SDK and the lints package (`flutter_lints`, DEP-58, for development only), and its 24 rendered screens in `test/shots/` |
 | Figma file "MFW app low-fi prototype (T-02.1)" | In Yuvraj Gaykhe's Figma drafts (Starter plan). Private: Sanika Attarde needs an invitation to open it. https://www.figma.com/design/7iQl4WKs8HoC8z5olvVzxX |
 
 ## 2. What Was Built
@@ -36,7 +36,7 @@
 2. **A walk-through as tests.** `test/walkthrough_test.dart` (6 tests) opens every screen from its entry point and follows the entry rule from a signed-out visitor to the reader. `test/screen_shots_test.dart` draws 24 screens and states at 1170 by 2532 pixels.
 3. **A Figma copy** built as editable layers, not screenshots: 25 phone frames composed from 10 local components (icon placeholder, placeholder box, button, chip, toggle, text field, list item, app bar, navigation bar, notice banner), 9 colour variables and 7 text styles in Roboto. 25 click links join the screens and 40 join the tab bars, with two flow starting points: "Visitor opens an issue (entry rule)" and "Settings and account deletion".
 
-**Checks on the prototype tree:** `dart format`, 0 changed; `dart analyze`, no issues; `flutter test`, 7 passed (the 24 drawing tests run only with `FONT_DIR` set, and then all 25 passed).
+**Checks on the prototype tree:** `dart format`, 0 changed; `dart analyze`, no issues; `flutter test` on Yuvraj Gaykhe's Mac (8 November 2026), 7 passed and 24 skipped without `FONT_DIR`, and all 31 passed with it. The 24 drawing tests compare each screen with its drawing committed in `test/shots/`, so they pass only where text renders the same: on Sanika Attarde's Mac the first one differs by 0.05 % of its pixels (1,372 pixels) and fails.
 
 ## 3. Walk-through Against the Inventory
 
@@ -67,7 +67,7 @@
 | SCR-A-22 | Not found | Yes | An unknown link |
 | SCR-A-23 | Edition-update sign-up | Not drawn: dropped on the working position (GS-Q49), CONFLICT C-02 | None |
 
-All 20 in-scope app screens are drawn and reached. The two that are not drawn are the ones the inventory itself withdraws or drops.
+All 21 in-scope app screens are drawn and reached. SCR-A-16 and SCR-A-17 share one screen, as two tabs (SN-05), so the table gives them one row. The two that are not drawn are the ones the inventory itself withdraws or drops.
 
 ### 3.2 States (section 7)
 

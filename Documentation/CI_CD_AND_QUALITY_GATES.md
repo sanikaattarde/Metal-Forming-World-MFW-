@@ -7,9 +7,9 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.6 |
+| Version | 0.7 |
 | Status | Draft for review. Not approved. **One workflow exists: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests that change `app/` or the workflow (T-01.5). Every other gate and pipeline below is PLANNED.** |
-| Date | 7 November 2026 |
+| Date | 8 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
 
 **Change history**
@@ -22,6 +22,7 @@
 | 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.5 | 5 November 2026 | Section 3 gives the CI service as AGREED, conditional on the cost check (DEC-022). The GitHub plan row records that branch protection on `main` is on. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.6 | 7 November 2026 | The first workflow, `.github/workflows/pr.yml`, runs QG-01 to QG-06 (T-01.5, pull request #48). The status row, section 2, the Available cells of QG-01 to QG-06, section 5.1 and section 14 say so, and QG-06 runs on pull requests only, not yet on merges to `main` (section 5.2). QG-14 is blocked by DEC-003 only, because DEC-026 is AGREED (`DECISION_LOG.md` section 5.8). No other gate changed. No MFW approval is recorded, and no entry is APPROVED. Revised on 7 November 2026 after the review of pull request #48: the Implements cell of QG-04 reads "None" in place of a dash. |
+| 0.7 | 8 November 2026 | Section 3 and section 13 record that the repository owner approved the cost of the workflow of pull request #48 in writing on 8 November 2026 (DEC-022, `DECISION_LOG.md` section 5.9). The plan minutes and the macOS runner cost stay NOT VERIFIED. No gate changed. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -47,7 +48,7 @@ This document proposes the automated checks that guard pull requests, integratio
 
 | Item | Proposal | Status |
 |---|---|---|
-| Service | GitHub Actions, since the repository is hosted on GitHub | DEC-022, AGREED, conditional on the cost check (MOD15-P1-T01, not done; `DECISION_LOG.md` section 5.6) |
+| Service | GitHub Actions, since the repository is hosted on GitHub | DEC-022, AGREED. The cost of the first workflow is approved by the repository owner, for the repository as it is now (`DECISION_LOG.md` section 5.9) |
 | Runners | Linux for formatting, analysis, tests and Android builds. macOS for iOS builds, which need Xcode. | PROPOSED |
 | Constraint | Runner minutes, macOS minute cost, and feature availability (environments, required reviewers) depend on the account plan and repository visibility | Not verified |
 | After handover | CI moves with the repository to MFW's ownership (OQ-48). Secrets are re-created in MFW's account. | PLANNED |
@@ -187,6 +188,7 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 - CI usage is billed to the account that owns the repository. That is currently `sanikaattarde`, and later MFW (OQ-48).
 - macOS runners use more of the minute allowance than Linux runners.
 - Any CI cost billed to MFW needs MFW's approval (DEC-022). No price is quoted here, because provider prices change.
+- Sanika Attarde, as the owner of the repository and of the account that pays, approved the cost of `.github/workflows/pr.yml` (three jobs, one on a macOS runner) in writing on 8 November 2026, in the approving review of pull request #48 (DEC-022, `DECISION_LOG.md` section 5.9). No cost is billed to MFW. The plan minutes and the macOS runner cost are NOT VERIFIED, and the check is made again if the repository's visibility or the paying account changes.
 
 ## 14. Implementation Steps (Not Performed)
 
