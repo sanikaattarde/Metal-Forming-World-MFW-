@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First report: the T-01.1 run on `main` at `5a77910`, first posted as a comment on pull request #30, with the two screenshots that the comment could not carry |
+| 0.1 | 8 November 2026 | First report: the T-01.1 run on `main` at `5a77910`, first posted as a comment on pull request #30, with the two screenshots that the comment could not carry. Revised on 8 November 2026 after the review of pull request #50: the last line of section 4 says that the checks run in CI since #48 merged |
 
 ### 1.1 Related documents
 
@@ -63,4 +63,4 @@ Taken on 7 November 2026 during the run above. They show the placeholder app onl
 - The Android minimum, target and compile SDK levels and the iOS deployment target 15.0 are Flutter's defaults, not the answer to OQ-26.
 - On Android the status bar icons are white on the light placeholder background (figure 2). That is a theme point for T-02.1, not a scaffold defect.
 
-With this, the exit criterion of T-01.1 is met on `main`. The same checks run in CI once pull request #48 (T-01.5) merges.
+With this, the exit criterion of T-01.1 is met on `main`. Since pull request #48 (T-01.5) merged as `9a5654b`, the same checks run in CI on every pull request that changes `app/` or the workflow.

@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First version: the steps, the rules for MFW's PDFs, and the result tables, after MFW's three issues were recorded (pull request #46) |
+| 0.1 | 8 November 2026 | First version: the steps, the rules for MFW's PDFs, and the result tables, after MFW's three issues were recorded (pull request #46). Revised on 8 November 2026 after the review of pull request #50: step 3 says that the harness does not report its container path on an iPhone, so that step is open, and step 5 takes the numbers from the `PDFCMP` lines of the `flutter run` output, saved to a local file |
 
 ### 1.1 Related documents
 
@@ -59,7 +59,7 @@ The harness measures, for pdfrx and for pdfx in separate launches: time to the f
 2. Build in profile mode. Debug timings are not meaningful on a phone.
 3. Put the issue where the app can read it, and pass that path in `LARGE_PDF`:
    - Android: the harness's application ID is `invalid.placeholder.pdf_compare`. Install the app once, then `adb push <issue>.pdf /sdcard/Android/data/invalid.placeholder.pdf_compare/files/` and use that path.
-   - iPhone: the bundle ID is `invalid.placeholder.pdfCompare`, so Xcode needs your own signing team and a bundle ID you own before it installs on a phone. Copy the file into the app's Documents folder (for example with `xcrun devicectl device copy to` and the app data container), and pass the full path that the app reports for its Documents folder.
+   - iPhone: the bundle ID is `invalid.placeholder.pdfCompare`, so Xcode needs your own signing team and a bundle ID you own before it installs on a phone. A file can be copied into the app's data container (for example with `xcrun devicectl device copy to`), but the harness does not report the path of its container, which holds an identifier that only the app knows. **This step is open:** no tested way to give the harness a path on an iPhone exists yet. A one-line change to the spike, showing `Directory.systemTemp.parent.path` in the status text, would let the tester build the path to the Documents folder.
    - These steps are NOT TESTED on a phone. If a path is refused, note it and use the method that works.
 4. Run, for each issue and each library:
 
@@ -69,7 +69,7 @@ flutter run --profile -d <device> --dart-define=LIBS=pdfrx --dart-define=LARGE_P
 
    Then the same with `LIBS=pdfx`.
 
-5. Keep the `results_<libs>.json` files and the `PDFCMP` log lines on the developer's machine. They hold local paths and stay out of Git, as in the simulator report. Copy the numbers into the tables of section 6.
+5. Take the numbers from the `PDFCMP` lines of the `flutter run` output. With `EXIT_WHEN_DONE=true` the app ends when the run is done, so its Copy JSON button cannot be used, and without `OUT_DIR` the `results_<libs>.json` file stays in the app's temporary folder on the phone, which a tester cannot easily fetch. Save the output to a local file, for example by adding `2>&1 | tee pdfcmp_<device>_<libs>_<issue>.log` to the command. The log and any JSON hold local paths and stay on the developer's machine, out of Git, as in the simulator report. Copy the numbers into the tables of section 6.
 
 ## 5. Part B: the checks by hand
 
