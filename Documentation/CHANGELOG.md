@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.40 |
+| Version | 0.41 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 7 November 2026 |
 
@@ -30,6 +30,20 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the first CI workflow, QG-01 to QG-06 (T-01.5), 2026-11-07, on topic branch `feat/yg-ci-skeleton` on top of `b5c3fad`, then merged with `origin/main` at `d328a7d`, under review in pull request #48
+
+Adds `.github/workflows/pr.yml`, the pull-request checks for the app: QG-01 to QG-06 of `CI_CD_AND_QUALITY_GATES.md` section 4. It runs on pull requests that change `app/` or the workflow, with read-only contents permission and no secrets, in three jobs: formatting, analysis, tests and the coverage report on Linux; a debug APK on Linux; and an iOS build without code signing on macOS. Flutter 3.47.9 is cloned from the official repository at its tag, inside the range pinned in `app/pubspec.yaml` (OQ-50), and `flutter pub get` uses `--enforce-lockfile`. Only GitHub-owned actions are used, pinned to the commits of their tags (DEP-75 to DEP-77). It is taken from the spike commit `68f6d3e` (WB-09), with three changes: the header gives DEC-022 as AGREED and conditional on the cost check, the workflow also runs when the workflow file changes, and the lock file is enforced. QG-11 (secrets scan) and QG-12 (documentation check) are not in it: they wait for DEP-62 and DEP-63. QG-06 runs on pull requests only, not yet on merges to `main`. The documents that said no CI exists follow: `CI_CD_AND_QUALITY_GATES.md` 0.6 and `DEPENDENCY_REGISTER.md` 0.10, which also moves DEP-75 to DEP-77 to CONFIRMED. QG-14 is blocked by DEC-003 only, because DEC-026 is AGREED (pull request #43). YG reports that Sanika Attarde approved the CI cost in person on 7 November 2026. That report is not filed, the cost check of DEC-022 (MOD15-P1-T01) stays open in `DECISION_LOG.md`, and no cost is billed to MFW. No requirement, scope item, decision, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+Revised on 2026-11-07 after Sanika Attarde's review of this pull request, which asked for one change: the Implements cell of QG-04 reads "None" in place of a dash. The versions do not change.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-07 | `.github/workflows/pr.yml` | Added: QG-01 to QG-06 for pull requests that change `app/` or the workflow. | The first CI workflow (T-01.5) | T-01.5, WB-09, QG-01, QG-02, QG-03, QG-04, QG-05, QG-06, DEC-022, OQ-50, DEP-61, DEP-74 to DEP-77 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.6: the status row, section 2, the Available cells of QG-01 to QG-06, section 5.1 and section 14 say what runs. QG-14 is blocked by DEC-003 only. | The workflow above; DEC-026 AGREED in pull request #43 | QG-01 to QG-06, QG-14, DEC-003, DEC-026, T-01.5 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.10: DEP-75 to DEP-77 CONFIRMED, the CI use in DEP-74 CONFIRMED, DEP-61 and the status row name the workflow. | The workflow above | DEP-61, DEP-74, DEP-75, DEP-76, DEP-77 | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `Documentation/CHANGELOG.md` | Version 0.41: this entry. It takes 0.41 because #43 (0.36) and #44 to #47 (0.37 to 0.40) merged with those numbers. `DEPENDENCY_REGISTER.md` takes 0.10, because #46 merged with 0.9. | Records the change above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-07 | `README.md` | The version column follows the control table of each changed document, one step up, and reads 0.6 for `CI_CD_AND_QUALITY_GATES` (was 0.5), 0.10 for `DEPENDENCY_REGISTER` (was 0.9) and 0.41 for `CHANGELOG` (was 0.40) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the four implementation plan documents committed with a status note, 2026-11-07, on topic branch `docs/sa-plan-docs` on top of `b5c3fad`, then merged with `origin/main` at `edcfa60`, under review in pull request #47
 

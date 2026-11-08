@@ -7,9 +7,9 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.5 |
-| Status | Draft for review. Not approved. **PLANNED: no CI/CD exists and no check runs automatically.** |
-| Date | 5 November 2026 |
+| Version | 0.6 |
+| Status | Draft for review. Not approved. **One workflow exists: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests that change `app/` or the workflow (T-01.5). Every other gate and pipeline below is PLANNED.** |
+| Date | 7 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
 
 **Change history**
@@ -21,6 +21,7 @@
 | 0.3 | 4 and 5 November 2026 | Gate QG-14 added for the contract tests (suite TS-14 in `TESTING_STRATEGY.md`), and the pull-request pipeline names it. It is PROPOSED, blocked by DEC-003 and DEC-026, and not available. No existing gate changed. Revised on 5 November 2026 after the review of pull request #17: QG-14 runs the backend side of TS-14 and stays [BACKEND], the app side runs in QG-03 on every pull request, and section 5.2 lists QG-14 for every merge to `main`. |
 | 0.4 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.5 | 5 November 2026 | Section 3 gives the CI service as AGREED, conditional on the cost check (DEC-022). The GitHub plan row records that branch protection on `main` is on. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.6 | 7 November 2026 | The first workflow, `.github/workflows/pr.yml`, runs QG-01 to QG-06 (T-01.5, pull request #48). The status row, section 2, the Available cells of QG-01 to QG-06, section 5.1 and section 14 say so, and QG-06 runs on pull requests only, not yet on merges to `main` (section 5.2). QG-14 is blocked by DEC-003 only, because DEC-026 is AGREED (`DECISION_LOG.md` section 5.8). No other gate changed. No MFW approval is recorded, and no entry is APPROVED. Revised on 7 November 2026 after the review of pull request #48: the Implements cell of QG-04 reads "None" in place of a dash. |
 
 ### 1.1 Related documents
 
@@ -40,6 +41,8 @@ This document proposes the automated checks that guard pull requests, integratio
 
 **Verified current state (23 October 2026).** The repository contains only `README.md` and `Documentation/`. There is no `.github/` directory, no workflow file, no app project and no build script. Nothing described here is running. This document creates no workflow file.
 
+**Update of 7 November 2026.** The app scaffold is on `main` (pull request #30), and `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests that change `app/` or the workflow (T-01.5, pull request #48). It uses GitHub-owned actions pinned to commit SHAs (DEP-75 to DEP-77), read-only contents permission and no secrets. Flutter 3.47.9 is cloned at its tag, inside the range in `app/pubspec.yaml` (OQ-50).
+
 ## 3. Proposed CI Service
 
 | Item | Proposal | Status |
@@ -53,12 +56,12 @@ This document proposes the automated checks that guard pull requests, integratio
 
 | Gate | Check | Command or tool (candidate) | Runs on | Blocks merge | Available | Implements |
 |---|---|---|---|---|---|---|
-| QG-01 | Formatting | `dart format --output=none --set-exit-if-changed .` | Every pull request | Yes | [SCAFFOLD] | TS-01 |
-| QG-02 | Static analysis | `flutter analyze`, failing on any issue (confirm the default behaviour for the Flutter version pinned under OQ-50) | Every pull request | Yes | [SCAFFOLD] | TS-01 |
-| QG-03 | Unit and widget tests | `flutter test`. It also runs the app side of the contract tests (CT-04, CT-08 to CT-10), which need no backend. CT-10 starts at the first release | Every pull request | Yes | [SCAFFOLD] | TS-02, TS-03, TS-14 (app side) |
-| QG-04 | Coverage report | `flutter test --coverage` | Every pull request | No: report only. No threshold agreed. | [SCAFFOLD] | — |
-| QG-05 | Android build check | `flutter build apk --debug` | Pull requests that touch `app/` | Yes | [SCAFFOLD] | DoD-INT 2 |
-| QG-06 | iOS build check | `flutter build ios --no-codesign` on macOS | Pull requests that touch `app/`; every merge to `main` | Yes | [SCAFFOLD] | DoD-INT 2 |
+| QG-01 | Formatting | `dart format --output=none --set-exit-if-changed .` | Every pull request | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-01 |
+| QG-02 | Static analysis | `flutter analyze`, failing on any issue (confirm the default behaviour for the Flutter version pinned under OQ-50) | Every pull request | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-01 |
+| QG-03 | Unit and widget tests | `flutter test`. It also runs the app side of the contract tests (CT-04, CT-08 to CT-10), which need no backend. CT-10 starts at the first release | Every pull request | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-02, TS-03, TS-14 (app side) |
+| QG-04 | Coverage report | `flutter test --coverage` | Every pull request | No: report only. No threshold agreed. | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). The report is kept for 7 days (DEP-76) | None |
+| QG-05 | Android build check | `flutter build apk --debug` | Pull requests that touch `app/` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | DoD-INT 2 |
+| QG-06 | iOS build check | `flutter build ios --no-codesign` on macOS | Pull requests that touch `app/`; every merge to `main` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). Not yet on merges to `main` (section 5.2) | DoD-INT 2 |
 | QG-07 | App integration tests | `flutter test integration_test` on an emulator | Every merge to `main`; release candidates | Yes, on `main` | [SCAFFOLD] | TS-04 |
 | QG-08 | Backend and authorization-rule tests | Blocked by DEC-003 | Pull requests that touch `backend/` | Yes | [BACKEND] | TS-05 |
 | QG-09 | Admin panel build and tests | Blocked by DEC-004 | Pull requests that touch `admin/` | Yes | [BACKEND] | TS-05 |
@@ -66,7 +69,7 @@ This document proposes the automated checks that guard pull requests, integratio
 | QG-11 | Secrets scan | Candidate: gitleaks, or GitHub secret scanning if the plan includes it | Every pull request and push | Yes | [CI] | SEC-CHK-09 |
 | QG-12 | Documentation checks | A check of IDs, references, file names, status labels and links. The script that was used when the documents were drafted is not in the repository, so the check cannot be reproduced from the repository and is PLANNED, not available; link check | Pull requests that touch `Documentation/` | Yes | [NOW] (manual until CI exists) | DoD-DOC |
 | QG-13 | Release build and signing | Tag-triggered signed Android App Bundle and iOS archive; manual approval | Release tags `v*` | Not a merge gate | [STORE] | AC-11.1 |
-| QG-14 | Contract tests, backend side | Blocked by DEC-003 and DEC-026. Candidate: the emulators in CI (TD-17). Runs CT-01 to CT-03, CT-05 to CT-07 and CT-11 of `API_AND_BACKEND_CONTRACT.md` §10. CT-02 replays requests of a released app version, so it starts at the first release. The app side (CT-04, CT-08 to CT-10) runs in QG-03 | Pull requests that touch `backend/` or the contract reference file (CT-01, not yet created); every merge to `main` | Yes | [BACKEND] | TS-14 |
+| QG-14 | Contract tests, backend side | Blocked by DEC-003. DEC-026 is AGREED (`DECISION_LOG.md` section 5.8). Candidate: the emulators in CI (TD-17). Runs CT-01 to CT-03, CT-05 to CT-07 and CT-11 of `API_AND_BACKEND_CONTRACT.md` §10. CT-02 replays requests of a released app version, so it starts at the first release. The app side (CT-04, CT-08 to CT-10) runs in QG-03 | Pull requests that touch `backend/` or the contract reference file (CT-01, not yet created); every merge to `main` | Yes | [BACKEND] | TS-14 |
 
 ## 5. Pipelines
 
@@ -84,6 +87,8 @@ pull request opened or updated
   → QG-12 documentation check                 (if Documentation/ changed)
   → review by the other developer (DEVELOPMENT_WORKFLOW.md §6)
 ```
+
+QG-01 to QG-06 run in `.github/workflows/pr.yml` for pull requests that change `app/` or the workflow. QG-11 and the other steps are PLANNED.
 
 ### 5.2 Integration on `main` (PLANNED)
 
@@ -186,8 +191,8 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 ## 14. Implementation Steps (Not Performed)
 
 1. Agree DEC-022 and this document.
-2. Create the app scaffold (T-01.1).
-3. Add workflow files for QG-01 to QG-06, QG-11 and QG-12 (T-01.5).
+2. Create the app scaffold (T-01.1). Done: pull request #30.
+3. Add workflow files for QG-01 to QG-06, QG-11 and QG-12 (T-01.5). QG-01 to QG-06 are done: `.github/workflows/pr.yml`, pull request #48. QG-11 and QG-12 wait for DEP-62 and DEP-63.
 4. Add QG-07 once integration tests exist.
 5. Add QG-08 and QG-09 once DEC-003 and DEC-004 are decided.
 6. Configure environment secrets after DEC-023 and the MFW account access in T-01.3.
