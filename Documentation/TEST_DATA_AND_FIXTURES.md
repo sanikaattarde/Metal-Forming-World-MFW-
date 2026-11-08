@@ -7,8 +7,8 @@
 | Document | Test Data and Fixtures |
 | File | `Documentation/TEST_DATA_AND_FIXTURES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 32) |
-| Version | 0.8 |
-| Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. |
+| Version | 0.9 |
+| Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. Update of 8 November 2026: FX-WP-01 to FX-WP-12 now exist as test files or test cases (section 10, pull request #58). |
 | Date | 6 November 2026 |
 | Approval required | Both developers. MFW confirms where its sample PDFs may be stored (DEC-024). |
 
@@ -24,6 +24,7 @@
 | 0.6 | 5 November 2026 | The related-documents row gives DEC-024 as AGREED. Revised on 5 November 2026 after the review of pull request #21: the DEC-024 row names both conditions of section 5.6. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.7 | 5 November 2026 | FX-PDF-11 had no upload expectation, as the review of pull request #18 noted. Its "Used by" cell and the note under the table say that the expectation is not set and follows the depth of the upload check, which is OQ-61. The FX-PDF-09 row cites OQ-61 too. Revised on 5 November 2026 after the review of pull request #24: the note says that the backend spike's check accepts FX-PDF-11, so readers can meet one, and RD-08 matters. No fixture or other expectation changed. |
 | 0.8 | 6 November 2026 | The note under the table cites the simulator result, which is now filed in `test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md`, and no longer says that it is not filed. It is a result on the iOS simulator in a debug build and not a result on a phone. No fixture or expectation changed. |
+| 0.9 | 8 November 2026 | Section 10 says where FX-WP-01 to FX-WP-12 now are (pull request #58), and the status row notes it. No fixture row or expected result changed. |
 
 ### 1.1 Related documents
 
@@ -186,6 +187,24 @@ Example shape (synthetic, abbreviated):
   }
 ]
 ```
+
+**Update of 8 November 2026 (pull request #58).** The FX-WP fixtures exist for the WordPress client (MOD09-P1-T01). They are synthetic, written for the tests on the host `news.example.test` with invented names and text, and copy nothing from MFW's site. The files are in `app/test/fixtures/wordpress/`; the status codes and the delay are set in `app/test/features/news/data/wordpress_news_repository_test.dart` and `app/test/core/network/https_client_test.dart`.
+
+| ID | Where |
+|---|---|
+| FX-WP-01 | `fx_wp_01_posts_page1.json` (10 posts in categories 7, 11 and 14, each with an embedded image; the test sets `X-WP-Total: 25` and `X-WP-TotalPages: 3`) and `fx_wp_01_categories.json` (3 categories, one name with `&amp;`) |
+| FX-WP-02 | `fx_wp_02_posts_last_page.json` (5 posts) |
+| FX-WP-03 | `fx_wp_03_empty_category.json` (`[]`) |
+| FX-WP-04 | `fx_wp_04_post_without_media.json` |
+| FX-WP-05 | `fx_wp_05_post_with_script.json` (an embedded image and a `script` element) |
+| FX-WP-06 | `fx_wp_06_titles_with_entities.json` (`&#8217;`, `&#8377;`, `&amp;`, `&#8220;` and letters with accents) |
+| FX-WP-07 | `fx_wp_07_page_out_of_range.json`, sent with status 400 |
+| FX-WP-08 | `fx_wp_08_api_blocked.json`, sent with status 401 and 403 |
+| FX-WP-09 | `fx_wp_09_no_route.json`, sent with status 404; also `fx_wp_09_invalid_post_id.json`, the 404 for an unknown article |
+| FX-WP-10 | Status 500, 503 and 429 with an HTML body, in the test |
+| FX-WP-11 | A response that never comes, with a 20 millisecond limit, in the test |
+| FX-WP-12 | `fx_wp_12_html_page.html`, sent with status 200 |
+| FX-WP-13 | Not written: it belongs to the news controls (MOD09-P2-T03) |
 
 ## 11. Notification Payloads
 

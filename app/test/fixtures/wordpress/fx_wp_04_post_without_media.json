@@ -1,0 +1,36 @@
+{
+  "id": 9031,
+  "date": "2026-03-12T09:30:00",
+  "date_gmt": "2026-03-12T09:30:00",
+  "modified_gmt": "2026-03-12T09:30:00",
+  "slug": "synthetic-post-31",
+  "status": "publish",
+  "type": "post",
+  "link": "https://news.example.test/synthetic-post-31/",
+  "title": {
+    "rendered": "Synthetic post 31"
+  },
+  "content": {
+    "rendered": "<p>Synthetic body of post 31.</p>\n",
+    "protected": false
+  },
+  "excerpt": {
+    "rendered": "<p>Synthetic excerpt 31.</p>\n",
+    "protected": false
+  },
+  "author": 1,
+  "featured_media": 0,
+  "sticky": false,
+  "format": "standard",
+  "categories": [
+    7
+  ],
+  "tags": [],
+  "_links": {
+    "self": [
+      {
+        "href": "https://news.example.test/wp-json/wp/v2/posts/9031"
+      }
+    ]
+  }
+}

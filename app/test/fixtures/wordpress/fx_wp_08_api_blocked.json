@@ -1,0 +1,7 @@
+{
+  "code": "rest_forbidden",
+  "message": "Synthetic: not allowed.",
+  "data": {
+    "status": 401
+  }
+}

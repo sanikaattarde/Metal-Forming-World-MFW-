@@ -7,7 +7,7 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.14 |
+| Version | 0.15 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
 | Date | 8 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
@@ -30,6 +30,7 @@
 | 0.12 | 6 November 2026 | Where `Result`, `Ok`, `Err`, `AppFailure` and `FailureCode` live is agreed in writing (issue 28): `app/lib/contracts/result.dart`, MOD-00. Section 4.2 says so, section 5 lists them, and section 6.2 says that MOD-02 depends on MOD-00 for `FailureCode` and `AppFailure`, where it said that it depended on nothing inside the app. No type, field or value changed. No requirement, scope item, decision, status label or MFW approval changed. Revised on 7 November 2026 after the review of pull request #37: section 4.2 says that the file is added with the shared contracts code and is not on `main` until that code merges. |
 | 0.13 | 7 November 2026 | Findings of Sanika Attarde's second-person review (issue 29) that the app contract holds, with YG's positions of 6 November 2026, PROPOSED. Section 4.2: the scheme is AGREED with DEC-026, and the note that agreement was reported and not filed is gone. Six rows (ACCOUNT_CLOSED, ALREADY_DELETING, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, LAST_ADMIN and RECENT_SIGN_IN_REQUIRED) and the rule for a reason with no row are added (R-1, R-4), and the `conflict` row no longer says "in use" (R-2). Section 6.3: `AuthService` gains two re-authentication methods (R-4 d). Sections 6.4, 6.6, 6.9 and 6.11 give the eight Dart shapes that only the code of #34 had. Section 8: OP-PRF-02, OP-PRF-03, OP-ACC-01, OP-ADM-01, OP-ADM-03 and OP-ADM-04 follow the backend contract (R-2, R-3, R-4, R-10). Section 11 lists the open items. No type, field or value of `result.dart` changed. No requirement, scope item, decision, status label or MFW approval changed. |
 | 0.14 | 8 November 2026 | The code of pull request #49 follows the contract. Section 6.3: `reauthenticateWithEmail` and `reauthenticateWithGoogle` are in `auth.dart` and `FakeAuthService`, and the Authorization row says how the fake refuses and when a sign-in stops being recent. Section 6.4: `saveOwnProfile` returns `ProfileSaveResult`, a PROPOSED shape for the output of OP-10 (the status, and the names of the missing fields). The note on OP-PRF-02 in section 8 says that the input waits for OQ-27. No requirement, scope item, decision, status label or MFW approval changed. |
+| 0.15 | 8 November 2026 | Section 9.1 records how the WordPress client of pull request #58 (MOD09-P1-T01) reads the three routes and what each response becomes, PROPOSED. The routes and the field map are unchanged, and stay PROVISIONAL until OQ-39. |
 
 ### 1.1 Related documents
 
@@ -842,6 +843,26 @@ PROVISIONAL example: standard WordPress REST routes. Each must be confirmed agai
 | `link` | `link`, used for sharing (RS FR-SHR-004) |
 | `categories` | `categoryIds` |
 | Featured media in `_embedded` | `imageUrl` |
+
+**In the code (pull request #58, MOD09-P1-T01), PROPOSED.** `WordPressNewsRepository` in `app/lib/features/news/data/` implements `NewsRepository` on the three routes above, through `HttpsGetClient` in `app/lib/core/network/` (the HTTP part of MOD01-P2-T03; the connectivity service and the platform settings that refuse plain HTTP are not built yet). The site and the categories come in a `WordPressSiteConfig` (`app/lib/core/config/`), and the app holds no values for them until CFG-03 and CFG-04 are confirmed (OQ-39). How it reads:
+
+- The list asks for `_embed=wp:featuredmedia`, so only the featured image is embedded, and pages of 10 posts. With no category it asks for every selected category; a category that is not selected is refused with `notFound` before any request.
+- The categories are asked for with `include=<ids>&orderby=include`, so they come in the configured order, and any category not selected is dropped.
+- One article in a category that is not selected is `notFound` (RS INT-WP-003).
+- `date_gmt` has no offset and is read as UTC (WP-PV-10). Titles and category names have their HTML references decoded. The article body is kept as sent; removing scripts is the renderer's work (SEC-CHK-15, MOD09-P2-T01). Only an `https` featured image is kept.
+- `isBreaking` is false, and hidden posts are not removed, until the news controls are applied (MOD09-P2-T03). There is no cache yet, so `fromCache` is false (MOD09-P2-T02).
+- HTTPS only. Redirects are not followed. One request may take 15 seconds in all (PROPOSED: no document sets a value).
+
+| Response | Result |
+|---|---|
+| 200 with a JSON body of the expected shape | `Ok`. `hasMore` comes from `X-WP-TotalPages`, or from a full page when the header is missing |
+| 200 that is not JSON, or JSON of another shape (FX-WP-12) | `invalidResponse` |
+| 400 `rest_post_invalid_page_number` (FX-WP-07) | `Ok` with an empty last page |
+| 404 `rest_post_invalid_id`, for one article | `notFound` |
+| 401 or 403 (FX-WP-08), 404 `rest_no_route` (FX-WP-09), a redirect, or another 4xx | `serviceUnavailable`, not retryable |
+| 429, or 5xx (FX-WP-10) | `serviceUnavailable`, retryable |
+| No answer within the time limit (FX-WP-11) | `timeout`, retryable |
+| A connection, TLS or HTTP protocol failure | `network`, retryable |
 
 ### 9.2 Push notification services
 

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 7,
+    "count": 4,
+    "name": "Synthetic News",
+    "slug": "synthetic-news",
+    "parent": 0
+  },
+  {
+    "id": 11,
+    "count": 3,
+    "name": "Synthetic Watch",
+    "slug": "synthetic-watch",
+    "parent": 0
+  },
+  {
+    "id": 14,
+    "count": 3,
+    "name": "Fairs &amp; Events",
+    "slug": "fairs-events",
+    "parent": 0
+  }
+]

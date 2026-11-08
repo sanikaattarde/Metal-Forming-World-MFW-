@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.49 |
+| Version | 0.51 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 8 November 2026 |
 
@@ -30,6 +30,22 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the WordPress client, its fixtures and a development read (MOD09-P1-T01, T-08.1), 2026-11-08, on topic branch `feat/yg-wordpress-client` on top of `6098196` (the head of pull request #56), under review in pull request #58
+
+`WordPressNewsRepository` implements the `NewsRepository` contract on the three WordPress REST routes of `API_AND_MODULE_CONTRACTS.md` section 9.1, read only, over HTTPS only, through a new `HttpsGetClient` (the HTTP part of MOD01-P2-T03, with a 15 second limit, PROPOSED, and no redirects followed). It shows only the configured categories (RS INT-WP-003), asks for pages of 10 posts with only the featured image embedded (INT-WP-004), decodes the HTML references in titles, reads `date_gmt` as UTC, and maps each response to a result: a blocked API, a wrong route and a redirect to `serviceUnavailable`, a server error to `serviceUnavailable` retryable, a page past the end to an empty last page, and HTML or a wrong shape to `invalidResponse`. The app holds no site address or category values, because CFG-03 and CFG-04 stay OPEN until OQ-39; `WordPressSiteConfig` carries them. The fixtures FX-WP-01 to FX-WP-12 are synthetic and copy nothing from MFW. A development tool read MFW's public API once with the client, on the working position of CFG-03 and CFG-04, and printed counts, IDs and dates only: 9 categories in order, 10 posts with images, newest first, an empty page past the end, and `notFound` for an unknown post (`WORDPRESS_PUBLIC_SITE_EVIDENCE.md` section 7). That read is development only and is not the recorded live read that closes T-08.1. News controls, the cache and the article renderer come with MOD09-P2. Built on pull request #56, which holds CFG-03, CFG-04 and the public site record. On 2026-11-08, with Flutter 3.47.9 and Dart 3.13.7, `flutter pub get --enforce-lockfile`, `dart format` (56 files, 0 changed), `flutter analyze` (no issues) and `flutter test` (140 tests, 37 of them new) passed. No package is added. No requirement, scope item, decision, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `app/lib/features/news/` | Added: `news.dart` (the feature's public file), the repository, the response parsing and the HTML reference decoder in `data/`. | MOD09-P1-T01 | MOD09-P1-T01, T-08.1, INT-WP-001, INT-WP-003, INT-WP-004, INT-WP-005, FR-STATE-005 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `app/lib/core/network/https_client.dart`, `app/lib/core/config/wordpress_config.dart` | Added: the HTTPS-only GET client and the site configuration type, with no values. | MOD01-P2-T03 (the HTTP part), CFG-03, CFG-04 | MOD01-P2-T03, NFR-SEC-001, CFG-03, CFG-04, OQ-39 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `app/test/fixtures/wordpress/`, `app/test/fakes/fake_https_get_client.dart`, `app/test/features/news/data/`, `app/test/core/` | Added: twelve synthetic fixture files, a fake HTTPS client, and 37 tests. | The fixture tests of T-08.1 | FX-WP-01 to FX-WP-12 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `app/tool/wordpress_live_read.dart` | Added: the development read, which prints counts, IDs and dates only. | MOD09-P1-T01 step 3, for development | T-08.1, OQ-39, CFG-03, CFG-04 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.15: section 9.1 records how the client reads the routes and what each response becomes. | Keeps the document the record of the shapes | MOD-09, MOD09-P1-T01 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/TEST_DATA_AND_FIXTURES.md` | Version 0.9: section 10 says where FX-WP-01 to FX-WP-12 are, and the status row notes it. | The fixtures exist | FX-WP-01 to FX-WP-13 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md` | Version 0.2: section 7, the development read. | Records the read | T-08.1, OQ-39, R5 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.51: this entry. It takes 0.51 because #53 (0.46), #54 (0.47), #55 (0.48), #56 (0.49) and #57 (0.50) are under review with those numbers. | Records the change above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | The versions of the changed documents: `API_AND_MODULE_CONTRACTS` 0.15 (was 0.14), `TEST_DATA_AND_FIXTURES` 0.9 (was 0.8), `test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE` 0.2 (was 0.1) and `CHANGELOG` 0.51 (was 0.49) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: MFW's clarifications on the brand, the cloud access and the website, as dated updates, 2026-11-08, on topic branch `docs/yg-client-clarifications` on top of `7d66eec`, under review in pull request #56
 
