@@ -8,7 +8,7 @@
 | File | `Documentation/BRAND_REFERENCE.md` |
 | Phase | 3: Development Planning and Collaboration. The reference for the design tokens (MOD16-P1-T01), the app theme (MOD01-P2-T02) and the M2 designs of the app and the admin panel |
 | Version | 0.1 |
-| Status | Draft for review. Not reviewed. **OBSERVED, not confirmed by MFW.** The values below were read from MFW's public website on 8 November 2026. MFW's direction to use them is reported by YG and not filed. DEP-02 stays PARTLY RECEIVED, and OQ-63 is OPEN. |
+| Status | Draft for review. Not reviewed. **OBSERVED, and the working position for the app: used as they are (reported by YG on 8 November 2026, not filed).** The values below were read from MFW's public website on 8 November 2026. They are not confirmed by MFW in writing, so OQ-63 stays OPEN. DEP-02 is RECEIVED by reference to the website. |
 | Date | 8 November 2026 |
 | Prepared by | Yuvraj Gaykhe (WS-B), 8 November 2026 |
 | Approval required | Both developers, for its use in the designs. MFW confirms the values in writing (OQ-63) and approves the screens at M2 |
@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First record: MFW's direction as reported on 8 November 2026, the colours, fonts, type scale and page patterns read from the public website and its web logo, the contrast of the colour pairs, and what was not inspected. |
+| 0.1 | 8 November 2026 | First record: MFW's direction as reported on 8 November 2026, the colours, fonts, type scale and page patterns read from the public website and its web logo, the contrast of the colour pairs, and what was not inspected. It also records YG's report of the same day that the website's colours and fonts are used in the app as they are, as the working position of section 4.3. |
 
 ### 1.1 Related documents
 
@@ -35,6 +35,8 @@
 Reported by YG on 8 November 2026, not filed: MFW confirmed that the app and the admin panel use the same colours and fonts as its official website, https://metalformingworld.com, together with the visual identity of the magazine issues and the logo it supplied. No new colour palette or type system is to be introduced.
 
 MFW gave no colour values, font names or font files. The channel and the sender's role are not recorded. So the direction is received, and the values are not: this document reads them from the website, and MFW confirms them (OQ-63).
+
+**Update of 8 November 2026.** YG reports, not filed, that the website's colours and fonts are used in the app as they are. The colours and fonts are therefore received by reference to the website (DEP-02), and section 4.3 is the working position. OQ-63 stays OPEN until MFW's written confirmation is filed.
 
 ## 3. How the Values Were Read
 
@@ -55,7 +57,7 @@ Share of the logo's opaque pixels, by exact value. The other values are the blen
 | Blue | `#014EA2` | 13 % | The word "WORLD" |
 | Near black | `#231F20` | under 1 % | The line of small text beside "WORLD" |
 
-The red of the logo (`#ED1C24`) and the red of the website's buttons (`#F0233B`, section 4.2) are close but not the same value. The blue of the logo is not used anywhere else on the pages read. Both points are for MFW (OQ-63).
+The red of the logo (`#ED1C24`) and the red of the website's buttons (`#F0233B`, section 4.2) are close but not the same value. The blue of the logo is not used anywhere else on the pages read. Both points are for MFW (OQ-63). The working position of section 4.3 follows the website: its red for actions, and both logo colours only inside the logo.
 
 ### 4.2 The website's global colours
 
@@ -83,9 +85,9 @@ The Elementor kit defines 17 global colours. Four have names in the kit; the oth
 
 One value outside the kit is in use: `#ADADAD`, for the date and the comment count under each item of the home page news list (Inter, 12 px). The page ground is white, `#FFFFFF`.
 
-### 4.3 Roles for the app and the admin panel (PROPOSED)
+### 4.3 Roles for the app and the admin panel (working position)
 
-A starting map for MOD16-P1-T01. It uses only values from sections 4.1 and 4.2, and adds none. Every row is PROVISIONAL until MFW answers OQ-63.
+The map MOD16-P1-T01 starts from. It uses only values from sections 4.1 and 4.2, and adds none. Working position of 8 November 2026 (reported by YG, not filed; Sanika Attarde's written agreement not filed): the website's values are used as they are. OQ-63 stays OPEN for MFW's written confirmation.
 
 | Role | Value | Taken from |
 |---|---|---|
@@ -97,8 +99,8 @@ A starting map for MOD16-P1-T01. It uses only values from sections 4.1 and 4.2, 
 | Surface | `#FFFFFF` | Website page ground |
 | Input fill | `#F5F7F8` | Website input fields |
 | Divider | `#DCDCDE` | Website border |
-| Error, success and warning states | **No website value.** Left open, not invented | OQ-63 |
-| Second brand colour outside the logo | **Not decided.** The logo blue `#014EA2` is not used in the website's interface | OQ-63 |
+| Error, success and warning states | **No website value.** The team proposes them in MOD16-P1-T01, preferring colours the website's kit already defines, and MFW sees them at M2. None is set here | OQ-63 |
+| Second brand colour outside the logo | **None.** The logo blue `#014EA2` stays inside the logo, because the website's interface does not use it | Working position; OQ-63 |
 
 ### 4.4 Contrast
 
@@ -180,7 +182,7 @@ Recorded so the designs can follow the same identity. None is a requirement.
 
 ## 8. How the Designs Use This Reference
 
-1. MOD16-P1-T01 draws its tokens from sections 4.3 and 5 only, labelled PROVISIONAL until OQ-63 is answered. It adds no other colour or font. A role with no website value (error, success, warning) stays open and is named in OQ-63, not invented.
+1. MOD16-P1-T01 draws its tokens from sections 4.3 and 5 only, on the working position that the website's values are used as they are. It adds no other colour or font. A role with no website value (error, success, warning) is the team's proposal, preferring colours the website's kit already defines, and MFW sees it at M2.
 2. The admin panel uses the same tokens. Its screens are WS-A work, and Sanika Attarde updates the WS-A plans.
 3. The logo is used only from the file MFW supplied, never redrawn.
 4. The low-fi prototype of T-02.1 (pull request #53) stays greyscale. This reference does not change it.
@@ -190,7 +192,7 @@ Recorded so the designs can follow the same identity. None is a requirement.
 
 | Point | Where it is tracked |
 |---|---|
-| MFW confirms the values in sections 4 and 5, says which red is the brand red, whether the logo blue is used outside the logo, and the colours for error, success and warning states | OQ-63 |
+| MFW's written confirmation of sections 4 and 5. YG reports that they are used as they are, and section 4.3 follows that. The colours for error, success and warning states are the team's proposal, seen by MFW at M2 | OQ-63 |
 | The contrast of white on the website red, and of the grey meta text | OQ-25 |
 | The licences of Fraunces, Inter and Plus Jakarta Sans for use in the app and the admin panel | DEP-78 |
 | The magazine's identity, read by eye and with no page image | Section 7; DEC-024 |

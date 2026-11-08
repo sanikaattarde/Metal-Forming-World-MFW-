@@ -21,7 +21,7 @@
 | 0.3 | 25 October 2026 | Tracking edit, see `CHANGELOG.md`. The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` now says it exists as a draft. No environment, configuration item or step changed. |
 | 0.4 | 5 November 2026 | The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` no longer gives version 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. No environment, configuration item or step changed. |
 | 0.5 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
-| 0.6 | 8 November 2026 | MFW's clarifications, reported by YG on 8 November 2026 and not filed. Section 4 notes that cloud access is promised for next week and points to `CLOUD_ACCESS_SETUP_CHECKLIST.md`. CFG-03 records the website MFW shared, and stays OPEN (OQ-39). Section 7.6 records the public read-only check of that day, with the categories the site showed for CFG-04, which stays OPEN. No environment, step or status label changed, and nothing has been deployed. |
+| 0.6 | 8 November 2026 | MFW's clarifications, reported by YG on 8 November 2026 and not filed. Section 4 notes that cloud access is promised for next week and points to `CLOUD_ACCESS_SETUP_CHECKLIST.md`. CFG-03 records the website MFW shared, and stays OPEN (OQ-39). CFG-04 records the working position that the app shows the website's categories, as YG reports, and stays OPEN. Section 7.6 records the public read-only check of that day. No environment, step or status label changed, and nothing has been deployed. |
 
 ### 1.1 Related documents
 
@@ -89,7 +89,7 @@ Update of 8 November 2026: MFW says cloud access will be provided next week (rep
 | CFG-01 | Backend project identifiers for ENV-TEST and ENV-PROD | — | OPEN (DEC-003, OQ-40) |
 | CFG-02 | Cloud region | — | OPEN (OQ-41) |
 | CFG-03 | WordPress site address | None recorded before 8 November 2026. Update of 8 November 2026: https://metalformingworld.com, the website MFW shared (reported by YG, not filed) | OPEN (OQ-39): not yet given in writing as the site the app reads |
-| CFG-04 | WordPress categories shown in the app | — | OPEN (RS INT-WP-003; MFW input) |
+| CFG-04 | WordPress categories shown in the app | None recorded before 8 November 2026. Working position of 8 November 2026 (reported by YG, not filed): the nine sections of the website's News menu, the WordPress categories with IDs 7 and 11 to 18. Blog (ID 1) is not shown | OPEN (RS INT-WP-003; OQ-39): not given in writing |
 | CFG-05 | Upload size limit | 150 MB by default (RS FR-ADMIN-007) | Boundary and unit: OQ-30 |
 | CFG-06 | Issue-file grant lifetime | — | OPEN (OQ-37) |
 | CFG-07 | Privacy policy and terms-of-use addresses | — | MFW input (CH §12) |
@@ -162,7 +162,7 @@ Nothing is deployed to WordPress, and the site is not changed (RS INT-WP-002). T
 2. Confirm that no security plugin or firewall blocks the app's requests (FX-WP-08 scenario).
 3. Confirm the categories with MFW.
 
-Update of 8 November 2026: checks 1 and 2 were run once from public data, with no credentials, and the API answered a browser and a client that is not a browser (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`). That is not MFW's confirmation, and both checks are repeated before release. Check 3 waits for MFW (OQ-39). For CFG-04, the site showed ten categories that day, of which only Industry News holds posts. MFW chooses the categories.
+Update of 8 November 2026: checks 1 and 2 were run once from public data, with no credentials, and the API answered a browser and a client that is not a browser (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`). That is not MFW's confirmation, and both checks are repeated before release. Check 3 waits for MFW (OQ-39). For CFG-04, the site showed ten categories that day, of which only Industry News holds posts. YG then reports (not filed) that the app may use the website's categories, with creative freedom for the team, and CFG-04 records the working position. MFW's written confirmation is still needed.
 
 ### 7.7 Logging and monitoring
 

@@ -33,7 +33,7 @@
 
 ## 2. What MFW Said
 
-Reported by YG on 8 November 2026, not filed: MFW will provide cloud access next week, which read from 8 November 2026 is the week that starts on Monday 9 November 2026. That is MFW's statement as reported, not a filed commitment. MFW did not say which provider, how many projects, or what kind of access.
+Reported by YG on 8 November 2026, not filed: MFW will provide cloud access next week, which read from 8 November 2026 is the week that starts on Monday 9 November 2026. That is MFW's statement as reported, not a filed commitment. MFW did not say which provider, how many projects, or what kind of access. Update of 8 November 2026: YG reports that none of the items of section 3 is provided yet: the provider, the project identifiers, the roles, the region, a test project and the cost ceiling. The Apple and Google store accounts are not provided either (DEP-06, DEP-07).
 
 Until access is granted, no cloud resource is created or configured in a personal account or in any other project (YG's instruction of 8 November 2026, and `DEVELOPMENT_ROADMAP.md` section 4.3). Cloud-dependent tasks stay blocked.
 

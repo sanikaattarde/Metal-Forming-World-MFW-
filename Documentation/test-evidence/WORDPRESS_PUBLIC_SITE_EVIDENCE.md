@@ -61,7 +61,7 @@ Facts seen on 8 November 2026. Each can change when MFW changes its site.
 | Item | Why public data is not enough | Tracked in |
 |---|---|---|
 | That https://metalformingworld.com is the WordPress site the app reads | MFW named it as its website. OQ-39 asks for the address in writing | OQ-39; CFG-03 |
-| Which categories the app shows | Only Industry News holds posts. The other nine are empty, and the menu sections are pages. MFW chooses the categories (RS INT-WP-003) | OQ-39; CFG-04 |
+| Which categories the app shows | Only Industry News holds posts. The other nine are empty, and the menu sections are pages. MFW chooses the categories (RS INT-WP-003). Update of 8 November 2026: YG reports (not filed) that the app may use the website's categories, with creative freedom for the team. The working position is in CFG-04, and MFW's written confirmation is still needed | OQ-39; CFG-04 |
 | That the API stays open to the app, with no security plugin, firewall or Cloudflare rule that blocks or limits it, and whom to contact if it does | One request of each kind passed. Rules and limits can change, and none was tested under load | OQ-39; R5 |
 | How a breaking post is marked | No post is sticky and the site uses no tags | OQ-17 |
 | Whether articles will go on being built with Elementor | Elementor layout in `content.rendered` decides how the app shows an article (DEP-54, DEP-66) | DEP-54 |
