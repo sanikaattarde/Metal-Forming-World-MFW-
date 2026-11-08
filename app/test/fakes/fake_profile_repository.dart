@@ -42,13 +42,20 @@ final class FakeProfileRepository implements ProfileRepository {
   }
 
   @override
-  Future<Result<void>> saveOwnProfile(ReaderProfile profile) async {
+  Future<Result<ProfileSaveResult>> saveOwnProfile(
+    ReaderProfile profile,
+  ) async {
     final String? userId = _auth.currentUserId;
     if (userId == null) {
-      return const Err<void>(AppFailure(FailureCode.unauthenticated));
+      return const Err<ProfileSaveResult>(
+        AppFailure(FailureCode.unauthenticated),
+      );
     }
     _server.saveProfile(userId, profile);
-    return const Ok<void>(null);
+    // Field validation waits for OQ-01, so a saved profile is complete.
+    return const Ok<ProfileSaveResult>(
+      ProfileSaveResult(status: ProfileStatus.complete),
+    );
   }
 
   @override

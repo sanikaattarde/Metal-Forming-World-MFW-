@@ -68,7 +68,7 @@ void main() {
             domainOfWork: 'Test Domain',
           ),
         ),
-        isA<Ok<void>>(),
+        isA<Ok<ProfileSaveResult>>(),
       );
       await settle();
 
