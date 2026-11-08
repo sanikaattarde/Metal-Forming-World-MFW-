@@ -7,9 +7,9 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.14 |
+| Version | 0.15 |
 | Status | Draft for review. Not approved. |
-| Date | 7 November 2026 |
+| Date | 8 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -30,6 +30,7 @@
 | 0.12 | 7 November 2026 | Section 5.7 added: Yuvraj Gaykhe's written positions of 6 November 2026 on DEC-025 to DEC-030, the other half of the evidence for those six entries. No entry changes status. Setting them to AGREED is a follow-up edit (section 4, step 3). No entry is AGREED or APPROVED by this version, and no MFW approval is recorded. |
 | 0.13 | 7 November 2026 | DEC-025 to DEC-030 set to AGREED, the follow-up that sections 5.4 and 5.7 name. Evidence: Sanika Attarde's note (section 5.4), Yuvraj Gaykhe's note (section 5.7) and Sanika Attarde's approving review of pull request #42 on 7 November 2026. Section 5.8 added: the evidence, Sanika Attarde's answer on EC-10 for DEC-025, the conditions still open for each entry, and the documents still to update. DEC-025 and DEC-026 depend on DEC-003, which is OPEN. DEC-027, DEC-028 and DEC-029 are agreed as internal positions, and MFW's answers are still needed (OQ-58; C-07 and OQ-23; OQ-24). The DEC-026 row of section 5.7 says that pull request #38 added OQ-62, where it said "adds", as that review asked. The DEC-025 context says "scheduled maintenance (OP-41)" where it said "a scheduled purge", because the purge window is withdrawn (PRC-02). No MFW approval is recorded, and no entry is APPROVED. |
 | 0.14 | 7 November 2026 | Two places that said that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository (the 0.4 row of this table and the DEC-022 row of section 5.6) now say that it has been since 7 November 2026. The task list is committed with its three companion documents. No entry changes status, and no requirement, scope item, decision or MFW approval changed. |
+| 0.15 | 8 November 2026 | DEC-022: the cost condition is met for the repository as it is now. Sanika Attarde, who owns the repository and the account that pays for its CI, approved the cost of the workflow of pull request #48 in writing in their approving review of 8 November 2026. Section 5.9 records it and says how the condition of task MOD15-P1-T01 now reads, and the index row, the DEC-022 entry and its row in section 5.6 follow. The plan minutes and the macOS runner cost stay NOT VERIFIED, and the check is made again if the visibility or the paying account changes. The DEC-022 row of section 5.6 also says that MOD15-P1-T01 is a task in `YUVRAJ_IMPLEMENTATION_ROADMAP.md`, owned by Yuvraj Gaykhe with Sanika Attarde's support, where it said that the task is Sanika Attarde's, in `SANIKA_IMPLEMENTATION_ROADMAP.md`, which does not list it. Section 5.10 adds Yuvraj Gaykhe's written positions of 8 November 2026 on DEC-003 and DEC-023 and on their own availability (OQ-38), and the DEC-003 and DEC-023 entries point to it. DEC-003 stays OPEN and DEC-023 stays PROPOSED. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -118,7 +119,7 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 | DEC-019 | Evidence status of the S3 amendments | OPEN | CONFLICT | Yes (MFW record) |
 | DEC-020 | Protected issue-file delivery mechanism | OPEN | OPEN | Only if it adds cost |
 | DEC-021 | News retrieval path | OPEN | CONFIRMED (S2 Flow 2), OPEN alternative | Only if it adds cost |
-| DEC-022 | CI service | AGREED, conditional on the cost check (section 5.6) | ASSUMPTION | Only if it adds cost to MFW |
+| DEC-022 | CI service | AGREED. Cost approved by the repository owner for the repository as it is now (section 5.9) | ASSUMPTION | Only if it adds cost to MFW |
 | DEC-023 | Environment model | PROPOSED | ASSUMPTION | Yes (cloud cost billed to MFW) |
 | DEC-024 | Test data policy | AGREED (section 5.6) | ASSUMPTION | No |
 | DEC-025 | Server-side language and runtime | AGREED (section 5.8), depends on DEC-003 | ASSUMPTION | No |
@@ -263,7 +264,7 @@ Eight entries move from PROPOSED to AGREED: DEC-010 to DEC-015, DEC-022 and DEC-
 | DEC-013 | Riverpod is used in `app/lib/app/` only, and feature code takes its dependencies through constructors. The Flutter and Dart versions are pinned at the scaffold (OQ-50). A `DEPENDENCY_REGISTER.md` entry comes before the package (DEP-43). |
 | DEC-014 | The route guard steers screens only, and the server enforces access (DEC-009). The versions are pinned at the scaffold, and a `DEPENDENCY_REGISTER.md` entry comes before the package (DEP-44). |
 | DEC-015 | Commits, merge commits and repository files carry no tool attribution lines and no co-author trailers, from now on. Existing history stays as it is. The rule itself is in `DEVELOPMENT_WORKFLOW.md` section 11, which reads AGREED (DEC-015). |
-| DEC-022 | Conditional on the cost check in task MOD15-P1-T01, which is not done. MOD15-P1-T01 is Sanika Attarde's task, in the task list `SANIKA_IMPLEMENTATION_ROADMAP.md`, which has been in this repository since 7 November 2026. As the documents state the check (`DEVELOPMENT_ROADMAP.md`, "Verify first"; the Follow-up of DEC-022), it confirms for this repository whether GitHub Actions is available, what the plan allows in runner minutes, and what a macOS runner minute costs. The answer depends on the repository's visibility and on the account that pays: the repository is public now (DEP-60), and CI is billed to the account that owns it, `sanikaattarde` now and MFW after the transfer (OQ-48; `CI_CD_AND_QUALITY_GATES.md` section 13). So the check is made for the visibility and the paying account at the time, and it is made again if either changes, for example at the transfer. Plan limits and macOS runner cost are NOT VERIFIED. The passing runs on draft pull request #10 (section 5.5) show that a macOS job ran, and they are not the cost check. Nothing is billed to MFW without MFW's approval. |
+| DEC-022 | Conditional on the cost check in task MOD15-P1-T01, which is not done. MOD15-P1-T01 is a task in `YUVRAJ_IMPLEMENTATION_ROADMAP.md`, owned by Yuvraj Gaykhe with Sanika Attarde's support, and that roadmap has been in this repository since 7 November 2026. As the documents state the check (`DEVELOPMENT_ROADMAP.md`, "Verify first"; the Follow-up of DEC-022), it confirms for this repository whether GitHub Actions is available, what the plan allows in runner minutes, and what a macOS runner minute costs. The answer depends on the repository's visibility and on the account that pays: the repository is public now (DEP-60), and CI is billed to the account that owns it, `sanikaattarde` now and MFW after the transfer (OQ-48; `CI_CD_AND_QUALITY_GATES.md` section 13). So the check is made for the visibility and the paying account at the time, and it is made again if either changes, for example at the transfer. Plan limits and macOS runner cost are NOT VERIFIED. The passing runs on draft pull request #10 (section 5.5) show that a macOS job ran, and they are not the cost check. Nothing is billed to MFW without MFW's approval. Update of 8 November 2026: the cost condition is met for the repository as it is now, by Sanika Attarde's written approval as its owner, and the plan minutes and the macOS runner cost stay NOT VERIFIED (section 5.9). |
 | DEC-024 | MFW still confirms where its sample PDFs may be kept. The public PDFs for the reader comparison leave out PDFs taken from MFW's own website until OQ-57 is answered (see the DEC-024 entry). |
 
 **Documents that called these entries PROPOSED.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request. The follow-up of 5 November 2026 updated the places below. `TECHNOLOGY_DECISIONS.md` section 10.5 is a dated record of 26 and 27 October 2026 and stays as written. The ENV-TEST rows of `DEPLOYMENT_PLAN.md` and `TESTING_STRATEGY.md` stay PROPOSED, because that status is DEC-023.
@@ -340,6 +341,53 @@ Dated records, left as written
 └── CI_CD_AND_QUALITY_GATES.md           the 0.3 row of the change history
 ```
 
+### 5.9 The cost of DEC-022, approved on 8 November 2026
+
+DEC-022 was set to AGREED on 4 November 2026, conditional on the cost check in task MOD15-P1-T01 (section 5.6).
+
+**Evidence.** Sanika Attarde, who owns the repository and the account that pays for its CI, approved pull request #48 on 8 November 2026 (the review: https://github.com/sanikaattarde/Metal-Forming-World-MFW-/pull/48#pullrequestreview-5815755450), and merged it the same day (merge commit `9a5654b`). In that review they approve the GitHub Actions cost of the workflow in that pull request, `.github/workflows/pr.yml`: its three jobs, including the one on a macOS runner. The review says that it is the written record of that approval, that no cost is billed to MFW, and that the repository is public (DEP-60). It asks this follow-up to say how the condition of MOD15-P1-T01 now reads.
+
+**How the condition reads now.** This reading is Yuvraj Gaykhe's, and Sanika Attarde's review of the pull request that carries it settles it.
+
+- **Met for the repository as it is now:** public, owned by `sanikaattarde`, and with nothing billed to MFW. The owner of the account that pays has approved the cost in writing.
+- **Not met in full:** MOD15-P1-T01 asks for the runner minutes and the macOS runner cost to be recorded with their source. Neither is recorded, and both stay NOT VERIFIED. The review says that it does not verify them.
+- **Made again** if the visibility or the paying account changes, for example at the transfer to MFW (OQ-48). Any cost that would fall to MFW needs MFW's approval first.
+- **The approval covers the workflow of pull request #48.** Whether a later workflow, for example for QG-07 or QG-13, needs an approval of its own is not decided here.
+
+**What this does not do.** It records no MFW approval, and no entry is APPROVED. It does not decide which checks are required before a merge to `main`: the review leaves that to Sanika Attarde, after the jobs have run. The workflow runs on pull requests that change `app/` or the workflow, not on merges to `main` (`CI_CD_AND_QUALITY_GATES.md` section 5.2).
+
+**Documents.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request.
+
+```text
+Updated in this edit
+├── CI_CD_AND_QUALITY_GATES.md           section 3 (the Service row) and section 13
+├── DEPENDENCY_REGISTER.md               the DEP-61 row
+├── TECHNOLOGY_DECISIONS.md              TD-17, the cost row and the recommendation
+└── .github/workflows/pr.yml             the comment at the top, which said "conditional on the cost check"
+
+Left as written
+├── DEVELOPMENT_ROADMAP.md               the "Verify first" lines of T-01.5: the macOS runner cost is still NOT VERIFIED
+└── IMPLEMENTATION_MODULE_INVENTORY.md, YUVRAJ_IMPLEMENTATION_ROADMAP.md
+                                         records of the plan of 30 October 2026, not updated (their status notes)
+```
+
+### 5.10 Written positions of Yuvraj Gaykhe, 8 November 2026
+
+Yuvraj Gaykhe gave these positions in chat on 8 November 2026, and they are recorded here at their instruction. This section is Yuvraj Gaykhe's written note under section 3.1 for the entries below.
+
+**What this section is and is not**
+
+- No entry changes status because of it. DEC-003 stays OPEN and DEC-023 stays PROPOSED.
+- Sanika Attarde's written positions on DEC-003 and DEC-023 are not filed: section 5.4 does not cover them. When they are, an entry can be set to AGREED in a follow-up edit that cites both notes and the approving review (section 4, step 3).
+- It does not cover DEC-004, the admin panel, or any other entry.
+- It records no MFW approval. Where an entry needs MFW, the condition column says what is still outstanding.
+
+| Entry | Subject | Position of Yuvraj Gaykhe | Condition or limit |
+|---|---|---|---|
+| DEC-003 | Backend platform | Accepts Firebase, as S2 proposes: Firebase Authentication, Cloud Firestore, Cloud Storage for Firebase, Cloud Functions, Firebase Cloud Messaging, and Firebase Crashlytics and Analytics. | Needs Sanika Attarde's written position. The choice does not differ from S2 (M3, AC-12), and MFW still approves the M1 architecture note (OQ-35). Any cost beyond S1 needs MFW's approval (CH §17.4). The data location is DEC-031 (OQ-41), the protected file delivery is DEC-020, and crash reporting and analytics follow DEC-028 (OQ-23). DEC-025 and DEC-026 depend on this entry, and QG-14 is blocked by it. |
+| DEC-023 | Environment model | Accepts the proposal: three environments, as in `DEPLOYMENT_PLAN.md` section 4. ENV-LOCAL runs on the developers' machines with emulators, simulators and fakes, ENV-TEST is a separate non-production project in MFW's name, and ENV-PROD is the live service. | Needs Sanika Attarde's written position, and MFW's approval, because the second project may add cost billed to MFW (OQ-40). If DEC-003 is Firebase, ENV-TEST and ENV-PROD are two Firebase projects. ENV-TEST holds synthetic data only (DEC-024). |
+| DEC-011 | Availability (OQ-38) | Yuvraj Gaykhe is available full time until handover. | Sanika Attarde's availability is still to be filed, by Sanika Attarde (OQ-38). Section 5.5 recorded Yuvraj Gaykhe's confirmation that both developers are full time (GS-Q53). This row is about Yuvraj Gaykhe only. |
+
 ## 6. Entries
 
 ### DEC-001 Decision log as the CH §17.4 record
@@ -376,6 +424,7 @@ Dated records, left as written
 | Context | S2 "Proposed technical architecture" proposes Firebase Authentication, Cloud Firestore, Cloud Storage for Firebase, Cloud Functions, Firebase Cloud Messaging, and Firebase Crashlytics and Analytics. CH §11 and §17.4 state that the architecture is not approved. S2 M3 ("running on MFW's Firebase project") and S2 AC-12 ("a fresh Firebase project") name Firebase, and S1 Annex A lines 21–25 price Firebase set-up. |
 | Options considered (evidence) | Firebase, as proposed in S2. An AWS-based design, which S2 "Why this design" says was considered and judged to need more parts and time with no benefit at launch volumes. |
 | Working position | Contracts in `API_AND_MODULE_CONTRACTS.md` are technology-neutral. Firebase appears only in examples labelled PROVISIONAL. No backend code is written as final. |
+| Position of 8 November 2026 | Yuvraj Gaykhe's written position: Firebase, as S2 proposes (section 5.10). Sanika Attarde's is not filed, and the status stays OPEN. |
 | Decision | None |
 | Approver and evidence | Requires agreement by both developers. Requires approval by MFW if the choice differs from S2, changes the S2 M3 or AC-12 wording, or adds third-party cost (CH §17.4). |
 | Affects | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`; MOD-03, MOD-04, MOD-06, MOD-08, MOD-11, MOD-12, MOD-13; `DEPLOYMENT_PLAN.md`; `BACKUP_AND_RECOVERY.md`; `CI_CD_AND_QUALITY_GATES.md` |
@@ -604,12 +653,12 @@ Dated records, left as written
 
 | Field | Detail |
 |---|---|
-| Status | AGREED, conditional on the cost check in task MOD15-P1-T01, which is not done. Recorded 4 November 2026, evidence in section 5.6. Earlier status: PROPOSED, recorded 23 October 2026. |
+| Status | AGREED. Recorded 4 November 2026, evidence in section 5.6. The cost condition is met for the repository as it is now: its owner approved the cost of the workflow of pull request #48 in writing on 8 November 2026 (section 5.9). The plan minutes and the macOS runner cost are NOT VERIFIED. Earlier statuses: AGREED, conditional on the cost check in task MOD15-P1-T01 (4 November 2026); PROPOSED, recorded 23 October 2026. |
 | Evidence class | ASSUMPTION |
-| Context | The repository is hosted on GitHub. No CI exists (no `.github/` directory, verified 23 October 2026). iOS build checks need macOS runners. |
+| Context | The repository is hosted on GitHub. No CI exists (no `.github/` directory, verified 23 October 2026). iOS build checks need macOS runners. Update of 8 November 2026: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests since pull request #48 merged (merge commit `9a5654b`). |
 | Proposal | GitHub Actions, as described in `CI_CD_AND_QUALITY_GATES.md`. Runner minutes, cost and feature availability depend on the account plan and repository visibility, and are not verified. |
 | Approver and evidence | Requires agreement by both developers. Requires MFW approval if any cost is billed to MFW. |
-| Follow-up | Verify plan limits before adoption. |
+| Follow-up | Record the plan minutes and the macOS runner cost with their source (MOD15-P1-T01). Make the cost check again if the repository's visibility or the paying account changes, for example at the transfer to MFW (OQ-48). |
 
 ### DEC-023 Environment model
 
@@ -619,6 +668,7 @@ Dated records, left as written
 | Evidence class | ASSUMPTION |
 | Context | S2 refers to "MFW's own Firebase project" in the singular. Cloud usage is billed to MFW [S1 Costs outside the fee]. Testing against production data conflicts with the test-data policy (DEC-024). |
 | Proposal | Three environments: ENV-LOCAL, ENV-TEST (a separate non-production project in MFW's name) and ENV-PROD, as in `DEPLOYMENT_PLAN.md` §4. |
+| Position of 8 November 2026 | Yuvraj Gaykhe's written position: the three environments of the proposal (section 5.10). Sanika Attarde's is not filed, MFW's approval is still needed (OQ-40), and the status stays PROPOSED. |
 | Approver and evidence | Requires agreement by both developers, and approval by MFW, because a second project may add cost billed to MFW |
 | Follow-up | OQ-40 |
 
