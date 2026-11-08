@@ -11,13 +11,13 @@
 | Status | Draft for review. Not reviewed. **Simulator and emulator only, debug builds, against a local test server.** No phone was used, and the candidate file mechanism (DEC-020) was not. It is evidence for T-02.4, not a result for AC-4.3, and it approves nothing |
 | Date | 8 November 2026 |
 | Tests run by | Yuvraj Gaykhe (WS-B), 8 November 2026, in the T-02.4 spike |
-| Approval required | Both developers. MOD06-P1-T02 is done when Sanika Attarde has reviewed this report |
+| Approval required | Both developers. This report covers the local-server part of MOD06-P1-T02. Step 4 and the candidate mechanism part of step 2 stay open |
 
 **Change history**
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First report: four integration tests of the resume spike on an iOS simulator and an Android emulator, with a 150,000,000 byte synthetic file served by a local range server. |
+| 0.1 | 8 November 2026 | First report: four integration tests of the resume spike on an iOS simulator and an Android emulator, with a 150,000,000 byte synthetic file served by a local range server. Revised on 8 November 2026 after the review of pull request #52: the "Approval required" row says that the report covers the local-server part of MOD06-P1-T02, and that step 4 and the candidate mechanism part of step 2 stay open, where it said that the task is done once the report is reviewed. |
 
 ### 1.1 Related documents
 
