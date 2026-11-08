@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First record: the low-fi clickable prototype of the app screens, its walk-through against the screen inventory, a design critique, and the Figma copy of the screens. Revised on 8 November 2026 after the review of pull request #53: the "Approval required" row says that the record covers the app screens of MOD16-P1-T05, and that the admin panel screens and the final look stay open; section 3.1 counts 21 in-scope app screens; section 2 gives the counts of the whole test suite and says that the drawing tests are golden comparisons; and the prototype's one package beyond the SDK, `flutter_lints`, is named. |
+| 0.1 | 8 November 2026 | First record: the low-fi clickable prototype of the app screens, its walk-through against the screen inventory, a design critique, and the Figma copy of the screens. Revised on 8 November 2026 after the review of pull request #53: the "Approval required" row says that the record covers the app screens of MOD16-P1-T05, and that the admin panel screens and the final look stay open; section 3.1 counts 21 in-scope app screens; section 2 gives the counts of the whole test suite and says that the drawing tests are golden comparisons; and the prototype's one package beyond the SDK, `flutter_lints`, is named. Revised again on 8 November 2026: the Figma row records that YG shared the file with Sanika Attarde, and that the file now also holds the work of pull request #57. |
 
 ### 1.1 Related documents
 
@@ -28,7 +28,7 @@
 | `YUVRAJ_IMPLEMENTATION_ROADMAP.md` MOD16-P1-T05 | Exists, a record of the plan. Tests: a walk-through against the inventory, recorded. This document is that record |
 | `DEVELOPMENT_WORKFLOW.md` §13 item 5 | Exists, draft. A spike is not merged into `main`; its findings are merged as a document |
 | Branch `spike/yg-prototype`, commit `c3f2773` | Not merged to `main`. On GitHub. The prototype in `tools/spikes/prototype/`, a separate Flutter app with no package beyond the SDK and the lints package (`flutter_lints`, DEP-58, for development only), and its 24 rendered screens in `test/shots/` |
-| Figma file "MFW app low-fi prototype (T-02.1)" | In Yuvraj Gaykhe's Figma drafts (Starter plan). Private: Sanika Attarde needs an invitation to open it. https://www.figma.com/design/7iQl4WKs8HoC8z5olvVzxX |
+| Figma file "MFW app low-fi prototype (T-02.1)" | In Yuvraj Gaykhe's Figma drafts (Starter plan). YG reports that the file was shared with Sanika Attarde on 8 November 2026; the access level is not recorded. The file now also holds the design tokens and an unfinished page of reader designs (pull request #57); the low-fi page recorded here is unchanged. https://www.figma.com/design/7iQl4WKs8HoC8z5olvVzxX |
 
 ## 2. What Was Built
 
