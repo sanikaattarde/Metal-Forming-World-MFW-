@@ -7,9 +7,9 @@
 | Document | Risk Register |
 | File | `Documentation/RISK_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 38) |
-| Version | 0.7 |
+| Version | 0.8 |
 | Status | Draft for review. Not approved. Ratings are an initial development-team assessment and are unreviewed. |
-| Date | 7 November 2026 |
+| Date | 8 November 2026 |
 | Approval required | Both developers. Risks that MFW must accept need MFW's written acceptance. |
 
 **Change history**
@@ -23,6 +23,7 @@
 | 0.5 | 4 and 5 November 2026 | The R14 mitigation no longer gives `CLOUD_INFRASTRUCTURE_AND_COSTS.md` as version 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
 | 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.7 | 7 November 2026 | R15 records that the logo file and three issues are in hand (`inputs/README.md`, `DEPENDENCY_REGISTER.md` DEP-02 and DEP-03). The report of 27 October 2026 stays as dated. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
+| 0.8 | 8 November 2026 | MFW's clarifications, reported by YG on 8 November 2026 and not filed. R15 adds a dated update: MFW directs the team to its website's colours and fonts with no values supplied, names its website, and says cloud access comes next week. R5 adds a current-evidence row with the public read-only check of that day (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`). The reports of 27 October and 7 November 2026 stay as dated. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
 
 ### 1.1 Related documents
 
@@ -141,6 +142,7 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 | Description [CH §18] | The WordPress API is blocked, slow or not enabled. |
 | Trigger | The live check in T-08.1 fails, or responses match FX-WP-08 or FX-WP-12. |
 | Mitigation [CH §18] | Confirm access in Week 1, test early, cache recent articles. The site address and API confirmation are an MFW input (OQ-39). |
+| Current evidence | Update of 8 November 2026: MFW shared its website, https://metalformingworld.com (reported by YG, not filed). A public read-only check that day reached the REST API over HTTPS with no credentials, from a browser and from a client that is not a browser. The responses pass through Cloudflare, and the site runs security and cache plugins (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`). One request of each kind, at one time: it shows the API is enabled today, and not that it stays open to the app. MFW's confirmation is still needed (OQ-39). |
 | Contingency | MFW's host changes its settings. The project changes nothing on WordPress (RS INT-WP-002). A backend proxy is an option under DEC-021. |
 | Evidence and related | RS INT-WP-001, INT-WP-004, FR-STATE-005; ASM-03; OQ-39 |
 
@@ -241,7 +243,7 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 | Field | Detail |
 |---|---|
 | Description | Brand assets, sample PDFs, WordPress details, the cloud project, store accounts, the privacy policy, launch content and approvers are MFW inputs [S1 What we need from MFW]. Until 7 November 2026 the repository held no record of any being received. It now records the logo file and three issues (`inputs/README.md`). |
-| Current evidence | Reported by YG on 27 October 2026 and not filed: MFW has not provided the brand assets, the sample PDFs, the WordPress details, the cloud project or the Apple and Google accounts. The request for those inputs has been sent. The product questions have not been sent, and no delay notice has been sent (GS-Q35, GS-Q64). The S2 delay rule is not yet invoked. On 7 November 2026 the logo file and three issues are recorded in `inputs/README.md` (`DEPENDENCY_REGISTER.md` DEP-02 and DEP-03). The brand colours and fonts, the WordPress details, the cloud project and the Apple and Google accounts are not recorded (`DEPENDENCY_REGISTER.md` section 4). |
+| Current evidence | Reported by YG on 27 October 2026 and not filed: MFW has not provided the brand assets, the sample PDFs, the WordPress details, the cloud project or the Apple and Google accounts. The request for those inputs has been sent. The product questions have not been sent, and no delay notice has been sent (GS-Q35, GS-Q64). The S2 delay rule is not yet invoked. On 7 November 2026 the logo file and three issues are recorded in `inputs/README.md` (`DEPENDENCY_REGISTER.md` DEP-02 and DEP-03). The brand colours and fonts, the WordPress details, the cloud project and the Apple and Google accounts are not recorded (`DEPENDENCY_REGISTER.md` section 4). Update of 8 November 2026, reported by YG and not filed: MFW directs the team to use the colours and fonts of its website, and gives no values, so DEP-02 stays PARTLY RECEIVED and the values read from the website wait for MFW's confirmation (`BRAND_REFERENCE.md`, OQ-63). MFW shared its website as the WordPress reference, so DEP-04 is PARTLY RECEIVED; the API confirmation and the categories are not received (OQ-39). MFW says cloud access will be provided next week, so DEP-05 stays NOT RECEIVED until it is granted (`CLOUD_ACCESS_SETUP_CHECKLIST.md`). The Apple and Google accounts are still not recorded. |
 | Trigger | An input is not received by its relative week (`DEVELOPMENT_ROADMAP.md` §3). |
 | Mitigation | Weekly input tracking. Requests sent by the contracting developer. Use synthetic fixtures until the inputs arrive. |
 | Contingency | The S2 delay rule: dates move one working day per day of delay. A written schedule change beyond five working days. |

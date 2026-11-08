@@ -25,6 +25,7 @@ Size is in bytes. To check a copy, run `shasum -a 256` on the file and compare i
 
 | Link | What it is |
 |---|---|
+| https://metalformingworld.com/ | MFW's official website, which MFW has shared (reported by YG on 8 November 2026, not filed) as the reference for the colours, the fonts and the news (DEP-02, DEP-04). A link only: nothing from the site is stored. |
 | https://metalformingworld.com/june-july-2026-issue/ | The June-July 2026 issue page on MFW's website. A link only: nothing from the page is stored. The page text showed no link to a PDF file, so no June-July PDF is held here. |
 
 ## Adding an input

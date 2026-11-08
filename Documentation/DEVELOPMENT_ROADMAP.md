@@ -7,9 +7,9 @@
 | Document | Development Roadmap |
 | File | `Documentation/DEVELOPMENT_ROADMAP.md` |
 | Phase | 3 — Development Planning and Collaboration (document 23) |
-| Version | 0.13 |
+| Version | 0.14 |
 | Status | Draft for review. Not approved. An internal planning document, not a contractual commitment. |
-| Date | 7 November 2026 |
+| Date | 8 November 2026 |
 | Approval required | Both developers. MFW approves milestones, not this plan. |
 
 **Change history**
@@ -29,6 +29,7 @@
 | 0.11 | 6 November 2026 | The open step under MOD-02, which file holds `Result` and `AppFailure`, is agreed: `app/lib/contracts/result.dart` (MOD-00), issue 28. No requirement, scope item, decision, status label or MFW approval changed. Revised on 7 November 2026 after the review of pull request #37: the MOD-02 line of section 4.3 reads "after the scaffold and MOD-00", where it said "no other dependency", because the types live in MOD-00. |
 | 0.12 | 7 November 2026 | The `getIssueFile` steps of sections 4.1 and 4.3 read "with check 0 and the six checks", where they said "with its six checks", so the plan agrees with OP-11 and `SYSTEM_ARCHITECTURE.md` section 7.4. Check 0 answers GONE for a deleted issue before the sign-in check. Asked for in the review of pull request #39. No date, estimate, milestone, task, requirement, scope item, decision, status label or MFW approval changed. |
 | 0.13 | 7 November 2026 | The MFW inputs row of the status table and the "Received" column of section 4.2 (rows 1 and 3) record that the logo file and three issues are in hand (`inputs/README.md`, `DEPENDENCY_REGISTER.md` DEP-02 and DEP-03). Section 4.3 says so in one sentence. The reports of 27 and 30 October 2026 stay as dated, and the "Status on 27 October 2026" column is not changed. No date, estimate, milestone, task, requirement, scope item, decision or status label changed. |
+| 0.14 | 8 November 2026 | MFW's clarifications, reported by YG on 8 November 2026 and not filed. The MFW inputs row of the status table, and the "Received" column of section 4.2 rows 1, 4 and 5, carry dated updates: the brand direction with no values, the website address, and access to the cloud promised for next week. Section 4.3 says so in one sentence. Section 4.4 added: what the clarifications unblock, what stays blocked, and what goes ahead without any input. The earlier reports stay as dated, and the "Status on 27 October 2026" column is not changed. No date, estimate, milestone, requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents
 
@@ -89,7 +90,7 @@ Evidence from the repository on 23 October 2026.
 | Phase 3 and Phase 4 documents | Merged into `main` by pull request #1 (merge commit 56c6d97) on 23 October 2026. Drafts. No review is recorded on the pull request. |
 | Application code | None |
 | M1 | No evidence of MFW's written approval of a requirements and architecture note. No architecture note exists. YG reports a chat message from MFW that says "go ahead" and names no note (GS-Q63, OQ-59). It is not filed, and it is weak evidence of approval. |
-| MFW inputs (S1 "What we need from MFW") | Until 7 November 2026 the repository held no record of any input being received, other than the S1 and S2 PDFs themselves. On 7 November 2026 `inputs/README.md` records the logo file and three issues (section 4.2). YG reports on 27 October 2026 that the brand assets, sample PDFs, WordPress details, cloud project and store accounts have not been received, and that the request for them has been sent (GS-Q35). Not filed. On 30 October 2026 YG reports that they are still not received and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed |
+| MFW inputs (S1 "What we need from MFW") | Until 7 November 2026 the repository held no record of any input being received, other than the S1 and S2 PDFs themselves. On 7 November 2026 `inputs/README.md` records the logo file and three issues (section 4.2). YG reports on 27 October 2026 that the brand assets, sample PDFs, WordPress details, cloud project and store accounts have not been received, and that the request for them has been sent (GS-Q35). Not filed. On 30 October 2026 YG reports that they are still not received and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. Update of 8 November 2026, reported by YG and not filed: MFW directs the team to its website's colours and fonts, gives no values, names its website as the WordPress reference, and says cloud access will be provided next week (section 4.4) |
 
 ### 4.1 Plan for 27 October 2026
 
@@ -141,11 +142,11 @@ On the S1 dates, kickoff is Monday 16 November 2026, so Week 1 ends on Friday 20
 
 | # | Input (S1 wording) | S1 due | Charter due (PROVISIONAL) | Needed for | Status on 27 October 2026 | Received |
 |---|---|---|---|---|---|---|
-| 1 | Logo files, brand colours and fonts | Kickoff, 16 Nov 2026 | 21 Oct 2026 | T-02.1, T-01.1 | Past due on the Charter date, not due on the S1 date. Reported not received (GS-Q35). Not filed. | Logo file only, supplied by MFW and recorded on 7 November 2026 in `inputs/README.md` (DEP-02). Brand colours and fonts: none recorded. Sender's role: not recorded. |
+| 1 | Logo files, brand colours and fonts | Kickoff, 16 Nov 2026 | 21 Oct 2026 | T-02.1, T-01.1 | Past due on the Charter date, not due on the S1 date. Reported not received (GS-Q35). Not filed. | Logo file only, supplied by MFW and recorded on 7 November 2026 in `inputs/README.md` (DEP-02). Brand colours and fonts: none recorded. Sender's role: not recorded. Update of 8 November 2026: MFW directs the team to use its website's colours and fonts with the identity of the issues and logo (reported by YG, not filed). No values or font files. The values read from the website are in `BRAND_REFERENCE.md`, not confirmed (OQ-63). |
 | 2 | Named approver and deputy, and written confirmation that MFW owns or may use the magazine content | Before kickoff | Before 21 Oct 2026 | T-00.1, T-00.5, every approval | Reported named, without saying who holds which role (GS-Q37). No written confirmation filed (OQ-28). | None recorded |
 | 3 | Two to three sample PDFs, including the largest expected issue | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-02.3, T-05.1 | Not due yet on either schedule. Reported not received (GS-Q35). | Three issues (April-May, August-September and October-November 2026), supplied by MFW and recorded on 7 November 2026 in `inputs/README.md` (DEP-03). Whether the largest expected issue is among them is not confirmed. Sender's role: not recorded. |
-| 4 | WordPress site address, confirmation that its API is reachable, and the news categories to show | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-08.1 | Not due yet on either schedule. Reported not received (GS-Q35). | None recorded |
-| 5 | A Firebase and Google Cloud project in MFW's name, with billing switched on | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-01.3, T-01.4 | Not due yet on either schedule. Reported not received (GS-Q35). Also needs DEC-003 and the region (DEC-031). | None recorded |
+| 4 | WordPress site address, confirmation that its API is reachable, and the news categories to show | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-08.1 | Not due yet on either schedule. Reported not received (GS-Q35). | None recorded. Update of 8 November 2026: the site address only, https://metalformingworld.com, shared by MFW (reported by YG, not filed) and recorded in `inputs/README.md` (DEP-04). The API confirmation and the categories: not received. A public read-only check is in `test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`. |
+| 5 | A Firebase and Google Cloud project in MFW's name, with billing switched on | End of Week 1 (20 Nov 2026) | 28 Oct 2026 | T-01.3, T-01.4 | Not due yet on either schedule. Reported not received (GS-Q35). Also needs DEC-003 and the region (DEC-031). | None recorded. Update of 8 November 2026: MFW says access will be provided next week (reported by YG, not filed). Not received. The steps for that day are in `CLOUD_ACCESS_SETUP_CHECKLIST.md`. |
 | 6 | Apple Developer Program (organisation) and Google Play accounts in MFW's name | Enrolment in Week 1, active by end of Week 4 (11 Dec 2026) | Active by 18 Nov 2026 | T-10.1, T-12.1 to T-12.3 | Not due yet. Reported not received (GS-Q35). Apple verification can take weeks (R8). | None recorded |
 | 7 | Privacy policy and terms of use at a public web address | End of Week 4 (11 Dec 2026) | 18 Nov 2026 | T-03.3, T-12.1 | Not due yet on either schedule. | None recorded |
 | 8 | Launch content: latest issue and four to six archive issues, with their details | End of Week 4 (11 Dec 2026) | 18 Nov 2026 | T-04.1, T-11.5 | Not due yet on either schedule. | None recorded |
@@ -161,7 +162,7 @@ On the S1 dates, kickoff is Monday 16 November 2026, so Week 1 ends on Friday 20
 
 ### 4.3 Plan for the days before the reported inputs (30 October 2026)
 
-PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4 (tracked in section 4.2), and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. On 7 November 2026 the logo file and three issues were recorded (section 4.2). The other inputs are still not recorded there. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
+PROPOSED, from a request by YG on 30 October 2026. Nothing in it has been done. YG reports that MFW has still not provided the inputs listed in section 4 (tracked in section 4.2), and expects them by Monday 2 November 2026. That date is YG's expectation, not an MFW commitment, and it is not filed. On 7 November 2026 the logo file and three issues were recorded (section 4.2). The other inputs are still not recorded there. On 8 November 2026 MFW's clarifications on the brand, the website and the cloud access are recorded in section 4.4, which adds to this section and does not change it. This section narrows section 4.1, which is unchanged, to the modules that need none of the five inputs: the brand assets, the sample PDFs, the WordPress details, the cloud project in MFW's name and the store accounts.
 
 All of it relies on decisions that are OPEN or PROPOSED (DEC-003, DEC-004, DEC-005), so it is spike work on `spike/` branches. It is not merged as production code until those decisions move (`DEFINITION_OF_DONE.md` section 5 check 2; `DEVELOPMENT_WORKFLOW.md` section 13). DEC-013 and DEC-014 are AGREED (`DECISION_LOG.md` section 5.6), so they no longer hold the scaffold back. Several tasks below are marked as blocked in section 6 or section 9 by such a decision or by an open question (for example T-01.1, T-01.6, T-03.1, T-06.2, T-04.1 and T-08.1). Here only the part that does not depend on the answer is started, and the block on production use stays. The split follows the mapping of `TASK_OWNERSHIP_MATRIX.md` section 5 (DEC-011, AGREED). Use local emulators and placeholder visuals, and create no cloud resource. No estimate is given for any item, and the estimates in section 8 are unchanged.
 
@@ -222,6 +223,38 @@ Modules that can start before the inputs arrive                [PROPOSED]
     ├── Brand assets: T-02.1 prototype and final screens, T-04.3 home screen
     └── Store accounts: T-03.2 Google Sign-In, T-10.1 push set-up, T-12.2 signing
 ```
+
+### 4.4 Update of 8 November 2026: MFW's clarifications
+
+PROPOSED. Three clarifications from MFW, reported by YG on 8 November 2026 and not filed. The channel and the sender's role are not recorded.
+
+1. **Brand.** Use the colours and fonts of MFW's website, with the identity of the issues and the logo MFW supplied. No new palette or type system. MFW gave no values. `BRAND_REFERENCE.md` records what the public website shows, OBSERVED and not confirmed (OQ-63).
+2. **Cloud.** Access will be provided next week. Until then nothing is created or configured in a personal account or another project, and the cloud tasks stay blocked. `CLOUD_ACCESS_SETUP_CHECKLIST.md` holds the steps for that day.
+3. **Website.** MFW's website is https://metalformingworld.com. No administrator, API or hosting access is given or assumed. `test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md` separates what is verified in public from what MFW still confirms.
+
+No input moves to RECEIVED: DEP-02 stays PARTLY RECEIVED, DEP-04 moves to PARTLY RECEIVED, and DEP-05 stays NOT RECEIVED (`DEPENDENCY_REGISTER.md` section 4). Sections 4.1 to 4.3 are unchanged, and so are the estimates of section 8.
+
+```text
+After MFW's clarifications, reported on 8 November 2026         [PROPOSED]
+├── Can start now, with PROVISIONAL values
+│   ├── MOD16-P1-T01 design tokens: from BRAND_REFERENCE.md sections 4.3 and 5 only, with the contrast check against OQ-25
+│   ├── MOD01-P2-T02 app theme: from those tokens, after MOD16-P1-T01
+│   ├── MOD16-P1-T02 reader screen designs, and WS-A's screen designs (MOD16-P1-T03, MOD16-P1-T04) on the same tokens
+│   └── T-08.1 WordPress client and fixture tests: against the public response shapes, with hand-written fixtures
+├── Still blocked
+│   ├── T-01.3 access and T-01.4 deploy to ENV-TEST: access not yet granted; DEC-003; OQ-40; OQ-41
+│   ├── T-01.6 admin panel in ENV-TEST: access; DEC-004
+│   ├── The live read in T-08.1, CFG-03 and CFG-04: OQ-39 (address and categories in writing)
+│   ├── Final brand values in the designs and the theme: OQ-63; the magazine's identity read by a developer by eye (DEC-024)
+│   ├── M2 screen approval: MFW, at M2
+│   └── T-03.2 Google Sign-In, T-10.1 push set-up, T-12.2 signing: the store accounts (unchanged)
+└── Goes ahead without any input (section 4.3, unchanged)
+    ├── App modules against the contracts and fakes, on main
+    ├── Backend rules, functions and the admin panel on spike branches against the local emulators
+    └── The cloud set-up checklist, ready for the day access is granted
+```
+
+The design tokens and the theme carry the label PROVISIONAL until OQ-63 is answered. Where the website gives no value (error, success and warning colours), the token stays open and is not invented.
 
 ## 5. Milestone Gates
 

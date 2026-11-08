@@ -7,7 +7,7 @@
 | Document | Open Questions |
 | File | `Documentation/OPEN_QUESTIONS.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 40) |
-| Version | 0.12 |
+| Version | 0.14 |
 | Status | Draft for review. Not approved. **Every question is OPEN except OQ-50 and OQ-62, which are ANSWERED. None is CLOSED.** |
 | Date | 8 November 2026 |
 | Approval required | Both developers for the register. Each answer needs the evidence listed against it. |
@@ -28,6 +28,7 @@
 | 0.10 | 7 November 2026 | OQ-50 is ANSWERED: Flutter 3.47.9 and Dart 3.13.7 are pinned in `app/pubspec.yaml` by pull request #30, which Sanika Attarde approved with the pin. It is not CLOSED, because the other documents that cite it are not all updated. OQ-56 also asks for the window before a reader's own account deletion (OP-12), as the Open line of OP-12 says. OQ-62 added (P1, both developers): whether DEC-026 is agreed, which tracks the exception that pull request #34 made to `DEFINITION_OF_DONE.md` section 5 check 2, as section 12 of that document asks and as Sanika Attarde's approval of #34 asked. The summary reads 62 questions. No requirement, scope item, decision or MFW approval changed. |
 | 0.11 | 7 November 2026 | OQ-62 is ANSWERED: DEC-026 is AGREED (`DECISION_LOG.md` section 5.8), which is the evidence the question names. Its four design points stay open in DEC-026 for the backend spike. It is not CLOSED, because the other documents that cite it are not all updated. OQ-51 and OQ-24 add an update sentence: DEC-027 and DEC-029 are AGREED as internal positions, and both questions stay OPEN for MFW. The summary reads two questions ANSWERED. No requirement, scope item or MFW approval changed. |
 | 0.12 | 8 November 2026 | Update sentences in OQ-38 (Yuvraj Gaykhe's availability is filed: full time until handover), OQ-35 (Yuvraj Gaykhe's written position on DEC-003 is Firebase, as S2 proposes) and OQ-40 (Yuvraj Gaykhe accepts the three environments of DEC-023), all from `DECISION_LOG.md` section 5.10. The three questions stay OPEN. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.14 | 8 November 2026 | MFW's clarifications, reported by YG on 8 November 2026 and not filed. OQ-39 and OQ-40 add an update sentence: MFW named its website, and a public read-only check reached the REST API (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`), but the categories and MFW's written confirmation are not received; MFW says cloud access comes next week, without saying whether a test project is included. Both stay OPEN. OQ-63 added (P1, MFW): MFW confirms the colours and fonts read from its website in `BRAND_REFERENCE.md`. The summary reads 63 questions. This version takes 0.14 because pull request #55 is under review with 0.13. No question is answered or closed, and no requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents
 
@@ -146,7 +147,7 @@ This is the single, actionable register of unresolved questions about client app
 |---|---|---|---|---|---|---|---|
 | OQ-16 | Are news articles kept offline by an explicit save action or automatically? How many are kept? How is embedded media shown? | P1 | RS FR-NEWS-005, FR-NEWS-006; T-08.3 | — | MFW, with the development team | Written decision Working position of 27 October 2026 (PROPOSED, reported by YG, not filed; Sanika's written agreement not filed) (GS-Q48): recently opened articles are cached automatically and rotate out, and a Save button keeps an article until the reader removes it. The number kept and the media handling are still open. | OPEN |
 | OQ-17 | How is a post marked as breaking shown in the app? | P1 | RS FR-NEWS-009, FR-ADMIN-014; T-08.4 | — | MFW | Written decision | OPEN |
-| OQ-39 | What is MFW's WordPress site address? Is the REST API reachable over HTTPS without being blocked by security plugins or firewalls? Which categories are shown? | P1 | RS INT-WP-001, INT-WP-003; T-08.1; CFG-03, CFG-04 | RS ASM-03; DEP-04; R5 | MFW | Address and categories in writing; a successful read-only test | OPEN |
+| OQ-39 | What is MFW's WordPress site address? Is the REST API reachable over HTTPS without being blocked by security plugins or firewalls? Which categories are shown? | P1 | RS INT-WP-001, INT-WP-003; T-08.1; CFG-03, CFG-04 | RS ASM-03; DEP-04; R5 | MFW | Address and categories in writing; a successful read-only test Update of 8 November 2026: MFW shared its website, https://metalformingworld.com, as the website reference (reported by YG, not filed). A public read-only check that day reached the REST API over HTTPS with no credentials, from a browser and from a client that is not a browser, and found ten categories, of which only Industry News holds posts (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`). MFW has not given the address or the categories in writing, and has not confirmed that the API stays open to the app. The question stays OPEN. | OPEN |
 
 ### 5.8 Notifications
 
@@ -187,6 +188,7 @@ This is the single, actionable register of unresolved questions about client app
 |---|---|---|---|---|---|---|---|
 | OQ-25 | Which accessibility baseline applies? Proposed for decision: app interface text follows the device's text-size setting, controls have screen-reader labels, and text and controls have enough colour contrast. The baseline would not apply to the PDF page content. The original wording is in RS OQ-25, with values in `CODING_STANDARDS.md` §9. | P1 | RS NFR-UX-004; TS-10 | — | MFW | Written decision | OPEN |
 | OQ-26 | What are the minimum Android and iOS versions, the test device models, and the supported admin browsers? | P1 | RS NFR-COMP-003 to 005; `TESTING_STRATEGY.md` §6; AC-10.2; AND-07; IOS-06 | — | MFW, with the development team | Written device and version list at M1 Reported by YG on 27 October 2026 (GS-Q54): the developers have a mid-range Android phone and a current iPhone. They have no low-cost Android phone, no older iPhone and no tablet. The device list for S2 AC-10 is still to be agreed with MFW. | OPEN |
+| OQ-63 | Does MFW confirm the colours, fonts and type scale read from its website in `BRAND_REFERENCE.md` as the brand for the app and the admin panel? Which red is the brand red (`#ED1C24` in the logo, `#F0233B` on the website), is the logo blue used outside the logo, and which colours mark errors, success and warnings, which the website does not define? Do the magazine issues add anything the website does not show? **Added on 8 November 2026.** | P1 | RS NFR-UX-001; MOD16-P1-T01, MOD01-P2-T02; the M2 designs | DEP-02, DEP-78; OQ-25 | MFW | MFW's written confirmation of the values Reported by YG on 8 November 2026, not filed: MFW directs the team to the colours and fonts of its website and the identity of the issues and logo it supplied, with no new palette or type system. MFW gave no values. | OPEN |
 
 ### 5.12 Store compliance
 
@@ -201,7 +203,7 @@ This is the single, actionable register of unresolved questions about client app
 
 | ID | Question | Priority | Blocks | Related | Decision owner | Evidence needed | Status |
 |---|---|---|---|---|---|---|---|
-| OQ-40 | Will MFW provide a separate non-production cloud project for testing, at its cost? | P1 | DEC-023; ENV-TEST; T-01.3, T-01.4; TS-05, TS-06 | R17; DEP-05 | MFW | Written approval and project access Update of 8 November 2026: Yuvraj Gaykhe's written position on DEC-023 accepts the three environments (`DECISION_LOG.md` section 5.10). MFW's answer is still needed. | OPEN |
+| OQ-40 | Will MFW provide a separate non-production cloud project for testing, at its cost? | P1 | DEC-023; ENV-TEST; T-01.3, T-01.4; TS-05, TS-06 | R17; DEP-05 | MFW | Written approval and project access Update of 8 November 2026: Yuvraj Gaykhe's written position on DEC-023 accepts the three environments (`DECISION_LOG.md` section 5.10). MFW's answer is still needed. Second update of 8 November 2026: MFW says cloud access will be provided next week (reported by YG, not filed), without saying whether a separate test project is included. `CLOUD_ACCESS_SETUP_CHECKLIST.md` CA-02 asks it. | OPEN |
 | OQ-46 | What backup and recovery does MFW expect (RPO, RTO, scope, cost)? Does MFW keep master copies of issue PDFs? S1 and S2 do not mention backup or restore, so these are proposed additions and not S2 deliverables. | P2 | `BACKUP_AND_RECOVERY.md` §4 and §5; release step 4; HO-14 | R19 | MFW | Written decision | OPEN |
 | OQ-47 | Who at MFW receives incident reports and monitoring alerts, through which channel, and what is the support contact for the stores? S1 and S2 do not mention monitoring access, so it is a proposed addition and not an S2 deliverable. | P3 | `DEPLOYMENT_PLAN.md` §7.7; `MAINTENANCE_AND_HANDOVER.md` §10; COM-10 | — | MFW | Named contacts | OPEN |
 
@@ -217,10 +219,10 @@ This is the single, actionable register of unresolved questions about client app
 
 | Priority | Count | IDs |
 |---|---|---|
-| P1 | 41 | OQ-01 to OQ-05, OQ-07 to OQ-10, OQ-12 to OQ-14, OQ-16 to OQ-18, OQ-24 to OQ-29, OQ-31 to OQ-42, OQ-50, OQ-51, OQ-53, OQ-54, OQ-57 to OQ-59, OQ-62 |
+| P1 | 42 | OQ-01 to OQ-05, OQ-07 to OQ-10, OQ-12 to OQ-14, OQ-16 to OQ-18, OQ-24 to OQ-29, OQ-31 to OQ-42, OQ-50, OQ-51, OQ-53, OQ-54, OQ-57 to OQ-59, OQ-62, OQ-63 |
 | P2 | 17 | OQ-06, OQ-11, OQ-15, OQ-19 to OQ-23, OQ-30, OQ-45, OQ-46, OQ-48, OQ-52, OQ-55, OQ-56, OQ-60, OQ-61 |
 | P3 | 4 | OQ-43, OQ-44, OQ-47, OQ-49 |
-| **Total** | **62** | All OPEN, except OQ-50 and OQ-62 (ANSWERED) |
+| **Total** | **63** | All OPEN, except OQ-50 and OQ-62 (ANSWERED) |
 
 Questions waiting on MFW, which the contracting developer sends (`TASK_OWNERSHIP_MATRIX.md` §10), make up most of the P1 list. Sending them early is task T-00.2 in `DEVELOPMENT_ROADMAP.md`.
 
