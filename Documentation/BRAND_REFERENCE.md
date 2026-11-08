@@ -8,7 +8,7 @@
 | File | `Documentation/BRAND_REFERENCE.md` |
 | Phase | 3: Development Planning and Collaboration. The reference for the design tokens (MOD16-P1-T01), the app theme (MOD01-P2-T02) and the M2 designs of the app and the admin panel |
 | Version | 0.1 |
-| Status | Draft for review. Not reviewed. **OBSERVED, and the working position for the app: used as they are (reported by YG on 8 November 2026, not filed).** The values below were read from MFW's public website on 8 November 2026. They are not confirmed by MFW in writing, so OQ-63 stays OPEN. DEP-02 is RECEIVED by reference to the website. |
+| Status | Draft for review. Not reviewed. **OBSERVED, and the working position for the app: used as they are (reported by YG on 8 November 2026, not filed).** The values below were read from MFW's public website on 8 November 2026. They are not confirmed by MFW in writing, so OQ-63 stays OPEN. DEP-02 is RECEIVED by reference to the website. Section 7 adds what the supplied logo file and the three issues show. |
 | Date | 8 November 2026 |
 | Prepared by | Yuvraj Gaykhe (WS-B), 8 November 2026 |
 | Approval required | Both developers, for its use in the designs. MFW confirms the values in writing (OQ-63) and approves the screens at M2 |
@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First record: MFW's direction as reported on 8 November 2026, the colours, fonts, type scale and page patterns read from the public website and its web logo, the contrast of the colour pairs, and what was not inspected. It also records YG's report of the same day that the website's colours and fonts are used in the app as they are, as the working position of section 4.3. |
+| 0.1 | 8 November 2026 | First record: MFW's direction as reported on 8 November 2026, the colours, fonts, type scale and page patterns read from the public website and its web logo, the contrast of the colour pairs, what the supplied logo file and the three issues show (section 7, read once YG allowed tools to open them), and what was not inspected. It also records YG's report of the same day that the website's colours and fonts are used in the app as they are, as the working position of section 4.3. |
 
 ### 1.1 Related documents
 
@@ -171,14 +171,62 @@ Recorded so the designs can follow the same identity. None is a requirement.
 - **Width.** Content up to 1280 px wide on the desktop, with breakpoints at 1024 px and 767 px.
 - **Website-only features.** Advertising slots and a pop-up advert for a trade event on first load. No requirement asks for these in the app.
 
-## 7. What Was Not Inspected
+## 7. The Supplied Logo and Issues
+
+Read on 8 November 2026 by an automated reading of the four files MFW supplied, after YG allowed tools to open them, with "no issue from the client side or dev side" (YG, not filed). Each file's SHA-256 matches `inputs/README.md`. The reading took font names, sizes, colours and positions only. No page text, image or file is stored in the repository, and the files stay outside Git (DEC-024). The issues are print files, so their colours are shown here as a PDF reader converts them for a screen, and are approximate.
+
+### 7.1 The logo file
+
+| Item | Finding |
+|---|---|
+| File | One page, 252 by 144 points, made in Adobe Illustrator 30.2 |
+| Name | "METAL FORMING WORLD" is drawn as shapes, not set as text, so it carries no font |
+| Red | Print values CMYK 0, 100, 100, 0. On screen `#ED1C24`, the same value as the web logo (section 4.1) |
+| Blue | Print values CMYK 100, 79.7, 0, 0. On screen `#074EA2` in this file, against `#014EA2` in the web logo and on the issue covers. The difference comes from the conversion, not from a different blue |
+| Black | CMYK 0, 0, 0, 100, on screen `#231F20`, for the line of small text |
+| Small text | 53 characters in Acumin Variable Concept, 5.6 points |
+| White | CMYK 0, 0, 0, 0 |
+
+So the supplied logo and the web logo use the same red and the same blue. The logo file is the source for the app's logo (section 8, item 3).
+
+### 7.2 The issues
+
+The three issues (April-May 2026, 28 pages; August-September 2026, 44 pages; October-November 2026, 32 pages) were made in Adobe InDesign at 684 by 972 points. They share one editorial template. The styles below recur on the editorial pages of all three issues. The many other fonts in the files (Calibri, Lato, Montserrat, Poppins, Futura and others) occur on a page or two each, and appear to come from advertisements.
+
+| Element | Font | Size | Colour on screen | Where |
+|---|---|---|---|---|
+| Body text | Arial | 9 pt | Black | 16 to 18 pages an issue, three quarters of all the characters |
+| Headline | Helvetica LT Std Bold | 28 pt | Black, some words in red `#EC2127` | Top or middle of an article's first page |
+| Section label | Helvetica LT Std Condensed | 14 pt | White on a red band `#EC2127` | Top of each editorial page |
+| Red emphasis in articles | Frutiger LT Std Bold | 10 pt | Red `#EC2127` | Inside articles, 12 to 14 pages an issue |
+| Italic lead text | Frutiger LT Std Light Italic | 10.5 pt | Grey `#58595B` | Two to five pages an issue |
+| Large initial letter | Arial Bold | 45 pt | Red `#EC2127` | One letter, like a drop cap, 8 to 10 times an issue |
+| Page number | Frutiger LT Std Bold Condensed | 13 pt | Red `#EC2127` | Foot of each editorial page |
+| Running foot | Frutiger LT Std Light, and Frutiger LT Std Bold | 8 pt | Blue `#0C509F`, and grey `#58595B` | Foot of each editorial page |
+| Cover lines | Helvetica LT Std Bold, Light and Roman | 18 to 38 pt | Black, grey and white; one issue uses a blue `#0F8BCC` for its cover theme | The cover, with the logo in its red and blue |
+
+Other colours that recur in the template: greys `#4D4D4F` and `#6D6E71`, and a light grey fill `#E6E7E8`. No spot colour belongs to the template; two Pantone colours in the April-May issue each occur once.
+
+### 7.3 What the issues add to the website
+
+| Point | Website (sections 4 and 5) | Issues | Consequence, not decided here |
+|---|---|---|---|
+| Red | `#F0233B` | `#EC2127`, the logo red | Two close reds. The working position of section 4.3 keeps the website red, as YG reports. OQ-63 |
+| Blue | Not used outside the logo | The logo blue `#0C509F` in every running foot | The magazine uses the logo blue as a second colour, and the website does not. The working position keeps the website's use. OQ-63 |
+| Text colour | Slate `#48586A` and `#282828` | Black, and greys `#58595B` and `#4D4D4F` | Different. The working position keeps the website's |
+| Headings | Fraunces, a serif | Helvetica LT Std, a sans serif | Different type systems. The working position keeps Fraunces |
+| Body text | Inter | Arial | Different. The working position keeps Inter |
+| Section marks | Red kicker text (`h6`) | White text on a red band | A shared pattern: red marks the section |
+
+The magazine fonts Frutiger LT Std, Helvetica LT Std, Arial and Acumin are not proposed for the app. Their licences are NOT VERIFIED, and a font that needs a paid licence needs MFW's written approval before use (RS NFR-MAINT-006). White on the issue red is 4.36 to 1, the logo blue on white 7.88 to 1, and the grey `#58595B` on white 7.01 to 1 (section 4.4 gives the levels).
+
+### 7.4 What was not inspected
 
 | Source | Why | What is needed |
 |---|---|---|
-| The three magazine issues MFW supplied (`inputs/README.md`) | They are MFW's confidential sample PDFs (DEC-024). The team keeps them out of automated reading, so no tool opened them for this record | A developer looks at the covers and inside pages by eye and adds only colour and font observations here, with no image of a page (DEC-024). Or MFW names the fonts and colours of the magazine. Colours read from a print file are approximate on a screen |
-| The logo file MFW supplied (`inputs/brand/`) | It is kept with MFW's inputs outside Git and was not opened. Section 4.1 reads the public web logo instead | A developer compares the supplied file with the web logo. MFW confirms the logo colours (OQ-63) |
 | Website pages other than the home page and one article | The global colours and type settings apply to the whole site | Nothing, unless a design needs a pattern from another page |
 | The website's settings behind the sign-in | No credentials were given, and none are needed | MFW's written confirmation (OQ-63) |
+| The exact print values of the issues' red and blue | The issues set their colours through colour spaces that the reading did not decode. Section 7.1 has the logo's print values | Nothing for the app, which uses screen colours |
 
 ## 8. How the Designs Use This Reference
 
@@ -195,4 +243,4 @@ Recorded so the designs can follow the same identity. None is a requirement.
 | MFW's written confirmation of sections 4 and 5. YG reports that they are used as they are, and section 4.3 follows that. The colours for error, success and warning states are the team's proposal, seen by MFW at M2 | OQ-63 |
 | The contrast of white on the website red, and of the grey meta text | OQ-25 |
 | The licences of Fraunces, Inter and Plus Jakarta Sans for use in the app and the admin panel | DEP-78 |
-| The magazine's identity, read by eye and with no page image | Section 7; DEC-024 |
+| Where the issues differ from the website: the red, the logo blue as a second colour, and the type system | Section 7.3; OQ-63 |

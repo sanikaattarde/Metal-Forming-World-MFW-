@@ -247,7 +247,7 @@ After MFW's clarifications, reported on 8 November 2026         [PROPOSED]
 │   ├── T-01.3 access and T-01.4 deploy to ENV-TEST: access not yet granted; DEC-003; OQ-40; OQ-41
 │   ├── T-01.6 admin panel in ENV-TEST: access; DEC-004
 │   ├── Release use of CFG-03 and CFG-04, and the checks of DEPLOYMENT_PLAN.md section 7.6: OQ-39 (in writing, with the API confirmation)
-│   ├── Written confirmations the work above does not wait for: OQ-63 (brand); the magazine's identity, read by a developer by eye (DEC-024)
+│   ├── Written confirmations the work above does not wait for: OQ-63 (brand, with the issues read in BRAND_REFERENCE.md section 7)
 │   ├── M2 screen approval: MFW, at M2
 │   └── T-03.2 Google Sign-In, T-10.1 push set-up, T-12.2 signing: the store accounts (unchanged)
 └── Goes ahead without any input (section 4.3, unchanged)
