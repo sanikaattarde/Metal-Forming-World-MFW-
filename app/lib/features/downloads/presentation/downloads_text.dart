@@ -35,6 +35,10 @@ abstract final class DownloadsText {
   /// The retry action.
   static const String retry = 'Retry';
 
+  /// Continues a download that the connection broke, from the bytes
+  /// already received (invariant I-5).
+  static const String resume = 'Resume';
+
   /// Empty Downloads screen (RS FR-STATE-002).
   static const String empty = 'No downloaded issues yet.';
 

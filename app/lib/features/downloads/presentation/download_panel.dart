@@ -10,7 +10,9 @@ import 'package:mfw_app/features/downloads/presentation/downloads_text.dart';
 /// Shows the size before the download (RS FR-DL-003), asks before using
 /// mobile data (FR-DL-004), shows progress (FR-DL-005), says when there is
 /// too little space (FR-STATE-004), and offers a retry after a retryable
-/// failure (FR-STATE-006).
+/// failure (FR-STATE-006). When the connection breaks, the bytes received
+/// so far are kept and the panel offers to resume (I-5, S2 AC-4). Whether
+/// a resume starts on its own is T-06.3 (OQ-54).
 class DownloadPanel extends StatefulWidget {
   /// Creates the panel for [issueId].
   const DownloadPanel({
@@ -95,20 +97,25 @@ class _DownloadPanelState extends State<DownloadPanel> {
             null => const _Busy(),
             NotDownloaded() => _planView(),
             Queued() => const Text(DownloadsText.queued),
-            InProgress(:final int receivedBytes, :final int totalBytes) ||
+            InProgress(:final int receivedBytes, :final int totalBytes) =>
+              _progress(receivedBytes, totalBytes),
             WaitingForNetwork(
               :final int receivedBytes,
               :final int totalBytes,
-            ) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                LinearProgressIndicator(
-                  value: totalBytes == 0 ? null : receivedBytes / totalBytes,
-                ),
-                const SizedBox(height: 8),
-                Text(DownloadsText.progress(receivedBytes, totalBytes)),
-              ],
-            ),
+            ) =>
+              _progress(
+                receivedBytes,
+                totalBytes,
+                footer: <Widget>[
+                  const SizedBox(height: 8),
+                  const Text(DownloadsText.failedNetwork),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: () => unawaited(_retry()),
+                    child: const Text(DownloadsText.resume),
+                  ),
+                ],
+              ),
             Verifying() => const Text(DownloadsText.verifying),
             Downloaded() => const Text(DownloadsText.downloaded),
             Failed(:final AppFailure failure) => Column(
@@ -125,6 +132,24 @@ class _DownloadPanelState extends State<DownloadPanel> {
               ],
             ),
           },
+    );
+  }
+
+  Widget _progress(
+    int receivedBytes,
+    int totalBytes, {
+    List<Widget> footer = const <Widget>[],
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        LinearProgressIndicator(
+          value: totalBytes == 0 ? null : receivedBytes / totalBytes,
+        ),
+        const SizedBox(height: 8),
+        Text(DownloadsText.progress(receivedBytes, totalBytes)),
+        ...footer,
+      ],
     );
   }
 

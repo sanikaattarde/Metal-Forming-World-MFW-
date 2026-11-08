@@ -11,8 +11,7 @@ import 'package:mfw_app/features/downloads/domain/download_ports.dart';
 final class IoFileStore implements FileStore {
   /// Creates the store in [root]. Without [freeSpace], free space is
   /// reported as unlimited, which is a spike shortcut.
-  IoFileStore(this.root, {Future<int> Function()? freeSpace})
-    : _freeSpace = freeSpace;
+  IoFileStore(this.root, {this._freeSpace});
 
   /// The store's folder.
   final Directory root;

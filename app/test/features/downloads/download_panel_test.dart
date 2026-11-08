@@ -98,8 +98,8 @@ void main() {
       expect(find.text(DownloadsText.download), findsNothing);
     });
 
-    testWidgets('a failed download offers a retry that completes '
-        '[FR-STATE-006]', (WidgetTester tester) async {
+    testWidgets('a broken download keeps its bytes and resumes from them '
+        '[FR-STATE-006, AC-4, I-5]', (WidgetTester tester) async {
       final DownloadRig rig = DownloadRig();
       rig.transport.resetAfterBytes = 300;
       await pumpPanel(tester, rig);
@@ -107,11 +107,13 @@ void main() {
       await tester.tap(find.text(DownloadsText.download));
       await tester.pumpAndSettle();
       expect(find.text(DownloadsText.failedNetwork), findsOneWidget);
+      expect(find.text(DownloadsText.retry), findsNothing);
 
-      await tester.tap(find.text(DownloadsText.retry));
+      await tester.tap(find.text(DownloadsText.resume));
       await tester.pumpAndSettle();
 
       expect(find.text(DownloadsText.downloaded), findsOneWidget);
+      expect(rig.transport.offsets, <int>[0, 300]);
     });
 
     testWidgets('a hash mismatch says the file did not pass its check '

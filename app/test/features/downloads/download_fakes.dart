@@ -129,6 +129,9 @@ final class FakeFileTransport implements FileTransport {
   /// How many fetches started.
   int fetches = 0;
 
+  /// The offset each fetch asked for, in order.
+  final List<int> offsets = <int>[];
+
   @override
   Future<Result<void>> fetch(
     IssueFileGrant grant, {
@@ -136,6 +139,7 @@ final class FakeFileTransport implements FileTransport {
     required Future<Result<void>> Function(List<int> chunk) onChunk,
   }) async {
     fetches++;
+    offsets.add(offset);
     await gate?.future;
     final List<int>? source = contents[grant.issueId];
     if (source == null) {
