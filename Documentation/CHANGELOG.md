@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.62 |
+| Version | 0.63 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Changed: the T-02.4 resume evidence, on the Firebase Storage emulator, 2026-11-09, on topic branch `docs/yg-resume-emulator` on top of `a1aa8e5` (the head of pull request #69)
+
+`DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` 0.2 adds section 4.2: the four resume tests of the spike, unchanged, passed on the iOS simulator and the Android emulator through the Firebase Storage emulator, with the same synthetic file of 150,000,000 bytes (DEC-024). The emulator's download link answered `Range: bytes=n-` with 206, and a missing or wrong download token with 403. The tools are on `spike/yg-download-resume` at `c5c427e`, which is not merged. No real Firebase project, signed link, expired grant or phone was used, and the report says so; AC-4.3 and step 4 of MOD06-P1-T02 stay open.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `Documentation/test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` | 0.2: section 4.2 (the Storage emulator run and what the emulator answered), with sections 6 and 7 brought in line. | DEC-003 AGREED (Firebase), so the transfer could be tried on the Firebase emulator | T-02.4, MOD06-P1-T02, DEC-003, DEC-020, R2, AR-01, AC-4.3, FX-NET-07 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.63: this entry. It takes 0.63 because #60 (0.53) to #69 (0.62) are merged or under review with those numbers. | Records the change above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | `test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE` at 0.2 (was 0.1) with its description, and `CHANGELOG` 0.63 (was 0.62) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: the reader-side screen designs (MOD16-P1-T02), 2026-11-09, on topic branch `docs/yg-reader-designs` on top of `d097e91` (the head of pull request #68), under review in pull request #69
 
