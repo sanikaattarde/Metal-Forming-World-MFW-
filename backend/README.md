@@ -18,13 +18,13 @@ The backend on Firebase (DEC-003, AGREED). This folder holds the Cloud Firestore
 npm test
 ```
 
-It starts the Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 9 November 2026: 318 tests, 318 passed (emulator only).
+It starts the Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 9 November 2026: 321 tests, 321 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
 | G1 Deny by default | `test/g1-deny-by-default.test.mjs` | The records with no client access, and paths no rule lists, are refused to six actors, including an admin account and readers with forged admin claims. Listing and collection-group queries are refused |
 | G2 Public reads | `test/g2-public-reads.test.mjs` | Segments, categories, notification categories, news controls, the deleted-issue list, the public configuration and published issues are readable by anyone and writable by no client. An unpublished issue is refused, and a query must filter on the published state |
-| G3 Own records | `test/g3-own-records.test.mjs` | A reader reads their account, profile and consent records, and reads and writes their bookmarks, favourites and notification preferences, with the fields checked. Every other actor is refused |
+| G3 Own records | `test/g3-own-records.test.mjs` | A reader reads their account, profile and consent records, and reads and writes their bookmarks, favourites and notification preferences, with the fields checked. Once written, none of the three can be changed, `created_at` included; a replayed write passes. Every other actor is refused |
 | G4 File store | `test/g4-storage.test.mjs` | Issue files, the holding area and unlisted paths are refused to every client. Covers are readable by anyone and writable by no client |
 
 ## What the rules do
