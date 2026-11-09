@@ -7,7 +7,7 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.7 |
+| Version | 0.8 |
 | Status | Draft for review. Not approved. **One workflow exists: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests that change `app/` or the workflow (T-01.5). Every other gate and pipeline below is PLANNED.** |
 | Date | 8 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
@@ -23,6 +23,7 @@
 | 0.5 | 5 November 2026 | Section 3 gives the CI service as AGREED, conditional on the cost check (DEC-022). The GitHub plan row records that branch protection on `main` is on. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.6 | 7 November 2026 | The first workflow, `.github/workflows/pr.yml`, runs QG-01 to QG-06 (T-01.5, pull request #48). The status row, section 2, the Available cells of QG-01 to QG-06, section 5.1 and section 14 say so, and QG-06 runs on pull requests only, not yet on merges to `main` (section 5.2). QG-14 is blocked by DEC-003 only, because DEC-026 is AGREED (`DECISION_LOG.md` section 5.8). No other gate changed. No MFW approval is recorded, and no entry is APPROVED. Revised on 7 November 2026 after the review of pull request #48: the Implements cell of QG-04 reads "None" in place of a dash. |
 | 0.7 | 8 November 2026 | Section 3 and section 13 record that the repository owner approved the cost of the workflow of pull request #48 in writing on 8 November 2026 (DEC-022, `DECISION_LOG.md` section 5.9). The plan minutes and the macOS runner cost stay NOT VERIFIED. No gate changed. No MFW approval is recorded, and no entry is APPROVED. |
+| 0.8 | 9 November 2026 | QG-05 tries the Android build up to 3 times, 30 seconds apart, and the Gradle wrapper downloads the binary distribution of Gradle 9.3.1 rather than the full one, after GitHub answered 504 to the Gradle download on 8 and 9 November 2026 (pull request #58, two commits made by the Copilot coding agent started from YG's account and kept by YG). A retry also repeats a build that fails for a real reason, so a real failure takes up to three times as long to show. No gate is added, removed or made optional. |
 
 ### 1.1 Related documents
 
@@ -61,7 +62,7 @@ This document proposes the automated checks that guard pull requests, integratio
 | QG-02 | Static analysis | `flutter analyze`, failing on any issue (confirm the default behaviour for the Flutter version pinned under OQ-50) | Every pull request | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-01 |
 | QG-03 | Unit and widget tests | `flutter test`. It also runs the app side of the contract tests (CT-04, CT-08 to CT-10), which need no backend. CT-10 starts at the first release | Every pull request | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-02, TS-03, TS-14 (app side) |
 | QG-04 | Coverage report | `flutter test --coverage` | Every pull request | No: report only. No threshold agreed. | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). The report is kept for 7 days (DEP-76) | None |
-| QG-05 | Android build check | `flutter build apk --debug` | Pull requests that touch `app/` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | DoD-INT 2 |
+| QG-05 | Android build check | `flutter build apk --debug`, tried up to 3 times, 30 seconds apart (pull request #58) | Pull requests that touch `app/` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | DoD-INT 2 |
 | QG-06 | iOS build check | `flutter build ios --no-codesign` on macOS | Pull requests that touch `app/`; every merge to `main` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). Not yet on merges to `main` (section 5.2) | DoD-INT 2 |
 | QG-07 | App integration tests | `flutter test integration_test` on an emulator | Every merge to `main`; release candidates | Yes, on `main` | [SCAFFOLD] | TS-04 |
 | QG-08 | Backend and authorization-rule tests | Blocked by DEC-003 | Pull requests that touch `backend/` | Yes | [BACKEND] | TS-05 |
