@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'package:flutter/foundation.dart' show kDebugMode;
 
 import 'wordpress_config.dart';
 
@@ -58,12 +58,12 @@ final class AppConfig {
   ///
   /// Throws [AppConfigException] for an unknown environment, a value that is
   /// not valid, or a setting that ENV-PROD needs and does not have. When
-  /// [releaseBuild] is true, the environment must be named: a release build
-  /// never falls back to `local` because its file was left out (review of
-  /// pull request #64).
+  /// [requireEnvironment] is true, the environment must be named, so a
+  /// build that leaves a developer's machine never falls back to `local`
+  /// because its file was left out (reviews of pull request #64).
   factory AppConfig.fromDefines(
     Map<String, String> defines, {
-    bool releaseBuild = false,
+    bool requireEnvironment = false,
   }) {
     final List<String> bad = <String>[];
     String? read(String key) {
@@ -85,7 +85,7 @@ final class AppConfig {
     }
 
     final String? namedEnvironment = read(environmentKey);
-    if (releaseBuild && namedEnvironment == null) {
+    if (requireEnvironment && namedEnvironment == null) {
       bad.add(environmentKey);
     }
     final String environmentName = namedEnvironment ?? 'local';
@@ -145,21 +145,23 @@ final class AppConfig {
     );
   }
 
-  /// Reads the settings passed to this build. A release build must name its
-  /// environment.
-  factory AppConfig.fromEnvironment() =>
-      AppConfig.fromDefines(releaseBuild: kReleaseMode, const <String, String>{
-        environmentKey: String.fromEnvironment(environmentKey),
-        wordPressSiteKey: String.fromEnvironment(wordPressSiteKey),
-        wordPressCategoriesKey: String.fromEnvironment(wordPressCategoriesKey),
-        privacyPolicyKey: String.fromEnvironment(privacyPolicyKey),
-        termsOfUseKey: String.fromEnvironment(termsOfUseKey),
-        storeLinkAndroidKey: String.fromEnvironment(storeLinkAndroidKey),
-        storeLinkIosKey: String.fromEnvironment(storeLinkIosKey),
-      });
+  /// Reads the settings passed to this build. Every build that is not a
+  /// debug build, profile as well as release, must name its environment.
+  factory AppConfig.fromEnvironment() => AppConfig.fromDefines(
+    requireEnvironment: !kDebugMode,
+    const <String, String>{
+      environmentKey: String.fromEnvironment(environmentKey),
+      wordPressSiteKey: String.fromEnvironment(wordPressSiteKey),
+      wordPressCategoriesKey: String.fromEnvironment(wordPressCategoriesKey),
+      privacyPolicyKey: String.fromEnvironment(privacyPolicyKey),
+      termsOfUseKey: String.fromEnvironment(termsOfUseKey),
+      storeLinkAndroidKey: String.fromEnvironment(storeLinkAndroidKey),
+      storeLinkIosKey: String.fromEnvironment(storeLinkIosKey),
+    },
+  );
 
   /// The environment's name: `local`, `test` or `prod`. `local` if unset,
-  /// except in a release build, which must set it.
+  /// except in a profile or release build, which must set it.
   static const String environmentKey = 'MFW_ENV';
 
   /// CFG-03.

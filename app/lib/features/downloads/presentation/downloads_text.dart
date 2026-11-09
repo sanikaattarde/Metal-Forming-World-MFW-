@@ -35,6 +35,9 @@ abstract final class DownloadsText {
   /// The retry action.
   static const String retry = 'Retry';
 
+  /// The Downloads list could not be read (RS FR-STATE-003).
+  static const String listFailed = 'Your downloads could not be read.';
+
   /// Empty Downloads screen (RS FR-STATE-002).
   static const String empty = 'No downloaded issues yet.';
 

@@ -53,7 +53,21 @@ final class IssueDownloadManager implements DownloadManager {
   final StreamController<void> _changes = StreamController<void>.broadcast(
     sync: true,
   );
-  late final Future<void> _ready = _loadRegistry();
+  Future<void>? _loading;
+
+  /// True while the repair of section 4.4 is still owed: it failed at load,
+  /// so it runs in full before the next list.
+  bool _repairPending = false;
+
+  /// Loads the registry once. A failed load is not kept, so the next call
+  /// tries again instead of failing for the rest of the session.
+  Future<void> get _ready => _loading ??= _loadRegistry().catchError((
+    Object error,
+    StackTrace stackTrace,
+  ) {
+    _loading = null;
+    Error.throwWithStackTrace(error, stackTrace);
+  });
 
   static const Err<void> _unauthenticated = Err<void>(
     AppFailure(FailureCode.unauthenticated),
@@ -171,11 +185,16 @@ final class IssueDownloadManager implements DownloadManager {
   Future<List<DownloadedIssue>> listDownloaded() async {
     await _ready;
     final String? userId = _currentUserId();
-    await _repairRows(
-      _copies.values
-          .where((DownloadedIssue copy) => copy.ownerUserId == userId)
-          .toList(),
-    );
+    if (_repairPending) {
+      await _repairAll();
+      _repairPending = false;
+    } else {
+      await _repairRows(
+        _copies.values
+            .where((DownloadedIssue copy) => copy.ownerUserId == userId)
+            .toList(),
+      );
+    }
     return _copies.values
         .where((DownloadedIssue copy) => copy.ownerUserId == userId)
         .toList()
@@ -218,36 +237,55 @@ final class IssueDownloadManager implements DownloadManager {
   /// (`PDF_READER_AND_OFFLINE_DESIGN.md` section 4.4, PROPOSED). The
   /// checksum is not recomputed, so the first page is not delayed
   /// (NFR-PERF-001).
+  ///
+  /// The repair is best effort: if the file store fails during it, the rows
+  /// still load, so kept copies can open, and the whole repair runs again
+  /// before the next list.
   Future<void> _loadRegistry() async {
     for (final DownloadedIssue copy in await _registry.load()) {
       _copies[(copy.ownerUserId, copy.issueId)] = copy;
     }
+    try {
+      await _repairAll();
+      _repairPending = false;
+    } on Exception {
+      _repairPending = true;
+    }
+  }
+
+  /// The repair of every row, then of orphan files: a file with no row, as
+  /// after a crash between the move and the row (invariant I-3). Rows of
+  /// every reader count, so another reader's copy is left alone (section
+  /// 6.2).
+  Future<void> _repairAll() async {
     await _repairRows(_copies.values.toList());
-    // An orphan: a file with no row, as after a crash between the move and
-    // the row (invariant I-3). Rows of every reader count, so another
-    // reader's copy is left alone (section 6.2).
     final Set<String> known = <String>{
       for (final DownloadedIssue copy in _copies.values) copy.localFile.path,
     };
-    for (final String path in await _store.completeFiles()) {
-      if (!known.contains(path)) {
-        await _store.deleteFile(path);
-      }
-    }
+    await Future.wait(<Future<void>>[
+      for (final String path in await _store.completeFiles())
+        if (!known.contains(path)) _store.deleteFile(path),
+    ]);
   }
 
   /// Drops each row in [copies] whose file is missing, and deletes the file
   /// and the row where the length differs: the issue then shows as not
   /// downloaded (FR-STATE-004).
+  /// The checks run side by side, so a long list is not checked file by
+  /// file.
   Future<void> _repairRows(List<DownloadedIssue> copies) async {
-    for (final DownloadedIssue copy in copies) {
-      final int? length = await _store.fileLength(copy.localFile.path);
-      if (length == null) {
-        await _forget(copy);
-      } else if (length != copy.sizeBytes) {
-        await _store.deleteFile(copy.localFile.path);
-        await _forget(copy);
-      }
+    await Future.wait(<Future<void>>[
+      for (final DownloadedIssue copy in copies) _repairRow(copy),
+    ]);
+  }
+
+  Future<void> _repairRow(DownloadedIssue copy) async {
+    final int? length = await _store.fileLength(copy.localFile.path);
+    if (length == null) {
+      await _forget(copy);
+    } else if (length != copy.sizeBytes) {
+      await _store.deleteFile(copy.localFile.path);
+      await _forget(copy);
     }
   }
 
