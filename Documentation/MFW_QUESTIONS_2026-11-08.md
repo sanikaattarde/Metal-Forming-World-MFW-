@@ -11,21 +11,22 @@
 | Status | Draft for review. **Not sent.** It asks five questions and records no answer. It approves nothing and changes no status label. |
 | Date | 8 November 2026 |
 | Prepared by | Yuvraj Gaykhe (WS-B) |
-| Sent by | Not sent. Decisions go to MFW's approver through the contracting developer, Sanika Attarde (`DECISION_LOG.md` section 4, step 4; CH §14). Who sends this pack, and when, is settled in the review of the pull request that adds it. |
+| Sent by | Yuvraj Gaykhe sends it to MFW's approver, for both developers, with the written agreement of the contracting developer, Sanika Attarde, given in the review of pull request #54 (8 November 2026; `DECISION_LOG.md` section 4, step 4; CH §14). The agreement covers these five questions only. It is sent after pull request #54 merges, with the text of section 5 as it then stands. |
+| Date sent | Not sent yet. The date is added here when it goes. |
 | Approval required | Both developers, before it is sent |
 
 **Change history**
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First version: five questions that only MFW can answer, each with the decision it unblocks, the team's working position and the answer that is needed. |
+| 0.1 | 8 November 2026 | First version: five questions that only MFW can answer, each with the decision it unblocks, the team's working position and the answer that is needed. Revised on 9 November 2026 after the review of pull request #54: item 2 of section 5 says that the team is checking that MFW still expects Firebase, as section 4 requires while Sanika Attarde's position on DEC-003 is not filed; the related-documents row says that #51 merged as `7d66eec`; and the "Sent by" row says that Yuvraj Gaykhe sends the pack with Sanika Attarde's written agreement, with a new row for the date it is sent. |
 
 ### 1.1 Related documents
 
 | Document | Status |
 |---|---|
 | `OPEN_QUESTIONS.md` OQ-08, OQ-11, OQ-26, OQ-35, OQ-40 | Exist, draft. The questions below, in the register's words |
-| `DECISION_LOG.md` DEC-003, DEC-008, DEC-023, DEC-024, DEC-033, sections 3.1 and 5.10 | Exist, draft. The decisions that wait for these answers and what counts as MFW's approval. Section 5.10, Yuvraj Gaykhe's positions of 8 November 2026, comes with pull request #51, under review |
+| `DECISION_LOG.md` DEC-003, DEC-008, DEC-023, DEC-024, DEC-033, sections 3.1 and 5.10 | Exist, draft. The decisions that wait for these answers and what counts as MFW's approval. Section 5.10, Yuvraj Gaykhe's positions of 8 November 2026, came with pull request #51, merged as `7d66eec` |
 | `TESTING_STRATEGY.md` §13 | Exists, draft. Large media go in an MFW-approved place, which does not exist yet |
 | `inputs/README.md` | Exists. MFW's logo and three sample issues are recorded there by size and SHA-256. The files are not in Git |
 
@@ -134,7 +135,8 @@ A reply to this email is enough. You can answer them one at a time.
    permanently.
 
 2. Backend. Do you keep the Firebase architecture in the statement of
-   work, in MFW's own Firebase project?
+   work, in MFW's own Firebase project? We are checking that you still
+   expect Firebase, as in the statement of work.
 
 3. Test project. Will MFW create a second Firebase project for testing,
    separate from the live one, and give both developers access? Its
