@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.55 |
+| Version | 0.56 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,23 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the connectivity service and cleartext off on both platforms (MOD01-P2-T03), 2026-11-09, on topic branch `feat/sa-connectivity` on top of `feat/sa-routes-guards` (the head of pull request #62), under review in pull request #63
+
+MOD01-P2-T03 is Yuvraj Gaykhe's task, built by Sanika Attarde at the repository owner's request of 9 November 2026, for Yuvraj Gaykhe's review. Step 2, the HTTPS-only client with its timeouts mapped to `FailureCode`, came with #58. Step 1: `PluginConnectivityService` implements `ConnectivityService` on `connectivity_plus` 7.3.2 (DEP-50, BSD-3-Clause), added with its register entry. With several connections listed, Wi-Fi comes first, then Ethernet, then mobile. A satellite link counts as mobile, and a platform failure reads as mobile, so the reader is warned before a download (PROPOSED). Step 3: the Android manifest sets `android:usesCleartextTraffic="false"`, and the iOS `Info.plist` keeps App Transport Security with no exception. A test inspects both files on each run (the configuration part of SEC-CHK-01, now in QG-03). The proxy observation and the check on a device stay manual. `FakeConnectivityService` is a fake for MOD-06. 332 tests pass, with 1 golden skipped. The local machine has no Android SDK, so the Android and iOS builds with the plugin are checked by QG-05 and QG-06 on the pull request.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `app/lib/core/network/connectivity_service.dart` | Added: `connectionTypeOf` and `PluginConnectivityService`. | MOD01-P2-T03 step 1 | MOD01-P2-T03, FR-DL-004, DEP-50 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/lib/app/app.dart` | Added: `connectivityServiceProvider`. | MOD01-P2-T03 step 1 | MOD01-P2-T03 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/android/app/src/main/AndroidManifest.xml` | Changed: `android:usesCleartextTraffic="false"` on the application. | MOD01-P2-T03 step 3 | SEC-CHK-01, NFR-SEC-001 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/pubspec.yaml`, `app/pubspec.lock` | Added: `connectivity_plus: ^7.3.2`, locked at 7.3.2, with nine packages it brings in. | MOD01-P2-T03 step 1 | DEP-50 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/test/core/network/`, `app/test/fakes/fake_connectivity_service.dart` | Added: 19 tests (the mapping, the service on a fake plugin, and the SEC-CHK-01 inspection) and the fake. | DoD-TASK: tests in the same pull request | MOD01-P2-T03, SEC-CHK-01 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.14: DEP-50 CONFIRMED, with its section 8.1 entry and the licences of the nine packages it brings in. | Section 3, step 1 | DEP-50 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.18: the Implemented row of section 6.1. | Records the code | MOD01-P2-T03 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.10: section 10 says that the configuration inspection of SEC-CHK-01 runs in QG-03. No gate changes. | Records the test | SEC-CHK-01, QG-03 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.56: this entry. It takes 0.56 because #62 takes 0.55. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | The version column reads 0.14 for `DEPENDENCY_REGISTER` (was 0.13), 0.18 for `API_AND_MODULE_CONTRACTS` (was 0.17), 0.10 for `CI_CD_AND_QUALITY_GATES` (was 0.9) and 0.56 for `CHANGELOG` (was 0.55). | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: the route table, the access guard and the not-found screen (MOD01-P2-T01), 2026-11-09, on topic branch `feat/sa-routes-guards` on top of `feat/sa-errors-logging` (the head of pull request #61), under review in pull request #62
 
