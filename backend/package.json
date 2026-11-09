@@ -1,0 +1,18 @@
+{
+  "name": "mfw-backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MFW backend: Firestore and Storage access rules with emulator tests (MOD13-P1-T01 to T03, DEC-003 AGREED). Local emulators only; nothing here is deployed.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "sh scripts/run-with-env.sh firebase emulators:exec --only firestore,storage --project demo-mfw \"node --test --test-concurrency=1 test/*.test.mjs\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "6.0.0",
+    "firebase": "13.1.0",
+    "firebase-tools": "15.34.2"
+  }
+}

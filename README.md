@@ -2,7 +2,7 @@
 
 Documentation for the Metal Forming World (MFW) mobile application: a Flutter app for Android and iOS, a backend, and a web admin panel for MFW's magazine issues and news.
 
-**State of this repository.** Early development. `app/` holds the Flutter app scaffold, the shared contracts, the theme and the WordPress news client, with tests that run on each pull request that changes `app/` (`.github/workflows/pr.yml`). There is no backend or admin panel code on `main`, no cloud project, no deployment and no store submission. Every document is a draft. MFW has not approved any document, and the proposal and the statement of work are unsigned copies (OQ-28). Where a document says a decision is agreed or approved, it follows the evidence rules in [Documentation/DECISION_LOG.md](Documentation/DECISION_LOG.md) section 3.1.
+**State of this repository.** Early development. `app/` holds the Flutter app scaffold, the shared contracts, the theme and the WordPress news client, with tests that run on each pull request that changes `app/` (`.github/workflows/pr.yml`). `backend/` holds the Firestore and Storage access rules with their tests on the local emulators. There is no admin panel code on `main`, no cloud project, no deployment and no store submission. Every document is a draft. MFW has not approved any document, and the proposal and the statement of work are unsigned copies (OQ-28). Where a document says a decision is agreed or approved, it follows the evidence rules in [Documentation/DECISION_LOG.md](Documentation/DECISION_LOG.md) section 3.1.
 
 **This repository is public.** Do not commit credentials, reader data, or the details of a security incident (see [Documentation/SECURITY_INCIDENT_PROCEDURE.md](Documentation/SECURITY_INCIDENT_PROCEDURE.md) section 5).
 
@@ -31,11 +31,11 @@ Reading order
 | Folder | On `main` | Set-up |
 |---|---|---|
 | `app/` | The Flutter app: the scaffold, the shared contracts, the theme and the WordPress news client, with their tests | [app/README.md](app/README.md) |
-| `backend/` | Not yet. The platform is Firebase (DEC-003, AGREED). The emulator spike is on the branch `spike/sa-backend-rules`, and its results are in `Documentation/test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md` | Below. The full steps come with the first backend code (MOD13-P1-T01) |
+| `backend/` | The Firestore and Storage access rules on Firebase (DEC-003, AGREED), with 321 rule tests on the local emulators (MOD13-P1-T01 to T03). Cloud Functions come in later tasks | [backend/README.md](backend/README.md) |
 | `admin/` | Not yet. A React web app on Firebase Hosting is PROPOSED (DEC-004). The spike is on the branches `spike/sa-admin-skeleton` and `spike/sa-admin-content` | Below. The full steps come with the first admin code (MOD12-P1-T01) |
 | `config/` | `config.example.env`: the configuration items CFG-01 to CFG-15 by name, with placeholder values and where each value comes from | Below |
 
-**`backend/`, once it exists.** Cloud Functions in TypeScript on Node.js (DEC-025), and the Firestore and Storage access rules, run on the developer's machine against the Firebase Local Emulator Suite (ENV-LOCAL, DEC-023), with no login and no cloud project. The spike used `firebase-tools` 15.34.2, Node.js 26.0.0 and Java 21, which the emulators need. ENV-TEST and ENV-PROD wait for MFW's cloud access (`Documentation/CLOUD_ACCESS_SETUP_CHECKLIST.md`) and MFW's answer to OQ-40.
+**`backend/`.** The access rules, and later Cloud Functions in TypeScript on Node.js (DEC-025), run on the developer's machine against the Firebase Local Emulator Suite (ENV-LOCAL, DEC-023), with no login and no cloud project: `npm ci` and `npm test` in `backend/`, with Node.js 22 or later and Java 21 or later (DEP-79 to DEP-83). ENV-TEST and ENV-PROD wait for MFW's cloud access (`Documentation/CLOUD_ACCESS_SETUP_CHECKLIST.md`) and MFW's answer to OQ-40.
 
 **`admin/`, once it exists.** A static single-page app in React and TypeScript, run locally against the same emulators. It holds no secret: every privileged operation is checked again on the backend (TD-14).
 
@@ -82,8 +82,8 @@ Reading order
 | [CODING_STANDARDS](Documentation/CODING_STANDARDS.md) | Coding rules and on-device storage rules | Authoritative: standards | 0.6 | Sanika (interim) | Both developers |
 | [DEFINITION_OF_DONE](Documentation/DEFINITION_OF_DONE.md) | What done means for each kind of work | Authoritative: done | 0.4 | Sanika (interim) | Both developers |
 | (see the document map) | Working rules for AI-assisted drafting. Named in the document map, `TASK_OWNERSHIP_MATRIX.md` section 13.1 | Supporting | 0.3 | Sanika (interim) | Both developers |
-| [DEPENDENCY_REGISTER](Documentation/DEPENDENCY_REGISTER.md) | Packages, services and accounts, with licences | Authoritative: dependencies | 0.14 | Sanika (interim) | Both developers; MFW for any paid component |
-| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.58 | Sanika (interim) | None stated |
+| [DEPENDENCY_REGISTER](Documentation/DEPENDENCY_REGISTER.md) | Packages, services and accounts, with licences | Authoritative: dependencies | 0.15 | Sanika (interim) | Both developers; MFW for any paid component |
+| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.59 | Sanika (interim) | None stated |
 | [ACCEPTANCE_CRITERIA](Documentation/ACCEPTANCE_CRITERIA.md) | S2 criteria AC-1 to AC-12 as checks, and proposed PAC rows | Authoritative: acceptance rows | 0.6 | Sanika (interim) | Both developers; MFW in writing for each PAC row |
 | [TESTING_STRATEGY](Documentation/TESTING_STRATEGY.md) | Test levels, plans, security checklist | Authoritative: test plans | 0.10 | Sanika (interim); move to Yuvraj proposed | Both developers |
 | [TEST_DATA_AND_FIXTURES](Documentation/TEST_DATA_AND_FIXTURES.md) | Test users, files and network scenarios | Authoritative: fixtures | 0.9 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW for where its sample PDFs are stored |

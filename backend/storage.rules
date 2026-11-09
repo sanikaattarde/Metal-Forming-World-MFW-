@@ -1,0 +1,26 @@
+rules_version = '2';
+
+// MOD13-P1-T03 (DEC-003 AGREED: Firebase). Taken from the emulator spike on
+// spike/sa-backend-rules and reviewed as final. DEC-020 (file delivery) is OPEN. Written from
+// SECURITY_AND_ACCESS_CONTROL.md section 12.2 and DATABASE_AND_DATA_MODEL.md section 8.
+// The path patterns are PROVISIONAL (section 8):
+//   issues/{issue_id}/{revision}.pdf   private area: no client read, no client write
+//   covers/{issue_id}/{version}        cover area: public read, no client write
+//   holding/{job_id}                   holding area: no client read
+//
+// The holding area is written through a signed upload URL from the backend. A signed URL is
+// checked by the file store itself, not by these rules, so the rules grant no client write there.
+// Whether the emulator honours signed URLs is NOT VERIFIED, so that path is not tested here.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    match /covers/{issueId}/{version} {
+      allow read: if true;
+    }
+
+    // Everything else, including the private and holding areas, is denied.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

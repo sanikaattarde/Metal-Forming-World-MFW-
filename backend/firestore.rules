@@ -1,0 +1,140 @@
+rules_version = '2';
+
+// MOD13-P1-T01 to T03 (DEC-003 AGREED: Firebase). Taken from the emulator spike on
+// spike/sa-backend-rules and reviewed as final. Written from
+// SECURITY_AND_ACCESS_CONTROL.md section 12.1 and DATABASE_AND_DATA_MODEL.md sections 4, 12 and 19.
+// The paths are the provisional Firestore mapping in DATABASE_AND_DATA_MODEL.md section 12.
+//
+// Deny by default (SC-05): a path that no rule below lists is refused to every client.
+// Admins have no special direct access (GS-Q20). No rule reads a role or any other claim from
+// the token (SC-04). No rule reads another document (SECURITY_AND_ACCESS_CONTROL.md section 13).
+// What these rules do not do is listed in backend/README.md, section "Known limits".
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // ---- Public read, no client write. Every write is made by a function. ----
+
+    match /segments/{segmentId} {
+      allow read: if true;
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+    }
+
+    match /notification_categories/{categoryId} {
+      allow read: if true;
+    }
+
+    match /news_controls/{wpPostId} {
+      allow read: if true;
+    }
+
+    match /deleted_issues/{issueId} {
+      allow read: if true;
+    }
+
+    // Only the public part of the configuration. config/private is not listed, so it is denied.
+    match /config/public {
+      allow read: if true;
+    }
+
+    // An unpublished issue is not readable. The segment links are the segment_ids array on the
+    // issue (DATABASE_AND_DATA_MODEL.md section 12), so they follow the same rule.
+    // A query must filter on publication_state == 'published' to be allowed.
+    // issues/{id}/files/{revision} is not listed, so it is denied.
+    match /issues/{issueId} {
+      allow read: if resource.data.publication_state == 'published';
+    }
+
+    // ---- Owner only ----
+
+    match /users/{uid} {
+      // The account record, the profile and the consent records: read by the owner.
+      // Writes go through functions, so no client write is allowed here.
+      allow read: if isOwner(uid);
+
+      match /profile/{docId} {
+        allow read: if isOwner(uid);
+      }
+
+      match /consents/{consentId} {
+        allow read: if isOwner(uid);
+      }
+
+      // BOOKMARK (DATABASE_AND_DATA_MODEL.md section 4.10). The owner reads and writes.
+      // A write carries only the fields the entity allows (INV-05, INV-11).
+      // A bookmark is unique on the reader, the issue and the page. A direct write has no function to
+      // check that, so the document key is derived from the issue and the page (section 12), and the
+      // rule requires it. The format "<issue_id>_<page_number>" is PROPOSED.
+      match /bookmarks/{bookmarkId} {
+        function validBookmark() {
+          let d = request.resource.data;
+          return d.keys().hasOnly(['bookmark_id', 'user_id', 'issue_id', 'page_number', 'file_revision', 'created_at'])
+            && d.keys().hasAll(['bookmark_id', 'user_id', 'issue_id', 'page_number', 'file_revision', 'created_at'])
+            && d.bookmark_id == bookmarkId
+            && d.user_id == uid
+            && d.issue_id is string && d.issue_id.size() > 0
+            && d.page_number is int && d.page_number >= 1
+            && d.file_revision is int && d.file_revision >= 1
+            && d.created_at is timestamp
+            && bookmarkId == d.issue_id + '_' + string(d.page_number);
+        }
+
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && validBookmark();
+        // Bookmarking a page that is already bookmarked changes nothing, so the bookmark keeps the
+        // revision it was first made on (section 10.1). A replayed write with the same values passes.
+        // Any other change is refused.
+        allow update: if isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().size() == 0;
+        allow delete: if isOwner(uid);
+      }
+
+      // FAVOURITE (section 4.11). The document key is the issue identifier.
+      match /favourites/{issueId} {
+        function validFavourite() {
+          let d = request.resource.data;
+          return d.keys().hasOnly(['user_id', 'issue_id', 'created_at'])
+            && d.keys().hasAll(['user_id', 'issue_id', 'created_at'])
+            && d.user_id == uid
+            && d.issue_id == issueId
+            && d.created_at is timestamp;
+        }
+
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && validFavourite();
+        // As for bookmarks: a replayed write with the same values passes, and any change,
+        // created_at included, is refused (review of pull request #66).
+        allow update: if isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().size() == 0;
+        allow delete: if isOwner(uid);
+      }
+
+      // NOTIFICATION_PREFERENCE (section 4.13). The document key is the category identifier.
+      match /notification_preferences/{categoryId} {
+        function validPreference() {
+          let d = request.resource.data;
+          return d.keys().hasOnly(['user_id', 'category_id', 'created_at'])
+            && d.keys().hasAll(['user_id', 'category_id', 'created_at'])
+            && d.user_id == uid
+            && d.category_id == categoryId
+            && d.created_at is timestamp;
+        }
+
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && validPreference();
+        // The record holds only its owner, its category and created_at, so an update that changes
+        // nothing is the only one allowed (review of pull request #66).
+        allow update: if isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().size() == 0;
+        allow delete: if isOwner(uid);
+      }
+    }
+
+    // ---- No client access at all: not listed, so denied ----
+    // admin_roles, admin_audit, admin_guard, upload_jobs, notification_sends, edition_updates,
+    // config/private, issues/{id}/files/{revision}.
+  }
+}
