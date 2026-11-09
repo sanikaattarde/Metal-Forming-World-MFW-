@@ -42,8 +42,8 @@ Reading order
 | [SCOPE_AND_EXCLUSIONS](Documentation/SCOPE_AND_EXCLUSIONS.md) | What is in scope, excluded, or needs a change request | Authoritative: scope | 0.2 | Not assigned | Not stated in the document |
 | [ASSUMPTIONS_AND_CONSTRAINTS](Documentation/ASSUMPTIONS_AND_CONSTRAINTS.md) | Assumptions, constraints and dependencies | Authoritative: assumptions | 0.3 | Not assigned | Not stated in the document |
 | [GLOSSARY](Documentation/GLOSSARY.md) | Terms used in the documents | Supporting | 0.2 | Not assigned | Not stated in the document |
-| [DECISION_LOG](Documentation/DECISION_LOG.md) | Decisions and the evidence each status needs | Authoritative: decisions | 0.16 | Sanika (interim) | Both developers for the structure |
-| [OPEN_QUESTIONS](Documentation/OPEN_QUESTIONS.md) | Questions for MFW and for the developers | Authoritative: questions | 0.14 | Sanika (interim) | Both developers |
+| [DECISION_LOG](Documentation/DECISION_LOG.md) | Decisions and the evidence each status needs | Authoritative: decisions | 0.17 | Sanika (interim) | Both developers for the structure |
+| [OPEN_QUESTIONS](Documentation/OPEN_QUESTIONS.md) | Questions for MFW and for the developers | Authoritative: questions | 0.15 | Sanika (interim) | Both developers |
 | [MFW_QUESTIONS_2026-11-08](Documentation/MFW_QUESTIONS_2026-11-08.md) | Five questions for MFW's written answer, with a draft email | Request: not sent | 0.1 | Yuvraj (proposed, not agreed) | Both developers, before it is sent |
 | [RISK_REGISTER](Documentation/RISK_REGISTER.md) | Risks, ratings and owners | Authoritative: risks | 0.9 | Sanika (interim) | Both developers; MFW for risks it must accept |
 | [SYSTEM_ARCHITECTURE](Documentation/SYSTEM_ARCHITECTURE.md) | Components, data flows, trust boundaries | Authoritative: logical architecture | 0.6 | Joint | Both developers; MFW for cost, scope or contract effects |
@@ -68,11 +68,11 @@ Reading order
 | [DEFINITION_OF_DONE](Documentation/DEFINITION_OF_DONE.md) | What done means for each kind of work | Authoritative: done | 0.4 | Sanika (interim) | Both developers |
 | (see the document map) | Working rules for AI-assisted drafting. Named in the document map, `TASK_OWNERSHIP_MATRIX.md` section 13.1 | Supporting | 0.3 | Sanika (interim) | Both developers |
 | [DEPENDENCY_REGISTER](Documentation/DEPENDENCY_REGISTER.md) | Packages, services and accounts, with licences | Authoritative: dependencies | 0.13 | Sanika (interim) | Both developers; MFW for any paid component |
-| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.51 | Sanika (interim) | None stated |
+| [CHANGELOG](Documentation/CHANGELOG.md) | Record of changes to the repository | Record | 0.52 | Sanika (interim) | None stated |
 | [ACCEPTANCE_CRITERIA](Documentation/ACCEPTANCE_CRITERIA.md) | S2 criteria AC-1 to AC-12 as checks, and proposed PAC rows | Authoritative: acceptance rows | 0.6 | Sanika (interim) | Both developers; MFW in writing for each PAC row |
 | [TESTING_STRATEGY](Documentation/TESTING_STRATEGY.md) | Test levels, plans, security checklist | Authoritative: test plans | 0.10 | Sanika (interim); move to Yuvraj proposed | Both developers |
 | [TEST_DATA_AND_FIXTURES](Documentation/TEST_DATA_AND_FIXTURES.md) | Test users, files and network scenarios | Authoritative: fixtures | 0.9 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW for where its sample PDFs are stored |
-| [CI_CD_AND_QUALITY_GATES](Documentation/CI_CD_AND_QUALITY_GATES.md) | Planned checks on each change | Authoritative: quality gates (planned) | 0.8 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW if a cost is billed to MFW |
+| [CI_CD_AND_QUALITY_GATES](Documentation/CI_CD_AND_QUALITY_GATES.md) | Planned checks on each change | Authoritative: quality gates (planned) | 0.9 | Sanika (interim); move to Yuvraj proposed | Both developers; MFW if a cost is billed to MFW |
 | [REQUIREMENT_COVERAGE_MATRIX](Documentation/REQUIREMENT_COVERAGE_MATRIX.md) | Which rows and plans name each requirement | Derived, not a source of truth | 0.4 | Yuvraj (proposed, not agreed) | Both developers |
 | [test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE](Documentation/test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md) | Backend spike results on the local emulators against eight SEC-CHK items, and the cases to run again on ENV-TEST | Record: test evidence, emulator only | 0.1 | Sanika (interim) | Both developers |
 | [test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE](Documentation/test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md) | Simulator results of the pdfrx and pdfx comparison harness, with two damaged files, and what to repeat on the test phone | Record: test evidence, simulator and debug build only | 0.1 | Yuvraj (proposed, not agreed) | Both developers |

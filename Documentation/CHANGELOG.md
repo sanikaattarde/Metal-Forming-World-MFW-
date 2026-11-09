@@ -4,9 +4,9 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.51 |
+| Version | 0.52 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
-| Date | 8 November 2026 |
+| Date | 9 November 2026 |
 
 **Purpose.** A chronological record of changes to the repository. It keeps verified history (from Git and from each document's own change table) apart from work not yet merged to `main`, and from future releases. It invents no releases, tags or dates.
 
@@ -30,6 +30,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: Sanika Attarde's positions on DEC-003, DEC-023 and DEC-004, with DEC-003 agreed (MOD20-P1-T02), 2026-11-09, on topic branch `docs/sa-dec-positions` from `e9ba2ae`, under review in pull request #59
+
+Adds Sanika Attarde's written positions of 9 November 2026 (`DECISION_LOG.md` section 5.11), step 4 of MOD20-P1-T02: Firebase for DEC-003, as S2 proposes; the three environments of DEC-023; and a React web app on Firebase Hosting for DEC-004. With Yuvraj Gaykhe's note of 8 November 2026 (section 5.10), both developers' written notes are filed, so DEC-003 moves from OPEN to AGREED, and DEC-023 from PROPOSED to AGREED as an internal position, with MFW's approval still needed (OQ-40). DEC-004 moves from OPEN to PROPOSED, with the options assessed and a Consequences row, because Yuvraj Gaykhe's position is not filed. QG-08 and QG-14 are no longer blocked by DEC-003 and wait for the backend code. No MFW approval is recorded, no entry is APPROVED, and no cloud project is created.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `Documentation/DECISION_LOG.md` | Version 0.17: section 5.11 (Sanika Attarde's positions); the index rows and entries of DEC-003 (AGREED), DEC-023 (AGREED as an internal position) and DEC-004 (PROPOSED, with options, proposal and consequences); the Status rows of DEC-025 and DEC-026. | Sanika Attarde's answers of 9 November 2026; MOD20-P1-T02 step 4 | DEC-003, DEC-004, DEC-023, DEC-025, DEC-026, TD-03, TD-14, TD-18, OQ-35, OQ-40, OQ-26, OQ-60 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/OPEN_QUESTIONS.md` | Version 0.15: update sentences in OQ-35 and OQ-40. Both stay OPEN. | Section 5.11 of the decision log | OQ-35, OQ-40 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.9: QG-08 and QG-14 are not blocked by DEC-003 and are added with the first backend code; section 14 item 5 and section 15 say that DEC-004 is PROPOSED. No gate is added, removed or made optional. | Section 5.11 of the decision log | QG-08, QG-09, QG-14, DEC-003, DEC-004 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.52: this entry. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | The version column follows the control table of each changed document, and reads 0.17 for `DECISION_LOG` (was 0.16), 0.15 for `OPEN_QUESTIONS` (was 0.14), 0.9 for `CI_CD_AND_QUALITY_GATES` (was 0.8) and 0.52 for `CHANGELOG` (was 0.51) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: the WordPress client, its fixtures and a development read (MOD09-P1-T01, T-08.1), 2026-11-08, on topic branch `feat/yg-wordpress-client` on top of `6098196` (the head of pull request #56), then merged with `origin/main` at `b9eac94` and at `1f8f182`, under review in pull request #58
 

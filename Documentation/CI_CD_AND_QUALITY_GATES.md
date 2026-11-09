@@ -7,9 +7,9 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.8 |
+| Version | 0.9 |
 | Status | Draft for review. Not approved. **One workflow exists: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests that change `app/` or the workflow (T-01.5). Every other gate and pipeline below is PLANNED.** |
-| Date | 8 November 2026 |
+| Date | 9 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
 
 **Change history**
@@ -24,6 +24,7 @@
 | 0.6 | 7 November 2026 | The first workflow, `.github/workflows/pr.yml`, runs QG-01 to QG-06 (T-01.5, pull request #48). The status row, section 2, the Available cells of QG-01 to QG-06, section 5.1 and section 14 say so, and QG-06 runs on pull requests only, not yet on merges to `main` (section 5.2). QG-14 is blocked by DEC-003 only, because DEC-026 is AGREED (`DECISION_LOG.md` section 5.8). No other gate changed. No MFW approval is recorded, and no entry is APPROVED. Revised on 7 November 2026 after the review of pull request #48: the Implements cell of QG-04 reads "None" in place of a dash. |
 | 0.7 | 8 November 2026 | Section 3 and section 13 record that the repository owner approved the cost of the workflow of pull request #48 in writing on 8 November 2026 (DEC-022, `DECISION_LOG.md` section 5.9). The plan minutes and the macOS runner cost stay NOT VERIFIED. No gate changed. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.8 | 9 November 2026 | QG-05 tries the Android build up to 3 times, 30 seconds apart, and the Gradle wrapper downloads the binary distribution of Gradle 9.3.1 rather than the full one, after GitHub answered 504 to the Gradle download on 8 and 9 November 2026 (pull request #58, two commits made by the Copilot coding agent started from YG's account and kept by YG). A retry also repeats a build that fails for a real reason, so a real failure takes up to three times as long to show. No gate is added, removed or made optional. |
+| 0.9 | 9 November 2026 | QG-08 and QG-14 are no longer blocked by DEC-003, which is AGREED (`DECISION_LOG.md` section 5.11). Both stay not available until the first backend code adds them. Section 14 item 5 and the open item in section 15 say the same, and that DEC-004 is PROPOSED, so QG-09 stays blocked. No gate is added, removed or made optional. |
 
 ### 1.1 Related documents
 
@@ -65,13 +66,13 @@ This document proposes the automated checks that guard pull requests, integratio
 | QG-05 | Android build check | `flutter build apk --debug`, tried up to 3 times, 30 seconds apart (pull request #58) | Pull requests that touch `app/` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | DoD-INT 2 |
 | QG-06 | iOS build check | `flutter build ios --no-codesign` on macOS | Pull requests that touch `app/`; every merge to `main` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). Not yet on merges to `main` (section 5.2) | DoD-INT 2 |
 | QG-07 | App integration tests | `flutter test integration_test` on an emulator | Every merge to `main`; release candidates | Yes, on `main` | [SCAFFOLD] | TS-04 |
-| QG-08 | Backend and authorization-rule tests | Blocked by DEC-003 | Pull requests that touch `backend/` | Yes | [BACKEND] | TS-05 |
+| QG-08 | Backend and authorization-rule tests | Not available. DEC-003 is AGREED (`DECISION_LOG.md` section 5.11), and the gate is added with the first backend code (MOD15-P2-T02) | Pull requests that touch `backend/` | Yes | [BACKEND] | TS-05 |
 | QG-09 | Admin panel build and tests | Blocked by DEC-004 | Pull requests that touch `admin/` | Yes | [BACKEND] | TS-05 |
 | QG-10 | Dependency and licence check | A script comparing `pubspec.lock` with `DEPENDENCY_REGISTER.md` (planned); `flutter pub outdated` report; published advisory check | Pull requests that touch dependency files; weekly | Yes, for an unregistered dependency | [SCAFFOLD] | SEC-CHK-13 |
 | QG-11 | Secrets scan | Candidate: gitleaks, or GitHub secret scanning if the plan includes it | Every pull request and push | Yes | [CI] | SEC-CHK-09 |
 | QG-12 | Documentation checks | A check of IDs, references, file names, status labels and links. The script that was used when the documents were drafted is not in the repository, so the check cannot be reproduced from the repository and is PLANNED, not available; link check | Pull requests that touch `Documentation/` | Yes | [NOW] (manual until CI exists) | DoD-DOC |
 | QG-13 | Release build and signing | Tag-triggered signed Android App Bundle and iOS archive; manual approval | Release tags `v*` | Not a merge gate | [STORE] | AC-11.1 |
-| QG-14 | Contract tests, backend side | Blocked by DEC-003. DEC-026 is AGREED (`DECISION_LOG.md` section 5.8). Candidate: the emulators in CI (TD-17). Runs CT-01 to CT-03, CT-05 to CT-07 and CT-11 of `API_AND_BACKEND_CONTRACT.md` §10. CT-02 replays requests of a released app version, so it starts at the first release. The app side (CT-04, CT-08 to CT-10) runs in QG-03 | Pull requests that touch `backend/` or the contract reference file (CT-01, not yet created); every merge to `main` | Yes | [BACKEND] | TS-14 |
+| QG-14 | Contract tests, backend side | Not available. DEC-003 and DEC-026 are AGREED (`DECISION_LOG.md` sections 5.11 and 5.8), and the gate is added with the first backend code. Candidate: the emulators in CI (TD-17). Runs CT-01 to CT-03, CT-05 to CT-07 and CT-11 of `API_AND_BACKEND_CONTRACT.md` §10. CT-02 replays requests of a released app version, so it starts at the first release. The app side (CT-04, CT-08 to CT-10) runs in QG-03 | Pull requests that touch `backend/` or the contract reference file (CT-01, not yet created); every merge to `main` | Yes | [BACKEND] | TS-14 |
 
 ## 5. Pipelines
 
@@ -197,7 +198,7 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 2. Create the app scaffold (T-01.1). Done: pull request #30.
 3. Add workflow files for QG-01 to QG-06, QG-11 and QG-12 (T-01.5). QG-01 to QG-06 are done: `.github/workflows/pr.yml`, pull request #48. QG-11 and QG-12 wait for DEP-62 and DEP-63.
 4. Add QG-07 once integration tests exist.
-5. Add QG-08 and QG-09 once DEC-003 and DEC-004 are decided.
+5. Add QG-08 with the first backend code, now that DEC-003 is AGREED, and QG-09 once DEC-004 is AGREED (it is PROPOSED).
 6. Configure environment secrets after DEC-023 and the MFW account access in T-01.3.
 7. Add QG-13 once the store accounts and signing are set up (OQ-42).
 
@@ -207,6 +208,6 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 |---|---|
 | CI service and cost | DEC-022 |
 | Toolchain versions | OQ-50 |
-| Backend and admin gates | DEC-003, DEC-004 |
+| Backend and admin gates | DEC-003 is AGREED; DEC-004 is PROPOSED |
 | Where release signing runs, and who holds the keys | Section 6; `MAINTENANCE_AND_HANDOVER.md` |
 | GitHub plan features (environments, secret scanning, branch protection) | Branch protection on `main` is on (`DEVELOPMENT_WORKFLOW.md` section 3). Environments and secret scanning: not verified |
