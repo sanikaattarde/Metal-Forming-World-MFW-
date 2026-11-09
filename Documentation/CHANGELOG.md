@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.63 |
+| Version | 0.64 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Changed: the prototype walk-through record, with the branded prototype (MOD16-P1-T05), 2026-11-09, on topic branch `docs/yg-prototype-branded` on top of `57388c7` (the head of pull request #70)
+
+`PROTOTYPE_WALKTHROUGH_RECORD.md` 0.2 adds section 7. The low-fi prototype is now drawn on the app's theme and tokens, in the look of the reader frames (#69) and Sanika Attarde's account frames (#67), with every flow and state switch kept. It is on `spike/yg-prototype-branded` at `797d16b`, which is not merged. The six walk-through tests pass, and 30 screens and states pass the tap-target and label checks. The admin panel screens (MOD16-P1-T04) are not in it, so MOD16-P1-T05 is not complete, and nothing has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `Documentation/test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` | 0.2: section 7 (the branded prototype, its walk-through and checks, and what it does not cover), with the control rows and section 5 brought in line. | The record of MOD16-P1-T05 for the app screens | MOD16-P1-T05, T-02.1, MOD16-P1-T02, MOD16-P1-T03, OQ-25, OQ-63 | Sanika Attarde reviews (not agreed); MFW at M2 | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.64: this entry. It takes 0.64 because #60 (0.53) to #70 (0.63) are merged or under review with those numbers. | Records the change above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | `test-evidence/PROTOTYPE_WALKTHROUGH_RECORD` at 0.2 (was 0.1) with its description, and `CHANGELOG` 0.64 (was 0.63) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Changed: the T-02.4 resume evidence, on the Firebase Storage emulator, 2026-11-09, on topic branch `docs/yg-resume-emulator` on top of `a1aa8e5` (the head of pull request #69)
 

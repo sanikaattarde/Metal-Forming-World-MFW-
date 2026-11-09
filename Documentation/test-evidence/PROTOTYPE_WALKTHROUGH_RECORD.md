@@ -7,17 +7,18 @@
 | Document | Prototype Walk-through Record |
 | File | `Documentation/test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` |
 | Phase | 4: Testing, Release and Risk Management. The recorded walk-through of T-02.1 (MOD16-P1-T05) |
-| Version | 0.1 |
-| Status | Draft for review. Not reviewed. **A low-fi prototype, not the M2 design.** It uses no MFW brand asset or content, it has not been shown to MFW, and it approves nothing. MOD16-P1-T05 stays blocked by MFW's brand assets for the final look |
-| Date | 8 November 2026 |
-| Prepared by | Yuvraj Gaykhe (WS-B), 8 November 2026 |
-| Approval required | Both developers. This record covers the app screens of MOD16-P1-T05. The admin panel screens (MOD16-P1-T04) and the final look stay open |
+| Version | 0.2 |
+| Status | Draft for review. Not reviewed. **A prototype, not the M2 design.** The low-fi prototype (sections 2 to 4) uses no MFW brand asset. The branded prototype (section 7) uses the website's colours and fonts as the working position of OQ-63, and no MFW logo or content. Neither has been shown to MFW, and neither approves anything |
+| Date | 9 November 2026 |
+| Prepared by | Yuvraj Gaykhe (WS-B), 8 and 9 November 2026 |
+| Approval required | Both developers. This record covers the app screens of MOD16-P1-T05, low-fi and branded. Its review by Sanika Attarde is the hand-over of the "Done when" of MOD16-P1-T05. The admin panel screens (MOD16-P1-T04) and MFW's approval at M2 stay open |
 
 **Change history**
 
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 8 November 2026 | First record: the low-fi clickable prototype of the app screens, its walk-through against the screen inventory, a design critique, and the Figma copy of the screens. Revised on 8 November 2026 after the review of pull request #53: the "Approval required" row says that the record covers the app screens of MOD16-P1-T05, and that the admin panel screens and the final look stay open; section 3.1 counts 21 in-scope app screens; section 2 gives the counts of the whole test suite and says that the drawing tests are golden comparisons; and the prototype's one package beyond the SDK, `flutter_lints`, is named. Revised again on 8 November 2026: the Figma row records that YG shared the file with Sanika Attarde, and that the file now also holds the work of pull request #57. |
+| 0.2 | 9 November 2026 | Added section 7: the branded prototype, which is the low-fi prototype drawn on the app's theme in the look of the design frames of MOD16-P1-T02 and MOD16-P1-T03, with its checks. The status, approval and related documents rows and section 5 say what applies to which prototype. |
 
 ### 1.1 Related documents
 
@@ -28,6 +29,8 @@
 | `YUVRAJ_IMPLEMENTATION_ROADMAP.md` MOD16-P1-T05 | Exists, a record of the plan. Tests: a walk-through against the inventory, recorded. This document is that record |
 | `DEVELOPMENT_WORKFLOW.md` §13 item 5 | Exists, draft. A spike is not merged into `main`; its findings are merged as a document |
 | Branch `spike/yg-prototype`, commit `c3f2773` | Not merged to `main`. On GitHub. The prototype in `tools/spikes/prototype/`, a separate Flutter app with no package beyond the SDK and the lints package (`flutter_lints`, DEP-58, for development only), and its 24 rendered screens in `test/shots/` |
+| Branch `spike/yg-prototype-branded`, commit `797d16b` | Not merged to `main`. On GitHub. The branded prototype in `app/prototype/`, run with `flutter run -t prototype/main.dart`, its tests in `app/test/prototype/` and its 30 images in `app/test/prototype/shots/`. Built on top of pull request #69 |
+| `design/READER_SCREEN_DESIGNS.md`, `design/ACCOUNT_SCREEN_DESIGNS.md` | Exist, draft (pull requests #69 and #67). The frames whose look the branded prototype follows |
 | Figma file "MFW app low-fi prototype (T-02.1)" | In Yuvraj Gaykhe's Figma drafts (Starter plan). YG reports that the file was shared with Sanika Attarde on 8 November 2026; the access level is not recorded. The file now also holds the design tokens and an unfinished page of reader designs (pull request #57); the low-fi page recorded here is unchanged. https://www.figma.com/design/7iQl4WKs8HoC8z5olvVzxX |
 
 ## 2. What Was Built
@@ -105,8 +108,8 @@ The design plugin's critique was run on the 24 rendered screens, for a low-fi st
 
 ## 5. What This Is Not
 
-- **Not the M2 design.** No MFW logo, colour, font or content is used. The look, the arrangement of the tabs (an M2 decision, section 4 of the inventory) and the wording are placeholders.
-- **Not the app.** The prototype does not use the code under `app/`, and nothing in it is built on the contracts.
+- **Not the M2 design.** The low-fi prototype uses no MFW logo, colour, font or content. The branded one uses the website's colours and fonts (OQ-63 stays open) and no logo or content. In both, the arrangement of the tabs (an M2 decision, section 4 of the inventory) is a placeholder, and so is the wording where the code does not set it.
+- **Not the app.** The low-fi prototype does not use the code under `app/`. The branded one uses only the theme, the tokens and the wording of the app's code, and none of its logic or contracts.
 - **Not reviewed with MFW.** MFW approves the screens at M2 (MOD16-P2-T01, Sanika Attarde's task).
 - **Not the admin panel.** The SCR-W screens are WS-A work.
 
@@ -119,3 +122,36 @@ These are points for the owners of the documents to consider. This record change
 | `SCREEN_INVENTORY_AND_NAVIGATION.md` SN-01 | The password reset and the delete confirmation were reached without routes of their own, which fits the gap SN-01 names: they need routes or a decision that they are not deep-linkable |
 | `SCREEN_INVENTORY_AND_NAVIGATION.md` SN-03, SN-05 | The prototype draws Home and the catalogue as two screens (SN-03), and bookmarks and favourites as two tabs of one screen (SN-05). Both are open, and the prototype decides neither |
 | `OPEN_QUESTIONS.md` OQ-08 | Critique finding 1: the answer to OQ-08 decides whether the issue screen needs one action or two |
+
+## 7. The Branded Prototype (9 November 2026)
+
+The low-fi prototype, drawn on the app's theme. It is the prototype step of MOD16-P1-T05 for the app: the reader frames of MOD16-P1-T02 (#69) and the account frames of MOD16-P1-T03 (#67) combined, with the flows linked.
+
+### 7.1 What changed
+
+1. **Where it lives.** The code moved from `tools/spikes/prototype/` into `app/prototype/` on a spike branch, so that it can use the app's theme (`buildMfwTheme`), tokens and bundled fonts. Nothing under `app/lib/` uses it, and the branch is not merged.
+2. **The look of the frames.** Section headings in the website's style, cover and picture placeholders, notices with an icon and a coloured edge, empty states with an icon and a heading, the search field with rounded ends, the reader's page bar with a slider, and the logo as a placeholder box (DEC-024). The account screens follow Sanika Attarde's frames: their fields (full name, age, gender, occupation, domain of work, still PROVISIONAL under OQ-01 and OQ-02), their wording, and settings grouped as notifications, reading, account and about.
+3. **The app's wording.** The download sheet and Downloads use `DownloadsText`, and the damaged-file message uses `messageFor`, as the frames do.
+4. **Screen IDs can be hidden.** A switch in the prototype controls hides the SCR-A-nn IDs, to show the screens as the designs draw them. The walk-through keeps them on.
+5. **Unchanged:** every flow, the entry rule, and every state switch of section 2.
+
+### 7.2 Walk-through and checks
+
+The six walk-through tests of section 3 pass on the branded prototype. They now run on the frames' phone size, 390 by 844 points, and three steps tap the frames' labels: "Your profile", "New here? Create an account" and "I have verified my email".
+
+On `797d16b` with Flutter 3.47.9, from `app/`:
+
+- `flutter pub get --enforce-lockfile` passes with no `pubspec` change.
+- `dart format` changes 0 of 119 files, and `flutter analyze` finds no issues.
+- `flutter test` passes 479 tests and skips 82 (images and goldens).
+- 30 screens and states pass the tap-target and label checks of the frames (the baseline proposed for OQ-25). Their images are drawn at 780 by 1688 pixels.
+- The prototype ran on an iPhone 18 Pro simulator (iOS 27.2): Home drew with the bundled fonts, and "View issue" opened the issue details. It was not run on Android.
+
+The 30 images cover SCR-A-01 to SCR-A-08, SCR-A-10 to SCR-A-20 and SCR-A-22, with the visitor views of settings and issue details. They also cover these states: no network, empty Downloads, empty search, news site unreachable, low storage, damaged file, unpublished issue, and full access needed.
+
+### 7.3 What it does not cover
+
+- **The admin panel screens** (MOD16-P1-T04, Sanika Attarde). MOD16-P1-T05 combines them too, so it is not complete.
+- **The Figma copy** is still the low-fi one of section 2.
+- **MFW's logo and content.** MFW approves the screens at M2 (MOD16-P2-T01).
+- **The critique findings left for M2** in section 4, apart from one: the reader's caption line is now a page bar, as in the frames. The app bar stays on screen.
