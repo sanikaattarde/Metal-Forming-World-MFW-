@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.54 |
+| Version | 0.55 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the route table, the access guard and the not-found screen (MOD01-P2-T01), 2026-11-09, on topic branch `feat/sa-routes-guards` on top of `feat/sa-errors-logging` (the head of pull request #61), then merged with `origin/main` at `bc00894` (#61 merged), under review in pull request #62
+
+MOD01-P2-T01 is Yuvraj Gaykhe's task, built by Sanika Attarde at the repository owner's request of 9 November 2026, for Yuvraj Gaykhe's review. The guard, the shell states and their tests follow Yuvraj Gaykhe's spike (`spike/yg-ws-b` at `49c6140`), reviewed again as final code. The routes of `API_AND_MODULE_CONTRACTS.md` section 6.1 are declared in go_router (DEC-014, AGREED), each with a placeholder screen until its feature task. A redirect reads `watchAccessState` and sends a reader without `fullAccess` from the reader, `/downloads` and `/library` to the missing step, keeping the route in `from`, and back after the step (FR-AUTH-010, FR-PROF-004, BR-001 to BR-003). Unlike the spike, `/downloads` is guarded, as SCR-A-15's access column says. An unknown route shows SCR-A-22, with a way home. The app shows a loading screen until the first access state, and an error with Retry if it cannot be read. `RouterAppNavigator` opens notification targets through the guard (BR-005). Until MOD-03 provides `AuthService`, `UnavailableAuthService` runs the app as a visitor. The IC-01 consumer check passes on the fake `AuthService` with FX-USR-01 to FX-USR-05 and the visitor FX-USR-09. ICP-02 waits for the real `AuthService` (MOD03-P2-T03). Revised on 9 November 2026 after Yuvraj Gaykhe's review at `746f1ec`: the guard strips trailing slashes itself, so `/library/` or `/issues/x/read/` is guarded whether or not go_router has already removed the slash (a probe showed that go_router does), with 7 more tests. 320 tests pass, with 1 golden skipped.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `app/lib/app/` | Added: `access_guard.dart`, `routes.dart`, `router.dart`, `router_app_navigator.dart`, `placeholder_screens.dart`, `shell_text.dart` and `unavailable_auth_service.dart`. Changed: `app.dart` provides `authServiceProvider`, `accessStateProvider`, `routerProvider` and `appNavigatorProvider`, and the placeholder shell is removed. | MOD01-P2-T01 steps 1 to 3 | MOD01-P2-T01, T-03.4, DEC-007, DEC-014, IC-01, IC-05, FR-AUTH-010, FR-PROF-004, BR-001, BR-002, BR-003, BR-005, SCR-A-22 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/test/app/` | Added: `access_guard_test.dart`, `router_test.dart` (the IC-01 consumer check), `shell_states_test.dart` and `app_harness.dart`. Changed: `app_test.dart` and `theme/mfw_theme_test.dart` find the home screen, where they found the placeholder shell. | MOD01-P2-T01 step 4 | IC-01, FX-USR-01 to FX-USR-05, FX-USR-09 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.17: an Implemented row in section 6.1. | Records the code | MOD01-P2-T01 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.55: this entry. It takes 0.55 because #61 takes 0.54. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | The version column reads 0.17 for `API_AND_MODULE_CONTRACTS` (was 0.16) and 0.55 for `CHANGELOG` (was 0.54). | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: failure messages, the backend failure mapping and the redacting logger (MOD02-P1-T01), 2026-11-09, on topic branch `feat/sa-errors-logging` on top of `docs/sa-readme-setup` (the head of pull request #60), then merged with `origin/main` at `36d8c5d` (#60 merged), under review in pull request #61
 
