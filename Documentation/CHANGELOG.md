@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.60 |
+| Version | 0.61 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: QG-08, the backend rule tests in CI (MOD15-P2-T02), 2026-11-09, on topic branch `ci/yg-qg08-backend` on top of `9579e32` (the head of pull request #67), under review in pull request #68
+
+A new workflow, `.github/workflows/backend.yml`, runs the emulator tests of `backend/` (#66, MOD13-P1-T01 to T03) on each pull request that changes `backend/` or the workflow: `npm ci` from the lockfile, then `npm test` on the Firestore and Storage emulators for the project `demo-mfw`, with Node.js 24 and Java 21. It needs no login, no cloud project and no secret. It is separate from `pr.yml`, so a pull request that changes only `app/` does not run it. The actions are pinned to commits, as in `pr.yml`; `actions/setup-node` is new (DEP-84). The register also records that YG read the licences of DEP-50 and DEP-79 to DEP-83. The tests were not run on YG's Mac, which has Java 17; the first run is this pull request's own check. No gate is removed or made optional, nothing is deployed, and nothing has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `.github/workflows/backend.yml` | Added: the QG-08 job. | MOD15-P2-T02 | QG-08, MOD15-P2-T02, MOD13-P1-T01, MOD13-P1-T02, MOD13-P1-T03, TS-05 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.11: the QG-08 row and section 14 item 5. | The gate exists | QG-08, QG-09, DEC-004 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.16: DEP-84 added; DEP-77 also installs Java 21; YG's licence readings in DEP-50 and DEP-79 to DEP-83. | The new action, and the readings asked for in the reviews of #63 and #66 | DEP-50, DEP-77, DEP-79 to DEP-84 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.61: this entry. It takes 0.61 because #60 (0.53) to #67 (0.60) are under review with those numbers. | Records the change above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | The versions of the changed documents: `CI_CD_AND_QUALITY_GATES` 0.11 (was 0.10), `DEPENDENCY_REGISTER` 0.16 (was 0.15) and `CHANGELOG` 0.61 (was 0.60) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the account, profile, settings and notification screen designs (MOD16-P1-T03), 2026-11-09, on topic branch `feat/sa-account-designs` on top of `feat/sa-backend-rules` (the head of pull request #66), under review in pull request #67
 
