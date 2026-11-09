@@ -64,6 +64,15 @@ for (const { name, existing, fresh, make } of OWNED) {
     });
   }
 
+  test(`G3 ${name}: the created_at of an existing record cannot be rewritten`, async () => {
+    const db = actors.readerA(env).firestore();
+    const path = `${col}/${fresh}`;
+    const record = make('reader-a', fresh);
+    await assertSucceeds(setDoc(doc(db, path), record));
+    const later = Timestamp.fromMillis(record.created_at.toMillis() + 60000);
+    await assertFails(setDoc(doc(db, path), make('reader-a', fresh, { created_at: later })));
+  });
+
   test(`G3 ${name}: reader B cannot write to their own path in reader A's name`, async () => {
     const db = actors.readerB(env).firestore();
     await assertFails(setDoc(doc(db, `users/reader-b/${name}/${fresh}`), make('reader-a', fresh)));

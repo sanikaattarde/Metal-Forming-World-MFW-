@@ -31,7 +31,7 @@ Reading order
 | Folder | On `main` | Set-up |
 |---|---|---|
 | `app/` | The Flutter app: the scaffold, the shared contracts, the theme and the WordPress news client, with their tests | [app/README.md](app/README.md) |
-| `backend/` | The Firestore and Storage access rules on Firebase (DEC-003, AGREED), with 318 rule tests on the local emulators (MOD13-P1-T01 to T03). Cloud Functions come in later tasks | [backend/README.md](backend/README.md) |
+| `backend/` | The Firestore and Storage access rules on Firebase (DEC-003, AGREED), with 321 rule tests on the local emulators (MOD13-P1-T01 to T03). Cloud Functions come in later tasks | [backend/README.md](backend/README.md) |
 | `admin/` | Not yet. A React web app on Firebase Hosting is PROPOSED (DEC-004). The spike is on the branches `spike/sa-admin-skeleton` and `spike/sa-admin-content` | Below. The full steps come with the first admin code (MOD12-P1-T01) |
 | `config/` | `config.example.env`: the configuration items CFG-01 to CFG-15 by name, with placeholder values and where each value comes from | Below |
 
