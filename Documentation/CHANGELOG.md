@@ -31,7 +31,7 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
-### Documentation: the wording of the DEC-022 cost approval, after the review of #51, 2026-11-08, on topic branch `docs/yg-dec022-wording` on top of `7d66eec`, under review in pull request #55
+### Documentation: the wording of the DEC-022 cost approval, after the review of #51, 2026-11-08, on topic branch `docs/yg-dec022-wording` on top of `7d66eec`, then merged with `origin/main` at `96ac392`, under review in pull request #55
 
 Sanika Attarde's review of pull request #51 asked for two edits in the push that merged `main`, and the merge commit was pushed before the review arrived. `DECISION_LOG.md` 0.16 says "the cost is approved by the repository owner" in the 0.15 row, the Status row of DEC-022 and the update sentence in section 5.6, where they said "the cost condition is met", with "the plan minutes and the macOS runner cost are NOT VERIFIED (MOD15-P1-T01 stays open)" next to it. `OPEN_QUESTIONS.md` 0.13 adds the full stop before the update sentences of OQ-35 and OQ-40. No entry or question changes status.
 
@@ -39,8 +39,37 @@ Sanika Attarde's review of pull request #51 asked for two edits in the push that
 |---|---|---|---|---|---|---|
 | 2026-11-08 | `Documentation/DECISION_LOG.md` | Version 0.16: "the cost is approved by the repository owner" in three places, with MOD15-P1-T01 open. | The review of pull request #51 | DEC-022, MOD15-P1-T01 | Both developers (not agreed) | No scope effect |
 | 2026-11-08 | `Documentation/OPEN_QUESTIONS.md` | Version 0.13: two full stops, in OQ-35 and OQ-40. | The review of pull request #51 | OQ-35, OQ-40 | Both developers (not agreed) | No scope effect |
-| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.48: this entry. It takes 0.48 because #52 (0.45), #53 (0.46) and #54 (0.47) are under review with those numbers. | Records the edits above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-08 | `README.md` | The version column reads 0.16 for `DECISION_LOG` (was 0.15), 0.13 for `OPEN_QUESTIONS` (was 0.12) and 0.48 for `CHANGELOG` (was 0.44) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.48: this entry. It takes 0.48 because #52 (0.45), #53 (0.46) and #54 (0.47) merged with those numbers. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | The version column reads 0.16 for `DECISION_LOG` (was 0.15), 0.13 for `OPEN_QUESTIONS` (was 0.12) and 0.48 for `CHANGELOG` (was 0.47) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+### Added: five questions for MFW's written answer, not sent, 2026-11-08, on topic branch `docs/yg-mfw-questions` on top of `8b2c824`, then merged with `origin/main` at `4cc9ed1`, under review in pull request #54
+
+Adds `MFW_QUESTIONS_2026-11-08.md` 0.1: five questions that only MFW can answer, each with the decision it unblocks, the team's working position and the answer that is needed. Q1 reading and downloading (OQ-08, OQ-11; DEC-008, DEC-033); Q2 the backend platform (OQ-35; DEC-003); Q3 a separate test project (OQ-40; DEC-023); Q4 where MFW's sample PDFs and the reader test recordings may be kept (DEC-024; `TESTING_STRATEGY.md` §13); Q5 test phones and versions (OQ-26). It holds a draft email. It is not sent: decisions go to MFW through the contracting developer (`DECISION_LOG.md` section 4, step 4), and Sanika Attarde agreed in the review of this pull request that Yuvraj Gaykhe sends it after the merge, for these five questions only. After that review, item 2 of the email also says that the team is checking that MFW still expects Firebase. No answer is recorded, and no question, decision or status label changed.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/MFW_QUESTIONS_2026-11-08.md` | Added: five questions for MFW and a draft email, not sent. | These decisions wait for MFW's written answers | OQ-08, OQ-11, OQ-26, OQ-35, OQ-40, DEC-003, DEC-008, DEC-023, DEC-024, DEC-033 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.47: this entry. It takes 0.47 because #51 (0.44), #52 (0.45) and #53 (0.46) merged with those numbers. | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | One row for the new document at 0.1, and 0.47 for `CHANGELOG` (was 0.46) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: the T-02.1 prototype walk-through record, 2026-11-08, on topic branch `docs/yg-t021-prototype-record` on top of `8b2c824`, then merged with `origin/main` at `ee2c99d`, under review in pull request #53
+
+Adds `test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` 0.1: the low-fi clickable prototype of the app screens on `spike/yg-prototype` at `c3f2773`, walked against `SCREEN_INVENTORY_AND_NAVIGATION.md`. All 21 in-scope app screens are drawn and reached (SCR-A-16 and SCR-A-17 as two tabs of one screen), the states of section 7 are listed with where they show, and the entry rule is followed from a signed-out visitor to the reader. It records the design plugin's critique (two findings applied, six for M2) and the Figma copy of the screens, built as editable layers in Yuvraj Gaykhe's Figma drafts. It is not the M2 design: no MFW brand asset or content is used, and nothing has gone to MFW. No requirement, decision or status label changed.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` | Added: the T-02.1 walk-through record. | MOD16-P1-T05 asks for a recorded walk-through against the inventory | T-02.1, MOD16-P1-T05, SCR-A-01 to SCR-A-23, FR-STATE-001 to FR-STATE-006, SN-01, SN-03, SN-05, OQ-08, OQ-25, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.46: this entry. It takes 0.46 because #51 (0.44) and #52 (0.45) merged with those numbers. | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | One row for the new document at 0.1, and 0.46 for `CHANGELOG` (was 0.45) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+
+### Documentation: the T-02.4 download resume spike results, 2026-11-08, on topic branch `docs/yg-t024-resume-evidence` on top of `8b2c824`, then merged with `origin/main` at `7d66eec`, under review in pull request #52
+
+Adds `test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` 0.1: four integration tests of the MOD-06 download manager with its real adapters on `spike/yg-download-resume` at `262f306`, run on an iOS simulator and an Android emulator against a local range server and a 150,000,000 byte synthetic file. All four passed on both. After two breaks, each resume asked from the bytes kept and no byte was sent twice; a server that ignores the range sent the whole file again. It is not a result for AC-4.3: no phone, no network loss on the device and no candidate file mechanism (DEC-020) were used. No MFW content is involved, and no requirement, decision or status label changed.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` | Added: the T-02.4 resume spike results, simulator and emulator only. | The spike's findings are merged as a document (`DEVELOPMENT_WORKFLOW.md` §13 item 5) | T-02.4, MOD06-P1-T02, AC-4.3, FX-NET-01, FX-NET-07, FX-PDF-05, I-5, DEC-020, OQ-30, OQ-37, OQ-54, R2, DEP-49 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.45: this entry. It takes 0.45 because #51 merged with 0.44. | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | One row for the new document at 0.1, and 0.45 for `CHANGELOG` (was 0.44) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the cost of DEC-022 approved, and Yuvraj Gaykhe's positions on DEC-003, DEC-023 and OQ-38, 2026-11-08, on topic branch `docs/yg-dec022-positions` on top of `9a5654b`, then merged with `origin/main` at `8b2c824`, under review in pull request #51
 
