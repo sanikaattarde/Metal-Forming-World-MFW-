@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.57 |
+| Version | 0.58 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: download preparation, the integrity check with repair at start, and the downloads screen (MOD06-P2-T01, T04, T05), 2026-11-09, on topic branch `feat/sa-downloads` on top of `feat/sa-app-config` (the head of pull request #64), then merged with `origin/main` at `233d0f9` (#64 merged), under review in pull request #65
+
+MOD06-P2-T01, T04 and T05 are Yuvraj Gaykhe's tasks, built by Sanika Attarde at the repository owner's request of 9 November 2026, for Yuvraj Gaykhe's review. The code and its 37 tests are Yuvraj Gaykhe's spike on `spike/yg-ws-b` at `49c6140`, whose contracts match `main`, reviewed again as final code. `IssueDownloadManager` implements `DownloadManager` over four feature ports. `prepare` reports the size from the grant, mobile data from `ConnectivityService` and whether the space is enough (FR-DL-003, FR-DL-004, FR-STATE-004), and the download panel (SCR-A-13) shows them before any transfer. After a transfer the size and `contentHash` are checked, and a mismatch deletes the partial file and reports `fileCorrupt` with a retry (FR-STATE-006, FR-READ-010). The downloads screen (SCR-A-15) lists the reader's kept copies and deletes one to free its space (FR-DL-008, FR-DL-009). New beyond the spike: the repair of `PDF_READER_AND_OFFLINE_DESIGN.md` section 4.4 at start and before each list (a row whose file is missing is dropped, a file of the wrong length is deleted with its row, and an orphan file is deleted, while another reader's copy is left alone), with the `FileStore.completeFiles` port method and 6 tests. Every transfer still starts at byte 0: resume, a new grant on expiry and the real adapters are MOD06-P2-T02 and T03 (DEC-020, OQ-54). Revised on 9 November 2026 after Sanika Attarde's review of #63 to #67: a failed registry load is tried again on the next call instead of failing for the rest of the session; the repair is best effort at start, so a kept copy still opens, and runs in full before the next list; the rows are checked side by side; the downloads screen shows a message and Retry when the list cannot be read, says why a delete was refused, and reads the list again when pulled down (a live list needs a change stream that `DownloadManager` does not have); the panel says why a Retry did not start, and follows a new issue when it is reused. 7 more tests, each of which fails on the earlier code. 395 tests pass, with 1 golden skipped.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `app/lib/features/downloads/` | Added: `downloads.dart`, `domain/download_ports.dart`, `domain/file_names.dart`, `data/issue_download_manager.dart`, and `presentation/download_panel.dart`, `downloads_screen.dart` and `downloads_text.dart`. | MOD06-P2-T01, T04, T05 | FR-DL-003, FR-DL-004, FR-DL-005, FR-DL-008, FR-DL-009, FR-STATE-002, FR-STATE-004, FR-STATE-006, FR-READ-010, AC-4.1, AC-4.4 to AC-4.7, IC-02, IC-03 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/test/features/downloads/` | Added: the spike's fakes, support and 37 tests, `download_repair_test.dart` with 6 tests, and `download_failures_test.dart` with 7. | DoD-FEAT: tests in the same pull request | MOD06-P2-T04, FX-NET-06, FX-NET-07 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.20: an Implemented row in section 6.6. | Records the code | MOD06-P2-T01, T04, T05 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.58: this entry. It takes 0.58 because #64 takes 0.57. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | The version column reads 0.20 for `API_AND_MODULE_CONTRACTS` (was 0.19) and 0.58 for `CHANGELOG` (was 0.57). | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: the app's environment configuration (MOD01-P2-T04), 2026-11-09, on topic branch `feat/sa-app-config` on top of `feat/sa-connectivity` (the head of pull request #63), then merged with `origin/main` at `97fd3f3` (#63 merged), under review in pull request #64
 

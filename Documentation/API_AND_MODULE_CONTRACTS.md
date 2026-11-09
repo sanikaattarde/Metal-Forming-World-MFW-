@@ -7,7 +7,7 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.19 |
+| Version | 0.20 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
 | Date | 9 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
@@ -35,6 +35,7 @@
 | 0.17 | 9 November 2026 | MOD01-P2-T01 (pull request #62). Section 6.1 adds an Implemented row: the route table, the guard and the not-found screen are in `app/lib/app/`, with every screen a placeholder until its feature task. The guard sends a reader without `fullAccess` from the reader, `/downloads` and `/library` to the missing step, as the access column of `SCREEN_INVENTORY_AND_NAVIGATION.md` section 5 says (SCR-A-14 to SCR-A-16). No route, interface or access rule changes. |
 | 0.18 | 9 November 2026 | MOD01-P2-T03 (pull request #63). The Implemented row of section 6.1 adds `PluginConnectivityService` on `connectivity_plus` (DEP-50): Wi-Fi is preferred over mobile when both are listed, a satellite link counts as mobile, and a platform failure reads as mobile, so the reader is warned (PROPOSED). The HTTPS client of #58 is the other half of the task. No interface changes. |
 | 0.19 | 9 November 2026 | MOD01-P2-T04 (pull request #64). The Implemented row of section 6.1 adds `AppConfig`: CFG-03, CFG-04, CFG-07 and CFG-08 from build-time defines, with `MFW_ENV` for the environment, and a start-up failure for a production build without them. No interface changes. |
+| 0.20 | 9 November 2026 | MOD06-P2-T01, T04 and T05 (pull request #65). Section 6.6 adds an Implemented row: `IssueDownloadManager` over the MOD-06 ports, the download panel (SCR-A-13) and the downloads screen (SCR-A-15), from Yuvraj Gaykhe's spike, with the repair at start of `PDF_READER_AND_OFFLINE_DESIGN.md` section 4.4 added. The ports and their real adapters stay feature-internal and PROPOSED. No interface changes. |
 
 ### 1.1 Related documents
 
@@ -520,6 +521,7 @@ With five to twelve issues at launch (RS ASM-02), filtering on the device is eno
 | Blocked | DEC-008 and OQ-08 (reading model); OQ-11 (FR-DL-010); DEC-020 and OQ-37 (mechanism) |
 | Tests | Unit tests with a fake transport that simulates breaks (FX-NET-* in `TEST_DATA_AND_FIXTURES.md`); AC-4.1 to AC-4.7; PAC-13; PAC-14; near-limit file test (FX-PDF-05) |
 | Integration acceptance | IC-02, IC-03, IC-08 |
+| Implemented | MOD06-P2-T01, T04 and T05 (pull request #65), from Yuvraj Gaykhe's spike on `spike/yg-ws-b`: `IssueDownloadManager` in `app/lib/features/downloads/` over four feature ports (`FileTransport`, `FileStore`, `HashVerifier`, `DownloadRegistry`, PROPOSED), `DownloadPanel` (SCR-A-13: the size, the mobile-data warning, too little space, retry) and `DownloadsScreen` (SCR-A-15: list and delete, with no network needed). Rules 3, 4 and 7 hold, and the repair of `PDF_READER_AND_OFFLINE_DESIGN.md` section 4.4 runs at start and before each list, without a checksum. Every transfer starts at byte 0: resume (rule 1), a new grant on expiry (rule 2) and the real adapters are MOD06-P2-T02 and T03 (DEC-020, OQ-54). The deleted-issue row of section 4.4 waits for OP-03 (MOD13-P1-T05). The router keeps a placeholder at `/downloads` until a manager with real adapters exists. |
 
 ```dart
 abstract interface class IssueFileService {
