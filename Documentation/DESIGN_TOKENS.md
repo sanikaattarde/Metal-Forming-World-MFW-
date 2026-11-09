@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First version: the colour, type, spacing and shape tokens taken from `BRAND_REFERENCE.md` sections 4.3, 5 and 6, the proposed state colours, the contrast check of every pair the theme draws, the mapping onto the Flutter theme, and the three bundled typefaces with their licences. Section 2 also says where the set is in Figma, and that the reader screen designs there are not finished. Revised on 8 November 2026: section 2 and section 9 record that YG shared the Figma file with Sanika Attarde. Revised on 9 November 2026 after the review of pull request #57: section 9 lists two points for M2, a darker red drawn beside the website red and the small input text. |
+| 0.1 | 8 November 2026 | First version: the colour, type, spacing and shape tokens taken from `BRAND_REFERENCE.md` sections 4.3, 5 and 6, the proposed state colours, the contrast check of every pair the theme draws, the mapping onto the Flutter theme, and the three bundled typefaces with their licences. Section 2 also says where the set is in Figma, and that the reader screen designs there are not finished. Revised on 8 November 2026: section 2 and section 9 record that YG shared the Figma file with Sanika Attarde. Revised on 9 November 2026 after the review of pull request #57: section 9 lists two points for M2, a darker red drawn beside the website red and the small input text. Revised again on 9 November 2026: section 8 records that YG read the three licence files, and section 9 no longer lists that reading as open. |
 
 ### 1.1 Related documents
 
@@ -152,7 +152,7 @@ The upright variable font of each family, from the Google Fonts repository at co
 | Inter | `inter/Inter-Variable.ttf` | 876,576 | `29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031` | optical size 14 to 32, weight 100 to 900 | SIL Open Font License 1.1, Copyright 2020 The Inter Project Authors (`inter/OFL.txt`, SHA-256 `5b9321a4…`) |
 | Plus Jakarta Sans | `plus_jakarta_sans/PlusJakartaSans-Variable.ttf` | 176,288 | `89b3fb38aa0d275d7a731d0d817a4f1622b316b4d7fbdedcf02ee9099ff68bc8` | weight 200 to 800 | SIL Open Font License 1.1, Copyright 2020 The Plus Jakarta Sans Project Authors (`plus_jakarta_sans/OFL.txt`, SHA-256 `995c7199…`) |
 
-The licence lets the fonts be bundled with software if each copy carries the copyright notice and the licence (condition 2), and forbids selling the fonts by themselves (condition 1). The licence files were read by the development assistant (DEP-41) on 8 November 2026 at YG's request; a developer has not read them yet (`DEPENDENCY_REGISTER.md` DEP-78).
+The licence lets the fonts be bundled with software if each copy carries the copyright notice and the licence (condition 2), and forbids selling the fonts by themselves (condition 1). The licence files were read by the development assistant (DEP-41) on 8 November 2026 at YG's request, and YG read them on 9 November 2026 (`DEPENDENCY_REGISTER.md` DEP-78).
 
 ## 9. Open Points
 
@@ -165,4 +165,3 @@ The licence lets the fonts be bundled with software if each copy carries the cop
 | For M2: draw a darker red beside the website red, each with its contrast ratio, so that MFW decides on something concrete. No darker value is proposed in this document | OQ-25, OQ-63, M2 |
 | For M2: input text at 12, the website's value, is small for typing on a phone | OQ-25, M2 |
 | How the logo enters the app while the file stays out of the repository | DEC-024, DEP-02 |
-| A developer's reading of the three licence files | DEP-78 |
