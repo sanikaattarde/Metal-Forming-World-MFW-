@@ -106,7 +106,10 @@ service cloud.firestore {
         }
 
         allow read: if isOwner(uid);
-        allow create, update: if isOwner(uid) && validFavourite();
+        allow create: if isOwner(uid) && validFavourite();
+        // As for bookmarks: a replayed write with the same values passes, and any change,
+        // created_at included, is refused (review of pull request #66).
+        allow update: if isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().size() == 0;
         allow delete: if isOwner(uid);
       }
 
@@ -122,7 +125,10 @@ service cloud.firestore {
         }
 
         allow read: if isOwner(uid);
-        allow create, update: if isOwner(uid) && validPreference();
+        allow create: if isOwner(uid) && validPreference();
+        // The record holds only its owner, its category and created_at, so an update that changes
+        // nothing is the only one allowed (review of pull request #66).
+        allow update: if isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().size() == 0;
         allow delete: if isOwner(uid);
       }
     }
