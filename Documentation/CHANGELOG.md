@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.49 |
+| Version | 0.50 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 8 November 2026 |
 
@@ -30,6 +30,21 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the design tokens and the app theme on the website's colours and fonts (MOD16-P1-T01, MOD01-P2-T02), 2026-11-08, on topic branch `feat/yg-design-tokens` on top of `6098196` (the head of pull request #56), then merged with `origin/main` at `b9eac94`, under review in pull request #57
+
+The token set both developers draw with, and the Flutter theme built from it, on the working position of 8 November 2026 that the website's colours and fonts are used in the app as they are (reported by YG, not filed; OQ-63 stays OPEN). The colour and type tokens take the values of `BRAND_REFERENCE.md` sections 4.3, 5 and 6 and add none. The error, success and warning colours are PROPOSED from the website's own kit, and the 4 pixel spacing step is PROPOSED because the website records none. A contrast check covers every pair the theme draws: three pairs of the website's own colours fall short of the proposed baseline (white on the red button, red text on white, and the grey field border), and they are recorded for MFW's decision under OQ-25 and not changed. The app bundles the upright variable font of Fraunces, Inter and Plus Jakarta Sans with each licence file (SIL Open Font License 1.1), downloaded with YG's approval after the development assistant read the licences, and shows the licences on the licence page. The logo is not used, because the file stays out of the repository (DEC-024). Built on pull request #56, which holds `BRAND_REFERENCE.md` and DEP-78. On 2026-11-08, with Flutter 3.47.9 and Dart 3.13.7, `flutter pub get --enforce-lockfile`, `dart format` (0 changed), `flutter analyze` (no issues) and `flutter test` (131 passed, 28 of them new, and the token specimen golden skipped without `MFW_GOLDENS`) passed; the golden passed on YG's Mac with `MFW_GOLDENS=true`. No requirement, scope item, decision, cost, estimate or MFW approval changes. Nothing here has gone to MFW.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `app/lib/app/theme/mfw_tokens.dart` | Added: the colour, type, spacing and shape tokens. | MOD16-P1-T01 | MOD16-P1-T01, NFR-UX-001, OQ-25, OQ-63 | Both developers (not agreed); MFW at M2 | No scope effect |
+| 2026-11-08 | `app/lib/app/theme/mfw_theme.dart`, `app/lib/app/theme/font_licences.dart`, `app/lib/app/app.dart` | Added: the theme from the tokens, and the font licences on the licence page. Changed: the app shell uses the theme, registers the licences, and its placeholder comment says what is still a placeholder (the name and the logo). | MOD01-P2-T02 | MOD01-P2-T02, NFR-UX-001, NFR-UX-004, DEP-78, DEC-024 | Both developers (not agreed); MFW at M2 | No scope effect |
+| 2026-11-08 | `app/pubspec.yaml`, `app/assets/fonts/` | Changed: three font families and their licence files as assets. Added: the three upright variable fonts and their `OFL.txt` files. No package is added and `pubspec.lock` does not change. | The website's typefaces (DEP-78) | DEP-78, DEP-02 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `app/test/app/theme/` | Added: 28 tests of the tokens, the contrast pairs, the theme and the font licences, a helper that loads the bundled fonts, and the token specimen golden, which runs only with `MFW_GOLDENS=true`. After the review of #57, the golden's file also says that it passes only where text is drawn as on the Mac that drew it. | The tests of MOD16-P1-T01 and MOD01-P2-T02 | MOD16-P1-T01, MOD01-P2-T02, OQ-25 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/DESIGN_TOKENS.md` | Added, 0.1, PROPOSED: the tokens, the contrast check with its three exceptions, the theme mapping, and the bundled typefaces with their sizes and SHA-256 values. After the review of #57, section 9 also lists two points for M2: a darker red drawn beside the website red, and the small input text. | The shared record of MOD16-P1-T01 | MOD16-P1-T01, MOD01-P2-T02, OQ-25, OQ-63, DEP-78 | Sanika Attarde for the WS-A screens (not agreed); MFW at M2 | No scope effect |
+| 2026-11-08 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.13: DEP-78 moves from CANDIDATE to CONFIRMED (licences read by the development assistant, bundling approved by YG, files bundled by pull request #57); the status row names it. After the review of #57, YG read the three licence files, and DEP-78 records it. | The fonts are in the app | DEP-78, DEP-41 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.50: this entry. It takes 0.50 because #53 (0.46), #54 (0.47), #55 (0.48) and #56 (0.49) merged with those numbers. | Records the change above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | One row for `DESIGN_TOKENS` at 0.1, and the versions of the changed documents: `DEPENDENCY_REGISTER` 0.13 (was 0.12) and `CHANGELOG` 0.50 (was 0.49) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: MFW's clarifications on the brand, the cloud access and the website, as dated updates, 2026-11-08, on topic branch `docs/yg-client-clarifications` on top of `7d66eec`, then merged with `origin/main` at `bd4a123`, under review in pull request #56
 
