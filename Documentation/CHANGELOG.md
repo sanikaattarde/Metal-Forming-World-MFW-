@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.56 |
+| Version | 0.57 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,21 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the app's environment configuration (MOD01-P2-T04), 2026-11-09, on topic branch `feat/sa-app-config` on top of `feat/sa-connectivity` (the head of pull request #63), then merged with `origin/main` at `97fd3f3` (#63 merged), under review in pull request #64
+
+MOD01-P2-T04 is Yuvraj Gaykhe's task, built by Sanika Attarde at the repository owner's request of 9 November 2026, for Yuvraj Gaykhe's review. `AppConfig` reads the app's non-secret settings, CFG-03, CFG-04, CFG-07 and CFG-08, from build-time defines, normally a file made from `config/config.example.env` and passed with `--dart-define-from-file`, so switching environment needs no code change. `MFW_ENV` picks ENV-LOCAL, ENV-TEST or ENV-PROD (DEC-023), and is `local` when not set. A setting left empty or as `replace-me` counts as not set. Every address must be HTTPS. A production build without the WordPress site, its categories or the two policy addresses stops at start-up with an error that names the settings and not their values. The store links may stay unset until the apps are listed (OQ-15). The configuration example gains the `MFW_ENV` line. Native Android and iOS flavours, with an identifier for each environment, wait for OQ-42 and the cloud projects (OQ-40). Revised on 9 November 2026 after Yuvraj Gaykhe's approving review, which agreed to leave the flavours out: a release build must set `MFW_ENV`, so it cannot fall back to `local` by accident (one more test), and `app/README.md` says that the signed-build step (T-12.2) reads the configuration before signing. Revised again after Sanika Attarde's review of #63 to #67: a profile build must set `MFW_ENV` too (only a debug build may fall back to `local`), and `runMfwApp` reads the configuration once and gives that value to `appConfigProvider`, where it was read twice. On this head, after the merge of `main`, 352 tests pass, with 1 golden skipped.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `app/lib/core/config/app_config.dart` | Added: `AppEnvironment`, `AppConfig` and `AppConfigException`. | MOD01-P2-T04 steps 1 and 2 | MOD01-P2-T04, CFG-03, CFG-04, CFG-07, CFG-08, DEC-023, NFR-SEC-001 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/lib/app/app.dart` | Added: `appConfigProvider`; `runMfwApp` reads the configuration first, so a wrong production build fails before any screen. | MOD01-P2-T04 step 1 | MOD01-P2-T04 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/test/core/config/app_config_test.dart` | Added: 13 tests, one of which loads the configuration example. | DoD-TASK: tests in the same pull request | MOD01-P2-T04 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `config/config.example.env` | Added: the `MFW_ENV` line, set to `local`. Placeholders only. | MOD01-P2-T04 step 2 | DEC-023 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/README.md` | The configuration section says how to keep one file for each environment, what `prod` needs, and that native flavours wait for OQ-42. | MOD01-P2-T04 step 3 | MOD01-P2-T04, OQ-42 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.19: the Implemented row of section 6.1. | Records the code | MOD01-P2-T04 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.57: this entry. It takes 0.57 because #63 takes 0.56. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | The version column reads 0.19 for `API_AND_MODULE_CONTRACTS` (was 0.18) and 0.57 for `CHANGELOG` (was 0.56). | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: the connectivity service and cleartext off on both platforms (MOD01-P2-T03), 2026-11-09, on topic branch `feat/sa-connectivity` on top of `feat/sa-routes-guards` (the head of pull request #62), then merged with `origin/main` at `9a23e22` (#62 merged), under review in pull request #63
 
