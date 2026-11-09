@@ -70,9 +70,9 @@ void main() {
       expect(config.wordPress, isNull);
     });
 
-    test('a release build must name its environment', () {
+    test('a profile or release build must name its environment', () {
       expect(
-        () => AppConfig.fromDefines(_complete, releaseBuild: true),
+        () => AppConfig.fromDefines(_complete, requireEnvironment: true),
         throwsA(
           isA<AppConfigException>().having(
             (AppConfigException e) => e.keys,
@@ -84,7 +84,7 @@ void main() {
       expect(
         AppConfig.fromDefines(
           _with(<String, String>{AppConfig.environmentKey: 'test'}),
-          releaseBuild: true,
+          requireEnvironment: true,
         ).environment,
         AppEnvironment.test,
       );
