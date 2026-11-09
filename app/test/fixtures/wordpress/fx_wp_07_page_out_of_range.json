@@ -1,0 +1,7 @@
+{
+  "code": "rest_post_invalid_page_number",
+  "message": "Synthetic: page out of range.",
+  "data": {
+    "status": 400
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "code": "rest_no_route",
+  "message": "Synthetic: no route.",
+  "data": {
+    "status": 404
+  }
+}

@@ -7,8 +7,8 @@
 | Document | WordPress Public Site Evidence |
 | File | `Documentation/test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md` |
 | Phase | 4: Testing, Release and Risk Management. Evidence for T-08.1 (MOD-09), OQ-39 and R5 |
-| Version | 0.1 |
-| Status | Draft for review. Not reviewed. **A one-time read of public data on 8 November 2026. It is not MFW's confirmation, and OQ-39 stays OPEN.** No credentials were used or held. |
+| Version | 0.2 |
+| Status | Draft for review. Not reviewed. **A one-time read of public data on 8 November 2026. It is not MFW's confirmation, and OQ-39 stays OPEN.** No credentials were used or held. Section 7 adds a development read with the app's own client the same day, which is not the recorded live read of T-08.1. |
 | Date | 8 November 2026 |
 | Prepared by | Yuvraj Gaykhe (WS-B), 8 November 2026 |
 | Approval required | Both developers |
@@ -18,6 +18,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 8 November 2026 | First record: what the public website and its public REST API show, and what still needs MFW's confirmation. Revised on 9 November 2026 after the review of pull request #56: section 6 point 5 notes that eight of the nine categories of CFG-04 hold no post, for the empty state of FR-STATE-002. |
+| 0.2 | 8 November 2026 | Section 7 added: a development read of the public API with the app's WordPress client (pull request #58), with counts, IDs and dates only. Sections 1 to 6 are unchanged. |
 
 ### 1.1 Related documents
 
@@ -75,3 +76,22 @@ Facts seen on 8 November 2026. Each can change when MFW changes its site.
 3. WP-PV-07 is a design input for DEP-54 and is not decided here. The options include showing the excerpt and the featured image with a link to the article on the website, or taking the article text out of the Elementor layout. Both developers decide, and RS FR-NEWS rows set what the app must show.
 4. The checks of `DEPLOYMENT_PLAN.md` section 7.6 are repeated before release. This record does not replace them.
 5. Eight of the nine categories of the CFG-04 working position hold no post today (WP-PV-05): only Industry News (ID 7) does. The news screens therefore need the empty state of RS FR-STATE-002 for a category, and the M2 designs show it. The working position of CFG-04 stays as it is.
+
+## 7. A Development Read with the App's Client
+
+On 8 November 2026 at 09:46 UTC, `app/tool/wordpress_live_read.dart` (pull request #58) ran the app's own WordPress client from YG's Mac against the public API, with the working position of CFG-03 and CFG-04: the site https://metalformingworld.com and the categories 7 and 11 to 18. It sent seven GET requests with no credentials, and printed counts, IDs, dates and yes or no answers only. No title, article or image was printed or stored.
+
+This is a development read. CFG-03 and CFG-04 stay OPEN until OQ-39 is answered in writing, so it is not the recorded live read that closes T-08.1 (section 6, point 2).
+
+| ID | Check | Result |
+|---|---|---|
+| WP-DR-01 | Categories | 9 returned, in the configured order: 7, 11, 12, 13, 14, 15, 16, 17, 18 |
+| WP-DR-02 | First page of posts | 10 posts, all in category 7, each with an `https` featured image; more pages: yes |
+| WP-DR-03 | Dates | Newest 21 March 2026, oldest on the page 16 March 2026, newest first |
+| WP-DR-04 | Titles | None still holds an HTML character reference after decoding |
+| WP-DR-05 | Category filter | Category 11: 0 posts. Category 7: 10 posts |
+| WP-DR-06 | A page past the end | Page 99 gives an empty last page, which is the path of the 400 `rest_post_invalid_page_number` answer |
+| WP-DR-07 | One article | The newest post (ID 198): a body of 32,422 characters, with no `script` and no `iframe` element, as WP-PV-07 found |
+| WP-DR-08 | An unknown article | `notFound` |
+
+What it shows: the client reads the live response shapes as the fixtures expect. WP-PV-04 found a featured image on the five newest posts; this read finds one on all ten posts of the first page. What it does not show: behaviour under load, rate limits, or the API staying open over time (R5).

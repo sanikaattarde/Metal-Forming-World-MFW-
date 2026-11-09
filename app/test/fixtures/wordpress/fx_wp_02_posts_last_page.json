@@ -1,0 +1,237 @@
+[
+  {
+    "id": 9021,
+    "date": "2026-03-05T09:30:00",
+    "date_gmt": "2026-03-05T09:30:00",
+    "modified_gmt": "2026-03-05T09:30:00",
+    "slug": "synthetic-post-21",
+    "status": "publish",
+    "type": "post",
+    "link": "https://news.example.test/synthetic-post-21/",
+    "title": {
+      "rendered": "Synthetic post 21"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body of post 21.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 21.</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 8021,
+    "sticky": false,
+    "format": "standard",
+    "categories": [
+      7
+    ],
+    "tags": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://news.example.test/wp-json/wp/v2/posts/9021"
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 8021,
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "alt_text": "",
+          "source_url": "https://news.example.test/wp-content/uploads/2026/03/synthetic-21.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": 9022,
+    "date": "2026-03-05T10:30:00",
+    "date_gmt": "2026-03-05T10:30:00",
+    "modified_gmt": "2026-03-05T10:30:00",
+    "slug": "synthetic-post-22",
+    "status": "publish",
+    "type": "post",
+    "link": "https://news.example.test/synthetic-post-22/",
+    "title": {
+      "rendered": "Synthetic post 22"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body of post 22.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 22.</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 8022,
+    "sticky": false,
+    "format": "standard",
+    "categories": [
+      7
+    ],
+    "tags": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://news.example.test/wp-json/wp/v2/posts/9022"
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 8022,
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "alt_text": "",
+          "source_url": "https://news.example.test/wp-content/uploads/2026/03/synthetic-22.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": 9023,
+    "date": "2026-03-05T11:30:00",
+    "date_gmt": "2026-03-05T11:30:00",
+    "modified_gmt": "2026-03-05T11:30:00",
+    "slug": "synthetic-post-23",
+    "status": "publish",
+    "type": "post",
+    "link": "https://news.example.test/synthetic-post-23/",
+    "title": {
+      "rendered": "Synthetic post 23"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body of post 23.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 23.</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 8023,
+    "sticky": false,
+    "format": "standard",
+    "categories": [
+      7
+    ],
+    "tags": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://news.example.test/wp-json/wp/v2/posts/9023"
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 8023,
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "alt_text": "",
+          "source_url": "https://news.example.test/wp-content/uploads/2026/03/synthetic-23.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": 9024,
+    "date": "2026-03-05T12:30:00",
+    "date_gmt": "2026-03-05T12:30:00",
+    "modified_gmt": "2026-03-05T12:30:00",
+    "slug": "synthetic-post-24",
+    "status": "publish",
+    "type": "post",
+    "link": "https://news.example.test/synthetic-post-24/",
+    "title": {
+      "rendered": "Synthetic post 24"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body of post 24.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 24.</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 8024,
+    "sticky": false,
+    "format": "standard",
+    "categories": [
+      7
+    ],
+    "tags": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://news.example.test/wp-json/wp/v2/posts/9024"
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 8024,
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "alt_text": "",
+          "source_url": "https://news.example.test/wp-content/uploads/2026/03/synthetic-24.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": 9025,
+    "date": "2026-03-05T13:30:00",
+    "date_gmt": "2026-03-05T13:30:00",
+    "modified_gmt": "2026-03-05T13:30:00",
+    "slug": "synthetic-post-25",
+    "status": "publish",
+    "type": "post",
+    "link": "https://news.example.test/synthetic-post-25/",
+    "title": {
+      "rendered": "Synthetic post 25"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body of post 25.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 25.</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 8025,
+    "sticky": false,
+    "format": "standard",
+    "categories": [
+      7
+    ],
+    "tags": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://news.example.test/wp-json/wp/v2/posts/9025"
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 8025,
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "alt_text": "",
+          "source_url": "https://news.example.test/wp-content/uploads/2026/03/synthetic-25.jpg"
+        }
+      ]
+    }
+  }
+]

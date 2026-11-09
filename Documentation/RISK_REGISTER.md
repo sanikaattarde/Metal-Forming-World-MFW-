@@ -7,7 +7,7 @@
 | Document | Risk Register |
 | File | `Documentation/RISK_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 38) |
-| Version | 0.8 |
+| Version | 0.9 |
 | Status | Draft for review. Not approved. Ratings are an initial development-team assessment and are unreviewed. |
 | Date | 8 November 2026 |
 | Approval required | Both developers. Risks that MFW must accept need MFW's written acceptance. |
@@ -24,6 +24,7 @@
 | 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.7 | 7 November 2026 | R15 records that the logo file and three issues are in hand (`inputs/README.md`, `DEPENDENCY_REGISTER.md` DEP-02 and DEP-03). The report of 27 October 2026 stays as dated. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
 | 0.8 | 8 November 2026 | MFW's clarifications, reported by YG on 8 November 2026 and not filed. R15 adds a dated update: the website's colours, fonts and categories are used as they are (YG's report), MFW names its website and says cloud access comes next week, and the cloud details and the store accounts are not provided. R5 adds a current-evidence row with the public read-only check of that day (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`). The reports of 27 October and 7 November 2026 stay as dated. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
+| 0.9 | 9 November 2026 | R5 adds an update to its current-evidence row from the review of pull request #58: the client's User-Agent and that it follows no redirect. No rating, trigger, contingency or status changed, and all ratings remain unreviewed. |
 
 ### 1.1 Related documents
 
@@ -142,7 +143,7 @@ Owners follow the PROPOSED workstreams in `TASK_OWNERSHIP_MATRIX.md`: WS-A (prop
 | Description [CH §18] | The WordPress API is blocked, slow or not enabled. |
 | Trigger | The live check in T-08.1 fails, or responses match FX-WP-08 or FX-WP-12. |
 | Mitigation [CH §18] | Confirm access in Week 1, test early, cache recent articles. The site address and API confirmation are an MFW input (OQ-39). |
-| Current evidence | Update of 8 November 2026: MFW shared its website, https://metalformingworld.com (reported by YG, not filed). A public read-only check that day reached the REST API over HTTPS with no credentials, from a browser and from a client that is not a browser. The responses pass through Cloudflare, and the site runs security and cache plugins (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`). One request of each kind, at one time: it shows the API is enabled today, and not that it stays open to the app. MFW's confirmation is still needed (OQ-39). |
+| Current evidence | Update of 8 November 2026: MFW shared its website, https://metalformingworld.com (reported by YG, not filed). A public read-only check that day reached the REST API over HTTPS with no credentials, from a browser and from a client that is not a browser. The responses pass through Cloudflare, and the site runs security and cache plugins (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`). One request of each kind, at one time: it shows the API is enabled today, and not that it stays open to the app. MFW's confirmation is still needed (OQ-39). Update of 9 November 2026, from the review of pull request #58: the app's WordPress client sends Dart's default User-Agent, which Cloudflare lets through today (WP-PV-08), and it follows no redirect, so a move of the site to another address (for example `www`) would stop the news until CFG-03 changes. Both are as designed (`API_AND_MODULE_CONTRACTS.md` section 9.1). |
 | Contingency | MFW's host changes its settings. The project changes nothing on WordPress (RS INT-WP-002). A backend proxy is an option under DEC-021. |
 | Evidence and related | RS INT-WP-001, INT-WP-004, FR-STATE-005; ASM-03; OQ-39 |
 

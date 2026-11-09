@@ -1,0 +1,143 @@
+[
+  {
+    "id": 9041,
+    "date": "2026-03-12T09:30:00",
+    "date_gmt": "2026-03-12T09:30:00",
+    "modified_gmt": "2026-03-12T09:30:00",
+    "slug": "synthetic-post-41",
+    "status": "publish",
+    "type": "post",
+    "link": "https://news.example.test/synthetic-post-41/",
+    "title": {
+      "rendered": "Synthetic press&#8217;s new line"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body of post 41.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 41.</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 8041,
+    "sticky": false,
+    "format": "standard",
+    "categories": [
+      7
+    ],
+    "tags": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://news.example.test/wp-json/wp/v2/posts/9041"
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 8041,
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "alt_text": "",
+          "source_url": "https://news.example.test/wp-content/uploads/2026/03/synthetic-41.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": 9042,
+    "date": "2026-03-12T10:30:00",
+    "date_gmt": "2026-03-12T10:30:00",
+    "modified_gmt": "2026-03-12T10:30:00",
+    "slug": "synthetic-post-42",
+    "status": "publish",
+    "type": "post",
+    "link": "https://news.example.test/synthetic-post-42/",
+    "title": {
+      "rendered": "Price &#8377; 1,200 &amp; more"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body of post 42.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 42.</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 8042,
+    "sticky": false,
+    "format": "standard",
+    "categories": [
+      7
+    ],
+    "tags": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://news.example.test/wp-json/wp/v2/posts/9042"
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 8042,
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "alt_text": "",
+          "source_url": "https://news.example.test/wp-content/uploads/2026/03/synthetic-42.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": 9043,
+    "date": "2026-03-12T11:30:00",
+    "date_gmt": "2026-03-12T11:30:00",
+    "modified_gmt": "2026-03-12T11:30:00",
+    "slug": "synthetic-post-43",
+    "status": "publish",
+    "type": "post",
+    "link": "https://news.example.test/synthetic-post-43/",
+    "title": {
+      "rendered": "&#8220;Umformtechnik&#8221; für Anfänger"
+    },
+    "content": {
+      "rendered": "<p>Synthetic body of post 43.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>Synthetic excerpt 43.</p>\n",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 8043,
+    "sticky": false,
+    "format": "standard",
+    "categories": [
+      7
+    ],
+    "tags": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://news.example.test/wp-json/wp/v2/posts/9043"
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "id": 8043,
+          "media_type": "image",
+          "mime_type": "image/jpeg",
+          "alt_text": "",
+          "source_url": "https://news.example.test/wp-content/uploads/2026/03/synthetic-43.jpg"
+        }
+      ]
+    }
+  }
+]
