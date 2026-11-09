@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.61 |
+| Version | 0.62 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the reader-side screen designs (MOD16-P1-T02), 2026-11-09, on topic branch `docs/yg-reader-designs` on top of `d097e91` (the head of pull request #68), under review in pull request #69
+
+28 design frames of the reader-side screens SCR-A-10 to SCR-A-19 and SCR-A-22, with the states of `SCREEN_INVENTORY_AND_NAVIGATION.md` section 7 that apply to them, drawn as Flutter widgets on the app's theme and tokens (#57), the same way as Sanika Attarde's account frames (#67). The images are drawn at 2x (780 by 1688 pixels). The download frames use the wording of `DownloadsText` (#65) and the error frames that of `messageFor` (#61). No MFW logo, cover, article or picture is drawn. A test checks every frame on each run for the tap-target and label baseline proposed for OQ-25, and all 28 pass; drawing them found that Flutter's `SearchBar` exposes its text field as a 17 point tap target, so the frames use a text field, and the record names it as a point for the catalogue task. On 2026-11-09, with Flutter 3.47.9: `flutter analyze` (no issues) and the frame tests (28 checks passed; the 28 images drawn with `MFW_DESIGN_FRAMES=true`). Nothing has gone to MFW, and the frames approve nothing.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `app/test/design/reader_frames.dart`, `app/test/design/reader_frames_test.dart` | Added: the 28 frames and their checks. | MOD16-P1-T02 | MOD16-P1-T02, NFR-UX-001, NFR-UX-004, OQ-25, FR-STATE-001 to FR-STATE-006 | Sanika Attarde reviews (not agreed); MFW at M2 | No scope effect |
+| 2026-11-09 | `Documentation/design/reader/` | Added: 28 images, 780 by 1688 pixels. | The designs for the prototype | MOD16-P1-T02, MOD16-P1-T05 | Sanika Attarde reviews (not agreed); MFW at M2 | No scope effect |
+| 2026-11-09 | `Documentation/design/READER_SCREEN_DESIGNS.md` | Added, 0.1: how the frames are made, each screen's frames and the open points it waits for, the choices made, and the accessibility findings. | The record of MOD16-P1-T02 | MOD16-P1-T02, OQ-08, OQ-10, OQ-12, OQ-13, OQ-14, OQ-16, OQ-17, OQ-25 | Sanika Attarde reviews (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.62: this entry. It takes 0.62 because #60 (0.53) to #68 (0.61) are merged or under review with those numbers. | Records the change above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | One row for `design/READER_SCREEN_DESIGNS` at 0.1, and `CHANGELOG` 0.62 (was 0.61) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: QG-08, the backend rule tests in CI (MOD15-P2-T02), 2026-11-09, on topic branch `ci/yg-qg08-backend` on top of `9579e32` (the head of pull request #67), under review in pull request #68
 
