@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../contracts/contracts.dart';
+import '../core/network/connectivity_service.dart';
 import 'placeholder_screens.dart';
 import 'router.dart';
 import 'router_app_navigator.dart';
@@ -51,6 +52,11 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
   });
   return router;
 });
+
+/// The connection type for the mobile-data warning (MOD01-P2-T03,
+/// RS FR-DL-004). Tests override it with `FakeConnectivityService`.
+final Provider<ConnectivityService> connectivityServiceProvider =
+    Provider<ConnectivityService>((Ref ref) => PluginConnectivityService());
 
 /// The `AppNavigator` for MOD-11: through the router and its guard
 /// (BR-005).
