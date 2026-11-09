@@ -6,9 +6,10 @@
 # files from `git status`, but it does not remove a file that is already
 # tracked. Run the secrets scan (QG-11, once it exists) as well.
 #
-# The folders app/, backend/ and admin/ do not exist yet (DEC-012). Entries
-# for tools whose choice is still open (DEC-003, DEC-004) are marked
-# PROVISIONAL and are to be confirmed when that tooling is first run.
+# Of the folders of DEC-012, app/ exists, and backend/ and admin/ do not yet.
+# Entries for backend and admin tooling (DEC-003, AGREED; DEC-004, PROPOSED)
+# are marked PROVISIONAL and are to be confirmed when that tooling is first
+# added to main.
 
 # ---------------------------------------------------------------------------
 # Secrets and credentials (CODING_STANDARDS.md section 13, item 1)
