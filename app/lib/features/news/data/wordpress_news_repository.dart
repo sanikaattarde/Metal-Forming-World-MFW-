@@ -27,6 +27,8 @@ final class WordPressNewsRepository implements NewsRepository {
   final HttpsGetClient _client;
   final WordPressSiteConfig _config;
 
+  static final RegExp _digits = RegExp(r'^[0-9]{1,18}$');
+
   @override
   Future<Result<NewsPage>> listPosts({String? categoryId, int page = 1}) async {
     if (page < 1) {
@@ -79,6 +81,14 @@ final class WordPressNewsRepository implements NewsRepository {
 
   @override
   Future<Result<NewsPost>> getPost(String postId) async {
+    // WordPress post IDs are whole numbers. Any other ID, for example from a
+    // deep link, would reach WordPress as an unknown route (`rest_no_route`)
+    // and read as the site being unusable, so it is refused here.
+    if (!_digits.hasMatch(postId)) {
+      return const Err<NewsPost>(
+        AppFailure(FailureCode.notFound, detail: 'post ID not numeric'),
+      );
+    }
     final Uri uri = _route(
       'posts/${Uri.encodeComponent(postId)}',
       <String, String>{'_embed': 'wp:featuredmedia'},

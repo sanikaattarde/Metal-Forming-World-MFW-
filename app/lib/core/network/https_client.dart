@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import '../../contracts/result.dart';
 
@@ -94,8 +95,39 @@ final class IoHttpsGetClient implements HttpsGetClient {
       return const Err<HttpsResponse>(
         AppFailure(FailureCode.invalidResponse, detail: 'body not UTF-8'),
       );
+    } on ResponseTooLarge {
+      return const Err<HttpsResponse>(
+        AppFailure(FailureCode.invalidResponse, detail: 'body over limit'),
+      );
     }
   }
+}
+
+/// The most a response body may hold, in bytes (PROPOSED: 5 MB, far above a
+/// page of posts, which was about 412,000 bytes on 9 November 2026).
+const int maxResponseBytes = 5 * 1000 * 1000;
+
+/// Thrown when a response body is larger than [maxResponseBytes]. The client
+/// turns it into `invalidResponse`.
+final class ResponseTooLarge implements Exception {
+  /// Creates the exception.
+  const ResponseTooLarge();
+}
+
+/// Reads [body] whole, and throws [ResponseTooLarge] as soon as it holds
+/// more than [maxBytes] bytes, so a large answer is never kept in memory.
+Future<List<int>> readCapped(
+  Stream<List<int>> body, {
+  int maxBytes = maxResponseBytes,
+}) async {
+  final BytesBuilder bytes = BytesBuilder(copy: false);
+  await for (final List<int> chunk in body) {
+    if (bytes.length + chunk.length > maxBytes) {
+      throw const ResponseTooLarge();
+    }
+    bytes.add(chunk);
+  }
+  return bytes.takeBytes();
 }
 
 final class _IoSender {
@@ -111,7 +143,10 @@ final class _IoSender {
     request.followRedirects = false;
     request.headers.set(HttpHeaders.acceptHeader, 'application/json');
     final HttpClientResponse response = await request.close();
-    final String body = await response.transform(utf8.decoder).join();
+    if (response.contentLength > maxResponseBytes) {
+      throw const ResponseTooLarge();
+    }
+    final String body = utf8.decode(await readCapped(response));
     final Map<String, String> headers = <String, String>{};
     response.headers.forEach((String name, List<String> values) {
       headers[name.toLowerCase()] = values.join(',');

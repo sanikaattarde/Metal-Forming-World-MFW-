@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First record: MFW's direction as reported on 8 November 2026, the colours, fonts, type scale and page patterns read from the public website and its web logo, the contrast of the colour pairs, what the supplied logo file and the three issues show (section 7, read once YG allowed tools to open them), and what was not inspected. It also records YG's report of the same day that the website's colours and fonts are used in the app as they are, as the working position of section 4.3. |
+| 0.1 | 8 November 2026 | First record: MFW's direction as reported on 8 November 2026, the colours, fonts, type scale and page patterns read from the public website and its web logo, the contrast of the colour pairs, what the supplied logo file and the three issues show (section 7, read once YG allowed tools to open them), and what was not inspected. It also records YG's report of the same day that the website's colours and fonts are used in the app as they are, as the working position of section 4.3. Revised on 9 November 2026 after the review of pull request #56: section 7 says which tool read the four files, what left YG's Mac, and that a reference to MFW's permission is added once it is filed. |
 
 ### 1.1 Related documents
 
@@ -173,7 +173,13 @@ Recorded so the designs can follow the same identity. None is a requirement.
 
 ## 7. The Supplied Logo and Issues
 
-Read on 8 November 2026 by an automated reading of the four files MFW supplied, after YG allowed tools to open them, with "no issue from the client side or dev side" (YG, not filed). Each file's SHA-256 matches `inputs/README.md`. The reading took font names, sizes, colours and positions only. No page text, image or file is stored in the repository, and the files stay outside Git (DEC-024). The issues are print files, so their colours are shown here as a PDF reader converts them for a screen, and are approximate.
+Read on 8 November 2026 by an automated reading of the four files MFW supplied, after YG allowed tools to open them, with "no issue from the client side or dev side" (YG, not filed). Each file's SHA-256 matches `inputs/README.md`. The reading took font names, sizes, colours and positions only. No page text, image or file is stored in the repository, and the files stay outside Git (DEC-024).
+
+What covers the reading under DEC-024, added on 9 November 2026 after the review of pull request #56:
+
+- **The tool.** Three short Python scripts using the PyMuPDF library, run on YG's Mac within the session of the development assistant (DEP-41). They read the font, size, colour and position of each text span and the colours of the larger shapes, and printed only names, numbers and counts. They printed no page text and rendered no page as an image.
+- **What left the machine.** The files, their text and any image of their pages did not. The printed names, sizes, colours and counts were read by the development assistant, which is a hosted service, so those figures left YG's Mac as part of that session.
+- **MFW's permission.** YG reports "no issue from the client side" (not filed). A reference to MFW's own permission, with its date and the sender's role, is added here once it is filed. Until then this reading rests on YG's report. The issues are print files, so their colours are shown here as a PDF reader converts them for a screen, and are approximate.
 
 ### 7.1 The logo file
 

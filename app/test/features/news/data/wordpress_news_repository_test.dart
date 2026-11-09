@@ -283,16 +283,28 @@ void main() {
       },
     );
 
-    test('the post ID is sent as one path segment', () async {
-      final FakeHttpsGetClient client = FakeHttpsGetClient(
-        (Uri uri) => jsonResponse('{}', status: 404),
-      );
+    test(
+      'an ID that is not a whole number is notFound, without a request',
+      () async {
+        final FakeHttpsGetClient client = FakeHttpsGetClient(
+          (Uri uri) => jsonResponse('{}', status: 404),
+        );
 
-      await _repository(client).getPost('12/../users');
-
-      expect(client.requests.single.pathSegments.last, '12/../users');
-      expect(client.requests.single.pathSegments, hasLength(5));
-    });
+        for (final String id in <String>[
+          'abc',
+          '12/../users',
+          '',
+          ' 12',
+          '1e3',
+        ]) {
+          final AppFailure failure = _err(
+            await _repository(client).getPost(id),
+          );
+          expect(failure.code, FailureCode.notFound, reason: id);
+        }
+        expect(client.requests, isEmpty);
+      },
+    );
   });
 
   group('site unreachable or unusable [FR-STATE-005]', () {

@@ -21,7 +21,9 @@ final class NewsPost {
   /// Title with HTML entities decoded.
   final String title;
 
-  /// Body HTML, rendered without scripts (CODING_STANDARDS section 7).
+  /// Body HTML as WordPress sent it. It may hold scripts and embedded media,
+  /// so the renderer must never run a script (CODING_STANDARDS section 7,
+  /// SEC-CHK-15).
   final String contentHtml;
 
   /// Featured image, if the post has one.

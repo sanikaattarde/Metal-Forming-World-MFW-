@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First record: what the public website and its public REST API show, and what still needs MFW's confirmation. |
+| 0.1 | 8 November 2026 | First record: what the public website and its public REST API show, and what still needs MFW's confirmation. Revised on 9 November 2026 after the review of pull request #56: section 6 point 5 notes that eight of the nine categories of CFG-04 hold no post, for the empty state of FR-STATE-002. |
 | 0.2 | 8 November 2026 | Section 7 added: a development read of the public API with the app's WordPress client (pull request #58), with counts, IDs and dates only. Sections 1 to 6 are unchanged. |
 
 ### 1.1 Related documents
@@ -75,6 +75,7 @@ Facts seen on 8 November 2026. Each can change when MFW changes its site.
 2. The live read stays gated on OQ-39, as `DEVELOPMENT_ROADMAP.md` section 4.3 says.
 3. WP-PV-07 is a design input for DEP-54 and is not decided here. The options include showing the excerpt and the featured image with a link to the article on the website, or taking the article text out of the Elementor layout. Both developers decide, and RS FR-NEWS rows set what the app must show.
 4. The checks of `DEPLOYMENT_PLAN.md` section 7.6 are repeated before release. This record does not replace them.
+5. Eight of the nine categories of the CFG-04 working position hold no post today (WP-PV-05): only Industry News (ID 7) does. The news screens therefore need the empty state of RS FR-STATE-002 for a category, and the M2 designs show it. The working position of CFG-04 stays as it is.
 
 ## 7. A Development Read with the App's Client
 

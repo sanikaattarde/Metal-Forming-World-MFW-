@@ -84,5 +84,40 @@ void main() {
     test('the default timeout is 15 seconds (PROPOSED)', () {
       expect(IoHttpsGetClient.defaultTimeout, const Duration(seconds: 15));
     });
+
+    test('a body over the limit is invalidResponse', () async {
+      final IoHttpsGetClient client = IoHttpsGetClient(
+        send: (Uri uri) async => throw const ResponseTooLarge(),
+      );
+
+      final AppFailure failure = _failureOf(await client.get(site));
+
+      expect(failure.code, FailureCode.invalidResponse);
+      expect(failure.retryable, isFalse);
+    });
+  });
+
+  group('readCapped (5 MB limit, PROPOSED)', () {
+    Stream<List<int>> chunks(int count, int size) =>
+        Stream<List<int>>.fromIterable(
+          List<List<int>>.generate(count, (_) => List<int>.filled(size, 65)),
+        );
+
+    test('reads a body up to the limit whole', () async {
+      final List<int> bytes = await readCapped(chunks(4, 25), maxBytes: 100);
+
+      expect(bytes, hasLength(100));
+    });
+
+    test('stops as soon as the body passes the limit', () async {
+      await expectLater(
+        readCapped(chunks(5, 25), maxBytes: 100),
+        throwsA(isA<ResponseTooLarge>()),
+      );
+    });
+
+    test('the limit is 5 MB', () {
+      expect(maxResponseBytes, 5000000);
+    });
   });
 }
