@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.47 |
+| Version | 0.48 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 8 November 2026 |
 
@@ -31,6 +31,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Documentation: the wording of the DEC-022 cost approval, after the review of #51, 2026-11-08, on topic branch `docs/yg-dec022-wording` on top of `7d66eec`, then merged with `origin/main` at `96ac392`, under review in pull request #55
+
+Sanika Attarde's review of pull request #51 asked for two edits in the push that merged `main`, and the merge commit was pushed before the review arrived. `DECISION_LOG.md` 0.16 says "the cost is approved by the repository owner" in the 0.15 row, the Status row of DEC-022 and the update sentence in section 5.6, where they said "the cost condition is met", with "the plan minutes and the macOS runner cost are NOT VERIFIED (MOD15-P1-T01 stays open)" next to it. `OPEN_QUESTIONS.md` 0.13 adds the full stop before the update sentences of OQ-35 and OQ-40. No entry or question changes status.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/DECISION_LOG.md` | Version 0.16: "the cost is approved by the repository owner" in three places, with MOD15-P1-T01 open. | The review of pull request #51 | DEC-022, MOD15-P1-T01 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/OPEN_QUESTIONS.md` | Version 0.13: two full stops, in OQ-35 and OQ-40. | The review of pull request #51 | OQ-35, OQ-40 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.48: this entry. It takes 0.48 because #52 (0.45), #53 (0.46) and #54 (0.47) merged with those numbers. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | The version column reads 0.16 for `DECISION_LOG` (was 0.15), 0.13 for `OPEN_QUESTIONS` (was 0.12) and 0.48 for `CHANGELOG` (was 0.47) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 ### Added: five questions for MFW's written answer, not sent, 2026-11-08, on topic branch `docs/yg-mfw-questions` on top of `8b2c824`, then merged with `origin/main` at `4cc9ed1`, under review in pull request #54
 
 Adds `MFW_QUESTIONS_2026-11-08.md` 0.1: five questions that only MFW can answer, each with the decision it unblocks, the team's working position and the answer that is needed. Q1 reading and downloading (OQ-08, OQ-11; DEC-008, DEC-033); Q2 the backend platform (OQ-35; DEC-003); Q3 a separate test project (OQ-40; DEC-023); Q4 where MFW's sample PDFs and the reader test recordings may be kept (DEC-024; `TESTING_STRATEGY.md` §13); Q5 test phones and versions (OQ-26). It holds a draft email. It is not sent: decisions go to MFW through the contracting developer (`DECISION_LOG.md` section 4, step 4), and Sanika Attarde agreed in the review of this pull request that Yuvraj Gaykhe sends it after the merge, for these five questions only. After that review, item 2 of the email also says that the team is checking that MFW still expects Firebase. No answer is recorded, and no question, decision or status label changed.
