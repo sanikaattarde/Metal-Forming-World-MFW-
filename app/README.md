@@ -53,10 +53,15 @@ It runs on a simulator, an emulator or a test phone. The app holds no backend ad
 
 ## Configuration
 
-Build-time values come from a file made from `../config/config.example.env`, passed with `--dart-define-from-file`, for example:
+The app's non-secret settings (CFG-03, CFG-04, CFG-07 and CFG-08 of `DEPLOYMENT_PLAN.md` section 5.2) come from build-time defines, read by `AppConfig` in `lib/core/config/app_config.dart` (MOD01-P2-T04). Keep one file for each environment in `../config/`, made from `config.example.env`: for example `local.env`, `test.env` and `prod.env`. Git ignores every file there except the example.
 
 ```bash
 flutter run --dart-define-from-file=../config/local.env
 ```
 
-Flutter 3.47.9 reads that `.env` format, comments included (checked on 9 November 2026). No code reads a CFG value this way yet. Never put a secret in that file: anything passed at build time can be read from the app.
+- `MFW_ENV` in the file picks the environment: `local`, `test` or `prod` (DEC-023). It is `local` when not set.
+- A value that is empty or still `replace-me` counts as not set. ENV-LOCAL and ENV-TEST run with nothing set, and the news screens then say that news is not available.
+- A `prod` build stops at start-up with `AppConfigException` if the WordPress site, its categories or either policy address is not set, or if any address is not HTTPS. The store links may stay unset until the apps are listed (OQ-15).
+- Switching environment needs no code change. The Android and iOS flavours (a separate app identifier for each environment) wait for the identifiers (OQ-42) and the cloud projects (DEC-023, OQ-40).
+
+Flutter 3.47.9 reads this `.env` format, comments included (checked on 9 November 2026). Never put a secret in these files: anything passed at build time can be read from the app.

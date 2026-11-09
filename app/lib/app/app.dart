@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../contracts/contracts.dart';
+import '../core/config/app_config.dart';
 import '../core/network/connectivity_service.dart';
 import 'placeholder_screens.dart';
 import 'router.dart';
@@ -53,6 +54,12 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
   return router;
 });
 
+/// The build's settings for its environment (MOD01-P2-T04). A wrong build
+/// throws `AppConfigException` when it is first read. Tests override it.
+final Provider<AppConfig> appConfigProvider = Provider<AppConfig>(
+  (Ref ref) => AppConfig.fromEnvironment(),
+);
+
 /// The connection type for the mobile-data warning (MOD01-P2-T03,
 /// RS FR-DL-004). Tests override it with `FakeConnectivityService`.
 final Provider<ConnectivityService> connectivityServiceProvider =
@@ -69,6 +76,8 @@ final Provider<AppNavigator> appNavigatorProvider = Provider<AppNavigator>(
 /// Riverpod is used in `app/lib/app/` only (DEC-013), so the scope is created
 /// here and not in `main.dart`.
 void runMfwApp() {
+  // A wrong production build fails here, before any screen (MOD01-P2-T04).
+  AppConfig.fromEnvironment();
   registerFontLicences();
   runApp(const ProviderScope(child: MfwApp()));
 }
