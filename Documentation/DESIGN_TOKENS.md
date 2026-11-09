@@ -17,7 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First version: the colour, type, spacing and shape tokens taken from `BRAND_REFERENCE.md` sections 4.3, 5 and 6, the proposed state colours, the contrast check of every pair the theme draws, the mapping onto the Flutter theme, and the three bundled typefaces with their licences. Section 2 also says where the set is in Figma, and that the reader screen designs there are not finished. Revised on 8 November 2026: section 2 and section 9 record that YG shared the Figma file with Sanika Attarde. |
+| 0.1 | 8 November 2026 | First version: the colour, type, spacing and shape tokens taken from `BRAND_REFERENCE.md` sections 4.3, 5 and 6, the proposed state colours, the contrast check of every pair the theme draws, the mapping onto the Flutter theme, and the three bundled typefaces with their licences. Section 2 also says where the set is in Figma, and that the reader screen designs there are not finished. Revised on 8 November 2026: section 2 and section 9 record that YG shared the Figma file with Sanika Attarde. Revised on 9 November 2026 after the review of pull request #57: section 9 lists two points for M2, a darker red drawn beside the website red and the small input text. |
 
 ### 1.1 Related documents
 
@@ -162,5 +162,7 @@ The licence lets the fonts be bundled with software if each copy carries the cop
 | The three contrast exceptions of section 5 | OQ-25, OQ-63 |
 | Sanika Attarde's confirmation that the WS-A screens can be drawn with this set; the Figma file is shared with Sanika Attarde | MOD16-P1-T01 acceptance |
 | The reader screen designs on these tokens, unfinished in Figma | MOD16-P1-T02 |
+| For M2: draw a darker red beside the website red, each with its contrast ratio, so that MFW decides on something concrete. No darker value is proposed in this document | OQ-25, OQ-63, M2 |
+| For M2: input text at 12, the website's value, is small for typing on a phone | OQ-25, M2 |
 | How the logo enters the app while the file stays out of the repository | DEC-024, DEP-02 |
 | A developer's reading of the three licence files | DEP-78 |

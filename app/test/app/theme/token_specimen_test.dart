@@ -5,6 +5,10 @@
 // and add --update-goldens to redraw it. Without MFW_GOLDENS the test is
 // skipped, because text drawing differs between macOS and the Linux runner
 // of the pull-request checks.
+//
+// It passes only where text is drawn exactly as on the Mac that drew the
+// golden (YG's). On another Mac it can fail by a few pixels of text, as the
+// drawing tests of the T-02.1 prototype do; redraw it there before using it.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
