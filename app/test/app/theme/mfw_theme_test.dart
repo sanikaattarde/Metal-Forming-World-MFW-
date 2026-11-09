@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mfw_app/app/app.dart';
+import 'package:mfw_app/app/shell_text.dart';
 import 'package:mfw_app/app/theme/font_licences.dart';
 import 'package:mfw_app/app/theme/mfw_theme.dart';
 import 'package:mfw_app/app/theme/mfw_tokens.dart';
@@ -154,9 +155,7 @@ void main() {
       await tester.pumpWidget(const ProviderScope(child: MfwApp()));
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(
-        find.text(placeholderShellLabel),
-      );
+      final BuildContext context = tester.element(find.text(ShellText.home));
       expect(Theme.of(context).colorScheme.primary, MfwColours.action);
     });
   });

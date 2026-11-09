@@ -7,7 +7,7 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.16 |
+| Version | 0.17 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
 | Date | 9 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
@@ -32,6 +32,7 @@
 | 0.14 | 8 November 2026 | The code of pull request #49 follows the contract. Section 6.3: `reauthenticateWithEmail` and `reauthenticateWithGoogle` are in `auth.dart` and `FakeAuthService`, and the Authorization row says how the fake refuses and when a sign-in stops being recent. Section 6.4: `saveOwnProfile` returns `ProfileSaveResult`, a PROPOSED shape for the output of OP-10 (the status, and the names of the missing fields). The note on OP-PRF-02 in section 8 says that the input waits for OQ-27. No requirement, scope item, decision, status label or MFW approval changed. |
 | 0.15 | 8 November 2026 | Section 9.1 records how the WordPress client of pull request #58 (MOD09-P1-T01) reads the three routes and what each response becomes, PROPOSED. The routes and the fields mapped are unchanged, and stay PROVISIONAL until OQ-39. Revised on 9 November 2026 after the review of pull request #58: the `contentHtml` row of the field map and its doc comment in `contracts/news.dart` say that the body is as WordPress sent it and that the renderer must never run a script; section 9.1 adds the refusal of an article ID that is not a whole number, the 5 MB body limit, and a point for T-08.2 on the size of a list page. |
 | 0.16 | 9 November 2026 | MOD02-P1-T01 (pull request #61). Section 4.2 maps GONE to `notFound` and RATE_LIMITED to `serviceUnavailable`, retryable, both PROPOSED for the review, where they were not mapped; the retry-after value of RATE_LIMITED is not carried, because `AppFailure` has no field for it (issue 28). The rule after the table follows. Section 6.2 adds an Implemented row that names the files. No `FailureCode` value and no interface changes. |
+| 0.17 | 9 November 2026 | MOD01-P2-T01 (pull request #62). Section 6.1 adds an Implemented row: the route table, the guard and the not-found screen are in `app/lib/app/`, with every screen a placeholder until its feature task. The guard sends a reader without `fullAccess` from the reader, `/downloads` and `/library` to the missing step, as the access column of `SCREEN_INVENTORY_AND_NAVIGATION.md` section 5 says (SCR-A-14 to SCR-A-16). No route, interface or access rule changes. |
 
 ### 1.1 Related documents
 
@@ -305,6 +306,7 @@ final class IssueFileGrant {
 | Data owned | None |
 | Tests | Unit tests of guard decisions for each access state; widget test of the navigation shell |
 | Integration acceptance | IC-01, IC-05 |
+| Implemented | MOD01-P2-T01: the routes below in `app/lib/app/routes.dart` and `router.dart`, the guard in `access_guard.dart` (`redirectFor`, on `watchAccessState`), SCR-A-22 in `placeholder_screens.dart`, and `RouterAppNavigator`. The reader, `/downloads` and `/library` need `fullAccess` (SCR-A-14 to SCR-A-16; favourites are OQ-12, kept copies after sign-out OQ-11). A step route the reader no longer needs moves on, and `from` accepts only an in-app path. Until MOD-03 provides `AuthService`, the app runs as a visitor. The IC-01 consumer check passes on the fake with FX-USR-01 to FX-USR-05 and FX-USR-09; ICP-02 needs the real `AuthService` (MOD03-P2-T03). |
 
 ```dart
 enum ConnectionType { none, wifi, mobile, other }
