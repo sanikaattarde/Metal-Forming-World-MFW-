@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.52 |
+| Version | 0.53 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: set-up sections for `app/`, `backend/`, `admin/` and the configuration (MOD14-P1-T01), 2026-11-09, on topic branch `docs/sa-readme-setup` on top of `2d23ab4` (the head of pull request #59), under review in pull request #60
+
+Completes MOD14-P1-T01, whose `.gitignore` and configuration example were already on `main`. The README says what is on `main` (the app, its contracts, theme and news client, and the pull-request checks), where it said "documentation stage only" and "no application code", and adds a set-up section: a table of the four folders, how `backend/` and `admin/` will run on the emulators once they exist, and how configuration is supplied. `app/README.md` replaces the one-line placeholder with the set-up, the checks that the pull-request workflow runs, and how to run the app and pass configuration. The configuration example no longer says that `--dart-define-from-file` reading its format is NOT VERIFIED: Flutter 3.47.9 read it, comments included, in a `flutter test` run on 9 November 2026. A manual search of the tracked files for keys, tokens and credential files found none. No code, gate or decision changes.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `README.md` | The state paragraph says what is on `main`; a set-up section is added before the index; the `CHANGELOG` cell reads 0.53. | MOD14-P1-T01 step 3 | MOD14-P1-T01, T-01.2, DEC-003, DEC-004, DEC-012, DEC-023, DEC-025 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/README.md` | Rewritten from the placeholder: the folders, the set-up, the checks of QG-01 to QG-06, the goldens, running the app and configuration. | MOD14-P1-T01 step 3 | MOD14-P1-T01, DEP-35, DEP-36, DEP-37, QG-01 to QG-06 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `config/config.example.env` | Step 2 names the three environments of DEC-023; step 3 records that Flutter 3.47.9 reads the format; CFG-01 says that DEC-003 is AGREED. Placeholders only, no value added. | The check of 9 November 2026; `DECISION_LOG.md` section 5.11 | CFG-01, DEC-003, DEC-023, OQ-40 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `.gitignore` | The header says that `app/` exists and `backend/` and `admin/` do not yet. No pattern changes. | Follows `main` | DEC-012 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.53: this entry. It takes 0.53 because #59 takes 0.52. | Records the edits above | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: Sanika Attarde's positions on DEC-003, DEC-023 and DEC-004, with DEC-003 agreed (MOD20-P1-T02), 2026-11-09, on topic branch `docs/sa-dec-positions` from `e9ba2ae`, under review in pull request #59
 
