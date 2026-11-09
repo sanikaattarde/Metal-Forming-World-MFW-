@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.53 |
+| Version | 0.54 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,19 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: failure messages, the backend failure mapping and the redacting logger (MOD02-P1-T01), 2026-11-09, on topic branch `feat/sa-errors-logging` on top of `docs/sa-readme-setup` (the head of pull request #60), then merged with `origin/main` at `36d8c5d` (#60 merged), under review in pull request #61
+
+`messageFor` gives every `FailureCode` a message, through an exhaustive switch, so a new code does not compile without one. The wording is a placeholder from the section 4.2 table until the M2 designs. `failureFromBackend` turns a backend category and reason into an `AppFailure` as the section 4.2 table says, with rule R-1 for a reason with no row, and holds only the two names in `detail`. GONE maps to `notFound` and RATE_LIMITED to `serviceUnavailable`, retryable: both are PROPOSED for the review (step 3 of the task). `RedactingLogger` implements the `AppLogger` interface of section 6.2: it redacts every message, context value and error text before a record reaches its sink, drops debug lines in release builds, takes an injected clock, and never throws. The redaction rules follow `CODING_STANDARDS.md` section 6.2, rule 3: email addresses, the query, user part and fragment of every link, tokens in a link's path, JSON Web Tokens, bearer and basic credentials, `key=value` and JSON secrets, long opaque tokens such as push device tokens, context keys that name personal data or a secret, and objects written by type only. Issue IDs and post IDs are kept (rule 5). `RecordingAppLogger` is a fake for other modules' tests. 222 tests pass, with 1 golden skipped. DEC-013 and DEC-026 are AGREED, so this is not a spike. `Result` and `AppFailure` are unchanged (step 1: taken over as they are on `main`). Revised on 9 November 2026 after Yuvraj Gaykhe's approving review, which accepted the GONE and RATE_LIMITED mappings: the doc comment of `RedactingLogger` names its catch of every sink failure as the exception to rule 3 of `CODING_STANDARDS.md` section 6.1 and no longer says "once"; section 4.2 lists, for M2, the two reasons that lose the table's wording (LAST_ADMIN, RECENT_SIGN_IN_REQUIRED) and says that a Retry on RATE_LIMITED is immediate.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `app/lib/core/errors/` | Added: `failure_messages.dart` (`messageFor`) and `backend_failure.dart` (`failureFromBackend`). | MOD02-P1-T01 steps 2 and 3 | MOD02-P1-T01, VR-02, DEC-026, R-1, FR-STATE-003 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/lib/core/logging/` | Added: `app_logger.dart` (`AppLogger`, `LogLevel`, `LogRecord`, `RedactingLogger`, `developerLogSink`) and `redaction.dart` (`Redactor`). | MOD02-P1-T01 step 4 | MOD02-P1-T01, SC-16, SEC-CHK-10, NFR-PRIV-003 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/test/core/errors/`, `app/test/core/logging/`, `app/test/fakes/recording_app_logger.dart` | Added: 50 tests and the recording fake. | DoD-TASK: tests in the same pull request | MOD02-P1-T01, SEC-CHK-10 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/API_AND_MODULE_CONTRACTS.md` | Version 0.16: the GONE and RATE_LIMITED rows of section 4.2, PROPOSED; the rule after the table; an Implemented row in section 6.2. | MOD02-P1-T01 step 3 | MOD02-P1-T01, DEC-026 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.54: this entry. It takes 0.54 because #60 takes 0.53. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | The version column reads 0.16 for `API_AND_MODULE_CONTRACTS` (was 0.15) and 0.54 for `CHANGELOG` (was 0.53). | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: set-up sections for `app/`, `backend/`, `admin/` and the configuration (MOD14-P1-T01), 2026-11-09, on topic branch `docs/sa-readme-setup` on top of `2d23ab4` (the head of pull request #59), under review in pull request #60
 

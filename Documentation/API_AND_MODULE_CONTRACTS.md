@@ -7,9 +7,9 @@
 | Document | API and Module Contracts |
 | File | `Documentation/API_AND_MODULE_CONTRACTS.md` |
 | Phase | 3 — Development Planning and Collaboration (document 24) |
-| Version | 0.15 |
+| Version | 0.16 |
 | Status | Draft for review. Not approved. Every contract is PROPOSED. Backend parts depend on OPEN decisions. |
-| Date | 8 November 2026 |
+| Date | 9 November 2026 |
 | Approval required | Both developers. Changes follow Section 12. |
 
 **Change history**
@@ -31,6 +31,7 @@
 | 0.13 | 7 November 2026 | Findings of Sanika Attarde's second-person review (issue 29) that the app contract holds, with YG's positions of 6 November 2026, PROPOSED. Section 4.2: the scheme is AGREED with DEC-026, and the note that agreement was reported and not filed is gone. Six rows (ACCOUNT_CLOSED, ALREADY_DELETING, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, LAST_ADMIN and RECENT_SIGN_IN_REQUIRED) and the rule for a reason with no row are added (R-1, R-4), and the `conflict` row no longer says "in use" (R-2). Section 6.3: `AuthService` gains two re-authentication methods (R-4 d). Sections 6.4, 6.6, 6.9 and 6.11 give the eight Dart shapes that only the code of #34 had. Section 8: OP-PRF-02, OP-PRF-03, OP-ACC-01, OP-ADM-01, OP-ADM-03 and OP-ADM-04 follow the backend contract (R-2, R-3, R-4, R-10). Section 11 lists the open items. No type, field or value of `result.dart` changed. No requirement, scope item, decision, status label or MFW approval changed. |
 | 0.14 | 8 November 2026 | The code of pull request #49 follows the contract. Section 6.3: `reauthenticateWithEmail` and `reauthenticateWithGoogle` are in `auth.dart` and `FakeAuthService`, and the Authorization row says how the fake refuses and when a sign-in stops being recent. Section 6.4: `saveOwnProfile` returns `ProfileSaveResult`, a PROPOSED shape for the output of OP-10 (the status, and the names of the missing fields). The note on OP-PRF-02 in section 8 says that the input waits for OQ-27. No requirement, scope item, decision, status label or MFW approval changed. |
 | 0.15 | 8 November 2026 | Section 9.1 records how the WordPress client of pull request #58 (MOD09-P1-T01) reads the three routes and what each response becomes, PROPOSED. The routes and the fields mapped are unchanged, and stay PROVISIONAL until OQ-39. Revised on 9 November 2026 after the review of pull request #58: the `contentHtml` row of the field map and its doc comment in `contracts/news.dart` say that the body is as WordPress sent it and that the renderer must never run a script; section 9.1 adds the refusal of an article ID that is not a whole number, the 5 MB body limit, and a point for T-08.2 on the size of a list page. |
+| 0.16 | 9 November 2026 | MOD02-P1-T01 (pull request #61). Section 4.2 maps GONE to `notFound` and RATE_LIMITED to `serviceUnavailable`, retryable, both PROPOSED for the review, where they were not mapped; the retry-after value of RATE_LIMITED is not carried, because `AppFailure` has no field for it (issue 28). The rule after the table follows. Section 6.2 adds an Implemented row that names the files. No `FailureCode` value and no interface changes. |
 
 ### 1.1 Related documents
 
@@ -171,10 +172,10 @@ final class AppFailure {
 | `UNAVAILABLE` | UNAVAILABLE | `serviceUnavailable` | Yes | Service unavailable, try again |
 | `DEADLINE_EXCEEDED` | UNAVAILABLE, reason DEADLINE_EXCEEDED | `timeout` | Yes | Taking too long, try again |
 | `INTERNAL` | INTERNAL | `unknown` | Yes | Something went wrong |
-| `GONE` (added) | GONE: the issue was permanently deleted | Not mapped yet (open) | No | No longer available |
-| `RATE_LIMITED` (added) | RATE_LIMITED: a rate or size limit | Not mapped yet (open) | Yes, after the retry-after value (PROPOSED) | Too many requests, try again later |
+| `GONE` (added) | GONE: the issue was permanently deleted | `notFound` (proposed by MOD02-P1-T01, accepted in the review of #61) | No | No longer available |
+| `RATE_LIMITED` (added) | RATE_LIMITED: a rate or size limit | `serviceUnavailable` (proposed by MOD02-P1-T01, accepted in the review of #61) | Yes, after the retry-after value (PROPOSED). `AppFailure` does not carry the value | Too many requests, try again later |
 
-**A reason with no row (PROPOSED, R-1).** It maps to the `FailureCode` of its category, and to `unknown` where the category has none. FAILED_PRECONDITION has no code of its own, and neither has GONE or RATE_LIMITED until they are mapped. `messageFor` takes only the `FailureCode`, so two reasons that share a code share a message. A separate prompt for one reason, such as an `accountClosed` code, would be an additive change later, if the M2 designs ask for it, and `result.dart` stays at the 17 values agreed in issue 28. Reasons that only an admin operation raises (`NO_ACCEPTED_FILE`, `STALE_RECORD`, `IN_USE`) have no row, because the app does not call those operations.
+**A reason with no row (PROPOSED, R-1).** It maps to the `FailureCode` of its category, and to `unknown` where the category has none. FAILED_PRECONDITION has no code of its own. GONE and RATE_LIMITED share the codes in their rows, so they share those messages. `messageFor` takes only the `FailureCode`, so two reasons that share a code share a message. For M2, two rows lose the table's wording that way: LAST_ADMIN shows the general `conflict` message, not "The last admin account cannot be deleted", and RECENT_SIGN_IN_REQUIRED shows "Sign in to continue", not "Sign in again to continue". RATE_LIMITED carries no retry-after value, so a Retry on it is immediate, and the first screen that offers one must hold it back. A separate prompt for one reason, such as an `accountClosed` code, would be an additive change later, if the M2 designs ask for it, and `result.dart` stays at the 17 values agreed in issue 28. Reasons that only an admin operation raises (`NO_ACCEPTED_FILE`, `STALE_RECORD`, `IN_USE`) have no row, because the app does not call those operations.
 
 **Open (R-2).** Whether "in use" is CONFLICT or FAILED_PRECONDITION with the reason `IN_USE`, and the name of the reason for a duplicate category name (the backend spike used `NAME_TAKEN`, finding D-2, emulator only), are not decided. They are recorded in `API_AND_BACKEND_CONTRACT.md` section 2.5 as well.
 
@@ -347,6 +348,7 @@ PROPOSED routes:
 | Errors | Never throws. Reporting failures are swallowed after one local log line. |
 | Data owned | Crash reports and usage events (RS DATA-014), with no personal data |
 | Tests | Every `FailureCode` has a message. Redaction rules are tested. Usage events outside the approved list are rejected (PAC-09). |
+| Implemented | MOD02-P1-T01: `messageFor` in `app/lib/core/errors/failure_messages.dart`, with placeholder wording until the M2 designs; the section 4.2 table as `failureFromBackend(category, reason: ...)` in `app/lib/core/errors/backend_failure.dart`; `AppLogger` and `RedactingLogger` in `app/lib/core/logging/`, with the redaction rules of `CODING_STANDARDS.md` section 6.2 in `redaction.dart`; `RecordingAppLogger` in `app/test/fakes/`. `CrashReporter` and `UsageEvents` are MOD02-P2-T01 and MOD02-P2-T02. |
 
 ```dart
 abstract interface class AppLogger {
