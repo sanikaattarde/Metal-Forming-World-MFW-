@@ -6,10 +6,9 @@
 # files from `git status`, but it does not remove a file that is already
 # tracked. Run the secrets scan (QG-11, once it exists) as well.
 #
-# Of the folders of DEC-012, app/ exists, and backend/ and admin/ do not yet.
-# Entries for backend and admin tooling (DEC-003, AGREED; DEC-004, PROPOSED)
-# are marked PROVISIONAL and are to be confirmed when that tooling is first
-# added to main.
+# Of the folders of DEC-012, app/ and backend/ exist, and admin/ does not yet.
+# Entries for admin tooling (DEC-004, PROPOSED) are marked PROVISIONAL and are
+# to be confirmed when that tooling is first added to main.
 
 # ---------------------------------------------------------------------------
 # Secrets and credentials (CODING_STANDARDS.md section 13, item 1)
@@ -132,9 +131,10 @@ yarn-error.log*
 *.tsbuildinfo
 
 # ---------------------------------------------------------------------------
-# Local emulator output. PROVISIONAL (TD-03): confirm the file names when the
-# emulators are first run, and add the folder that holds any exported
-# emulator data once its name is chosen.
+# Local emulator output (TD-03). Checked on 9 November 2026 with the backend
+# rule tests: the emulators write backend/firestore-debug.log, which *.log
+# covers, and keep their downloads in backend/node_modules/.cache/. Add the
+# folder that holds any exported emulator data once its name is chosen.
 # ---------------------------------------------------------------------------
 
 .firebase/

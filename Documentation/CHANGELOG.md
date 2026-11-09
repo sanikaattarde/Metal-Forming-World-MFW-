@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.58 |
+| Version | 0.59 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,20 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: the first backend code, the Firestore and Storage access rules with emulator tests (MOD13-P1-T01 to T03), 2026-11-09, on topic branch `feat/sa-backend-rules` on top of `feat/sa-downloads` (the head of pull request #65), under review in pull request #66
+
+DEC-003 is AGREED by pull request #59 (Firebase, as S2 proposes), so the rules leave spike status. `backend/` holds the Cloud Firestore and Cloud Storage access rules and their tests, taken from Sanika Attarde's emulator spike on `spike/sa-backend-rules` (results in `test-evidence/BACKEND_RULES_EMULATOR_EVIDENCE.md`) and reviewed as final. MOD13-P1-T01: a reader reads only their own account, profile and consent records (written through OP-10) and changes only their own notification preferences (NFR-SEC-006). MOD13-P1-T02: bookmarks and favourites are owner only, with their fields checked (NFR-SEC-005); who may use favourites is OQ-12. MOD13-P1-T03: shared records (issues, categories, segments, news controls, notification categories) have public reads, published issues only, and no client writes, so admin changes go through server functions (NFR-SEC-007). Deny by default (SC-05), no rule trusts a role claim (SC-04), and no rule reads another document. `npm test` runs 318 tests on the Firestore and Storage emulators for the project `demo-mfw`, with no login and no cloud project: 318 passed on 9 November 2026 (emulator only). The spike's Cloud Functions are not included: OP-11 waits for DEC-020, OP-12 for OQ-24, and the admin operations for DEC-004. The test helpers no longer import the seed or the functions, and use three synthetic notification categories. The dependency register gains the five server-side tools (finding T-5 of issue 32). QG-08 runs these tests in CI once it is added (MOD15-P2-T02). Nothing is deployed: ENV-TEST waits for MOD14-P2-T03 and MFW's cloud access.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `backend/firestore.rules`, `backend/storage.rules` | Added: the rules, with headers that say they are final under DEC-003 and point to `backend/README.md` for the known limits. | MOD13-P1-T01, T02, T03 | NFR-SEC-005, NFR-SEC-006, NFR-SEC-007, SC-04, SC-05, SC-07, SEC-CHK-02, SEC-CHK-03, SEC-CHK-05, DEC-003 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `backend/test/` | Added: groups G1 to G4 from the spike (318 tests) and `helpers.mjs`, trimmed to the rules. | Section 14, rule 7 of `CODING_STANDARDS.md`: allowed and refused tests | MOD13-P1-T01 to T03, TS-05 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `backend/firebase.json`, `backend/package.json`, `backend/package-lock.json`, `backend/scripts/run-with-env.sh`, `backend/README.md` | Added: the emulator configuration for Firestore and Storage, the pinned tools, the script that puts Java 21 on `PATH` for one command, and the set-up, tests and known limits. | MOD13-P1-T01 to T03 | DEP-79 to DEP-83, DEC-023 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.15: section 8.2 with DEP-79 to DEP-83; the status row; the open item of section 10 on the server-side tools is met for the backend. | Section 3, step 1; finding T-5 of issue 32 | DEP-79, DEP-80, DEP-81, DEP-82, DEP-83, QG-10 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | The state paragraph, the `backend/` row of the set-up table and the backend paragraph say what `backend/` holds; the version cells. | Follows `main` | DEC-003 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `.gitignore` | The header says that `backend/` exists; the emulator output comment records what the emulators wrote on 9 November 2026. No pattern changes. | Follows the first emulator run on this branch | TD-03 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.59: this entry. It takes 0.59 because #65 takes 0.58. | Records the edits above | None | Both developers (not agreed) | No scope effect |
 
 ### Added: download preparation, the integrity check with repair at start, and the downloads screen (MOD06-P2-T01, T04, T05), 2026-11-09, on topic branch `feat/sa-downloads` on top of `feat/sa-app-config` (the head of pull request #64), under review in pull request #65
 
