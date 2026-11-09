@@ -14,10 +14,13 @@ import '../../contracts/result.dart';
 ///   `FAILED_PRECONDITION`, which has no code of its own.
 /// - An unknown category maps to [FailureCode.unknown], not retryable.
 /// - `GONE` maps to [FailureCode.notFound] and `RATE_LIMITED` to
-///   [FailureCode.serviceUnavailable], retryable. Both are PROPOSED by
-///   MOD02-P1-T01 for the review: section 4.2 left them open. The
+///   [FailureCode.serviceUnavailable], retryable. MOD02-P1-T01 proposed
+///   both, where section 4.2 left them open, and the review of pull request
+///   #61 accepted them. The
 ///   retry-after value of `RATE_LIMITED` is not carried, because
-///   [AppFailure] has no field for it (issue 28).
+///   [AppFailure] has no field for it (issue 28). A screen that offers Retry
+///   on it therefore retries at once; the first such screen must hold the
+///   retry back (review of pull request #61).
 ///
 /// [AppFailure.detail] holds the two names only, never the backend's
 /// message, so it carries no personal data. A name that is not an
@@ -49,7 +52,7 @@ const Map<String, _Row> _categories = <String, _Row>{
   'CONFLICT': _Row(FailureCode.conflict),
   'UNAVAILABLE': _Row(FailureCode.serviceUnavailable, retryable: true),
   'INTERNAL': _Row(FailureCode.unknown, retryable: true),
-  // PROPOSED by MOD02-P1-T01: section 4.2 left these two open.
+  // Proposed by MOD02-P1-T01 and accepted in the review of #61.
   'GONE': _Row(FailureCode.notFound),
   'RATE_LIMITED': _Row(FailureCode.serviceUnavailable, retryable: true),
 };

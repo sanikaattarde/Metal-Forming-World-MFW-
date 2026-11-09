@@ -70,6 +70,26 @@ void main() {
       expect(config.wordPress, isNull);
     });
 
+    test('a release build must name its environment', () {
+      expect(
+        () => AppConfig.fromDefines(_complete, releaseBuild: true),
+        throwsA(
+          isA<AppConfigException>().having(
+            (AppConfigException e) => e.keys,
+            'keys',
+            <String>[AppConfig.environmentKey],
+          ),
+        ),
+      );
+      expect(
+        AppConfig.fromDefines(
+          _with(<String, String>{AppConfig.environmentKey: 'test'}),
+          releaseBuild: true,
+        ).environment,
+        AppEnvironment.test,
+      );
+    });
+
     test('an unknown environment fails at start-up', () {
       expect(
         () => AppConfig.fromDefines(

@@ -78,9 +78,13 @@ typedef LogSink = void Function(LogRecord record);
 /// (`Redactor`) before a record reaches its sink, so no caller can write
 /// personal data or a secret that the rules recognise (SC-16, SEC-CHK-10).
 ///
-/// It never throws (`API_AND_MODULE_CONTRACTS.md` section 6.2): a sink that
-/// fails is reported once on the development console and the record is
-/// dropped.
+/// It never throws (`API_AND_MODULE_CONTRACTS.md` section 6.2): each time a
+/// sink fails, the failure's type is written to the development console and
+/// the record is dropped. To keep that promise it catches everything a sink
+/// throws, an [Error] included. This is the one named exception to rule 3 of
+/// `CODING_STANDARDS.md` section 6.1, which leaves programming errors to the
+/// top-level handler: a logger that throws would hide the failure it was
+/// logging.
 final class RedactingLogger implements AppLogger {
   /// Creates a logger. [sink] defaults to [developerLogSink]; [debugEnabled]
   /// defaults to true outside release builds; [clock] is injected for tests.
@@ -138,7 +142,8 @@ final class RedactingLogger implements AppLogger {
         ),
       );
     } on Object catch (e) {
-      // The logger never throws. Only the failure's type is written.
+      // The exception to rule 3 of CODING_STANDARDS section 6.1, named in
+      // the class comment: the logger never throws. Only the type is written.
       developer.log('log sink failed: ${e.runtimeType}', name: 'mfw');
     }
   }
