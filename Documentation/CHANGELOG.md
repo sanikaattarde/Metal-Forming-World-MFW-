@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.46 |
+| Version | 0.47 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 8 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Added: five questions for MFW's written answer, not sent, 2026-11-08, on topic branch `docs/yg-mfw-questions` on top of `8b2c824`, then merged with `origin/main` at `4cc9ed1`, under review in pull request #54
+
+Adds `MFW_QUESTIONS_2026-11-08.md` 0.1: five questions that only MFW can answer, each with the decision it unblocks, the team's working position and the answer that is needed. Q1 reading and downloading (OQ-08, OQ-11; DEC-008, DEC-033); Q2 the backend platform (OQ-35; DEC-003); Q3 a separate test project (OQ-40; DEC-023); Q4 where MFW's sample PDFs and the reader test recordings may be kept (DEC-024; `TESTING_STRATEGY.md` §13); Q5 test phones and versions (OQ-26). It holds a draft email. It is not sent: decisions go to MFW through the contracting developer (`DECISION_LOG.md` section 4, step 4), and Sanika Attarde agreed in the review of this pull request that Yuvraj Gaykhe sends it after the merge, for these five questions only. After that review, item 2 of the email also says that the team is checking that MFW still expects Firebase. No answer is recorded, and no question, decision or status label changed.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/MFW_QUESTIONS_2026-11-08.md` | Added: five questions for MFW and a draft email, not sent. | These decisions wait for MFW's written answers | OQ-08, OQ-11, OQ-26, OQ-35, OQ-40, DEC-003, DEC-008, DEC-023, DEC-024, DEC-033 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.47: this entry. It takes 0.47 because #51 (0.44), #52 (0.45) and #53 (0.46) merged with those numbers. | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | One row for the new document at 0.1, and 0.47 for `CHANGELOG` (was 0.46) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the T-02.1 prototype walk-through record, 2026-11-08, on topic branch `docs/yg-t021-prototype-record` on top of `8b2c824`, then merged with `origin/main` at `ee2c99d`, under review in pull request #53
 
