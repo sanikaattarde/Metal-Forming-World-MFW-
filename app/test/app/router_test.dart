@@ -113,6 +113,25 @@ void main() {
       });
     }
 
+    for (final String route in <String>[
+      '/issues/fx-iss-01/read/',
+      '/library/',
+      '/downloads/',
+    ]) {
+      testWidgets('$route with a trailing slash still asks a visitor to sign '
+          'in', (WidgetTester tester) async {
+        final GoRouter router = await pumpApp(
+          tester,
+          FakeAuthService(FakeServer()),
+        );
+
+        router.go(route);
+        await tester.pumpAndSettle();
+
+        expect(find.text(ShellText.signIn), findsOneWidget);
+      });
+    }
+
     testWidgets('an unknown route shows SCR-A-22, which goes home', (
       WidgetTester tester,
     ) async {

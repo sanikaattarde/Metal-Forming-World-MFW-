@@ -54,8 +54,9 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
   return router;
 });
 
-/// The build's settings for its environment (MOD01-P2-T04). A wrong build
-/// throws `AppConfigException` when it is first read. Tests override it.
+/// The build's settings for its environment (MOD01-P2-T04). `runMfwApp`
+/// reads them once and puts that value here, so a wrong build fails before
+/// any screen. Without that override (in tests) it reads them itself.
 final Provider<AppConfig> appConfigProvider = Provider<AppConfig>(
   (Ref ref) => AppConfig.fromEnvironment(),
 );
@@ -76,10 +77,16 @@ final Provider<AppNavigator> appNavigatorProvider = Provider<AppNavigator>(
 /// Riverpod is used in `app/lib/app/` only (DEC-013), so the scope is created
 /// here and not in `main.dart`.
 void runMfwApp() {
-  // A wrong production build fails here, before any screen (MOD01-P2-T04).
-  AppConfig.fromEnvironment();
+  // A wrong build fails here, before any screen (MOD01-P2-T04), and the
+  // value read here is the one the app uses, so it is read once.
+  final AppConfig config = AppConfig.fromEnvironment();
   registerFontLicences();
-  runApp(const ProviderScope(child: MfwApp()));
+  runApp(
+    ProviderScope(
+      overrides: [appConfigProvider.overrideWithValue(config)],
+      child: const MfwApp(),
+    ),
+  );
 }
 
 /// Root widget of the app.

@@ -59,7 +59,7 @@ The app's non-secret settings (CFG-03, CFG-04, CFG-07 and CFG-08 of `DEPLOYMENT_
 flutter run --dart-define-from-file=../config/local.env
 ```
 
-- `MFW_ENV` in the file picks the environment: `local`, `test` or `prod` (DEC-023). It is `local` when not set, except in a release build, which stops at start-up unless it is set.
+- `MFW_ENV` in the file picks the environment: `local`, `test` or `prod` (DEC-023). It is `local` when not set, except in a profile or release build, which stops at start-up unless it is set.
 - A value that is empty or still `replace-me` counts as not set. ENV-LOCAL and ENV-TEST run with nothing set, and the news screens then say that news is not available.
 - A `prod` build stops at start-up with `AppConfigException` if the WordPress site, its categories or either policy address is not set, or if any address is not HTTPS. The store links may stay unset until the apps are listed (OQ-15).
 - The signed-build step (T-12.2, MOD18-P1-T02) must read the configuration before signing, so that a build that would stop at start-up never ships (review of pull request #64).

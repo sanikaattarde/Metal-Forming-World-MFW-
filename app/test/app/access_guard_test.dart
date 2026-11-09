@@ -80,6 +80,28 @@ void main() {
       );
     }
 
+    for (final (String route, String step) in <(String, String)>[
+      ('/issues/fx-iss-01/read/', '/sign-in'),
+      ('/library/', '/sign-in'),
+      ('/downloads//', '/sign-in'),
+    ]) {
+      test('a trailing slash does not get past the guard: $route', () {
+        expect(
+          pathOf(redirectFor(AccessState.signedOut, Uri.parse(route))),
+          step,
+        );
+        expect(redirectFor(AccessState.fullAccess, Uri.parse(route)), isNull);
+      });
+    }
+
+    test('a step route with a trailing slash is still a step route', () {
+      expect(
+        redirectFor(AccessState.signedOut, Uri.parse('/sign-in/')),
+        isNull,
+      );
+      expect(redirectFor(AccessState.fullAccess, Uri.parse('/sign-in/')), '/');
+    });
+
     test('the next step keeps the issue to return to [FR-PROF-004]', () {
       final Uri signIn = Uri(
         path: '/sign-in',
