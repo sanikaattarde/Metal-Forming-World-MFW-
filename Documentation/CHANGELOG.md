@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.45 |
+| Version | 0.46 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 8 November 2026 |
 
@@ -30,6 +30,16 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the T-02.1 prototype walk-through record, 2026-11-08, on topic branch `docs/yg-t021-prototype-record` on top of `8b2c824`, then merged with `origin/main` at `ee2c99d`, under review in pull request #53
+
+Adds `test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` 0.1: the low-fi clickable prototype of the app screens on `spike/yg-prototype` at `c3f2773`, walked against `SCREEN_INVENTORY_AND_NAVIGATION.md`. All 21 in-scope app screens are drawn and reached (SCR-A-16 and SCR-A-17 as two tabs of one screen), the states of section 7 are listed with where they show, and the entry rule is followed from a signed-out visitor to the reader. It records the design plugin's critique (two findings applied, six for M2) and the Figma copy of the screens, built as editable layers in Yuvraj Gaykhe's Figma drafts. It is not the M2 design: no MFW brand asset or content is used, and nothing has gone to MFW. No requirement, decision or status label changed.
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-08 | `Documentation/test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` | Added: the T-02.1 walk-through record. | MOD16-P1-T05 asks for a recorded walk-through against the inventory | T-02.1, MOD16-P1-T05, SCR-A-01 to SCR-A-23, FR-STATE-001 to FR-STATE-006, SN-01, SN-03, SN-05, OQ-08, OQ-25, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `Documentation/CHANGELOG.md` | Version 0.46: this entry. It takes 0.46 because #51 (0.44) and #52 (0.45) merged with those numbers. | Records the addition above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-08 | `README.md` | One row for the new document at 0.1, and 0.46 for `CHANGELOG` (was 0.45) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Documentation: the T-02.4 download resume spike results, 2026-11-08, on topic branch `docs/yg-t024-resume-evidence` on top of `8b2c824`, then merged with `origin/main` at `7d66eec`, under review in pull request #52
 
