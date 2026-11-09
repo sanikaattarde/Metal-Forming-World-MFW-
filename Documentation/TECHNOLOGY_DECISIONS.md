@@ -7,7 +7,7 @@
 | Document title | Technology Decisions |
 | File | `TECHNOLOGY_DECISIONS.md`, in the same folder as `REQUIREMENTS_SPECIFICATION.md` |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.8 |
+| Version | 0.9 |
 | Status | Draft for Review |
 | Last updated | 8 November 2026 |
 | Prepared by | MFW development team |
@@ -30,6 +30,7 @@
 | 0.6 | 7 November 2026 | Findings of Sanika Attarde's second-person review (issue 32, T-1 to T-4) that this document holds, with YG's positions of 6 November 2026, PROPOSED. TD-15's enforcement tests no longer say that none exists: some ran on the emulators in the backend spike, and the two evidence reports hold the results, none a pass for the concurrency or token cases (T-1). TD-17's cost and operations row and item 15 of section 9 record the emulator limits the spike met, as spike observations, and TD-15 says the Functions emulator does not verify tokens (T-2). TD-04 records that the spike declares Node 22 and that the deploy runtime is NOT TESTED (T-3). TD-04 no longer says "roughly ten functions" or "a scheduled purge" (T-4). D1 of TD-09 names check 0 of OP-11 (A-1). The spike facts are emulator only and not merged. No requirement, scope item, decision, status label, cost or MFW approval changed. Revised on 7 November 2026 after the review of pull request #40: TD-17's recommendation and cost row, and section 7.5, name GitHub Actions as the CI service that DEC-022 chose (AGREED, conditional on its cost check, which is not done), where they called the CI product open. |
 | 0.7 | 7 November 2026 | GS-Q35 carries a dated update: the logo file and three issues are recorded in `inputs/README.md`. The answer of 26 and 27 October 2026 is unchanged. No requirement, scope item, decision or status label changed. |
 | 0.8 | 8 November 2026 | TD-17: the cost row and the recommendation record that the repository owner approved the cost of the first workflow in writing on 8 November 2026 (DEC-022, `DECISION_LOG.md` section 5.9), where they said that the cost check is not done. The plan limits and the macOS runner cost stay NOT VERIFIED. TD-17 stays proposed. No other decision changed. |
+| 0.9 | 8 November 2026 | GS-Q35 carries a second dated update: MFW's clarifications on the brand, the website and the cloud access, reported by YG on 8 November 2026 and not filed. The answers of 26 and 27 October and of 7 November 2026 are unchanged. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Sources and authority
 
@@ -1104,7 +1105,7 @@ A third session was held on 26 and 27 October 2026 with the same `/grill-me` ski
 
 | Ref | Question | Answer recorded | Used in |
 |---|---|---|---|
-| GS-Q35 | What does MFW hold in writing? | Signed or accepted copies of S1 and S2 and the S3 emails are held by YG and are not in the repository. YG reports that MFW has not provided the brand assets, the sample PDFs, the WordPress details, the cloud project or the Apple and Google accounts. The request for those inputs has been sent. The product questions have not been sent. Update of 7 November 2026: the logo file and three issues are recorded in `inputs/README.md`. The brand colours and fonts, the WordPress details, the cloud project and the Apple and Google accounts are not recorded (`DEPENDENCY_REGISTER.md` section 4) | DEC-016, DEC-019, OQ-28, OQ-29 |
+| GS-Q35 | What does MFW hold in writing? | Signed or accepted copies of S1 and S2 and the S3 emails are held by YG and are not in the repository. YG reports that MFW has not provided the brand assets, the sample PDFs, the WordPress details, the cloud project or the Apple and Google accounts. The request for those inputs has been sent. The product questions have not been sent. Update of 7 November 2026: the logo file and three issues are recorded in `inputs/README.md`. The brand colours and fonts, the WordPress details, the cloud project and the Apple and Google accounts are not recorded (`DEPENDENCY_REGISTER.md` section 4). Update of 8 November 2026, reported by YG and not filed: MFW directs the team to its website's colours and fonts and gives no values (`BRAND_REFERENCE.md`, OQ-63); MFW shared its website, https://metalformingworld.com, with no administrator or API access (`test-evidence/WORDPRESS_PUBLIC_SITE_EVIDENCE.md`, OQ-39); and MFW says cloud access will be provided next week (`CLOUD_ACCESS_SETUP_CHECKLIST.md`). YG then reports that the website's colours, fonts and categories are used as they are, and that the cloud details and the Apple and Google accounts are not provided | DEC-016, DEC-019, OQ-28, OQ-29 |
 | GS-Q36 | Is CH section 17.3 a faithful summary of the S3 emails? | Yes. The emails add nothing the table omits | DEC-019, OQ-29 |
 | GS-Q37 | Who is MFW's authorised approver and deputy? | The two people CH section 7 names as the senders of the S3 emails. Which holds which role was not stated | OQ-28 |
 | GS-Q38 | Where does Sanika stand on the proposed decisions? | Agreed verbally. She will put it in writing. Nothing is filed | DEC-010 to DEC-015, DEC-025 to DEC-030 |

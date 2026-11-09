@@ -8,8 +8,8 @@
 | File | `Documentation/YUVRAJ_IMPLEMENTATION_ROADMAP.md` |
 | Assigned developer | Yuvraj (branch `YG`, workstream WS-B Reader Experience, PROPOSED under DEC-011) |
 | Project | Metal Forming World (MFW) mobile application |
-| Version | 0.2 |
-| Last updated | 7 November 2026 |
+| Version | 0.3 |
+| Last updated | 8 November 2026 |
 | Status | Draft for review. Not approved. A planning document. It approves no decision, requirement or scope item. Drafted in Sanika Attarde's session, so Yuvraj has not yet reviewed it (task MOD20-P1-T04). |
 | Prepared in | Sanika Attarde's session, branch `SA`, on top of commit `bd2db98` |
 | Authoritative module inventory | `Documentation/IMPLEMENTATION_MODULE_INVENTORY.md` v0.1. If this roadmap and the inventory differ, the inventory wins. |
@@ -22,8 +22,11 @@
 |---|---|---|
 | 0.1 | 27 October 2026 | Initial draft. 58 tasks in 12 modules. |
 | 0.2 | 7 November 2026 | Committed to the repository, unchanged apart from a status note after this table, the version, the date, and one wording fix (a tool name in the "Prepared in" row). The plan, its task IDs and its order of work are not changed. |
+| 0.3 | 8 November 2026 | A status note of 8 November 2026 after the note of 7 November 2026: MFW's brand direction, reported by YG and not filed, and what it changes for MOD16-P1-T01, MOD01-P2-T02, MOD16-P1-T02 and MOD16-P1-T05. The task rows, their IDs and the order of work are not changed. |
 
 **Status note of 7 November 2026.** This document was written on 30 October 2026 on top of commit `bd2db98`, and it is committed here as a record of the plan. Apart from this note, the version, the date and a few wording fixes, it is unchanged. The sections below describe the repository, the open pull requests and the open decisions as they were on 30 October 2026, and are not updated. Since then the Flutter app scaffold (pull request 30) and the shared contracts and fakes (pull request 34) are on `main`; the backend and admin panel spikes are done, and their evidence reports are in `Documentation/test-evidence/` (emulator only, not merged); both developers' written notes are filed, and DEC-010 to DEC-015, DEC-022 and DEC-024 to DEC-030 are AGREED (`DECISION_LOG.md` sections 5.6 and 5.8); and the second-person reviews of issues 28, 29, 31 and 32 are recorded in pull requests 33 to 46. `README.md`, `CHANGELOG.md` and `DEVELOPMENT_ROADMAP.md` give the current state. The task IDs and the order of work stay as the plan.
+
+**Status note of 8 November 2026.** MFW directs the team to use the colours and fonts of its website, with the identity of the issues and logo it supplied, and no new palette or type system (reported by YG, not filed). MFW gave no values. `BRAND_REFERENCE.md` records the values the public website shows, and YG reports the same day that they are used in the app as they are (not filed), which is the working position; OQ-63 stays OPEN for MFW's written confirmation. For the tasks whose "Blocked by" row names MFW's brand assets, this means: MOD16-P1-T01 can start on those values, and its contrast check runs against the proposed baseline of OQ-25; MOD01-P2-T02 follows MOD16-P1-T01; MOD16-P1-T02 can be drawn on those tokens; MOD16-P1-T05 stays a low-fi prototype (pull request #53) until the designs exist. The "Blocked by" rows below are not edited, so they still read as on 30 October 2026. `DEVELOPMENT_ROADMAP.md` section 4.4 has the whole picture.
 
 ## 2. Project Context
 
