@@ -185,8 +185,9 @@ class _Field extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: MfwSpace.lg),
-      child: TextField(
-        controller: TextEditingController(text: value),
+      // initialValue, not a controller made in build: nothing to dispose.
+      child: TextFormField(
+        initialValue: value,
         obscureText: obscure,
         decoration: InputDecoration(
           labelText: label,
