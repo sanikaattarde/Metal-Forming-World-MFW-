@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.59 |
+| Version | 0.60 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -30,6 +30,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
 
 ## Unreleased
+
+### Documentation: the account, profile, settings and notification screen designs (MOD16-P1-T03), 2026-11-09, on topic branch `feat/sa-account-designs` on top of `feat/sa-backend-rules` (the head of pull request #66), under review in pull request #67
+
+23 frames of SCR-A-01 to SCR-A-08, SCR-A-20 and SCR-A-21, with their loading, error, no-network and visitor states, drawn as Flutter widgets on the app's own theme and tokens (#57) and rendered as images on a 390 by 844 point phone. The widgets are in `app/test/design/` and are not app code. A test checks every frame on each run against the tap-target and label guidelines (OQ-25 baseline): all 23 pass. The frames inherit the two contrast exceptions of `DESIGN_TOKENS.md` section 5 (the button label and red links, 4.19 to 1), which MFW decides at M2. The design record lists each frame, the choices made (PROPOSED) and the open points each waits for, chiefly OQ-01, OQ-02, OQ-09, OQ-18 and OQ-27. The wording is PLACEHOLDER and no MFW logo is shown. The task is done when the frames are in Yuvraj Gaykhe's prototype (MOD16-P1-T05) and reviewed. 411 tests pass, with 24 skipped (the golden of #57 and the 23 frame images, which are compared only with `MFW_DESIGN_FRAMES`).
+
+| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
+|---|---|---|---|---|---|---|
+| 2026-11-09 | `Documentation/design/ACCOUNT_SCREEN_DESIGNS.md` | Added: version 0.1, the design record. | MOD16-P1-T03 steps 2 and 3 | MOD16-P1-T03, ICP-09, SCR-A-01 to SCR-A-08, SCR-A-20, SCR-A-21, FR-STATE-001, FR-STATE-003, OQ-01, OQ-02, OQ-09, OQ-18, OQ-25, OQ-27 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/design/account/` | Added: the 23 frame images (608 KB in all). Synthetic values only. | MOD16-P1-T03 step 2 | MOD16-P1-T03, DEC-024 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `app/test/design/account_frames.dart`, `account_frames_test.dart` | Added: the frame widgets, and 24 checks (the screen coverage and the tap-target and label guidelines for each frame), with the image comparison behind `MFW_DESIGN_FRAMES`. | MOD16-P1-T03 step 1 | OQ-25 | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.60: this entry. It takes 0.60 because #66 takes 0.59. | Records the edits above | None | Both developers (not agreed) | No scope effect |
+| 2026-11-09 | `README.md` | A row for the design record in the index; the `CHANGELOG` cell reads 0.60. | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
 
 ### Added: the first backend code, the Firestore and Storage access rules with emulator tests (MOD13-P1-T01 to T03), 2026-11-09, on topic branch `feat/sa-backend-rules` on top of `feat/sa-downloads` (the head of pull request #65), under review in pull request #66
 
