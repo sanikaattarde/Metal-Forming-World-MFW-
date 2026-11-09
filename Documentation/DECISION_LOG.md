@@ -7,9 +7,9 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.16 |
+| Version | 0.17 |
 | Status | Draft for review. Not approved. |
-| Date | 8 November 2026 |
+| Date | 9 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -32,6 +32,7 @@
 | 0.14 | 7 November 2026 | Two places that said that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository (the 0.4 row of this table and the DEC-022 row of section 5.6) now say that it has been since 7 November 2026. The task list is committed with its three companion documents. No entry changes status, and no requirement, scope item, decision or MFW approval changed. |
 | 0.15 | 8 November 2026 | DEC-022: the cost is approved by the repository owner for the repository as it is now, and the plan minutes and the macOS runner cost are NOT VERIFIED (MOD15-P1-T01 stays open). Sanika Attarde, who owns the repository and the account that pays for its CI, approved the cost of the workflow of pull request #48 in writing in their approving review of 8 November 2026. Section 5.9 records it and says how the condition of task MOD15-P1-T01 now reads, and the index row, the DEC-022 entry and its row in section 5.6 follow. The plan minutes and the macOS runner cost stay NOT VERIFIED, and the check is made again if the visibility or the paying account changes. The DEC-022 row of section 5.6 also says that MOD15-P1-T01 is a task in `YUVRAJ_IMPLEMENTATION_ROADMAP.md`, owned by Yuvraj Gaykhe with Sanika Attarde's support, where it said that the task is Sanika Attarde's, in `SANIKA_IMPLEMENTATION_ROADMAP.md`, which does not list it. Section 5.10 adds Yuvraj Gaykhe's written positions of 8 November 2026 on DEC-003 and DEC-023 and on their own availability (OQ-38), and the DEC-003 and DEC-023 entries point to it. DEC-003 stays OPEN and DEC-023 stays PROPOSED. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.16 | 8 November 2026 | After the review of pull request #51, which arrived after its merge commit was pushed: the 0.15 row, the Status row of DEC-022 and the update sentence of the DEC-022 row in section 5.6 say "the cost is approved by the repository owner" where they said "the cost condition is met", with "the plan minutes and the macOS runner cost are NOT VERIFIED (MOD15-P1-T01 stays open)" next to it, so that the Status row is not read as the cost check being done. Section 5.9 already read so. No entry changes status, and no MFW approval is recorded. |
+| 0.17 | 9 November 2026 | Section 5.11 adds Sanika Attarde's written positions of 9 November 2026 on DEC-003, DEC-023 and DEC-004 (MOD20-P1-T02, step 4). DEC-003 moves from OPEN to AGREED: Firebase, as S2 proposes, with both developers' written notes filed (sections 5.10 and 5.11). DEC-023 moves from PROPOSED to AGREED as an internal position: the three environments, with MFW's approval still needed because the second project may add cost billed to MFW (OQ-40). DEC-004 moves from OPEN to PROPOSED: a React web app on Firebase Hosting, with the options assessed and a Consequences row; Yuvraj Gaykhe's written position is not filed. The index rows and the three entries follow, and the Status rows of DEC-025 and DEC-026 say that DEC-003 is AGREED. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -101,8 +102,8 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 |---|---|---|---|---|
 | DEC-001 | Decision log as the CH §17.4 record | PROPOSED | ASSUMPTION | No |
 | DEC-002 | Mobile framework: Flutter, one codebase | BASELINE | CONFIRMED | Already in S2 |
-| DEC-003 | Backend platform | OPEN | PROVISIONAL, CONFLICT C-05 | Yes, if it differs from S2 or adds cost |
-| DEC-004 | Admin panel technology and hosting | OPEN | PROVISIONAL | Yes, if it differs from S2 or adds cost |
+| DEC-003 | Backend platform | AGREED (section 5.11): Firebase, as S2 proposes. MFW still approves the M1 note (OQ-35) | PROVISIONAL, CONFLICT C-05 | Yes, if it differs from S2 or adds cost |
+| DEC-004 | Admin panel technology and hosting | PROPOSED (section 5.11): a React web app on Firebase Hosting | PROVISIONAL | Yes, if it differs from S2 or adds cost |
 | DEC-005 | PDF reader approach and library | OPEN | CONFIRMED approach, OPEN library | Yes, at M2, and for any paid licence |
 | DEC-006 | Sign-in methods | OPEN | CONFIRMED and PROVISIONAL, CONFLICT C-04 | Yes |
 | DEC-007 | Access rule for full issues; no guest reading | OPEN (working position mandatory) | CONFIRMED and PROVISIONAL, CONFLICT C-01 | Yes |
@@ -121,7 +122,7 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 | DEC-020 | Protected issue-file delivery mechanism | OPEN | OPEN | Only if it adds cost |
 | DEC-021 | News retrieval path | OPEN | CONFIRMED (S2 Flow 2), OPEN alternative | Only if it adds cost |
 | DEC-022 | CI service | AGREED. Cost approved by the repository owner for the repository as it is now (section 5.9) | ASSUMPTION | Only if it adds cost to MFW |
-| DEC-023 | Environment model | PROPOSED | ASSUMPTION | Yes (cloud cost billed to MFW) |
+| DEC-023 | Environment model | AGREED as an internal position (section 5.11): three environments. MFW's approval still needed (OQ-40) | ASSUMPTION | Yes (cloud cost billed to MFW) |
 | DEC-024 | Test data policy | AGREED (section 5.6) | ASSUMPTION | No |
 | DEC-025 | Server-side language and runtime | AGREED (section 5.8), depends on DEC-003 | ASSUMPTION | No |
 | DEC-026 | API style, operation catalogue and error scheme | AGREED (section 5.8), depends on DEC-003 | ASSUMPTION | No |
@@ -389,6 +390,44 @@ Yuvraj Gaykhe gave these positions in chat on 8 November 2026, and they are reco
 | DEC-023 | Environment model | Accepts the proposal: three environments, as in `DEPLOYMENT_PLAN.md` section 4. ENV-LOCAL runs on the developers' machines with emulators, simulators and fakes, ENV-TEST is a separate non-production project in MFW's name, and ENV-PROD is the live service. | Needs Sanika Attarde's written position, and MFW's approval, because the second project may add cost billed to MFW (OQ-40). If DEC-003 is Firebase, ENV-TEST and ENV-PROD are two Firebase projects. ENV-TEST holds synthetic data only (DEC-024). |
 | DEC-011 | Availability (OQ-38) | Yuvraj Gaykhe is available full time until handover. | Sanika Attarde's availability is still to be filed, by Sanika Attarde (OQ-38). Section 5.5 recorded Yuvraj Gaykhe's confirmation that both developers are full time (GS-Q53). This row is about Yuvraj Gaykhe only. |
 
+### 5.11 Written positions of Sanika Attarde, 9 November 2026
+
+Sanika Attarde gave these positions on 9 November 2026, and they are recorded here at their instruction, in a pull request that they open. This section is Sanika Attarde's written note under section 3.1 for the entries below. It is step 4 of task MOD20-P1-T02.
+
+**What changes status**
+
+- **DEC-003 moves from OPEN to AGREED.** Both developers' written notes are filed: Yuvraj Gaykhe's in section 5.10 (8 November 2026) and Sanika Attarde's below. Section 3.1 accepts a written note from both developers as the evidence for AGREED. Yuvraj Gaykhe reviews the pull request that carries this section, and it is not merged without that approving review (section 4, step 3).
+- **DEC-023 moves from PROPOSED to AGREED as an internal position**, on the same evidence. A second project may add cost billed to MFW, so MFW's approval is still needed (OQ-40), the entry is not APPROVED, and ENV-TEST is not created until MFW's answer is filed.
+- **DEC-004 moves from OPEN to PROPOSED**, with the options assessed in the entry (section 4, step 2). Yuvraj Gaykhe's written position is not filed, so it is not AGREED.
+
+**What this does not do.** It records no MFW approval, and no entry is APPROVED. It does not cover Sanika Attarde's availability (OQ-38) or any other entry. DEC-020, DEC-028 and DEC-031, which DEC-003 names, stay as recorded.
+
+| Entry | Subject | Position of Sanika Attarde | Condition or limit |
+|---|---|---|---|
+| DEC-003 | Backend platform | Accepts Firebase, as S2 proposes: Firebase Authentication, Cloud Firestore, Cloud Storage for Firebase, Cloud Functions, Firebase Cloud Messaging, and Firebase Crashlytics and Analytics. | The same as in section 5.10. The choice does not differ from S2 (M3, AC-12), and MFW still approves the M1 architecture note (OQ-35). Any cost beyond S1 needs MFW's approval (CH §17.4). The data location is DEC-031 (OQ-41), the protected file delivery is DEC-020, and crash reporting and analytics follow DEC-028 (OQ-23). No cloud project is created until MFW gives access (`CLOUD_ACCESS_SETUP_CHECKLIST.md`). |
+| DEC-023 | Environment model | Accepts the three environments of `DEPLOYMENT_PLAN.md` section 4: ENV-LOCAL on the developers' machines with emulators, simulators and fakes, ENV-TEST as a separate non-production project in MFW's name, and ENV-PROD as the live service. | MFW's approval, because the second project may add cost billed to MFW (OQ-40). With DEC-003 agreed, ENV-TEST and ENV-PROD are two Firebase projects. ENV-TEST holds synthetic data only (DEC-024). TD-18 still names development and production projects plus a throwaway project, and is reconciled when it is next edited. |
+| DEC-004 | Admin panel technology and hosting | Proposes a React web app, written in TypeScript (DEC-025) and served from Firebase Hosting, as S2 proposes and TD-14 recommends (option A). | Needs Yuvraj Gaykhe's written position. The choice does not differ from S2, and TD-14 finds Hosting's no-cost allowance ample for an editor-only site (VS-01), so MFW's approval is needed only for a custom domain, which MFW pays for (CHG-14). The supported browser list is still to set (TD-14, OQ-26), and the web surface controls are OQ-60. |
+
+**Documents.** Section 4, step 5 asks for the affected documents to be updated in the same or a follow-up pull request.
+
+```text
+Updated in this edit
+├── OPEN_QUESTIONS.md                    update sentences in OQ-35 (DEC-003, DEC-004) and OQ-40 (DEC-023)
+└── CI_CD_AND_QUALITY_GATES.md           QG-08 and QG-14 are no longer blocked by DEC-003; they wait for the backend code
+
+Still to update
+├── TECHNOLOGY_DECISIONS.md              TD-03, TD-14 and TD-18 keep the status "proposed"; TD-18 names a throwaway project
+├── SYSTEM_ARCHITECTURE.md, API_AND_MODULE_CONTRACTS.md
+│                                        Firebase examples labelled PROVISIONAL, updated with the first backend code (MOD-13)
+└── DEPLOYMENT_PLAN.md, TESTING_STRATEGY.md
+                                         the ENV-TEST rows, updated when MFW answers OQ-40
+
+Dated records, left as written
+├── sections 5.8 and 5.10 of this log    "DEC-003, which is OPEN"
+└── the roadmaps and IMPLEMENTATION_MODULE_INVENTORY.md
+                                         records of the plan of 30 October 2026, not updated (their status notes)
+```
+
 ## 6. Entries
 
 ### DEC-001 Decision log as the CH §17.4 record
@@ -420,13 +459,14 @@ Yuvraj Gaykhe gave these positions in chat on 8 November 2026, and they are reco
 
 | Field | Detail |
 |---|---|
-| Status | OPEN. Recorded 23 October 2026. |
+| Status | AGREED. Recorded 9 November 2026, evidence in section 5.11. Earlier status: OPEN, recorded 23 October 2026. MFW still approves the M1 architecture note (OQ-35), so C-05 stays open. |
 | Evidence class | PROVISIONAL (S2 proposal). CONFLICT C-05. |
 | Context | S2 "Proposed technical architecture" proposes Firebase Authentication, Cloud Firestore, Cloud Storage for Firebase, Cloud Functions, Firebase Cloud Messaging, and Firebase Crashlytics and Analytics. CH §11 and §17.4 state that the architecture is not approved. S2 M3 ("running on MFW's Firebase project") and S2 AC-12 ("a fresh Firebase project") name Firebase, and S1 Annex A lines 21–25 price Firebase set-up. |
 | Options considered (evidence) | Firebase, as proposed in S2. An AWS-based design, which S2 "Why this design" says was considered and judged to need more parts and time with no benefit at launch volumes. |
 | Working position | Contracts in `API_AND_MODULE_CONTRACTS.md` are technology-neutral. Firebase appears only in examples labelled PROVISIONAL. No backend code is written as final. |
 | Position of 8 November 2026 | Yuvraj Gaykhe's written position: Firebase, as S2 proposes (section 5.10). Sanika Attarde's is not filed, and the status stays OPEN. |
-| Decision | None |
+| Position of 9 November 2026 | Sanika Attarde's written position: Firebase, as S2 proposes (section 5.11). With both developers' notes filed, the status is AGREED. |
+| Decision | Firebase, as S2 proposes: Firebase Authentication, Cloud Firestore, Cloud Storage for Firebase, Cloud Functions, Firebase Cloud Messaging, and Firebase Crashlytics and Analytics. Agreed by both developers (section 5.11). It does not differ from S2, and MFW approves the M1 architecture note (OQ-35). |
 | Approver and evidence | Requires agreement by both developers. Requires approval by MFW if the choice differs from S2, changes the S2 M3 or AC-12 wording, or adds third-party cost (CH §17.4). |
 | Affects | `SYSTEM_ARCHITECTURE.md`, `TECHNOLOGY_DECISIONS.md`, `DATABASE_AND_DATA_MODEL.md`; MOD-03, MOD-04, MOD-06, MOD-08, MOD-11, MOD-12, MOD-13; `DEPLOYMENT_PLAN.md`; `BACKUP_AND_RECOVERY.md`; `CI_CD_AND_QUALITY_GATES.md` |
 | Follow-up | OQ-35. The M1 "requirements and architecture note" [S2 Milestones] depends on this decision. |
@@ -435,12 +475,15 @@ Yuvraj Gaykhe gave these positions in chat on 8 November 2026, and they are reco
 
 | Field | Detail |
 |---|---|
-| Status | OPEN. Recorded 23 October 2026. |
+| Status | PROPOSED. Proposed by Sanika Attarde on 9 November 2026 (section 5.11). Earlier status: OPEN, recorded 23 October 2026. |
 | Evidence class | PROVISIONAL (S2 proposal) |
 | Context | S2 Components: Admin panel proposes a React web app on Firebase Hosting. The admin panel is the only web interface (RS FR-ADMIN-001). A custom domain is optional, at MFW's cost [S1 Costs outside the fee]. |
 | Options considered (evidence) | React on Firebase Hosting (S2). No other option is recorded in the sources. |
 | Options to assess (not yet assessed) | Flutter web, which would share Dart models with the app. This is listed for assessment only. |
-| Decision | None |
+| Options considered (assessed 9 November 2026) | A: a React web app on Firebase Hosting (S2; TD-14 option A). B: Flutter web (TD-14 option B). C: a low-code admin tool. D: the provider's console alone. A matches S2's wording, so the choice needs no MFW approval, and it shares TypeScript with the server (DEC-025). Sanika Attarde, who writes the panel, confirmed their TypeScript skills (section 5.4). The admin spike ran option A against the local emulators only: React and the Firebase web SDK, the sign-in page, the admin check through OP-14 with a verified email, and the issue, category and news-controls screens, with tests (branches `spike/sa-admin-skeleton` and `spike/sa-admin-content`, not merged). B would give one UI language and could share the Dart models, but it departs from S2's wording, so MFW would approve it, and no spike tried it. C adds a third-party service and its cost. D cannot apply the business rules (TD-14). |
+| Proposal | A, a React web app written in TypeScript and served from Firebase Hosting, as TD-14 recommends. The build tool and library versions are configuration, chosen in the pull request that adds them (TD-14). |
+| Consequences | The panel is a static single-page app in `admin/` (DEC-012). It does not share the app's Dart models, so its types follow `API_AND_BACKEND_CONTRACT.md`. Its role checks are for the interface only, and every privileged operation is checked again on the backend (TD-14, NFR-SEC-007). QG-09 builds and tests it once the gate exists. Lock-in is low: a static single-page app moves to any static host. The supported browsers (OQ-26) and the web surface controls (OQ-60) are still to set. |
+| Decision | None. Yuvraj Gaykhe's written position is not filed. |
 | Approver and evidence | Requires agreement by both developers. Requires approval by MFW if the choice differs from S2 or adds cost. |
 | Affects | MOD-12; `CODING_STANDARDS.md` §15; `DEPLOYMENT_PLAN.md` |
 | Follow-up | OQ-35 |
@@ -665,11 +708,12 @@ Yuvraj Gaykhe gave these positions in chat on 8 November 2026, and they are reco
 
 | Field | Detail |
 |---|---|
-| Status | PROPOSED. Recorded 23 October 2026. |
+| Status | AGREED as an internal position. Recorded 9 November 2026, evidence in section 5.11. Earlier status: PROPOSED, recorded 23 October 2026. MFW's approval is still needed (OQ-40), and ENV-TEST is not created until it is filed. |
 | Evidence class | ASSUMPTION |
 | Context | S2 refers to "MFW's own Firebase project" in the singular. Cloud usage is billed to MFW [S1 Costs outside the fee]. Testing against production data conflicts with the test-data policy (DEC-024). |
 | Proposal | Three environments: ENV-LOCAL, ENV-TEST (a separate non-production project in MFW's name) and ENV-PROD, as in `DEPLOYMENT_PLAN.md` §4. |
 | Position of 8 November 2026 | Yuvraj Gaykhe's written position: the three environments of the proposal (section 5.10). Sanika Attarde's is not filed, MFW's approval is still needed (OQ-40), and the status stays PROPOSED. |
+| Position of 9 November 2026 | Sanika Attarde's written position: the three environments of the proposal (section 5.11). With both developers' notes filed, the internal position is AGREED. With DEC-003 agreed, ENV-TEST and ENV-PROD are two Firebase projects. |
 | Approver and evidence | Requires agreement by both developers, and approval by MFW, because a second project may add cost billed to MFW |
 | Follow-up | OQ-40 |
 
@@ -687,7 +731,7 @@ Yuvraj Gaykhe gave these positions in chat on 8 November 2026, and they are reco
 
 | Field | Detail |
 |---|---|
-| Status | AGREED. Depends on DEC-003, which is OPEN. Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026. Mirrors TD-04. |
+| Status | AGREED. Depends on DEC-003, which is AGREED (section 5.11). Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026. Mirrors TD-04. |
 | Evidence class | ASSUMPTION |
 | Context | S2 places upload checks, publishing, notification sending and account deletion in server logic and names no language. The design adds file access issuing, admin role management and scheduled maintenance (OP-41). |
 | Proposal | TypeScript on Node.js, using a supported release at implementation time. The release is a configuration choice and is not set here. It also matches the admin panel language (TD-14). |
@@ -699,7 +743,7 @@ Yuvraj Gaykhe gave these positions in chat on 8 November 2026, and they are reco
 
 | Field | Detail |
 |---|---|
-| Status | AGREED. Depends on DEC-003, which is OPEN, and the four design differences in the Proposal row stay open for the backend spike. Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026. Mirrors TD-05. |
+| Status | AGREED. Depends on DEC-003, which is AGREED (section 5.11), and the four design differences in the Proposal row stay open for the backend spike. Recorded 7 November 2026, evidence in section 5.8. Earlier status: PROPOSED, recorded 23 October 2026. Mirrors TD-05. |
 | Evidence class | ASSUMPTION |
 | Context | Two operation catalogues exist: the 31 technology-neutral operations in `API_AND_MODULE_CONTRACTS.md` section 8 (OP-AREA-nn) and the 42 operations in `API_AND_BACKEND_CONTRACT.md` (OP-nn). They use different names, groupings and error vocabularies. |
 | Proposal | Direct database access under rules for per-user data, callable functions for privileged actions, no public REST API (TD-05). One operation catalogue, in `API_AND_BACKEND_CONTRACT.md`, with the OP-nn identifiers as the main ones and the OP-AREA-nn identifiers as aliases. One error scheme: a category plus a reason code, in upper-case names. Open design differences are listed in the catalogue and are not decided here: device tokens or topics, one upload call or staged upload, publish and unpublish as one operation or two, and a single-issue read. |
