@@ -21,10 +21,26 @@ import 'unavailable_auth_service.dart';
 final Provider<FirebaseServices?> firebaseServicesProvider =
     Provider<FirebaseServices?>((Ref ref) => null);
 
+/// MOD-04's profile repository (MOD04-P2-T01) over Firebase once it has
+/// started, or null without it, in which case the profile screens stay
+/// placeholders. Tests override it with a fake.
+final Provider<AccountProfileRepository?> profileRepositoryProvider =
+    Provider<AccountProfileRepository?>((Ref ref) {
+      final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
+      if (firebase == null) {
+        return null;
+      }
+      return AccountProfileRepository(
+        firebase.identity,
+        firebase.backend,
+        FirestoreProfileDocuments(firebase.firestore),
+      );
+    });
+
 /// MOD-03's `AuthService` (MOD03-P2-T01 to T03): [AccountAuthService] over
-/// Firebase once it has started, and [UnavailableAuthService] without it,
-/// so a test that sets neither runs as a visitor. Tests override it with a
-/// fake.
+/// Firebase, with MOD-04's profile status, once Firebase has started, and
+/// [UnavailableAuthService] without it, so a test that sets neither runs as
+/// a visitor. Tests override it with a fake.
 ///
 /// Riverpod is used in `app/lib/app/` only (DEC-013).
 final Provider<AuthService> authServiceProvider = Provider<AuthService>((
@@ -34,7 +50,13 @@ final Provider<AuthService> authServiceProvider = Provider<AuthService>((
   if (firebase == null) {
     return const UnavailableAuthService();
   }
-  return AccountAuthService(firebase.identity);
+  final AccountProfileRepository? profiles = ref.watch(
+    profileRepositoryProvider,
+  );
+  return AccountAuthService(
+    firebase.identity,
+    profileStatus: profiles?.watchStatus,
+  );
 });
 
 /// The current access state (`API_AND_MODULE_CONTRACTS.md` section 4.1).
@@ -65,7 +87,10 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
   }, fireImmediately: true);
   final GoRouter router = buildRouter(
     accessState,
-    screens: accountScreens(auth: ref.read(authServiceProvider)),
+    screens: accountScreens(
+      auth: ref.read(authServiceProvider),
+      profiles: ref.read(profileRepositoryProvider),
+    ),
   );
   ref.onDispose(() {
     router.dispose();

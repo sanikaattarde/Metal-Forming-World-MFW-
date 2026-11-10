@@ -108,4 +108,60 @@ abstract final class AccountText {
 
   /// Sign out.
   static const String signOut = 'Sign out';
+
+  // SCR-A-05 and the profile form.
+
+  /// The complete-profile title.
+  static const String completeTitle = 'Complete your profile';
+
+  /// Why the profile is asked for.
+  static const String completeBody =
+      'MFW asks for these details before you read full issues.';
+
+  /// The complete-profile button.
+  static const String saveAndContinue = 'Save and continue';
+
+  /// The label of each profile field.
+  static const String fullName = 'Full name';
+
+  /// See [fullName].
+  static const String age = 'Age';
+
+  /// The hint under the age.
+  static const String ageHint = 'In whole years';
+
+  /// See [fullName].
+  static const String gender = 'Gender';
+
+  /// See [fullName].
+  static const String occupation = 'Occupation';
+
+  /// See [fullName].
+  static const String domainOfWork = 'Domain of work';
+
+  /// A name left empty or too long.
+  static const String nameInvalid = 'Enter your name.';
+
+  /// An age that is not a whole number from 1 to 120.
+  static const String ageInvalid = 'Enter an age from 1 to 120.';
+
+  /// No option chosen.
+  static const String chooseOption = 'Choose an option.';
+
+  /// An occupation left empty or too long.
+  static const String occupationInvalid = 'Enter your occupation.';
+
+  /// No segments to choose from yet (OQ-13).
+  static const String noSegments = 'No domains of work are available yet.';
+
+  /// Fields still missing after a save.
+  static const String stillMissing = 'Some details are still missing.';
+
+  /// The consent action (FR-PRIV-001).
+  static const String consent =
+      'I accept the privacy policy and the terms of use.';
+
+  /// The consent left unticked.
+  static const String consentMissing =
+      'Accept the privacy policy and the terms of use to continue.';
 }

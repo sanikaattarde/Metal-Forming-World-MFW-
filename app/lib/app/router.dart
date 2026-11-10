@@ -24,7 +24,11 @@ final class RouteScreens {
     this.passwordReset,
     this.register,
     this.verifyEmail,
+    this.completeProfile,
   });
+
+  /// SCR-A-05 (MOD04-P2-T01).
+  final ScreenBuilder? completeProfile;
 
   /// SCR-A-01 (MOD03-P2-T02).
   final ScreenBuilder? signIn;
@@ -108,7 +112,11 @@ GoRouter buildRouter(
       ),
       _route(AppRoutes.register, ShellText.register, screens.register),
       _route(AppRoutes.verifyEmail, ShellText.verifyEmail, screens.verifyEmail),
-      _placeholder(AppRoutes.completeProfile, ShellText.completeProfile),
+      _route(
+        AppRoutes.completeProfile,
+        ShellText.completeProfile,
+        screens.completeProfile,
+      ),
       _placeholder(AppRoutes.settings, ShellText.settings),
     ],
   );
