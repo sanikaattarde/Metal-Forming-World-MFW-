@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: email registration and verification in the app (MOD03-P2-T01), 2026-11-10
+
+`app/lib/features/account/` starts MOD-03: the ports `IdentityProvider` and `BackendCalls` with thin FlutterFire adapters (`FirebaseIdentityProvider`, `FirebaseBackendCalls`), and `AccountAuthService`, which registers an email account (address check, PROPOSED minimum of 8 characters), sends and resends the verification email, reloads the verification status and signs out, with every provider code mapped to the contract's failures and no address or provider message kept. SCR-A-02 and SCR-A-03 are built from the MOD16-P1-T03 frames and put on `/register` and `/verify-email` through `RouteScreens` in `app/lib/app/router.dart` and `account_routes.dart`; the other routes keep their placeholders. The router tests now find a screen by its app-bar title. FlutterFire packages DEP-96 to DEP-99 added (`DEPENDENCY_REGISTER.md` section 8.5). Tests: 2 files added; `flutter analyze` clean and `flutter test` 504 passed. The adapters run only on a device and are not run here.
+
 ### Added: server security events without personal data (MOD02-P2-T03), 2026-11-10
 
 `backend/functions/src/safeLog.ts` adds a closed list of security events (`access_refused`, `check_failed`, `grant_issued`, `account_deleted`, `admin_removed`, `upload_rejected`), derived from each logged outcome and never set by a caller, with refusals and failures as warnings. Every admin operation now logs its refused access and failed checks through `adminCall`, which takes the operation's name; OP-10 and OP-14 do too, and OP-12 logs an admin leaving the count. An email address is now refused in any log value, as links and tokens were (SC-16, SEC-CHK-10). Tests: G14 and U8 added; `npm test` in `backend/`: 1,039 passed (emulator only).

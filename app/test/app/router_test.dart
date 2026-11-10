@@ -4,17 +4,23 @@ import 'package:go_router/go_router.dart';
 import 'package:mfw_app/app/router_app_navigator.dart';
 import 'package:mfw_app/app/shell_text.dart';
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/features/account/account.dart';
 
 import '../fakes/fake_auth_service.dart';
 import '../fakes/fake_server.dart';
 import '../fakes/test_users.dart';
 import 'app_harness.dart';
 
+/// The screen whose app bar shows [title]. Scoped to the app bar, because a
+/// built screen may use its title as a button label too ("Sign in").
+Finder titled(String title) =>
+    find.descendant(of: find.byType(AppBar), matching: find.text(title));
+
 void main() {
   group('IC-01 consumer check: the guard on the fake AuthService', () {
     const Map<AccessState, String> shownFor = <AccessState, String>{
       AccessState.signedOut: ShellText.signIn,
-      AccessState.emailUnverified: ShellText.verifyEmail,
+      AccessState.emailUnverified: AccountText.verifyTitle,
       AccessState.profileIncomplete: ShellText.completeProfile,
       AccessState.fullAccess: ShellText.reader,
     };
@@ -41,7 +47,7 @@ void main() {
         router.go('/issues/fx-iss-01/read');
         await tester.pumpAndSettle();
 
-        expect(find.text(shownFor[state]!), findsOneWidget);
+        expect(titled(shownFor[state]!), findsOneWidget);
       });
     }
 
@@ -52,12 +58,12 @@ void main() {
 
       router.go('/issues/fx-iss-01/read?page=4');
       await tester.pumpAndSettle();
-      expect(find.text(ShellText.signIn), findsOneWidget);
+      expect(titled(ShellText.signIn), findsOneWidget);
 
       auth.signInAs(fxUsr01);
       await tester.pumpAndSettle();
 
-      expect(find.text(ShellText.reader), findsOneWidget);
+      expect(titled(ShellText.reader), findsOneWidget);
       expect(router.state.uri.toString(), '/issues/fx-iss-01/read?page=4');
     });
 
@@ -71,12 +77,12 @@ void main() {
       final GoRouter router = await pumpApp(tester, auth);
       router.go('/issues/fx-iss-01/read');
       await tester.pumpAndSettle();
-      expect(find.text(ShellText.reader), findsOneWidget);
+      expect(titled(ShellText.reader), findsOneWidget);
 
       await auth.signOut();
       await tester.pumpAndSettle();
 
-      expect(find.text(ShellText.signIn), findsOneWidget);
+      expect(titled(ShellText.signIn), findsOneWidget);
       expect(
         router.state.uri.queryParameters['from'],
         '/issues/fx-iss-01/read',
@@ -95,8 +101,8 @@ void main() {
           ('/news', null, ShellText.news),
           ('/news/101', null, ShellText.newsArticle),
           ('/sign-in', null, ShellText.signIn),
-          ('/register', null, ShellText.register),
-          ('/verify-email', fxUsr02, ShellText.verifyEmail),
+          ('/register', null, AccountText.registerTitle),
+          ('/verify-email', fxUsr02, AccountText.verifyTitle),
           ('/complete-profile', fxUsr03, ShellText.completeProfile),
           ('/settings', null, ShellText.settings),
         ]) {
@@ -109,7 +115,7 @@ void main() {
         router.go(route);
         await tester.pumpAndSettle();
 
-        expect(find.text(title), findsOneWidget);
+        expect(titled(title), findsOneWidget);
       });
     }
 
@@ -128,7 +134,7 @@ void main() {
         router.go(route);
         await tester.pumpAndSettle();
 
-        expect(find.text(ShellText.signIn), findsOneWidget);
+        expect(titled(ShellText.signIn), findsOneWidget);
       });
     }
 
@@ -142,12 +148,12 @@ void main() {
 
       router.go('/no-such-page');
       await tester.pumpAndSettle();
-      expect(find.text(ShellText.notFound), findsOneWidget);
+      expect(titled(ShellText.notFound), findsOneWidget);
 
       await tester.tap(find.widgetWithText(FilledButton, ShellText.goHome));
       await tester.pumpAndSettle();
 
-      expect(find.text(ShellText.home), findsOneWidget);
+      expect(titled(ShellText.home), findsOneWidget);
       expect(router.state.uri.path, '/');
     });
   });
@@ -185,7 +191,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(router.state.uri.path, '/news/101');
-      expect(find.text(ShellText.newsArticle), findsOneWidget);
+      expect(titled(ShellText.newsArticle), findsOneWidget);
     });
 
     testWidgets('an ID with a slash stays one path segment', (
@@ -200,7 +206,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(router.state.uri.pathSegments, <String>['issues', 'a/b', 'read']);
-      expect(find.text(ShellText.reader), findsOneWidget);
+      expect(titled(ShellText.reader), findsOneWidget);
     });
   });
 }
