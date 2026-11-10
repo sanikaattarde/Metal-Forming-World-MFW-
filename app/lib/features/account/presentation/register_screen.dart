@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme/mfw_tokens.dart';
 import '../../../contracts/contracts.dart';
 import '../../../core/errors/failure_messages.dart';
 import '../domain/account_rules.dart';
@@ -7,7 +8,13 @@ import 'account_text.dart';
 import 'account_widgets.dart';
 
 /// SCR-A-02, register with an email address and a password
-/// (MOD03-P2-T01; FR-AUTH-001, FR-AUTH-002).
+/// (MOD03-P2-T01; FR-AUTH-001, FR-AUTH-002), accepting the privacy policy
+/// and the terms of use (MOD04-P2-T02; FR-PRIV-001, FR-PRIV-002).
+///
+/// The acceptance is required to register. It is noted with MOD-04 at once
+/// ([ProfileRepository.recordConsent]) and stored, with the current
+/// versions and the server's time, by the first profile save through OP-10
+/// (PROPOSED; how consent is recorded is OQ-27).
 ///
 /// After a registration the access state becomes `emailUnverified`, and the
 /// router's guard moves on to SCR-A-03, so this screen does not navigate.
@@ -17,11 +24,20 @@ class RegisterScreen extends StatefulWidget {
     super.key,
     required this.auth,
     required this.onSignIn,
+    this.profiles,
+    this.policyLinks,
     this.onBack,
   });
 
   /// MOD-03.
   final AuthService auth;
+
+  /// MOD-04, which keeps the acceptance for the first profile save. Null
+  /// before Firebase has started.
+  final ProfileRepository? profiles;
+
+  /// The links to the policy and terms, under the acceptance.
+  final Widget? policyLinks;
 
   /// Opens sign-in instead.
   final VoidCallback onSignIn;
@@ -37,9 +53,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   bool _busy = false;
+  bool _consented = false;
   String? _notice;
   String? _emailError;
   String? _passwordError;
+  String? _consentError;
 
   @override
   void dispose() {
@@ -59,8 +77,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _passwordError = AccountRules.isPasswordLongEnough(password)
           ? null
           : AccountText.passwordTooShort;
+      _consentError = _consented ? null : AccountText.consentMissing;
     });
-    if (_emailError != null || _passwordError != null) {
+    if (_emailError != null || _passwordError != null || !_consented) {
       return;
     }
     setState(() => _busy = true);
@@ -68,6 +87,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       email: email,
       password: password,
     );
+    if (result is Ok<void>) {
+      await widget.profiles?.recordConsent(
+        ConsentRecord(
+          agreedTo: 'privacy_policy,terms_of_use',
+          agreedAt: DateTime.now().toUtc(),
+        ),
+      );
+    }
     if (!mounted) {
       return;
     }
@@ -109,6 +136,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
           autofillHints: const <String>[AutofillHints.newPassword],
           onSubmitted: (_) => _submit(),
         ),
+        CheckboxListTile(
+          value: _consented,
+          onChanged: _busy
+              ? null
+              : (bool? value) => setState(() => _consented = value ?? false),
+          contentPadding: EdgeInsets.zero,
+          controlAffinity: ListTileControlAffinity.leading,
+          title: const Text(AccountText.consent),
+          subtitle: _consentError == null
+              ? null
+              : Text(
+                  _consentError!,
+                  style: MfwType.small.copyWith(color: MfwColours.error),
+                ),
+        ),
+        ?widget.policyLinks,
         const AccountGap(),
         AccountPrimaryButton(
           AccountText.registerButton,

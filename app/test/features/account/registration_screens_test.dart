@@ -43,6 +43,7 @@ void main() {
     ) async {
       await tester.enterText(field(AccountText.email), email);
       await tester.enterText(field(AccountText.password), password);
+      await tester.tap(find.text(AccountText.consent));
       await tester.tap(find.text(AccountText.registerButton));
       await tester.pumpAndSettle();
     }
@@ -105,6 +106,7 @@ void main() {
       await pumpRegister(tester);
       await tester.enterText(field(AccountText.email), 'reader@example.test');
       await tester.enterText(field(AccountText.password), 'long-enough-1');
+      await tester.tap(find.text(AccountText.consent));
       await tester.tap(find.text(AccountText.registerButton));
       await tester.pump();
 
