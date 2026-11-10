@@ -67,7 +67,7 @@ This document proposes the automated checks that guard pull requests, integratio
 | QG-05 | Android build check | `flutter build apk --debug`, tried up to 3 times, 30 seconds apart (pull request #58) | Pull requests that touch `app/` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | DoD-INT 2 |
 | QG-06 | iOS build check | `flutter build ios --no-codesign` on macOS | Pull requests that touch `app/`; every merge to `main` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). Not yet on merges to `main` (section 5.2) | DoD-INT 2 |
 | QG-07 | App integration tests | `flutter test integration_test` on an emulator | Every merge to `main`; release candidates | Yes, on `main` | [SCAFFOLD] | TS-04 |
-| QG-08 | Backend and authorization-rule tests | Not available. DEC-003 is AGREED (`DECISION_LOG.md` section 5.11), and the gate is added with the first backend code (MOD15-P2-T02) | Pull requests that touch `backend/` | Yes | [BACKEND] | TS-05 |
+| QG-08 | Backend and authorization-rule tests | `npm ci` in `backend/` and in `backend/functions/`, then `npm test` in `backend/`: the functions are built and the tests run on the auth, functions, Firestore and Storage emulators, project `demo-mfw`, with Node.js 22 and Java 21. `.github/workflows/backend.yml` (MOD15-P2-T02) | Pull requests and pushes to `main` that touch `backend/` | Yes | [BACKEND] | TS-05 |
 | QG-09 | Admin panel build and tests | Blocked by DEC-004 | Pull requests that touch `admin/` | Yes | [BACKEND] | TS-05 |
 | QG-10 | Dependency and licence check | A script comparing `pubspec.lock` with `DEPENDENCY_REGISTER.md` (planned); `flutter pub outdated` report; published advisory check | Pull requests that touch dependency files; weekly | Yes, for an unregistered dependency | [SCAFFOLD] | SEC-CHK-13 |
 | QG-11 | Secrets scan | Candidate: gitleaks, or GitHub secret scanning if the plan includes it | Every pull request and push | Yes | [CI] | SEC-CHK-09 |
@@ -199,7 +199,7 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 2. Create the app scaffold (T-01.1). Done: pull request #30.
 3. Add workflow files for QG-01 to QG-06, QG-11 and QG-12 (T-01.5). QG-01 to QG-06 are done: `.github/workflows/pr.yml`, pull request #48. QG-11 and QG-12 wait for DEP-62 and DEP-63.
 4. Add QG-07 once integration tests exist.
-5. Add QG-08 with the first backend code, now that DEC-003 is AGREED, and QG-09 once DEC-004 is AGREED (it is PROPOSED).
+5. QG-08 is added (`.github/workflows/backend.yml`). It runs on pull requests and on pushes to `main`, because tasks merge without pull requests from 10 November 2026 (DEC-010). QG-09, the admin panel's build and tests, is still to add: DEC-004 is AGREED (`DECISION_LOG.md` section 5.12) and `admin/` is on `main`.
 6. Configure environment secrets after DEC-023 and the MFW account access in T-01.3.
 7. Add QG-13 once the store accounts and signing are set up (OQ-42).
 
