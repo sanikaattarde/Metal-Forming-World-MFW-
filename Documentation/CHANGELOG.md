@@ -34,9 +34,9 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ### Added: QG-08, the backend tests in CI (MOD15-P2-T02), 2026-11-10
 
-`.github/workflows/backend.yml` runs the tests of `backend/` on the emulators (`npm test`, the command of `backend/README.md`) on each pull request and each push to `main` that changes `backend/` or the workflow. It installs both lockfiles with `npm ci` (`backend/` and `backend/functions/`), uses Node.js 22, the runtime that `backend/functions/package.json` pins, and Java 21 for the emulators. `CI_CD_AND_QUALITY_GATES.md` gains the QG-08 row and section 14 item 5. `DEPENDENCY_REGISTER.md` adds DEP-96 (`actions/setup-node`, MIT), says DEP-77 also installs Java 21, and records YG's licence readings in DEP-50 and DEP-79 to DEP-83. The admin panel's build and tests are not in this gate (QG-09).
+`.github/workflows/backend.yml` runs the tests of `backend/` on the emulators (`npm test`, the command of `backend/README.md`) on each pull request and each push to `main` that changes `backend/` or the workflow. It installs both lockfiles with `npm ci` (`backend/` and `backend/functions/`), uses Node.js 22, the runtime that `backend/functions/package.json` pins, and Java 21 for the emulators. `CI_CD_AND_QUALITY_GATES.md` gains the QG-08 row and section 14 item 5. `DEPENDENCY_REGISTER.md` adds DEP-96 (`actions/setup-node`, MIT), says DEP-77 also installs Java 21, and names the licence and the file YG read in DEP-50 and DEP-79 to DEP-83, with a line on install scripts in DEP-80 (review of #68). The admin panel's build and tests are not in this gate (QG-09).
 
-Tests: `npm test` in `backend/` on the merged tree, on a Mac with Node.js 24 and Java 21: 981 passed, 0 failed (emulators only). The run on GitHub with Node.js 22 is the gate's own check.
+Tests: `npm test` in `backend/` on the merged tree: 981 passed, 0 failed, on a Mac (Node.js 24, Java 21) and in QG-08 on GitHub (Node.js 22.23.4, OpenJDK 21.0.13), emulators only. On Node.js 22, `npm ci` warns that ten packages of the `firebase` test client (DEP-82) ask for Node.js 24.12 or later; the tests pass, and the two pins are for Sanika Attarde to align.
 
 ### Fixed: findings of the audit of the ten tasks, 2026-11-10
 
