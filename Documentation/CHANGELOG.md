@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the reader-side screen designs (MOD16-P1-T02), 2026-11-10
+
+28 design frames of SCR-A-10 to SCR-A-19 and SCR-A-22, with the states of `SCREEN_INVENTORY_AND_NAVIGATION.md` section 7 that apply to them, drawn as Flutter widgets on the app's theme and tokens, the same way as Sanika Attarde's account frames (#67): `app/test/design/reader_frames.dart` and `reader_frames_test.dart`, 28 images at 780 by 1688 pixels in `Documentation/design/reader/`, and the record `Documentation/design/READER_SCREEN_DESIGNS.md`, with a README index row. The download frames use `DownloadsText` and the error frames `messageFor`. No MFW logo, cover, article or picture is drawn. Drawing them found that Flutter's `SearchBar` exposes its text field as a 17 point tap target, so the frames use a text field; the record names it as a point for the catalogue task. Nothing has gone to MFW, and the frames approve nothing.
+
+Tests: in `app/` on the merged tree with Flutter 3.47.9, `flutter analyze` finds no issues and `flutter test` passes 456 and skips 52 (the frame images and goldens); all 28 frames pass the tap-target and label checks.
+
 ### Added: QG-08, the backend tests in CI (MOD15-P2-T02), 2026-11-10
 
 `.github/workflows/backend.yml` runs the tests of `backend/` on the emulators (`npm test`, the command of `backend/README.md`) on each pull request and each push to `main` that changes `backend/` or the workflow. It installs both lockfiles with `npm ci` (`backend/` and `backend/functions/`), uses Node.js 22, the runtime that `backend/functions/package.json` pins, and Java 21 for the emulators. `CI_CD_AND_QUALITY_GATES.md` gains the QG-08 row and section 14 item 5. `DEPENDENCY_REGISTER.md` adds DEP-96 (`actions/setup-node`, MIT), says DEP-77 also installs Java 21, and names the licence and the file YG read in DEP-50 and DEP-79 to DEP-83, with a line on install scripts in DEP-80 (review of #68). The admin panel's build and tests are not in this gate (QG-09).
