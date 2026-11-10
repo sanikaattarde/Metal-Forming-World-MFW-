@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the settings screen (MOD04-P2-T04), 2026-11-10
+
+SCR-A-07 (`settings_screen.dart`) on `/settings`: for a signed-in reader, the profile, sign-out (FR-AUTH-008) and account deletion; for a visitor, sign-in; and for everyone the privacy policy and terms of use (CFG-07, through the `LinkOpener`) and the open-source licences. The notification choices (SCR-A-21, MOD11-P2-T02) and the reader-mode setting (MOD-07) are slots the shell fills once those features exist, left out until then. The route `/settings/delete-account` is added for SCR-A-08 and, like `/profile`, needs a session. Tests: `settings_test.dart` added; `flutter test` 602 passed.
+
 ### Added: the profile screen and editing, PROVISIONAL (MOD04-P2-T03), 2026-11-10
 
 SCR-A-06 (`profile_screen.dart`) on the new route `/profile` shows the reader's address and each configured profile value, with the domain of work by its segment name, and edits them in the shared `ProfileFormView` with the same checks as SCR-A-05, saving through OP-10 (FR-PROF-006). The profile is read from the reader's own record, so a change made on one device is what another reads (FR-PROF-007). The access guard sends a visitor who opens `/profile` to sign in and back (`needsSession` in `app/lib/app/access_guard.dart`). PROVISIONAL: the fields wait for OQ-01. Tests: `profile_screen_test.dart` added; `flutter test` 593 passed.

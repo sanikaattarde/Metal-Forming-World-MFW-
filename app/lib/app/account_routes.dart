@@ -53,6 +53,17 @@ RouteScreens accountScreens({
             profiles: profiles,
             consentLinks: policyLinks,
           ),
+    settings: links == null
+        ? null
+        : (BuildContext context, GoRouterState state) => SettingsScreen(
+            auth: auth,
+            links: links,
+            privacyPolicy: config?.privacyPolicy,
+            termsOfUse: config?.termsOfUse,
+            onOpenProfile: () => context.go(AppRoutes.profile),
+            onSignIn: () => context.go(AppRoutes.signIn),
+            onDeleteAccount: () => context.go(AppRoutes.deleteAccount),
+          ),
     profile: profiles == null
         ? null
         : (BuildContext context, GoRouterState state) => ProfileScreen(
