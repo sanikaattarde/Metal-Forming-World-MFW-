@@ -1,15 +1,23 @@
-# Pull-request checks for the Flutter app: QG-01 to QG-06 of
-# Documentation/CI_CD_AND_QUALITY_GATES.md section 4.
+# Checks for the Flutter app: QG-01 to QG-06 of
+# Documentation/CI_CD_AND_QUALITY_GATES.md section 4. They run on pull
+# requests and on each push to main, because tasks merge into main without
+# pull requests from 10 November 2026 (DEC-010).
 # DEC-022 (GitHub Actions) is AGREED, and the repository owner approved
 # the cost of this workflow (Documentation/DECISION_LOG.md section 5.9).
 # FLUTTER_VERSION is the version used for the scaffold. It must sit inside
 # the flutter range in app/pubspec.yaml (>=3.47.9 <3.48.0, OQ-50).
 # GitHub-owned actions only, pinned to full commit SHAs. No secrets.
 
-name: PR checks (app)
+name: App checks
 
 on:
   pull_request:
+    paths:
+      - "app/**"
+      - ".github/workflows/pr.yml"
+  push:
+    branches:
+      - main
     paths:
       - "app/**"
       - ".github/workflows/pr.yml"
@@ -17,9 +25,11 @@ on:
 permissions:
   contents: read
 
+# A newer push to a pull request cancels its older run; runs on main are
+# never cancelled, so each merge gets its own result.
 concurrency:
-  group: pr-app-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  group: app-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   FLUTTER_VERSION: "3.47.9"

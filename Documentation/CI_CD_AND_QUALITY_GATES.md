@@ -8,7 +8,7 @@
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
 | Version | 0.10 |
-| Status | Draft for review. Not approved. **One workflow exists: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests that change `app/` or the workflow (T-01.5). Every other gate and pipeline below is PLANNED.** |
+| Status | Draft for review. Not approved. **Two workflows exist: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests and on pushes to `main` that change `app/` or the workflow (T-01.5, DEC-010), and `.github/workflows/backend.yml` runs QG-08. Every other gate and pipeline below is PLANNED.** |
 | Date | 9 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
 
@@ -60,12 +60,12 @@ This document proposes the automated checks that guard pull requests, integratio
 
 | Gate | Check | Command or tool (candidate) | Runs on | Blocks merge | Available | Implements |
 |---|---|---|---|---|---|---|
-| QG-01 | Formatting | `dart format --output=none --set-exit-if-changed .` | Every pull request | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-01 |
-| QG-02 | Static analysis | `flutter analyze`, failing on any issue (confirm the default behaviour for the Flutter version pinned under OQ-50) | Every pull request | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-01 |
-| QG-03 | Unit and widget tests | `flutter test`. It also runs the app side of the contract tests (CT-04, CT-08 to CT-10), which need no backend. CT-10 starts at the first release | Every pull request | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-02, TS-03, TS-14 (app side) |
-| QG-04 | Coverage report | `flutter test --coverage` | Every pull request | No: report only. No threshold agreed. | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). The report is kept for 7 days (DEP-76) | None |
-| QG-05 | Android build check | `flutter build apk --debug`, tried up to 3 times, 30 seconds apart (pull request #58) | Pull requests that touch `app/` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | DoD-INT 2 |
-| QG-06 | iOS build check | `flutter build ios --no-codesign` on macOS | Pull requests that touch `app/`; every merge to `main` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). Not yet on merges to `main` (section 5.2) | DoD-INT 2 |
+| QG-01 | Formatting | `dart format --output=none --set-exit-if-changed .` | Every pull request | Yes | Yes, on pull requests and pushes to `main` that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-01 |
+| QG-02 | Static analysis | `flutter analyze`, failing on any issue (confirm the default behaviour for the Flutter version pinned under OQ-50) | Every pull request | Yes | Yes, on pull requests and pushes to `main` that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-01 |
+| QG-03 | Unit and widget tests | `flutter test`. It also runs the app side of the contract tests (CT-04, CT-08 to CT-10), which need no backend. CT-10 starts at the first release | Every pull request | Yes | Yes, on pull requests and pushes to `main` that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | TS-02, TS-03, TS-14 (app side) |
+| QG-04 | Coverage report | `flutter test --coverage` | Every pull request | No: report only. No threshold agreed. | Yes, on pull requests and pushes to `main` that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). The report is kept for 7 days (DEP-76) | None |
+| QG-05 | Android build check | `flutter build apk --debug`, tried up to 3 times, 30 seconds apart (pull request #58) | Pull requests that touch `app/` | Yes | Yes, on pull requests and pushes to `main` that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | DoD-INT 2 |
+| QG-06 | iOS build check | `flutter build ios --no-codesign` on macOS | Pull requests that touch `app/`; every merge to `main` | Yes | Yes, on pull requests and pushes to `main` that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). On merges to `main` since 10 November 2026 (DEC-010) | DoD-INT 2 |
 | QG-07 | App integration tests | `flutter test integration_test` on an emulator | Every merge to `main`; release candidates | Yes, on `main` | [SCAFFOLD] | TS-04 |
 | QG-08 | Backend and authorization-rule tests | `npm ci` in `backend/` and in `backend/functions/`, then `npm test` in `backend/`: the functions are built and the tests run on the auth, functions, Firestore and Storage emulators, project `demo-mfw`, with Node.js 22 and Java 21. `.github/workflows/backend.yml` (MOD15-P2-T02) | Pull requests and pushes to `main` that touch `backend/` | Yes | [BACKEND] | TS-05 |
 | QG-09 | Admin panel build and tests | Blocked by DEC-004 | Pull requests that touch `admin/` | Yes | [BACKEND] | TS-05 |
@@ -92,7 +92,7 @@ pull request opened or updated
   → review by the other developer (DEVELOPMENT_WORKFLOW.md §6)
 ```
 
-QG-01 to QG-06 run in `.github/workflows/pr.yml` for pull requests that change `app/` or the workflow. QG-11 and the other steps are PLANNED.
+QG-01 to QG-06 run in `.github/workflows/pr.yml` for pull requests and pushes to `main` that change `app/` or the workflow. QG-11 and the other steps are PLANNED.
 
 ### 5.2 Integration on `main` (PLANNED)
 
@@ -191,7 +191,7 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 - CI usage is billed to the account that owns the repository. That is currently `sanikaattarde`, and later MFW (OQ-48).
 - macOS runners use more of the minute allowance than Linux runners.
 - Any CI cost billed to MFW needs MFW's approval (DEC-022). No price is quoted here, because provider prices change.
-- Sanika Attarde, as the owner of the repository and of the account that pays, approved the cost of `.github/workflows/pr.yml` (three jobs, one on a macOS runner) in writing on 8 November 2026, in the approving review of pull request #48 (DEC-022, `DECISION_LOG.md` section 5.9). No cost is billed to MFW. The plan minutes and the macOS runner cost are NOT VERIFIED, and the check is made again if the repository's visibility or the paying account changes.
+- Sanika Attarde, as the owner of the repository and of the account that pays, approved the cost of `.github/workflows/pr.yml` (three jobs, one on a macOS runner) in writing on 8 November 2026, in the approving review of pull request #48 (DEC-022, `DECISION_LOG.md` section 5.9). No cost is billed to MFW. The plan minutes and the macOS runner cost are NOT VERIFIED, and the check is made again if the repository's visibility or the paying account changes. From 10 November 2026 the workflow also runs on each push to `main` that changes `app/` (DEC-010). Those runs take the place of the pull request runs that tasks no longer open; whether the approval covers them is for Sanika Attarde to confirm.
 
 ## 14. Implementation Steps (Not Performed)
 
