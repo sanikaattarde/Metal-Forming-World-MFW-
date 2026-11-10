@@ -64,6 +64,11 @@ RouteScreens accountScreens({
             onSignIn: () => context.go(AppRoutes.signIn),
             onDeleteAccount: () => context.go(AppRoutes.deleteAccount),
           ),
+    deleteAccount: (BuildContext context, GoRouterState state) =>
+        DeleteAccountScreen(
+          auth: auth,
+          onKeep: () => context.go(AppRoutes.settings),
+        ),
     profile: profiles == null
         ? null
         : (BuildContext context, GoRouterState state) => ProfileScreen(

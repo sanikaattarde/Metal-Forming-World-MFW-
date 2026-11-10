@@ -134,10 +134,10 @@ void main() {
     },
   );
 
-  test('the deletion page needs a session', () {
+  test('the deletion page needs a session, and sends a visitor home', () {
     expect(
       redirectFor(AccessState.signedOut, Uri.parse('/settings/delete-account')),
-      '/sign-in?from=%2Fsettings%2Fdelete-account',
+      '/',
     );
     expect(
       redirectFor(

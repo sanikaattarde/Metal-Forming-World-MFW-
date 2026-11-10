@@ -62,6 +62,7 @@ final Provider<AuthService> authServiceProvider = Provider<AuthService>((
   return AccountAuthService(
     firebase.identity,
     profileStatus: profiles?.watchStatus,
+    backend: firebase.backend,
   );
 });
 

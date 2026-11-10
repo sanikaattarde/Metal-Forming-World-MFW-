@@ -58,7 +58,8 @@ bool needsSession(String path) {
 /// 2. A step route that the reader no longer needs moves on to the next
 ///    missing step, or back to `from`, or home.
 /// 3. A reader's own account page sends a visitor to sign in, keeping the
-///    route in `from` (MOD04-P2-T03).
+///    route in `from` (MOD04-P2-T03), except account deletion, which sends
+///    a visitor home (MOD03-P4-T01).
 /// 4. Every other route opens. An unknown one shows the not-found screen
 ///    (SCR-A-22).
 String? redirectFor(AccessState state, Uri location) {
@@ -78,7 +79,11 @@ String? redirectFor(AccessState state, Uri location) {
     return _withFrom(step, location.toString());
   }
   if (state == AccessState.signedOut && needsSession(path)) {
-    return _withFrom(AppRoutes.signIn, location.toString());
+    // A visitor has no account to delete, and a reader whose account was
+    // just deleted must not be sent back here after a new sign-in.
+    return path == AppRoutes.deleteAccount
+        ? AppRoutes.home
+        : _withFrom(AppRoutes.signIn, location.toString());
   }
   return null;
 }

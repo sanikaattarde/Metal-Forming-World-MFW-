@@ -138,6 +138,36 @@ abstract final class AccountText {
   /// The licences of the open-source parts.
   static const String licences = 'Open-source licences';
 
+  // SCR-A-08.
+
+  /// What deleting removes.
+  static const String deleteBody =
+      'Deleting your account removes your profile, bookmarks, favourites, '
+      'notification choices and downloaded issues at once. It cannot be '
+      'undone.';
+
+  /// Keep the account: the safe, filled button.
+  static const String keepAccount = 'Keep my account';
+
+  /// Delete: the irreversible, outlined button.
+  static const String deleteMyAccount = 'Delete my account';
+
+  /// Delete after signing in again.
+  static const String confirmAndDelete = 'Confirm and delete';
+
+  /// A recent sign-in is needed.
+  static const String reauthNeeded =
+      'For your safety, enter your password again.';
+
+  /// The last admin cannot leave (LAST_ADMIN, INV-03).
+  static const String lastAdmin =
+      'You are the only admin. Add another admin in the admin panel before '
+      'you delete this account.';
+
+  /// A deletion already running (ALREADY_DELETING).
+  static const String alreadyDeleting =
+      'This account is already being deleted.';
+
   // SCR-A-06.
 
   /// The profile title.
