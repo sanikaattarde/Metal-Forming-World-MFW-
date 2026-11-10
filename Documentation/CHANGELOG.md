@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the issue, category and news admin operations (MOD13-P1-T03), 2026-11-10
+
+`backend/functions/src/issues.ts` (OP-15, OP-16, OP-21, OP-22, with the input checks in `issueChecks.ts`), `categories.ts` (OP-17, OP-18) and `newsControls.ts` (OP-23), each declared through `adminCall`, so the gate runs first. Every caller-supplied identifier is checked as a document key before it reaches the database. Tests: G8 and U2 added; `npm test` in `backend/`: 583 passed, 0 failed (emulator only).
+
 ### Added: the admin gate, OP-14 and the last-admin guard (MOD13-P1-T08), 2026-11-10
 
 `backend/functions/src/admin.ts` reads the role record and the account on every privileged call and fails closed (INV-08, SC-02 to SC-04), keeps the active-admin count in `admin_guard/current` so the last active admin cannot be removed (INV-03), and repairs a wrong count (OP-41's repair task, not scheduled yet). `adminCall.ts` wraps every privileged operation in the sign-in check and the gate. `getMyAdminRole.ts` is OP-14. Tests: G5 added; `npm test` in `backend/`: 428 passed, 0 failed (emulator only). In-panel add and remove wait for OQ-58.
