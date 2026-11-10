@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Changed: the T-02.4 resume evidence, on the Firebase Storage emulator (MOD06-P1-T02), 2026-11-10
+
+`Documentation/test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` gains section 4.2: the four resume tests of the spike, unchanged, passed on the iOS simulator and the Android emulator through the Storage emulator, with the same synthetic file of 150,000,000 bytes (DEC-024). The emulator's download link answered `Range: bytes=n-` with 206, so no byte was sent twice, and a missing or wrong download token with 403. The tools are on `spike/yg-download-resume` at `c5c427e`, not merged: `app/tool/storage_emulator_seed.dart` and `app/tool/storage_break_proxy.dart`. The report's DEC-020 lines now say AGREED (signed URLs, TD-09). A download token never expires and the emulator cannot sign, so the real service, a signed link, an expired grant and a phone are still not shown; AC-4.3, step 4 of MOD06-P1-T02 and the TD-09 device proof stay open.
+
+Tests: `flutter test integration_test/download_resume_test.dart` on the spike, through the proxy and the Storage emulator (`firebase-tools` 15.34.2): 4 of 4 passed on an iPhone 18 Pro simulator and 4 of 4 on the Android emulator `mfw_api36`, 9 November 2026.
+
 ### Added: the reader-side screen designs (MOD16-P1-T02), 2026-11-10
 
 28 design frames of SCR-A-10 to SCR-A-19 and SCR-A-22, with the states of `SCREEN_INVENTORY_AND_NAVIGATION.md` section 7 that apply to them, drawn as Flutter widgets on the app's theme and tokens, the same way as Sanika Attarde's account frames (#67): `app/test/design/reader_frames.dart` and `reader_frames_test.dart`, 28 images at 780 by 1688 pixels in `Documentation/design/reader/`, and the record `Documentation/design/READER_SCREEN_DESIGNS.md`, with a README index row. The download frames use `DownloadsText` and the error frames `messageFor`. No MFW logo, cover, article or picture is drawn. Drawing them found that Flutter's `SearchBar` exposes its text field as a 17 point tap target, so the frames use a text field; the record names it as a point for the catalogue task. Nothing has gone to MFW, and the frames approve nothing.
