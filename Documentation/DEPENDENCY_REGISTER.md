@@ -310,6 +310,17 @@ The first backend code, `backend/` (MOD13-P1-T01 to T03, DEC-003 AGREED), runs i
 
 The lockfile pins the packages these bring in. Under the position on QG-10 (section 10), they are not given entries.
 
+### 8.3 Cloud Functions packages (10 November 2026)
+
+`backend/functions/` (DEC-003, DEC-025 AGREED). Pinned in `backend/functions/package.json` and its lockfile, taken from the emulator spike. Licences read from the installed packages' `package.json` on 10 November 2026, in Sanika Attarde's session.
+
+| ID | Package | Purpose | Version | Licence | Cost | Status |
+|---|---|---|---|---|---|---|
+| DEP-84 | `firebase-admin` | Server access to Auth, Firestore and Storage from the functions | 14.5.0, exact pin | Apache-2.0 | None | CONFIRMED (runtime, server) |
+| DEP-85 | `firebase-functions` | Declares the callable and storage-triggered functions | 7.4.0, exact pin | MIT | None | CONFIRMED (runtime, server) |
+| DEP-86 | `typescript` | Compiles `functions/src/` | 7.0.2, exact pin | Apache-2.0 | None | CONFIRMED (development) |
+| DEP-87 | `@types/node` | Node.js types for the compiler | 22.20.5, exact pin | MIT | None | CONFIRMED (development) |
+
 ## 9. Repository and CI Services
 
 | ID | Name | Category | Purpose | Owner | Licence and security | Cost | Status | Required action |
