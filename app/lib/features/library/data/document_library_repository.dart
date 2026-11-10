@@ -174,12 +174,20 @@ final class DocumentLibraryRepository implements LibraryRepository {
   }
 
   /// [watch] for the signed-in reader, again for each new reader, and
-  /// [empty] while signed out.
+  /// [empty] while signed out. The sign-in stream repeats the current
+  /// reader when it is listened to, which does not start a second watch.
   Stream<T> _perUser<T>(Stream<T> Function(String uid) watch, T empty) {
     late StreamController<T> out;
     StreamSubscription<T>? current;
     StreamSubscription<String?>? users;
+    bool following = false;
+    String? followed;
     void follow(String? uid) {
+      if (following && uid == followed) {
+        return;
+      }
+      following = true;
+      followed = uid;
       unawaited(current?.cancel());
       current = null;
       if (uid == null) {
@@ -192,7 +200,7 @@ final class DocumentLibraryRepository implements LibraryRepository {
     out = StreamController<T>(
       onListen: () {
         follow(_currentUserId());
-        users = _userChanges.distinct().listen(follow);
+        users = _userChanges.listen(follow);
       },
       onCancel: () async {
         await users?.cancel();

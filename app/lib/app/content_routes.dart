@@ -115,12 +115,16 @@ RouteScreens withContentScreens(
                     ]
                   : const <Widget>[],
         actions: IssueDetailsActions(
-          onRead: (IssueSummary issue) =>
-              context.push(AppRoutes.reader(issue.issueId)),
+          onRead: (IssueSummary issue) {
+            // Read downloads first (OQ-08 working position), so the title
+            // is kept for the offline lists here too.
+            _keepTitle(titles, issue);
+            unawaited(context.push(AppRoutes.reader(issue.issueId)));
+          },
           onDownload: downloads == null
               ? null
               : (IssueSummary issue) {
-                  unawaited(titles?.remember(issue.issueId, issue.title));
+                  _keepTitle(titles, issue);
                   unawaited(showDownloadSheet(context, downloads, issue));
                 },
           onSignIn: () => context.go(returningTo(AppRoutes.signIn, here)),
@@ -175,35 +179,51 @@ Future<void> showDownloadSheet(
   ),
 );
 
+/// Keeps [issue]'s title beside the files, for the offline lists. A title
+/// that cannot be written leaves the identifier shown instead.
+void _keepTitle(IssueTitles? titles, IssueSummary issue) {
+  unawaited(
+    titles?.remember(issue.issueId, issue.title).catchError((Object _) {}),
+  );
+}
+
 /// SCR-A-15 with the titles kept beside the files, so it names the issues
-/// with no network (NFR-OFF-001).
-class _DownloadsTab extends StatelessWidget {
+/// with no network (NFR-OFF-001). The titles are read once; one kept later
+/// is found in memory, so a copy finished since shows its title.
+class _DownloadsTab extends StatefulWidget {
   const _DownloadsTab({required this.downloads, this.titles});
 
   final DownloadManager downloads;
   final IssueTitles? titles;
 
   @override
+  State<_DownloadsTab> createState() => _DownloadsTabState();
+}
+
+class _DownloadsTabState extends State<_DownloadsTab> {
+  late final Future<void> _loaded =
+      widget.titles?.load().then((_) {}, onError: (Object _) {}) ??
+      Future<void>.value();
+
+  @override
   Widget build(BuildContext context) {
-    final IssueTitles? store = titles;
+    final IssueTitles? store = widget.titles;
     if (store == null) {
-      return DownloadsScreen(downloads: downloads);
+      return DownloadsScreen(downloads: widget.downloads);
     }
-    return FutureBuilder<Map<String, String>>(
-      future: store.load().catchError((Object _) => <String, String>{}),
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, String>> known) {
-            final Map<String, String>? names = known.data;
-            if (names == null) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            }
-            return DownloadsScreen(
-              downloads: downloads,
-              titleOf: (String issueId) => names[issueId] ?? issueId,
-            );
-          },
+    return FutureBuilder<void>(
+      future: _loaded,
+      builder: (BuildContext context, AsyncSnapshot<void> loaded) {
+        if (loaded.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        return DownloadsScreen(
+          downloads: widget.downloads,
+          titleOf: (String issueId) => store.titleOf(issueId) ?? issueId,
+        );
+      },
     );
   }
 }

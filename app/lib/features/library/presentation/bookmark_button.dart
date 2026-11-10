@@ -50,6 +50,7 @@ class _BookmarkButtonState extends State<BookmarkButton> {
         _page = page;
       });
     });
+    // A failed watch, as at sign-out, keeps the last state shown.
     _bookmarks = widget.library.watchBookmarks().listen((List<Bookmark> all) {
       setState(() {
         _marked = <int, Bookmark>{
@@ -57,7 +58,7 @@ class _BookmarkButtonState extends State<BookmarkButton> {
             if (bookmark.issueId == widget.issueId) bookmark.page: bookmark,
         };
       });
-    });
+    }, onError: (Object _) {});
   }
 
   @override

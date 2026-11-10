@@ -283,4 +283,135 @@ void main() {
       },
     );
   });
+
+  group('Stopped downloads and their files [MOD06-P2-T03]', () {
+    IssueDownloadManager managerOver(
+      DownloadRig rig, {
+      IssueFileService? files,
+      PendingDownloads? pending,
+      Future<void> Function(Duration delay)? sleep,
+    }) => IssueDownloadManager(
+      files: files ?? rig.files,
+      transport: rig.transport,
+      store: rig.store,
+      verifier: const FakeHashVerifier(),
+      registry: rig.registry,
+      connectivity: rig.connectivity,
+      currentUserId: () => rig.auth.currentUserId,
+      clock: () => DateTime.utc(2026),
+      pending: pending ?? rig.pending,
+      sleep: sleep ?? (Duration _) async {},
+    );
+
+    test('a partial file that holds every byte is checked without another '
+        'fetch, as when the app closed before the check [rule 1]', () async {
+      final DownloadRig rig = DownloadRig();
+      rig.store.partials['issue-fx-iss-01-r1.pdf.part'] = syntheticFile(1000);
+      expect(
+        await rig.manager.start('fx-iss-01', mobileDataAccepted: false),
+        isA<Ok<void>>(),
+      );
+      expect(rig.transport.fetches, 0);
+      expect(await rig.manager.listDownloaded(), hasLength(1));
+    });
+
+    test('a partial file of another revision is removed when the issue '
+        'downloads again, and other issues keep theirs [rule 8]', () async {
+      final DownloadRig rig = DownloadRig();
+      rig.store.partials['issue-fx-iss-01-r7.pdf.part'] = <int>[1, 2, 3];
+      rig.store.partials['issue-fx-iss-01x-r1.pdf.part'] = <int>[4];
+      expect(
+        await rig.manager.start('fx-iss-01', mobileDataAccepted: false),
+        isA<Ok<void>>(),
+      );
+      expect(rig.store.partials.keys, <String>['issue-fx-iss-01x-r1.pdf.part']);
+    });
+
+    test('a stopped download of an issue that is gone is dropped with its '
+        'bytes, so it is not tried at every start [FR-MAG-008]', () async {
+      final DownloadRig rig = DownloadRig();
+      rig.store.partials['issue-fx-iss-01-r1.pdf.part'] = <int>[1, 2, 3];
+      await rig.pending.save(
+        const PendingDownload(
+          ownerUserId: 'fx-usr-01',
+          issueId: 'fx-iss-01',
+          mobileDataAccepted: false,
+        ),
+      );
+      final IssueDownloadManager manager = managerOver(
+        rig,
+        files: const GoneIssues(),
+      );
+      expect(
+        failureCodeOf(
+          await manager.start('fx-iss-01', mobileDataAccepted: false),
+        ),
+        FailureCode.notFound,
+      );
+      expect(rig.store.partials, isEmpty);
+      expect(await rig.pending.load(), isEmpty);
+    });
+
+    test('cancel during the pause before a retry ends it at once '
+        '(RD-01)', () async {
+      final DownloadRig rig = DownloadRig();
+      rig.transport.failNext.add(
+        const AppFailure(FailureCode.serviceUnavailable, retryable: true),
+      );
+      final IssueDownloadManager manager = managerOver(
+        rig,
+        // A pause that would never end on its own.
+        sleep: (Duration _) => Completer<void>().future,
+      );
+      final Future<Result<void>> running = manager.start(
+        'fx-iss-01',
+        mobileDataAccepted: false,
+      );
+      await settle();
+      await manager.cancel('fx-iss-01').timeout(const Duration(seconds: 2));
+      expect(failureCodeOf(await running), FailureCode.cancelled);
+      expect(rig.transport.fetches, 1);
+    });
+
+    test('a storage error fails the download instead of leaving it '
+        'queued', () async {
+      final DownloadRig rig = DownloadRig();
+      final IssueDownloadManager manager = managerOver(
+        rig,
+        pending: BrokenPendingDownloads(),
+      );
+      final Result<void> result = await manager.start(
+        'fx-iss-01',
+        mobileDataAccepted: false,
+      );
+      expect(failureCodeOf(result), FailureCode.unknown);
+      expect(failureOf(result)!.retryable, isTrue);
+      expect(await manager.watch('fx-iss-01').first, isA<Failed>());
+    });
+  });
+}
+
+/// Every issue is gone: unpublished or removed (ISSUE_NOT_AVAILABLE).
+final class GoneIssues implements IssueFileService {
+  const GoneIssues();
+
+  @override
+  Future<Result<IssueFileGrant>> requestIssueFile(String issueId) async =>
+      const Err<IssueFileGrant>(AppFailure(FailureCode.notFound));
+}
+
+/// A pending store whose writes fail, as on a full or broken disk.
+final class BrokenPendingDownloads implements PendingDownloads {
+  @override
+  Future<List<PendingDownload>> load() async => <PendingDownload>[];
+
+  @override
+  Future<void> save(PendingDownload pending) async =>
+      throw Exception('synthetic storage failure');
+
+  @override
+  Future<void> remove({
+    required String ownerUserId,
+    required String issueId,
+  }) async {}
 }

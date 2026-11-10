@@ -89,12 +89,15 @@ final class JsonDownloadRegistry implements DownloadRegistry {
       'version': 1,
       'rows': <Object?>[for (final DownloadedIssue row in rows) _rowTo(row)],
     });
-    return _writing = _writing.then((_) async {
+    final Future<void> write = _writing.then((_) async {
       final File file = await _file();
       final File temporary = File('${file.path}.tmp');
       await temporary.writeAsString(text, flush: true);
       await temporary.rename(file.path);
     });
+    // A failed write fails its own caller only; the next one still runs.
+    _writing = write.catchError((Object _) {});
+    return write;
   }
 
   static Map<String, Object?> _rowTo(DownloadedIssue row) => <String, Object?>{

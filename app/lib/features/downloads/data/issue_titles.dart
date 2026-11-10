@@ -55,11 +55,19 @@ final class IssueTitles {
     titles[issueId] = title;
     _titles = titles;
     final String text = jsonEncode(titles);
-    return _writing = _writing.then((_) async {
+    final Future<void> write = _writing.then((_) async {
       final File file = await _file();
       final File temporary = File('${file.path}.tmp');
       await temporary.writeAsString(text, flush: true);
       await temporary.rename(file.path);
     });
+    // A failed write fails its own caller only; the next one still runs.
+    _writing = write.catchError((Object _) {});
+    return write;
   }
+
+  /// The title kept for [issueId], from memory: null before [load] has
+  /// read the file, or when none is kept. A title kept after the load is
+  /// found at once.
+  String? titleOf(String issueId) => _titles?[issueId];
 }

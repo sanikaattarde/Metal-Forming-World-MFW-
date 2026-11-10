@@ -38,6 +38,9 @@ final class RuledLibraryDocuments implements LibraryDocuments {
     StreamSubscription<void>? changes;
     out = StreamController<T>(
       onListen: () {
+        if (T == List<Map<String, Object?>>) {
+          bookmarkWatches++;
+        }
         out.add(read());
         changes = _changes.stream.listen((void _) => out.add(read()));
       },
@@ -45,6 +48,9 @@ final class RuledLibraryDocuments implements LibraryDocuments {
     );
     return out.stream;
   }
+
+  /// How many bookmark watches started.
+  int bookmarkWatches = 0;
 
   @override
   Stream<List<Map<String, Object?>>> watchBookmarks(String uid) => _watch(
@@ -272,6 +278,26 @@ void main() {
       expect(counts, <int>[1, 0, 0]);
       await watching.cancel();
     });
+  });
+
+  test('a sign-in stream that repeats the current reader does not start a '
+      'second watch', () async {
+    final DocumentLibraryRepository repeating = DocumentLibraryRepository(
+      documents,
+      currentUserId: () => uid,
+      accessState: () => access,
+      // Firebase repeats the signed-in reader to a new listener.
+      userChanges: Stream<String?>.value('fx-usr-01'),
+      clock: () => now,
+    );
+    final List<List<Bookmark>> seen = <List<Bookmark>>[];
+    final StreamSubscription<List<Bookmark>> watching = repeating
+        .watchBookmarks()
+        .listen(seen.add);
+    await settle();
+    expect(documents.bookmarkWatches, 1);
+    expect(seen, hasLength(1));
+    await watching.cancel();
   });
 
   group('Favourites [MOD08-P2-T02]', () {

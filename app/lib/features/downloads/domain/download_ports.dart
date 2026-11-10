@@ -37,6 +37,10 @@ abstract interface class FileStore {
   /// Deletes the partial file [name], if any.
   Future<void> deletePartial(String name);
 
+  /// The names of every partial file, so one that can no longer be resumed
+  /// is removed.
+  Future<List<String>> partialFiles();
+
   /// Moves the partial file [partialName] to its final place as [fileName]
   /// and returns where it is. Called before the registry row is written
   /// (PDF_READER_AND_OFFLINE_DESIGN invariant I-3).

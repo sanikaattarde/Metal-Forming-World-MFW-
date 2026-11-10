@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mfw_app/app/reader_route.dart';
@@ -57,6 +59,30 @@ void main() {
       expect(renderer.opened.single.issueId, 'fx-iss-01');
       expect(find.text('Test Issue 01'), findsOneWidget);
       expect(find.text('3 / 4'), findsOneWidget);
+    });
+
+    testWidgets('the pages open without waiting for the title, which comes '
+        'when it can [IC-03]', (WidgetTester tester) async {
+      final FakeDownloadManager downloads = downloadsFor(fxUsr01);
+      await downloads.start('fx-iss-01', mobileDataAccepted: true);
+      final Completer<String> title = Completer<String>();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildMfwTheme(),
+          home: ReaderRoute(
+            issueId: 'fx-iss-01',
+            downloads: downloads,
+            renderer: FakeRenderer(Ok<PdfDocumentHandle>(FakeDocument(4))),
+            titleOf: (String _) => title.future,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('1 / 4'), findsOneWidget);
+
+      title.complete('Test Issue 01');
+      await tester.pumpAndSettle();
+      expect(find.text('Test Issue 01'), findsOneWidget);
     });
 
     testWidgets('with no copy it offers the download in place, and opens '

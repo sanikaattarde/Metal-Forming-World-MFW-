@@ -12,3 +12,9 @@ String issueFileName(String issueId, int revision, {int copy = 1}) {
 
 /// The name of the partial file that becomes [fileName].
 String partialFileName(String fileName) => '$fileName.part';
+
+/// Whether [name] is a partial file of [issueId], of any revision or copy.
+bool isPartialOf(String name, String issueId) => RegExp(
+  '^${RegExp.escape('issue-${Uri.encodeComponent(issueId)}-r')}'
+  r'\d+(-c\d+)?\.pdf\.part$',
+).hasMatch(name);

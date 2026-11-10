@@ -57,8 +57,14 @@ Future<FirebaseServices> startFirebase(FirebaseSettings settings) async {
   final FirebaseFunctions functions = FirebaseFunctions.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  // A project's default bucket: the newer name for a cloud project created
+  // since October 2024, as ENV-TEST and ENV-PROD will be, and the older one
+  // that the emulators give a demo project.
   final String bucket =
-      settings.storageBucket ?? '${settings.projectId}.appspot.com';
+      settings.storageBucket ??
+      (settings.emulatorHost == null
+          ? '${settings.projectId}.firebasestorage.app'
+          : '${settings.projectId}.appspot.com');
   CoverUrls covers = CoverUrls(bucket: bucket);
   String? emulatorTarget;
   final String? host = settings.emulatorHost;
