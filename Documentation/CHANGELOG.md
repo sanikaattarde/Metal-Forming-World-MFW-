@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the profile screen and editing, PROVISIONAL (MOD04-P2-T03), 2026-11-10
+
+SCR-A-06 (`profile_screen.dart`) on the new route `/profile` shows the reader's address and each configured profile value, with the domain of work by its segment name, and edits them in the shared `ProfileFormView` with the same checks as SCR-A-05, saving through OP-10 (FR-PROF-006). The profile is read from the reader's own record, so a change made on one device is what another reads (FR-PROF-007). The access guard sends a visitor who opens `/profile` to sign in and back (`needsSession` in `app/lib/app/access_guard.dart`). PROVISIONAL: the fields wait for OQ-01. Tests: `profile_screen_test.dart` added; `flutter test` 593 passed.
+
 ### Added: consent at registration and the policy links (MOD04-P2-T02), 2026-11-10
 
 SCR-A-02 now requires the acceptance of the privacy policy and the terms of use before an account is created (FR-PRIV-001). The acceptance is noted with MOD-04 at once (`ProfileRepository.recordConsent`) and stored with the current versions and the server's time by the first profile save through OP-10, so SCR-A-05 asks again only after a restart (PROPOSED; OQ-27). `PolicyLinks` opens the CFG-07 addresses in the browser through the `LinkOpener` port (`url_launcher`, DEP-100), says so when a page cannot open, and disables a link whose address is not set, which only a non-production build can have (FR-PRIV-002, DATA-012). MFW's policy addresses are still to come. Tests: `consent_test.dart` added and the registration tests tick the acceptance; `flutter test` 580 passed.

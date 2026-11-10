@@ -98,6 +98,8 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       profiles: ref.read(profileRepositoryProvider),
       config: ref.read(appConfigProvider),
       links: ref.read(linkOpenerProvider),
+      email: () =>
+          ref.read(firebaseServicesProvider)?.identity.currentUser?.email,
     ),
   );
   ref.onDispose(() {

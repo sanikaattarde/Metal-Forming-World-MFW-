@@ -25,7 +25,11 @@ final class RouteScreens {
     this.register,
     this.verifyEmail,
     this.completeProfile,
+    this.profile,
   });
+
+  /// SCR-A-06 (MOD04-P2-T03).
+  final ScreenBuilder? profile;
 
   /// SCR-A-05 (MOD04-P2-T01).
   final ScreenBuilder? completeProfile;
@@ -118,6 +122,7 @@ GoRouter buildRouter(
         screens.completeProfile,
       ),
       _placeholder(AppRoutes.settings, ShellText.settings),
+      _route(AppRoutes.profile, ShellText.profile, screens.profile),
     ],
   );
   return router;

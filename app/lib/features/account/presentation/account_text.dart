@@ -109,6 +109,26 @@ abstract final class AccountText {
   /// Sign out.
   static const String signOut = 'Sign out';
 
+  // SCR-A-06.
+
+  /// The profile title.
+  static const String profileTitle = 'Your profile';
+
+  /// The edit button.
+  static const String editProfile = 'Edit profile';
+
+  /// The save button while editing.
+  static const String saveChanges = 'Save changes';
+
+  /// Leave editing without saving.
+  static const String cancel = 'Cancel';
+
+  /// The profile was saved.
+  static const String profileSaved = 'Your profile is saved.';
+
+  /// A value not given.
+  static const String notGiven = 'Not given';
+
   // SCR-A-05 and the profile form.
 
   /// The complete-profile title.

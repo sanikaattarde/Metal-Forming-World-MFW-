@@ -29,6 +29,9 @@ abstract final class AppRoutes {
   /// SCR-A-05, complete profile.
   static const String completeProfile = '/complete-profile';
 
+  /// SCR-A-06, the reader's own profile (MOD04-P2-T03). Needs a session.
+  static const String profile = '/profile';
+
   /// SCR-A-07, settings.
   static const String settings = '/settings';
 
