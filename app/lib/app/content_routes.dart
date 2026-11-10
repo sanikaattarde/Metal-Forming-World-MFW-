@@ -15,11 +15,23 @@ RouteScreens withContentScreens(
   RouteScreens base, {
   required ValueListenable<AccessState> accessState,
   CatalogueRepository? catalogue,
+  NewsRepository? news,
 }) {
   if (catalogue == null) {
     return base;
   }
   return base.withContent(
+    home: (BuildContext context, GoRouterState state) => HomeScreen(
+      catalogue: catalogue,
+      news: news,
+      actions: HomeActions(
+        onOpenIssue: (String issueId) => context.push(AppRoutes.issue(issueId)),
+        onOpenCatalogue: () => context.push(AppRoutes.catalogue),
+        onOpenPost: (String postId) => context.push(AppRoutes.newsPost(postId)),
+        onOpenNews: () => context.go(AppRoutes.news),
+        onOpenDownloads: () => context.go(AppRoutes.downloads),
+      ),
+    ),
     catalogue: (BuildContext context, GoRouterState state) => CatalogueScreen(
       catalogue: catalogue,
       segments: catalogue is SegmentSource ? catalogue as SegmentSource : null,

@@ -71,6 +71,57 @@ void main() {
       expect(titled(ShellText.reader), findsOneWidget);
     });
 
+    testWidgets('home shows the latest issue, and the tabs move between '
+        'Home, News and Settings [MOD05-P2-T03]', (WidgetTester tester) async {
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        FakeAuthService(FakeServer()),
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+      );
+      expect(find.text('LATEST ISSUE'), findsOneWidget);
+
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text(ShellText.news),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(router.routerDelegate.currentConfiguration.uri.path, '/news');
+
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text(ShellText.home),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('LATEST ISSUE'), findsOneWidget);
+
+      await tester.tap(find.text('View issue'));
+      await tester.pumpAndSettle();
+      expect(titled('Test Issue 01'), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
+    });
+
+    testWidgets('a visitor tapping Library is asked to sign in [DEC-014]', (
+      WidgetTester tester,
+    ) async {
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        FakeAuthService(FakeServer()),
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text(ShellText.library),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(router.routerDelegate.currentConfiguration.uri.path, '/sign-in');
+    });
+
     testWidgets('without a catalogue the routes stay placeholders', (
       WidgetTester tester,
     ) async {

@@ -79,7 +79,13 @@ void main() {
 
       auth.states.add(AccessState.signedOut);
       await tester.pumpAndSettle();
-      expect(find.text(ShellText.home), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(AppBar),
+          matching: find.text(ShellText.home),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('an access-state failure shows an error with Retry, and '
@@ -98,7 +104,13 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(auth.listens, 2);
-      expect(find.text(ShellText.home), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(AppBar),
+          matching: find.text(ShellText.home),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('the Retry control is at least 48 by 48 [OQ-25]', (

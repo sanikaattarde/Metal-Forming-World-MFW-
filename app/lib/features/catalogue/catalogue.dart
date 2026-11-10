@@ -8,5 +8,6 @@ export 'domain/cover_urls.dart';
 export 'domain/issue_search.dart';
 export 'presentation/catalogue_screen.dart';
 export 'presentation/catalogue_text.dart';
+export 'presentation/home_screen.dart';
 export 'presentation/issue_details_screen.dart';
 export 'presentation/issue_row.dart';
