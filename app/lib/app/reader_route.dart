@@ -71,6 +71,7 @@ class _ReaderRouteState extends State<ReaderRoute> {
   void initState() {
     super.initState();
     unawaited(_load());
+    unawaited(_loadTitle());
   }
 
   @override
@@ -80,19 +81,30 @@ class _ReaderRouteState extends State<ReaderRoute> {
   }
 
   Future<void> _load() async {
-    final (Result<LocalIssueFile> local, String title) = await (
-      widget.downloads.openLocal(widget.issueId),
-      widget.titleOf(widget.issueId).catchError((Object _) => ''),
-    ).wait;
+    final Result<LocalIssueFile> local = await widget.downloads.openLocal(
+      widget.issueId,
+    );
     if (!mounted) {
       return;
     }
     setState(() {
       _local = local;
-      _title = title;
     });
     if (local is Err<LocalIssueFile>) {
       _waitForCopy();
+    }
+  }
+
+  /// The title comes on its own: when it is not kept with the copy it is
+  /// read from the catalogue, and a slow network must not hold the pages.
+  Future<void> _loadTitle() async {
+    final String title = await widget
+        .titleOf(widget.issueId)
+        .catchError((Object _) => '');
+    if (mounted) {
+      setState(() {
+        _title = title;
+      });
     }
   }
 

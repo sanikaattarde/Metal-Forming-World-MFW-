@@ -32,6 +32,19 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Fixed: audit of the ten tasks of 10 November 2026, 2026-11-10
+
+- **Downloads tab:** a copy finished after the tab was first opened now shows when the tab comes back into view, with its title, and an empty list can be pulled to refresh. Read keeps the issue's title for the offline lists, as Download already did.
+- **Download manager:** a cancel during the pause before a retry ends the download at once. A partial file that already holds every byte goes straight to the check. A stopped download of an issue that is gone is dropped with its bytes, instead of being tried at every start. A partial file of another revision is removed. A storage error fails the download instead of leaving it queued.
+- **Local files:** a failed write of the registry, the pending downloads or the titles no longer stops every later write until the app restarts.
+- **Library:** a bookmark or star change offline no longer holds the button until the connection returns; the change stays queued on the device (more offline behaviour is MOD08-P2-T04, with OQ-10). A watch starts once per reader, and a failed watch no longer reports an unhandled error.
+- **Reader:** the pages open without waiting for the title.
+- **Covers:** the default bucket of a cloud project is now `<project>.firebasestorage.app`, the name Firebase gives projects created since October 2024, as ENV-TEST and ENV-PROD will be.
+
+Tests:
+- 11 tests were added: 5 for the download manager, 3 for the local files, and 1 each for the Downloads tab, the library watch and the reader route.
+- `flutter analyze` finds no issues, and `flutter test` passes 785 and skips 52.
+
 ### Added: favourites (MOD08-P2-T02), 2026-11-10
 
 - **Star:** `FavouriteButton` is the star on SCR-A-12. It marks or unmarks an issue at once (FR-BKM-003), and puts itself back and says why if the change is refused.
