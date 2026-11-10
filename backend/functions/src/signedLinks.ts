@@ -19,7 +19,7 @@ export const isUsableLifetime = (seconds: unknown): seconds is number =>
 // The part of a Cloud Storage file that signs a link. Passed in, so a test needs no bucket.
 export interface SignRequest {
   version: 'v4';
-  action: 'read' | 'write';
+  action: 'read' | 'resumable';
   expires: number;
   contentType?: string;
   extensionHeaders?: Record<string, string>;
@@ -43,7 +43,7 @@ export async function signLink(
   open: OpenFile,
   path: string,
   lifetimeSeconds: number,
-  options: { action: 'read' } | { action: 'write'; contentType: string; extensionHeaders: Record<string, string> },
+  options: { action: 'read' } | { action: 'resumable'; contentType: string },
   now: () => number = Date.now,
 ): Promise<SignedLink> {
   if (!isUsableLifetime(lifetimeSeconds)) {

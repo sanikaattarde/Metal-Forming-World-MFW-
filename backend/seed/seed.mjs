@@ -1,4 +1,4 @@
-// The seed definitions and their loader (MOD13-P1-T10, GAP-03). Emulators only.
+// The seed definitions and their loader (MOD13-P1-T10). Emulators only.
 // On the working position the developers set three fixed notification categories (GS-Q47, PROPOSED).
 // OQ-18 and CFG-13 are OPEN. The segment list waits for OQ-13 and is not seeded.
 import { readFileSync } from 'node:fs';

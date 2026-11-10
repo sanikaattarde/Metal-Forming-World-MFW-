@@ -5,5 +5,6 @@ export const MESSAGES = {
   refused: 'Sign-in failed. Check the email address and the password, and that this account has admin access.',
   unavailable: 'Sign-in could not be completed. Check the connection and try again.',
   notConfigured: 'This build of the admin panel has no project configuration, so it runs only against the local emulators.',
+  badConfiguration: 'This build of the admin panel has an incomplete or unusable project configuration, so it cannot start.',
   accessEnded: 'Your admin access has ended, so you have been signed out.',
 } as const;

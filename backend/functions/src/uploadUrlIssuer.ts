@@ -1,7 +1,12 @@
 // How OP-19 makes a short-lived address for one upload into the holding area (DEC-020 AGREED, TD-09).
-// The real issuer signs a V4 PUT URL for the one holding path. The client must send the content type
-// and the size range it was given, so the store itself refuses another type or a file over the limit;
-// OP-40 checks the file again when it lands (SEC-CHK-07).
+// The real issuer signs a V4 resumable-upload URL for the one holding path, as OP-19 asks ("signed,
+// resumable, short-lived"), so a 150 MB file can continue after a break (FR-ADMIN-007). The client
+// POSTs to it with the headers it was given, which opens an upload session, and sends the file to the
+// session address the store returns. That address is a credential, held in memory only.
+//
+// The store does not limit the size here: OP-19 checks the declared size, and OP-40 checks the real
+// size and deletes a file over the limit (SEC-CHK-07). Whether a size-range header works on a
+// resumable upload is NOT VERIFIED, so none is signed.
 import { randomBytes } from 'node:crypto';
 import { onEmulators, openDefaultBucketFile, signLink } from './signedLinks.js';
 import type { OpenFile } from './signedLinks.js';
@@ -16,34 +21,25 @@ export interface UploadRequest {
 export interface UploadAddress {
   url: string;
   expiresAtMillis: number;
-  headers: Record<string, string>; // the headers the client sends with the upload, and nothing secret
+  headers: Record<string, string>; // the headers the client sends to open the session, and nothing secret
 }
 
 export interface UploadUrlIssuer {
   issue(request: UploadRequest): Promise<UploadAddress>;
 }
 
-const headersFor = ({ contentType, maxBytes }: UploadRequest) => ({
+// The storage library adds x-goog-resumable to what it signs for a resumable action, so the client
+// must send it too.
+const headersFor = ({ contentType }: UploadRequest) => ({
   'content-type': contentType,
-  'x-goog-content-length-range': `1,${maxBytes}`,
+  'x-goog-resumable': 'start',
 });
 
 export function signedUploadUrlIssuer(open: OpenFile = openDefaultBucketFile, now: () => number = Date.now): UploadUrlIssuer {
   return {
     async issue(request) {
-      const headers = headersFor(request);
-      const link = await signLink(
-        open,
-        request.holdingPath,
-        request.lifetimeSeconds,
-        {
-          action: 'write',
-          contentType: request.contentType,
-          extensionHeaders: { 'x-goog-content-length-range': headers['x-goog-content-length-range'] },
-        },
-        now,
-      );
-      return { ...link, headers };
+      const link = await signLink(open, request.holdingPath, request.lifetimeSeconds, { action: 'resumable', contentType: request.contentType }, now);
+      return { ...link, headers: headersFor(request) };
     },
   };
 }

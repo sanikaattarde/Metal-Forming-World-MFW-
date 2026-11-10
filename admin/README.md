@@ -20,7 +20,7 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 
 ## Configuration
 
-`.env.example` names the web configuration of a Firebase project (CFG-01): `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID` and, optionally, `VITE_FIREBASE_APP_ID`. Copy it to `.env.test` or `.env.production` (ignored by Git) and build with `vite build --mode test` or `vite build`. Set all three or none: a partial configuration, or a `demo-` project name, stops the panel. With none, the panel works only from `127.0.0.1` or `localhost` against the emulators, and shows a notice anywhere else. No project exists until ENV-TEST is created (OQ-40).
+`.env.example` names the web configuration of a Firebase project (CFG-01): `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID` and, optionally, `VITE_FIREBASE_APP_ID`. Copy it to `.env.test` or `.env.production` (ignored by Git) and build with `vite build --mode test` or `vite build`. Set all three or none: a partial configuration, or a `demo-` project name, stops the panel with a notice. With none, the panel works only from `127.0.0.1` or `localhost` against the emulators, and shows a notice anywhere else. No project exists until ENV-TEST is created (OQ-40).
 
 ## Screens
 
