@@ -71,6 +71,8 @@ RouteScreens withContentScreens(
             onOpenBookmark: (Bookmark bookmark) => context.push(
               AppRoutes.reader(bookmark.issueId, page: bookmark.page),
             ),
+            onOpenIssue: (String issueId) =>
+                context.push(AppRoutes.issue(issueId)),
           ),
         );
   if (catalogue == null) {
@@ -102,6 +104,16 @@ RouteScreens withContentScreens(
         issueId: issueId,
         catalogue: catalogue,
         accessState: accessState,
+        // The star for a reader with full access only (OQ-12, YG's answer,
+        // PROVISIONAL).
+        appBarActions: library == null
+            ? null
+            : (IssueSummary issue, AccessState state) =>
+                  state == AccessState.fullAccess
+                  ? <Widget>[
+                      FavouriteButton(library: library, issueId: issue.issueId),
+                    ]
+                  : const <Widget>[],
         actions: IssueDetailsActions(
           onRead: (IssueSummary issue) =>
               context.push(AppRoutes.reader(issue.issueId)),

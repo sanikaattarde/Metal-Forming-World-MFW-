@@ -32,6 +32,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: favourites (MOD08-P2-T02), 2026-11-10
+
+- **Star:** `FavouriteButton` is the star on SCR-A-12. It marks or unmarks an issue at once (FR-BKM-003), and puts itself back and says why if the change is refused.
+- **Who gets it:** it shows only to a reader with full access. That is YG's answer to OQ-12 of 10 November 2026, PROVISIONAL until MFW answers; the repository refuses favourites without full access too.
+- **Library tab:** it now has two views, Bookmarks and Favourites (SN-05). SCR-A-17 lists favourite issues by title, opens one on SCR-A-12, and unmarks one, with an empty state.
+- **Idempotent:** marking and unmarking were already idempotent in `DocumentLibraryRepository` (MOD08-P2-T01), and checked against the rules on the emulators.
+
+Tests:
+- Star and SCR-A-17 tests were added to `library_screens_test.dart`.
+- Two shell tests were added to `content_routes_test.dart`: the star for full access but not for a visitor, and the Favourites view opening the issue.
+- `flutter analyze` finds no issues, and `flutter test` passes 774 and skips 52.
+
 ### Added: bookmarks (MOD08-P2-T01), 2026-11-10
 
 `app/lib/features/library/` holds MOD-08:
