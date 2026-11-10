@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the first-admin bootstrap and recovery step, OP-42 (MOD12-P1-T02), 2026-11-10
+
+`backend/functions/src/bootstrap.ts` and `backend/scripts/bootstrap-admin.mjs`: a developer-run step, never deployed and holding no key, that makes a verified reader named in writing by MFW the first admin, or recovers from a lockout with `--recovery` (SC-14, GS-Q33). One transaction writes the role record, the guard record and the change record `bootstrap_admin` with the written reference (INV-03, INV-04); it refuses while an active admin exists. `--verify` is the second developer's check. Without `--project` it writes only to local emulators; with it, `--confirm` must repeat the project. The procedure is in `DEPLOYMENT_PLAN.md` section 7.5. Tests: G13 added; `npm test` in `backend/`: 1,008 passed (emulator only).
+
 ### Changed: the app gates run on merges to `main` (MOD15-P1-T02), 2026-11-10
 
 `.github/workflows/pr.yml` ran QG-01 to QG-06 only on pull requests, so since tasks merge into `main` without pull requests (DEC-010) a change to `app/` reached `main` with no gate run. It now also runs on each push to `main` that changes `app/` or the workflow, as `backend.yml` does for QG-08. Runs on `main` are never cancelled, so each merge gets its own result; the job names, and so any required check, are unchanged, and the workflow is named "App checks". `CI_CD_AND_QUALITY_GATES.md` says so in the status row, the QG-01 to QG-06 rows (QG-06 now runs on every merge to `main`, as section 4 planned), section 5.1 and the cost note. The push runs take the place of the pull request runs; Sanika Attarde to confirm that the cost approval of 8 November 2026 covers them.

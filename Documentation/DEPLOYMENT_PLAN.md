@@ -152,7 +152,17 @@ The iOS push credential is created in MFW's Apple Developer account (RS INT-PUSH
 
 ### 7.5 Admin panel
 
-BLOCKED by DEC-004. Deployed from a release tag to MFW-owned hosting. A custom domain is optional and at MFW's cost (S1). The first admin accounts are created from MFW's admin list (CH §12; OQ-20). The first admin is a named step and not an implicit one: it is run from that list by one developer, verified by the other and recorded (PROPOSED).
+DEC-004 is AGREED: a React app on Firebase Hosting (`admin/`). Deployed from a release tag to MFW-owned hosting. A custom domain is optional and at MFW's cost (S1). The first admin accounts are created from MFW's admin list (CH §12; OQ-20). The first admin is a named step and not an implicit one: it is run from that list by one developer, verified by the other and recorded (PROPOSED).
+
+**The first-admin step and recovery (OP-42, MOD12-P1-T02, SC-14).** `backend/scripts/bootstrap-admin.mjs`, never deployed, holding no key (SC-19):
+
+1. The person registers an ordinary reader account in the app and verifies the email address.
+2. MFW's authorised approver names the person in writing (OQ-28). The written request's reference is the step's `--reference`; its content never goes into the database.
+3. One developer runs, with their own credentials under role-based access (NFR-SEC-012): `npm --prefix backend/functions run build`, then `node backend/scripts/bootstrap-admin.mjs --email <address> --reference "<reference>" --project <id> --confirm <id>`. It refuses while an active admin exists. In one transaction it writes the role record (`granted_by` is the step's marker), the guard record and the change record `bootstrap_admin` (INV-03, INV-04).
+4. The other developer verifies: `node backend/scripts/bootstrap-admin.mjs --verify --email <address> --project <id> --confirm <id>` shows the active role, the marker, the guard count and one change record.
+5. **Recovery**, when every admin is locked out: the same two-person steps with `--recovery` and a new written reference. It may run while admin records exist, recounts the active admins and gives a removed admin the role again.
+
+The step is rehearsed on the emulators (G13 in `backend/test/`) and in a throwaway project before ENV-TEST (ST-09). Without `--project` it writes only to local emulators.
 
 ### 7.6 WordPress integration
 
