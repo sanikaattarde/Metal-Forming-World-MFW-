@@ -33,10 +33,14 @@ final class RouteScreens {
     this.catalogue,
     this.issue,
     this.downloads,
+    this.reader,
   });
 
   /// SCR-A-15 (MOD06-P2-T02).
   final ScreenBuilder? downloads;
+
+  /// SCR-A-14 (MOD07-P2-T01, MOD06-P3-T03).
+  final ScreenBuilder? reader;
 
   /// SCR-A-10 (MOD05-P2-T03).
   final ScreenBuilder? home;
@@ -54,6 +58,7 @@ final class RouteScreens {
     ScreenBuilder? catalogue,
     ScreenBuilder? issue,
     ScreenBuilder? downloads,
+    ScreenBuilder? reader,
   }) => RouteScreens(
     signIn: signIn,
     passwordReset: passwordReset,
@@ -67,6 +72,7 @@ final class RouteScreens {
     catalogue: catalogue ?? this.catalogue,
     issue: issue ?? this.issue,
     downloads: downloads ?? this.downloads,
+    reader: reader ?? this.reader,
   );
 
   /// SCR-A-07 (MOD04-P2-T04).
@@ -151,11 +157,13 @@ GoRouter buildRouter(
                       GoRoute(
                         path: 'read',
                         parentNavigatorKey: root,
-                        builder: (BuildContext context, GoRouterState state) =>
-                            PlaceholderScreen(
-                              title: ShellText.reader,
-                              detail: state.pathParameters['issueId'],
-                            ),
+                        builder:
+                            screens.reader ??
+                            (BuildContext context, GoRouterState state) =>
+                                PlaceholderScreen(
+                                  title: ShellText.reader,
+                                  detail: state.pathParameters['issueId'],
+                                ),
                       ),
                     ],
                   ),
