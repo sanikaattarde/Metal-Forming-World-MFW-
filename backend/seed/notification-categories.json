@@ -1,0 +1,8 @@
+{
+  "about": "The seed for the notification categories (MOD13-P1-T10). Working position GS-Q47 (PROPOSED): three fixed notification categories set by the developers. OQ-18 and CFG-13 are OPEN. The identifiers, the display wording and the order are PROPOSED (spike note 08). Public data only.",
+  "notification_categories": [
+    { "category_id": "notif-new-issues", "name": "New issues", "display_order": 1, "is_active": true },
+    { "category_id": "notif-expo-specials", "name": "Expo specials", "display_order": 2, "is_active": true },
+    { "category_id": "notif-major-news", "name": "Major news", "display_order": 3, "is_active": true }
+  ]
+}

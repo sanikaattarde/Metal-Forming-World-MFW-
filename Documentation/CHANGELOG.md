@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the seed of the three notification categories (MOD13-P1-T10), 2026-11-10
+
+`backend/seed/` holds the three fixed notification categories (GS-Q47, PROPOSED) with a checker and a loader that writes only to a local emulator (`npm run seed`, `npm run seed:check`). The tests now take the categories from the seed, not from test values. Tests: G9 and U4 added; `npm test` in `backend/`: 636 passed, 0 failed (emulator only).
+
 ### Added: the issue, category and news admin operations (MOD13-P1-T03), 2026-11-10
 
 `backend/functions/src/issues.ts` (OP-15, OP-16, OP-21, OP-22, with the input checks in `issueChecks.ts`), `categories.ts` (OP-17, OP-18) and `newsControls.ts` (OP-23), each declared through `adminCall`, so the gate runs first. Every caller-supplied identifier is checked as a document key before it reaches the database. Tests: G8 and U2 added; `npm test` in `backend/`: 583 passed, 0 failed (emulator only).
