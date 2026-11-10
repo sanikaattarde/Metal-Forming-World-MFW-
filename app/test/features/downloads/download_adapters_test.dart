@@ -348,6 +348,15 @@ void main() {
     test('reports the platform free space', () async {
       expect(await store.freeBytes(), 12345);
     });
+
+    test('lists the partial files by name', () async {
+      await store.appendPartial('d.pdf.part', <int>[1]);
+      await store.appendPartial('e.pdf.part', <int>[2]);
+      expect(
+        await store.partialFiles(),
+        unorderedEquals(<String>['d.pdf.part', 'e.pdf.part']),
+      );
+    });
   });
 
   group('JsonDownloadRegistry [RS DATA-013]', () {
@@ -394,6 +403,28 @@ void main() {
       expect(rows.single.localFile.path, '${moved.path}/issue-a-r2.pdf');
       expect(rows.single.downloadedAt, DateTime.utc(2026, 11, 10, 9));
       expect(rows.single.contentHash, 'ab' * 32);
+    });
+
+    test('a write that fails does not stop the next one', () async {
+      final JsonDownloadRegistry registry = JsonDownloadRegistry(
+        TempIssueStorage(temp),
+      );
+      // A folder where the temporary file goes makes one write fail.
+      final Directory blocker = await Directory(
+        '${temp.path}/registry.json.tmp',
+      ).create();
+      await expectLater(
+        registry.save(copy('a', 'reader-a', temp)),
+        throwsA(isA<FileSystemException>()),
+      );
+      await blocker.delete();
+      await registry.save(copy('b', 'reader-a', temp));
+      expect(
+        (await JsonDownloadRegistry(
+          TempIssueStorage(temp),
+        ).load()).map((DownloadedIssue row) => row.issueId),
+        unorderedEquals(<String>['a', 'b']),
+      );
     });
 
     test('an unreadable registry counts as empty', () async {
@@ -478,6 +509,16 @@ void main() {
       expect(await IssueTitles(TempIssueStorage(temp)).load(), <String, String>{
         'a': 'Title A',
       });
+    });
+
+    test('a title kept after the load is found in memory at once', () async {
+      final Directory temp = await Directory.systemTemp.createTemp('mfw-t-');
+      addTearDown(() => temp.delete(recursive: true));
+      final IssueTitles titles = IssueTitles(TempIssueStorage(temp));
+      expect(titles.titleOf('a'), isNull);
+      await titles.load();
+      await titles.remember('a', 'Title A');
+      expect(titles.titleOf('a'), 'Title A');
     });
   });
 

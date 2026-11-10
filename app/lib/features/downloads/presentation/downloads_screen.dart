@@ -26,6 +26,21 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   late Future<List<DownloadedIssue>> _copies = widget.downloads
       .listDownloaded();
 
+  /// Whether the screen was in view at the last check.
+  bool _inView = true;
+
+  /// The screen stays alive out of view as a tab, so the list is read again
+  /// each time it comes back into view: a copy finished meanwhile shows.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bool inView = TickerMode.valuesOf(context).enabled;
+    if (inView && !_inView) {
+      _copies = widget.downloads.listDownloaded();
+    }
+    _inView = inView;
+  }
+
   Future<void> _delete(String issueId) async {
     final Result<void> result = await widget.downloads.delete(issueId);
     if (!mounted) {
@@ -84,7 +99,25 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                 return const Center(child: CircularProgressIndicator());
               }
               if (copies.isEmpty) {
-                return const Center(child: Text(DownloadsText.empty));
+                // Pull to refresh works here too.
+                return RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) =>
+                            ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              children: <Widget>[
+                                SizedBox(
+                                  height: constraints.maxHeight,
+                                  child: const Center(
+                                    child: Text(DownloadsText.empty),
+                                  ),
+                                ),
+                              ],
+                            ),
+                  ),
+                );
               }
               return RefreshIndicator(
                 onRefresh: _refresh,

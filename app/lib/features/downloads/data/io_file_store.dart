@@ -120,6 +120,18 @@ final class IoFileStore implements FileStore {
   }
 
   @override
+  Future<List<String>> partialFiles() async {
+    final List<String> names = <String>[];
+    await for (final FileSystemEntity entity
+        in (await _partialDirectory()).list()) {
+      if (entity is File) {
+        names.add(entity.path.substring(entity.path.lastIndexOf('/') + 1));
+      }
+    }
+    return names;
+  }
+
+  @override
   Future<Result<String>> promotePartial(
     String partialName,
     String fileName,

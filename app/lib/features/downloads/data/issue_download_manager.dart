@@ -152,7 +152,7 @@ final class IssueDownloadManager
     if (running != null) {
       return running;
     }
-    final Future<Result<void>> download = _download(key, mobileDataAccepted)
+    final Future<Result<void>> download = _guarded(key, mobileDataAccepted)
         .whenComplete(() {
           _running.remove(key);
           _cancelRequested.remove(key);
@@ -308,6 +308,26 @@ final class IssueDownloadManager
     }
   }
 
+  /// [_download], where a storage error fails the download instead of
+  /// leaving it queued.
+  Future<Result<void>> _guarded(
+    (String, String) key,
+    bool mobileDataAccepted,
+  ) async {
+    try {
+      return await _download(key, mobileDataAccepted);
+    } on Exception {
+      return _fail(
+        key,
+        const AppFailure(
+          FailureCode.unknown,
+          retryable: true,
+          detail: 'storage',
+        ),
+      );
+    }
+  }
+
   Future<Result<void>> _download(
     (String, String) key,
     bool mobileDataAccepted,
@@ -334,6 +354,12 @@ final class IssueDownloadManager
     IssueFileGrant grant;
     switch (await _files.requestIssueFile(issueId)) {
       case Err<IssueFileGrant>(:final AppFailure failure):
+        if (failure.code == FailureCode.notFound) {
+          // The issue was unpublished or removed, so a stopped download of
+          // it never resumes: its bytes and its record go.
+          await _dropPartials(issueId);
+          await _forgetPending(key);
+        }
         return _fail(key, failure);
       case Ok<IssueFileGrant>(:final IssueFileGrant value):
         grant = value;
@@ -351,6 +377,9 @@ final class IssueDownloadManager
     // Rule 1: go on from the bytes held. A partial file longer than the
     // file cannot be this file, so it is dropped.
     int received = await _store.partialLength(partial);
+    // A partial file of another revision, left when the app closed, can
+    // never be resumed (rule 8).
+    await _dropPartials(issueId, keep: partial);
     if (received > grant.sizeBytes) {
       await _store.deletePartial(partial);
       received = 0;
@@ -364,6 +393,9 @@ final class IssueDownloadManager
     int stalled = 0;
     bool rangeIgnored = false;
     while (true) {
+      if (_cancelRequested.contains(key)) {
+        return _cancelled(key, partial);
+      }
       // Rule 2: an expired grant is renewed before it is used.
       if (!grant.expiresAt.isAfter(_clock())) {
         switch (await _files.requestIssueFile(issueId)) {
@@ -378,6 +410,10 @@ final class IssueDownloadManager
             }
             grant = value;
         }
+      }
+      if (received == grant.sizeBytes) {
+        // Every byte is held, as when the app closed before the check.
+        break;
       }
       final int before = received;
       final IssueFileGrant current = grant;
@@ -417,10 +453,10 @@ final class IssueDownloadManager
         case FailureCode.network || FailureCode.timeout:
           // Rule 1: wait for the network, then go on from the bytes held.
           _setStatus(key, WaitingForNetwork(received, current.sizeBytes));
-          if (!await _waitForNetwork(key, mobileDataAccepted)) {
+          if (!await _waitForNetwork(key, mobileDataAccepted) ||
+              !await _pause(key, _backoff(stalled))) {
             return _cancelled(key, partial);
           }
-          await _sleep(_backoff(stalled));
         case FailureCode.forbidden when failure.retryable:
           // Rule 2: the link expired or was refused; ask for a new grant.
           switch (await _files.requestIssueFile(issueId)) {
@@ -441,7 +477,9 @@ final class IssueDownloadManager
           await _store.deletePartial(partial);
           received = 0;
         case FailureCode.serviceUnavailable when failure.retryable:
-          await _sleep(_backoff(stalled));
+          if (!await _pause(key, _backoff(stalled))) {
+            return _cancelled(key, partial);
+          }
         default:
           return _stop(key, partial, failure);
       }
@@ -540,6 +578,18 @@ final class IssueDownloadManager
     return !_cancelRequested.contains(key);
   }
 
+  /// Waits [delay] before the next try. A cancel ends the wait at once;
+  /// false then.
+  Future<bool> _pause((String, String) key, Duration delay) async {
+    if (_cancelRequested.contains(key)) {
+      return false;
+    }
+    final Completer<void> waker = _wakers[key] = Completer<void>();
+    await Future.any(<Future<void>>[_sleep(delay), waker.future]);
+    _wakers.remove(key);
+    return !_cancelRequested.contains(key);
+  }
+
   void _wake((String, String) key) {
     final Completer<void>? waker = _wakers[key];
     if (waker != null && !waker.isCompleted) {
@@ -573,6 +623,16 @@ final class IssueDownloadManager
     _status.remove(key);
     _notify();
     return const Err<void>(AppFailure(FailureCode.cancelled));
+  }
+
+  /// Deletes the partial files of [issueId], of any revision, except
+  /// [keep].
+  Future<void> _dropPartials(String issueId, {String? keep}) async {
+    for (final String name in await _store.partialFiles()) {
+      if (name != keep && isPartialOf(name, issueId)) {
+        await _store.deletePartial(name);
+      }
+    }
   }
 
   Future<void> _forgetPending((String, String) key) =>

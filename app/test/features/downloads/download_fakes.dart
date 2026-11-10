@@ -75,6 +75,9 @@ final class FakeFileStore implements FileStore {
   Future<void> deletePartial(String name) async => partials.remove(name);
 
   @override
+  Future<List<String>> partialFiles() async => partials.keys.toList();
+
+  @override
   Future<Result<String>> promotePartial(
     String partialName,
     String fileName,

@@ -168,6 +168,42 @@ void main() {
       expect(find.text('fx-iss-01'), findsOneWidget);
     });
 
+    testWidgets('a copy finished after the Downloads tab was opened shows '
+        'when the tab is opened again [FR-DL-008]', (
+      WidgetTester tester,
+    ) async {
+      final FakeAuthService auth = FakeAuthService(
+        FakeServer(),
+        signedInAs: fxUsr01,
+      );
+      final FakeDownloadManager downloads = FakeDownloadManager(
+        auth,
+        FakeIssueFileService(auth, files: fxIssueFiles),
+      );
+      await pumpAppWithContent(
+        tester,
+        auth,
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        downloads: downloads,
+      );
+      Finder tab(String label) => find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text(label),
+      );
+      await tester.tap(tab('Downloads'));
+      await tester.pumpAndSettle();
+      expect(find.text('fx-iss-01'), findsNothing);
+
+      await tester.tap(tab('Home'));
+      await tester.pumpAndSettle();
+      await tester.runAsync(
+        () => downloads.start('fx-iss-01', mobileDataAccepted: true),
+      );
+      await tester.tap(tab('Downloads'));
+      await tester.pumpAndSettle();
+      expect(find.text('fx-iss-01'), findsOneWidget);
+    });
+
     testWidgets('Read on a downloaded issue opens it in the reader, and '
         'Close returns to the issue [MOD06-P3-T03, IC-03]', (
       WidgetTester tester,
