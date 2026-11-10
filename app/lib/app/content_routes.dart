@@ -22,6 +22,7 @@ RouteScreens withContentScreens(
   return base.withContent(
     catalogue: (BuildContext context, GoRouterState state) => CatalogueScreen(
       catalogue: catalogue,
+      segments: catalogue is SegmentSource ? catalogue as SegmentSource : null,
       onOpenIssue: (String issueId) => context.push(AppRoutes.issue(issueId)),
       onBack: () => _back(context),
     ),

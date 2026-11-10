@@ -29,6 +29,49 @@ abstract final class CatalogueText {
   /// Line when nothing is published.
   static const String emptyText = 'Published issues will appear here.';
 
+  /// The search field's hint.
+  static const String searchHint = 'Search issues';
+
+  /// Clears the search text.
+  static const String clearSearch = 'Clear the search';
+
+  /// Clears the search and every filter.
+  static const String clearFilters = 'Clear the filters';
+
+  /// Heading when nothing matches.
+  static const String noMatchHeading = 'No issues match';
+
+  /// Line when nothing matches.
+  static const String noMatchText = 'Try other words, or clear the filters.';
+
+  /// The category filter (FR-SRCH-002).
+  static const String filterCategory = 'Category';
+
+  /// The industry segment filter (FR-SRCH-003; meaning: OQ-13).
+  static const String filterSegment = 'Industry segment';
+
+  /// The year filter (FR-SRCH-004).
+  static const String filterYear = 'Year';
+
+  /// The edition filter (FR-SRCH-005; meaning: OQ-13).
+  static const String filterEdition = 'Edition';
+
+  /// The category filter's "no filter" choice.
+  static const String anyCategory = 'Any category';
+
+  /// The segment filter's "no filter" choice.
+  static const String anySegment = 'Any industry segment';
+
+  /// The year filter's "no filter" choice.
+  static const String anyYear = 'Any year';
+
+  /// The edition filter's "no filter" choice.
+  static const String anyEdition = 'Any edition';
+
+  /// What a filter chip says it does, with its value when one is set.
+  static String filterTooltip(String filter, String? value) =>
+      value == null ? 'Filter by $filter' : '$filter: $value';
+
   /// Reads a full issue (SCR-A-14).
   static const String read = 'Read';
 

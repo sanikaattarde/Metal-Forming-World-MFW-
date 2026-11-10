@@ -32,6 +32,22 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: search and filters on the device (MOD05-P2-T02), 2026-11-10
+
+- **Search:** `applyQuery` (`features/catalogue/domain/issue_search.dart`) searches the title, description and category name. Every word must match, ignoring case and accents. It never searches text inside a PDF (FR-SRCH-007).
+- **Filters:** category, industry segment, year and edition, alone or combined. The segment filter matches an issue whose segments include it, as section 6.5 proposes.
+- **On SCR-A-11:**
+  - A search field with rounded ends, not `SearchBar` (READER_SCREEN_DESIGNS section 5).
+  - One chip per filter, which opens a list of the values some issue has, with "any" first.
+  - A live issue count, "Clear the filters", and a no-match state.
+  - Open while signed out (FR-SRCH-006).
+- **Segment names:** they come from the new `SegmentSource`, which `DocumentCatalogueRepository` implements over `segments`. The model is feature-level and PROPOSED, because section 6.5 does not define it.
+- **Sorting:** category and segment names sort without regard to case.
+
+The meanings of "industry segment" and "edition" are still OQ-13.
+
+Tests: `issue_search_test.dart` was added, covering AC-1.2, AC-1.3 and PAC-07 on the FX-ISS set. Search and filter widget tests were added to `catalogue_screens_test.dart`, with the tap-target and label guidelines. `flutter analyze` finds no issues, and `flutter test` passes 673 and skips 52.
+
 ### Added: the catalogue and issue details (MOD05-P2-T01), 2026-11-10
 
 The new `app/lib/features/catalogue/` holds the catalogue code.

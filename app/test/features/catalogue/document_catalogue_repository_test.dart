@@ -130,6 +130,24 @@ void main() {
     });
   });
 
+  group('listSegments [FR-SRCH-003]', () {
+    test(
+      'lists segments by name, with the identifier for a missing name',
+      () async {
+        documents.segmentsById
+          ..['fx-seg-02'] = <String, Object?>{'name': 'Segment Two'}
+          ..['fx-seg-01'] = <String, Object?>{};
+        final List<IndustrySegment> segments =
+            (await repository.listSegments() as Ok<List<IndustrySegment>>)
+                .value;
+        expect(
+          segments.map((IndustrySegment s) => '${s.segmentId}=${s.name}'),
+          <String>['fx-seg-01=fx-seg-01', 'fx-seg-02=Segment Two'],
+        );
+      },
+    );
+  });
+
   group('failureFromRead', () {
     for (final (String code, FailureCode expected, bool retryable)
         in <(String, FailureCode, bool)>[
