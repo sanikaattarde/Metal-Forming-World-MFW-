@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Changed: the prototype walk-through record, with the branded prototype (MOD16-P1-T05), 2026-11-10
+
+`Documentation/test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` gains section 7: the low-fi prototype drawn on the app's theme and tokens, in the look of the reader frames (#69) and Sanika Attarde's account frames (#67), with every flow and state switch kept. It is on `spike/yg-prototype-branded` at `797d16b`, not merged, in `app/prototype/`, run with `flutter run -t prototype/main.dart`. The admin panel screens (MOD16-P1-T04) are not in it, so MOD16-P1-T05 is not complete, and nothing has gone to MFW.
+
+Tests: on `797d16b` with Flutter 3.47.9, `flutter analyze` finds no issues and `flutter test` passes 479 and skips 82; the 6 walk-through tests pass, and 30 screens and states pass the tap-target and label checks. It launched on an iPhone 18 Pro simulator; it was not run on Android.
+
 ### Changed: the T-02.4 resume evidence, on the Firebase Storage emulator (MOD06-P1-T02), 2026-11-10
 
 `Documentation/test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` gains section 4.2: the four resume tests of the spike, unchanged, passed on the iOS simulator and the Android emulator through the Storage emulator, with the same synthetic file of 150,000,000 bytes (DEC-024). The emulator's download link answered `Range: bytes=n-` with 206, so no byte was sent twice, and a missing or wrong download token with 403. The tools are on `spike/yg-download-resume` at `c5c427e`, not merged: `app/tool/storage_emulator_seed.dart` and `app/tool/storage_break_proxy.dart`. The report's DEC-020 lines now say AGREED (signed URLs, TD-09). A download token never expires and the emulator cannot sign, so the real service, a signed link, an expired grant and a phone are still not shown; AC-4.3, step 4 of MOD06-P1-T02 and the TD-09 device proof stay open.
