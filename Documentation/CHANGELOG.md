@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: account deletion, OP-12, PROVISIONAL (MOD13-P1-T06), 2026-11-10
+
+`backend/functions/src/accountDeletion.ts` deletes a reader's account at once on a confirmed request (DEC-029, immediate deletion; OQ-24 open, so nothing is kept): it ends the sessions, takes an admin out of the count through the last-admin guard, erases the reader's records and removes the sign-in account. `deletionCleanup.ts` finishes any deletion that stopped part-way (the OP-41 task; not scheduled yet). Tests: G11 added; `npm test` in `backend/`: 930 passed, 0 failed (emulator only). Known gap A-10 is recorded in `backend/README.md`.
+
 ### Added: the upload backend, OP-19, OP-20 and OP-40 (MOD13-P1-T09), 2026-11-10
 
 `backend/functions/src/uploads.ts` gives an admin an upload job and a V4 signed PUT URL for the holding area (`uploadUrlIssuer.ts`, DEC-020), with the content type and size range the store enforces; `listUploadJobs` shows a job's state. `uploadFinalized.ts` (OP-40) checks each file that lands, with the genuine-PDF check in `pdfCheck.ts` (pdf.js, DEP-88), and moves it to the private area as the next accepted revision, or deletes it with the reason recorded. Tests: G10 and U5 added, U6 extended; `npm test` in `backend/`: 896 passed, 0 failed (emulator only). The panel side (MOD12-P2-T02) still waits for OQ-22 and OQ-30.
