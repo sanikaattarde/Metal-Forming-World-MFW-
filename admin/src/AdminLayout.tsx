@@ -13,6 +13,7 @@ export function AdminLayout({ onSignOut }: Props) {
         <nav aria-label="Admin sections">
           <NavLink to="/issues">Issues</NavLink>
           <NavLink to="/categories">Categories</NavLink>
+          <NavLink to="/news">News</NavLink>
         </nav>
         <button type="button" onClick={onSignOut}>
           Sign out

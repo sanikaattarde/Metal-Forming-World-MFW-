@@ -20,7 +20,7 @@ The functions were first built on the emulator spike, branch `spike/sa-backend-r
 npm test
 ```
 
-It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 944 tests, 944 passed (emulator only).
+It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 981 tests, 981 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
@@ -41,6 +41,8 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | G10 Uploads | `test/g10-uploads.test.mjs` | OP-19, OP-20 and OP-40 through the emulators: a job and its upload address for an admin only; the size and type checks; a genuine PDF accepted as the next revision, a fake, an over-limit file, a file with no pending job and a file from a removed admin refused and deleted; a replacement keeps revision 1 until it succeeds |
 | U5 PDF check | `test/u5-pdf-check.test.mjs` | The genuine-PDF check on generated files (FX-PDF-06 to FX-PDF-13) and the emulator upload address, with no database |
 | G11 Account deletion | `test/g11-account-deletion.test.mjs` | OP-12 through the Functions emulator: the confirmation, every own record and the sign-in account erased, a retry after a lost reply, an admin taken out of the count, the last admin refused, a deletion that stopped part-way finished by the cleanup task, and the known gap below |
+| G12 WordPress posts | `test/g12-wordpress.test.mjs` | OP-24 through the Functions emulator against a stand-in WordPress site (`test/wp-standin.mjs`): a page of posts for an admin only, paging and the category filter, and every kind of bad site reply refused as `SITE_UNAVAILABLE` with nothing from the site in the log |
+| U7 WordPress parts | `test/u7-wordpress-parts.test.mjs` | The site-address check, the plain-text title and the time and size limits, with no emulator |
 | G5 Admin gate | `test/g5-admin-gate.test.mjs` | The gate reads the role record and the account on each call and trusts no claim; the last-admin guard refuses to remove the only active admin, also with removals at the same moment; the count repair finds and corrects a wrong count |
 
 ## The seed
@@ -60,6 +62,7 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | OP-19 `requestUpload`, OP-20 `listUploadJobs` | `functions/src/uploads.ts`, `uploadUrlIssuer.ts` | MOD13-P1-T09 | Admin only. A job and a V4 signed PUT URL for `holding/{job_id}`, with the headers the client must send (`content-type: application/pdf` and `x-goog-content-length-range`), so the store refuses another type or a larger file. The limit is `config/private.max_upload_bytes`, with no default (CFG-05, OQ-30). The URL lifetime of 900 seconds is a PLACEHOLDER. PDFs only; a cover waits for OQ-22 |
 | OP-40 `onUploadFinalized` | `functions/src/uploadFinalized.ts`, `pdfCheck.ts` | MOD13-P1-T09 | Runs when a file lands in the holding area: checks the job, the uploader's admin standing, the size and that the file is a genuine PDF (pdf.js, no scripts, no fonts), then copies it to `issues/{issue_id}/{revision}.pdf` as the next accepted revision. Anything else is deleted and the job records the reason |
 | OP-12 `requestAccountDeletion` | `functions/src/accountDeletion.ts`, `deletionCleanup.ts` | MOD13-P1-T06 | PROVISIONAL (DEC-029, OQ-24): immediate deletion, nothing kept. Ends the sessions, removes the admin role through the guard, erases the reader's records and the sign-in account. `finishDeletions` is the OP-41 task that finishes a deletion that stopped part-way; its schedule is not built |
+| OP-24 `listWordPressPosts` | `functions/src/wordpress.ts` | MOD12-P2-T04 | A page of MFW's WordPress posts for the news-controls screen, so the panel never calls the site itself (TD-12). The site address is `config/private.wordpress_base_url` (CFG-03, OQ-39), HTTPS only, with no default. The timeout, size and page limits are PLACEHOLDERS. No post is stored |
 | OP-10 `saveProfile` | `functions/src/saveProfile.ts`, `profile.ts` | MOD13-P1-T01 | The required fields and policy versions come from `config/public`; a missing or malformed setting refuses the call. The mandatory profile is PROVISIONAL (BR-003, OQ-01) |
 
 ## What the rules do

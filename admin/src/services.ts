@@ -12,7 +12,7 @@ import { connectFunctionsEmulator, getFunctions, httpsCallable } from 'firebase/
 import type { Functions } from 'firebase/functions';
 import { roleCheckThrough } from './adminApi';
 import type { CallFn } from './adminApi';
-import type { Category, Reads, Segment } from './data';
+import type { Category, NewsControl, Reads, Segment } from './data';
 import type { SignInDeps } from './signIn';
 
 export const EMULATOR = {
@@ -98,6 +98,10 @@ export function readsThrough(firestore: Firestore): Reads {
       }) satisfies Category),
     segments: async () =>
       (await getDocs(collection(firestore, 'segments'))).docs.map((doc) => ({ segment_id: doc.id, name: String(doc.get('name') ?? doc.id) }) satisfies Segment),
+    newsControls: async () =>
+      (await getDocs(collection(firestore, 'news_controls'))).docs.map(
+        (doc) => ({ wp_post_id: Number(doc.get('wp_post_id') ?? doc.id), is_hidden: doc.get('is_hidden') === true, is_breaking: doc.get('is_breaking') === true }) satisfies NewsControl,
+      ),
   };
 }
 

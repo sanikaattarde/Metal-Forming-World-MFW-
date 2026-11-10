@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the news controls, OP-24 and the news-controls screen (MOD12-P2-T04), 2026-11-10
+
+`backend/functions/src/wordpress.ts` is OP-24 `listWordPressPosts`: an admin-only page of MFW's WordPress posts, read by the server so the panel never calls the site (TD-12), from an HTTPS address in `config/private` with no default (CFG-03, OQ-39), with time, size and page limits; any bad reply is `SITE_UNAVAILABLE`. `admin/src/NewsPage.tsx` is SCR-W-06: it lists the posts and hides, shows or marks each one as breaking through OP-23. Marking a post as breaking sends nothing. Tests: G12 and U7 added, against a stand-in site (`backend/test/wp-standin.mjs`); `npm test` in `backend/`: 981 passed; in `admin/`: 87 passed, two runs in a row (emulator only).
+
 ### Added: the issue and category screens of the admin panel (MOD12-P2-T03), 2026-11-10
 
 `admin/src/IssuesPage.tsx`, `IssueEditor.tsx` and `CategoriesPage.tsx`, with the menu in `AdminLayout.tsx`, the server calls in `data.ts` and the panel's wording for each refusal in `describeError.ts`: list, create, edit, publish and unpublish issues, and add, rename, reorder and delete issue categories, all through the admin operations of MOD13-P1-T03. Retries reuse the request identifier, edits carry the record version, and the server's own message never reaches the screen. Routing uses `react-router` (DEP-95). The session test now waits for the focus listener (the spike's fix M-1). Tests: `npm test` in `admin/`: 75 passed, three runs in a row (emulator only).

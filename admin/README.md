@@ -30,6 +30,7 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 | Issues list | `src/IssuesPage.tsx` | MOD12-P2-T03 |
 | Issue details: create, edit, publish and unpublish | `src/IssueEditor.tsx` | MOD12-P2-T03 |
 | Issue categories: add, rename, reorder and delete | `src/CategoriesPage.tsx` | MOD12-P2-T03 |
+| SCR-W-06 News controls: hide or show a post, mark it as breaking | `src/NewsPage.tsx` | MOD12-P2-T04 |
 
 ## What the panel does on sign-in
 
@@ -45,6 +46,8 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 - **An edit carries the record version the screen showed**; a stale screen is told to reload (`STALE_RECORD`).
 - **Publishing needs an accepted file** (`NO_ACCEPTED_FILE`). The upload screen waits for OQ-22 and OQ-30 (MOD12-P2-T02).
 - **The server's own message never reaches the screen**: `src/describeError.ts` maps each reason to the panel's wording, and names fields by their labels, never by the value typed.
+
+The news-controls screen lists MFW's posts through OP-24 and sets each post's control through OP-23. Marking a post as breaking sends no notification: dispatch is MOD11-P2-T03.
 
 ## Known limits
 
