@@ -27,6 +27,9 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 | Screen | File | Task |
 |---|---|---|
 | SCR-W-01 Admin sign-in | `src/SignInPage.tsx`, `src/signIn.ts` | MOD12-P1-T01, MOD12-P2-T01 |
+| Issues list | `src/IssuesPage.tsx` | MOD12-P2-T03 |
+| Issue details: create, edit, publish and unpublish | `src/IssueEditor.tsx` | MOD12-P2-T03 |
+| Issue categories: add, rename, reorder and delete | `src/CategoriesPage.tsx` | MOD12-P2-T03 |
 
 ## What the panel does on sign-in
 
@@ -34,6 +37,14 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 - **The role check** calls OP-14 `getMyAdminRole`: an account is admitted only if the role exists, is active and the email is verified (OQ-20's working position). A refused account is signed out.
 - **The session ends when access is lost**: when any server operation refuses the account as no longer an admin, and when the panel comes back into focus and OP-14 says so.
 - **Sessions live in memory only**, so a reload signs the admin out and nothing about the account is kept in browser storage (`CODING_STANDARDS.md` §15).
+
+## The content screens
+
+- **Every write goes through a server operation** (OP-15 to OP-18, OP-21, OP-22) in `src/data.ts`; the public reads of categories and segments use the same Firestore reads as the app, which the rules allow to anyone.
+- **A retry sends the same request identifier**, so a lost reply never makes a second issue or category.
+- **An edit carries the record version the screen showed**; a stale screen is told to reload (`STALE_RECORD`).
+- **Publishing needs an accepted file** (`NO_ACCEPTED_FILE`). The upload screen waits for OQ-22 and OQ-30 (MOD12-P2-T02).
+- **The server's own message never reaches the screen**: `src/describeError.ts` maps each reason to the panel's wording, and names fields by their labels, never by the value typed.
 
 ## Known limits
 

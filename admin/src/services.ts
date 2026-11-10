@@ -6,10 +6,13 @@
 import { initializeApp } from 'firebase/app';
 import { connectAuthEmulator, initializeAuth, inMemoryPersistence, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import type { Auth } from 'firebase/auth';
+import { collection, connectFirestoreEmulator, getDocs, getFirestore, orderBy, query } from 'firebase/firestore/lite';
+import type { Firestore } from 'firebase/firestore/lite';
 import { connectFunctionsEmulator, getFunctions, httpsCallable } from 'firebase/functions';
 import type { Functions } from 'firebase/functions';
 import { roleCheckThrough } from './adminApi';
 import type { CallFn } from './adminApi';
+import type { Category, Reads, Segment } from './data';
 import type { SignInDeps } from './signIn';
 
 export const EMULATOR = {
@@ -18,6 +21,8 @@ export const EMULATOR = {
   authUrl: 'http://127.0.0.1:9099',
   functionsHost: '127.0.0.1',
   functionsPort: 5001,
+  firestoreHost: '127.0.0.1',
+  firestorePort: 8080,
 } as const;
 
 // The web configuration of a Firebase project (CFG-01). None exists until ENV-TEST is created (OQ-40).
@@ -56,11 +61,14 @@ export const AUTH_OPTIONS = { persistence: inMemoryPersistence } as const;
 export interface Backend {
   auth: Auth;
   functions: Functions;
+  firestore: Firestore;
 }
 
 export interface Services extends SignInDeps {
   // Calls a server operation as the signed-in account. Screens go through adminApi, never this directly.
   call: CallFn;
+  // Public reads, the same the app makes. The rules allow them to anyone, and refuse every client write.
+  read: Reads;
 }
 
 export function emulatorBackend(authUrl: string = EMULATOR.authUrl, name?: string, functionsPort: number = EMULATOR.functionsPort): Backend {
@@ -69,26 +77,42 @@ export function emulatorBackend(authUrl: string = EMULATOR.authUrl, name?: strin
   connectAuthEmulator(auth, authUrl, { disableWarnings: true });
   const functions = getFunctions(app);
   connectFunctionsEmulator(functions, EMULATOR.functionsHost, functionsPort);
-  return { auth, functions };
+  const firestore = getFirestore(app);
+  connectFirestoreEmulator(firestore, EMULATOR.firestoreHost, EMULATOR.firestorePort);
+  return { auth, functions, firestore };
 }
 
 // A real project. The functions' region is the default until DEC-031 sets one (OQ-41).
 export function projectBackend(config: ProjectConfig, name?: string): Backend {
   const app = initializeApp(config, name);
-  return { auth: initializeAuth(app, AUTH_OPTIONS), functions: getFunctions(app) };
+  return { auth: initializeAuth(app, AUTH_OPTIONS), functions: getFunctions(app), firestore: getFirestore(app) };
+}
+
+export function readsThrough(firestore: Firestore): Reads {
+  return {
+    categories: async () =>
+      (await getDocs(query(collection(firestore, 'categories'), orderBy('display_order')))).docs.map((doc) => ({
+        category_id: doc.id,
+        name: String(doc.get('name') ?? ''),
+        display_order: Number(doc.get('display_order') ?? 0),
+      }) satisfies Category),
+    segments: async () =>
+      (await getDocs(collection(firestore, 'segments'))).docs.map((doc) => ({ segment_id: doc.id, name: String(doc.get('name') ?? doc.id) }) satisfies Segment),
+  };
 }
 
 export function callThrough(functions: Functions): CallFn {
   return async (name, data) => (await httpsCallable(functions, name)(data)).data;
 }
 
-export function servicesFor({ auth, functions }: Backend): Services {
+export function servicesFor({ auth, functions, firestore }: Backend): Services {
   const call = callThrough(functions);
   return {
     signIn: async (email, password) => (await signInWithEmailAndPassword(auth, email, password)).user,
     signOut: () => signOut(auth),
     roleCheck: roleCheckThrough(call),
     call,
+    read: readsThrough(firestore),
   };
 }
 

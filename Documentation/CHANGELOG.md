@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the issue and category screens of the admin panel (MOD12-P2-T03), 2026-11-10
+
+`admin/src/IssuesPage.tsx`, `IssueEditor.tsx` and `CategoriesPage.tsx`, with the menu in `AdminLayout.tsx`, the server calls in `data.ts` and the panel's wording for each refusal in `describeError.ts`: list, create, edit, publish and unpublish issues, and add, rename, reorder and delete issue categories, all through the admin operations of MOD13-P1-T03. Retries reuse the request identifier, edits carry the record version, and the server's own message never reaches the screen. Routing uses `react-router` (DEP-95). The session test now waits for the focus listener (the spike's fix M-1). Tests: `npm test` in `admin/`: 75 passed, three runs in a row (emulator only).
+
 ### Added: the admin panel, its sign-in page and the OP-14 role check (MOD12-P1-T01, MOD12-P2-T01), 2026-11-10
 
 `admin/` is the React and TypeScript admin panel built with Vite (DEC-004 AGREED), taken from the admin spike with its spike labels removed: SCR-W-01 with one message for every refusal (SEC-CHK-17), the OP-14 role check that admits only an active admin with a verified email, the session ended when access is lost, and sessions in memory only. New on `main`: a build reads the project's web configuration from `VITE_FIREBASE_*` (CFG-01, `admin/.env.example`) and otherwise runs only against the local emulators. The backend now refuses every admin operation, and OP-40 an upload, from an admin whose email is not verified (OQ-20's working position), and OP-14 returns `email_verified`. Tests: `npm test` in `admin/`: 46 passed; in `backend/`: 944 passed, 0 failed (emulator only). DEP-31 confirmed, DEP-89 to DEP-94 added.

@@ -1,4 +1,4 @@
-// The one way the panel calls a server operation (B5). The panel's checks are a
+// The one way the panel calls a server operation (MOD12-P2-T01). The panel's checks are a
 // convenience only: the server checks every admin operation again (TD-14, SEC-CHK-06).
 //
 // MOD12-P2-T01 step 4: the session ends when the role is removed. The server reads the role on every call
