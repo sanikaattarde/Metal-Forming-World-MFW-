@@ -1,15 +1,17 @@
 # MFW backend
 
-The backend on Firebase (DEC-003, AGREED). This folder holds the Cloud Firestore and Cloud Storage access rules of MOD13-P1-T01 to T03, with their tests on the local emulators. Nothing here is deployed: no cloud project exists yet (`Documentation/CLOUD_ACCESS_SETUP_CHECKLIST.md`), and ENV-TEST waits for MFW's answer to OQ-40. Cloud Functions (OP-11, OP-12 and the admin operations) come in later tasks.
+The backend on Firebase (DEC-003, AGREED). This folder holds the Cloud Firestore and Cloud Storage access rules (MOD13-P1-T01 to T03), the Cloud Functions in `functions/` (TypeScript, DEC-025), and their tests on the local emulators. Nothing here is deployed: no cloud project exists yet (`Documentation/CLOUD_ACCESS_SETUP_CHECKLIST.md`), and ENV-TEST waits for MFW's answer to OQ-40.
+
+The functions were first built on the emulator spike, branch `spike/sa-backend-rules`. Its notes, `backend/spike/01-*.md` to `10-*.md` on that branch, hold the findings and the deliberate-break checks; a code comment that says "spike note 07" points there.
 
 ## Set-up
 
 1. Install Node.js 22 or later (DEP-79). The tests were run with Node.js 26.0.0.
 2. Install Java 21 or later (DEP-83), which the emulators need. With Homebrew's `openjdk@21`, `scripts/run-with-env.sh` puts it on `PATH` for the one command, so nothing global changes.
-3. From this folder, install the pinned tools from the lockfile:
+3. From this folder, install the pinned tools and the functions' packages from the lockfiles:
 
    ```bash
-   npm ci
+   npm ci && npm --prefix functions ci
    ```
 
 ## Tests
@@ -18,7 +20,7 @@ The backend on Firebase (DEC-003, AGREED). This folder holds the Cloud Firestore
 npm test
 ```
 
-It starts the Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 9 November 2026: 321 tests, 321 passed (emulator only).
+It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 392 tests, 392 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
@@ -26,6 +28,15 @@ It starts the Firestore and Storage emulators for the project `demo-mfw`, which 
 | G2 Public reads | `test/g2-public-reads.test.mjs` | Segments, categories, notification categories, news controls, the deleted-issue list, the public configuration and published issues are readable by anyone and writable by no client. An unpublished issue is refused, and a query must filter on the published state |
 | G3 Own records | `test/g3-own-records.test.mjs` | A reader reads their account, profile and consent records, and reads and writes their bookmarks, favourites and notification preferences, with the fields checked. Once written, none of the three can be changed, `created_at` included; a replayed write passes. Every other actor is refused |
 | G4 File store | `test/g4-storage.test.mjs` | Issue files, the holding area and unlisted paths are refused to every client. Covers are readable by anyone and writable by no client |
+| G0 Auth emulator | `test/g0-auth-emulator.test.mjs` | The Auth emulator creates and signs in a test account (UA-8) |
+| G6 Save profile | `test/g6-save-profile.test.mjs` | OP-10 through the Functions emulator: the first save, later saves, consent records, the segment check, closed accounts and an unusable configuration |
+| U1 Profile checks | `test/u1-profile-checks.test.mjs` | The profile and configuration checks of OP-10, with no database |
+
+## The operations
+
+| Operation | File | Task | Notes |
+|---|---|---|---|
+| OP-10 `saveProfile` | `functions/src/saveProfile.ts`, `profile.ts` | MOD13-P1-T01 | The required fields and policy versions come from `config/public`; a missing or malformed setting refuses the call. The mandatory profile is PROVISIONAL (BR-003, OQ-01) |
 
 ## What the rules do
 

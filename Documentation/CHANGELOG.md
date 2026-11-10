@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: Cloud Functions and `saveProfile`, OP-10 (MOD13-P1-T01), 2026-11-10
+
+`backend/functions/` is the TypeScript Cloud Functions project (DEC-025), taken from the emulator spike with the spike labels removed. It holds OP-10 `saveProfile` (`saveProfile.ts`, `profile.ts`) and the shared refusals and input checks (`errors.ts`, `validation.ts`). `backend/firebase.json` adds the Auth and Functions emulators; `backend/package.json` builds the functions before the tests; `backend/test/helpers.mjs` gains the account and callable helpers. Tests: G0, G6 and U1 added. `npm test` in `backend/`: 392 tests, 392 passed (emulator only). DEP-84 to DEP-87 in `DEPENDENCY_REGISTER.md` section 8.3.
+
 ### Documentation: merges without pull requests; DEC-004 and DEC-020 agreed, 2026-11-10
 
 `DECISION_LOG.md` section 5.12 records the agreement of both developers: tasks merge into `main` without pull requests (DEC-010), the admin panel is React on Firebase Hosting (DEC-004 AGREED), and issue files are delivered through function-issued short-lived signed URLs (DEC-020 AGREED, the device resume proof still owed). `DEVELOPMENT_WORKFLOW.md` section 6 and convention 7 above say how a task is merged and logged now.

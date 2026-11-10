@@ -1,6 +1,7 @@
-// Shared set-up for the rule tests (MOD13-P1-T01 to T03). Local emulators only:
-// every result is "emulator only" until the rules run in ENV-TEST (MOD14-P2-T03).
+// Shared set-up for the backend tests (MOD-13). Local emulators only: every result is
+// "emulator only" until the tests run in ENV-TEST (MOD14-P2-T03).
 import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { ref, uploadString } from 'firebase/storage';
@@ -10,6 +11,117 @@ const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url), 'utf
 
 // A "demo-" project is one the emulators run without a cloud project or a login.
 export const PROJECT_ID = 'demo-mfw';
+export const AUTH_BASE = `http://${config.emulators.auth.host}:${config.emulators.auth.port}`;
+const FUNCTIONS_BASE = `http://${config.emulators.functions.host}:${config.emulators.functions.port}`;
+
+const JSON_HEADERS = { 'content-type': 'application/json' };
+
+export async function clearAuthAccounts() {
+  const reply = await fetch(`${AUTH_BASE}/emulator/v1/projects/${PROJECT_ID}/accounts`, {
+    method: 'DELETE',
+    headers: { authorization: 'Bearer owner' },
+  });
+  if (!reply.ok) throw new Error(`could not clear accounts: ${reply.status}`);
+}
+
+// Test accounts on the local Auth emulator, which holds no real account.
+export async function signUp(email) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=fake-key`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ email, password: 'test-password-1', returnSecureToken: true }),
+  });
+  const body = await reply.json();
+  if (!reply.ok) throw new Error(`sign-up failed: ${JSON.stringify(body)}`);
+  return { uid: body.localId, idToken: body.idToken };
+}
+
+// Signs in with the test password. Returns the provider's error code, or null when sign-in works.
+export async function signInError(email) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=fake-key`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ email, password: 'test-password-1', returnSecureToken: true }),
+  });
+  if (reply.ok) return null;
+  return (await reply.json()).error?.message ?? String(reply.status);
+}
+
+export async function disableAccount(uid) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:update`, {
+    method: 'POST',
+    headers: { ...JSON_HEADERS, authorization: 'Bearer owner' },
+    body: JSON.stringify({ localId: uid, disableUser: true }),
+  });
+  if (!reply.ok) throw new Error(`could not disable the account: ${reply.status}`);
+}
+
+export async function deleteAccount(idToken) {
+  const reply = await fetch(`${AUTH_BASE}/identitytoolkit.googleapis.com/v1/accounts:delete?key=fake-key`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ idToken }),
+  });
+  if (!reply.ok) throw new Error(`could not delete the account: ${reply.status}`);
+}
+
+// The Admin SDK from the functions folder, pointed at the emulators by emulators:exec. It bypasses
+// the rules, so a test can seed and inspect records and call the server code directly.
+const requireFromFunctions = createRequire(new URL('../functions/package.json', import.meta.url));
+
+export function adminBackend() {
+  const { getApps, initializeApp } = requireFromFunctions('firebase-admin/app');
+  const { getAuth } = requireFromFunctions('firebase-admin/auth');
+  const { getFirestore } = requireFromFunctions('firebase-admin/firestore');
+  const app = getApps()[0] ?? initializeApp({ projectId: PROJECT_ID });
+  return { db: getFirestore(app), auth: getAuth(app) };
+}
+
+// The bucket the Functions emulator's storage trigger listens on. It is not the test library's default
+// bucket (gs://demo-mfw), so a test that needs the trigger names it.
+export const TRIGGER_BUCKET = `${PROJECT_ID}.appspot.com`;
+
+export function adminBucket(name = TRIGGER_BUCKET) {
+  const { getApps, initializeApp } = requireFromFunctions('firebase-admin/app');
+  const { getStorage } = requireFromFunctions('firebase-admin/storage');
+  const app = getApps()[0] ?? initializeApp({ projectId: PROJECT_ID });
+  return getStorage(app).bucket(name);
+}
+
+// A token nobody signed, for a real account, carrying whatever claims the test wants. The Functions
+// emulator accepts it (spike note 04, B-1), so it can show that the code ignores claims.
+// It says nothing about whether a real platform would accept it.
+export function forgedToken(uid, claims = {}) {
+  const part = (value) => Buffer.from(JSON.stringify(value)).toString('base64url');
+  const issuedAt = Math.floor(Date.now() / 1000);
+  const body = {
+    iss: `https://securetoken.google.com/${PROJECT_ID}`,
+    aud: PROJECT_ID,
+    auth_time: issuedAt,
+    iat: issuedAt,
+    exp: issuedAt + 3600,
+    sub: uid,
+    user_id: uid,
+    firebase: { identities: {}, sign_in_provider: 'password' },
+    ...claims,
+  };
+  return `${part({ alg: 'none', typ: 'JWT' })}.${part(body)}.`;
+}
+
+// Calls a callable function the way the client SDK does. Returns the HTTP status, the parsed reply
+// and the raw text, so a test can check what the reply does not contain.
+export async function callFunction(name, data, idToken) {
+  const headers = { ...JSON_HEADERS };
+  if (idToken) headers.authorization = `Bearer ${idToken}`;
+  const reply = await fetch(`${FUNCTIONS_BASE}/${PROJECT_ID}/us-central1/${name}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ data }),
+  });
+  const raw = await reply.text();
+  return { status: reply.status, raw, ...JSON.parse(raw) };
+}
+
 
 export async function newTestEnv() {
   return initializeTestEnvironment({
