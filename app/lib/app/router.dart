@@ -28,7 +28,31 @@ final class RouteScreens {
     this.profile,
     this.settings,
     this.deleteAccount,
+    this.catalogue,
+    this.issue,
   });
+
+  /// SCR-A-11 (MOD05-P2-T01).
+  final ScreenBuilder? catalogue;
+
+  /// SCR-A-12 (MOD05-P2-T01).
+  final ScreenBuilder? issue;
+
+  /// This set with the reader-side screens given here; the account screens
+  /// stay as they are.
+  RouteScreens withContent({ScreenBuilder? catalogue, ScreenBuilder? issue}) =>
+      RouteScreens(
+        signIn: signIn,
+        passwordReset: passwordReset,
+        register: register,
+        verifyEmail: verifyEmail,
+        completeProfile: completeProfile,
+        profile: profile,
+        settings: settings,
+        deleteAccount: deleteAccount,
+        catalogue: catalogue ?? this.catalogue,
+        issue: issue ?? this.issue,
+      );
 
   /// SCR-A-07 (MOD04-P2-T04).
   final ScreenBuilder? settings;
@@ -81,11 +105,13 @@ GoRouter buildRouter(
         routes: <RouteBase>[
           GoRoute(
             path: 'issues/:issueId',
-            builder: (BuildContext context, GoRouterState state) =>
-                PlaceholderScreen(
-                  title: ShellText.issue,
-                  detail: state.pathParameters['issueId'],
-                ),
+            builder:
+                screens.issue ??
+                (BuildContext context, GoRouterState state) =>
+                    PlaceholderScreen(
+                      title: ShellText.issue,
+                      detail: state.pathParameters['issueId'],
+                    ),
             routes: <RouteBase>[
               GoRoute(
                 path: 'read',
@@ -99,6 +125,7 @@ GoRouter buildRouter(
           ),
         ],
       ),
+      _route(AppRoutes.catalogue, ShellText.catalogue, screens.catalogue),
       _placeholder(AppRoutes.downloads, ShellText.downloads),
       _placeholder(AppRoutes.library, ShellText.library),
       GoRoute(

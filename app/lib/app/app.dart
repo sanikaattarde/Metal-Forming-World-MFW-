@@ -6,8 +6,10 @@ import '../contracts/contracts.dart';
 import '../core/config/app_config.dart';
 import '../core/config/firebase_settings.dart';
 import '../features/account/account.dart';
+import '../features/catalogue/catalogue.dart';
 import '../core/network/connectivity_service.dart';
 import 'account_routes.dart';
+import 'content_routes.dart';
 import 'firebase_bootstrap.dart';
 import 'placeholder_screens.dart';
 import 'router.dart';
@@ -34,6 +36,21 @@ final Provider<AccountProfileRepository?> profileRepositoryProvider =
         firebase.identity,
         firebase.backend,
         FirestoreProfileDocuments(firebase.firestore),
+      );
+    });
+
+/// MOD-05's catalogue (MOD05-P2-T01) over Firebase once it has started, or
+/// null without it, in which case the catalogue screens stay placeholders.
+/// Tests override it with a fake.
+final Provider<CatalogueRepository?> catalogueRepositoryProvider =
+    Provider<CatalogueRepository?>((Ref ref) {
+      final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
+      if (firebase == null) {
+        return null;
+      }
+      return DocumentCatalogueRepository(
+        FirestoreCatalogueDocuments(firebase.firestore),
+        covers: firebase.covers,
       );
     });
 
@@ -94,13 +111,17 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
   }, fireImmediately: true);
   final GoRouter router = buildRouter(
     accessState,
-    screens: accountScreens(
-      auth: ref.read(authServiceProvider),
-      profiles: ref.read(profileRepositoryProvider),
-      config: ref.read(appConfigProvider),
-      links: ref.read(linkOpenerProvider),
-      email: () =>
-          ref.read(firebaseServicesProvider)?.identity.currentUser?.email,
+    screens: withContentScreens(
+      accountScreens(
+        auth: ref.read(authServiceProvider),
+        profiles: ref.read(profileRepositoryProvider),
+        config: ref.read(appConfigProvider),
+        links: ref.read(linkOpenerProvider),
+        email: () =>
+            ref.read(firebaseServicesProvider)?.identity.currentUser?.email,
+      ),
+      accessState: accessState,
+      catalogue: ref.read(catalogueRepositoryProvider),
     ),
   );
   ref.onDispose(() {

@@ -5,6 +5,9 @@ abstract final class AppRoutes {
   /// SCR-A-10, home.
   static const String home = '/';
 
+  /// SCR-A-11, the catalogue (MOD05-P2-T01). Open to everyone.
+  static const String catalogue = '/catalogue';
+
   /// SCR-A-15, downloads.
   static const String downloads = '/downloads';
 

@@ -6,6 +6,9 @@ abstract final class ShellText {
   /// Title of SCR-A-10.
   static const String home = 'Home';
 
+  /// Title of SCR-A-11.
+  static const String catalogue = 'Catalogue';
+
   /// Title of SCR-A-12.
   static const String issue = 'Issue';
 
