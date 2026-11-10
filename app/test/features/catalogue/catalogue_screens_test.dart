@@ -133,8 +133,101 @@ void main() {
       await tester.scrollUntilVisible(
         find.textContaining('a deliberately long title'),
         200,
+        scrollable: find.byType(Scrollable).first,
       );
       expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('Search and filters on SCR-A-11 [MOD05-P2-T02]', () {
+    testWidgets('typing a word lists only the matches, and Clear brings back '
+        'every issue [FR-SRCH-001, AC-1.2]', (WidgetTester tester) async {
+      await pumpCatalogue(tester, FakeCatalogueRepository.fromFixtures());
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'cafe');
+      await tester.pump();
+      expect(find.text('1 issue'), findsOneWidget);
+      expect(find.text('Test Issue 01'), findsNothing);
+
+      await tester.tap(find.text('Clear the filters'));
+      await tester.pump();
+      expect(find.text('9 issues'), findsOneWidget);
+      expect(find.text('cafe'), findsNothing);
+    });
+
+    testWidgets('a search with no match shows the empty state with Clear', (
+      WidgetTester tester,
+    ) async {
+      await pumpCatalogue(tester, FakeCatalogueRepository.fromFixtures());
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'zzz');
+      await tester.pump();
+      expect(find.text('No issues match'), findsOneWidget);
+      await tester.tap(
+        find.widgetWithText(OutlinedButton, 'Clear the filters'),
+      );
+      await tester.pump();
+      expect(find.text('9 issues'), findsOneWidget);
+    });
+
+    testWidgets('the category and year filters combine [FR-SRCH-002, '
+        'FR-SRCH-004, AC-1.3]', (WidgetTester tester) async {
+      await pumpCatalogue(tester, FakeCatalogueRepository.fromFixtures());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithText(FilterChip, 'Category'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ListTile, 'Test Category A'));
+      await tester.pumpAndSettle();
+      expect(find.text('3 issues'), findsOneWidget);
+      expect(
+        find.widgetWithText(FilterChip, 'Test Category A'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.widgetWithText(FilterChip, 'Year'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ListTile, '2025'));
+      await tester.pumpAndSettle();
+      expect(find.text('2 issues'), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(FilterChip, '2025'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ListTile, 'Any year'));
+      await tester.pumpAndSettle();
+      expect(find.text('3 issues'), findsOneWidget);
+    });
+
+    testWidgets('the segment filter uses the segment names [FR-SRCH-003, '
+        'PAC-07]', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildMfwTheme(),
+          home: CatalogueScreen(
+            catalogue: FakeCatalogueRepository.fromFixtures(),
+            segments: const FixedSegments(<IndustrySegment>[
+              IndustrySegment(segmentId: 'fx-seg-01', name: 'Segment One'),
+              IndustrySegment(segmentId: 'fx-seg-02', name: 'Segment Two'),
+            ]),
+            onOpenIssue: (String _) {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilterChip, 'Industry segment'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ListTile, 'Segment Two'));
+      await tester.pumpAndSettle();
+      expect(find.text('5 issues'), findsOneWidget);
+    });
+
+    testWidgets('every filter chip is a large enough tap target with a label', (
+      WidgetTester tester,
+    ) async {
+      await pumpCatalogue(tester, FakeCatalogueRepository.fromFixtures());
+      await tester.pumpAndSettle();
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     });
   });
 
@@ -266,4 +359,14 @@ void main() {
       expect(find.text('Read'), findsNothing);
     });
   });
+}
+
+final class FixedSegments implements SegmentSource {
+  const FixedSegments(this.segments);
+
+  final List<IndustrySegment> segments;
+
+  @override
+  Future<Result<List<IndustrySegment>>> listSegments() async =>
+      Ok<List<IndustrySegment>>(segments);
 }

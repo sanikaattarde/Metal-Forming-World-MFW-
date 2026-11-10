@@ -2,6 +2,7 @@ import 'package:mfw_app/contracts/contracts.dart';
 
 import '../domain/catalogue_documents.dart';
 import '../domain/cover_urls.dart';
+import '../domain/issue_search.dart';
 
 /// MOD-05's [CatalogueRepository] over the catalogue documents
 /// (MOD05-P2-T01).
@@ -17,7 +18,8 @@ import '../domain/cover_urls.dart';
 /// - Failures: `network` (no connection, retryable), `timeout` (retryable),
 ///   `serviceUnavailable` (retryable), `notFound` (missing or unpublished),
 ///   `invalidResponse`.
-final class DocumentCatalogueRepository implements CatalogueRepository {
+final class DocumentCatalogueRepository
+    implements CatalogueRepository, SegmentSource {
   /// Creates the repository over [documents], with covers from [covers].
   DocumentCatalogueRepository(this._documents, {required this.covers});
 
@@ -58,8 +60,18 @@ final class DocumentCatalogueRepository implements CatalogueRepository {
       for (final Map<String, Object?> document in await _documents.categories())
         if (_text(document[CatalogueDocuments.idKey]) case final String id)
           IssueCategory(categoryId: id, name: _text(document['name']) ?? id),
-    ]..sort((IssueCategory a, IssueCategory b) => a.name.compareTo(b.name));
+    ]..sort((IssueCategory a, IssueCategory b) => byName(a.name, b.name));
     return Ok<List<IssueCategory>>(categories);
+  });
+
+  @override
+  Future<Result<List<IndustrySegment>>> listSegments() => _guard(() async {
+    final List<IndustrySegment> segments = <IndustrySegment>[
+      for (final Map<String, Object?> document in await _documents.segments())
+        if (_text(document[CatalogueDocuments.idKey]) case final String id)
+          IndustrySegment(segmentId: id, name: _text(document['name']) ?? id),
+    ]..sort((IndustrySegment a, IndustrySegment b) => byName(a.name, b.name));
+    return Ok<List<IndustrySegment>>(segments);
   });
 
   Future<Result<T>> _guard<T>(Future<Result<T>> Function() read) async {
@@ -95,6 +107,9 @@ AppFailure failureFromRead(String code) {
     _ => AppFailure(FailureCode.unknown, retryable: true, detail: detail),
   };
 }
+
+/// Names in alphabetical order, ignoring case.
+int byName(String a, String b) => a.toLowerCase().compareTo(b.toLowerCase());
 
 /// Newest publication date first; the same date in title order.
 int newestFirst(IssueSummary a, IssueSummary b) {
