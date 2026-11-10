@@ -27,13 +27,30 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
       .listDownloaded();
 
   Future<void> _delete(String issueId) async {
-    await widget.downloads.delete(issueId);
+    final Result<void> result = await widget.downloads.delete(issueId);
     if (!mounted) {
       return;
     }
+    if (result case Err<void>(:final AppFailure failure)) {
+      ScaffoldMessenger.maybeOf(
+        context,
+      )?.showSnackBar(SnackBar(content: Text(DownloadsText.failure(failure))));
+    }
+    _reload();
+  }
+
+  void _reload() {
     setState(() {
       _copies = widget.downloads.listDownloaded();
     });
+  }
+
+  /// Pull to refresh: the list is read when the screen opens, so a copy
+  /// finished elsewhere shows after a refresh. A live list needs a change
+  /// stream on `DownloadManager`, which the contract does not have.
+  Future<void> _refresh() async {
+    _reload();
+    await _copies.then((_) {}, onError: (Object _) {});
   }
 
   @override
@@ -47,6 +64,21 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
               BuildContext context,
               AsyncSnapshot<List<DownloadedIssue>> snapshot,
             ) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Text(DownloadsText.listFailed),
+                      const SizedBox(height: 16),
+                      FilledButton(
+                        onPressed: _reload,
+                        child: const Text(DownloadsText.retry),
+                      ),
+                    ],
+                  ),
+                );
+              }
               final List<DownloadedIssue>? copies = snapshot.data;
               if (copies == null) {
                 return const Center(child: CircularProgressIndicator());
@@ -54,25 +86,28 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
               if (copies.isEmpty) {
                 return const Center(child: Text(DownloadsText.empty));
               }
-              return ListView(
-                children: <Widget>[
-                  for (final DownloadedIssue copy in copies)
-                    ListTile(
-                      key: ValueKey<String>(copy.issueId),
-                      title: Text(
-                        widget.titleOf?.call(copy.issueId) ?? copy.issueId,
-                      ),
-                      subtitle: Text(DownloadsText.sizeLabel(copy.sizeBytes)),
-                      trailing: IconButton(
-                        tooltip: DownloadsText.deleteDownload,
-                        style: IconButton.styleFrom(
-                          minimumSize: const Size.square(48),
+              return RefreshIndicator(
+                onRefresh: _refresh,
+                child: ListView(
+                  children: <Widget>[
+                    for (final DownloadedIssue copy in copies)
+                      ListTile(
+                        key: ValueKey<String>(copy.issueId),
+                        title: Text(
+                          widget.titleOf?.call(copy.issueId) ?? copy.issueId,
                         ),
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () => unawaited(_delete(copy.issueId)),
+                        subtitle: Text(DownloadsText.sizeLabel(copy.sizeBytes)),
+                        trailing: IconButton(
+                          tooltip: DownloadsText.deleteDownload,
+                          style: IconButton.styleFrom(
+                            minimumSize: const Size.square(48),
+                          ),
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () => unawaited(_delete(copy.issueId)),
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               );
             },
       ),

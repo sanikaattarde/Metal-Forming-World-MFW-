@@ -1,0 +1,95 @@
+/* Placeholder visuals only: no brand assets have been received and there is no M2 design. */
+:root {
+  font-family: system-ui, sans-serif;
+  color: #1f2328;
+  background: #f6f8fa;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  max-width: 24rem;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+input {
+  font: inherit;
+  padding: 0.5rem;
+  border: 1px solid #8c959f;
+  border-radius: 4px;
+}
+
+button {
+  font: inherit;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #cf222e;
+  border-radius: 4px;
+  background: #ffebe9;
+}
+
+.admin-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.admin-header h1 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.admin-header nav {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+}
+
+.admin-header nav a.active {
+  font-weight: bold;
+}
+
+.admin-main {
+  max-width: 48rem;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+.admin-main form {
+  margin: 1rem 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.4rem;
+  border-bottom: 1px solid #d0d7de;
+}
+
+textarea,
+select {
+  font: inherit;
+  padding: 0.5rem;
+}

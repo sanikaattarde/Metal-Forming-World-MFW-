@@ -7,7 +7,7 @@
 | Document | Download Resume Spike Evidence |
 | File | `Documentation/test-evidence/DOWNLOAD_RESUME_SPIKE_EVIDENCE.md` |
 | Phase | 4: Testing, Release and Risk Management. A test evidence report (`TESTING_STRATEGY.md` §13) |
-| Version | 0.2 |
+| Version | 0.1 |
 | Status | Draft for review. Not reviewed. **Simulator and emulator only, debug builds, against a local test server and the Firebase Storage emulator.** No phone was used, no real Firebase project was used, and no signed link was tried. It is evidence for T-02.4, not a result for AC-4.3, and it approves nothing |
 | Date | 9 November 2026 |
 | Tests run by | Yuvraj Gaykhe (WS-B), 8 November 2026 (local server) and 9 November 2026 (Storage emulator), in the T-02.4 spike |
@@ -17,8 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First report: four integration tests of the resume spike on an iOS simulator and an Android emulator, with a 150,000,000 byte synthetic file served by a local range server. Revised on 8 November 2026 after the review of pull request #52: the "Approval required" row says that the report covers the local-server part of MOD06-P1-T02, and that step 4 and the candidate mechanism part of step 2 stay open, where it said that the task is done once the report is reviewed. |
-| 0.2 | 9 November 2026 | Added section 4.2: the same four tests on both platforms through the Firebase Storage emulator (DEC-003 is AGREED), with the same synthetic file, and what the emulator answers without a token or with a wrong one. Sections 6 and 7 say what that run shows and what it does not. |
+| 0.1 | 8 November 2026 | First report: four integration tests of the resume spike on an iOS simulator and an Android emulator, with a 150,000,000 byte synthetic file served by a local range server. Revised on 8 November 2026 after the review of pull request #52: the "Approval required" row says that the report covers the local-server part of MOD06-P1-T02, and that step 4 and the candidate mechanism part of step 2 stay open, where it said that the task is done once the report is reviewed. Revised on 10 November 2026 (no version change, DEC-010): section 4.2 adds the same four tests through the Firebase Storage emulator, and the DEC-020 rows follow its agreement of that day. |
 
 ### 1.1 Related documents
 
@@ -30,7 +29,7 @@
 | `API_AND_MODULE_CONTRACTS.md` section 6.6 | Exists, draft. The MOD-06 rules |
 | `ACCEPTANCE_CRITERIA.md` AC-4.3 | Exists, draft. A download resumes after a network break, tested with FX-NET-01 on FX-PDF-05 |
 | `TEST_DATA_AND_FIXTURES.md` FX-NET-01, FX-NET-07, FX-PDF-05 | Exist, draft. Network lost; a reset mid-transfer; the near-limit file |
-| `DECISION_LOG.md` DEC-020; `OPEN_QUESTIONS.md` OQ-30, OQ-37, OQ-54 | Exist, draft. The file mechanism (OPEN); what "MB" means; the mechanism question; background downloads |
+| `DECISION_LOG.md` DEC-020; `OPEN_QUESTIONS.md` OQ-30, OQ-37, OQ-54 | Exist, draft. The file mechanism (AGREED on 10 November 2026: function-issued short-lived V4 signed URLs, TD-09, with the device proof still owed); what "MB" means; the mechanism question; background downloads |
 | `RISK_REGISTER.md` R2 (AR-01) | Exists, draft. Resume with a signed URL not shown to work |
 | `DEVELOPMENT_WORKFLOW.md` §13 item 5 | Exists, draft. A spike is not merged into `main` as production code. Its findings are merged as a document. This report is that document |
 | Branch `spike/yg-download-resume`, commits `262f306` and `c5c427e` | Not merged to `main`. On GitHub. Holds the adapters, the range server (`app/tool/range_server.dart`), the integration test (`app/integration_test/download_resume_test.dart`), and from `c5c427e` the Storage emulator tools (`app/tool/storage_emulator_seed.dart`, `app/tool/storage_break_proxy.dart`) |
@@ -132,7 +131,7 @@ A first run on 9 November 2026 with a different synthetic file of 150,000,000 ra
 - **The emulator's download link honours `Range: bytes=n-`** with 206 and a matching `Content-Range`, so the transfer through it resumes without sending a byte twice, as with the local server.
 - **The download token is checked:** no token or a wrong one gets 403.
 
-**What it does not show.** The emulator imitates the service; it is not the service. The real Firebase Storage was not used, so its answers, its limits and its speed are not shown. A download token does not expire, so this is not the short-lived grant of DEC-020 option (b): a signed link was not tried, because the emulator does not give one, and an expired grant during a download is still not tested (step 4). The proxy's cut stands for a network break, as in section 3. The times are loopback on one Mac in debug builds; the Android unbroken run includes the first install of the test app, and no time is compared with a target.
+**What it does not show.** The emulator imitates the service; it is not the service. The real Firebase Storage was not used, so its answers, its limits and its speed are not shown. A download token does not expire, so this is not the short-lived signed link that DEC-020 agreed on 10 November 2026: a signed link was not tried, because the emulator cannot sign, and an expired grant during a download is still not tested (step 4). The proxy's cut stands for a network break, as in section 3. The times are loopback on one Mac in debug builds; the Android unbroken run includes the first install of the test app, and no time is compared with a target.
 
 ## 5. What Changed in the Spike for This Run
 
@@ -155,7 +154,7 @@ These are points for the owners of the documents to consider. This report change
 
 | Document | Point |
 |---|---|
-| `DECISION_LOG.md` DEC-020; `OPEN_QUESTIONS.md` OQ-37 | Whatever mechanism is chosen should answer `Range: bytes=n-` with 206 and a matching `Content-Range`. Otherwise a break costs the whole file again (section 4.1). The Storage emulator's download link does (section 4.2); the real service and a signed link are still to be tried |
+| `DECISION_LOG.md` DEC-020; `OPEN_QUESTIONS.md` OQ-37 | The agreed mechanism, a V4 signed URL from Cloud Storage, needs to answer `Range: bytes=n-` with 206 and a matching `Content-Range` on the real service. Otherwise a break costs the whole file again (section 4.1). The Storage emulator's download link does (section 4.2); the real service and a signed link are still to be tried |
 | `RISK_REGISTER.md` R2 (AR-01) | Resume works with a plain range server and through the Storage emulator's download link. With a signed URL, and on the real service, it is still not shown, so AR-01 stands |
 | `DEPENDENCY_REGISTER.md` | The spike uses `crypto` directly for SHA-256. The lock file already held it as a transitive package, and it has no register entry of its own. It needs one before it is used beyond a spike (`CODING_STANDARDS.md` §12) |
 | `ACCEPTANCE_CRITERIA.md` AC-4.3 | Still to be run on a phone with FX-NET-01 on FX-PDF-05, in T-06.3 |

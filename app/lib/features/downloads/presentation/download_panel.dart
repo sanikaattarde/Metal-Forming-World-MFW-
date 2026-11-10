@@ -30,13 +30,31 @@ class DownloadPanel extends StatefulWidget {
 }
 
 class _DownloadPanelState extends State<DownloadPanel> {
-  late final Stream<DownloadStatus> _status = widget.downloads.watch(
-    widget.issueId,
-  );
-  late Future<Result<DownloadPlan>> _plan = widget.downloads.prepare(
-    widget.issueId,
-  );
+  late Stream<DownloadStatus> _status;
+  late Future<Result<DownloadPlan>> _plan;
   bool _mobileDataAccepted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _watch();
+  }
+
+  /// A panel reused for another issue follows the new issue.
+  @override
+  void didUpdateWidget(DownloadPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.issueId != widget.issueId ||
+        oldWidget.downloads != widget.downloads) {
+      _watch();
+      _mobileDataAccepted = false;
+    }
+  }
+
+  void _watch() {
+    _status = widget.downloads.watch(widget.issueId);
+    _plan = widget.downloads.prepare(widget.issueId);
+  }
 
   Future<void> _download(DownloadPlan plan) async {
     if (plan.onMobileData && !_mobileDataAccepted) {
@@ -81,8 +99,17 @@ class _DownloadPanelState extends State<DownloadPanel> {
     final Result<DownloadPlan> plan = await widget.downloads.prepare(
       widget.issueId,
     );
-    if (plan case Ok<DownloadPlan>(:final DownloadPlan value) when mounted) {
-      await _download(value);
+    if (!mounted) {
+      return;
+    }
+    switch (plan) {
+      case Ok<DownloadPlan>(:final DownloadPlan value):
+        await _download(value);
+      case Err<DownloadPlan>(:final AppFailure failure):
+        // The status stays Failed, so say why Retry did not start anything.
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          SnackBar(content: Text(DownloadsText.failure(failure))),
+        );
     }
   }
 

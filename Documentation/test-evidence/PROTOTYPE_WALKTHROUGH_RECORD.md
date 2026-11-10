@@ -7,7 +7,7 @@
 | Document | Prototype Walk-through Record |
 | File | `Documentation/test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` |
 | Phase | 4: Testing, Release and Risk Management. The recorded walk-through of T-02.1 (MOD16-P1-T05) |
-| Version | 0.2 |
+| Version | 0.1 |
 | Status | Draft for review. Not reviewed. **A prototype, not the M2 design.** The low-fi prototype (sections 2 to 4) uses no MFW brand asset. The branded prototype (section 7) uses the website's colours and fonts as the working position of OQ-63, and no MFW logo or content. Neither has been shown to MFW, and neither approves anything |
 | Date | 9 November 2026 |
 | Prepared by | Yuvraj Gaykhe (WS-B), 8 and 9 November 2026 |
@@ -17,8 +17,7 @@
 
 | Version | Date | Change |
 |---|---|---|
-| 0.1 | 8 November 2026 | First record: the low-fi clickable prototype of the app screens, its walk-through against the screen inventory, a design critique, and the Figma copy of the screens. Revised on 8 November 2026 after the review of pull request #53: the "Approval required" row says that the record covers the app screens of MOD16-P1-T05, and that the admin panel screens and the final look stay open; section 3.1 counts 21 in-scope app screens; section 2 gives the counts of the whole test suite and says that the drawing tests are golden comparisons; and the prototype's one package beyond the SDK, `flutter_lints`, is named. Revised again on 8 November 2026: the Figma row records that YG shared the file with Sanika Attarde, and that the file now also holds the work of pull request #57. |
-| 0.2 | 9 November 2026 | Added section 7: the branded prototype, which is the low-fi prototype drawn on the app's theme in the look of the design frames of MOD16-P1-T02 and MOD16-P1-T03, with its checks. The status, approval and related documents rows and section 5 say what applies to which prototype. |
+| 0.1 | 8 November 2026 | First record: the low-fi clickable prototype of the app screens, its walk-through against the screen inventory, a design critique, and the Figma copy of the screens. Revised on 8 November 2026 after the review of pull request #53: the "Approval required" row says that the record covers the app screens of MOD16-P1-T05, and that the admin panel screens and the final look stay open; section 3.1 counts 21 in-scope app screens; section 2 gives the counts of the whole test suite and says that the drawing tests are golden comparisons; and the prototype's one package beyond the SDK, `flutter_lints`, is named. Revised again on 8 November 2026: the Figma row records that YG shared the file with Sanika Attarde, and that the file now also holds the work of pull request #57. Revised on 10 November 2026 (no version change, DEC-010): section 7 adds the branded prototype, and the status, approval and related documents rows and section 5 say what applies to which prototype. |
 
 ### 1.1 Related documents
 
@@ -151,7 +150,7 @@ The 30 images cover SCR-A-01 to SCR-A-08, SCR-A-10 to SCR-A-20 and SCR-A-22, wit
 
 ### 7.3 What it does not cover
 
-- **The admin panel screens** (MOD16-P1-T04, Sanika Attarde). MOD16-P1-T05 combines them too, so it is not complete.
+- **The admin panel screens** (MOD16-P1-T04, Sanika Attarde). MOD16-P1-T05 combines them too, so it is not complete. The admin panel itself is on `main` as code since 10 November 2026 (MOD12-P1-T01, MOD12-P2-T01, MOD12-P2-T03, MOD12-P2-T04), but its screens are not in this prototype.
 - **The Figma copy** is still the low-fi one of section 2.
 - **MFW's logo and content.** MFW approves the screens at M2 (MOD16-P2-T01).
 - **The critique findings left for M2** in section 4, apart from one: the reader's caption line is now a page bar, as in the frames. The app bar stays on screen.
