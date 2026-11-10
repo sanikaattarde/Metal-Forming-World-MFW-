@@ -53,6 +53,10 @@ export const lastAdmin = () =>
 export const notAnAdmin = () =>
   new HttpsError('failed-precondition', 'That account is not an active admin.', { reason: 'NOT_AN_ADMIN' });
 
+// OP-24: the WordPress site could not be reached or read (API_AND_BACKEND_CONTRACT.md section 5.1).
+export const siteUnavailable = () =>
+  new HttpsError('unavailable', 'The news site could not be reached.', { reason: 'SITE_UNAVAILABLE' });
+
 // The caller's authorisation could not be verified, or a needed record is unusable. Fail closed (SC-03).
 export const cannotVerify = () =>
   new HttpsError('internal', 'The request could not be completed. Nothing was changed.');

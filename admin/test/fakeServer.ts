@@ -2,7 +2,7 @@
 // screen tests. It refuses the way the backend does, with the same codes and reasons. The emulator
 // tests check the real operations.
 import type { CallFn } from '../src/adminApi';
-import type { Category, Issue, Reads } from '../src/data';
+import type { Category, Issue, NewsControl, Post, Reads } from '../src/data';
 import { serverError } from './fakes';
 
 const PAGE = 20;
@@ -26,8 +26,22 @@ export const issueRecord = (over: Partial<Issue> & { issue_id: string }): Issue 
 
 const invalid = (fields: string[]) => Object.assign(serverError('invalid-argument'), { details: { fields: fields.sort() } });
 
-export function fakeServer({ issues = [] as Issue[], categories = [] as Category[] } = {}) {
-  const state = { issues: issues.map((i) => ({ ...i })), categories: categories.map((c) => ({ ...c })) };
+export const makePost = (i: number, over: Partial<Post> = {}): Post => ({
+  id: 100 + i,
+  title: `Post ${i + 1}`,
+  date: `2026-10-${String((i % 28) + 1).padStart(2, '0')}T09:00:00`,
+  link: `https://news.example.test/post-${i + 1}/`,
+  categories: [7],
+  ...over,
+});
+
+export function fakeServer({ issues = [] as Issue[], categories = [] as Category[], posts = [] as Post[], controls = [] as NewsControl[] } = {}) {
+  const state = {
+    issues: issues.map((i) => ({ ...i })),
+    categories: categories.map((c) => ({ ...c })),
+    posts: posts.map((p) => ({ ...p })),
+    controls: new Map(controls.map((c) => [c.wp_post_id, { ...c }])),
+  };
   const log: { name: string; data: Record<string, unknown> }[] = [];
   const failures = new Map<string, unknown>();
   const created = new Map<string, string>();
@@ -103,6 +117,18 @@ export function fakeServer({ issues = [] as Issue[], categories = [] as Category
         state.categories = state.categories.filter((c) => c.category_id !== data.category_id);
         return { category_id: data.category_id, deleted: true };
       }
+      case 'listWordPressPosts': {
+        const page = Number(data.page ?? 1);
+        const perPage = Number(data.per_page ?? 20);
+        const totalPages = Math.max(1, Math.ceil(state.posts.length / perPage));
+        return { posts: state.posts.slice((page - 1) * perPage, page * perPage).map((p) => ({ ...p })), total_pages: totalPages, page, per_page: perPage };
+      }
+      case 'setNewsControl': {
+        const control = { wp_post_id: data.wp_post_id as number, is_hidden: data.is_hidden as boolean, is_breaking: data.is_breaking as boolean };
+        if (!control.is_hidden && !control.is_breaking) state.controls.delete(control.wp_post_id);
+        else state.controls.set(control.wp_post_id, control);
+        return { ...control };
+      }
       default:
         return {};
     }
@@ -111,6 +137,7 @@ export function fakeServer({ issues = [] as Issue[], categories = [] as Category
   const read: Reads = {
     categories: async () => [...state.categories].sort((a, b) => a.display_order - b.display_order),
     segments: async () => [],
+    newsControls: async () => [...state.controls.values()].map((c) => ({ ...c })),
   };
 
   return {

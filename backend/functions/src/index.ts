@@ -10,6 +10,7 @@ export { getIssueFile } from './issueFile.js';
 export { getMyAdminRole } from './getMyAdminRole.js';
 export { listIssuesForAdmin, publishIssue, saveIssue, unpublishIssue } from './issues.js';
 export { setNewsControl } from './newsControls.js';
+export { listWordPressPosts } from './wordpress.js';
 export { saveProfile } from './saveProfile.js';
 export { onUploadFinalized } from './uploadFinalized.js';
 export { listUploadJobs, requestUpload } from './uploads.js';

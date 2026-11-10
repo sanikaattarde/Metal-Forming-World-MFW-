@@ -53,9 +53,36 @@ export interface IssueDetails {
   edition?: string;
 }
 
+// A WordPress post as OP-24 returns it. The post stays in WordPress; the panel copies nothing (M3).
+export interface Post {
+  id: number;
+  title: string;
+  date: string;
+  link: string;
+  categories: number[];
+}
+
+export interface PostPage {
+  posts: Post[];
+  total_pages: number | null;
+  page: number;
+  per_page: number;
+}
+
+// NEWS_CONTROL: hide a post in the app, or mark it as breaking. No record means neither.
+export interface NewsControl {
+  wp_post_id: number;
+  is_hidden: boolean;
+  is_breaking: boolean;
+}
+
+// PLACEHOLDER. No document sets how many posts the news screen shows at once.
+export const PLACEHOLDER_POSTS_PER_PAGE = 20;
+
 export interface Reads {
   categories(): Promise<Category[]>;
   segments(): Promise<Segment[]>;
+  newsControls(): Promise<NewsControl[]>;
 }
 
 export const newRequestId = (): string => crypto.randomUUID();
@@ -99,4 +126,14 @@ export function saveCategory(api: CallFn, category: { category_id?: string; name
 
 export function deleteCategory(api: CallFn, categoryId: string): Promise<unknown> {
   return api('deleteCategory', { request_id: newRequestId(), category_id: categoryId });
+}
+
+// OP-24, run on the server: the panel never calls the WordPress site itself (TD-12).
+export function listPosts(api: CallFn, page: number): Promise<PostPage> {
+  return api('listWordPressPosts', { page, per_page: PLACEHOLDER_POSTS_PER_PAGE }) as Promise<PostPage>;
+}
+
+// OP-23. Clearing both flags removes the record. Marking a post as breaking sends nothing (OP-25 not built).
+export function setNewsControl(api: CallFn, control: NewsControl): Promise<NewsControl> {
+  return api('setNewsControl', { request_id: newRequestId(), ...control }) as Promise<NewsControl>;
 }
