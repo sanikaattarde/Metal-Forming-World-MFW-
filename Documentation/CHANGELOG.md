@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the upload backend, OP-19, OP-20 and OP-40 (MOD13-P1-T09), 2026-11-10
+
+`backend/functions/src/uploads.ts` gives an admin an upload job and a V4 signed PUT URL for the holding area (`uploadUrlIssuer.ts`, DEC-020), with the content type and size range the store enforces; `listUploadJobs` shows a job's state. `uploadFinalized.ts` (OP-40) checks each file that lands, with the genuine-PDF check in `pdfCheck.ts` (pdf.js, DEP-88), and moves it to the private area as the next accepted revision, or deletes it with the reason recorded. Tests: G10 and U5 added, U6 extended; `npm test` in `backend/`: 896 passed, 0 failed (emulator only). The panel side (MOD12-P2-T02) still waits for OQ-22 and OQ-30.
+
 ### Added: `getIssueFile`, OP-11, with signed URLs (MOD13-P1-T04), 2026-11-10
 
 `backend/functions/src/issueFile.ts` runs check 0 and the six ordered checks of OP-11 and, when they pass, returns a V4 signed read URL for the current revision (DEC-020 AGREED, TD-09) from `grantIssuer.ts` and `signedLinks.ts`. The lifetime comes from `config/private` and is refused over one hour (the AOQ-07 assumption), so a wrong setting cannot make a long-lived link (SEC-CHK-03). On the emulators, which cannot sign, an issuer whose links cannot resolve is used, and it refuses to run anywhere else. `safeLog.ts` keeps links and tokens out of the log (SC-16). Tests: G7, U3 and U6 added; `npm test` in `backend/`: 795 passed, 0 failed (emulator only). The TD-09 device proof is still owed.
