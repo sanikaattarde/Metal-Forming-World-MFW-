@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Changed: the app gates run on merges to `main` (MOD15-P1-T02), 2026-11-10
+
+`.github/workflows/pr.yml` ran QG-01 to QG-06 only on pull requests, so since tasks merge into `main` without pull requests (DEC-010) a change to `app/` reached `main` with no gate run. It now also runs on each push to `main` that changes `app/` or the workflow, as `backend.yml` does for QG-08. Runs on `main` are never cancelled, so each merge gets its own result; the job names, and so any required check, are unchanged, and the workflow is named "App checks". `CI_CD_AND_QUALITY_GATES.md` says so in the status row, the QG-01 to QG-06 rows (QG-06 now runs on every merge to `main`, as section 4 planned), section 5.1 and the cost note. The push runs take the place of the pull request runs; Sanika Attarde to confirm that the cost approval of 8 November 2026 covers them.
+
+Tests: the workflow parses as YAML; its first run is on this merge to `main`.
+
 ### Changed: the prototype walk-through record, with the branded prototype (MOD16-P1-T05), 2026-11-10
 
 `Documentation/test-evidence/PROTOTYPE_WALKTHROUGH_RECORD.md` gains section 7: the low-fi prototype drawn on the app's theme and tokens, in the look of the reader frames (#69) and Sanika Attarde's account frames (#67), with every flow and state switch kept. It is on `spike/yg-prototype-branded` at `797d16b`, not merged, in `app/prototype/`, run with `flutter run -t prototype/main.dart`. The admin panel screens (MOD16-P1-T04) are not in it, so MOD16-P1-T05 is not complete, and nothing has gone to MFW.
