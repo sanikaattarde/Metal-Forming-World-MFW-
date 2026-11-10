@@ -176,7 +176,7 @@ export async function fetchPosts(
   return { posts: parsed.map(toPost), total_pages: totalPages };
 }
 
-export const listWordPressPosts = adminCall(async ({ uid, db, data }) => {
+export const listWordPressPosts = adminCall('listWordPressPosts', async ({ uid, db, data }) => {
   const invalid = unknownFields(data, FIELDS);
   const page = data.page ?? 1;
   const perPage = data.per_page ?? PLACEHOLDER_POSTS_PER_PAGE;

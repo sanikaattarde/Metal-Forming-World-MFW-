@@ -47,7 +47,7 @@ const jobView = (snap: DocumentSnapshot) => ({
   finished_at: millis(snap, 'finished_at'),
 });
 
-export const requestUpload = adminCall(async ({ uid, db, data }) => {
+export const requestUpload = adminCall('requestUpload', async ({ uid, db, data }) => {
   const invalid = unknownFields(data, REQUEST_FIELDS);
   if (!isNonEmptyText(data.request_id)) invalid.push('request_id');
   if (data.kind !== 'pdf') invalid.push('kind'); // a cover waits for OQ-22
@@ -90,7 +90,7 @@ export const requestUpload = adminCall(async ({ uid, db, data }) => {
   return { job_id: job.id, upload_url: address.url, upload_headers: address.headers, expires_at: address.expiresAtMillis };
 });
 
-export const listUploadJobs = adminCall(async ({ db, data }) => {
+export const listUploadJobs = adminCall('listUploadJobs', async ({ db, data }) => {
   const invalid = unknownFields(data, LIST_FIELDS);
   const byIssue = data.issue_id !== undefined;
   const byJob = data.job_id !== undefined;

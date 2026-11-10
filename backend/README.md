@@ -20,7 +20,7 @@ The functions were first built on the emulator spike, branch `spike/sa-backend-r
 npm test
 ```
 
-It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 1,008 tests, 1,008 passed (emulator only).
+It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 1,039 tests, 1,039 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
@@ -44,6 +44,8 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | G12 WordPress posts | `test/g12-wordpress.test.mjs` | OP-24 through the Functions emulator against a stand-in WordPress site (`test/wp-standin.mjs`): a page of posts for an admin only, paging and the category filter, and every kind of bad site reply refused as `SITE_UNAVAILABLE` with nothing from the site in the log |
 | U7 WordPress parts | `test/u7-wordpress-parts.test.mjs` | The site-address check, the plain-text title and the time and size limits, with no emulator |
 | G13 First-admin step | `test/g13-bootstrap.test.mjs` | OP-42: the first admin from a verified reader with the guard at 1 and the change record; each refusal writes nothing; two steps at once make one admin; recovery; the verification; the command and its refusals |
+| G14 Security events | `test/g14-security-events.test.mjs` | The real operations, run in the test's process, log a refused reader, a signed-out call, an unverified admin, a closed account, a link given out, an account deletion with an admin removal and a rejected upload, with no input, address or link in the log |
+| U8 Security event list | `test/u8-security-events.test.mjs` | The closed event list, which outcome is which event, the warning level, and that a caller cannot set the event or log an email address |
 | G5 Admin gate | `test/g5-admin-gate.test.mjs` | The gate reads the role record and the account on each call and trusts no claim; the last-admin guard refuses to remove the only active admin, also with removals at the same moment; the count repair finds and corrects a wrong count |
 
 ## The seed
@@ -73,6 +75,10 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 - **No client writes to shared records.** Issues, categories, segments, news controls and notification categories are changed only by server functions that check the admin role (MOD13-P1-T03, NFR-SEC-007). Admins get no direct access in the rules (GS-Q20), and no rule trusts a role claim in the token (SC-04).
 - **Owner only** for the account record, profile, consent records, bookmarks, favourites and notification preferences (NFR-SEC-005, NFR-SEC-006). Profile and consent writes go through a function (OP-10), so the rules allow the owner to read them only.
 - **No rule reads another document** (`SECURITY_AND_ACCESS_CONTROL.md` section 13).
+
+## The server log (MOD02-P2-T03)
+
+`functions/src/safeLog.ts` writes one line per logged outcome with only the operation, the caller's identifier and the outcome (SC-16, SEC-CHK-10); a value that looks like a link, a token or an email address, or is too long, is dropped and only its field name is noted. A line that is a security event carries `event`, from a closed list: `access_refused` (signed out, not an admin, closed account, unverified email), `check_failed` (a check could not be made, SC-03), `grant_issued` (OP-11), `account_deleted` (OP-12), `admin_removed` and `upload_rejected` (OP-40). Refusals and failures are warnings. Every admin operation (through `adminCall`), OP-10 and OP-14 log their security refusals; a refusal of the input is not an event. The caller's identifier is pseudonymous; whether it may be logged at all is finding E-9.
 
 ## Known limits
 

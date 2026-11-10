@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: server security events without personal data (MOD02-P2-T03), 2026-11-10
+
+`backend/functions/src/safeLog.ts` adds a closed list of security events (`access_refused`, `check_failed`, `grant_issued`, `account_deleted`, `admin_removed`, `upload_rejected`), derived from each logged outcome and never set by a caller, with refusals and failures as warnings. Every admin operation now logs its refused access and failed checks through `adminCall`, which takes the operation's name; OP-10 and OP-14 do too, and OP-12 logs an admin leaving the count. An email address is now refused in any log value, as links and tokens were (SC-16, SEC-CHK-10). Tests: G14 and U8 added; `npm test` in `backend/`: 1,039 passed (emulator only).
+
 ### Added: the first-admin bootstrap and recovery step, OP-42 (MOD12-P1-T02), 2026-11-10
 
 `backend/functions/src/bootstrap.ts` and `backend/scripts/bootstrap-admin.mjs`: a developer-run step, never deployed and holding no key, that makes a verified reader named in writing by MFW the first admin, or recovers from a lockout with `--recovery` (SC-14, GS-Q33). One transaction writes the role record, the guard record and the change record `bootstrap_admin` with the written reference (INV-03, INV-04); it refuses while an active admin exists. `--verify` is the second developer's check. Without `--project` it writes only to local emulators; with it, `--confirm` must repeat the project. The procedure is in `DEPLOYMENT_PLAN.md` section 7.5. Tests: G13 added; `npm test` in `backend/`: 1,008 passed (emulator only).

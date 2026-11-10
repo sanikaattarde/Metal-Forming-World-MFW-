@@ -37,7 +37,7 @@ function issueView(snap: DocumentSnapshot) {
   };
 }
 
-export const listIssuesForAdmin = adminCall(async ({ db, data }) => {
+export const listIssuesForAdmin = adminCall('listIssuesForAdmin', async ({ db, data }) => {
   const invalid: string[] = [];
 
   const state = data.publication_state;
@@ -70,7 +70,7 @@ export const listIssuesForAdmin = adminCall(async ({ db, data }) => {
   };
 });
 
-export const saveIssue = adminCall(async ({ uid, db, data }) => {
+export const saveIssue = adminCall('saveIssue', async ({ uid, db, data }) => {
   const check = checkIssueInput(data);
   if (check.invalid.length > 0) throw invalidArgument(check.invalid);
 
@@ -125,7 +125,7 @@ const issueRef = (db: FirebaseFirestore.Firestore, data: Record<string, unknown>
   return db.collection('issues').doc(data.issue_id as string);
 };
 
-export const publishIssue = adminCall(async ({ db, data }) => {
+export const publishIssue = adminCall('publishIssue', async ({ db, data }) => {
   const ref = issueRef(db, data);
 
   await db.runTransaction(async (tx) => {
@@ -148,7 +148,7 @@ export const publishIssue = adminCall(async ({ db, data }) => {
   return issueView(await ref.get());
 });
 
-export const unpublishIssue = adminCall(async ({ db, data }) => {
+export const unpublishIssue = adminCall('unpublishIssue', async ({ db, data }) => {
   const ref = issueRef(db, data);
 
   await db.runTransaction(async (tx) => {

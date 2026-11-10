@@ -8,7 +8,7 @@ import { isNonEmptyText, unknownFields } from './validation.js';
 
 const FIELDS = new Set(['request_id', 'wp_post_id', 'is_hidden', 'is_breaking']);
 
-export const setNewsControl = adminCall(async ({ db, data }) => {
+export const setNewsControl = adminCall('setNewsControl', async ({ db, data }) => {
   const invalid = unknownFields(data, FIELDS);
   if (!isNonEmptyText(data.request_id)) invalid.push('request_id');
   if (!Number.isInteger(data.wp_post_id) || (data.wp_post_id as number) < 1) invalid.push('wp_post_id');

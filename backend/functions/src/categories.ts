@@ -13,7 +13,7 @@ const DELETE_FIELDS = new Set(['request_id', 'category_id']);
 
 const nameKey = (name: string) => name.trim().toLowerCase();
 
-export const saveCategory = adminCall(async ({ uid, db, data }) => {
+export const saveCategory = adminCall('saveCategory', async ({ uid, db, data }) => {
   const invalid = unknownFields(data, SAVE_FIELDS);
   if (!isNonEmptyText(data.request_id)) invalid.push('request_id');
   if (data.category_id !== undefined && !isDocumentId(data.category_id)) invalid.push('category_id');
@@ -43,7 +43,7 @@ export const saveCategory = adminCall(async ({ uid, db, data }) => {
   return record;
 });
 
-export const deleteCategory = adminCall(async ({ db, data }) => {
+export const deleteCategory = adminCall('deleteCategory', async ({ db, data }) => {
   const invalid = unknownFields(data, DELETE_FIELDS);
   if (!isNonEmptyText(data.request_id)) invalid.push('request_id');
   if (!isDocumentId(data.category_id)) invalid.push('category_id');
