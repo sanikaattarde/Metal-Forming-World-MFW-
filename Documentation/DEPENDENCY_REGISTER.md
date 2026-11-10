@@ -7,7 +7,7 @@
 | Document | Dependency Register |
 | File | `Documentation/DEPENDENCY_REGISTER.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 39) |
-| Version | 0.16 |
+| Version | 0.15 |
 | Status | Draft for review. Not approved. Three packages are installed on `main`, by pull request #30: DEP-43, DEP-44 and DEP-58, with the Flutter and Dart pin (DEP-35, DEP-36). Pull request #63 adds a fourth, DEP-50 (`connectivity_plus` 7.3.2), with its entry in section 8.1. Pull request #66 adds the first backend tools, DEP-79 to DEP-83, in section 8.2. The first CI workflow, `.github/workflows/pr.yml` (pull request #48), uses DEP-61 and DEP-74 to DEP-77. The three typefaces of DEP-78 are bundled in the app by pull request #57, as font files and not a package. YG read their three licence files on 9 November 2026 (in chat, not filed). No version, licence or price below has been verified unless it is quoted from a source document, or is recorded in section 8.1 with the page it was read from. The section 8.1 facts were read on 30 October 2026 by an automated page reader. A developer has read the LICENSE files of DEP-64, DEP-65 and DEP-66 (YG, 1 November 2026; DEP-66 also on 30 October 2026). YG also reports the licence of PDFium and of the pdfx native engines (1 November 2026), and re-read PDFium's LICENSE file on 4 November 2026 after the review of pull request 13: a BSD-3-Clause notice followed by the Apache License 2.0 text. Those reports give licence names only, with no page addresses. On 7 November 2026 an automated reader read the LICENSE files of DEP-35, DEP-43, DEP-44 and DEP-58 at the pinned versions, at YG's request, and YG accepts that reading (in chat, not filed). A developer has not read those four files. |
 | Date | 9 November 2026 |
 | Approval required | Both developers. MFW for any paid component (RS NFR-MAINT-006). |
@@ -31,7 +31,6 @@
 | 0.13 | 8 November 2026 | DEP-78 moves from CANDIDATE to CONFIRMED: the three licence files were read by the development assistant at YG's request (all SIL Open Font License 1.1), YG approved bundling the upright files, and pull request #57 bundles them in the app with their licences (MOD16-P1-T01, MOD01-P2-T02). The status row names it. A developer has not read the licence files themselves. Revised on 9 November 2026 after the review of pull request #57: YG then read them, and the DEP-78 row records it. No package is added, `pubspec.lock` does not change, and no entry is APPROVED. |
 | 0.14 | 9 November 2026 | DEP-50 moves from CANDIDATE to CONFIRMED: `connectivity_plus` is added to `app/pubspec.yaml` at `^7.3.2`, locked at 7.3.2, for the connectivity service of MOD01-P2-T03 (pull request #63). Section 8.1 adds its review entry, with the licence read from the published package on 9 November 2026 (BSD-3-Clause), and lists the nine packages it brings in with their licences. Two of them, `dbus` and `nm`, are under the Mozilla Public License 2.0 and serve the Linux build only. Whether they reach an Android or iOS build is NOT VERIFIED. No paid component is added. |
 | 0.15 | 9 November 2026 | Section 8.2 added: the server-side tools of the first backend code, `backend/` (MOD13-P1-T01 to T03, pull request #66): DEP-79 Node.js, DEP-80 Firebase command line tools, DEP-81 the rules test library, DEP-82 the Firebase JavaScript SDK used by the tests, and DEP-83 Java for the emulators. All are development tools, none is shipped in the app, and none has a cost. The open item of section 10 that asked for these rows (finding T-5 of issue 32) is met. |
-| 0.16 | 9 November 2026 | DEP-50 and DEP-79 to DEP-83 record that YG read their licences (reported in chat, not filed). DEP-84 is added: `actions/setup-node` for QG-08, with its licence read by the development assistant and still to be read by a developer. DEP-77 also installs Java 21 for QG-08 (pull request #68). No package of the app changes, and no entry is APPROVED. |
 
 ### 1.1 Related documents
 
@@ -121,7 +120,7 @@ All are from the S2 proposal unless noted. None is approved (DEC-003, DEC-004).
 | DEP-28 | Firebase Crashlytics | Crash reporting | MOD-02 (RS NFR-OBS-001) | MFW account | No personal data (`CODING_STANDARDS.md` §6.2); store privacy declarations | Verify | CANDIDATE | DEC-003 |
 | DEP-29 | Google Analytics for Firebase | Usage events | MOD-02 (RS NFR-OBS-002) | MFW account | Approved event list only (OQ-23); declarations | Verify | CANDIDATE | DEC-003, OQ-23 |
 | DEP-30 | AWS-based design | Alternative backend | All backend modules | — | — | — | Considered in S2 and not preferred there | Recorded for completeness |
-| DEP-31 | React | Admin user interface | MOD-12 | Development team | Verify from its LICENSE file | None expected (open source); verify | CANDIDATE (S2) | DEC-004 |
+| DEP-31 | React (`react`, `react-dom`) | Admin user interface | MOD-12 | Development team | MIT (package.json, read 10 November 2026) | None (open source) | CONFIRMED: 19.3.1, exact pin, in `admin/` (DEC-004 AGREED, section 8.4) | None |
 | DEP-32 | Flutter web | Admin user interface (alternative) | MOD-12 | Development team | As DEP-35 | None expected; verify | CANDIDATE, not assessed (not in S2) | DEC-004 |
 
 ## 7. Toolchain and Development Tools
@@ -306,10 +305,36 @@ The first backend code, `backend/` (MOD13-P1-T01 to T03, DEC-003 AGREED), runs i
 | DEP-79 | Node.js | Runs the tests and the command line tools | `engines: node >=22` in `backend/package.json`. The tests ran on 26.0.0. The deploy runtime of Cloud Functions is set with the first function (TD-04, B-10 of the spike) | Not read here. Node.js is installed by the developer, not by the project. Update of 9 November 2026: YG read this licence (reported in chat, not filed). | None | CONFIRMED for development |
 | DEP-80 | `firebase-tools` | The Firebase command line tools: the Firestore and Storage emulators, and later deploys | 15.34.2, exact pin | MIT: the package's LICENSE file, "The MIT License (MIT)", "Copyright (c) 2015 Firebase". Update of 9 November 2026: YG read this licence (reported in chat, not filed). | None | CONFIRMED (development) |
 | DEP-81 | `@firebase/rules-unit-testing` | Runs the rule tests against the emulators | 6.0.0, exact pin | Apache-2.0 in the package's `package.json`. The package has no LICENSE file, and the repository's file was not read. Update of 9 November 2026: YG read this licence (reported in chat, not filed). | None | CONFIRMED (development) |
-| DEP-82 | `firebase` (JavaScript SDK) | The client calls in the rule tests | 13.1.0, exact pin | Apache-2.0 in the package's `package.json`. The package has no LICENSE file, and the repository's file was not read. Update of 9 November 2026: YG read this licence (reported in chat, not filed). | None | CONFIRMED (development); the admin panel would add it as a runtime dependency (DEC-004) |
+| DEP-82 | `firebase` (JavaScript SDK) | The client calls in the rule tests | 13.1.0, exact pin | Apache-2.0 in the package's `package.json`. The package has no LICENSE file, and the repository's file was not read. Update of 9 November 2026: YG read this licence (reported in chat, not filed). | None | CONFIRMED (development); also a runtime dependency of the admin panel since 10 November 2026 (section 8.4) |
 | DEP-83 | Java (OpenJDK) | The emulators need Java 21 or later | OpenJDK 21.0.13 (Homebrew `openjdk@21`) on the run of 9 November 2026 | Not read here. Installed by the developer. Update of 9 November 2026: YG read this licence (reported in chat, not filed). | None | CONFIRMED for development |
 
 The lockfile pins the packages these bring in. Under the position on QG-10 (section 10), they are not given entries.
+
+### 8.3 Cloud Functions packages (10 November 2026)
+
+`backend/functions/` (DEC-003, DEC-025 AGREED). Pinned in `backend/functions/package.json` and its lockfile, taken from the emulator spike. Licences read from the installed packages' `package.json` on 10 November 2026, in Sanika Attarde's session.
+
+| ID | Package | Purpose | Version | Licence | Cost | Status |
+|---|---|---|---|---|---|---|
+| DEP-84 | `firebase-admin` | Server access to Auth, Firestore and Storage from the functions | 14.5.0, exact pin | Apache-2.0 | None | CONFIRMED (runtime, server) |
+| DEP-85 | `firebase-functions` | Declares the callable and storage-triggered functions | 7.4.0, exact pin | MIT | None | CONFIRMED (runtime, server) |
+| DEP-86 | `typescript` | Compiles `functions/src/` | 7.0.2, exact pin | Apache-2.0 | None | CONFIRMED (development) |
+| DEP-87 | `@types/node` | Node.js types for the compiler | 22.20.5, exact pin | MIT | None | CONFIRMED (development) |
+| DEP-88 | `pdfjs-dist` | The genuine-PDF check of OP-40 (FR-ADMIN-006, NFR-SEC-008), with scripts and font loading off | 6.4.299, exact pin | Apache-2.0 | None | CONFIRMED (runtime, server) |
+
+### 8.4 Admin panel packages (10 November 2026)
+
+`admin/` (DEC-004 AGREED). Pinned in `admin/package.json` and its lockfile, taken from the admin spike, where each was the newest release at least two weeks old on 5 November 2026. Licences read from the installed packages' `package.json` on 10 November 2026. React is DEP-31 (section 6), and the Firebase JavaScript SDK is DEP-82, now also a runtime dependency of the panel.
+
+| ID | Package | Purpose | Version | Licence | Cost | Status |
+|---|---|---|---|---|---|---|
+| DEP-89 | `vite`, `@vitejs/plugin-react` | The panel's dev server and static build (TD-14 names no build tool) | 8.3.5 and 6.1.2, exact pins | MIT | None | CONFIRMED (development) |
+| DEP-90 | `typescript` | Type checks for `admin/` (also DEP-86 for the functions) | 7.0.2, exact pin | Apache-2.0 | None | CONFIRMED (development) |
+| DEP-91 | `@types/react`, `@types/react-dom` | Types for DEP-31 | 19.3.0, exact pins | MIT | None | CONFIRMED (development) |
+| DEP-92 | `vitest` | The panel's test runner (QG-09) | 5.0.5, exact pin | MIT | None | CONFIRMED (development) |
+| DEP-93 | `jsdom` | A simulated browser for the component tests | 30.1.3, exact pin | MIT | None | CONFIRMED (development) |
+| DEP-94 | `@testing-library/react`, `@testing-library/dom` | Render and drive the components in tests | 16.3.3 and 10.4.2, exact pins | MIT | None | CONFIRMED (development) |
+| DEP-95 | `react-router` | The panel's routes (issues, an issue, categories, news) | 8.5.0, exact pin | MIT | None | CONFIRMED (runtime, admin panel) |
 
 ## 9. Repository and CI Services
 
@@ -321,8 +346,8 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-63 | Documentation check script | CI | QG-12 | Both | Written by the team | None | CANDIDATE | Write after T-01.5, for the same reason as DEP-62 |
 | DEP-75 | `actions/checkout` v7.0.1, used at commit `3d3c42e5aac5ba805825da76410c181273ba90b1` (the commit of the tag) | CI action | Checks out the repository in each job of the first workflow (QG-01 to QG-06) | Both | The LICENSE file at the tag is "The MIT License (MIT)", "Copyright (c) 2018 GitHub, Inc. and contributors" (automated reading of 7 November 2026, to confirm). Owned by GitHub. Used with `persist-credentials: false` under read-only contents permission | None | CONFIRMED | In `.github/workflows/pr.yml` (T-01.5, pull request #48) |
 | DEP-76 | `actions/upload-artifact` v7.0.2, used at commit `cf430e030ddbb5b0abf93d22962f4752f3646cd9` (the commit of the tag) | CI action | Keeps the coverage report of QG-04 for 7 days | Both | The LICENSE file at the tag is "The MIT License (MIT)", "Copyright (c) 2018 GitHub, Inc. and contributors" (automated reading of 7 November 2026, to confirm). Owned by GitHub | None | CONFIRMED | In `.github/workflows/pr.yml` (T-01.5, pull request #48) |
-| DEP-77 | `actions/setup-java` v6.1.0, used at commit `b843ebf9b913146b38da2eaa7aeddf76074ae1ad` (the commit of the tag) | CI action | Installs Eclipse Temurin Java 17 (DEP-74) for the Android build of QG-05, and Java 21 (DEP-83) for the emulators of QG-08 (`.github/workflows/backend.yml`, pull request #68) | Both | The LICENSE file at the tag is "The MIT License (MIT)", "Copyright (c) 2018 GitHub, Inc. and contributors" (automated reading of 7 November 2026, to confirm). Owned by GitHub | None | CONFIRMED | In `.github/workflows/pr.yml` (T-01.5, pull request #48) |
-| DEP-84 | `actions/setup-node` v7.1.0, used at commit `949feb2413d6458794dcd2491c4babbbce0c15c1` (the commit of the tag, released 8 October 2026) | CI action | Installs Node.js 24 (DEP-79) for QG-08 | Both | The LICENSE file at the tag is "The MIT License (MIT)", "Copyright (c) 2018 GitHub, Inc. and contributors" (read by the development assistant on 9 November 2026, to confirm by a developer). Owned by GitHub | None | CONFIRMED | In `.github/workflows/backend.yml` (MOD15-P2-T02, pull request #68) |
+| DEP-77 | `actions/setup-java` v6.1.0, used at commit `b843ebf9b913146b38da2eaa7aeddf76074ae1ad` (the commit of the tag) | CI action | Installs Eclipse Temurin Java 17 (DEP-74) for the Android build of QG-05, and Java 21 (DEP-83) for the emulators of QG-08 (`.github/workflows/backend.yml`) | Both | The LICENSE file at the tag is "The MIT License (MIT)", "Copyright (c) 2018 GitHub, Inc. and contributors" (automated reading of 7 November 2026, to confirm). Owned by GitHub | None | CONFIRMED | In `.github/workflows/pr.yml` (T-01.5, pull request #48) |
+| DEP-96 | `actions/setup-node` v7.1.0, used at commit `949feb2413d6458794dcd2491c4babbbce0c15c1` (the commit of the tag, released 8 October 2026) | CI action | Installs Node.js 22 (DEP-79) for QG-08, the runtime `backend/functions/` pins | Both | The LICENSE file at the tag is "The MIT License (MIT)", "Copyright (c) 2018 GitHub, Inc. and contributors" (read by the development assistant on 9 November 2026, to confirm by a developer). Owned by GitHub | None | CONFIRMED | In `.github/workflows/backend.yml` (MOD15-P2-T02) |
 
 Numbers 33 and 34 are not assigned. Sections 7 to 9 start at 35, to leave room for further backend or admin candidates. DEP-64 to DEP-66 were added later and sit in section 8. DEP-33, DEP-34 and DEP-67 to DEP-73 are used on the backend and admin spike branches, which are not on `main`, so the rows added on 7 November 2026 start at DEP-74. DEP-78 was added on 8 November 2026.
 

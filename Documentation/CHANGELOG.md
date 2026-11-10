@@ -4,7 +4,7 @@
 |---|---|
 | File | `Documentation/CHANGELOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 29) |
-| Version | 0.61 |
+| Version | 0.60 |
 | Status | Draft for review. Not approved. The conventions are AGREED (DEC-015, `DECISION_LOG.md` section 5.6). |
 | Date | 9 November 2026 |
 
@@ -28,20 +28,67 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 4. Entry types: **Added**, **Changed**, **Fixed**, **Removed**, **Security**, **Documentation**.
 5. Dates use `YYYY-MM-DD`. A date is given only when Git or a document's own history shows it.
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
+7. From 10 November 2026 (DEC-010, `DECISION_LOG.md` section 5.12) tasks merge without pull requests, and each task adds one short entry: a heading with the task ID and date, a few lines on what changed, and the test result. No per-document version or `README.md` version-cell bumps. Older entries keep their table form.
 
 ## Unreleased
 
-### Added: QG-08, the backend rule tests in CI (MOD15-P2-T02), 2026-11-09, on topic branch `ci/yg-qg08-backend` on top of `d097e91`, then merged with `origin/main` at `141f2bd` (#67 merged), under review in pull request #68
+### Added: QG-08, the backend tests in CI (MOD15-P2-T02), 2026-11-10
 
-A new workflow, `.github/workflows/backend.yml`, runs the emulator tests of `backend/` (#66, MOD13-P1-T01 to T03) on each pull request that changes `backend/` or the workflow: `npm ci` from the lockfile, then `npm test` on the Firestore and Storage emulators for the project `demo-mfw`, with Node.js 24 and Java 21. It needs no login, no cloud project and no secret. It is separate from `pr.yml`, so a pull request that changes only `app/` does not run it. The actions are pinned to commits, as in `pr.yml`; `actions/setup-node` is new (DEP-84). The register also records that YG read the licences of DEP-50 and DEP-79 to DEP-83. The tests were not run on YG's Mac, which has Java 17; the first run is this pull request's own check. No gate is removed or made optional, nothing is deployed, and nothing has gone to MFW.
+`.github/workflows/backend.yml` runs the tests of `backend/` on the emulators (`npm test`, the command of `backend/README.md`) on each pull request and each push to `main` that changes `backend/` or the workflow. It installs both lockfiles with `npm ci` (`backend/` and `backend/functions/`), uses Node.js 22, the runtime that `backend/functions/package.json` pins, and Java 21 for the emulators. `CI_CD_AND_QUALITY_GATES.md` gains the QG-08 row and section 14 item 5. `DEPENDENCY_REGISTER.md` adds DEP-96 (`actions/setup-node`, MIT), says DEP-77 also installs Java 21, and records YG's licence readings in DEP-50 and DEP-79 to DEP-83. The admin panel's build and tests are not in this gate (QG-09).
 
-| Date | Document | Change | Reason | Related IDs | Approval status | Affects scope |
-|---|---|---|---|---|---|---|
-| 2026-11-09 | `.github/workflows/backend.yml` | Added: the QG-08 job. | MOD15-P2-T02 | QG-08, MOD15-P2-T02, MOD13-P1-T01, MOD13-P1-T02, MOD13-P1-T03, TS-05 | Both developers (not agreed) | No scope effect |
-| 2026-11-09 | `Documentation/CI_CD_AND_QUALITY_GATES.md` | Version 0.11: the QG-08 row and section 14 item 5. | The gate exists | QG-08, QG-09, DEC-004 | Both developers (not agreed) | No scope effect |
-| 2026-11-09 | `Documentation/DEPENDENCY_REGISTER.md` | Version 0.16: DEP-84 added; DEP-77 also installs Java 21; YG's licence readings in DEP-50 and DEP-79 to DEP-83. | The new action, and the readings asked for in the reviews of #63 and #66 | DEP-50, DEP-77, DEP-79 to DEP-84 | Both developers (not agreed) | No scope effect |
-| 2026-11-09 | `Documentation/CHANGELOG.md` | Version 0.61: this entry. It takes 0.61 because #60 (0.53) to #67 (0.60) are merged with those numbers. | Records the change above | None | Both developers (not agreed) | No scope effect |
-| 2026-11-09 | `README.md` | The versions of the changed documents: `CI_CD_AND_QUALITY_GATES` 0.11 (was 0.10), `DEPENDENCY_REGISTER` 0.16 (was 0.15) and `CHANGELOG` 0.61 (was 0.60) | Follows each document's own control table | None | Both developers (not agreed) | No scope effect |
+Tests: `npm test` in `backend/` on the merged tree, on a Mac with Node.js 24 and Java 21: 981 passed, 0 failed (emulators only). The run on GitHub with Node.js 22 is the gate's own check.
+
+### Fixed: findings of the audit of the ten tasks, 2026-11-10
+
+- **OP-19 upload link** (MOD13-P1-T09): the signed URL is now a V4 resumable-upload URL, as the contract and TD-09 say, so a 150 MB file can continue after a break (FR-ADMIN-007). The reply's `upload_headers` are `content-type` and `x-goog-resumable: start`. No size-range header is signed, because its effect on a resumable upload is NOT VERIFIED; OP-19 and OP-40 keep checking the size. `API_AND_BACKEND_CONTRACT.md` OP-19 lists `upload_headers`.
+- **Admin panel start-up** (MOD12-P1-T01): a partial or demo project configuration showed a blank page; it now shows a notice and no form.
+- **Stale text**: the root `README.md` state and `backend/` paragraphs, the DEC-010 line of `DECISION_LOG.md` section 5.12, CFG-06 in `config/config.example.env` (unit, range, DEC-020 agreed), the DEP-82 row, and a plan identifier in `backend/seed/seed.mjs`.
+
+Tests: `npm test` in `backend/`: 981 passed; in `admin/`: 89 passed; the admin build passes. A clean checkout of `main` before these fixes gave 981 and 87 passed.
+
+### Added: the news controls, OP-24 and the news-controls screen (MOD12-P2-T04), 2026-11-10
+
+`backend/functions/src/wordpress.ts` is OP-24 `listWordPressPosts`: an admin-only page of MFW's WordPress posts, read by the server so the panel never calls the site (TD-12), from an HTTPS address in `config/private` with no default (CFG-03, OQ-39), with time, size and page limits; any bad reply is `SITE_UNAVAILABLE`. `admin/src/NewsPage.tsx` is SCR-W-06: it lists the posts and hides, shows or marks each one as breaking through OP-23. Marking a post as breaking sends nothing. Tests: G12 and U7 added, against a stand-in site (`backend/test/wp-standin.mjs`); `npm test` in `backend/`: 981 passed; in `admin/`: 87 passed, two runs in a row (emulator only).
+
+### Added: the issue and category screens of the admin panel (MOD12-P2-T03), 2026-11-10
+
+`admin/src/IssuesPage.tsx`, `IssueEditor.tsx` and `CategoriesPage.tsx`, with the menu in `AdminLayout.tsx`, the server calls in `data.ts` and the panel's wording for each refusal in `describeError.ts`: list, create, edit, publish and unpublish issues, and add, rename, reorder and delete issue categories, all through the admin operations of MOD13-P1-T03. Retries reuse the request identifier, edits carry the record version, and the server's own message never reaches the screen. Routing uses `react-router` (DEP-95). The session test now waits for the focus listener (the spike's fix M-1). Tests: `npm test` in `admin/`: 75 passed, three runs in a row (emulator only).
+
+### Added: the admin panel, its sign-in page and the OP-14 role check (MOD12-P1-T01, MOD12-P2-T01), 2026-11-10
+
+`admin/` is the React and TypeScript admin panel built with Vite (DEC-004 AGREED), taken from the admin spike with its spike labels removed: SCR-W-01 with one message for every refusal (SEC-CHK-17), the OP-14 role check that admits only an active admin with a verified email, the session ended when access is lost, and sessions in memory only. New on `main`: a build reads the project's web configuration from `VITE_FIREBASE_*` (CFG-01, `admin/.env.example`) and otherwise runs only against the local emulators. The backend now refuses every admin operation, and OP-40 an upload, from an admin whose email is not verified (OQ-20's working position), and OP-14 returns `email_verified`. Tests: `npm test` in `admin/`: 46 passed; in `backend/`: 944 passed, 0 failed (emulator only). DEP-31 confirmed, DEP-89 to DEP-94 added.
+
+### Added: account deletion, OP-12, PROVISIONAL (MOD13-P1-T06), 2026-11-10
+
+`backend/functions/src/accountDeletion.ts` deletes a reader's account at once on a confirmed request (DEC-029, immediate deletion; OQ-24 open, so nothing is kept): it ends the sessions, takes an admin out of the count through the last-admin guard, erases the reader's records and removes the sign-in account. `deletionCleanup.ts` finishes any deletion that stopped part-way (the OP-41 task; not scheduled yet). Tests: G11 added; `npm test` in `backend/`: 930 passed, 0 failed (emulator only). Known gap A-10 is recorded in `backend/README.md`.
+
+### Added: the upload backend, OP-19, OP-20 and OP-40 (MOD13-P1-T09), 2026-11-10
+
+`backend/functions/src/uploads.ts` gives an admin an upload job and a V4 signed PUT URL for the holding area (`uploadUrlIssuer.ts`, DEC-020), with the content type and size range the store enforces; `listUploadJobs` shows a job's state. `uploadFinalized.ts` (OP-40) checks each file that lands, with the genuine-PDF check in `pdfCheck.ts` (pdf.js, DEP-88), and moves it to the private area as the next accepted revision, or deletes it with the reason recorded. Tests: G10 and U5 added, U6 extended; `npm test` in `backend/`: 896 passed, 0 failed (emulator only). The panel side (MOD12-P2-T02) still waits for OQ-22 and OQ-30.
+
+### Added: `getIssueFile`, OP-11, with signed URLs (MOD13-P1-T04), 2026-11-10
+
+`backend/functions/src/issueFile.ts` runs check 0 and the six ordered checks of OP-11 and, when they pass, returns a V4 signed read URL for the current revision (DEC-020 AGREED, TD-09) from `grantIssuer.ts` and `signedLinks.ts`. The lifetime comes from `config/private` and is refused over one hour (the AOQ-07 assumption), so a wrong setting cannot make a long-lived link (SEC-CHK-03). On the emulators, which cannot sign, an issuer whose links cannot resolve is used, and it refuses to run anywhere else. `safeLog.ts` keeps links and tokens out of the log (SC-16). Tests: G7, U3 and U6 added; `npm test` in `backend/`: 795 passed, 0 failed (emulator only). The TD-09 device proof is still owed.
+
+### Added: the seed of the three notification categories (MOD13-P1-T10), 2026-11-10
+
+`backend/seed/` holds the three fixed notification categories (GS-Q47, PROPOSED) with a checker and a loader that writes only to a local emulator (`npm run seed`, `npm run seed:check`). The tests now take the categories from the seed, not from test values. Tests: G9 and U4 added; `npm test` in `backend/`: 636 passed, 0 failed (emulator only).
+
+### Added: the issue, category and news admin operations (MOD13-P1-T03), 2026-11-10
+
+`backend/functions/src/issues.ts` (OP-15, OP-16, OP-21, OP-22, with the input checks in `issueChecks.ts`), `categories.ts` (OP-17, OP-18) and `newsControls.ts` (OP-23), each declared through `adminCall`, so the gate runs first. Every caller-supplied identifier is checked as a document key before it reaches the database. Tests: G8 and U2 added; `npm test` in `backend/`: 583 passed, 0 failed (emulator only).
+
+### Added: the admin gate, OP-14 and the last-admin guard (MOD13-P1-T08), 2026-11-10
+
+`backend/functions/src/admin.ts` reads the role record and the account on every privileged call and fails closed (INV-08, SC-02 to SC-04), keeps the active-admin count in `admin_guard/current` so the last active admin cannot be removed (INV-03), and repairs a wrong count (OP-41's repair task, not scheduled yet). `adminCall.ts` wraps every privileged operation in the sign-in check and the gate. `getMyAdminRole.ts` is OP-14. Tests: G5 added; `npm test` in `backend/`: 428 passed, 0 failed (emulator only). In-panel add and remove wait for OQ-58.
+
+### Added: Cloud Functions and `saveProfile`, OP-10 (MOD13-P1-T01), 2026-11-10
+
+`backend/functions/` is the TypeScript Cloud Functions project (DEC-025), taken from the emulator spike with the spike labels removed. It holds OP-10 `saveProfile` (`saveProfile.ts`, `profile.ts`) and the shared refusals and input checks (`errors.ts`, `validation.ts`). `backend/firebase.json` adds the Auth and Functions emulators; `backend/package.json` builds the functions before the tests; `backend/test/helpers.mjs` gains the account and callable helpers. Tests: G0, G6 and U1 added. `npm test` in `backend/`: 392 tests, 392 passed (emulator only). DEP-84 to DEP-87 in `DEPENDENCY_REGISTER.md` section 8.3.
+
+### Documentation: merges without pull requests; DEC-004 and DEC-020 agreed, 2026-11-10
+
+`DECISION_LOG.md` section 5.12 records the agreement of both developers: tasks merge into `main` without pull requests (DEC-010), the admin panel is React on Firebase Hosting (DEC-004 AGREED), and issue files are delivered through function-issued short-lived signed URLs (DEC-020 AGREED, the device resume proof still owed). `DEVELOPMENT_WORKFLOW.md` section 6 and convention 7 above say how a task is merged and logged now.
 
 ### Documentation: the account, profile, settings and notification screen designs (MOD16-P1-T03), 2026-11-09, on topic branch `feat/sa-account-designs` on top of `feat/sa-backend-rules` (the head of pull request #66), then merged with `origin/main` at `fe4e618` (#66 merged), under review in pull request #67
 
