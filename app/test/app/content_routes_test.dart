@@ -234,6 +234,49 @@ void main() {
       );
     });
 
+    testWidgets('the star shows on issue details with full access only, and '
+        'the Favourites view opens the issue [MOD08-P2-T02, OQ-12]', (
+      WidgetTester tester,
+    ) async {
+      final FakeServer server = FakeServer();
+      final FakeAuthService auth = FakeAuthService(server, signedInAs: fxUsr01);
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        auth,
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        library: FakeLibraryRepository(server, auth),
+      );
+      router.go('/issues/fx-iss-02');
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Add to favourites'));
+      await tester.pumpAndSettle();
+      expect(server.favouriteIssueIdsOf('fx-usr-01'), <String>{'fx-iss-02'});
+
+      router.go('/library');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Favourites'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Test Issue 02'));
+      await tester.pumpAndSettle();
+      expect(titled('Test Issue 02'), findsOneWidget);
+    });
+
+    testWidgets('a visitor sees no star on issue details', (
+      WidgetTester tester,
+    ) async {
+      final FakeServer server = FakeServer();
+      final FakeAuthService auth = FakeAuthService(server);
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        auth,
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        library: FakeLibraryRepository(server, auth),
+      );
+      router.go('/issues/fx-iss-02');
+      await tester.pumpAndSettle();
+      expect(find.byTooltip('Add to favourites'), findsNothing);
+    });
+
     testWidgets('without a download manager, issue details offer Read only', (
       WidgetTester tester,
     ) async {

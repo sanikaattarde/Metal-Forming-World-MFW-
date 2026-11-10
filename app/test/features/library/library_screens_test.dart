@@ -189,4 +189,83 @@ void main() {
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     });
   });
+
+  group('Favourites [MOD08-P2-T02]', () {
+    Future<void> pumpStar(
+      WidgetTester tester,
+      LibraryRepository library,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildMfwTheme(),
+          home: Scaffold(
+            appBar: AppBar(
+              actions: <Widget>[
+                FavouriteButton(library: library, issueId: 'fx-iss-02'),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('the star marks and unmarks a favourite at once '
+        '[FR-BKM-003, AC-5.2]', (WidgetTester tester) async {
+      final FakeServer server = FakeServer();
+      await pumpStar(tester, libraryFor(server, fxUsr01));
+
+      await tester.tap(find.byTooltip('Add to favourites'));
+      await tester.pump();
+      expect(find.byTooltip('Remove from favourites'), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(server.favouriteIssueIdsOf('fx-usr-01'), <String>{'fx-iss-02'});
+
+      await tester.tap(find.byTooltip('Remove from favourites'));
+      await tester.pumpAndSettle();
+      expect(server.favouriteIssueIdsOf('fx-usr-01'), isEmpty);
+      expect(find.byTooltip('Add to favourites'), findsOneWidget);
+    });
+
+    testWidgets('a refused star goes back and says why (OQ-12, YG\'s '
+        'answer, PROVISIONAL)', (WidgetTester tester) async {
+      final FakeServer server = FakeServer();
+      await pumpStar(tester, libraryFor(server, fxUsr03));
+      await tester.tap(find.byTooltip('Add to favourites'));
+      await tester.pumpAndSettle();
+      expect(find.byTooltip('Add to favourites'), findsOneWidget);
+      expect(find.text('You do not have access.'), findsOneWidget);
+      expect(server.favouriteIssueIdsOf('fx-usr-03'), isEmpty);
+    });
+
+    testWidgets('SCR-A-17 lists favourites by title, opens one, and unmarks '
+        'one [FR-BKM-003]', (WidgetTester tester) async {
+      final FakeServer server = FakeServer();
+      final FakeLibraryRepository library = libraryFor(server, fxUsr01);
+      await library.setFavourite('fx-iss-02', true);
+      final List<String> opened = <String>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildMfwTheme(),
+          home: LibraryScreen(
+            library: library,
+            titleOf: titleOf,
+            onOpenBookmark: (Bookmark _) {},
+            onOpenIssue: opened.add,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Favourites'));
+      await tester.pumpAndSettle();
+      expect(find.text('Title of fx-iss-02'), findsOneWidget);
+
+      await tester.tap(find.text('Title of fx-iss-02'));
+      expect(opened, <String>['fx-iss-02']);
+
+      await tester.tap(find.byTooltip('Remove from favourites'));
+      await tester.pumpAndSettle();
+      expect(find.text('No favourites yet'), findsOneWidget);
+    });
+  });
 }
