@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../contracts/contracts.dart';
 import '../features/catalogue/catalogue.dart';
+import '../features/downloads/downloads.dart';
 import 'access_guard.dart';
 import 'router.dart';
 import 'routes.dart';
@@ -16,11 +19,19 @@ RouteScreens withContentScreens(
   required ValueListenable<AccessState> accessState,
   CatalogueRepository? catalogue,
   NewsRepository? news,
+  DownloadManager? downloads,
+  IssueTitles? titles,
 }) {
+  final RouteScreens withDownloads = downloads == null
+      ? base
+      : base.withContent(
+          downloads: (BuildContext context, GoRouterState state) =>
+              _DownloadsTab(downloads: downloads, titles: titles),
+        );
   if (catalogue == null) {
-    return base;
+    return withDownloads;
   }
-  return base.withContent(
+  return withDownloads.withContent(
     home: (BuildContext context, GoRouterState state) => HomeScreen(
       catalogue: catalogue,
       news: news,
@@ -49,6 +60,12 @@ RouteScreens withContentScreens(
         actions: IssueDetailsActions(
           onRead: (IssueSummary issue) =>
               context.push(AppRoutes.reader(issue.issueId)),
+          onDownload: downloads == null
+              ? null
+              : (IssueSummary issue) {
+                  unawaited(titles?.remember(issue.issueId, issue.title));
+                  unawaited(showDownloadSheet(context, downloads, issue));
+                },
           onSignIn: () => context.go(returningTo(AppRoutes.signIn, here)),
           onRegister: () => context.go(returningTo(AppRoutes.register, here)),
           onContinueSignUp: () {
@@ -73,5 +90,63 @@ void _back(BuildContext context) {
     context.pop();
   } else {
     context.go(AppRoutes.home);
+  }
+}
+
+/// SCR-A-13 as a sheet over the issue details (where it sits is SN-04).
+Future<void> showDownloadSheet(
+  BuildContext context,
+  DownloadManager downloads,
+  IssueSummary issue,
+) => showModalBottomSheet<void>(
+  context: context,
+  showDragHandle: true,
+  isScrollControlled: true,
+  builder: (BuildContext context) => SafeArea(
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(issue.title, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 12),
+          DownloadPanel(downloads: downloads, issueId: issue.issueId),
+        ],
+      ),
+    ),
+  ),
+);
+
+/// SCR-A-15 with the titles kept beside the files, so it names the issues
+/// with no network (NFR-OFF-001).
+class _DownloadsTab extends StatelessWidget {
+  const _DownloadsTab({required this.downloads, this.titles});
+
+  final DownloadManager downloads;
+  final IssueTitles? titles;
+
+  @override
+  Widget build(BuildContext context) {
+    final IssueTitles? store = titles;
+    if (store == null) {
+      return DownloadsScreen(downloads: downloads);
+    }
+    return FutureBuilder<Map<String, String>>(
+      future: store.load().catchError((Object _) => <String, String>{}),
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, String>> known) {
+            final Map<String, String>? names = known.data;
+            if (names == null) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+            return DownloadsScreen(
+              downloads: downloads,
+              titleOf: (String issueId) => names[issueId] ?? issueId,
+            );
+          },
+    );
   }
 }
