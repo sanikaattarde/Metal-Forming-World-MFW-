@@ -35,13 +35,14 @@ class _FavouriteButtonState extends State<FavouriteButton> {
   @override
   void initState() {
     super.initState();
+    // A failed watch, as at sign-out, keeps the last state shown.
     _favourites = widget.library.watchFavouriteIssueIds().listen((
       Set<String> ids,
     ) {
       setState(() {
         _favourite = ids.contains(widget.issueId);
       });
-    });
+    }, onError: (Object _) {});
   }
 
   @override

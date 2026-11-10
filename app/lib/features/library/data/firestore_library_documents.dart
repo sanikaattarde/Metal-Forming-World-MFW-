@@ -6,6 +6,13 @@ import '../domain/library_documents.dart';
 /// `users/{uid}/bookmarks` and `users/{uid}/favourites`
 /// (`DATABASE_AND_DATA_MODEL.md` section 12). Timestamps become UTC
 /// `DateTime`s. Thin on purpose: it runs only on a device or simulator.
+///
+/// With no connection a write is kept on the device and sent when the
+/// connection returns, but the database does not answer it until then. A
+/// write therefore returns after [serverWait] at most, so the reader's
+/// bookmark and star are not held for the whole time offline. A refusal
+/// that comes later puts the record back in the watched list. More offline
+/// behaviour is MOD08-P2-T04, with OQ-10.
 final class FirestoreLibraryDocuments implements LibraryDocuments {
   /// Creates the adapter over [firestore].
   FirestoreLibraryDocuments(this._firestore);
@@ -27,6 +34,12 @@ final class FirestoreLibraryDocuments implements LibraryDocuments {
           },
         LibraryDocuments.idKey: id,
       };
+
+  /// How long a write waits for the database's answer.
+  static const Duration serverWait = Duration(seconds: 10);
+
+  Future<void> _write(Future<void> Function() call) =>
+      _guard(() => call().timeout(serverWait, onTimeout: () {}));
 
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
@@ -52,7 +65,7 @@ final class FirestoreLibraryDocuments implements LibraryDocuments {
     String uid,
     String bookmarkId,
     Map<String, Object?> fields,
-  ) => _guard(() => _bookmarks(uid).doc(bookmarkId).set(fields));
+  ) => _write(() => _bookmarks(uid).doc(bookmarkId).set(fields));
 
   @override
   Future<Map<String, Object?>?> readBookmark(String uid, String bookmarkId) =>
@@ -65,7 +78,7 @@ final class FirestoreLibraryDocuments implements LibraryDocuments {
 
   @override
   Future<void> deleteBookmark(String uid, String bookmarkId) =>
-      _guard(() => _bookmarks(uid).doc(bookmarkId).delete());
+      _write(() => _bookmarks(uid).doc(bookmarkId).delete());
 
   @override
   Stream<Set<String>> watchFavourites(String uid) =>
@@ -82,7 +95,7 @@ final class FirestoreLibraryDocuments implements LibraryDocuments {
     String uid,
     String issueId,
     Map<String, Object?> fields,
-  ) => _guard(() => _favourites(uid).doc(issueId).set(fields));
+  ) => _write(() => _favourites(uid).doc(issueId).set(fields));
 
   @override
   Future<bool> hasFavourite(String uid, String issueId) =>
@@ -90,5 +103,5 @@ final class FirestoreLibraryDocuments implements LibraryDocuments {
 
   @override
   Future<void> deleteFavourite(String uid, String issueId) =>
-      _guard(() => _favourites(uid).doc(issueId).delete());
+      _write(() => _favourites(uid).doc(issueId).delete());
 }
