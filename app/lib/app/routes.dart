@@ -17,6 +17,9 @@ abstract final class AppRoutes {
   /// SCR-A-01, sign in.
   static const String signIn = '/sign-in';
 
+  /// SCR-A-04, password reset (MOD03-P2-T02). Open in every access state.
+  static const String passwordReset = '/reset-password';
+
   /// SCR-A-02, register.
   static const String register = '/register';
 

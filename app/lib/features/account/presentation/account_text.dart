@@ -21,6 +21,49 @@ abstract final class AccountText {
   /// A password left empty.
   static const String passwordMissing = 'Enter your password.';
 
+  // SCR-A-01.
+
+  /// The sign-in title.
+  static const String signInTitle = 'Sign in';
+
+  /// Why to sign in.
+  static const String signInBody = 'Sign in to read and download full issues.';
+
+  /// The sign-in button.
+  static const String signInButton = 'Sign in';
+
+  /// One message for any wrong address or password (SEC-CHK-17).
+  static const String wrongCredentials = 'The email or password is not right.';
+
+  /// The link to the password reset.
+  static const String forgotPassword = 'Forgot your password?';
+
+  /// The link to register.
+  static const String toRegister = 'New here? Create an account';
+
+  // SCR-A-04.
+
+  /// The password reset title.
+  static const String resetTitle = 'Reset your password';
+
+  /// What the reset does.
+  static const String resetBody =
+      'Enter your email address, and we will send a link.';
+
+  /// The reset button.
+  static const String resetButton = 'Send link';
+
+  /// The reset button once a link was sent.
+  static const String resetAgainButton = 'Send again';
+
+  /// The same message for a known and an unknown address (SC-21).
+  static const String resetSent =
+      'If an account uses this address, we have sent it a link to set a new '
+      'password.';
+
+  /// Back to sign-in.
+  static const String backToSignIn = 'Back to sign in';
+
   // SCR-A-02.
 
   /// The register title.
