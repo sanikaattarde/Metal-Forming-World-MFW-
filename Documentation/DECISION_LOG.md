@@ -104,7 +104,7 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 | DEC-002 | Mobile framework: Flutter, one codebase | BASELINE | CONFIRMED | Already in S2 |
 | DEC-003 | Backend platform | AGREED (section 5.11): Firebase, as S2 proposes. MFW still approves the M1 note (OQ-35) | PROVISIONAL, CONFLICT C-05 | Yes, if it differs from S2 or adds cost |
 | DEC-004 | Admin panel technology and hosting | AGREED (section 5.12): a React web app on Firebase Hosting | PROVISIONAL | Yes, if it differs from S2 or adds cost |
-| DEC-005 | PDF reader approach and library | OPEN | CONFIRMED approach, OPEN library | Yes, at M2, and for any paid licence |
+| DEC-005 | PDF reader approach and library | OPEN. YG's position of 10 November 2026 (in chat): pdfrx, the library the comparison spike chose (MOD07-P1-T01), used behind `PdfRenderer` so it can change. Sanika Attarde's position and the M2 reader result with MFW are still owed | CONFIRMED approach, OPEN library | Yes, at M2, and for any paid licence |
 | DEC-006 | Sign-in methods | OPEN | CONFIRMED and PROVISIONAL, CONFLICT C-04 | Yes |
 | DEC-007 | Access rule for full issues; no guest reading | OPEN (working position mandatory) | CONFIRMED and PROVISIONAL, CONFLICT C-01 | Yes |
 | DEC-008 | Reading model: online reading or complete local copy | OPEN | CONFLICT C-03 | Yes |
