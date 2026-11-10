@@ -214,7 +214,7 @@ test('G10 requestUpload: an admin gets a job, an address that cannot resolve and
   assert.deepEqual(Object.keys(reply.result).sort(), ['expires_at', 'job_id', 'upload_headers', 'upload_url']);
   assert.deepEqual(reply.result.upload_headers, {
     'content-type': 'application/pdf',
-    'x-goog-content-length-range': `1,${TEST_LIMIT}`,
+    'x-goog-resumable': 'start',
   });
   assert.equal(reply.result.job_id, jobIdFor(admin.uid, 'r1'));
   assert.equal(new URL(reply.result.upload_url).hostname.endsWith('.invalid'), true);

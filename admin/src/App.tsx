@@ -14,11 +14,14 @@ import type { Services } from './services';
 import { SignInPage } from './SignInPage';
 
 interface Props {
-  // null: the page is not served from a local address, so no services exist.
+  // null: no services exist, because the build has no project configuration and the page is not served
+  // from a local address, or because the build's configuration is unusable.
   services: Services | null;
+  // What to say when there are no services. The default is the no-configuration notice.
+  unavailableNotice?: string;
 }
 
-export function App({ services }: Props) {
+export function App({ services, unavailableNotice = MESSAGES.notConfigured }: Props) {
   const [signedIn, setSignedIn] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -55,7 +58,7 @@ export function App({ services }: Props) {
       <main className="page">
         <h1>Admin panel</h1>
         <p role="alert" className="message">
-          {MESSAGES.notConfigured}
+          {unavailableNotice}
         </p>
       </main>
     );

@@ -2,7 +2,7 @@
 
 Documentation for the Metal Forming World (MFW) mobile application: a Flutter app for Android and iOS, a backend, and a web admin panel for MFW's magazine issues and news.
 
-**State of this repository.** Early development. `app/` holds the Flutter app scaffold, the shared contracts, the theme and the WordPress news client, with tests that run on each pull request that changes `app/` (`.github/workflows/pr.yml`). `backend/` holds the Firestore and Storage access rules with their tests on the local emulators. There is no admin panel code on `main`, no cloud project, no deployment and no store submission. Every document is a draft. MFW has not approved any document, and the proposal and the statement of work are unsigned copies (OQ-28). Where a document says a decision is agreed or approved, it follows the evidence rules in [Documentation/DECISION_LOG.md](Documentation/DECISION_LOG.md) section 3.1.
+**State of this repository.** Early development. `app/` holds the Flutter app scaffold, the shared contracts, the theme and the WordPress news client, with tests that run on each pull request that changes `app/` (`.github/workflows/pr.yml`). `backend/` holds the Firestore and Storage access rules and the Cloud Functions, and `admin/` the admin panel, each with tests on the local emulators. There is no cloud project, no deployment and no store submission. Every document is a draft. MFW has not approved any document, and the proposal and the statement of work are unsigned copies (OQ-28). Where a document says a decision is agreed or approved, it follows the evidence rules in [Documentation/DECISION_LOG.md](Documentation/DECISION_LOG.md) section 3.1.
 
 **This repository is public.** Do not commit credentials, reader data, or the details of a security incident (see [Documentation/SECURITY_INCIDENT_PROCEDURE.md](Documentation/SECURITY_INCIDENT_PROCEDURE.md) section 5).
 
@@ -35,7 +35,7 @@ Reading order
 | `admin/` | The admin panel: a React web app for Firebase Hosting (DEC-004, AGREED), with its tests on the local emulators (MOD12) | [admin/README.md](admin/README.md) |
 | `config/` | `config.example.env`: the configuration items CFG-01 to CFG-15 by name, with placeholder values and where each value comes from | Below |
 
-**`backend/`.** The access rules, and later Cloud Functions in TypeScript on Node.js (DEC-025), run on the developer's machine against the Firebase Local Emulator Suite (ENV-LOCAL, DEC-023), with no login and no cloud project: `npm ci` and `npm test` in `backend/`, with Node.js 22 or later and Java 21 or later (DEP-79 to DEP-83). ENV-TEST and ENV-PROD wait for MFW's cloud access (`Documentation/CLOUD_ACCESS_SETUP_CHECKLIST.md`) and MFW's answer to OQ-40.
+**`backend/`.** The access rules and the Cloud Functions in TypeScript on Node.js (DEC-025) run on the developer's machine against the Firebase Local Emulator Suite (ENV-LOCAL, DEC-023), with no login and no cloud project: `npm ci`, `npm --prefix functions ci` and `npm test` in `backend/`, with Node.js 22 or later and Java 21 or later (DEP-79 to DEP-83). ENV-TEST and ENV-PROD wait for MFW's cloud access (`Documentation/CLOUD_ACCESS_SETUP_CHECKLIST.md`) and MFW's answer to OQ-40.
 
 **`admin/`.** A static single-page app in React and TypeScript, run locally against the same emulators. It holds no secret: every privileged operation is checked again on the backend (TD-14).
 

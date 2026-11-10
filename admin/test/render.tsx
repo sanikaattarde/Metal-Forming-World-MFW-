@@ -5,10 +5,10 @@ import { MemoryRouter } from 'react-router';
 import { App } from '../src/App';
 import type { Services } from '../src/services';
 
-export function renderApp(services: Services | null, path = '/') {
+export function renderApp(services: Services | null, path = '/', unavailableNotice?: string) {
   return render(
     <MemoryRouter initialEntries={[path]}>
-      <App services={services} />
+      <App services={services} unavailableNotice={unavailableNotice} />
     </MemoryRouter>,
   );
 }

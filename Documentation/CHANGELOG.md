@@ -32,6 +32,14 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Fixed: findings of the audit of the ten tasks, 2026-11-10
+
+- **OP-19 upload link** (MOD13-P1-T09): the signed URL is now a V4 resumable-upload URL, as the contract and TD-09 say, so a 150 MB file can continue after a break (FR-ADMIN-007). The reply's `upload_headers` are `content-type` and `x-goog-resumable: start`. No size-range header is signed, because its effect on a resumable upload is NOT VERIFIED; OP-19 and OP-40 keep checking the size. `API_AND_BACKEND_CONTRACT.md` OP-19 lists `upload_headers`.
+- **Admin panel start-up** (MOD12-P1-T01): a partial or demo project configuration showed a blank page; it now shows a notice and no form.
+- **Stale text**: the root `README.md` state and `backend/` paragraphs, the DEC-010 line of `DECISION_LOG.md` section 5.12, CFG-06 in `config/config.example.env` (unit, range, DEC-020 agreed), the DEP-82 row, and a plan identifier in `backend/seed/seed.mjs`.
+
+Tests: `npm test` in `backend/`: 981 passed; in `admin/`: 89 passed; the admin build passes. A clean checkout of `main` before these fixes gave 981 and 87 passed.
+
 ### Added: the news controls, OP-24 and the news-controls screen (MOD12-P2-T04), 2026-11-10
 
 `backend/functions/src/wordpress.ts` is OP-24 `listWordPressPosts`: an admin-only page of MFW's WordPress posts, read by the server so the panel never calls the site (TD-12), from an HTTPS address in `config/private` with no default (CFG-03, OQ-39), with time, size and page limits; any bad reply is `SITE_UNAVAILABLE`. `admin/src/NewsPage.tsx` is SCR-W-06: it lists the posts and hides, shows or marks each one as breaking through OP-23. Marking a post as breaking sends nothing. Tests: G12 and U7 added, against a stand-in site (`backend/test/wp-standin.mjs`); `npm test` in `backend/`: 981 passed; in `admin/`: 87 passed, two runs in a row (emulator only).

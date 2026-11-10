@@ -41,3 +41,7 @@ test('CFG-01: with project values, services exist on any address, and nothing is
   expect(services).not.toBeNull();
   expect(typeof services?.signIn).toBe('function');
 });
+
+test('CFG-01: an unusable configuration makes createServices fail, so the entry point shows its notice', async () => {
+  await expect(createServices('admin.example.test', { ...FULL, VITE_FIREBASE_AUTH_DOMAIN: '' })).rejects.toThrow(/incomplete/);
+});

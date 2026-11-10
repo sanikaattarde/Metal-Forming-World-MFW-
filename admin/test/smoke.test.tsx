@@ -24,3 +24,10 @@ test('with no project configuration and served from an address that is not local
   expect(screen.queryByRole('textbox')).toBeNull();
   expect(screen.queryByRole('button')).toBeNull();
 });
+
+test('with an unusable project configuration, the panel shows that notice and no form (CFG-01)', () => {
+  renderApp(null, '/', MESSAGES.badConfiguration);
+  expect(screen.getByRole('alert').textContent).toBe(MESSAGES.badConfiguration);
+  expect(screen.queryByRole('textbox')).toBeNull();
+  expect(screen.queryByRole('button')).toBeNull();
+});

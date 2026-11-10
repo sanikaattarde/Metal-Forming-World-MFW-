@@ -92,7 +92,7 @@ test('U6 the chosen grant issuer is the emulator one only on the emulators', asy
 
 const UPLOAD = { holdingPath: 'holding/job-1', contentType: 'application/pdf', maxBytes: 8192, lifetimeSeconds: 900 };
 
-test('U6 the upload issuer signs a V4 write link for the one holding path, with the type and the size range', async () => {
+test('U6 the upload issuer signs a V4 resumable-upload link for the one holding path, with the type (OP-19)', async () => {
   const bucket = fakeBucket();
   const address = await signedUploadUrlIssuer(bucket.open, () => NOW).issue(UPLOAD);
   assert.deepEqual(bucket.calls, [
@@ -100,16 +100,15 @@ test('U6 the upload issuer signs a V4 write link for the one holding path, with 
       path: 'holding/job-1',
       request: {
         version: 'v4',
-        action: 'write',
+        action: 'resumable',
         expires: NOW + 900_000,
         contentType: 'application/pdf',
-        extensionHeaders: { 'x-goog-content-length-range': '1,8192' },
       },
     },
   ]);
   assert.equal(address.url, 'https://storage.example.test/holding/job-1?X-Goog-Signature=fake');
   assert.equal(address.expiresAtMillis, NOW + 900_000);
-  assert.deepEqual(address.headers, { 'content-type': 'application/pdf', 'x-goog-content-length-range': '1,8192' });
+  assert.deepEqual(address.headers, { 'content-type': 'application/pdf', 'x-goog-resumable': 'start' });
 });
 
 test('U6 the upload issuer refuses a lifetime over the ceiling', async () => {
@@ -122,7 +121,7 @@ test('U6 on the emulators the upload address cannot resolve, holds no path and c
   const address = await withEmulatorFlag('true', () => emulatorUploadUrlIssuer.issue(UPLOAD));
   assert.equal(new URL(address.url).hostname, 'upload-emulator.invalid');
   assert.equal(address.url.includes('holding'), false);
-  assert.deepEqual(address.headers, { 'content-type': 'application/pdf', 'x-goog-content-length-range': '1,8192' });
+  assert.deepEqual(address.headers, { 'content-type': 'application/pdf', 'x-goog-resumable': 'start' });
 });
 
 test('U6 the chosen upload issuer is the emulator one only on the emulators', async () => {
