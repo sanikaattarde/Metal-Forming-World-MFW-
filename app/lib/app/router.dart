@@ -34,6 +34,7 @@ final class RouteScreens {
     this.issue,
     this.downloads,
     this.reader,
+    this.library,
   });
 
   /// SCR-A-15 (MOD06-P2-T02).
@@ -41,6 +42,9 @@ final class RouteScreens {
 
   /// SCR-A-14 (MOD07-P2-T01, MOD06-P3-T03).
   final ScreenBuilder? reader;
+
+  /// SCR-A-16 and SCR-A-17 (MOD08-P2-T01, MOD08-P2-T02).
+  final ScreenBuilder? library;
 
   /// SCR-A-10 (MOD05-P2-T03).
   final ScreenBuilder? home;
@@ -59,6 +63,7 @@ final class RouteScreens {
     ScreenBuilder? issue,
     ScreenBuilder? downloads,
     ScreenBuilder? reader,
+    ScreenBuilder? library,
   }) => RouteScreens(
     signIn: signIn,
     passwordReset: passwordReset,
@@ -73,6 +78,7 @@ final class RouteScreens {
     issue: issue ?? this.issue,
     downloads: downloads ?? this.downloads,
     reader: reader ?? this.reader,
+    library: library ?? this.library,
   );
 
   /// SCR-A-07 (MOD04-P2-T04).
@@ -193,7 +199,7 @@ GoRouter buildRouter(
           ),
           StatefulShellBranch(
             routes: <RouteBase>[
-              _placeholder(AppRoutes.library, ShellText.library),
+              _route(AppRoutes.library, ShellText.library, screens.library),
             ],
           ),
           StatefulShellBranch(

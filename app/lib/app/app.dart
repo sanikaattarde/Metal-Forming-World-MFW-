@@ -10,6 +10,7 @@ import '../core/config/firebase_settings.dart';
 import '../features/account/account.dart';
 import '../features/catalogue/catalogue.dart';
 import '../features/downloads/downloads.dart';
+import '../features/library/library.dart';
 import '../features/news/news.dart';
 import '../features/reader/reader.dart';
 import '../core/config/wordpress_config.dart';
@@ -118,6 +119,26 @@ final Provider<PdfRenderer> pdfRendererProvider = Provider<PdfRenderer>(
   (Ref ref) => const PdfrxRenderer(),
 );
 
+/// MOD-08's bookmarks and favourites (MOD08-P2-T01, MOD08-P2-T02) over
+/// Firebase once it has started, or null without it, in which case the
+/// library stays a placeholder. Tests override it with a fake.
+final Provider<LibraryRepository?> libraryRepositoryProvider =
+    Provider<LibraryRepository?>((Ref ref) {
+      final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
+      if (firebase == null) {
+        return null;
+      }
+      return DocumentLibraryRepository(
+        FirestoreLibraryDocuments(firebase.firestore),
+        currentUserId: () => firebase.identity.currentUser?.uid,
+        accessState: () =>
+            ref.read(accessStateProvider).value ?? AccessState.signedOut,
+        userChanges: firebase.identity.userChanges().map(
+          (IdentityUser? user) => user?.uid,
+        ),
+      );
+    });
+
 /// Opens MFW's policy pages outside the app (CFG-07, MOD04-P2-T02). Tests
 /// override it with a fake.
 final Provider<LinkOpener> linkOpenerProvider = Provider<LinkOpener>(
@@ -198,6 +219,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       downloads: ref.read(downloadManagerProvider),
       titles: ref.read(issueTitlesProvider),
       renderer: ref.read(pdfRendererProvider),
+      library: ref.read(libraryRepositoryProvider),
     ),
   );
   ref.onDispose(() {

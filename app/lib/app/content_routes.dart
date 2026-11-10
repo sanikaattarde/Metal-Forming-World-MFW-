@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../contracts/contracts.dart';
 import '../features/catalogue/catalogue.dart';
 import '../features/downloads/downloads.dart';
+import '../features/library/library.dart';
 import 'access_guard.dart';
 import 'reader_route.dart';
 import 'router.dart';
@@ -23,6 +24,7 @@ RouteScreens withContentScreens(
   DownloadManager? downloads,
   IssueTitles? titles,
   PdfRenderer? renderer,
+  LibraryRepository? library,
 }) {
   final RouteScreens withDownloads = downloads == null
       ? base
@@ -43,13 +45,38 @@ RouteScreens withContentScreens(
                       state.uri.queryParameters['page'] ?? '',
                     ),
                     onClose: () => _back(context),
+                    actions: library == null
+                        ? null
+                        : (
+                            String issueId,
+                            LocalIssueFile file,
+                            ReaderController reader,
+                          ) => <Widget>[
+                            BookmarkButton(
+                              library: library,
+                              issueId: issueId,
+                              fileRevision: file.fileRevision,
+                              reader: reader,
+                            ),
+                          ],
                   );
                 },
         );
+  final RouteScreens withLibrary = library == null
+      ? withDownloads
+      : withDownloads.withContent(
+          library: (BuildContext context, GoRouterState state) => LibraryScreen(
+            library: library,
+            titleOf: (String id) => _titleOf(id, titles, catalogue),
+            onOpenBookmark: (Bookmark bookmark) => context.push(
+              AppRoutes.reader(bookmark.issueId, page: bookmark.page),
+            ),
+          ),
+        );
   if (catalogue == null) {
-    return withDownloads;
+    return withLibrary;
   }
-  return withDownloads.withContent(
+  return withLibrary.withContent(
     home: (BuildContext context, GoRouterState state) => HomeScreen(
       catalogue: catalogue,
       news: news,

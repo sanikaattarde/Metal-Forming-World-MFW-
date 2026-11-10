@@ -32,6 +32,30 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: bookmarks (MOD08-P2-T01), 2026-11-10
+
+`app/lib/features/library/` holds MOD-08:
+- **`DocumentLibraryRepository`** follows section 6.8, over the `LibraryDocuments` port and the Firestore adapter, on `users/{uid}/bookmarks` and `favourites`.
+  - A bookmark is keyed `<issueId>_<page>` (rule 1).
+  - Page and revision are checked before any write (rule 5), and full access is checked by the app.
+  - A repeated add that the rules refuse reads the record and returns the first bookmark unchanged (rule 2).
+  - Removing a missing bookmark is `notFound`.
+  - Lists follow a change of reader.
+- **`BookmarkButton` in the reader** is filled when the page shown is bookmarked. A tap adds the bookmark with the file revision being read (rule 3), or removes it, and says so. The reader's page stream now gives the page shown first.
+- **The Library tab** is SCR-A-16 (`LibraryScreen`): bookmarks by issue with their titles, each opening the reader at its page (FR-BKM-006) or removed (FR-BKM-007), with an empty state.
+- **Offline:** offline reading follows the database's cache until OQ-10 (MOD08-P2-T04).
+
+Tests:
+- `document_library_repository_test.dart` uses an in-memory store with the rules' refusals.
+- `library_screens_test.dart` covers the button, the list, removal, a second device of the same reader, another reader, and the tap-target and label guidelines.
+- A Library tab test was added to `content_routes_test.dart`.
+- `integration_test/library_rules_test.dart` passes 3 of 3 on an iPhone 18 Pro simulator against the Firestore and Auth emulators with `backend/firestore.rules`:
+  - A repeat on a later revision returns the first bookmark.
+  - Another reader can neither read nor write a reader's bookmarks (SEC-CHK-05).
+  - Favourites set idempotently.
+- The two-device IC-04 check stays with MOD08-P2-T03.
+- `flutter analyze` finds no issues, and `flutter test` passes 769 and skips 52.
+
 ### Added: offline opening through `openLocal`, with the IC-03 check (MOD06-P3-T03), 2026-11-10
 
 - **Reader route:** `/issues/:id/read?page=` is now `ReaderRoute` (`app/lib/app/reader_route.dart`).

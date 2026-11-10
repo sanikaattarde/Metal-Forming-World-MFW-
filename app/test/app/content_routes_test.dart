@@ -10,6 +10,7 @@ import '../fakes/fake_auth_service.dart';
 import '../fakes/fake_catalogue_repository.dart';
 import '../fakes/fake_download_manager.dart';
 import '../fakes/fake_issue_file_service.dart';
+import '../fakes/fake_library_repository.dart';
 import '../fixtures/fx_issue_files.dart';
 import '../fakes/fake_server.dart';
 import '../features/reader/reader_screen_test.dart'
@@ -197,6 +198,40 @@ void main() {
       await tester.tap(find.byTooltip('Close'));
       await tester.pumpAndSettle();
       expect(find.text('Read'), findsOneWidget);
+    });
+
+    testWidgets('the Library tab lists bookmarks, and one opens the reader '
+        'at its page with the bookmark shown [MOD08-P2-T01, FR-BKM-006]', (
+      WidgetTester tester,
+    ) async {
+      final FakeServer server = FakeServer();
+      final FakeAuthService auth = FakeAuthService(server, signedInAs: fxUsr01);
+      final FakeDownloadManager downloads = FakeDownloadManager(
+        auth,
+        FakeIssueFileService(auth, files: fxIssueFiles),
+      );
+      await downloads.start('fx-iss-01', mobileDataAccepted: true);
+      final FakeLibraryRepository library = FakeLibraryRepository(server, auth);
+      await library.addBookmark('fx-iss-01', 3, 1);
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        auth,
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        downloads: downloads,
+        renderer: FakeRenderer(Ok<PdfDocumentHandle>(FakeDocument(4))),
+        library: library,
+      );
+      router.go('/library');
+      await tester.pumpAndSettle();
+      expect(find.text('TEST ISSUE 01'), findsOneWidget);
+
+      await tester.tap(find.text('Page 3'));
+      await tester.pumpAndSettle();
+      expect(find.text('3 / 4'), findsOneWidget);
+      expect(
+        find.byTooltip('Remove the bookmark of this page'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('without a download manager, issue details offer Read only', (
