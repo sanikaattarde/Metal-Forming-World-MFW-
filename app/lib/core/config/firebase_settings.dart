@@ -85,10 +85,10 @@ final class FirebaseSettings {
     projectId: emulatorProjectId,
     messagingSenderId: '0',
     android: const FirebaseAppIds(
-      apiKey: 'emulator-api-key',
+      apiKey: emulatorApiKey,
       appId: '1:0:android:0',
     ),
-    ios: const FirebaseAppIds(apiKey: 'emulator-api-key', appId: '1:0:ios:0'),
+    ios: const FirebaseAppIds(apiKey: emulatorApiKey, appId: '1:0:ios:0'),
     emulatorHost: host ?? '',
   );
 
@@ -107,6 +107,14 @@ final class FirebaseSettings {
 
   /// The demo project the emulators run, with no cloud project.
   static const String emulatorProjectId = 'demo-mfw';
+
+  /// The API key used with the emulators. Not a real key: the emulators
+  /// accept any. It has the shape Firebase checks on iOS (39 characters,
+  /// starting with `A`, URL-safe), because Firebase Installations stops the
+  /// app at start-up on any other shape. It avoids the `AIza` prefix of real
+  /// keys, so a secrets scan does not take it for one.
+  static const String emulatorApiKey =
+      'A-emulator-only-placeholder-not-a-key-0';
 
   /// CFG-01, the Firebase project identifier.
   static const String projectIdKey = 'CFG_01_BACKEND_PROJECT_ID';

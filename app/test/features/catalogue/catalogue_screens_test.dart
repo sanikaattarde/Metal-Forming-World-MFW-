@@ -231,6 +231,93 @@ void main() {
     });
   });
 
+  group('Refresh and publication changes [MOD05-P2-T04, IC-07]', () {
+    Future<void> pull(WidgetTester tester) async {
+      await tester.fling(
+        find.byType(Scrollable).first,
+        const Offset(0, 400),
+        1000,
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('a newly published issue appears after pull to refresh, and '
+        'goes after it is unpublished [FR-MAG-007, FR-MAG-008, AC-1.4, '
+        'AC-8.7]', (WidgetTester tester) async {
+      final FakeCatalogueRepository catalogue =
+          FakeCatalogueRepository.fromFixtures();
+      await pumpCatalogue(tester, catalogue);
+      await tester.pumpAndSettle();
+      expect(find.text('9 issues'), findsOneWidget);
+
+      catalogue.publish('fx-iss-08');
+      await pull(tester);
+      expect(find.text('10 issues'), findsOneWidget);
+
+      catalogue.unpublish('fx-iss-08');
+      await pull(tester);
+      expect(find.text('9 issues'), findsOneWidget);
+    });
+
+    testWidgets('a refresh that fails keeps the list and says why', (
+      WidgetTester tester,
+    ) async {
+      final FakeCatalogueRepository catalogue =
+          FakeCatalogueRepository.fromFixtures();
+      await pumpCatalogue(tester, catalogue);
+      await tester.pumpAndSettle();
+      catalogue.failure = const AppFailure(
+        FailureCode.network,
+        retryable: true,
+      );
+      await pull(tester);
+      expect(find.text('9 issues'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(SnackBar),
+          matching: find.text('No connection. Check your connection.'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('the search is kept across a refresh', (
+      WidgetTester tester,
+    ) async {
+      final FakeCatalogueRepository catalogue =
+          FakeCatalogueRepository.fromFixtures();
+      await pumpCatalogue(tester, catalogue);
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'Test Issue 08');
+      await tester.pump();
+      expect(find.text('No issues match'), findsOneWidget);
+
+      catalogue.publish('fx-iss-08');
+      await pull(tester);
+      expect(find.text('1 issue'), findsOneWidget);
+    });
+
+    testWidgets('an open issue that is unpublished shows as gone after a '
+        'refresh [FR-MAG-008]', (WidgetTester tester) async {
+      final FakeCatalogueRepository catalogue =
+          FakeCatalogueRepository.fromFixtures();
+      await pumpDetails(
+        tester,
+        catalogue,
+        ValueNotifier<AccessState>(AccessState.fullAccess),
+        Recorded().actions(),
+        issueId: 'fx-iss-02',
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Read'), findsOneWidget);
+
+      catalogue.unpublish('fx-iss-02');
+      await pull(tester);
+      expect(find.text('This issue is no longer available'), findsOneWidget);
+      expect(find.text('Read'), findsNothing);
+    });
+  });
+
   group('IssueDetailsScreen, SCR-A-12 [MOD05-P2-T01]', () {
     testWidgets('shows the public metadata [FR-MAG-005, AC-1.1]', (
       WidgetTester tester,
@@ -354,7 +441,7 @@ void main() {
         issueId: 'fx-iss-08',
       );
       await tester.pumpAndSettle();
-      expect(find.text('This is no longer available.'), findsOneWidget);
+      expect(find.text('This issue is no longer available'), findsOneWidget);
       expect(find.text('Retry'), findsNothing);
       expect(find.text('Read'), findsNothing);
     });
