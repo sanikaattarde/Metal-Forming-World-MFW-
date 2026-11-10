@@ -4,6 +4,7 @@ import 'package:mfw_app/contracts/contracts.dart';
 
 import '../../../app/theme/mfw_tokens.dart';
 import '../../../core/ui/content_widgets.dart';
+import '../../../core/ui/reloadable.dart';
 import 'catalogue_text.dart';
 import 'issue_row.dart';
 
@@ -78,64 +79,88 @@ class IssueDetailsScreen extends StatefulWidget {
   State<IssueDetailsScreen> createState() => _IssueDetailsScreenState();
 }
 
-class _IssueDetailsScreenState extends State<IssueDetailsScreen> {
-  late Future<Result<IssueContent>> _content = _load();
-
-  Future<Result<IssueContent>> _load() =>
+class _IssueDetailsScreenState extends State<IssueDetailsScreen>
+    with Reloadable<IssueDetailsScreen, IssueContent> {
+  @override
+  Future<Result<IssueContent>> fetch() =>
       loadIssue(widget.catalogue, widget.issueId);
 
-  void _reload() {
-    setState(() {
-      _content = _load();
-    });
-  }
+  /// An issue unpublished since it was opened is shown as gone at once
+  /// (RS FR-MAG-008).
+  @override
+  bool replaceOnFailure(AppFailure failure) =>
+      failure.code == FailureCode.notFound;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Result<IssueContent>>(
-      future: _content,
-      builder:
-          (BuildContext context, AsyncSnapshot<Result<IssueContent>> snapshot) {
-            final Result<IssueContent>? result = snapshot.data;
-            final IssueContent? content = switch (result) {
-              Ok<IssueContent>(:final IssueContent value) => value,
-              _ => null,
-            };
-            return ValueListenableBuilder<AccessState>(
-              valueListenable: widget.accessState,
-              builder: (BuildContext context, AccessState state, Widget? _) =>
-                  Scaffold(
-                    appBar: AppBar(
-                      automaticallyImplyLeading: false,
-                      leading: widget.actions.onBack == null
-                          ? null
-                          : IconButton(
-                              tooltip: CatalogueText.back,
-                              icon: const Icon(Icons.arrow_back),
-                              onPressed: widget.actions.onBack,
-                            ),
-                      title: Text(content?.issue.title ?? ''),
-                      actions: content == null
-                          ? null
-                          : widget.appBarActions?.call(content.issue, state),
-                    ),
-                    body: switch (result) {
-                      null => const LoadingContent(
-                        label: CatalogueText.loadingIssue,
-                      ),
-                      Err<IssueContent>(:final AppFailure failure) => _Failure(
-                        failure: failure,
-                        onRetry: _reload,
-                      ),
-                      Ok<IssueContent>(:final IssueContent value) => _Details(
-                        content: value,
-                        state: state,
-                        actions: widget.actions,
-                      ),
-                    },
-                  ),
-            );
-          },
+    final Result<IssueContent>? current = result;
+    final IssueContent? content = switch (current) {
+      Ok<IssueContent>(:final IssueContent value) => value,
+      _ => null,
+    };
+    return ValueListenableBuilder<AccessState>(
+      valueListenable: widget.accessState,
+      builder: (BuildContext context, AccessState state, Widget? _) => Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: widget.actions.onBack == null
+              ? null
+              : IconButton(
+                  tooltip: CatalogueText.back,
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: widget.actions.onBack,
+                ),
+          title: Text(content?.issue.title ?? ''),
+          actions: content == null
+              ? null
+              : widget.appBarActions?.call(content.issue, state),
+        ),
+        body: switch (current) {
+          null => const LoadingContent(label: CatalogueText.loadingIssue),
+          Err<IssueContent>(:final AppFailure failure)
+              when failure.code == FailureCode.notFound =>
+            _NoLongerAvailable(onBack: widget.actions.onBack),
+          Err<IssueContent>(:final AppFailure failure) => RefreshIndicator(
+            onRefresh: refresh,
+            child: _Failure(failure: failure, onRetry: retry),
+          ),
+          Ok<IssueContent>(:final IssueContent value) => RefreshIndicator(
+            onRefresh: refresh,
+            child: _Details(
+              content: value,
+              state: state,
+              actions: widget.actions,
+            ),
+          ),
+        },
+      ),
+    );
+  }
+}
+
+/// The issue was unpublished or never existed (RS FR-MAG-008). There is
+/// nothing to retry.
+class _NoLongerAvailable extends StatelessWidget {
+  const _NoLongerAvailable({this.onBack});
+
+  final VoidCallback? onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        EmptyState(
+          icon: Icons.remove_circle_outline,
+          heading: CatalogueText.goneHeading,
+          text: CatalogueText.goneText,
+          action: onBack == null
+              ? null
+              : OutlinedButton(
+                  onPressed: onBack,
+                  child: const Text(CatalogueText.back),
+                ),
+        ),
+      ],
     );
   }
 }
@@ -149,6 +174,7 @@ class _Failure extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(MfwSpace.lg),
       children: <Widget>[
         ContentNotice(
@@ -183,6 +209,7 @@ class _Details extends StatelessWidget {
   Widget build(BuildContext context) {
     final IssueSummary issue = content.issue;
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(MfwSpace.lg),
       children: <Widget>[
         Center(

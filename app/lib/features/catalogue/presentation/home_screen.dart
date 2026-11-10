@@ -4,6 +4,7 @@ import 'package:mfw_app/contracts/contracts.dart';
 import '../../../app/theme/mfw_tokens.dart';
 import '../../../core/format/display_format.dart';
 import '../../../core/ui/content_widgets.dart';
+import '../../../core/ui/reloadable.dart';
 import 'catalogue_screen.dart';
 import 'catalogue_text.dart';
 import 'issue_row.dart';
@@ -72,17 +73,25 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  late Future<Result<CatalogueContent>> _issues = loadCatalogue(
-    widget.catalogue,
-  );
+class _HomeScreenState extends State<HomeScreen>
+    with Reloadable<HomeScreen, CatalogueContent> {
   late Future<Result<NewsPage>>? _news = widget.news?.listPosts();
 
-  void _reload() {
+  @override
+  Future<Result<CatalogueContent>> fetch() => loadCatalogue(widget.catalogue);
+
+  Future<void> _refreshAll() {
     setState(() {
-      _issues = loadCatalogue(widget.catalogue);
       _news = widget.news?.listPosts();
     });
+    return refresh();
+  }
+
+  Future<void> _retryAll() {
+    setState(() {
+      _news = widget.news?.listPosts();
+    });
+    return retry();
   }
 
   @override
@@ -98,26 +107,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: FutureBuilder<Result<CatalogueContent>>(
-        future: _issues,
-        builder:
-            (
-              BuildContext context,
-              AsyncSnapshot<Result<CatalogueContent>> snapshot,
-            ) => switch (snapshot.data) {
-              null => const LoadingContent(label: HomeText.loading),
-              Err<CatalogueContent>(:final AppFailure failure) => _Unavailable(
-                failure: failure,
-                onRetry: _reload,
-                onOpenDownloads: widget.actions.onOpenDownloads,
-              ),
-              Ok<CatalogueContent>(:final CatalogueContent value) => _Home(
-                content: value,
-                news: _news,
-                actions: widget.actions,
-              ),
-            },
-      ),
+      body: switch (result) {
+        null => const LoadingContent(label: HomeText.loading),
+        Err<CatalogueContent>(:final AppFailure failure) => RefreshIndicator(
+          onRefresh: _refreshAll,
+          child: _Unavailable(
+            failure: failure,
+            onRetry: _retryAll,
+            onOpenDownloads: widget.actions.onOpenDownloads,
+          ),
+        ),
+        Ok<CatalogueContent>(:final CatalogueContent value) => RefreshIndicator(
+          onRefresh: _refreshAll,
+          child: _Home(content: value, news: _news, actions: widget.actions),
+        ),
+      },
     );
   }
 }
@@ -137,6 +141,7 @@ class _Unavailable extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool offline = failure.code == FailureCode.network;
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(MfwSpace.lg),
       children: <Widget>[
         ContentNotice(
@@ -182,6 +187,7 @@ class _Home extends StatelessWidget {
     final List<IssueSummary> issues = content.issues;
     final Future<Result<NewsPage>>? posts = news;
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: MfwSpace.lg),
       children: <Widget>[
         const SectionHeading(HomeText.latestIssue),

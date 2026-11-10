@@ -3,6 +3,7 @@ import 'package:mfw_app/contracts/contracts.dart';
 
 import '../../../app/theme/mfw_tokens.dart';
 import '../../../core/ui/content_widgets.dart';
+import '../../../core/ui/reloadable.dart';
 import '../domain/issue_search.dart';
 import 'catalogue_text.dart';
 import 'issue_row.dart';
@@ -37,19 +38,14 @@ class CatalogueScreen extends StatefulWidget {
   State<CatalogueScreen> createState() => _CatalogueScreenState();
 }
 
-class _CatalogueScreenState extends State<CatalogueScreen> {
-  late Future<Result<CatalogueContent>> _content = _load();
+class _CatalogueScreenState extends State<CatalogueScreen>
+    with Reloadable<CatalogueScreen, CatalogueContent> {
   final TextEditingController _search = TextEditingController();
   IssueQuery _query = const IssueQuery();
 
-  Future<Result<CatalogueContent>> _load() =>
+  @override
+  Future<Result<CatalogueContent>> fetch() =>
       loadCatalogue(widget.catalogue, segments: widget.segments);
-
-  void _reload() {
-    setState(() {
-      _content = _load();
-    });
-  }
 
   void _setQuery(IssueQuery query) {
     setState(() {
@@ -82,40 +78,39 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
               ),
         title: const Text(CatalogueText.title),
       ),
-      body: FutureBuilder<Result<CatalogueContent>>(
-        future: _content,
-        builder:
-            (
-              BuildContext context,
-              AsyncSnapshot<Result<CatalogueContent>> snapshot,
-            ) => switch (snapshot.data) {
-              null => const LoadingContent(label: CatalogueText.loading),
-              Err<CatalogueContent>(:final AppFailure failure) => ListView(
-                padding: const EdgeInsets.all(MfwSpace.lg),
-                children: <Widget>[
-                  ContentNotice(
-                    CatalogueText.failure(failure),
-                    kind: failure.code == FailureCode.network
-                        ? NoticeKind.offline
-                        : NoticeKind.error,
-                    action: TextButton(
-                      onPressed: _reload,
-                      child: const Text(CatalogueText.retry),
-                    ),
-                  ),
-                ],
-              ),
-              Ok<CatalogueContent>(:final CatalogueContent value) =>
-                _CatalogueList(
-                  content: value,
-                  search: _search,
-                  query: _query,
-                  onQuery: _setQuery,
-                  onClear: _clear,
-                  onOpen: widget.onOpenIssue,
+      body: switch (result) {
+        null => const LoadingContent(label: CatalogueText.loading),
+        Err<CatalogueContent>(:final AppFailure failure) => RefreshIndicator(
+          onRefresh: refresh,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(MfwSpace.lg),
+            children: <Widget>[
+              ContentNotice(
+                CatalogueText.failure(failure),
+                kind: failure.code == FailureCode.network
+                    ? NoticeKind.offline
+                    : NoticeKind.error,
+                action: TextButton(
+                  onPressed: retry,
+                  child: const Text(CatalogueText.retry),
                 ),
-            },
-      ),
+              ),
+            ],
+          ),
+        ),
+        Ok<CatalogueContent>(:final CatalogueContent value) => RefreshIndicator(
+          onRefresh: refresh,
+          child: _CatalogueList(
+            content: value,
+            search: _search,
+            query: _query,
+            onQuery: _setQuery,
+            onClear: _clear,
+            onOpen: widget.onOpenIssue,
+          ),
+        ),
+      },
     );
   }
 }
@@ -141,6 +136,7 @@ class _CatalogueList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (content.issues.isEmpty) {
       return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
         children: const <Widget>[
           EmptyState(
             icon: Icons.menu_book_outlined,
@@ -161,6 +157,7 @@ class _CatalogueList extends StatelessWidget {
     );
     final bool filtering = _isFiltering(query);
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(MfwSpace.lg),
       children: <Widget>[
         _SearchField(

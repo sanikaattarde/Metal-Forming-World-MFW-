@@ -72,6 +72,13 @@ abstract final class CatalogueText {
   static String filterTooltip(String filter, String? value) =>
       value == null ? 'Filter by $filter' : '$filter: $value';
 
+  /// Heading for an issue that is no longer published (FR-MAG-008).
+  static const String goneHeading = 'This issue is no longer available';
+
+  /// Line for an issue that is no longer published.
+  static const String goneText =
+      'It was withdrawn from the catalogue. Other issues are still there.';
+
   /// Reads a full issue (SCR-A-14).
   static const String read = 'Read';
 
