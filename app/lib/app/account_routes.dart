@@ -7,9 +7,13 @@ import 'router.dart';
 import 'routes.dart';
 
 /// The account screens of MOD-03 and MOD-04 for the route table, over
-/// [auth]. Screens take their dependencies through their constructors
-/// (DEC-013); navigation stays here, in the shell.
-RouteScreens accountScreens({required AuthService auth}) => RouteScreens(
+/// [auth] and, when Firebase has started, [profiles]. Screens take their
+/// dependencies through their constructors (DEC-013); navigation stays
+/// here, in the shell.
+RouteScreens accountScreens({
+  required AuthService auth,
+  AccountProfileRepository? profiles,
+}) => RouteScreens(
   signIn: (BuildContext context, GoRouterState state) => SignInScreen(
     auth: auth,
     onRegister: () => context.go(keepFrom(AppRoutes.register, state)),
@@ -27,6 +31,10 @@ RouteScreens accountScreens({required AuthService auth}) => RouteScreens(
   ),
   verifyEmail: (BuildContext context, GoRouterState state) =>
       VerifyEmailScreen(auth: auth),
+  completeProfile: profiles == null
+      ? null
+      : (BuildContext context, GoRouterState state) =>
+            CompleteProfileScreen(forms: profiles, profiles: profiles),
 );
 
 /// [path] with the `from` of [state] kept, so that moving between the
