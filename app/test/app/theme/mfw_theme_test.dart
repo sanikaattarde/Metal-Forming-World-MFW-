@@ -155,7 +155,9 @@ void main() {
       await tester.pumpWidget(const ProviderScope(child: MfwApp()));
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(find.text(ShellText.home));
+      final BuildContext context = tester.element(
+        find.text(ShellText.home).first,
+      );
       expect(Theme.of(context).colorScheme.primary, MfwColours.action);
     });
   });

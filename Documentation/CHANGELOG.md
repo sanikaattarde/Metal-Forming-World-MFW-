@@ -32,6 +32,19 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the home screen and the five tabs (MOD05-P2-T03), 2026-11-10
+
+- **SCR-A-10 (`HomeScreen`):** it follows the reader frames:
+  - The latest issue with "View issue", an archive row of up to six issues, and "See the catalogue".
+  - Up to three posts of the latest news, with the breaking label as a placeholder until OQ-17.
+  - Loading and no-connection states; the no-connection state offers Downloads.
+  - The logo stays a placeholder (DEC-024).
+- **News on home:** it comes from the new `newsRepositoryProvider`, which puts `WordPressNewsRepository` behind CFG-03. With no site set there is no news section, and a news failure leaves the issues in place.
+- **Tabs:** the router now has the five tabs of the frames as a `StatefulShellRoute` (`app/lib/app/tab_shell.dart`): Home, News, Library, Downloads and Settings, each with its own history. Pages opened from a tab sit on the root navigator and cover the tab bar: issue details, the reader, an article and account deletion. Library and Downloads still send a visitor to sign in.
+- **Placement:** whether home and the catalogue are one screen is still SCP-002 and SN-03, and the screens are PROPOSED until M2.
+
+Tests: `home_screen_test.dart` was added, with the tap-target and label guidelines, and tab tests were added to `content_routes_test.dart`. Three shell tests now look for "Home" in the app bar, because the tab bar shows it too. `flutter analyze` finds no issues, and `flutter test` passes 683 and skips 52.
+
 ### Added: search and filters on the device (MOD05-P2-T02), 2026-11-10
 
 - **Search:** `applyQuery` (`features/catalogue/domain/issue_search.dart`) searches the title, description and category name. Every word must match, ignoring case and accents. It never searches text inside a PDF (FR-SRCH-007).

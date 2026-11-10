@@ -7,6 +7,7 @@ import 'access_guard.dart';
 import 'placeholder_screens.dart';
 import 'routes.dart';
 import 'shell_text.dart';
+import 'tab_shell.dart';
 
 /// Builds a route's screen.
 typedef ScreenBuilder = Widget Function(
@@ -28,9 +29,13 @@ final class RouteScreens {
     this.profile,
     this.settings,
     this.deleteAccount,
+    this.home,
     this.catalogue,
     this.issue,
   });
+
+  /// SCR-A-10 (MOD05-P2-T03).
+  final ScreenBuilder? home;
 
   /// SCR-A-11 (MOD05-P2-T01).
   final ScreenBuilder? catalogue;
@@ -40,19 +45,23 @@ final class RouteScreens {
 
   /// This set with the reader-side screens given here; the account screens
   /// stay as they are.
-  RouteScreens withContent({ScreenBuilder? catalogue, ScreenBuilder? issue}) =>
-      RouteScreens(
-        signIn: signIn,
-        passwordReset: passwordReset,
-        register: register,
-        verifyEmail: verifyEmail,
-        completeProfile: completeProfile,
-        profile: profile,
-        settings: settings,
-        deleteAccount: deleteAccount,
-        catalogue: catalogue ?? this.catalogue,
-        issue: issue ?? this.issue,
-      );
+  RouteScreens withContent({
+    ScreenBuilder? home,
+    ScreenBuilder? catalogue,
+    ScreenBuilder? issue,
+  }) => RouteScreens(
+    signIn: signIn,
+    passwordReset: passwordReset,
+    register: register,
+    verifyEmail: verifyEmail,
+    completeProfile: completeProfile,
+    profile: profile,
+    settings: settings,
+    deleteAccount: deleteAccount,
+    home: home ?? this.home,
+    catalogue: catalogue ?? this.catalogue,
+    issue: issue ?? this.issue,
+  );
 
   /// SCR-A-07 (MOD04-P2-T04).
   final ScreenBuilder? settings;
@@ -91,58 +100,115 @@ GoRouter buildRouter(
   RouteScreens screens = const RouteScreens(),
 }) {
   late final GoRouter router;
+  final GlobalKey<NavigatorState> root = GlobalKey<NavigatorState>(
+    debugLabel: 'root',
+  );
   router = GoRouter(
+    navigatorKey: root,
     refreshListenable: accessState,
     redirect: (BuildContext context, GoRouterState state) =>
         redirectFor(accessState.value, state.uri),
     errorBuilder: (BuildContext context, GoRouterState state) =>
         NotFoundScreen(onGoHome: () => router.go(AppRoutes.home)),
     routes: <RouteBase>[
-      GoRoute(
-        path: AppRoutes.home,
-        builder: (BuildContext context, GoRouterState state) =>
-            const PlaceholderScreen(title: ShellText.home),
-        routes: <RouteBase>[
-          GoRoute(
-            path: 'issues/:issueId',
-            builder:
-                screens.issue ??
-                (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(
-                      title: ShellText.issue,
-                      detail: state.pathParameters['issueId'],
-                    ),
+      // The five tabs of the reader frames (READER_SCREEN_DESIGNS section 4,
+      // PROPOSED). Each keeps its own history. A page opened from a tab
+      // (an issue, the reader, an article, account deletion) covers the
+      // tab bar, on the root navigator.
+      StatefulShellRoute.indexedStack(
+        builder: (
+          BuildContext context,
+          GoRouterState state,
+          StatefulNavigationShell shell,
+        ) => TabShell(shell: shell),
+        branches: <StatefulShellBranch>[
+          StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
-                path: 'read',
+                path: AppRoutes.home,
+                builder:
+                    screens.home ??
+                    (BuildContext context, GoRouterState state) =>
+                        const PlaceholderScreen(title: ShellText.home),
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'issues/:issueId',
+                    parentNavigatorKey: root,
+                    builder:
+                        screens.issue ??
+                        (BuildContext context, GoRouterState state) =>
+                            PlaceholderScreen(
+                              title: ShellText.issue,
+                              detail: state.pathParameters['issueId'],
+                            ),
+                    routes: <RouteBase>[
+                      GoRoute(
+                        path: 'read',
+                        parentNavigatorKey: root,
+                        builder: (BuildContext context, GoRouterState state) =>
+                            PlaceholderScreen(
+                              title: ShellText.reader,
+                              detail: state.pathParameters['issueId'],
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: AppRoutes.news,
                 builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(
-                      title: ShellText.reader,
-                      detail: state.pathParameters['issueId'],
-                    ),
+                    const PlaceholderScreen(title: ShellText.news),
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: ':postId',
+                    parentNavigatorKey: root,
+                    builder: (BuildContext context, GoRouterState state) =>
+                        PlaceholderScreen(
+                          title: ShellText.newsArticle,
+                          detail: state.pathParameters['postId'],
+                        ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              _placeholder(AppRoutes.library, ShellText.library),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              _placeholder(AppRoutes.downloads, ShellText.downloads),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: AppRoutes.settings,
+                builder:
+                    screens.settings ??
+                    (BuildContext context, GoRouterState state) =>
+                        const PlaceholderScreen(title: ShellText.settings),
+                routes: <RouteBase>[
+                  _route(
+                    'delete-account',
+                    ShellText.deleteAccount,
+                    screens.deleteAccount,
+                    parent: root,
+                  ),
+                ],
               ),
             ],
           ),
         ],
       ),
       _route(AppRoutes.catalogue, ShellText.catalogue, screens.catalogue),
-      _placeholder(AppRoutes.downloads, ShellText.downloads),
-      _placeholder(AppRoutes.library, ShellText.library),
-      GoRoute(
-        path: AppRoutes.news,
-        builder: (BuildContext context, GoRouterState state) =>
-            const PlaceholderScreen(title: ShellText.news),
-        routes: <RouteBase>[
-          GoRoute(
-            path: ':postId',
-            builder: (BuildContext context, GoRouterState state) =>
-                PlaceholderScreen(
-                  title: ShellText.newsArticle,
-                  detail: state.pathParameters['postId'],
-                ),
-          ),
-        ],
-      ),
       _route(AppRoutes.signIn, ShellText.signIn, screens.signIn),
       _route(
         AppRoutes.passwordReset,
@@ -156,33 +222,28 @@ GoRouter buildRouter(
         ShellText.completeProfile,
         screens.completeProfile,
       ),
-      GoRoute(
-        path: AppRoutes.settings,
-        builder:
-            screens.settings ??
-            (BuildContext context, GoRouterState state) =>
-                const PlaceholderScreen(title: ShellText.settings),
-        routes: <RouteBase>[
-          _route(
-            'delete-account',
-            ShellText.deleteAccount,
-            screens.deleteAccount,
-          ),
-        ],
-      ),
       _route(AppRoutes.profile, ShellText.profile, screens.profile),
     ],
   );
   return router;
 }
 
-GoRoute _placeholder(String path, String title) => GoRoute(
+GoRoute _placeholder(
+  String path,
+  String title, {
+  GlobalKey<NavigatorState>? parent,
+}) => GoRoute(
   path: path,
+  parentNavigatorKey: parent,
   builder: (BuildContext context, GoRouterState state) =>
       PlaceholderScreen(title: title),
 );
 
-GoRoute _route(String path, String title, ScreenBuilder? screen) =>
-    screen == null
-    ? _placeholder(path, title)
-    : GoRoute(path: path, builder: screen);
+GoRoute _route(
+  String path,
+  String title,
+  ScreenBuilder? screen, {
+  GlobalKey<NavigatorState>? parent,
+}) => screen == null
+    ? _placeholder(path, title, parent: parent)
+    : GoRoute(path: path, parentNavigatorKey: parent, builder: screen);

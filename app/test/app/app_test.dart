@@ -13,7 +13,13 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(MaterialApp), findsOneWidget);
-    expect(find.text(ShellText.home), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text(ShellText.home),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('without MOD-03, opening a full issue asks to sign in', (

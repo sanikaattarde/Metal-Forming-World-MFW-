@@ -7,6 +7,9 @@ import '../core/config/app_config.dart';
 import '../core/config/firebase_settings.dart';
 import '../features/account/account.dart';
 import '../features/catalogue/catalogue.dart';
+import '../features/news/news.dart';
+import '../core/config/wordpress_config.dart';
+import '../core/network/https_client.dart';
 import '../core/network/connectivity_service.dart';
 import 'account_routes.dart';
 import 'content_routes.dart';
@@ -52,6 +55,17 @@ final Provider<CatalogueRepository?> catalogueRepositoryProvider =
         FirestoreCatalogueDocuments(firebase.firestore),
         covers: firebase.covers,
       );
+    });
+
+/// MOD-09's news from MFW's WordPress site (MOD09-P1-T01), or null when the
+/// build names no site (CFG-03). Tests override it with a fake.
+final Provider<NewsRepository?> newsRepositoryProvider =
+    Provider<NewsRepository?>((Ref ref) {
+      final WordPressSiteConfig? site = ref.watch(appConfigProvider).wordPress;
+      if (site == null) {
+        return null;
+      }
+      return WordPressNewsRepository(client: IoHttpsGetClient(), config: site);
     });
 
 /// Opens MFW's policy pages outside the app (CFG-07, MOD04-P2-T02). Tests
@@ -122,6 +136,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       ),
       accessState: accessState,
       catalogue: ref.read(catalogueRepositoryProvider),
+      news: ref.read(newsRepositoryProvider),
     ),
   );
   ref.onDispose(() {
