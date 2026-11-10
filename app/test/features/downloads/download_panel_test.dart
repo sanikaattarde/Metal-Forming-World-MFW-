@@ -98,10 +98,15 @@ void main() {
       expect(find.text(DownloadsText.download), findsNothing);
     });
 
-    testWidgets('a failed download offers a retry that completes '
-        '[FR-STATE-006]', (WidgetTester tester) async {
+    testWidgets('a download that keeps failing offers a retry that completes '
+        'from the bytes held [FR-STATE-006, FR-DL-006]', (
+      WidgetTester tester,
+    ) async {
       final DownloadRig rig = DownloadRig();
-      rig.transport.resetAfterBytes = 300;
+      // One break after 300 bytes, then five tries that move nothing.
+      rig.transport
+        ..resetAfterBytes = 300
+        ..resetCount = 6;
       await pumpPanel(tester, rig);
 
       await tester.tap(find.text(DownloadsText.download));

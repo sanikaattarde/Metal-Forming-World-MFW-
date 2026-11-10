@@ -141,6 +141,20 @@ final class FakeFileTransport implements FileTransport {
   /// How many fetches started.
   int fetches = 0;
 
+  /// The byte offset each fetch started from, in order.
+  final List<int> offsets = <int>[];
+
+  /// How many fetches [resetAfterBytes] breaks before it stops firing.
+  int resetCount = 1;
+
+  /// Called at the moment of each reset, as when the network drops with it.
+  void Function()? onReset;
+
+  /// Failures the next fetches return at once, before any byte, in order:
+  /// an expired link (`forbidden`), a range the server ignored
+  /// (`invalidResponse`).
+  final List<AppFailure> failNext = <AppFailure>[];
+
   @override
   Future<Result<void>> fetch(
     IssueFileGrant grant, {
@@ -148,6 +162,10 @@ final class FakeFileTransport implements FileTransport {
     required Future<Result<void>> Function(List<int> chunk) onChunk,
   }) async {
     fetches++;
+    offsets.add(offset);
+    if (failNext.isNotEmpty) {
+      return Err<void>(failNext.removeAt(0));
+    }
     await gate?.future;
     final List<int>? source = contents[grant.issueId];
     if (source == null) {
@@ -164,7 +182,11 @@ final class FakeFileTransport implements FileTransport {
     for (int start = offset; start < bytes.length; start += chunkBytes) {
       final int? reset = resetAfterBytes;
       if (reset != null && start >= reset) {
-        resetAfterBytes = null;
+        onReset?.call();
+        resetCount--;
+        if (resetCount <= 0) {
+          resetAfterBytes = null;
+        }
         return const Err<void>(
           AppFailure(FailureCode.network, retryable: true),
         );

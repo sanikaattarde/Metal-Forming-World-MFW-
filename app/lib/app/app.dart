@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +16,7 @@ import '../core/network/https_client.dart';
 import '../core/network/connectivity_service.dart';
 import 'account_routes.dart';
 import 'content_routes.dart';
+import 'download_resumer.dart';
 import 'firebase_bootstrap.dart';
 import 'placeholder_screens.dart';
 import 'router.dart';
@@ -103,6 +106,7 @@ final Provider<DownloadManager?> downloadManagerProvider =
         registry: JsonDownloadRegistry(storage),
         connectivity: ref.watch(connectivityServiceProvider),
         currentUserId: () => firebase.identity.currentUser?.uid,
+        pending: JsonPendingDownloads(storage),
       );
     });
 
@@ -159,6 +163,14 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
     final AccessState? value = next.value;
     if (value != null) {
       accessState.value = value;
+      // A stopped download resumes the next time the app is open with the
+      // reader who started it signed in (MOD06-P2-T03, rule 6).
+      if (value == AccessState.fullAccess) {
+        final DownloadManager? downloads = ref.read(downloadManagerProvider);
+        if (downloads is ResumableDownloads) {
+          unawaited((downloads as ResumableDownloads).resumePending());
+        }
+      }
     }
   }, fireImmediately: true);
   final GoRouter router = buildRouter(
@@ -245,10 +257,17 @@ class MfwApp extends ConsumerWidget {
     final AsyncValue<AccessState> accessState = ref.watch(accessStateProvider);
     final ThemeData theme = buildMfwTheme();
     if (accessState.hasValue) {
+      final DownloadManager? downloads = ref.read(downloadManagerProvider);
       return MaterialApp.router(
         theme: theme,
         themeMode: ThemeMode.light,
         routerConfig: ref.watch(routerProvider),
+        builder: (BuildContext context, Widget? child) => DownloadResumer(
+          downloads: downloads is ResumableDownloads
+              ? downloads as ResumableDownloads
+              : null,
+          child: child ?? const SizedBox.shrink(),
+        ),
       );
     }
     if (accessState.hasError) {

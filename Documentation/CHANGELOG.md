@@ -32,6 +32,27 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: resume after a network break (MOD06-P2-T03), 2026-11-10
+
+`IssueDownloadManager` resumes instead of starting again (section 6.6 rules 1, 2 and 6):
+- **Start:** a download starts from the partial file's length, with a `Range` request.
+- **Break:** it moves to `WaitingForNetwork` and waits for a usable connection: any but none, and mobile data only when the reader accepted it (FR-DL-004). It then goes on from the bytes held, with a pause of 1, 2, 4 and up to 30 seconds.
+- **Grant:** a grant past its expiry, or a link the server refuses (401 or 403), brings a new grant. The bytes are kept unless the new grant names another revision, size or hash, in which case the new file starts from 0 (rule 8).
+- **Range ignored:** a server that ignores the range makes the file start again, once.
+- **Stopping:** five tries in a row that move nothing stop with a retryable failure. The partial file is kept, so Retry goes on from it.
+- **Pending store:** a pending-download record (`PendingDownloads`, `JsonPendingDownloads` in the issue folder) survives a restart. The app resumes the signed-in reader's stopped downloads when it opens, when a reader with full access signs in, and when it comes back to the foreground (`DownloadResumer`). This is the OQ-54 working position: foreground only, no background plugin.
+- **Cancel:** cancel, including while waiting, keeps nothing (RD-01).
+
+FX-NET-07 and the panel's retry test now expect a resume instead of a failure. Downloads in the background stay with OQ-54.
+
+Tests:
+- `download_resume_test.dart` covers the network gone and back, mobile data not accepted, an expired link, an expired grant, a new revision, an ignored range, five tries then a resume after a restart, another reader's record left alone, and cancel while waiting.
+- `download_resumer_test.dart` covers the return to the foreground.
+- `JsonPendingDownloads` tests were added.
+- On an iPhone 18 Pro simulator, `integration_test/download_adapters_test.dart` passes 4 of 4: a real connection cut at 2 MB of 5 MB resumes with a byte range, and the file passes its SHA-256 check.
+- The airplane-mode run on a phone or the Android emulator has not been done.
+- `flutter analyze` finds no issues, and `flutter test` passes 736 and skips 52.
+
 ### Added: download with progress through the grant, on real adapters (MOD06-P2-T02), 2026-11-10
 
 `IssueDownloadManager` now runs on real adapters in `features/downloads/data/`:

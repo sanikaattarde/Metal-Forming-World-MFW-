@@ -428,6 +428,48 @@ void main() {
     });
   });
 
+  group('JsonPendingDownloads [MOD06-P2-T03, rule 6]', () {
+    test('keeps pending downloads across a restart', () async {
+      final Directory temp = await Directory.systemTemp.createTemp('mfw-p-');
+      addTearDown(() => temp.delete(recursive: true));
+      final JsonPendingDownloads first = JsonPendingDownloads(
+        TempIssueStorage(temp),
+      );
+      await first.save(
+        const PendingDownload(
+          ownerUserId: 'a',
+          issueId: 'x',
+          mobileDataAccepted: true,
+        ),
+      );
+      await first.save(
+        const PendingDownload(
+          ownerUserId: 'b',
+          issueId: 'y',
+          mobileDataAccepted: false,
+        ),
+      );
+      await first.remove(ownerUserId: 'b', issueId: 'y');
+
+      final List<PendingDownload> rows = await JsonPendingDownloads(
+        TempIssueStorage(temp),
+      ).load();
+      expect(rows.single.ownerUserId, 'a');
+      expect(rows.single.issueId, 'x');
+      expect(rows.single.mobileDataAccepted, isTrue);
+    });
+
+    test('an unreadable file counts as empty', () async {
+      final Directory temp = await Directory.systemTemp.createTemp('mfw-p-');
+      addTearDown(() => temp.delete(recursive: true));
+      await File('${temp.path}/pending.json').writeAsString('[{"broken"');
+      expect(
+        await JsonPendingDownloads(TempIssueStorage(temp)).load(),
+        isEmpty,
+      );
+    });
+  });
+
   group('IssueTitles [NFR-OFF-001]', () {
     test('remembers titles across a restart', () async {
       final Directory temp = await Directory.systemTemp.createTemp('mfw-t-');

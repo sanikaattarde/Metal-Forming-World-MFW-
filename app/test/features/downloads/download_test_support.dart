@@ -83,5 +83,10 @@ final class DownloadRig {
     connectivity: connectivity,
     currentUserId: () => auth.currentUserId,
     clock: () => DateTime.utc(2026),
+    pending: pending,
+    sleep: (Duration _) async {},
   );
+
+  /// Downloads started and not finished, which outlive a manager.
+  final MemoryPendingDownloads pending = MemoryPendingDownloads();
 }

@@ -71,3 +71,63 @@ abstract interface class DownloadRegistry {
   /// Forgets the copy of [issueId] held for [ownerUserId].
   Future<void> remove({required String ownerUserId, required String issueId});
 }
+
+/// A download that was started and has not finished, so it can resume the
+/// next time the app is open (`API_AND_MODULE_CONTRACTS.md` section 6.6
+/// rule 6; OQ-54 working position). PROPOSED.
+final class PendingDownload {
+  /// Creates the record.
+  const PendingDownload({
+    required this.ownerUserId,
+    required this.issueId,
+    required this.mobileDataAccepted,
+  });
+
+  /// The reader who started it.
+  final String ownerUserId;
+
+  /// The issue.
+  final String issueId;
+
+  /// Whether the reader accepted mobile data for it (RS FR-DL-004).
+  final bool mobileDataAccepted;
+}
+
+/// Downloads that were started and not finished, kept across a restart.
+abstract interface class PendingDownloads {
+  /// Every pending download, of every reader.
+  Future<List<PendingDownload>> load();
+
+  /// Records [pending], replacing the reader's record for the issue.
+  Future<void> save(PendingDownload pending);
+
+  /// Forgets the reader's pending download of [issueId].
+  Future<void> remove({required String ownerUserId, required String issueId});
+}
+
+/// A download manager that can resume the downloads that stopped before
+/// they finished (rule 6).
+abstract interface class ResumableDownloads {
+  /// Resumes the signed-in reader's stopped downloads.
+  Future<void> resumePending();
+}
+
+/// [PendingDownloads] held in memory only, for a manager that does not
+/// resume across a restart.
+final class MemoryPendingDownloads implements PendingDownloads {
+  final Map<(String, String), PendingDownload> _rows =
+      <(String, String), PendingDownload>{};
+
+  @override
+  Future<List<PendingDownload>> load() async => _rows.values.toList();
+
+  @override
+  Future<void> save(PendingDownload pending) async =>
+      _rows[(pending.ownerUserId, pending.issueId)] = pending;
+
+  @override
+  Future<void> remove({
+    required String ownerUserId,
+    required String issueId,
+  }) async => _rows.remove((ownerUserId, issueId));
+}

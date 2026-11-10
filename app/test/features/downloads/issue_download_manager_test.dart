@@ -191,25 +191,28 @@ void main() {
         expect(await rig.manager.watch('fx-iss-02').first, isA<Failed>());
       });
 
-      test('FX-NET-07: a reset mid-transfer fails with a retry, and the retry '
-          'completes [FR-STATE-006]', () async {
+      test('FX-NET-07: a reset mid-transfer waits for the network and goes '
+          'on from the bytes held [FR-DL-006, AC-4.3]', () async {
         final DownloadRig rig = DownloadRig();
         rig.transport.resetAfterBytes = 500;
+        final List<DownloadStatus> seen = <DownloadStatus>[];
+        final StreamSubscription<DownloadStatus> watching = rig.manager
+            .watch('fx-iss-01')
+            .listen(seen.add);
+        await settle();
 
-        final Result<void> first = await rig.manager.start(
+        final Result<void> result = await rig.manager.start(
           'fx-iss-01',
           mobileDataAccepted: false,
         );
-        expect(failureCodeOf(first), FailureCode.network);
-        expect(failureOf(first)!.retryable, isTrue);
-        expect(rig.store.partials, isEmpty);
-        expect(await rig.manager.listDownloaded(), isEmpty);
+        await settle();
+        await watching.cancel();
 
-        expect(
-          await rig.manager.start('fx-iss-01', mobileDataAccepted: false),
-          isA<Ok<void>>(),
-        );
+        expect(result, isA<Ok<void>>());
+        expect(rig.transport.offsets, <int>[0, 500]);
+        expect(seen.whereType<WaitingForNetwork>().single.receivedBytes, 500);
         expect(await rig.manager.listDownloaded(), hasLength(1));
+        expect(await rig.pending.load(), isEmpty);
       });
 
       test('a hash mismatch deletes the partial and reports fileCorrupt with '
