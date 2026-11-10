@@ -32,6 +32,34 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the reader on pdfrx behind `PdfRenderer` (MOD07-P2-T01), 2026-11-10
+
+`app/lib/features/reader/` holds MOD-07:
+- **`PdfrxRenderer`** opens a complete local file with pdfrx, DEP-64, at 2.11.0, now in `app/pubspec.yaml`.
+  - A missing file is `notFound`.
+  - A file PDFium cannot open, or with no pages, is `fileCorrupt` with a retry (FR-READ-010).
+- **`ReaderDocument`** adds the page view that `PdfDocumentHandle` left to DEC-005, so the library stays inside the feature and can change.
+- **SCR-A-14 (`ReaderScreen`)** follows the reader frame:
+  - One page at a time, turned by a swipe or by the previous and next buttons (CODING_STANDARDS section 9 rule 6).
+  - A page slider and "7 / 64" in a bottom bar, with an initial page clamped to the document.
+  - A damaged-file state with "Download again".
+  - It implements `ReaderController`, whose page stream gives the page shown and then each page turned to.
+- **Decision:** YG's position on DEC-005 is pdfrx, recorded in the DEC-005 row. DEC-005 stays OPEN until Sanika Attarde's position and the M2 reader result with MFW.
+- **Not yet built:** the page-turn effect and mode switch (MOD07-P2-T02, OQ-14), and zoom and the two-page spread (MOD07-P2-T03).
+- **Fixtures:** FX-PDF-01, FX-PDF-02 and the truncated FX-PDF-10 are generated in `test/fixtures/synthetic_pdf.dart`. FX-PDF-03 and FX-PDF-04 are MFW's samples and are not used (DEC-024).
+- **Register:** DEP-64 records the package and what it brings in, `path_provider` among it.
+
+Tests:
+- `reader_screen_test.dart` uses a fake document.
+- `integration_test/reader_pdfrx_test.dart` passes 5 of 5 on an iPhone 18 Pro simulator with PDFium:
+  - FX-PDF-01 opens with 4 pages.
+  - FX-PDF-02 shows its landscape pages.
+  - FX-PDF-10 is refused or repaired without a crash.
+  - A missing file is `notFound`.
+  - SCR-A-14 turns pages with the buttons and a swipe.
+- It was not run on Android, and no timings were taken (MOD07-P3-T01).
+- `flutter analyze` finds no issues, and `flutter test` passes, including the new reader tests.
+
 ### Added: resume after a network break (MOD06-P2-T03), 2026-11-10
 
 `IssueDownloadManager` resumes instead of starting again (section 6.6 rules 1, 2 and 6):
