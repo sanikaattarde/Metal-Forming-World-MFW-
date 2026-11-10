@@ -19,6 +19,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mfw_app/app/theme/mfw_theme.dart';
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/core/config/firebase_settings.dart';
 import 'package:mfw_app/features/catalogue/catalogue.dart';
 
 import 'support/emulator_admin.dart';
@@ -50,25 +51,30 @@ void main() {
   late DocumentCatalogueRepository catalogue;
 
   setUpAll(() async {
-    await Firebase.initializeApp(
-      options: FirebaseOptions(
-        apiKey: 'emulator-api-key',
-        appId: Platform.isAndroid ? '1:0:android:0' : '1:0:ios:0',
-        messagingSenderId: '0',
-        projectId: 'demo-mfw',
-      ),
-    );
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    firestore.useFirestoreEmulator(emulatorHost, 8080);
-    firestore.settings = const Settings(persistenceEnabled: false);
-    catalogue = DocumentCatalogueRepository(
-      FirestoreCatalogueDocuments(firestore),
-      covers: CoverUrls.emulator(
-        bucket: 'demo-mfw.appspot.com',
-        host: emulatorHost,
-      ),
-    );
-    admin = EmulatorAdmin(host: emulatorHost);
+    try {
+      debugPrint('IC-07 emulator host: $emulatorHost');
+      await Firebase.initializeApp(
+        options: FirebaseOptions(
+          apiKey: FirebaseSettings.emulatorApiKey,
+          appId: Platform.isAndroid ? '1:0:android:0' : '1:0:ios:0',
+          messagingSenderId: '0',
+          projectId: 'demo-mfw',
+        ),
+      );
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      firestore.useFirestoreEmulator(emulatorHost, 8080);
+      catalogue = DocumentCatalogueRepository(
+        FirestoreCatalogueDocuments(firestore),
+        covers: CoverUrls.emulator(
+          bucket: 'demo-mfw.appspot.com',
+          host: emulatorHost,
+        ),
+      );
+      admin = EmulatorAdmin(host: emulatorHost);
+    } catch (error, stack) {
+      debugPrint('IC-07 setup failed: $error\n$stack');
+      rethrow;
+    }
   });
 
   setUp(() async {
@@ -183,6 +189,8 @@ void main() {
 }
 
 Future<void> _pull(WidgetTester tester) async {
+  // Let the last refresh's indicator finish hiding, or the pull is ignored.
+  await tester.pumpAndSettle();
   await tester.fling(find.byType(Scrollable).first, const Offset(0, 400), 1000);
   await tester.pump();
 }

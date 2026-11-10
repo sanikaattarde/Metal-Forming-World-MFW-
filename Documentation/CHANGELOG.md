@@ -32,6 +32,28 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: refresh and publication changes, with the IC-07 check (MOD05-P2-T04), 2026-11-10
+
+- **Pull to refresh:** home, the catalogue and issue details refresh by pulling down, through the shared `Reloadable` mixin (`core/ui/reloadable.dart`).
+  - A refresh that fails keeps what is shown and says why in a short message.
+  - Retry clears the screen and reads again.
+  - The catalogue keeps its search and filters across a refresh.
+- **Unpublished issues:** an issue unpublished since it was opened shows "This issue is no longer available", with a way back and no Retry (FR-MAG-008).
+- **IC-07 check:** `app/integration_test/ic07_catalogue_publication_test.dart` runs on the local Firestore emulator, with the real `FirestoreCatalogueDocuments` and `backend/firestore.rules`.
+  - **Rules:** the rules let the app read published issues only. An unpublished or missing issue is `notFound`. Categories and segments are read.
+  - **Catalogue:** publish, refresh, unpublish and refresh on SCR-A-11 show the issue appear, first as the newest, then go (AC-1.4, AC-8.7).
+  - **Issue details:** an open issue that is unpublished shows as gone after a refresh.
+  - **Data:** the test writes synthetic data to the emulator as its owner, standing in for the admin panel's functions.
+- **Test package:** `integration_test` (Flutter SDK) is added as a development dependency.
+- **Fixed: the iOS crash at start-up on the emulators.**
+  - **Cause:** Firebase Installations stopped the app on iOS because the placeholder API key `emulator-api-key` of `FirebaseSettings.emulators` does not have the shape it checks: 39 characters, starting with `A`, URL-safe.
+  - **Fix:** the new `FirebaseSettings.emulatorApiKey` has that shape. It is not a real key and avoids the `AIza` prefix of real keys. The emulators accept any key.
+  - **Found by:** the IC-07 run. Any ENV-LOCAL launch on iOS crashed the same way.
+
+ENV-TEST does not exist yet, so the emulator stands in. ICP-04 waits for Sanika Attarde's review.
+
+Tests: refresh tests were added to `catalogue_screens_test.dart`. IC-07 passes 3 of 3 on an iPhone 18 Pro simulator against the Firestore emulator (firebase-tools 15.34.2); it was not run on Android. `flutter analyze` finds no issues, and `flutter test` passes 724 and skips 52, a count that includes task 5's files on the same working tree.
+
 ### Added: the home screen and the five tabs (MOD05-P2-T03), 2026-11-10
 
 - **SCR-A-10 (`HomeScreen`):** it follows the reader frames:
