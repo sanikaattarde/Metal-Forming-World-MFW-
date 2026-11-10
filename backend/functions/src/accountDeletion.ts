@@ -9,7 +9,7 @@ import type { Firestore } from 'firebase-admin/firestore';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
 import { applyAdminRemoval, planAdminRemoval } from './admin.js';
 import { alreadyDeleting, cannotVerify, invalidArgument, unauthenticated } from './errors.js';
-import { logOperation } from './safeLog.js';
+import { logOperation, logSecurityEvent } from './safeLog.js';
 import { isNonEmptyText, isObject, unknownFields } from './validation.js';
 
 const OPERATION = 'requestAccountDeletion';
@@ -66,6 +66,7 @@ export async function requestDeletion(backend: DeletionBackend, uid: string | un
 
   const { db } = backend;
   const userRef = db.collection('users').doc(uid);
+  let removedAdmin = false;
   await db.runTransaction(async (tx) => {
     const user = await tx.get(userRef);
     if (user.exists && user.get('status') === 'deleting') throw alreadyDeleting();
@@ -76,7 +77,9 @@ export async function requestDeletion(backend: DeletionBackend, uid: string | un
     // A reader who never saved a profile has no record yet. One is written, so the cleanup can find it.
     tx.set(userRef, { user_id: uid, status: 'deleting', deletion_requested_at: now, ...(user.exists ? {} : { created_at: now }) }, { merge: true });
     if (plan) applyAdminRemoval(tx, plan);
+    removedAdmin = plan !== null; // the last attempt of the transaction is the one that counts
   });
+  if (removedAdmin) logSecurityEvent('admin_removed', { operation: OPERATION, caller: uid, outcome: 'removed' });
 
   try {
     await eraseAccount(backend, uid);
