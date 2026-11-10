@@ -37,11 +37,34 @@ void main() {
   final List<int> bytes = synthetic(5 * 1000 * 1000);
   late HttpServer server;
 
+  /// When set, the next answer drops the connection after this many bytes.
+  int? cutAfter;
+
+  /// The `Range` header of each request, in order.
+  final List<String?> ranges = <String?>[];
+
   setUpAll(() async {
     server = await HttpServer.bind(_host, 0);
     server.listen((HttpRequest request) async {
-      request.response.contentLength = bytes.length;
-      request.response.add(bytes);
+      final String? range = request.headers.value(HttpHeaders.rangeHeader);
+      ranges.add(range);
+      int start = 0;
+      if (range != null) {
+        start = int.parse(range.substring(6, range.length - 1));
+        request.response.statusCode = HttpStatus.partialContent;
+      }
+      final List<int> body = bytes.sublist(start);
+      request.response.contentLength = body.length;
+      final int? cut = cutAfter;
+      if (cut != null) {
+        cutAfter = null;
+        final Socket socket = await request.response.detachSocket();
+        socket.add(body.sublist(0, cut));
+        await socket.flush();
+        socket.destroy();
+        return;
+      }
+      request.response.add(body);
       await request.response.close();
     });
   });
@@ -110,6 +133,47 @@ void main() {
     expect(await restarted.delete('fx-iss-it'), isA<Ok<void>>());
     expect(await File(file.path).exists(), isFalse);
     expect(await manager(grant(), storage).listDownloaded(), isEmpty);
+  });
+
+  test('a connection cut mid-file resumes from the bytes held with a byte '
+      'range, and the file passes its check [MOD06-P2-T03, FR-DL-006, '
+      'AC-4.3]', () async {
+    final PlatformIssueStorage storage = PlatformIssueStorage();
+    final IssueDownloadManager downloads = IssueDownloadManager(
+      files: FixedGrant(grant()),
+      transport: HttpFileTransport(plainHttpHosts: <String>{_host}),
+      store: IoFileStore(storage),
+      verifier: const Sha256HashVerifier(),
+      registry: JsonDownloadRegistry(storage),
+      connectivity: PluginConnectivityService(),
+      currentUserId: () => 'fx-usr-it',
+      pending: JsonPendingDownloads(storage),
+      sleep: (Duration _) async {},
+    );
+    ranges.clear();
+    cutAfter = 2 * 1000 * 1000;
+    final List<DownloadStatus> seen = <DownloadStatus>[];
+    final StreamSubscription<DownloadStatus> watching = downloads
+        .watch('fx-iss-it')
+        .listen(seen.add);
+    expect(
+      await downloads.start('fx-iss-it', mobileDataAccepted: true),
+      isA<Ok<void>>(),
+    );
+    await Future<void>.delayed(Duration.zero);
+    await watching.cancel();
+
+    expect(ranges.first, isNull);
+    expect(ranges.last, startsWith('bytes='));
+    final int resumedFrom = int.parse(
+      ranges.last!.substring(6, ranges.last!.length - 1),
+    );
+    expect(resumedFrom, greaterThan(0));
+    expect(resumedFrom, lessThanOrEqualTo(2 * 1000 * 1000));
+    expect(seen.whereType<WaitingForNetwork>(), isNotEmpty);
+    expect(seen.last, isA<Downloaded>());
+    expect(await JsonPendingDownloads(storage).load(), isEmpty);
+    expect(await downloads.delete('fx-iss-it'), isA<Ok<void>>());
   });
 
   test('a file whose hash does not match is never kept [FR-STATE-006, '

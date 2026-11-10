@@ -6,9 +6,10 @@ import 'package:mfw_app/features/downloads/domain/file_names.dart';
 
 // MOD06-P2-T01, T04 and T05 (pull request #65) take this from Yuvraj
 // Gaykhe's spike on spike/yg-ws-b and add the repair of section 4.4.
-// TODO(yg): T-06.3 resumes from the partial file's length (I-5), with
-// WaitingForNetwork while the network is down and a new grant after expiry
-// (DEC-020); until then every start begins at byte 0.
+// MOD06-P2-T03 resumes from the partial file's length (I-5), waits in
+// WaitingForNetwork while the network is down, asks for a new grant after
+// expiry (DEC-020), and resumes a stopped download the next time the app is
+// open (rule 6, OQ-54 working position).
 // TODO(yg): the copy kind, kept or temporary, waits for OQ-08 (GS-Q43).
 // TODO(yg): offline rules and sign-out behaviour wait for T-06.5 and OQ-11.
 
@@ -18,7 +19,8 @@ import 'package:mfw_app/features/downloads/domain/file_names.dart';
 /// Copies are kept per reader (rule 7): [listDownloaded] and [openLocal]
 /// see only the signed-in reader's copies. A copy is listed only after its
 /// size and hash match (rule 4, invariant I-1).
-final class IssueDownloadManager implements DownloadManager {
+final class IssueDownloadManager
+    implements DownloadManager, ResumableDownloads {
   /// Creates the manager. [currentUserId] gives the signed-in reader's ID,
   /// or null when signed out.
   IssueDownloadManager({
@@ -30,7 +32,23 @@ final class IssueDownloadManager implements DownloadManager {
     required this._connectivity,
     required this._currentUserId,
     DateTime Function()? clock,
-  }) : _clock = clock ?? _utcNow;
+    PendingDownloads? pending,
+    Future<void> Function(Duration delay)? sleep,
+    this.maxAttemptsWithoutProgress = 5,
+  }) : _clock = clock ?? _utcNow,
+       _pending = pending ?? MemoryPendingDownloads(),
+       _sleep = sleep ?? _delay;
+
+  static Future<void> _delay(Duration delay) => Future<void>.delayed(delay);
+
+  /// How many tries in a row may move no bytes before a download stops
+  /// with a retry. Its partial file is kept, so it resumes later.
+  final int maxAttemptsWithoutProgress;
+
+  final PendingDownloads _pending;
+  final Future<void> Function(Duration delay) _sleep;
+  final Map<(String, String), Completer<void>> _wakers =
+      <(String, String), Completer<void>>{};
 
   static DateTime _utcNow() => DateTime.now().toUtc();
 
@@ -157,6 +175,7 @@ final class IssueDownloadManager implements DownloadManager {
       return const Ok<void>(null);
     }
     _cancelRequested.add(key);
+    _wake(key);
     await running;
     return const Ok<void>(null);
   }
@@ -296,6 +315,7 @@ final class IssueDownloadManager implements DownloadManager {
     await _ready;
     final (String userId, String issueId) = key;
     if (_copies.containsKey(key)) {
+      await _forgetPending(key);
       return const Ok<void>(null);
     }
     final ConnectionType connection = await _connectivity.current();
@@ -311,45 +331,120 @@ final class IssueDownloadManager implements DownloadManager {
       );
     }
     _setStatus(key, const Queued());
-    final IssueFileGrant grant;
+    IssueFileGrant grant;
     switch (await _files.requestIssueFile(issueId)) {
       case Err<IssueFileGrant>(:final AppFailure failure):
         return _fail(key, failure);
       case Ok<IssueFileGrant>(:final IssueFileGrant value):
         grant = value;
     }
-    final String fileName = _freeFileName(issueId, grant.revision);
-    final String partial = partialFileName(fileName);
-    await _store.deletePartial(partial);
-    if (await _store.freeBytes() < grant.sizeBytes) {
+    await _pending.save(
+      PendingDownload(
+        ownerUserId: userId,
+        issueId: issueId,
+        mobileDataAccepted: mobileDataAccepted,
+      ),
+    );
+
+    String fileName = _freeFileName(issueId, grant.revision);
+    String partial = partialFileName(fileName);
+    // Rule 1: go on from the bytes held. A partial file longer than the
+    // file cannot be this file, so it is dropped.
+    int received = await _store.partialLength(partial);
+    if (received > grant.sizeBytes) {
+      await _store.deletePartial(partial);
+      received = 0;
+    }
+    if (await _store.freeBytes() < grant.sizeBytes - received) {
+      await _store.deletePartial(partial);
+      await _forgetPending(key);
       return _fail(key, const AppFailure(FailureCode.insufficientStorage));
     }
 
-    int received = 0;
-    _setStatus(key, InProgress(received, grant.sizeBytes));
-    final Result<void> transfer = await _transport.fetch(
-      grant,
-      offset: 0,
-      onChunk: (List<int> chunk) async {
-        if (_cancelRequested.contains(key)) {
-          return const Err<void>(AppFailure(FailureCode.cancelled));
+    int stalled = 0;
+    bool rangeIgnored = false;
+    while (true) {
+      // Rule 2: an expired grant is renewed before it is used.
+      if (!grant.expiresAt.isAfter(_clock())) {
+        switch (await _files.requestIssueFile(issueId)) {
+          case Err<IssueFileGrant>(:final AppFailure failure):
+            return _stop(key, partial, failure);
+          case Ok<IssueFileGrant>(:final IssueFileGrant value):
+            if (_changed(grant, value)) {
+              await _store.deletePartial(partial);
+              received = 0;
+              fileName = _freeFileName(issueId, value.revision);
+              partial = partialFileName(fileName);
+            }
+            grant = value;
         }
-        final Result<void> written = await _store.appendPartial(partial, chunk);
-        if (written is Ok<void>) {
-          received += chunk.length;
-          _setStatus(key, InProgress(received, grant.sizeBytes));
-        }
-        return written;
-      },
-    );
-    if (transfer case Err<void>(:final AppFailure failure)) {
-      await _store.deletePartial(partial);
-      if (failure.code == FailureCode.cancelled) {
-        _status.remove(key);
-        _notify();
-        return Err<void>(failure);
       }
-      return _fail(key, failure);
+      final int before = received;
+      final IssueFileGrant current = grant;
+      final String target = partial;
+      _setStatus(key, InProgress(received, current.sizeBytes));
+      final Result<void> transfer = await _transport.fetch(
+        current,
+        offset: received,
+        onChunk: (List<int> chunk) async {
+          if (_cancelRequested.contains(key)) {
+            return const Err<void>(AppFailure(FailureCode.cancelled));
+          }
+          final Result<void> written = await _store.appendPartial(
+            target,
+            chunk,
+          );
+          if (written is Ok<void>) {
+            received += chunk.length;
+            _setStatus(key, InProgress(received, current.sizeBytes));
+          }
+          return written;
+        },
+      );
+      if (transfer is Ok<void>) {
+        break;
+      }
+      final AppFailure failure = (transfer as Err<void>).failure;
+      if (failure.code == FailureCode.cancelled ||
+          _cancelRequested.contains(key)) {
+        return _cancelled(key, partial);
+      }
+      stalled = received > before ? 0 : stalled + 1;
+      if (stalled >= maxAttemptsWithoutProgress) {
+        return _stop(key, partial, failure);
+      }
+      switch (failure.code) {
+        case FailureCode.network || FailureCode.timeout:
+          // Rule 1: wait for the network, then go on from the bytes held.
+          _setStatus(key, WaitingForNetwork(received, current.sizeBytes));
+          if (!await _waitForNetwork(key, mobileDataAccepted)) {
+            return _cancelled(key, partial);
+          }
+          await _sleep(_backoff(stalled));
+        case FailureCode.forbidden when failure.retryable:
+          // Rule 2: the link expired or was refused; ask for a new grant.
+          switch (await _files.requestIssueFile(issueId)) {
+            case Err<IssueFileGrant>(:final AppFailure failure):
+              return _stop(key, partial, failure);
+            case Ok<IssueFileGrant>(:final IssueFileGrant value):
+              if (_changed(grant, value)) {
+                await _store.deletePartial(partial);
+                received = 0;
+                fileName = _freeFileName(issueId, value.revision);
+                partial = partialFileName(fileName);
+              }
+              grant = value;
+          }
+        case FailureCode.invalidResponse when before > 0 && !rangeIgnored:
+          // The server ignored the range: start the file again, once.
+          rangeIgnored = true;
+          await _store.deletePartial(partial);
+          received = 0;
+        case FailureCode.serviceUnavailable when failure.retryable:
+          await _sleep(_backoff(stalled));
+        default:
+          return _stop(key, partial, failure);
+      }
     }
 
     _setStatus(key, const Verifying());
@@ -359,6 +454,7 @@ final class IssueDownloadManager implements DownloadManager {
             grant.contentHash;
     if (!verified) {
       await _store.deletePartial(partial);
+      await _forgetPending(key);
       return _fail(
         key,
         const AppFailure(FailureCode.fileCorrupt, retryable: true),
@@ -385,11 +481,102 @@ final class IssueDownloadManager implements DownloadManager {
       contentHash: grant.contentHash,
     );
     await _registry.save(copy);
+    await _forgetPending(key);
     _copies[key] = copy;
     _status.remove(key);
     _notify();
     return const Ok<void>(null);
   }
+
+  /// Resumes the signed-in reader's downloads that stopped before they
+  /// finished, as when the app was closed or left (rule 6). Each runs as
+  /// [start] would; one that already runs is left alone.
+  @override
+  Future<void> resumePending() async {
+    await _ready;
+    final String? userId = _currentUserId();
+    if (userId == null) {
+      return;
+    }
+    for (final PendingDownload pending in await _pending.load()) {
+      if (pending.ownerUserId != userId ||
+          _running.containsKey((userId, pending.issueId))) {
+        continue;
+      }
+      unawaited(
+        start(pending.issueId, mobileDataAccepted: pending.mobileDataAccepted),
+      );
+    }
+  }
+
+  /// Whether [next] is for other bytes than [old], so the bytes held
+  /// cannot be kept.
+  static bool _changed(IssueFileGrant old, IssueFileGrant next) =>
+      old.revision != next.revision ||
+      old.contentHash != next.contentHash ||
+      old.sizeBytes != next.sizeBytes;
+
+  /// Waits until a usable connection is back: any but none, and mobile
+  /// data only when the reader accepted it. False when the download was
+  /// cancelled meanwhile.
+  Future<bool> _waitForNetwork((String, String) key, bool mobileOk) async {
+    bool usable(ConnectionType type) =>
+        type != ConnectionType.none &&
+        (type != ConnectionType.mobile || mobileOk);
+    if (usable(await _connectivity.current())) {
+      return !_cancelRequested.contains(key);
+    }
+    final Completer<void> waker = _wakers[key] = Completer<void>();
+    final StreamSubscription<ConnectionType> watching = _connectivity
+        .watch()
+        .listen((ConnectionType type) {
+          if (usable(type) && !waker.isCompleted) {
+            waker.complete();
+          }
+        });
+    await waker.future;
+    await watching.cancel();
+    _wakers.remove(key);
+    return !_cancelRequested.contains(key);
+  }
+
+  void _wake((String, String) key) {
+    final Completer<void>? waker = _wakers[key];
+    if (waker != null && !waker.isCompleted) {
+      waker.complete();
+    }
+  }
+
+  /// The pause before the next try: 1, 2, 4, 8 and at most 30 seconds.
+  static Duration _backoff(int attempt) =>
+      Duration(seconds: attempt <= 0 ? 1 : (1 << attempt).clamp(1, 30));
+
+  /// Stops with [failure]. A retryable one keeps the partial file and the
+  /// pending record, so the download resumes later (rule 6); any other
+  /// drops both.
+  Future<Err<void>> _stop(
+    (String, String) key,
+    String partial,
+    AppFailure failure,
+  ) async {
+    if (!failure.retryable) {
+      await _store.deletePartial(partial);
+      await _forgetPending(key);
+    }
+    return _fail(key, failure);
+  }
+
+  /// A cancelled download keeps nothing (RD-01, PROPOSED).
+  Future<Err<void>> _cancelled((String, String) key, String partial) async {
+    await _store.deletePartial(partial);
+    await _forgetPending(key);
+    _status.remove(key);
+    _notify();
+    return const Err<void>(AppFailure(FailureCode.cancelled));
+  }
+
+  Future<void> _forgetPending((String, String) key) =>
+      _pending.remove(ownerUserId: key.$1, issueId: key.$2);
 
   /// The first file name for [issueId] that no copy on the device uses, so
   /// a second reader's copy does not replace the first (RD-05).
