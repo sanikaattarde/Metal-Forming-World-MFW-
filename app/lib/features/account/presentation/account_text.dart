@@ -161,6 +161,21 @@ abstract final class AccountText {
   static const String consent =
       'I accept the privacy policy and the terms of use.';
 
+  /// The link to the privacy policy.
+  static const String readPrivacyPolicy = 'Read the privacy policy';
+
+  /// The link to the terms of use.
+  static const String readTermsOfUse = 'Read the terms of use';
+
+  /// A policy address not set in this build (outside ENV-PROD only).
+  static const String policiesNotSet =
+      'The privacy policy or the terms of use are not available in this '
+      'version of the app.';
+
+  /// A page that could not be opened.
+  static const String linkFailed =
+      'The page could not be opened. Check that a browser is installed.';
+
   /// The consent left unticked.
   static const String consentMissing =
       'Accept the privacy policy and the terms of use to continue.';

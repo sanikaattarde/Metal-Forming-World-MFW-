@@ -346,6 +346,7 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-97 | `firebase_auth` | Email registration, sign-in, verification and password reset (MOD-03) | 7.0.1 (`^7.0.1`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
 | DEP-98 | `cloud_functions` | Calls the backend operations, such as OP-10 and OP-12 | 7.0.1 (`^7.0.1`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
 | DEP-99 | `cloud_firestore` | Reads the reader's own records, such as the profile (MOD-04) | 7.1.0 (`^7.1.0`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
+| DEP-100 | `url_launcher` | Opens MFW's privacy policy and terms of use in the browser (CFG-07, MOD04-P2-T02) | 6.3.3 (`^6.3.3`) | BSD-3-Clause, "The Flutter Authors" | None | CONFIRMED (runtime, app) |
 
 ## 9. Repository and CI Services
 

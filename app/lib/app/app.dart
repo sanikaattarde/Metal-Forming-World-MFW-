@@ -37,6 +37,12 @@ final Provider<AccountProfileRepository?> profileRepositoryProvider =
       );
     });
 
+/// Opens MFW's policy pages outside the app (CFG-07, MOD04-P2-T02). Tests
+/// override it with a fake.
+final Provider<LinkOpener> linkOpenerProvider = Provider<LinkOpener>(
+  (Ref ref) => const UrlLauncherLinkOpener(),
+);
+
 /// MOD-03's `AuthService` (MOD03-P2-T01 to T03): [AccountAuthService] over
 /// Firebase, with MOD-04's profile status, once Firebase has started, and
 /// [UnavailableAuthService] without it, so a test that sets neither runs as
@@ -90,6 +96,8 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
     screens: accountScreens(
       auth: ref.read(authServiceProvider),
       profiles: ref.read(profileRepositoryProvider),
+      config: ref.read(appConfigProvider),
+      links: ref.read(linkOpenerProvider),
     ),
   );
   ref.onDispose(() {
