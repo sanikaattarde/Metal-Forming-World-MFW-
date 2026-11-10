@@ -45,6 +45,7 @@ Future<GoRouter> pumpAppWithContent(
   CatalogueRepository? catalogue,
   DownloadManager? downloads,
   PdfRenderer? renderer,
+  LibraryRepository? library,
 }) async {
   final ProviderContainer container = ProviderContainer.test(
     overrides: [
@@ -53,6 +54,7 @@ Future<GoRouter> pumpAppWithContent(
       downloadManagerProvider.overrideWithValue(downloads),
       issueTitlesProvider.overrideWithValue(null),
       if (renderer != null) pdfRendererProvider.overrideWithValue(renderer),
+      libraryRepositoryProvider.overrideWithValue(library),
     ],
   );
   await tester.pumpWidget(
