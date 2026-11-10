@@ -8,14 +8,37 @@ import 'placeholder_screens.dart';
 import 'routes.dart';
 import 'shell_text.dart';
 
+/// Builds a route's screen.
+typedef ScreenBuilder = Widget Function(
+  BuildContext context,
+  GoRouterState state,
+);
+
+/// The screens that feature tasks have built, by route. A route whose
+/// builder is null shows its placeholder, so a test can build the router
+/// with none of them.
+final class RouteScreens {
+  /// Creates the set; every screen left out stays a placeholder.
+  const RouteScreens({this.register, this.verifyEmail});
+
+  /// SCR-A-02 (MOD03-P2-T01).
+  final ScreenBuilder? register;
+
+  /// SCR-A-03 (MOD03-P2-T01).
+  final ScreenBuilder? verifyEmail;
+}
+
 /// Builds the route table of `API_AND_MODULE_CONTRACTS.md` section 6.1
 /// (PROPOSED), guarded by [redirectFor] on the latest [accessState]. The
 /// router checks again whenever it changes (DEC-014).
 ///
-/// Every route shows a placeholder until its feature task builds the
-/// screen. Issue details sit under home, so that back from an issue returns
-/// there, and the reader sits under the issue.
-GoRouter buildRouter(ValueListenable<AccessState> accessState) {
+/// A route shows its screen from [screens], or a placeholder until its
+/// feature task builds one. Issue details sit under home, so that back from
+/// an issue returns there, and the reader sits under the issue.
+GoRouter buildRouter(
+  ValueListenable<AccessState> accessState, {
+  RouteScreens screens = const RouteScreens(),
+}) {
   late final GoRouter router;
   router = GoRouter(
     refreshListenable: accessState,
@@ -67,8 +90,8 @@ GoRouter buildRouter(ValueListenable<AccessState> accessState) {
         ],
       ),
       _placeholder(AppRoutes.signIn, ShellText.signIn),
-      _placeholder(AppRoutes.register, ShellText.register),
-      _placeholder(AppRoutes.verifyEmail, ShellText.verifyEmail),
+      _route(AppRoutes.register, ShellText.register, screens.register),
+      _route(AppRoutes.verifyEmail, ShellText.verifyEmail, screens.verifyEmail),
       _placeholder(AppRoutes.completeProfile, ShellText.completeProfile),
       _placeholder(AppRoutes.settings, ShellText.settings),
     ],
@@ -81,3 +104,8 @@ GoRoute _placeholder(String path, String title) => GoRoute(
   builder: (BuildContext context, GoRouterState state) =>
       PlaceholderScreen(title: title),
 );
+
+GoRoute _route(String path, String title, ScreenBuilder? screen) =>
+    screen == null
+    ? _placeholder(path, title)
+    : GoRoute(path: path, builder: screen);

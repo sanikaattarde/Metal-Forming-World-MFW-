@@ -149,7 +149,7 @@ Section 8.1 holds review entries for the candidates the WS-B scaffold needs, and
 | DEP-44 | go_router | Navigation and guards (MOD-01) | DEC-014 | LICENSE file. Read on 30 October 2026, and at the pinned version on 7 November 2026: section 8.1 | None expected | CONFIRMED (18.1.2 locked, pull request #30) |
 | DEP-45 | PDF rendering library | MOD-07 | DEC-005, OQ-36 | **Licence is critical.** Some PDF viewer packages are distributed under commercial licences, which would need MFW's written approval. Check platform support, rendering quality at 300% zoom, and memory use with large files. Candidates for the comparison: DEP-64 and DEP-65 (section 8.1). Neither is chosen. | Possibly paid; verify | UNRESOLVED |
 | DEP-46 | google_sign_in plugin | MOD-03 | DEC-006 | LICENSE file; platform set-up | None expected | CANDIDATE |
-| DEP-47 | Backend provider plugins (for example the FlutterFire packages, if DEC-003 chooses Firebase) | MOD-03 to MOD-13 data layers | DEC-003 | LICENSE files; privacy manifests (IOS-09) | None expected | CANDIDATE |
+| DEP-47 | Backend provider plugins: the FlutterFire packages (DEC-003 AGREED) | MOD-03 to MOD-13 data layers | DEC-003 | Section 8.5 | None | CONFIRMED: four packages in `app/pubspec.yaml` from 10 November 2026, section 8.5 |
 | DEP-48 | Secure storage plugin (for example flutter_secure_storage) | Tokens (`CODING_STANDARDS.md` §8.1) | — | LICENSE file; Keychain and Keystore behaviour | None expected | CANDIDATE |
 | DEP-49 | App directories (path_provider) | Private storage paths (MOD-06) | — | LICENSE file | None expected | CANDIDATE |
 | DEP-50 | Connectivity type: connectivity_plus | Mobile-data warning (MOD-01; RS FR-DL-004) | None | Read on 9 November 2026: section 8.1. Update of 9 November 2026: YG read this licence (reported in chat, not filed). Accuracy on both platforms is checked on a device | None expected | CONFIRMED (7.3.2 locked, pull request #63) |
@@ -335,6 +335,17 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-93 | `jsdom` | A simulated browser for the component tests | 30.1.3, exact pin | MIT | None | CONFIRMED (development) |
 | DEP-94 | `@testing-library/react`, `@testing-library/dom` | Render and drive the components in tests | 16.3.3 and 10.4.2, exact pins | MIT | None | CONFIRMED (development) |
 | DEP-95 | `react-router` | The panel's routes (issues, an issue, categories, news) | 8.5.0, exact pin | MIT | None | CONFIRMED (runtime, admin panel) |
+
+### 8.5 FlutterFire packages in the app (10 November 2026)
+
+`app/` (DEC-003 AGREED, DEP-47). Added with `flutter pub add` and locked in `app/pubspec.lock`. Licences read from each package's LICENSE file on 10 November 2026: BSD-3-Clause, "the Chromium project authors". They need iOS 15 and Android minSdk 24, which the app already sets. The plugins run only on a device or simulator; the app's tests use fakes through the account ports (`app/lib/features/account/domain/`).
+
+| ID | Package | Purpose | Version | Licence | Cost | Status |
+|---|---|---|---|---|---|---|
+| DEP-96 | `firebase_core` | Starts Firebase in the app | 5.1.0 (`^5.1.0`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
+| DEP-97 | `firebase_auth` | Email registration, sign-in, verification and password reset (MOD-03) | 7.0.1 (`^7.0.1`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
+| DEP-98 | `cloud_functions` | Calls the backend operations, such as OP-10 and OP-12 | 7.0.1 (`^7.0.1`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
+| DEP-99 | `cloud_firestore` | Reads the reader's own records, such as the profile (MOD-04) | 7.1.0 (`^7.1.0`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
 
 ## 9. Repository and CI Services
 

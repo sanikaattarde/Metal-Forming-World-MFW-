@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../contracts/contracts.dart';
 import '../core/config/app_config.dart';
 import '../core/network/connectivity_service.dart';
+import 'account_routes.dart';
 import 'placeholder_screens.dart';
 import 'router.dart';
 import 'router_app_navigator.dart';
@@ -46,7 +47,10 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       accessState.value = value;
     }
   }, fireImmediately: true);
-  final GoRouter router = buildRouter(accessState);
+  final GoRouter router = buildRouter(
+    accessState,
+    screens: accountScreens(auth: ref.read(authServiceProvider)),
+  );
   ref.onDispose(() {
     router.dispose();
     accessState.dispose();
