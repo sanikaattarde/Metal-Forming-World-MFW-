@@ -1,15 +1,22 @@
 # QG-08: backend and authorization-rule tests (MOD15-P2-T02,
-# CI_CD_AND_QUALITY_GATES.md section 4). Runs the emulator tests of backend/
-# (MOD13-P1-T01 to T03) on the Firestore and Storage emulators, for the
-# project demo-mfw: no login, no cloud project, no secret.
+# CI_CD_AND_QUALITY_GATES.md section 4). Runs the tests of backend/ with
+# `npm test`, on the local emulators for the project demo-mfw: no login, no
+# cloud project, no secret.
 #
-# A separate workflow from pr.yml, so a pull request that changes only app/
-# does not run it, and one that changes only backend/ does not build the app.
+# A separate workflow from pr.yml, so a change to app/ alone does not run it,
+# and a change to backend/ alone does not build the app. Tasks merge into
+# main without pull requests (DEC-010), so it also runs on each push to main.
 
-name: PR checks (backend)
+name: Backend checks
 
 on:
   pull_request:
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+  push:
+    branches:
+      - main
     paths:
       - "backend/**"
       - ".github/workflows/backend.yml"
@@ -18,8 +25,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: pr-backend-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  group: backend-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 defaults:
   run:
@@ -29,16 +36,17 @@ jobs:
   rules:
     name: QG-08 backend and authorization-rule tests
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Set up Node.js 24
+      # Node.js 22: the runtime backend/functions/package.json pins.
+      - name: Set up Node.js 22
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: "24"
+          node-version: "22"
       - name: Set up Java 21 for the emulators
         uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
@@ -49,7 +57,12 @@ jobs:
           node --version
           npm --version
           java -version
-      - name: Install from the lockfile
+      - name: Install the test tools from the lockfile
         run: npm ci
-      - name: QG-08 rule tests on the emulators
+      - name: Install the functions from their lockfile
+        run: npm ci
+        working-directory: backend/functions
+      # npm test builds the functions first (pretest), then runs the tests on
+      # the auth, functions, Firestore and Storage emulators.
+      - name: QG-08 backend tests on the emulators
         run: npm test

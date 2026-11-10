@@ -514,7 +514,8 @@ Admin operations                                      [any admin]
 │   └── Requirements: FR-ADMIN-010, DATA-002 (CONFIRMED)
 ├── OP-19 requestUpload
 │   ├── In: request_id; kind (pdf or cover); issue_id; declared_size_bytes; content_type
-│   ├── Out: job_id, upload_url (signed, resumable, short-lived) and expires_at. The URL points to a holding area
+│   ├── Out: job_id, upload_url (signed, resumable, short-lived), upload_headers (the headers the client sends to open the
+│   │   session; added 10 November 2026, PROPOSED) and expires_at. The URL points to a holding area
 │   ├── Checks: the issue exists; the size is within max_upload_bytes (150 MB by default); the content type is allowed. It serves a
 │   │   first upload and a replacement (GS-Q45)
 │   ├── Refuses: INVALID_ARGUMENT (size or type); NOT_FOUND; RATE_LIMITED

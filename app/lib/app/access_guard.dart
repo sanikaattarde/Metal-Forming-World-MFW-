@@ -27,10 +27,11 @@ String? missingStepRoute(AccessState state) => switch (state) {
 /// - the library, because bookmarks need fullAccess (SCR-A-16). Who may use
 ///   favourites is OQ-12, which may open it wider (SCR-A-17).
 bool needsFullAccess(String path) {
-  if (path == AppRoutes.downloads || path == AppRoutes.library) {
+  final String normal = _withoutTrailingSlash(path);
+  if (normal == AppRoutes.downloads || normal == AppRoutes.library) {
     return true;
   }
-  final List<String> segments = Uri(path: path).pathSegments;
+  final List<String> segments = Uri(path: normal).pathSegments;
   return segments.length == 3 &&
       segments[0] == 'issues' &&
       segments[1].isNotEmpty &&
@@ -51,7 +52,7 @@ bool needsFullAccess(String path) {
 /// 3. Every other route opens. An unknown one shows the not-found screen
 ///    (SCR-A-22).
 String? redirectFor(AccessState state, Uri location) {
-  final String path = location.path;
+  final String path = _withoutTrailingSlash(location.path);
   final String? step = missingStepRoute(state);
   if (_stepRoutes.contains(path)) {
     final bool stillNeeded =
@@ -67,6 +68,16 @@ String? redirectFor(AccessState state, Uri location) {
     return _withFrom(step, location.toString());
   }
   return null;
+}
+
+/// [path] without trailing slashes, so `/library/` is guarded as `/library`
+/// whether or not the router has already removed them (review of #62).
+String _withoutTrailingSlash(String path) {
+  String out = path;
+  while (out.length > 1 && out.endsWith('/')) {
+    out = out.substring(0, out.length - 1);
+  }
+  return out;
 }
 
 String _withFrom(String step, String? from) => from == null
