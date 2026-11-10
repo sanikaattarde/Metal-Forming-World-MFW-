@@ -39,9 +39,12 @@ bool needsFullAccess(String path) {
 }
 
 /// Whether [path] is one of the reader's own account pages, which need a
-/// session but not fullAccess (MOD04-P2-T03): the profile (SCR-A-06).
-bool needsSession(String path) =>
-    _withoutTrailingSlash(path) == AppRoutes.profile;
+/// session but not fullAccess: the profile (SCR-A-06, MOD04-P2-T03) and
+/// account deletion (SCR-A-08, MOD03-P4-T01).
+bool needsSession(String path) {
+  final String normal = _withoutTrailingSlash(path);
+  return normal == AppRoutes.profile || normal == AppRoutes.deleteAccount;
+}
 
 /// The guard's decision for [location] in [state]: where to go instead, or
 /// null to open it (DEC-014).

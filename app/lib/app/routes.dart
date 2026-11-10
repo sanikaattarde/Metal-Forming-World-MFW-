@@ -35,6 +35,9 @@ abstract final class AppRoutes {
   /// SCR-A-07, settings.
   static const String settings = '/settings';
 
+  /// SCR-A-08, delete the account (MOD03-P4-T01). Needs a session.
+  static const String deleteAccount = '/settings/delete-account';
+
   /// SCR-A-12 for [issueId].
   static String issue(String issueId) =>
       '/issues/${Uri.encodeComponent(issueId)}';

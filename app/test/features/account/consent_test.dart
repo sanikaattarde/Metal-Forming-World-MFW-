@@ -9,18 +9,8 @@ import 'package:mfw_app/contracts/contracts.dart';
 import 'package:mfw_app/features/account/account.dart';
 
 import 'fake_identity_provider.dart';
+import 'fake_link_opener.dart';
 import 'fake_profile_backend.dart';
-
-final class FakeLinkOpener implements LinkOpener {
-  final List<Uri> opened = <Uri>[];
-  bool works = true;
-
-  @override
-  Future<bool> open(Uri uri) async {
-    opened.add(uri);
-    return works;
-  }
-}
 
 final Uri privacy = Uri.parse('https://example.test/privacy');
 final Uri terms = Uri.parse('https://example.test/terms');

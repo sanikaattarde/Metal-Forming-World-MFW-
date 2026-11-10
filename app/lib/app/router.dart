@@ -26,7 +26,15 @@ final class RouteScreens {
     this.verifyEmail,
     this.completeProfile,
     this.profile,
+    this.settings,
+    this.deleteAccount,
   });
+
+  /// SCR-A-07 (MOD04-P2-T04).
+  final ScreenBuilder? settings;
+
+  /// SCR-A-08 (MOD03-P4-T01).
+  final ScreenBuilder? deleteAccount;
 
   /// SCR-A-06 (MOD04-P2-T03).
   final ScreenBuilder? profile;
@@ -121,7 +129,20 @@ GoRouter buildRouter(
         ShellText.completeProfile,
         screens.completeProfile,
       ),
-      _placeholder(AppRoutes.settings, ShellText.settings),
+      GoRoute(
+        path: AppRoutes.settings,
+        builder:
+            screens.settings ??
+            (BuildContext context, GoRouterState state) =>
+                const PlaceholderScreen(title: ShellText.settings),
+        routes: <RouteBase>[
+          _route(
+            'delete-account',
+            ShellText.deleteAccount,
+            screens.deleteAccount,
+          ),
+        ],
+      ),
       _route(AppRoutes.profile, ShellText.profile, screens.profile),
     ],
   );

@@ -109,6 +109,35 @@ abstract final class AccountText {
   /// Sign out.
   static const String signOut = 'Sign out';
 
+  // SCR-A-07.
+
+  /// The settings title.
+  static const String settingsTitle = 'Settings';
+
+  /// The account section.
+  static const String accountSection = 'Account';
+
+  /// The about section.
+  static const String aboutSection = 'About';
+
+  /// Open the profile.
+  static const String yourProfile = 'Your profile';
+
+  /// Delete the account.
+  static const String deleteAccount = 'Delete account';
+
+  /// Sign in or register, for a visitor.
+  static const String signInOrRegister = 'Sign in or create an account';
+
+  /// The privacy policy.
+  static const String privacyPolicy = 'Privacy policy';
+
+  /// The terms of use.
+  static const String termsOfUse = 'Terms of use';
+
+  /// The licences of the open-source parts.
+  static const String licences = 'Open-source licences';
+
   // SCR-A-06.
 
   /// The profile title.
