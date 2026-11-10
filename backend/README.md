@@ -20,7 +20,7 @@ The functions were first built on the emulator spike, branch `spike/sa-backend-r
 npm test
 ```
 
-It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 636 tests, 636 passed (emulator only).
+It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 795 tests, 795 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
@@ -35,6 +35,9 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | U2 Issue checks | `test/u2-issue-checks.test.mjs` | The OP-16 input checks and the derived identifier, with no database |
 | G9 Seed | `test/g9-seed.test.mjs` | The loader writes the three categories into the emulator, is safe to run twice, leaves other records alone and refuses any address that is not a local emulator |
 | U4 Seed definitions | `test/u4-seed.test.mjs` | The seed file's checks: identifiers, names, order and fields, with no database |
+| G7 Issue file | `test/g7-issue-file.test.mjs` | OP-11 through the Functions emulator: the allowed reply and its five fields; each of check 0 and the six ordered checks, and their order; forged claims; unpublishing stops new links at once; an unusable or over-ceiling lifetime refuses the call; the log holds no link |
+| U3 Issue file parts | `test/u3-issue-file-parts.test.mjs` | The key check, the profile computation, the log wrapper and the emulator grant issuer, with no database |
+| U6 Signed links | `test/u6-signed-links.test.mjs` | The signed-URL issuers of DEC-020 against a fake file: V4, the action, the path, the expiry, the one-hour ceiling, and that the emulator issuer is chosen only on the emulators |
 | G5 Admin gate | `test/g5-admin-gate.test.mjs` | The gate reads the role record and the account on each call and trusts no claim; the last-admin guard refuses to remove the only active admin, also with removals at the same moment; the count repair finds and corrects a wrong count |
 
 ## The seed
@@ -50,6 +53,7 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | OP-15 `listIssuesForAdmin`, OP-16 `saveIssue`, OP-21 `publishIssue`, OP-22 `unpublishIssue` | `functions/src/issues.ts`, `issueChecks.ts` | MOD13-P1-T03 | Admin only, through `adminCall`. A save carries the version it was opened at and is refused as `STALE_RECORD` if the record changed. Publishing needs an accepted file (`NO_ACCEPTED_FILE`) |
 | OP-17 `saveCategory`, OP-18 `deleteCategory` | `functions/src/categories.ts` | MOD13-P1-T03 | Issue categories only. A category in use is refused (`IN_USE`); names are unique (`NAME_TAKEN`) |
 | OP-23 `setNewsControl` | `functions/src/newsControls.ts` | MOD13-P1-T03 | Hides or marks a news post. Marking a post as breaking sends nothing (OP-25 is not built) |
+| OP-11 `getIssueFile` | `functions/src/issueFile.ts`, `grantIssuer.ts`, `signedLinks.ts`, `safeLog.ts` | MOD13-P1-T04 | Check 0 (`GONE`) and six ordered checks, then a V4 signed read URL for the current revision (DEC-020, TD-09). The lifetime is `config/private.signed_url_lifetime` in seconds, refused over 3,600 (the AOQ-07 assumption) and with no default. The log keeps only the operation, the caller and the outcome |
 | OP-10 `saveProfile` | `functions/src/saveProfile.ts`, `profile.ts` | MOD13-P1-T01 | The required fields and policy versions come from `config/public`; a missing or malformed setting refuses the call. The mandatory profile is PROVISIONAL (BR-003, OQ-01) |
 
 ## What the rules do
@@ -65,4 +69,5 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 - **Bookmarks and favourites check the owner, not `fullAccess`.** The app's guard asks for `fullAccess` (`API_AND_MODULE_CONTRACTS.md` section 4.1), but a rule cannot check a complete profile without reading another document. Who may use favourites is OQ-12.
 - **The bookmark key** is `<issue_id>_<page_number>`, PROPOSED, so a page is bookmarked once.
 - **Signed upload links** to the holding area are checked by the file store, not by these rules, and the emulator was not tried with them.
+- **Signed URLs are not tried on the emulators.** The emulators have no key to sign with, so they use an issuer whose links cannot resolve, and the real issuers are tested against a fake file (U6). Signing in ENV-TEST needs the Service Account Token Creator role (TD-09, VS-08). Another reader's link, an expired link, and Range and resume on a 150 MB file are the TD-09 proof plan (AR-01, AOQ-07), run when ENV-TEST exists.
 - **Not yet in CI.** QG-08 runs these tests in CI once it is added (MOD15-P2-T02).
