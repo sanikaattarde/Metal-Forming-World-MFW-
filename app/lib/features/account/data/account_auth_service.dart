@@ -6,16 +6,19 @@ import '../domain/identity_provider.dart';
 
 /// MOD-03's `AuthService` over an [IdentityProvider] (IC-01): registration
 /// and email verification (MOD03-P2-T01); sign-in, password reset and
-/// sign-out (MOD03-P2-T02).
+/// sign-out (MOD03-P2-T02); the access state (MOD03-P2-T03).
 ///
 /// Failures follow the contract: `invalidInput`, `conflict` for an address
 /// already in use, `unauthenticated`, `network` and `serviceUnavailable`.
 /// No provider message, address or password is kept in a failure.
 final class AccountAuthService implements AuthService {
-  /// Creates the service over [identity].
-  AccountAuthService(this._identity);
+  /// Creates the service over [identity]. [profileStatus] is MOD-04's
+  /// `ProfileRepository.watchStatus`; without it a verified reader counts
+  /// as `profileIncomplete`, so nothing opens that should not.
+  AccountAuthService(this._identity, {this._profileStatus});
 
   final IdentityProvider _identity;
+  final Stream<ProfileStatus> Function()? _profileStatus;
 
   static const Err<void> _notYet = Err<void>(
     AppFailure(FailureCode.serviceUnavailable),
@@ -39,14 +42,65 @@ final class AccountAuthService implements AuthService {
       a?.emailVerified == b?.emailVerified &&
       a?.method == b?.method;
 
+  /// The access state of `API_AND_MODULE_CONTRACTS.md` section 4.1, in its
+  /// order: signed out, then an unverified address, then the profile
+  /// (FR-AUTH-010, BR-002, BR-003). The profile is read only for a verified
+  /// session, and again for each new session. While its status is still
+  /// unknown nothing is emitted, so the guard never sends a reader with a
+  /// complete profile to SCR-A-05 for a moment. Whether a Google account
+  /// can be unverified is OQ-04: the provider's flag is used as it is.
   @override
-  Stream<AccessState> watchAccessState() => watchSession().map(
-    (AuthSession? session) => switch (session) {
-      null => AccessState.signedOut,
-      AuthSession(emailVerified: false) => AccessState.emailUnverified,
-      _ => AccessState.profileIncomplete,
-    },
-  );
+  Stream<AccessState> watchAccessState() {
+    StreamSubscription<AuthSession?>? sessions;
+    StreamSubscription<ProfileStatus>? profile;
+    late final StreamController<AccessState> out;
+
+    void stopProfile() {
+      final StreamSubscription<ProfileStatus>? old = profile;
+      profile = null;
+      if (old != null) {
+        unawaited(old.cancel());
+      }
+    }
+
+    void onSession(AuthSession? session) {
+      stopProfile();
+      if (session == null) {
+        out.add(AccessState.signedOut);
+        return;
+      }
+      if (!session.emailVerified) {
+        out.add(AccessState.emailUnverified);
+        return;
+      }
+      final Stream<ProfileStatus> Function()? source = _profileStatus;
+      if (source == null) {
+        out.add(AccessState.profileIncomplete);
+        return;
+      }
+      profile = source().listen((ProfileStatus status) {
+        switch (status) {
+          case ProfileStatus.complete:
+            out.add(AccessState.fullAccess);
+          case ProfileStatus.incomplete:
+            out.add(AccessState.profileIncomplete);
+          case ProfileStatus.unknown:
+            break;
+        }
+      }, onError: out.addError);
+    }
+
+    out = StreamController<AccessState>(
+      onListen: () {
+        sessions = watchSession().listen(onSession, onError: out.addError);
+      },
+      onCancel: () async {
+        stopProfile();
+        await sessions?.cancel();
+      },
+    );
+    return out.stream.distinct();
+  }
 
   @override
   Future<Result<void>> registerWithEmail({

@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 
 import '../contracts/contracts.dart';
 import '../core/config/app_config.dart';
+import '../core/config/firebase_settings.dart';
+import '../features/account/account.dart';
 import '../core/network/connectivity_service.dart';
 import 'account_routes.dart';
+import 'firebase_bootstrap.dart';
 import 'placeholder_screens.dart';
 import 'router.dart';
 import 'router_app_navigator.dart';
@@ -13,13 +16,26 @@ import 'theme/font_licences.dart';
 import 'theme/mfw_theme.dart';
 import 'unavailable_auth_service.dart';
 
-/// MOD-03's `AuthService`. WS-A provides the real one (MOD03-P2-T01); until
-/// then [UnavailableAuthService]. Tests override it with a fake.
+/// The Firebase services, set by [runMfwApp] once Firebase has started.
+/// Null in tests, which use fakes.
+final Provider<FirebaseServices?> firebaseServicesProvider =
+    Provider<FirebaseServices?>((Ref ref) => null);
+
+/// MOD-03's `AuthService` (MOD03-P2-T01 to T03): [AccountAuthService] over
+/// Firebase once it has started, and [UnavailableAuthService] without it,
+/// so a test that sets neither runs as a visitor. Tests override it with a
+/// fake.
 ///
 /// Riverpod is used in `app/lib/app/` only (DEC-013).
-final Provider<AuthService> authServiceProvider = Provider<AuthService>(
-  (Ref ref) => const UnavailableAuthService(),
-);
+final Provider<AuthService> authServiceProvider = Provider<AuthService>((
+  Ref ref,
+) {
+  final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
+  if (firebase == null) {
+    return const UnavailableAuthService();
+  }
+  return AccountAuthService(firebase.identity);
+});
 
 /// The current access state (`API_AND_MODULE_CONTRACTS.md` section 4.1).
 ///
@@ -76,18 +92,26 @@ final Provider<AppNavigator> appNavigatorProvider = Provider<AppNavigator>(
   (Ref ref) => RouterAppNavigator(ref.watch(routerProvider)),
 );
 
-/// Starts the app inside its Riverpod scope.
+/// Starts Firebase and then the app inside its Riverpod scope.
 ///
 /// Riverpod is used in `app/lib/app/` only (DEC-013), so the scope is created
 /// here and not in `main.dart`.
-void runMfwApp() {
+Future<void> runMfwApp() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // A wrong build fails here, before any screen (MOD01-P2-T04), and the
-  // value read here is the one the app uses, so it is read once.
+  // values read here are the ones the app uses, so they are read once.
   final AppConfig config = AppConfig.fromEnvironment();
+  final FirebaseSettings firebaseSettings = FirebaseSettings.fromEnvironment(
+    config.environment,
+  );
+  final FirebaseServices firebase = await startFirebase(firebaseSettings);
   registerFontLicences();
   runApp(
     ProviderScope(
-      overrides: [appConfigProvider.overrideWithValue(config)],
+      overrides: [
+        appConfigProvider.overrideWithValue(config),
+        firebaseServicesProvider.overrideWithValue(firebase),
+      ],
       child: const MfwApp(),
     ),
   );
