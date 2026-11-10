@@ -30,6 +30,9 @@ abstract final class ShellText {
   /// Title of SCR-A-02.
   static const String register = 'Register';
 
+  /// SCR-A-04's placeholder title.
+  static const String passwordReset = 'Reset your password';
+
   /// Title of SCR-A-03.
   static const String verifyEmail = 'Verify email';
 

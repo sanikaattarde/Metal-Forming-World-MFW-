@@ -13,5 +13,7 @@ export 'domain/backend_calls.dart';
 export 'domain/identity_provider.dart';
 export 'presentation/account_text.dart';
 export 'presentation/account_widgets.dart';
+export 'presentation/password_reset_screen.dart';
 export 'presentation/register_screen.dart';
+export 'presentation/sign_in_screen.dart';
 export 'presentation/verify_email_screen.dart';

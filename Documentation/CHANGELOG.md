@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: email sign-in, password reset and sign-out in the app (MOD03-P2-T02), 2026-11-10
+
+`AccountAuthService` signs in with one `unauthenticated` for a wrong address, a wrong password, an unknown account and a disabled one (SEC-CHK-17), and sends a password reset with the same outcome for a known and an unknown address (FR-AUTH-004, SC-21). SCR-A-01 (`sign_in_screen.dart`, which clears the password after a failure and offers Retry when the network failed) and SCR-A-04 (`password_reset_screen.dart`) are on `/sign-in` and the new `/reset-password`, linked to each other and to registration with the reader's `from` kept. Google Sign-In is not shown until DEC-006. Tests: `sign_in_test.dart` added, including the FR-AUTH-008 check through the app; `flutter test` 520 passed.
+
 ### Added: email registration and verification in the app (MOD03-P2-T01), 2026-11-10
 
 `app/lib/features/account/` starts MOD-03: the ports `IdentityProvider` and `BackendCalls` with thin FlutterFire adapters (`FirebaseIdentityProvider`, `FirebaseBackendCalls`), and `AccountAuthService`, which registers an email account (address check, PROPOSED minimum of 8 characters), sends and resends the verification email, reloads the verification status and signs out, with every provider code mapped to the contract's failures and no address or provider message kept. SCR-A-02 and SCR-A-03 are built from the MOD16-P1-T03 frames and put on `/register` and `/verify-email` through `RouteScreens` in `app/lib/app/router.dart` and `account_routes.dart`; the other routes keep their placeholders. The router tests now find a screen by its app-bar title. FlutterFire packages DEP-96 to DEP-99 added (`DEPENDENCY_REGISTER.md` section 8.5). Tests: 2 files added; `flutter analyze` clean and `flutter test` 504 passed. The adapters run only on a device and are not run here.

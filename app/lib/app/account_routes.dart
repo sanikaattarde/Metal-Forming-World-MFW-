@@ -10,6 +10,17 @@ import 'routes.dart';
 /// [auth]. Screens take their dependencies through their constructors
 /// (DEC-013); navigation stays here, in the shell.
 RouteScreens accountScreens({required AuthService auth}) => RouteScreens(
+  signIn: (BuildContext context, GoRouterState state) => SignInScreen(
+    auth: auth,
+    onRegister: () => context.go(keepFrom(AppRoutes.register, state)),
+    onForgotPassword: () =>
+        context.go(keepFrom(AppRoutes.passwordReset, state)),
+  ),
+  passwordReset: (BuildContext context, GoRouterState state) =>
+      PasswordResetScreen(
+        auth: auth,
+        onBackToSignIn: () => context.go(keepFrom(AppRoutes.signIn, state)),
+      ),
   register: (BuildContext context, GoRouterState state) => RegisterScreen(
     auth: auth,
     onSignIn: () => context.go(keepFrom(AppRoutes.signIn, state)),

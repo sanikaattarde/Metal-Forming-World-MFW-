@@ -5,7 +5,8 @@ import '../domain/account_rules.dart';
 import '../domain/identity_provider.dart';
 
 /// MOD-03's `AuthService` over an [IdentityProvider] (IC-01): registration
-/// and email verification (MOD03-P2-T01).
+/// and email verification (MOD03-P2-T01); sign-in, password reset and
+/// sign-out (MOD03-P2-T02).
 ///
 /// Failures follow the contract: `invalidInput`, `conflict` for an address
 /// already in use, `unauthenticated`, `network` and `serviceUnavailable`.
@@ -79,18 +80,45 @@ final class AccountAuthService implements AuthService {
   Future<Result<void>> reloadVerificationStatus() =>
       _signedIn(_identity.reloadUser);
 
+  /// One `unauthenticated` for a wrong address, a wrong password, an
+  /// unknown account and a disabled one, so the reader cannot tell them
+  /// apart (SEC-CHK-17).
   @override
   Future<Result<void>> signInWithEmail({
     required String email,
     required String password,
-  }) async => _notYet;
+  }) async {
+    if (!AccountRules.isEmail(email) || password.isEmpty) {
+      return const Err<void>(AppFailure(FailureCode.invalidInput));
+    }
+    try {
+      await _identity.signIn(email: email.trim(), password: password);
+      return const Ok<void>(null);
+    } on IdentityError catch (error) {
+      return Err<void>(identityFailure(error));
+    }
+  }
 
   /// Google Sign-In waits for DEC-006 (PROVISIONAL, C-04; MOD03-P3-T02).
   @override
   Future<Result<void>> signInWithGoogle() async => _notYet;
 
+  /// The same outcome whether or not an account uses [email] (FR-AUTH-004,
+  /// SC-21): an unknown address is not reported.
   @override
-  Future<Result<void>> sendPasswordReset(String email) async => _notYet;
+  Future<Result<void>> sendPasswordReset(String email) async {
+    if (!AccountRules.isEmail(email)) {
+      return const Err<void>(AppFailure(FailureCode.invalidInput));
+    }
+    try {
+      await _identity.sendPasswordReset(email.trim());
+    } on IdentityError catch (error) {
+      if (error.code != 'user-not-found' && error.code != 'user-disabled') {
+        return Err<void>(identityFailure(error));
+      }
+    }
+    return const Ok<void>(null);
+  }
 
   @override
   Future<void> signOut() async {

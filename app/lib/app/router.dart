@@ -19,7 +19,18 @@ typedef ScreenBuilder = Widget Function(
 /// with none of them.
 final class RouteScreens {
   /// Creates the set; every screen left out stays a placeholder.
-  const RouteScreens({this.register, this.verifyEmail});
+  const RouteScreens({
+    this.signIn,
+    this.passwordReset,
+    this.register,
+    this.verifyEmail,
+  });
+
+  /// SCR-A-01 (MOD03-P2-T02).
+  final ScreenBuilder? signIn;
+
+  /// SCR-A-04 (MOD03-P2-T02).
+  final ScreenBuilder? passwordReset;
 
   /// SCR-A-02 (MOD03-P2-T01).
   final ScreenBuilder? register;
@@ -89,7 +100,12 @@ GoRouter buildRouter(
           ),
         ],
       ),
-      _placeholder(AppRoutes.signIn, ShellText.signIn),
+      _route(AppRoutes.signIn, ShellText.signIn, screens.signIn),
+      _route(
+        AppRoutes.passwordReset,
+        ShellText.passwordReset,
+        screens.passwordReset,
+      ),
       _route(AppRoutes.register, ShellText.register, screens.register),
       _route(AppRoutes.verifyEmail, ShellText.verifyEmail, screens.verifyEmail),
       _placeholder(AppRoutes.completeProfile, ShellText.completeProfile),

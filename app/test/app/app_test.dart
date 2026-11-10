@@ -28,7 +28,13 @@ void main() {
     container.read(appNavigatorProvider).openIssue('fx-iss-01');
     await tester.pumpAndSettle();
 
-    expect(find.text(ShellText.signIn), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text(ShellText.signIn),
+      ),
+      findsOneWidget,
+    );
     final Result<void> result = await container
         .read(authServiceProvider)
         .signInWithEmail(email: 'reader@example.test', password: 'x');
