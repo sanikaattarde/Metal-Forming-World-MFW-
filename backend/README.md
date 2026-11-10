@@ -20,7 +20,7 @@ The functions were first built on the emulator spike, branch `spike/sa-backend-r
 npm test
 ```
 
-It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 930 tests, 930 passed (emulator only).
+It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 944 tests, 944 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
@@ -51,8 +51,8 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 
 | Operation | File | Task | Notes |
 |---|---|---|---|
-| OP-14 `getMyAdminRole` | `functions/src/getMyAdminRole.ts` | MOD13-P1-T08 | Shows or hides panel controls only; every privileged operation checks again. The panel goes by `is_active` |
-| Admin gate, last-admin guard, count repair | `functions/src/admin.ts`, `adminCall.ts` | MOD13-P1-T08 | `adminCall` is the only way to declare a privileged operation. The guard record `admin_guard/current` keeps the active-admin count (INV-03). In-panel add and remove (OP-34 to OP-39) wait for OQ-58; the bootstrap step OP-42 is MOD12-P1-T02 |
+| OP-14 `getMyAdminRole` | `functions/src/getMyAdminRole.ts` | MOD13-P1-T08 | Shows or hides panel controls only; every privileged operation checks again. Returns `is_admin`, `is_active` and `email_verified`; the panel admits an account only when the last two are true |
+| Admin gate, last-admin guard, count repair | `functions/src/admin.ts`, `adminCall.ts` | MOD13-P1-T08 | `adminCall` is the only way to declare a privileged operation. The gate also needs a verified email, read from the provider on the call (OQ-20's working position, `EMAIL_NOT_VERIFIED`). The guard record `admin_guard/current` keeps the active-admin count (INV-03). In-panel add and remove (OP-34 to OP-39) wait for OQ-58; the bootstrap step OP-42 is MOD12-P1-T02 |
 | OP-15 `listIssuesForAdmin`, OP-16 `saveIssue`, OP-21 `publishIssue`, OP-22 `unpublishIssue` | `functions/src/issues.ts`, `issueChecks.ts` | MOD13-P1-T03 | Admin only, through `adminCall`. A save carries the version it was opened at and is refused as `STALE_RECORD` if the record changed. Publishing needs an accepted file (`NO_ACCEPTED_FILE`) |
 | OP-17 `saveCategory`, OP-18 `deleteCategory` | `functions/src/categories.ts` | MOD13-P1-T03 | Issue categories only. A category in use is refused (`IN_USE`); names are unique (`NAME_TAKEN`) |
 | OP-23 `setNewsControl` | `functions/src/newsControls.ts` | MOD13-P1-T03 | Hides or marks a news post. Marking a post as breaking sends nothing (OP-25 is not built) |

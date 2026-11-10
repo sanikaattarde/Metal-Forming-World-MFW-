@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the admin panel, its sign-in page and the OP-14 role check (MOD12-P1-T01, MOD12-P2-T01), 2026-11-10
+
+`admin/` is the React and TypeScript admin panel built with Vite (DEC-004 AGREED), taken from the admin spike with its spike labels removed: SCR-W-01 with one message for every refusal (SEC-CHK-17), the OP-14 role check that admits only an active admin with a verified email, the session ended when access is lost, and sessions in memory only. New on `main`: a build reads the project's web configuration from `VITE_FIREBASE_*` (CFG-01, `admin/.env.example`) and otherwise runs only against the local emulators. The backend now refuses every admin operation, and OP-40 an upload, from an admin whose email is not verified (OQ-20's working position), and OP-14 returns `email_verified`. Tests: `npm test` in `admin/`: 46 passed; in `backend/`: 944 passed, 0 failed (emulator only). DEP-31 confirmed, DEP-89 to DEP-94 added.
+
 ### Added: account deletion, OP-12, PROVISIONAL (MOD13-P1-T06), 2026-11-10
 
 `backend/functions/src/accountDeletion.ts` deletes a reader's account at once on a confirmed request (DEC-029, immediate deletion; OQ-24 open, so nothing is kept): it ends the sessions, takes an admin out of the count through the last-admin guard, erases the reader's records and removes the sign-in account. `deletionCleanup.ts` finishes any deletion that stopped part-way (the OP-41 task; not scheduled yet). Tests: G11 added; `npm test` in `backend/`: 930 passed, 0 failed (emulator only). Known gap A-10 is recorded in `backend/README.md`.

@@ -357,6 +357,7 @@ test('G7 check 5: unpublished and missing get the same answer', async () => {
 
 test('G7 check 5: unpublishing stops new links at once, and publishing restores them (AC-8.7)', async () => {
   const admin = await signUp('admin@example.test');
+  await verify(admin.uid);
   await db.doc(`admin_roles/${admin.uid}`).set({ user_id: admin.uid, is_active: true });
 
   assertGrant(await getFile({ issue_id: 'i-pub' }));

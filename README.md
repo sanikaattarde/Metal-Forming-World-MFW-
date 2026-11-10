@@ -31,13 +31,13 @@ Reading order
 | Folder | On `main` | Set-up |
 |---|---|---|
 | `app/` | The Flutter app: the scaffold, the shared contracts, the theme and the WordPress news client, with their tests | [app/README.md](app/README.md) |
-| `backend/` | The Firestore and Storage access rules on Firebase (DEC-003, AGREED), with 321 rule tests on the local emulators (MOD13-P1-T01 to T03). Cloud Functions come in later tasks | [backend/README.md](backend/README.md) |
-| `admin/` | Not yet. A React web app on Firebase Hosting is PROPOSED (DEC-004). The spike is on the branches `spike/sa-admin-skeleton` and `spike/sa-admin-content` | Below. The full steps come with the first admin code (MOD12-P1-T01) |
+| `backend/` | The Firestore and Storage access rules and the Cloud Functions on Firebase (DEC-003, AGREED), with their tests on the local emulators (MOD-13) | [backend/README.md](backend/README.md) |
+| `admin/` | The admin panel: a React web app for Firebase Hosting (DEC-004, AGREED), with its tests on the local emulators (MOD12) | [admin/README.md](admin/README.md) |
 | `config/` | `config.example.env`: the configuration items CFG-01 to CFG-15 by name, with placeholder values and where each value comes from | Below |
 
 **`backend/`.** The access rules, and later Cloud Functions in TypeScript on Node.js (DEC-025), run on the developer's machine against the Firebase Local Emulator Suite (ENV-LOCAL, DEC-023), with no login and no cloud project: `npm ci` and `npm test` in `backend/`, with Node.js 22 or later and Java 21 or later (DEP-79 to DEP-83). ENV-TEST and ENV-PROD wait for MFW's cloud access (`Documentation/CLOUD_ACCESS_SETUP_CHECKLIST.md`) and MFW's answer to OQ-40.
 
-**`admin/`, once it exists.** A static single-page app in React and TypeScript, run locally against the same emulators. It holds no secret: every privileged operation is checked again on the backend (TD-14).
+**`admin/`.** A static single-page app in React and TypeScript, run locally against the same emulators. It holds no secret: every privileged operation is checked again on the backend (TD-14).
 
 **Configuration.** Copy `config/config.example.env` to `config/<environment>.env` and fill in the values from the source named beside each item. Everything in `config/` except the example is ignored by Git. The app reads the file at build time with `--dart-define-from-file` (see `app/README.md`). Server-side secrets are never kept in a file: they live in the provider's secret store in MFW's account (`Documentation/DEPLOYMENT_PLAN.md` section 5). Never commit a real value, key or credential: this repository is public.
 

@@ -120,7 +120,7 @@ All are from the S2 proposal unless noted. None is approved (DEC-003, DEC-004).
 | DEP-28 | Firebase Crashlytics | Crash reporting | MOD-02 (RS NFR-OBS-001) | MFW account | No personal data (`CODING_STANDARDS.md` §6.2); store privacy declarations | Verify | CANDIDATE | DEC-003 |
 | DEP-29 | Google Analytics for Firebase | Usage events | MOD-02 (RS NFR-OBS-002) | MFW account | Approved event list only (OQ-23); declarations | Verify | CANDIDATE | DEC-003, OQ-23 |
 | DEP-30 | AWS-based design | Alternative backend | All backend modules | — | — | — | Considered in S2 and not preferred there | Recorded for completeness |
-| DEP-31 | React | Admin user interface | MOD-12 | Development team | Verify from its LICENSE file | None expected (open source); verify | CANDIDATE (S2) | DEC-004 |
+| DEP-31 | React (`react`, `react-dom`) | Admin user interface | MOD-12 | Development team | MIT (package.json, read 10 November 2026) | None (open source) | CONFIRMED: 19.3.1, exact pin, in `admin/` (DEC-004 AGREED, section 8.4) | None |
 | DEP-32 | Flutter web | Admin user interface (alternative) | MOD-12 | Development team | As DEP-35 | None expected; verify | CANDIDATE, not assessed (not in S2) | DEC-004 |
 
 ## 7. Toolchain and Development Tools
@@ -321,6 +321,19 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-86 | `typescript` | Compiles `functions/src/` | 7.0.2, exact pin | Apache-2.0 | None | CONFIRMED (development) |
 | DEP-87 | `@types/node` | Node.js types for the compiler | 22.20.5, exact pin | MIT | None | CONFIRMED (development) |
 | DEP-88 | `pdfjs-dist` | The genuine-PDF check of OP-40 (FR-ADMIN-006, NFR-SEC-008), with scripts and font loading off | 6.4.299, exact pin | Apache-2.0 | None | CONFIRMED (runtime, server) |
+
+### 8.4 Admin panel packages (10 November 2026)
+
+`admin/` (DEC-004 AGREED). Pinned in `admin/package.json` and its lockfile, taken from the admin spike, where each was the newest release at least two weeks old on 5 November 2026. Licences read from the installed packages' `package.json` on 10 November 2026. React is DEP-31 (section 6), and the Firebase JavaScript SDK is DEP-82, now also a runtime dependency of the panel.
+
+| ID | Package | Purpose | Version | Licence | Cost | Status |
+|---|---|---|---|---|---|---|
+| DEP-89 | `vite`, `@vitejs/plugin-react` | The panel's dev server and static build (TD-14 names no build tool) | 8.3.5 and 6.1.2, exact pins | MIT | None | CONFIRMED (development) |
+| DEP-90 | `typescript` | Type checks for `admin/` (also DEP-86 for the functions) | 7.0.2, exact pin | Apache-2.0 | None | CONFIRMED (development) |
+| DEP-91 | `@types/react`, `@types/react-dom` | Types for DEP-31 | 19.3.0, exact pins | MIT | None | CONFIRMED (development) |
+| DEP-92 | `vitest` | The panel's test runner (QG-09) | 5.0.5, exact pin | MIT | None | CONFIRMED (development) |
+| DEP-93 | `jsdom` | A simulated browser for the component tests | 30.1.3, exact pin | MIT | None | CONFIRMED (development) |
+| DEP-94 | `@testing-library/react`, `@testing-library/dom` | Render and drive the components in tests | 16.3.3 and 10.4.2, exact pins | MIT | None | CONFIRMED (development) |
 
 ## 9. Repository and CI Services
 

@@ -14,5 +14,7 @@ export const getMyAdminRole = onCall(async (request) => {
 
   const standing = await readStanding({ db: getFirestore(), auth: getAuth() }, uid);
   if (standing.accountClosed) throw accountClosed();
-  return { is_admin: standing.hasRole, is_active: standing.roleActive };
+  // email_verified is an addition to OP-14, PROPOSED (MOD12-P2-T01): the panel admits an admin only when
+  // the role is active and the email is verified.
+  return { is_admin: standing.hasRole, is_active: standing.roleActive, email_verified: standing.emailVerified };
 });
