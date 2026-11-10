@@ -5,6 +5,7 @@ import { createRequire } from 'node:module';
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { ref, uploadString } from 'firebase/storage';
+import { seedDocuments } from '../seed/seed.mjs';
 
 const config = JSON.parse(readFileSync(new URL('../firebase.json', import.meta.url), 'utf8'));
 const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url), 'utf8');
@@ -160,14 +161,8 @@ export const now = () => Timestamp.now();
 
 export const SEED_BOOKMARK = 'i-pub_7';
 
-// Synthetic notification categories for the tests (DEC-024). The real list is OQ-18 and CFG-13,
-// and the seed that loads it is MOD13-P1-T10.
-const TEST_CATEGORIES = [
-  { category_id: 'notif-new-issues', name: 'New issues', display_order: 1, is_active: true },
-  { category_id: 'notif-expo-specials', name: 'Expo specials', display_order: 2, is_active: true },
-  { category_id: 'notif-major-news', name: 'Major news', display_order: 3, is_active: true },
-];
-export const SEED_CATEGORIES = TEST_CATEGORIES.map((c) => c.category_id);
+// The notification categories come from the real seed (MOD13-P1-T10), not from test values.
+export const SEED_CATEGORIES = seedDocuments().map(({ data }) => data.category_id);
 
 // The document key of a bookmark, derived from the issue and the page (firestore.rules).
 export const bookmarkKey = (issueId, page) => `${issueId}_${page}`;
@@ -211,7 +206,7 @@ export async function seedFirestore(env) {
     await put('issues/i-pub/files/1', { storage_path: 'issues/i-pub/1.pdf', status: 'current' });
     await put('segments/s1', { name: 'Segment one' });
     await put('categories/c1', { name: 'Category one' });
-    for (const c of TEST_CATEGORIES) await put(`notification_categories/${c.category_id}`, c);
+    for (const { path, data } of seedDocuments()) await put(path, data);
     await put('news_controls/101', { is_hidden: true, is_breaking: false });
     await put('deleted_issues/i-gone', { deleted_at: now() });
     await put('config/public', { policy_versions: { privacy_policy: 'test' } });

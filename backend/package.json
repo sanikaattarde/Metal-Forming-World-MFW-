@@ -9,6 +9,8 @@
   },
   "scripts": {
     "pretest": "npm --prefix functions run build",
+    "seed": "node seed/load.mjs",
+    "seed:check": "node seed/load.mjs --check",
     "test": "sh scripts/run-with-env.sh firebase emulators:exec --only auth,functions,firestore,storage --project demo-mfw \"node --test --test-concurrency=1 test/*.test.mjs\""
   },
   "devDependencies": {

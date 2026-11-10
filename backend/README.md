@@ -20,7 +20,7 @@ The functions were first built on the emulator spike, branch `spike/sa-backend-r
 npm test
 ```
 
-It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 583 tests, 583 passed (emulator only).
+It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 636 tests, 636 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
@@ -33,7 +33,13 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | U1 Profile checks | `test/u1-profile-checks.test.mjs` | The profile and configuration checks of OP-10, with no database |
 | G8 Admin operations | `test/g8-admin-operations.test.mjs` | OP-15 to OP-18 and OP-21 to OP-23 through the Functions emulator: every privileged call refused to a visitor, a reader, a closed or removed admin and forged claims; the details checks, stale-record and name conflicts, retries with the same request identifier, publishing only with an accepted file |
 | U2 Issue checks | `test/u2-issue-checks.test.mjs` | The OP-16 input checks and the derived identifier, with no database |
+| G9 Seed | `test/g9-seed.test.mjs` | The loader writes the three categories into the emulator, is safe to run twice, leaves other records alone and refuses any address that is not a local emulator |
+| U4 Seed definitions | `test/u4-seed.test.mjs` | The seed file's checks: identifiers, names, order and fields, with no database |
 | G5 Admin gate | `test/g5-admin-gate.test.mjs` | The gate reads the role record and the account on each call and trusts no claim; the last-admin guard refuses to remove the only active admin, also with removals at the same moment; the count repair finds and corrects a wrong count |
+
+## The seed
+
+`seed/notification-categories.json` holds the three fixed notification categories of the working position (GS-Q47, PROPOSED; OQ-18 and CFG-13 are OPEN), and `seed/seed.mjs` checks and loads them (MOD13-P1-T10). With the emulators running, `npm run seed` loads them into the local Firestore emulator; it refuses any other address. `npm run seed:check` checks the file with no emulator. The segment list waits for OQ-13 and is not seeded.
 
 ## The operations
 
