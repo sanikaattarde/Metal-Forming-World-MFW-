@@ -38,6 +38,11 @@ bool needsFullAccess(String path) {
       segments[2] == 'read';
 }
 
+/// Whether [path] is one of the reader's own account pages, which need a
+/// session but not fullAccess (MOD04-P2-T03): the profile (SCR-A-06).
+bool needsSession(String path) =>
+    _withoutTrailingSlash(path) == AppRoutes.profile;
+
 /// The guard's decision for [location] in [state]: where to go instead, or
 /// null to open it (DEC-014).
 ///
@@ -49,7 +54,9 @@ bool needsFullAccess(String path) {
 ///    missing step, keeping the route in `from` (FR-AUTH-010, FR-PROF-004).
 /// 2. A step route that the reader no longer needs moves on to the next
 ///    missing step, or back to `from`, or home.
-/// 3. Every other route opens. An unknown one shows the not-found screen
+/// 3. A reader's own account page sends a visitor to sign in, keeping the
+///    route in `from` (MOD04-P2-T03).
+/// 4. Every other route opens. An unknown one shows the not-found screen
 ///    (SCR-A-22).
 String? redirectFor(AccessState state, Uri location) {
   final String path = _withoutTrailingSlash(location.path);
@@ -66,6 +73,9 @@ String? redirectFor(AccessState state, Uri location) {
   }
   if (step != null && needsFullAccess(path)) {
     return _withFrom(step, location.toString());
+  }
+  if (state == AccessState.signedOut && needsSession(path)) {
+    return _withFrom(AppRoutes.signIn, location.toString());
   }
   return null;
 }

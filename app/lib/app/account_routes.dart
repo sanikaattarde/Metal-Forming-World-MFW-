@@ -16,6 +16,7 @@ RouteScreens accountScreens({
   AccountProfileRepository? profiles,
   AppConfig? config,
   LinkOpener? links,
+  String? Function()? email,
 }) {
   // CFG-07, shown where the reader accepts them (MOD04-P2-T02).
   final Widget? policyLinks = links == null
@@ -51,6 +52,15 @@ RouteScreens accountScreens({
             forms: profiles,
             profiles: profiles,
             consentLinks: policyLinks,
+          ),
+    profile: profiles == null
+        ? null
+        : (BuildContext context, GoRouterState state) => ProfileScreen(
+            forms: profiles,
+            profiles: profiles,
+            email: email?.call(),
+            consentLinks: policyLinks,
+            onBack: () => context.go(AppRoutes.settings),
           ),
   );
 }

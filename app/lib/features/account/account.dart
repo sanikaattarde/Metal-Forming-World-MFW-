@@ -22,6 +22,7 @@ export 'presentation/complete_profile_screen.dart';
 export 'presentation/password_reset_screen.dart';
 export 'presentation/policy_links.dart';
 export 'presentation/profile_form_view.dart';
+export 'presentation/profile_screen.dart';
 export 'presentation/register_screen.dart';
 export 'presentation/sign_in_screen.dart';
 export 'presentation/verify_email_screen.dart';
