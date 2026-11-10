@@ -32,6 +32,18 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the catalogue and issue details (MOD05-P2-T01), 2026-11-10
+
+The new `app/lib/features/catalogue/` holds the catalogue code.
+- **Repository:** `DocumentCatalogueRepository` reads published issues, one issue and the categories through the `CatalogueDocuments` port. `FirestoreCatalogueDocuments` reads them from the server, because an offline catalogue is OQ-10.
+- **Issue fields:** it returns the public fields of the OQ-13 working position, newest first, never with a file location. An unpublished or missing issue is `notFound`. A document that cannot be read as an issue is left out of the list.
+- **Covers:** `CoverUrls` builds a cover's address from `cover_path`, under `covers/` only. In ENV-LOCAL it uses the file store emulator.
+- **Screens:** SCR-A-11 (`CatalogueScreen` on the new `/catalogue` route, open to everyone) and SCR-A-12 (`IssueDetailsScreen` on `/issues/:id`) follow the reader frames of #69, with loading, empty, no-connection and not-available states.
+- **Access state:** issue details show Read to a reader with full access. A visitor gets sign in and register, and a reader with a missing step gets that step; each returns to the issue. Download appears once MOD06-P2-T02 wires it.
+- **Shared parts:** `core/ui/content_widgets.dart` holds the parts the other reader screens will share, and `core/format/display_format.dart` holds the one date format.
+
+Tests: `document_catalogue_repository_test.dart`, `catalogue_screens_test.dart` and `content_routes_test.dart` were added. `flutter analyze` finds no issues, and `flutter test` passes 653 and skips 52. The Firestore adapter is run against the emulators with the IC-07 check of MOD05-P2-T04.
+
 ### Added: in-app account deletion, PROVISIONAL (MOD03-P4-T01), 2026-11-10
 
 `AccountAuthService.deleteAccount` calls OP-12 `requestAccountDeletion` with the confirmation, then runs the modules' deletion hooks to clear this device's data for the account (IC-08; MOD-06's kept copies register theirs with MOD06-P3-T02) and signs out; a hook that fails does not keep the reader signed in. `reauthenticateWithEmail` confirms the password when the backend asks for a recent sign-in (R-4 d; OQ-56). SCR-A-08 (`delete_account_screen.dart`) on `/settings/delete-account` is the confirmation: the filled button keeps the account and the outlined one deletes; it asks for the password again when needed and explains LAST_ADMIN and ALREADY_DELETING. After a deletion the reader is a visitor at home: the guard sends a signed-out visitor from the deletion page home, not to sign-in. PROVISIONAL: immediate deletion with nothing kept (DEC-029, OQ-24). Tests: `account_deletion_flow_test.dart` added; `flutter test` 618 passed.

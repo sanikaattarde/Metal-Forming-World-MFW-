@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import '../core/config/firebase_settings.dart';
 import '../features/account/account.dart';
+import '../features/catalogue/catalogue.dart';
 
 /// The Firebase services the app's adapters use, once Firebase has started.
 final class FirebaseServices {
@@ -14,6 +15,7 @@ final class FirebaseServices {
     required this.identity,
     required this.backend,
     required this.firestore,
+    required this.covers,
   });
 
   /// MOD-03's identity provider.
@@ -24,6 +26,9 @@ final class FirebaseServices {
 
   /// The database, for the reader's own records.
   final FirebaseFirestore firestore;
+
+  /// Where issue covers are loaded from (MOD05-P2-T01).
+  final CoverUrls covers;
 }
 
 /// Starts Firebase for [settings] and connects the emulators in ENV-LOCAL
@@ -47,12 +52,16 @@ Future<FirebaseServices> startFirebase(FirebaseSettings settings) async {
   final FirebaseFunctions functions = FirebaseFunctions.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  final String bucket =
+      settings.storageBucket ?? '${settings.projectId}.appspot.com';
+  CoverUrls covers = CoverUrls(bucket: bucket);
   final String? host = settings.emulatorHost;
   if (host != null) {
     // The Android emulator sees the developer's machine as 10.0.2.2.
     final String target = host.isNotEmpty
         ? host
         : (android ? '10.0.2.2' : '127.0.0.1');
+    covers = CoverUrls.emulator(bucket: bucket, host: target);
     // The ports of backend/firebase.json.
     await auth.useAuthEmulator(target, 9099);
     functions.useFunctionsEmulator(target, 5001);
@@ -63,5 +72,6 @@ Future<FirebaseServices> startFirebase(FirebaseSettings settings) async {
     identity: FirebaseIdentityProvider(auth),
     backend: FirebaseBackendCalls(functions),
     firestore: firestore,
+    covers: covers,
   );
 }
