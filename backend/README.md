@@ -20,7 +20,7 @@ The functions were first built on the emulator spike, branch `spike/sa-backend-r
 npm test
 ```
 
-It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 392 tests, 392 passed (emulator only).
+It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 428 tests, 428 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
@@ -31,11 +31,14 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | G0 Auth emulator | `test/g0-auth-emulator.test.mjs` | The Auth emulator creates and signs in a test account (UA-8) |
 | G6 Save profile | `test/g6-save-profile.test.mjs` | OP-10 through the Functions emulator: the first save, later saves, consent records, the segment check, closed accounts and an unusable configuration |
 | U1 Profile checks | `test/u1-profile-checks.test.mjs` | The profile and configuration checks of OP-10, with no database |
+| G5 Admin gate | `test/g5-admin-gate.test.mjs` | The gate reads the role record and the account on each call and trusts no claim; the last-admin guard refuses to remove the only active admin, also with removals at the same moment; the count repair finds and corrects a wrong count |
 
 ## The operations
 
 | Operation | File | Task | Notes |
 |---|---|---|---|
+| OP-14 `getMyAdminRole` | `functions/src/getMyAdminRole.ts` | MOD13-P1-T08 | Shows or hides panel controls only; every privileged operation checks again. The panel goes by `is_active` |
+| Admin gate, last-admin guard, count repair | `functions/src/admin.ts`, `adminCall.ts` | MOD13-P1-T08 | `adminCall` is the only way to declare a privileged operation. The guard record `admin_guard/current` keeps the active-admin count (INV-03). In-panel add and remove (OP-34 to OP-39) wait for OQ-58; the bootstrap step OP-42 is MOD12-P1-T02 |
 | OP-10 `saveProfile` | `functions/src/saveProfile.ts`, `profile.ts` | MOD13-P1-T01 | The required fields and policy versions come from `config/public`; a missing or malformed setting refuses the call. The mandatory profile is PROVISIONAL (BR-003, OQ-01) |
 
 ## What the rules do

@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the admin gate, OP-14 and the last-admin guard (MOD13-P1-T08), 2026-11-10
+
+`backend/functions/src/admin.ts` reads the role record and the account on every privileged call and fails closed (INV-08, SC-02 to SC-04), keeps the active-admin count in `admin_guard/current` so the last active admin cannot be removed (INV-03), and repairs a wrong count (OP-41's repair task, not scheduled yet). `adminCall.ts` wraps every privileged operation in the sign-in check and the gate. `getMyAdminRole.ts` is OP-14. Tests: G5 added; `npm test` in `backend/`: 428 passed, 0 failed (emulator only). In-panel add and remove wait for OQ-58.
+
 ### Added: Cloud Functions and `saveProfile`, OP-10 (MOD13-P1-T01), 2026-11-10
 
 `backend/functions/` is the TypeScript Cloud Functions project (DEC-025), taken from the emulator spike with the spike labels removed. It holds OP-10 `saveProfile` (`saveProfile.ts`, `profile.ts`) and the shared refusals and input checks (`errors.ts`, `validation.ts`). `backend/firebase.json` adds the Auth and Functions emulators; `backend/package.json` builds the functions before the tests; `backend/test/helpers.mjs` gains the account and callable helpers. Tests: G0, G6 and U1 added. `npm test` in `backend/`: 392 tests, 392 passed (emulator only). DEP-84 to DEP-87 in `DEPENDENCY_REGISTER.md` section 8.3.
