@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: the access state from the session and the profile, and Firebase in the app (MOD03-P2-T03), 2026-11-10
+
+`AccountAuthService.watchAccessState` now follows `API_AND_MODULE_CONTRACTS.md` section 4.1: signed out, then an unverified address, then MOD-04's profile status, read only for a verified session and again for each new one, and with nothing emitted while the status is unknown. `runMfwApp` starts Firebase before the first frame from `FirebaseSettings` (CFG-01, `app/lib/core/config/firebase_settings.dart`, new keys in `config/config.example.env`): the local emulators under `demo-mfw` in ENV-LOCAL with no project set, and a named project, required in full, in ENV-TEST and ENV-PROD. `authServiceProvider` gives `AccountAuthService` once Firebase has started and `UnavailableAuthService` without it. Known limit, in `app/README.md`: with cleartext off (SEC-CHK-01), a device cannot reach the HTTP emulators until both developers decide on a debug-only exception. Tests: `access_state_test.dart` (with FX-USR-01 to FX-USR-05) and `firebase_settings_test.dart` added; `flutter test` 544 passed.
+
 ### Added: email sign-in, password reset and sign-out in the app (MOD03-P2-T02), 2026-11-10
 
 `AccountAuthService` signs in with one `unauthenticated` for a wrong address, a wrong password, an unknown account and a disabled one (SEC-CHK-17), and sends a password reset with the same outcome for a known and an unknown address (FR-AUTH-004, SC-21). SCR-A-01 (`sign_in_screen.dart`, which clears the password after a failure and offers Retry when the network failed) and SCR-A-04 (`password_reset_screen.dart`) are on `/sign-in` and the new `/reset-password`, linked to each other and to registration with the reader's `from` kept. Google Sign-In is not shown until DEC-006. Tests: `sign_in_test.dart` added, including the FR-AUTH-008 check through the app; `flutter test` 520 passed.

@@ -9,7 +9,7 @@ The Flutter app for Android and iOS (WS-B, `TASK_OWNERSHIP_MATRIX.md`). The iden
 | `lib/contracts/` | The shared contracts of `API_AND_MODULE_CONTRACTS.md` (MOD-00) |
 | `lib/app/` | The app root and the theme on MFW's website colours and fonts (`DESIGN_TOKENS.md`) |
 | `lib/core/` | Configuration and the HTTPS client |
-| `lib/features/` | One folder for each feature module, for example `news/` |
+| `lib/features/` | One folder for each feature module, for example `news/` and `account/` (MOD-03, MOD-04) |
 | `test/` | Unit and widget tests, the fakes of the contracts and the synthetic fixtures (`TEST_DATA_AND_FIXTURES.md`) |
 | `tool/` | Development scripts, not part of the app |
 
@@ -66,3 +66,12 @@ flutter run --dart-define-from-file=../config/local.env
 - Switching environment needs no code change. The Android and iOS flavours (a separate app identifier for each environment) wait for the identifiers (OQ-42) and the cloud projects (DEC-023, OQ-40).
 
 Flutter 3.47.9 reads this `.env` format, comments included (checked on 9 November 2026). Never put a secret in these files: anything passed at build time can be read from the app.
+
+### Firebase (CFG-01)
+
+`FirebaseSettings` in `lib/core/config/firebase_settings.dart` reads the Firebase project from the same file: `CFG_01_BACKEND_PROJECT_ID` and the public app identifiers `FIREBASE_*` (MOD03-P2-T03). `runMfwApp` starts Firebase with them before the first frame (`lib/app/firebase_bootstrap.dart`).
+
+- **ENV-LOCAL with no project set** runs against the backend's emulators (`npm test` style: `firebase emulators:start` in `backend/`) under the demo project `demo-mfw`, at `MFW_EMULATOR_HOST`, by default 10.0.2.2 on the Android emulator and 127.0.0.1 on iOS.
+- **ENV-TEST and ENV-PROD** must set the project, the sender ID and both platforms' API key and app ID, or the app stops at start-up with `AppConfigException`. A `demo-` project or an emulator host is refused there.
+- **Known limit:** the emulators speak plain HTTP, and SEC-CHK-01 keeps cleartext off on both platforms with no exception (`test/core/network/cleartext_config_test.dart`). A device or simulator therefore cannot reach them until both developers decide on a debug-only exception; until then the account flows run against fakes in the tests, and against a real project once ENV-TEST exists (OQ-40).
+- The Firebase plugins have no implementation in `flutter test`. The account logic is tested through its ports (`lib/features/account/domain/`) with fakes; the adapters are compiled and analysed only.
