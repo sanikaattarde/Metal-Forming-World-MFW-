@@ -185,8 +185,9 @@ class _Field extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: MfwSpace.lg),
-      child: TextField(
-        controller: TextEditingController(text: value),
+      // initialValue, not a controller made in build: nothing to dispose.
+      child: TextFormField(
+        initialValue: value,
         obscureText: obscure,
         decoration: InputDecoration(
           labelText: label,
@@ -258,6 +259,37 @@ class _Primary extends StatelessWidget {
               ),
             )
           : Text(label),
+    );
+  }
+}
+
+/// The style of an irreversible action: an outline in the error colour, a
+/// delete icon, and the label in the heading colour, which meets the
+/// contrast baseline where red text does not (DESIGN_TOKENS.md section 5).
+class _Destructive extends StatelessWidget {
+  const _Destructive(this.label, {this.busy = false});
+
+  final String label;
+  final bool busy;
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton.icon(
+      onPressed: busy ? null : () {},
+      style: OutlinedButton.styleFrom(
+        foregroundColor: MfwColours.heading,
+        side: const BorderSide(color: MfwColours.error, width: 2),
+      ),
+      icon: busy
+          ? const SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                semanticsLabel: 'Deleting',
+              ),
+            )
+          : const Icon(Icons.delete_outline),
+      label: Text(busy ? 'Deleting' : label),
     );
   }
 }
@@ -642,11 +674,15 @@ class _DeleteAccount extends StatelessWidget {
           ),
           const _Field('Password', obscure: true),
         ],
-        _Primary(
+        // The safe choice is the filled button, and the irreversible one has
+        // its own style: an outline in the error colour with a delete icon
+        // (review of pull request #67).
+        const _Primary('Keep my account'),
+        const _Gap(MfwSpace.md),
+        _Destructive(
           reauth ? 'Confirm and delete' : 'Delete my account',
           busy: busy,
         ),
-        const _Link('Keep my account'),
       ],
     );
   }

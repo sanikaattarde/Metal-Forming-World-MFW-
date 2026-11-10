@@ -7,7 +7,7 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.11 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. **One workflow exists: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests that change `app/` or the workflow (T-01.5). Every other gate and pipeline below is PLANNED.** |
 | Date | 9 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
@@ -26,7 +26,6 @@
 | 0.8 | 9 November 2026 | QG-05 tries the Android build up to 3 times, 30 seconds apart, and the Gradle wrapper downloads the binary distribution of Gradle 9.3.1 rather than the full one, after GitHub answered 504 to the Gradle download on 8 and 9 November 2026 (pull request #58, two commits made by the Copilot coding agent started from YG's account and kept by YG). A retry also repeats a build that fails for a real reason, so a real failure takes up to three times as long to show. No gate is added, removed or made optional. |
 | 0.9 | 9 November 2026 | QG-08 and QG-14 are no longer blocked by DEC-003, which is AGREED (`DECISION_LOG.md` section 5.11). Both stay not available until the first backend code adds them. Section 14 item 5 and the open item in section 15 say the same, and that DEC-004 is PROPOSED, so QG-09 stays blocked. No gate is added, removed or made optional. |
 | 0.10 | 9 November 2026 | Section 10: the configuration part of SEC-CHK-01 now runs in QG-03, as `app/test/core/network/cleartext_config_test.dart` (pull request #63, MOD01-P2-T03): the Android manifest turns cleartext off and no manifest turns it on, and the iOS `Info.plist` has no App Transport Security exception. The proxy observation stays manual. No gate is added, removed or made optional. |
-| 0.11 | 9 November 2026 | QG-08 exists: `.github/workflows/backend.yml` runs the backend emulator tests on each pull request that changes `backend/` or that workflow (MOD15-P2-T02, pull request #68). It is a separate workflow, so app-only pull requests do not run it. Section 14 item 5 says so. No other gate changed. |
 
 ### 1.1 Related documents
 
@@ -68,7 +67,7 @@ This document proposes the automated checks that guard pull requests, integratio
 | QG-05 | Android build check | `flutter build apk --debug`, tried up to 3 times, 30 seconds apart (pull request #58) | Pull requests that touch `app/` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5) | DoD-INT 2 |
 | QG-06 | iOS build check | `flutter build ios --no-codesign` on macOS | Pull requests that touch `app/`; every merge to `main` | Yes | Yes, on pull requests that change `app/` or the workflow (`.github/workflows/pr.yml`, T-01.5). Not yet on merges to `main` (section 5.2) | DoD-INT 2 |
 | QG-07 | App integration tests | `flutter test integration_test` on an emulator | Every merge to `main`; release candidates | Yes, on `main` | [SCAFFOLD] | TS-04 |
-| QG-08 | Backend and authorization-rule tests | `npm ci` and `npm test` in `backend/`: the emulator tests of MOD13-P1-T01 to T03 on the Firestore and Storage emulators, project `demo-mfw`, with Node.js 24 and Java 21. `.github/workflows/backend.yml` (MOD15-P2-T02, pull request #68) | Pull requests that touch `backend/` | Yes | [BACKEND] | TS-05 |
+| QG-08 | Backend and authorization-rule tests | `npm ci` in `backend/` and in `backend/functions/`, then `npm test` in `backend/`: the functions are built and the tests run on the auth, functions, Firestore and Storage emulators, project `demo-mfw`, with Node.js 22 and Java 21. `.github/workflows/backend.yml` (MOD15-P2-T02) | Pull requests and pushes to `main` that touch `backend/` | Yes | [BACKEND] | TS-05 |
 | QG-09 | Admin panel build and tests | Blocked by DEC-004 | Pull requests that touch `admin/` | Yes | [BACKEND] | TS-05 |
 | QG-10 | Dependency and licence check | A script comparing `pubspec.lock` with `DEPENDENCY_REGISTER.md` (planned); `flutter pub outdated` report; published advisory check | Pull requests that touch dependency files; weekly | Yes, for an unregistered dependency | [SCAFFOLD] | SEC-CHK-13 |
 | QG-11 | Secrets scan | Candidate: gitleaks, or GitHub secret scanning if the plan includes it | Every pull request and push | Yes | [CI] | SEC-CHK-09 |
@@ -200,7 +199,7 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 2. Create the app scaffold (T-01.1). Done: pull request #30.
 3. Add workflow files for QG-01 to QG-06, QG-11 and QG-12 (T-01.5). QG-01 to QG-06 are done: `.github/workflows/pr.yml`, pull request #48. QG-11 and QG-12 wait for DEP-62 and DEP-63.
 4. Add QG-07 once integration tests exist.
-5. QG-08 is added (`.github/workflows/backend.yml`, pull request #68). Add QG-09 with the first admin code once DEC-004 is AGREED: Yuvraj Gaykhe's written position for option A was posted on pull request #59 on 9 November 2026, and the entry is updated in a follow-up.
+5. QG-08 is added (`.github/workflows/backend.yml`). It runs on pull requests and on pushes to `main`, because tasks merge without pull requests from 10 November 2026 (DEC-010). QG-09, the admin panel's build and tests, is still to add: DEC-004 is AGREED (`DECISION_LOG.md` section 5.12) and `admin/` is on `main`.
 6. Configure environment secrets after DEC-023 and the MFW account access in T-01.3.
 7. Add QG-13 once the store accounts and signing are set up (OQ-42).
 

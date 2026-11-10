@@ -94,8 +94,17 @@ final class FakeFileStore implements FileStore {
   @override
   Future<void> deleteFile(String path) async => files.remove(path);
 
+  /// How many more calls of [completeFiles] fail, to test the repair.
+  int completeFilesFailures = 0;
+
   @override
-  Future<List<String>> completeFiles() async => files.keys.toList();
+  Future<List<String>> completeFiles() async {
+    if (completeFilesFailures > 0) {
+      completeFilesFailures--;
+      throw Exception('synthetic file store failure');
+    }
+    return files.keys.toList();
+  }
 }
 
 /// Fake transport over in-memory files, with the FX-NET-07 fault.
@@ -181,8 +190,17 @@ final class FakeDownloadRegistry implements DownloadRegistry {
   final Map<(String, String), DownloadedIssue> rows =
       <(String, String), DownloadedIssue>{};
 
+  /// How many more calls of [load] fail, to test a failed start.
+  int loadFailures = 0;
+
   @override
-  Future<List<DownloadedIssue>> load() async => rows.values.toList();
+  Future<List<DownloadedIssue>> load() async {
+    if (loadFailures > 0) {
+      loadFailures--;
+      throw Exception('synthetic registry failure');
+    }
+    return rows.values.toList();
+  }
 
   @override
   Future<void> save(DownloadedIssue copy) async =>

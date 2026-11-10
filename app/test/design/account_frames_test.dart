@@ -19,7 +19,8 @@ import 'account_frames.dart';
 const bool _drawImages = bool.fromEnvironment('MFW_DESIGN_FRAMES');
 
 Future<void> _pumpFrame(WidgetTester tester, DesignFrame frame) async {
-  // A 390 by 844 point phone at 2x.
+  // A 390 by 844 point phone. The images are written at 1x, 390 by 844
+  // pixels.
   tester.view.physicalSize = const Size(780, 1688);
   tester.view.devicePixelRatio = 2;
   addTearDown(tester.view.reset);

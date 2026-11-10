@@ -103,13 +103,13 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 | DEC-001 | Decision log as the CH §17.4 record | PROPOSED | ASSUMPTION | No |
 | DEC-002 | Mobile framework: Flutter, one codebase | BASELINE | CONFIRMED | Already in S2 |
 | DEC-003 | Backend platform | AGREED (section 5.11): Firebase, as S2 proposes. MFW still approves the M1 note (OQ-35) | PROVISIONAL, CONFLICT C-05 | Yes, if it differs from S2 or adds cost |
-| DEC-004 | Admin panel technology and hosting | PROPOSED (section 5.11): a React web app on Firebase Hosting | PROVISIONAL | Yes, if it differs from S2 or adds cost |
+| DEC-004 | Admin panel technology and hosting | AGREED (section 5.12): a React web app on Firebase Hosting | PROVISIONAL | Yes, if it differs from S2 or adds cost |
 | DEC-005 | PDF reader approach and library | OPEN | CONFIRMED approach, OPEN library | Yes, at M2, and for any paid licence |
 | DEC-006 | Sign-in methods | OPEN | CONFIRMED and PROVISIONAL, CONFLICT C-04 | Yes |
 | DEC-007 | Access rule for full issues; no guest reading | OPEN (working position mandatory) | CONFIRMED and PROVISIONAL, CONFLICT C-01 | Yes |
 | DEC-008 | Reading model: online reading or complete local copy | OPEN | CONFLICT C-03 | Yes |
 | DEC-009 | Content protection and protected file access | BASELINE | CONFIRMED | Already in S2 |
-| DEC-010 | Branching and integration model | AGREED (section 5.6) | ASSUMPTION | No |
+| DEC-010 | Branching and integration model | AGREED (section 5.6); merges without pull requests from 10 November 2026 (section 5.12) | ASSUMPTION | No |
 | DEC-011 | Two workstreams and proposed developer mapping | AGREED (section 5.6) | ASSUMPTION | No |
 | DEC-012 | Repository layout | AGREED (section 5.6) | ASSUMPTION | No |
 | DEC-013 | Flutter state management | AGREED (section 5.6) | ASSUMPTION | No |
@@ -119,7 +119,7 @@ Each entry also carries the evidence class used in RS §1.2: CONFIRMED, PROVISIO
 | DEC-017 | Schedule baseline | OPEN | CONFLICT C-08 | Yes (MFW record) |
 | DEC-018 | Delivery team composition | OPEN | CONFLICT | Yes (MFW record) |
 | DEC-019 | Evidence status of the S3 amendments | OPEN | CONFLICT | Yes (MFW record) |
-| DEC-020 | Protected issue-file delivery mechanism | OPEN | OPEN | Only if it adds cost |
+| DEC-020 | Protected issue-file delivery mechanism | AGREED (section 5.12): function-issued short-lived signed URLs (TD-09). The device resume proof is still owed | PROVISIONAL | Only if it adds cost |
 | DEC-021 | News retrieval path | OPEN | CONFIRMED (S2 Flow 2), OPEN alternative | Only if it adds cost |
 | DEC-022 | CI service | AGREED. Cost approved by the repository owner for the repository as it is now (section 5.9) | ASSUMPTION | Only if it adds cost to MFW |
 | DEC-023 | Environment model | AGREED as an internal position (section 5.11): three environments. MFW's approval still needed (OQ-40) | ASSUMPTION | Yes (cloud cost billed to MFW) |
@@ -427,6 +427,16 @@ Dated records, left as written
 └── the roadmaps and IMPLEMENTATION_MODULE_INVENTORY.md
                                          records of the plan of 30 October 2026, not updated (their status notes)
 ```
+
+### 5.12 Agreement of both developers, 10 November 2026
+
+Sanika Attarde recorded this agreement of both developers on 10 November 2026. It is the written note of both under section 3.1 for the three entries below.
+
+| Entry | What changes | Condition or limit |
+|---|---|---|
+| DEC-010 | From 10 November 2026, tasks are merged into `main` without pull requests. Each task is built on a local topic branch, its tests and checks are run, and it is merged into `main` with a merge commit and pushed. For this, the repository owner removes the required review from the branch protection of `main`; force pushes and deletion of `main` stay blocked. | Review happens after the merge: the other developer reads the merged commits and raises any finding as a fix commit or an issue. Section 6 of `DEVELOPMENT_WORKFLOW.md` is superseded where it requires a pull request. One short `CHANGELOG.md` entry per task, with no per-document version or `README.md` version-cell bumps. |
+| DEC-004 | Moves from PROPOSED to AGREED: a React web app in TypeScript (DEC-025), served from Firebase Hosting, as S2 proposes and TD-14 recommends. | The conditions of section 5.11 stand: MFW's approval only for a custom domain (CHG-14); the browser list (TD-14, OQ-26) and the web surface controls (OQ-60) are still to set. |
+| DEC-020 | Moves from OPEN to AGREED: option (b), a short-lived signed link issued by server logic after the access checks (TD-09: function-issued V4 signed URLs from Cloud Storage). | The lifetime stays configuration (CFG-06, OQ-37). The TD-09 proof plan (resume on a 150 MB file on a real Android device and a real iPhone, AR-01, AOQ-07) is still owed and is run when ENV-TEST exists. The signing identity needs the Service Account Token Creator role, granted by MFW (NFR-SEC-012). |
 
 ## 6. Entries
 
