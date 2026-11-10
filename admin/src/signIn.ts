@@ -1,7 +1,7 @@
 // The sign-in decision for SCR-W-01 (FR-ADMIN-002, FR-ADMIN-003; AC-8.1, AC-8.2).
 // A wrong password, an unknown address and an account without the admin role all end in the same
 // outcome, so the page cannot tell them apart (SEC-CHK-17). The role check is passed in: the real one,
-// which calls OP-14, is MOD12-P2-T01 (B5). The panel's check is a convenience only, and the server checks
+// which calls OP-14, is MOD12-P2-T01 (MOD12-P2-T01). The panel's check is a convenience only, and the server checks
 // every admin operation again (TD-14, SEC-CHK-06).
 
 export type SignInOutcome = 'signed-in' | 'refused' | 'unavailable';

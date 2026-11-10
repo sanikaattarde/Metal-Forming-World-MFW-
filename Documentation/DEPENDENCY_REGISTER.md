@@ -334,6 +334,7 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-92 | `vitest` | The panel's test runner (QG-09) | 5.0.5, exact pin | MIT | None | CONFIRMED (development) |
 | DEP-93 | `jsdom` | A simulated browser for the component tests | 30.1.3, exact pin | MIT | None | CONFIRMED (development) |
 | DEP-94 | `@testing-library/react`, `@testing-library/dom` | Render and drive the components in tests | 16.3.3 and 10.4.2, exact pins | MIT | None | CONFIRMED (development) |
+| DEP-95 | `react-router` | The panel's routes (issues, an issue, categories, news) | 8.5.0, exact pin | MIT | None | CONFIRMED (runtime, admin panel) |
 
 ## 9. Repository and CI Services
 
