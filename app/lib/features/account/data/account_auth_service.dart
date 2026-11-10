@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import '../../../contracts/contracts.dart';
+import '../../../core/errors/backend_failure.dart';
+import '../domain/backend_calls.dart';
 import '../domain/account_rules.dart';
 import '../domain/identity_provider.dart';
 
 /// MOD-03's `AuthService` over an [IdentityProvider] (IC-01): registration
 /// and email verification (MOD03-P2-T01); sign-in, password reset and
-/// sign-out (MOD03-P2-T02); the access state (MOD03-P2-T03).
+/// sign-out (MOD03-P2-T02); the access state (MOD03-P2-T03); account
+/// deletion and re-authentication (MOD03-P4-T01).
 ///
 /// Failures follow the contract: `invalidInput`, `conflict` for an address
 /// already in use, `unauthenticated`, `network` and `serviceUnavailable`.
@@ -15,10 +18,27 @@ final class AccountAuthService implements AuthService {
   /// Creates the service over [identity]. [profileStatus] is MOD-04's
   /// `ProfileRepository.watchStatus`; without it a verified reader counts
   /// as `profileIncomplete`, so nothing opens that should not.
-  AccountAuthService(this._identity, {this._profileStatus});
+  ///
+  /// [backend] carries OP-12; without it deletion is unavailable.
+  AccountAuthService(
+    this._identity, {
+    this._profileStatus,
+    this._backend,
+    String Function()? requestIds,
+  }) : _requestIds = requestIds ?? newRequestId;
 
   final IdentityProvider _identity;
   final Stream<ProfileStatus> Function()? _profileStatus;
+  final BackendCalls? _backend;
+  final String Function() _requestIds;
+  final List<Future<void> Function(String userId)> _deletionHooks =
+      <Future<void> Function(String userId)>[];
+
+  /// Registers [hook] to clear a module's local data for a deleted account,
+  /// such as MOD-06's kept copies (IC-08, FR-AUTH-009). Hooks run after
+  /// the server has accepted the deletion and before the local sign-out.
+  void addDeletionHook(Future<void> Function(String userId) hook) =>
+      _deletionHooks.add(hook);
 
   static const Err<void> _notYet = Err<void>(
     AppFailure(FailureCode.serviceUnavailable),
@@ -183,17 +203,67 @@ final class AccountAuthService implements AuthService {
     }
   }
 
+  /// Confirms the password of the signed-in email account, so that the
+  /// sign-in is recent before [deleteAccount] (R-4 d; how recent is OQ-56).
   @override
   Future<Result<void>> reauthenticateWithEmail({
     required String password,
-  }) async => _notYet;
+  }) async {
+    final IdentityUser? user = _identity.currentUser;
+    if (user == null || user.method != SignInMethod.email) {
+      return const Err<void>(AppFailure(FailureCode.unauthenticated));
+    }
+    if (password.isEmpty) {
+      return const Err<void>(AppFailure(FailureCode.invalidInput));
+    }
+    try {
+      await _identity.reauthenticate(password);
+      return const Ok<void>(null);
+    } on IdentityError catch (error) {
+      return Err<void>(identityFailure(error));
+    }
+  }
 
   /// Google Sign-In waits for DEC-006 (PROVISIONAL, C-04).
   @override
   Future<Result<void>> reauthenticateWithGoogle() async => _notYet;
 
+  /// Deletes the reader's account through OP-12 at once (DEC-029,
+  /// immediate deletion; PROVISIONAL, OQ-24), then clears this device's data
+  /// for it and signs out (FR-AUTH-009, FR-PRIV-004). The confirmation is
+  /// the screen's (SCR-A-08), so the call carries `confirm: true`.
   @override
-  Future<Result<void>> deleteAccount() async => _notYet;
+  Future<Result<void>> deleteAccount() async {
+    final IdentityUser? user = _identity.currentUser;
+    if (user == null) {
+      return const Err<void>(AppFailure(FailureCode.unauthenticated));
+    }
+    final BackendCalls? backend = _backend;
+    if (backend == null) {
+      return _notYet;
+    }
+    try {
+      await backend.call('requestAccountDeletion', <String, Object?>{
+        'request_id': _requestIds(),
+        'confirm': true,
+      });
+    } on BackendCallError catch (error) {
+      return Err<void>(
+        failureFromBackend(error.category, reason: error.reason),
+      );
+    }
+    // The account is gone, or its deletion is finishing on the server
+    // (OP-41). A clean-up that fails must not keep the reader signed in.
+    for (final Future<void> Function(String userId) hook in _deletionHooks) {
+      try {
+        await hook(user.uid);
+      } on Object {
+        // Left for the module's own clean-up at the next start.
+      }
+    }
+    await signOut();
+    return const Ok<void>(null);
+  }
 
   Future<Result<void>> _signedIn(Future<void> Function() action) async {
     if (_identity.currentUser == null) {

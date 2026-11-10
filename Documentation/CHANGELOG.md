@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: in-app account deletion, PROVISIONAL (MOD03-P4-T01), 2026-11-10
+
+`AccountAuthService.deleteAccount` calls OP-12 `requestAccountDeletion` with the confirmation, then runs the modules' deletion hooks to clear this device's data for the account (IC-08; MOD-06's kept copies register theirs with MOD06-P3-T02) and signs out; a hook that fails does not keep the reader signed in. `reauthenticateWithEmail` confirms the password when the backend asks for a recent sign-in (R-4 d; OQ-56). SCR-A-08 (`delete_account_screen.dart`) on `/settings/delete-account` is the confirmation: the filled button keeps the account and the outlined one deletes; it asks for the password again when needed and explains LAST_ADMIN and ALREADY_DELETING. After a deletion the reader is a visitor at home: the guard sends a signed-out visitor from the deletion page home, not to sign-in. PROVISIONAL: immediate deletion with nothing kept (DEC-029, OQ-24). Tests: `account_deletion_flow_test.dart` added; `flutter test` 618 passed.
+
 ### Added: the settings screen (MOD04-P2-T04), 2026-11-10
 
 SCR-A-07 (`settings_screen.dart`) on `/settings`: for a signed-in reader, the profile, sign-out (FR-AUTH-008) and account deletion; for a visitor, sign-in; and for everyone the privacy policy and terms of use (CFG-07, through the `LinkOpener`) and the open-source licences. The notification choices (SCR-A-21, MOD11-P2-T02) and the reader-mode setting (MOD-07) are slots the shell fills once those features exist, left out until then. The route `/settings/delete-account` is added for SCR-A-08 and, like `/profile`, needs a session. Tests: `settings_test.dart` added; `flutter test` 602 passed.

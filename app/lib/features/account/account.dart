@@ -19,6 +19,7 @@ export 'domain/profile_form.dart';
 export 'presentation/account_text.dart';
 export 'presentation/account_widgets.dart';
 export 'presentation/complete_profile_screen.dart';
+export 'presentation/delete_account_screen.dart';
 export 'presentation/password_reset_screen.dart';
 export 'presentation/policy_links.dart';
 export 'presentation/profile_form_view.dart';
