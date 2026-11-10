@@ -11,6 +11,7 @@ import '../features/account/account.dart';
 import '../features/catalogue/catalogue.dart';
 import '../features/downloads/downloads.dart';
 import '../features/news/news.dart';
+import '../features/reader/reader.dart';
 import '../core/config/wordpress_config.dart';
 import '../core/network/https_client.dart';
 import '../core/network/connectivity_service.dart';
@@ -110,6 +111,13 @@ final Provider<DownloadManager?> downloadManagerProvider =
       );
     });
 
+/// MOD-07's renderer (MOD07-P2-T01): pdfrx, YG's position on DEC-005
+/// (PROPOSED). Tests override it with a fake, because PDFium is not loaded
+/// in `flutter test`.
+final Provider<PdfRenderer> pdfRendererProvider = Provider<PdfRenderer>(
+  (Ref ref) => const PdfrxRenderer(),
+);
+
 /// Opens MFW's policy pages outside the app (CFG-07, MOD04-P2-T02). Tests
 /// override it with a fake.
 final Provider<LinkOpener> linkOpenerProvider = Provider<LinkOpener>(
@@ -189,6 +197,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       news: ref.read(newsRepositoryProvider),
       downloads: ref.read(downloadManagerProvider),
       titles: ref.read(issueTitlesProvider),
+      renderer: ref.read(pdfRendererProvider),
     ),
   );
   ref.onDispose(() {

@@ -8,6 +8,7 @@ import '../contracts/contracts.dart';
 import '../features/catalogue/catalogue.dart';
 import '../features/downloads/downloads.dart';
 import 'access_guard.dart';
+import 'reader_route.dart';
 import 'router.dart';
 import 'routes.dart';
 
@@ -21,12 +22,29 @@ RouteScreens withContentScreens(
   NewsRepository? news,
   DownloadManager? downloads,
   IssueTitles? titles,
+  PdfRenderer? renderer,
 }) {
   final RouteScreens withDownloads = downloads == null
       ? base
       : base.withContent(
           downloads: (BuildContext context, GoRouterState state) =>
               _DownloadsTab(downloads: downloads, titles: titles),
+          reader: renderer == null
+              ? null
+              : (BuildContext context, GoRouterState state) {
+                  final String issueId = state.pathParameters['issueId'] ?? '';
+                  return ReaderRoute(
+                    key: ValueKey<String>(issueId),
+                    issueId: issueId,
+                    downloads: downloads,
+                    renderer: renderer,
+                    titleOf: (String id) => _titleOf(id, titles, catalogue),
+                    initialPage: int.tryParse(
+                      state.uri.queryParameters['page'] ?? '',
+                    ),
+                    onClose: () => _back(context),
+                  );
+                },
         );
   if (catalogue == null) {
     return withDownloads;
@@ -149,4 +167,24 @@ class _DownloadsTab extends StatelessWidget {
           },
     );
   }
+}
+
+/// An issue's title: the one kept with its download, which works offline,
+/// or else the catalogue's. The identifier when neither knows it.
+Future<String> _titleOf(
+  String issueId,
+  IssueTitles? titles,
+  CatalogueRepository? catalogue,
+) async {
+  final String? kept = (await titles?.load().catchError(
+    (Object _) => <String, String>{},
+  ))?[issueId];
+  if (kept != null) {
+    return kept;
+  }
+  final Result<IssueSummary>? issue = await catalogue?.getIssue(issueId);
+  return switch (issue) {
+    Ok<IssueSummary>(:final IssueSummary value) => value.title,
+    _ => issueId,
+  };
 }

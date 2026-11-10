@@ -32,6 +32,22 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: offline opening through `openLocal`, with the IC-03 check (MOD06-P3-T03), 2026-11-10
+
+- **Reader route:** `/issues/:id/read?page=` is now `ReaderRoute` (`app/lib/app/reader_route.dart`).
+  - MOD-06 hands MOD-07 the reader's complete, verified copy through `openLocal`. SCR-A-14 opens it at the page asked for, with no network (FR-DL-007).
+  - The title comes from the titles kept with the download, which work offline, or else from the catalogue.
+  - Read on issue details opens it; Close returns there.
+- **No copy yet:** the route offers the download in place, through `DownloadPanel`, and opens the reader when the download completes. On the working position of DEC-033, Read opens a temporary copy instead; that waits for MFW's written answer to OQ-08 (MOD06-P3-T01). Until then, Read means download, then read.
+- **Damaged copy:** a copy the reader cannot open is deleted, and the download is offered again (FR-READ-010).
+- **Renderer:** `pdfRendererProvider` holds MOD-07's renderer, so tests use a fake.
+
+Tests:
+- `reader_route_test.dart` was added, and a reader test was added to `content_routes_test.dart`.
+- `integration_test/ic03_offline_opening_test.dart` passes 1 of 1 on an iPhone 18 Pro simulator. A generated FX-PDF-01 is downloaded and verified on the real adapters. With the server shut and the connection set to none, it opens through `ReaderRoute` and pdfrx at "1 / 4" and turns to page 2 (IC-03, AC-4.2).
+- The airplane-mode run on a phone is not done.
+- `flutter analyze` finds no issues, and `flutter test` passes 768 and skips 52.
+
 ### Added: the reader on pdfrx behind `PdfRenderer` (MOD07-P2-T01), 2026-11-10
 
 `app/lib/features/reader/` holds MOD-07:

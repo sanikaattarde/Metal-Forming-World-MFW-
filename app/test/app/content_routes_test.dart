@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mfw_app/app/content_routes.dart';
 import 'package:mfw_app/app/shell_text.dart';
+import 'package:mfw_app/contracts/contracts.dart';
 import 'package:mfw_app/features/downloads/downloads.dart';
 
 import '../fakes/fake_auth_service.dart';
@@ -11,6 +12,8 @@ import '../fakes/fake_download_manager.dart';
 import '../fakes/fake_issue_file_service.dart';
 import '../fixtures/fx_issue_files.dart';
 import '../fakes/fake_server.dart';
+import '../features/reader/reader_screen_test.dart'
+    show FakeDocument, FakeRenderer;
 import '../fakes/test_users.dart';
 import 'app_harness.dart';
 import 'router_test.dart' show titled;
@@ -162,6 +165,38 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(DownloadsScreen), findsOneWidget);
       expect(find.text('fx-iss-01'), findsOneWidget);
+    });
+
+    testWidgets('Read on a downloaded issue opens it in the reader, and '
+        'Close returns to the issue [MOD06-P3-T03, IC-03]', (
+      WidgetTester tester,
+    ) async {
+      final FakeAuthService auth = FakeAuthService(
+        FakeServer(),
+        signedInAs: fxUsr01,
+      );
+      final FakeDownloadManager downloads = FakeDownloadManager(
+        auth,
+        FakeIssueFileService(auth, files: fxIssueFiles),
+      );
+      await downloads.start('fx-iss-01', mobileDataAccepted: true);
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        auth,
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        downloads: downloads,
+        renderer: FakeRenderer(Ok<PdfDocumentHandle>(FakeDocument(4))),
+      );
+      router.go('/issues/fx-iss-01');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Read'));
+      await tester.pumpAndSettle();
+      expect(find.text('1 / 4'), findsOneWidget);
+      expect(find.text('Test Issue 01'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Close'));
+      await tester.pumpAndSettle();
+      expect(find.text('Read'), findsOneWidget);
     });
 
     testWidgets('without a download manager, issue details offer Read only', (
