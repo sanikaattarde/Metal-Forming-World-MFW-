@@ -43,11 +43,14 @@ Future<GoRouter> pumpAppWithContent(
   WidgetTester tester,
   AuthService auth, {
   CatalogueRepository? catalogue,
+  DownloadManager? downloads,
 }) async {
   final ProviderContainer container = ProviderContainer.test(
     overrides: [
       authServiceProvider.overrideWithValue(auth),
       catalogueRepositoryProvider.overrideWithValue(catalogue),
+      downloadManagerProvider.overrideWithValue(downloads),
+      issueTitlesProvider.overrideWithValue(null),
     ],
   );
   await tester.pumpWidget(

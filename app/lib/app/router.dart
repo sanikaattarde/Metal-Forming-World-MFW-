@@ -32,7 +32,11 @@ final class RouteScreens {
     this.home,
     this.catalogue,
     this.issue,
+    this.downloads,
   });
+
+  /// SCR-A-15 (MOD06-P2-T02).
+  final ScreenBuilder? downloads;
 
   /// SCR-A-10 (MOD05-P2-T03).
   final ScreenBuilder? home;
@@ -49,6 +53,7 @@ final class RouteScreens {
     ScreenBuilder? home,
     ScreenBuilder? catalogue,
     ScreenBuilder? issue,
+    ScreenBuilder? downloads,
   }) => RouteScreens(
     signIn: signIn,
     passwordReset: passwordReset,
@@ -61,6 +66,7 @@ final class RouteScreens {
     home: home ?? this.home,
     catalogue: catalogue ?? this.catalogue,
     issue: issue ?? this.issue,
+    downloads: downloads ?? this.downloads,
   );
 
   /// SCR-A-07 (MOD04-P2-T04).
@@ -184,7 +190,11 @@ GoRouter buildRouter(
           ),
           StatefulShellBranch(
             routes: <RouteBase>[
-              _placeholder(AppRoutes.downloads, ShellText.downloads),
+              _route(
+                AppRoutes.downloads,
+                ShellText.downloads,
+                screens.downloads,
+              ),
             ],
           ),
           StatefulShellBranch(

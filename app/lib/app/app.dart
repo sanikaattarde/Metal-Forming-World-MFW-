@@ -7,6 +7,7 @@ import '../core/config/app_config.dart';
 import '../core/config/firebase_settings.dart';
 import '../features/account/account.dart';
 import '../features/catalogue/catalogue.dart';
+import '../features/downloads/downloads.dart';
 import '../features/news/news.dart';
 import '../core/config/wordpress_config.dart';
 import '../core/network/https_client.dart';
@@ -66,6 +67,43 @@ final Provider<NewsRepository?> newsRepositoryProvider =
         return null;
       }
       return WordPressNewsRepository(client: IoHttpsGetClient(), config: site);
+    });
+
+/// Where issue files live, from the platform (MOD06-P2-T02, section 8.2).
+final Provider<IssueStorage> issueStorageProvider = Provider<IssueStorage>(
+  (Ref ref) => PlatformIssueStorage(),
+);
+
+/// The titles of downloaded issues, for the Downloads screen offline.
+/// Tests set it to null, so the screen shows identifiers.
+final Provider<IssueTitles?> issueTitlesProvider = Provider<IssueTitles?>(
+  (Ref ref) => IssueTitles(ref.watch(issueStorageProvider)),
+);
+
+/// MOD-06's download manager over the real adapters (MOD06-P2-T02) once
+/// Firebase has started, or null without it, in which case Download is not
+/// offered and the Downloads tab stays a placeholder. Tests override it.
+final Provider<DownloadManager?> downloadManagerProvider =
+    Provider<DownloadManager?>((Ref ref) {
+      final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
+      if (firebase == null) {
+        return null;
+      }
+      final IssueStorage storage = ref.watch(issueStorageProvider);
+      final String? emulator = firebase.emulatorHost;
+      return IssueDownloadManager(
+        files: FunctionsIssueFileService(firebase.backend),
+        transport: HttpFileTransport(
+          plainHttpHosts: emulator == null
+              ? const <String>{}
+              : <String>{emulator},
+        ),
+        store: IoFileStore(storage),
+        verifier: const Sha256HashVerifier(),
+        registry: JsonDownloadRegistry(storage),
+        connectivity: ref.watch(connectivityServiceProvider),
+        currentUserId: () => firebase.identity.currentUser?.uid,
+      );
     });
 
 /// Opens MFW's policy pages outside the app (CFG-07, MOD04-P2-T02). Tests
@@ -137,6 +175,8 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       accessState: accessState,
       catalogue: ref.read(catalogueRepositoryProvider),
       news: ref.read(newsRepositoryProvider),
+      downloads: ref.read(downloadManagerProvider),
+      titles: ref.read(issueTitlesProvider),
     ),
   );
   ref.onDispose(() {

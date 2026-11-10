@@ -16,6 +16,7 @@ final class FirebaseServices {
     required this.backend,
     required this.firestore,
     required this.covers,
+    this.emulatorHost,
   });
 
   /// MOD-03's identity provider.
@@ -29,6 +30,10 @@ final class FirebaseServices {
 
   /// Where issue covers are loaded from (MOD05-P2-T01).
   final CoverUrls covers;
+
+  /// The emulators' host as the device sees it, in ENV-LOCAL only. Links
+  /// to it may use plain HTTP (DEC-023).
+  final String? emulatorHost;
 }
 
 /// Starts Firebase for [settings] and connects the emulators in ENV-LOCAL
@@ -55,6 +60,7 @@ Future<FirebaseServices> startFirebase(FirebaseSettings settings) async {
   final String bucket =
       settings.storageBucket ?? '${settings.projectId}.appspot.com';
   CoverUrls covers = CoverUrls(bucket: bucket);
+  String? emulatorTarget;
   final String? host = settings.emulatorHost;
   if (host != null) {
     // The Android emulator sees the developer's machine as 10.0.2.2.
@@ -62,6 +68,7 @@ Future<FirebaseServices> startFirebase(FirebaseSettings settings) async {
         ? host
         : (android ? '10.0.2.2' : '127.0.0.1');
     covers = CoverUrls.emulator(bucket: bucket, host: target);
+    emulatorTarget = target;
     // The ports of backend/firebase.json.
     await auth.useAuthEmulator(target, 9099);
     functions.useFunctionsEmulator(target, 5001);
@@ -73,5 +80,6 @@ Future<FirebaseServices> startFirebase(FirebaseSettings settings) async {
     backend: FirebaseBackendCalls(functions),
     firestore: firestore,
     covers: covers,
+    emulatorHost: emulatorTarget,
   );
 }

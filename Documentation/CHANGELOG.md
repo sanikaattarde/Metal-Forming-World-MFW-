@@ -32,6 +32,41 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: download with progress through the grant, on real adapters (MOD06-P2-T02), 2026-11-10
+
+`IssueDownloadManager` now runs on real adapters in `features/downloads/data/`:
+- **`FunctionsIssueFileService`** calls OP-11 `getIssueFile`.
+  - It reads the link, expiry, revision, size and `checksum_sha256` into the grant.
+  - A reply with a field missing is `invalidResponse`, so a file the app could not check is never fetched.
+  - Refusals map through `failureFromBackend`.
+- **`HttpFileTransport`** streams the file over `dart:io`.
+  - HTTPS only, except plain HTTP to the emulator host in ENV-LOCAL.
+  - A `Range` request is ready for MOD06-P2-T03.
+  - 401 and 403 are `forbidden`, retryable with a new grant; cut and stalled connections are `network` and `timeout`.
+  - The link is never written into a failure.
+- **`IoFileStore`** keeps partial files in a `partial` folder. It reports a full disk as `insufficientStorage`.
+- **The new `mfw/storage` platform channel** (`MainActivity.kt`, `AppDelegate.swift`) gives the folder and the free space, so `path_provider` is not needed (CODING_STANDARDS section 8.2):
+  - Android: `noBackupFilesDir/issues`.
+  - iOS: Application Support `issues`, excluded from backups.
+- **`Sha256HashVerifier`** checks the file, using `crypto`, DEP-101.
+- **`JsonDownloadRegistry`** keeps rows by file name, because iOS can move the app's folder on an update, and writes atomically.
+- **`IssueTitles`** keeps the titles so the Downloads screen names issues offline.
+
+The shell wiring:
+- `downloadManagerProvider` builds the manager once Firebase has started.
+- Download on issue details opens SCR-A-13 (`DownloadPanel`) in a sheet.
+- The Downloads tab shows SCR-A-15.
+
+The register now marks DEP-49 not needed and DEP-51 resolved without a package.
+
+**Not covered:** the emulators' `getIssueFile` hands out a link that opens nothing (`grantIssuer.ts`), so a download through a real grant waits for ENV-TEST and DEC-020's TD-09 proof. IC-02 is unit-tested with a scripted backend.
+
+Tests:
+- `download_adapters_test.dart` covers the grant, the transport against a local HTTP server, the store, the registry, the titles, the hash, and the manager end to end.
+- Download wiring tests were added to `content_routes_test.dart`.
+- `integration_test/download_adapters_test.dart` passes 3 of 3 on an iPhone 18 Pro simulator, with the platform channel, a 5 MB synthetic download kept across a restart and deleted, and a wrong hash never kept. It was not run on Android.
+- `flutter analyze` finds no issues, and `flutter test` passes 724 and skips 52.
+
 ### Added: refresh and publication changes, with the IC-07 check (MOD05-P2-T04), 2026-11-10
 
 - **Pull to refresh:** home, the catalogue and issue details refresh by pulling down, through the shared `Reloadable` mixin (`core/ui/reloadable.dart`).
