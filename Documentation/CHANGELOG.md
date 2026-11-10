@@ -28,8 +28,13 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 4. Entry types: **Added**, **Changed**, **Fixed**, **Removed**, **Security**, **Documentation**.
 5. Dates use `YYYY-MM-DD`. A date is given only when Git or a document's own history shows it.
 6. Each entry cites the files changed and, where relevant, requirement, decision or task IDs.
+7. From 10 November 2026 (DEC-010, `DECISION_LOG.md` section 5.12) tasks merge without pull requests, and each task adds one short entry: a heading with the task ID and date, a few lines on what changed, and the test result. No per-document version or `README.md` version-cell bumps. Older entries keep their table form.
 
 ## Unreleased
+
+### Documentation: merges without pull requests; DEC-004 and DEC-020 agreed, 2026-11-10
+
+`DECISION_LOG.md` section 5.12 records the agreement of both developers: tasks merge into `main` without pull requests (DEC-010), the admin panel is React on Firebase Hosting (DEC-004 AGREED), and issue files are delivered through function-issued short-lived signed URLs (DEC-020 AGREED, the device resume proof still owed). `DEVELOPMENT_WORKFLOW.md` section 6 and convention 7 above say how a task is merged and logged now.
 
 ### Documentation: the account, profile, settings and notification screen designs (MOD16-P1-T03), 2026-11-09, on topic branch `feat/sa-account-designs` on top of `feat/sa-backend-rules` (the head of pull request #66), then merged with `origin/main` at `fe4e618` (#66 merged), under review in pull request #67
 

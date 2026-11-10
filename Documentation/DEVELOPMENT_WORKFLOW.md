@@ -84,6 +84,8 @@ Do not use `SA/<topic>` or `sa/<topic>`. Git cannot hold a branch `SA` and a bra
 
 ## 6. Pull Request and Review Workflow
 
+**Superseded from 10 November 2026 (DEC-010, `DECISION_LOG.md` section 5.12).** Tasks are merged into `main` without pull requests: build the task on a local topic branch, run its tests and checks, merge it into `main` with a merge commit (`git merge --no-ff`) and push. Review happens after the merge, by the other developer reading the merged commits; a finding becomes a fix commit or an issue. Each task adds one short `CHANGELOG.md` entry. The rest of this section applies only if a pull request is opened by choice.
+
 ### 6.1 Opening a pull request
 
 Each pull request description includes:
