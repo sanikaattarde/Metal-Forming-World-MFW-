@@ -320,6 +320,7 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-85 | `firebase-functions` | Declares the callable and storage-triggered functions | 7.4.0, exact pin | MIT | None | CONFIRMED (runtime, server) |
 | DEP-86 | `typescript` | Compiles `functions/src/` | 7.0.2, exact pin | Apache-2.0 | None | CONFIRMED (development) |
 | DEP-87 | `@types/node` | Node.js types for the compiler | 22.20.5, exact pin | MIT | None | CONFIRMED (development) |
+| DEP-88 | `pdfjs-dist` | The genuine-PDF check of OP-40 (FR-ADMIN-006, NFR-SEC-008), with scripts and font loading off | 6.4.299, exact pin | Apache-2.0 | None | CONFIRMED (runtime, server) |
 
 ## 9. Repository and CI Services
 

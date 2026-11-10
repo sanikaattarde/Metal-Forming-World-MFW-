@@ -20,7 +20,7 @@ The functions were first built on the emulator spike, branch `spike/sa-backend-r
 npm test
 ```
 
-It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 795 tests, 795 passed (emulator only).
+It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulators for the project `demo-mfw`, which needs no login and no cloud project, runs every file in `test/`, and stops them. The emulator downloads are kept in the ignored `node_modules/.cache/`. On 10 November 2026: 896 tests, 896 passed (emulator only).
 
 | Group | File | What it shows |
 |---|---|---|
@@ -38,6 +38,8 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | G7 Issue file | `test/g7-issue-file.test.mjs` | OP-11 through the Functions emulator: the allowed reply and its five fields; each of check 0 and the six ordered checks, and their order; forged claims; unpublishing stops new links at once; an unusable or over-ceiling lifetime refuses the call; the log holds no link |
 | U3 Issue file parts | `test/u3-issue-file-parts.test.mjs` | The key check, the profile computation, the log wrapper and the emulator grant issuer, with no database |
 | U6 Signed links | `test/u6-signed-links.test.mjs` | The signed-URL issuers of DEC-020 against a fake file: V4, the action, the path, the expiry, the one-hour ceiling, and that the emulator issuer is chosen only on the emulators |
+| G10 Uploads | `test/g10-uploads.test.mjs` | OP-19, OP-20 and OP-40 through the emulators: a job and its upload address for an admin only; the size and type checks; a genuine PDF accepted as the next revision, a fake, an over-limit file, a file with no pending job and a file from a removed admin refused and deleted; a replacement keeps revision 1 until it succeeds |
+| U5 PDF check | `test/u5-pdf-check.test.mjs` | The genuine-PDF check on generated files (FX-PDF-06 to FX-PDF-13) and the emulator upload address, with no database |
 | G5 Admin gate | `test/g5-admin-gate.test.mjs` | The gate reads the role record and the account on each call and trusts no claim; the last-admin guard refuses to remove the only active admin, also with removals at the same moment; the count repair finds and corrects a wrong count |
 
 ## The seed
@@ -54,6 +56,8 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | OP-17 `saveCategory`, OP-18 `deleteCategory` | `functions/src/categories.ts` | MOD13-P1-T03 | Issue categories only. A category in use is refused (`IN_USE`); names are unique (`NAME_TAKEN`) |
 | OP-23 `setNewsControl` | `functions/src/newsControls.ts` | MOD13-P1-T03 | Hides or marks a news post. Marking a post as breaking sends nothing (OP-25 is not built) |
 | OP-11 `getIssueFile` | `functions/src/issueFile.ts`, `grantIssuer.ts`, `signedLinks.ts`, `safeLog.ts` | MOD13-P1-T04 | Check 0 (`GONE`) and six ordered checks, then a V4 signed read URL for the current revision (DEC-020, TD-09). The lifetime is `config/private.signed_url_lifetime` in seconds, refused over 3,600 (the AOQ-07 assumption) and with no default. The log keeps only the operation, the caller and the outcome |
+| OP-19 `requestUpload`, OP-20 `listUploadJobs` | `functions/src/uploads.ts`, `uploadUrlIssuer.ts` | MOD13-P1-T09 | Admin only. A job and a V4 signed PUT URL for `holding/{job_id}`, with the headers the client must send (`content-type: application/pdf` and `x-goog-content-length-range`), so the store refuses another type or a larger file. The limit is `config/private.max_upload_bytes`, with no default (CFG-05, OQ-30). The URL lifetime of 900 seconds is a PLACEHOLDER. PDFs only; a cover waits for OQ-22 |
+| OP-40 `onUploadFinalized` | `functions/src/uploadFinalized.ts`, `pdfCheck.ts` | MOD13-P1-T09 | Runs when a file lands in the holding area: checks the job, the uploader's admin standing, the size and that the file is a genuine PDF (pdf.js, no scripts, no fonts), then copies it to `issues/{issue_id}/{revision}.pdf` as the next accepted revision. Anything else is deleted and the job records the reason |
 | OP-10 `saveProfile` | `functions/src/saveProfile.ts`, `profile.ts` | MOD13-P1-T01 | The required fields and policy versions come from `config/public`; a missing or malformed setting refuses the call. The mandatory profile is PROVISIONAL (BR-003, OQ-01) |
 
 ## What the rules do
@@ -70,4 +74,5 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 - **The bookmark key** is `<issue_id>_<page_number>`, PROPOSED, so a page is bookmarked once.
 - **Signed upload links** to the holding area are checked by the file store, not by these rules, and the emulator was not tried with them.
 - **Signed URLs are not tried on the emulators.** The emulators have no key to sign with, so they use an issuer whose links cannot resolve, and the real issuers are tested against a fake file (U6). Signing in ENV-TEST needs the Service Account Token Creator role (TD-09, VS-08). Another reader's link, an expired link, and Range and resume on a 150 MB file are the TD-09 proof plan (AR-01, AOQ-07), run when ENV-TEST exists.
+- **The bucket needs a CORS setting** for the admin panel's origin before a browser can upload to a signed URL. It is set with ENV-TEST (MOD14-P2-T03).
 - **Not yet in CI.** QG-08 runs these tests in CI once it is added (MOD15-P2-T02).
