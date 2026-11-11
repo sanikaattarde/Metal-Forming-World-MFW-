@@ -1,4 +1,4 @@
-// A stand-in for MFW's WordPress REST API, for OP-24's tests. MFW has not given the site's address
+// A stand-in for MFW's WordPress REST API, for the tests of OP-24 and of OP-25's link check. MFW has not given the site's address
 // (OQ-39), and no test reads the live site. It serves generated posts on 127.0.0.1, pages them the way the
 // API is documented to (TD-12, VS-41), records each request, and can be told to misbehave.
 import { createServer } from 'node:http';
@@ -30,6 +30,19 @@ export async function startWordPress({ posts = makePosts(3) } = {}) {
     // Where the redirect mode points: a page that answers with good posts, so that following a redirect
     // would succeed, and a test can tell that OP-24 refused it.
     if (url.pathname === '/elsewhere/wp-json/wp/v2/posts') return json(200, [], { 'X-WP-TotalPages': '1' });
+    // One post, for OP-25's link check.
+    const one = /^\/wp-json\/wp\/v2\/posts\/(\d+)$/.exec(url.pathname);
+    if (one) {
+      if (state.mode === 'status500') return json(500, {});
+      if (state.mode === 'hang') return; // never answers
+      if (state.mode === 'redirect') {
+        res.writeHead(302, { Location: `http://127.0.0.1:${server.address().port}/elsewhere/wp-json/wp/v2/posts` });
+        return res.end();
+      }
+      const post = state.posts.find((p) => p.id === Number(one[1]));
+      if (!post) return json(404, { code: 'rest_post_invalid_id', message: 'Invalid post ID.' });
+      return json(200, url.searchParams.get('_fields') === 'id' ? { id: post.id } : post);
+    }
     if (url.pathname !== '/wp-json/wp/v2/posts') return json(404, { code: 'rest_no_route' });
     switch (state.mode) {
       case 'status500':

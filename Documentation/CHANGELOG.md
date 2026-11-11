@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD11-P2-T03 notification sends and the send log, 2026-11-11
+
+- **Backend:** OP-25 `sendNotification`, OP-26 `retryNotification` and OP-27 `listNotificationSends` (`backend/functions/src/notifications.ts`), admin only. A send goes to the category's push topic through a port (`pushSender.ts`): Firebase Cloud Messaging, or a stand-in on the emulators. The record is written as pending first, then marked accepted or failed (GS-Q27). An issue link must be published, and a post must exist on the site and not be hidden (`postExists` in `wordpress.ts`). Only an admin retries (INV-17), and `markStaleSends` is the OP-41 task for attempts that never reported back. The record fields are PROVISIONAL (OQ-19), and the limits are PLACEHOLDERS.
+- **Tests:** G15 and U9 added, and G1 refuses the stand-in's collections to every client. G1, G12, G15 and U9: 231 passed on the emulators.
+
 ### Fixed: audit of the ten tasks of 10 November 2026, 2026-11-10
 
 - **Downloads tab:** a copy finished after the tab was first opened now shows when the tab comes back into view, with its title, and an empty list can be pulled to refresh. Read keeps the issue's title for the offline lists, as Download already did.
