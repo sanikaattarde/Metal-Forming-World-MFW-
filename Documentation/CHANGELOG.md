@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD13-P1-T05 OP-30 deleteIssue and the deleted-issue record (PROVISIONAL), 2026-11-11
+
+- **Backend:** OP-30 `deleteIssue` (`backend/functions/src/issueDeletion.ts`), admin only, on the GS-Q45 working position. The issue must be unpublished and the confirmation must be its title. One transaction deletes it and writes `deleted_issues/{issue_id}` (identifier and time only), which OP-03 lets anyone read so the app can drop a kept copy. Its file records, files, cover and upload jobs are removed afterwards. A repeat returns the first result; a later request is `GONE`.
+- **Open:** OQ-21 and OQ-11. No delete control in the panel until OQ-21 is answered. The orphan cleanup of readers' bookmarks and favourites (DM section 10.3) is not built.
+- **Tests:** G17 added, and G1 refuses `issue_deletion_requests` to every client. G1, G7 and G17: 277 passed on the emulators.
+
 ### Added: MOD12-P2-T06 the registered-reader list and CSV export (PROVISIONAL), 2026-11-11
 
 - **Backend:** OP-31 `listRegisteredUsers` and OP-32 `exportRegisteredUsers` (`backend/functions/src/registeredUsers.ts`), admin only. Active readers newest first with a cursor, the email from the sign-in provider and the five profile fields; accounts being deleted are hidden. The CSV is built in memory and not stored, with formula cells neutralised (SEC-CHK-12, FX-ADM-07) and a 10,000-row PLACEHOLDER cap (`EXPORT_TOO_LARGE`).
