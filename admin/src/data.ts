@@ -79,10 +79,20 @@ export interface NewsControl {
 // PLACEHOLDER. No document sets how many posts the news screen shows at once.
 export const PLACEHOLDER_POSTS_PER_PAGE = 20;
 
+// NOTIFICATION_CATEGORY: the three fixed categories of the working position (GS-Q47; OQ-18 is OPEN). A public
+// read, as the app makes it.
+export interface NotificationCategory {
+  category_id: string;
+  name: string;
+  display_order: number;
+  is_active: boolean;
+}
+
 export interface Reads {
   categories(): Promise<Category[]>;
   segments(): Promise<Segment[]>;
   newsControls(): Promise<NewsControl[]>;
+  notificationCategories(): Promise<NotificationCategory[]>;
 }
 
 export const newRequestId = (): string => crypto.randomUUID();
@@ -133,7 +143,84 @@ export function listPosts(api: CallFn, page: number): Promise<PostPage> {
   return api('listWordPressPosts', { page, per_page: PLACEHOLDER_POSTS_PER_PAGE }) as Promise<PostPage>;
 }
 
-// OP-23. Clearing both flags removes the record. Marking a post as breaking sends nothing (OP-25 not built).
+// OP-23. Clearing both flags removes the record. Marking a post as breaking sends nothing; a send is OP-25.
 export function setNewsControl(api: CallFn, control: NewsControl): Promise<NewsControl> {
   return api('setNewsControl', { request_id: newRequestId(), ...control }) as Promise<NewsControl>;
+}
+
+// OP-25 to OP-27 (MOD12-P2-T05). What a notification opens: an issue, a news post or nothing (FR-NOTIF-005).
+export type TargetType = 'issue' | 'news_post' | 'none';
+
+export type SendOutcome = 'pending' | 'accepted' | 'failed' | 'unknown';
+
+export interface NotificationDraft {
+  category_id: string;
+  title: string;
+  body: string;
+  target_type: TargetType;
+  target_ref?: string;
+}
+
+// A send record as OP-27 returns it. The fields wait for OQ-19 (PROVISIONAL).
+export interface SendRecord {
+  send_id: string;
+  category_id: string;
+  title: string;
+  body: string;
+  target_type: TargetType;
+  target_ref: string | null;
+  sent_by: string;
+  sent_at: number | null;
+  outcome: SendOutcome;
+  attempt_count: number;
+  last_attempt_at: number | null;
+}
+
+export interface SendPage {
+  items: SendRecord[];
+  next_cursor: string | null;
+}
+
+export interface SendResult {
+  send_id: string;
+  outcome: SendOutcome;
+}
+
+// PLACEHOLDERS, the backend's own: no document sets them (notifications.ts).
+export const PLACEHOLDER_MAX_TITLE_LENGTH = 100;
+export const PLACEHOLDER_MAX_BODY_LENGTH = 400;
+// PLACEHOLDER. No document sets how many sends the log shows at once.
+export const PLACEHOLDER_SENDS_PER_PAGE = 20;
+
+// The same request identifier for the same send, so a repeat after a lost reply sends nothing twice.
+export function sendNotification(api: CallFn, requestId: string, draft: NotificationDraft): Promise<SendResult> {
+  const { target_ref, ...rest } = draft;
+  return api('sendNotification', { request_id: requestId, ...rest, ...(draft.target_type === 'none' ? {} : { target_ref }) }) as Promise<SendResult>;
+}
+
+export function retryNotification(api: CallFn, sendId: string, requestId = newRequestId()): Promise<SendResult> {
+  return api('retryNotification', { request_id: requestId, send_id: sendId }) as Promise<SendResult>;
+}
+
+export function listSends(api: CallFn, { outcome, cursor }: { outcome?: SendOutcome; cursor?: string | null } = {}): Promise<SendPage> {
+  return api('listNotificationSends', {
+    page_size: PLACEHOLDER_SENDS_PER_PAGE,
+    ...(outcome ? { outcome } : {}),
+    ...(cursor ? { cursor } : {}),
+  }) as Promise<SendPage>;
+}
+
+// PLACEHOLDER. How many pages of published issues the send screen reads for its list of targets.
+export const PLACEHOLDER_TARGET_ISSUE_PAGES = 5;
+
+export async function publishedIssues(api: CallFn): Promise<Issue[]> {
+  const found: Issue[] = [];
+  let cursor: string | null = null;
+  for (let page = 0; page < PLACEHOLDER_TARGET_ISSUE_PAGES; page += 1) {
+    const result: IssuePage = await listIssues(api, { state: 'published', cursor });
+    found.push(...result.items);
+    cursor = result.next_cursor;
+    if (!cursor) break;
+  }
+  return found;
 }
