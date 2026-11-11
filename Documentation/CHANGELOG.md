@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD02-P2-T01 crash reporting with no user identifier, off until C-07, 2026-11-11
+
+- **App:** `CrashReporter` (`app/lib/core/monitoring/crash_reporter.dart`) over a `CrashSink` port with no way to set a user identifier (NFR-OBS-001, DATA-014). Every report is redacted with the logger's rules, a failure to send writes one local line, and nothing is thrown. With `CFG_11_CRASH_REPORTING_ENABLED=true`, `runMfwApp` installs handlers that report uncaught Flutter and platform errors as fatal, after the earlier handlers. No crash service is connected, so a report goes nowhere yet.
+- **Waits for:** DEC-028 and C-07 (the provider and MFW's confirmation), MFW's cloud project (MOD14-P2-T03), then the Crashlytics adapter, its dependency entry and the forced crash on both platforms.
+- **Tests:** `app/test/core/monitoring/crash_reporter_test.dart` (5). App suite: 835 passed.
+
 ### Added: MOD02-P2-T02 the usage-event allowlist, off until OQ-23, 2026-11-11
 
 - **App:** `UsageEvents` (`app/lib/core/monitoring/usage_events.dart`) records an event only if its name and every parameter are on the approved list and every value is plain; a parameter naming a reader, an issue, a post or a page is refused whatever the list says (NFR-PRIV-003, PAC-09). The shipped list is empty until OQ-23, so collection is off in every build. `MonitoringConfig` reads CFG-11 at start-up and refuses a value other than `true` or `false`. No analytics service is connected (DEC-028).
