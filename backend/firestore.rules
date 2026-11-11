@@ -134,7 +134,7 @@ service cloud.firestore {
     }
 
     // ---- No client access at all: not listed, so denied ----
-    // admin_roles, admin_audit, admin_guard, upload_jobs, notification_sends, edition_updates, issue_deletion_requests,
+    // admin_roles, admin_audit, admin_guard, upload_jobs, notification_sends, edition_updates, issue_deletion_requests, rate_limits,
     // config/private, issues/{id}/files/{revision}.
   }
 }

@@ -51,6 +51,7 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 | G16 Registered readers | `test/g16-registered-users.test.mjs` | OP-31 and OP-32 through the emulators: newest first with a cursor, the provider email and the profile fields only, accounts being deleted hidden, admin only, formula cells neutralised in the export, and nothing stored |
 | U10 CSV | `test/u10-csv.test.mjs` | The export's cell escaping, quoting, columns and line ends, with no emulator |
 | G17 Issue deletion | `test/g17-delete-issue.test.mjs` | OP-30 through the emulators: an unpublished issue whose title is typed is deleted with its file records, stored files, cover and upload jobs; the deleted-issue record holds the identifier and the time only and anyone reads it (OP-03); a repeat returns the first result and a new request is `GONE`; a published issue, a wrong title, bad input and a reader are refused with nothing changed |
+| G18 Rate limits | `test/g18-rate-limits.test.mjs` | Every callable has a class; a call over its class's limit is `RATE_LIMITED` with a retry-after and writes nothing, for an admin write, a send, the export, a link request (without showing whether the issue exists), the reader writes and the role check; counters are per caller and class, restart each window, admit one of two calls at the last place, and go with the account |
 | G5 Admin gate | `test/g5-admin-gate.test.mjs` | The gate reads the role record and the account on each call and trusts no claim; the last-admin guard refuses to remove the only active admin, also with removals at the same moment; the count repair finds and corrects a wrong count |
 
 ## The seed
@@ -84,9 +85,25 @@ It builds `functions/`, starts the Auth, Functions, Firestore and Storage emulat
 - **Owner only** for the account record, profile, consent records, bookmarks, favourites and notification preferences (NFR-SEC-005, NFR-SEC-006). Profile and consent writes go through a function (OP-10), so the rules allow the owner to read them only.
 - **No rule reads another document** (`SECURITY_AND_ACCESS_CONTROL.md` section 13).
 
+## Rate limits (MOD13-P1-T07)
+
+`functions/src/rateLimits.ts` counts each call per caller and class of operation in a fixed 60-second window, in `rate_limits/{class}__{uid}`, inside one transaction, and refuses a call over the limit with `RATE_LIMITED` (callable code `resource-exhausted`) and `retry_after_seconds`. The mechanism is PROPOSED and every number is a PLACEHOLDER for review (SC-18 leaves both OPEN, AOQ-10; App Check is OQ-52):
+
+| Class | Operations | Calls per minute |
+|---|---|---|
+| `reader_write` | OP-10, OP-12 | 20 |
+| `issue_file` | OP-11 | 30 |
+| `role_check` | OP-14 | 60 |
+| `admin_read` | OP-15, OP-20, OP-24, OP-27, OP-31 | 300 |
+| `admin_write` | OP-16 to OP-19, OP-21 to OP-23, OP-30 | 120 |
+| `notification_send` | OP-25, OP-26 | 10 |
+| `export` | OP-32 | 5 |
+
+An admin operation is counted after the admin gate, so a refused caller writes no counter. OP-11 is counted before check 0, so a limited call shows nothing about the issue. An operation with no class fails closed, and G18 checks that every exported callable has one. OP-12 removes an account's counters. Sign-in, registration and password reset are limited by the identity provider, which is NOT VERIFIED (SC-21). Size limits are each operation's own checks: the upload size (CFG-05), text lengths and page sizes.
+
 ## The server log (MOD02-P2-T03)
 
-`functions/src/safeLog.ts` writes one line per logged outcome with only the operation, the caller's identifier and the outcome (SC-16, SEC-CHK-10); a value that looks like a link, a token or an email address, or is too long, is dropped and only its field name is noted. A line that is a security event carries `event`, from a closed list: `access_refused` (signed out, not an admin, closed account, unverified email), `check_failed` (a check could not be made, SC-03), `grant_issued` (OP-11), `account_deleted` (OP-12), `admin_removed` and `upload_rejected` (OP-40). Refusals and failures are warnings. Every admin operation (through `adminCall`), OP-10 and OP-14 log their security refusals; a refusal of the input is not an event. The caller's identifier is pseudonymous; whether it may be logged at all is finding E-9.
+`functions/src/safeLog.ts` writes one line per logged outcome with only the operation, the caller's identifier and the outcome (SC-16, SEC-CHK-10); a value that looks like a link, a token or an email address, or is too long, is dropped and only its field name is noted. A line that is a security event carries `event`, from a closed list: `access_refused` (signed out, not an admin, closed account, unverified email), `check_failed` (a check could not be made, SC-03), `grant_issued` (OP-11), `account_deleted` (OP-12), `admin_removed`, `upload_rejected` (OP-40) and `rate_limited` (MOD13-P1-T07). Refusals and failures are warnings. Every admin operation (through `adminCall`), OP-10 and OP-14 log their security refusals; a refusal of the input is not an event. The caller's identifier is pseudonymous; whether it may be logged at all is finding E-9.
 
 ## Known limits
 

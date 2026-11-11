@@ -217,3 +217,14 @@ test('SEC-CHK-15: a title is shown as text', async () => {
   const row = (await screen.findByText('<img src=x onerror=alert(1)>')).closest('tr')!;
   expect(row.querySelector('img')).toBeNull();
 });
+
+test('SC-18: a send over the rate limit says to wait, and nothing is sent', async () => {
+  const { server, deps } = setUp();
+  server.failNext('sendNotification', Object.assign(new Error('resource-exhausted'), { code: 'functions/resource-exhausted', details: { reason: 'RATE_LIMITED', retry_after_seconds: 30 } }));
+  await signedInApp(deps, '/notifications/new');
+  await fillForm();
+  fireEvent.click(button('Review'));
+  fireEvent.click(button('Send now'));
+  expect((await screen.findByRole('alert')).textContent).toBe(ERRORS.rateLimited);
+  expect(server.state.sends).toHaveLength(0);
+});

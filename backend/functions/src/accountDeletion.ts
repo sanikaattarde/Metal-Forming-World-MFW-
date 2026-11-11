@@ -9,6 +9,7 @@ import type { Firestore } from 'firebase-admin/firestore';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
 import { applyAdminRemoval, planAdminRemoval } from './admin.js';
 import { alreadyDeleting, cannotVerify, invalidArgument, unauthenticated } from './errors.js';
+import { enforceRate, removeCounters } from './rateLimits.js';
 import { logOperation, logSecurityEvent } from './safeLog.js';
 import { isNonEmptyText, isObject, unknownFields } from './validation.js';
 
@@ -43,8 +44,9 @@ export async function eraseAccount({ db, auth }: DeletionBackend, uid: string): 
   for (const name of OWN_COLLECTIONS) await db.recursiveDelete(userRef.collection(name));
 
   // 3. The admin role record, removed with the account (section 13.3). The count was taken down when the
-  // deletion was confirmed.
+  // deletion was confirmed. The rate-limit counters go too: they hold the identifier.
   await db.collection('admin_roles').doc(uid).delete();
+  await removeCounters(db, uid);
 
   // 4. The sign-in account.
   await auth.deleteUser(uid).catch(ignoreMissingAccount);
@@ -93,6 +95,7 @@ export async function requestDeletion(backend: DeletionBackend, uid: string | un
 export const requestAccountDeletion = onCall(async (request) => {
   const uid = request.auth?.uid;
   const caller = uid ?? 'none';
+  if (uid) await enforceRate(getFirestore(), uid, OPERATION);
   try {
     const state = await requestDeletion({ db: getFirestore(), auth: getAuth() }, uid, request.data);
     logOperation({ operation: OPERATION, caller, outcome: state });

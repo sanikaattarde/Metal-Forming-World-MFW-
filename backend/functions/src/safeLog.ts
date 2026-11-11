@@ -40,11 +40,12 @@ export const SECURITY_EVENTS = [
   'account_deleted', // a reader deleted their account (OP-12)
   'admin_removed', // an admin left the count (INV-03)
   'upload_rejected', // a file in the holding area was refused and deleted (OP-40, SEC-CHK-07)
+  'rate_limited', // a call over its class's limit was refused (SC-18, MOD13-P1-T07)
 ] as const;
 
 export type SecurityEvent = (typeof SECURITY_EVENTS)[number];
 
-const WARNINGS = new Set<SecurityEvent>(['access_refused', 'check_failed', 'upload_rejected']);
+const WARNINGS = new Set<SecurityEvent>(['access_refused', 'check_failed', 'upload_rejected', 'rate_limited']);
 const ACCESS_REFUSALS = new Set(['unauthenticated', 'permission-denied', 'ACCOUNT_CLOSED', 'EMAIL_NOT_VERIFIED']);
 const UPLOAD_REJECTIONS = new Set(['NOT_A_PDF', 'OVER_LIMIT', 'UPLOADER_NOT_AUTHORISED', 'ISSUE_NOT_FOUND', 'NO_PENDING_JOB']);
 

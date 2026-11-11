@@ -39,10 +39,12 @@ let reader;
 const getFile = (data, token = reader.idToken) => callFunction('getIssueFile', data, token);
 const code = (reply) => reply.error?.details?.reason ?? reply.error?.status;
 
+// The rate-limit counters are left out: every call is counted, even one that is refused (MOD13-P1-T07, G18).
 async function dump() {
   const out = {};
   const walk = async (collections) => {
     for (const collection of collections) {
+      if (collection.path === 'rate_limits') continue;
       for (const item of await collection.listDocuments()) {
         const snap = await item.get();
         if (snap.exists) out[item.path] = snap.data();

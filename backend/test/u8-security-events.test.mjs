@@ -34,7 +34,7 @@ async function logLines(run) {
 }
 
 test('U8 the event list is closed and named', () => {
-  assert.deepEqual([...SECURITY_EVENTS], ['access_refused', 'check_failed', 'grant_issued', 'account_deleted', 'admin_removed', 'upload_rejected']);
+  assert.deepEqual([...SECURITY_EVENTS], ['access_refused', 'check_failed', 'grant_issued', 'account_deleted', 'admin_removed', 'upload_rejected', 'rate_limited']);
 });
 
 for (const [operation, outcome, event] of [

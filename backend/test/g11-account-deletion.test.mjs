@@ -62,10 +62,12 @@ async function holdings(uid) {
 }
 
 // Every record outside one account, to show that a deletion touched nothing else.
+// The rate-limit counters are left out: every call is counted, even one that is refused (MOD13-P1-T07, G18).
 async function everythingBut(uid) {
   const out = {};
   const walk = async (collections) => {
     for (const collection of collections) {
+      if (collection.path === 'rate_limits') continue;
       for (const item of (await collection.get()).docs) {
         if (item.ref.path === `users/${uid}` || item.ref.path === `admin_roles/${uid}`) continue;
         out[item.ref.path] = item.data();
