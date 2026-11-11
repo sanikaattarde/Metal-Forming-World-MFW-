@@ -1,6 +1,6 @@
 // OP-19 requestUpload and OP-20 listUploadJobs, from
 // API_AND_BACKEND_CONTRACT.md section 5.1. The backend half of T-09.2, which stays held as a feature.
-// PDFs only: a cover waits for OQ-22. RATE_LIMITED is not built (MOD13-P1-T07).
+// PDFs only: a cover waits for OQ-22. The rate limit is the admin_write class (rateLimits.ts, MOD13-P1-T07).
 import { FieldValue } from 'firebase-admin/firestore';
 import type { DocumentSnapshot, Firestore } from 'firebase-admin/firestore';
 import { adminCall } from './adminCall.js';

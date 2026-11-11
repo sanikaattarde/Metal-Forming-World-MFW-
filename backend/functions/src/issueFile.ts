@@ -1,6 +1,6 @@
 // OP-11 getIssueFile, from API_AND_BACKEND_CONTRACT.md section 4.2 and
 // section 8: check 0 and the six ordered checks, then a signed link from the grant issuer (DEC-020). Rate limiting
-// (RATE_LIMITED) is not built (MOD13-P1-T07). The checks read only what they need, and write nothing.
+// (RATE_LIMITED) is checked first, in the callable (rateLimits.ts, MOD13-P1-T07). The checks read only what they need, and write nothing.
 import { getAuth } from 'firebase-admin/auth';
 import type { Auth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
@@ -20,6 +20,7 @@ import {
 import { grantIssuer } from './grantIssuer.js';
 import type { GrantIssuer } from './grantIssuer.js';
 import { isProfileComplete, parsePublicConfig } from './profile.js';
+import { enforceRate } from './rateLimits.js';
 import { logOperation } from './safeLog.js';
 import { isUsableLifetime, MAX_LINK_LIFETIME_SECONDS } from './signedLinks.js';
 import { isDocumentId, isObject, unknownFields } from './validation.js';
@@ -149,6 +150,9 @@ export async function releaseIssueFile(backend: IssueFileBackend, uid: string | 
   }
 }
 
-export const getIssueFile = onCall((request) =>
-  releaseIssueFile({ db: getFirestore(), auth: getAuth(), issuer: grantIssuer() }, request.auth?.uid, request.data),
-);
+// The rate limit comes first, before check 0, so that a refusal for it shows nothing about the issue (SC-18).
+export const getIssueFile = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (uid) await enforceRate(getFirestore(), uid, OPERATION);
+  return releaseIssueFile({ db: getFirestore(), auth: getAuth(), issuer: grantIssuer() }, uid, request.data);
+});

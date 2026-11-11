@@ -32,6 +32,13 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD13-P1-T07 rate limits per class of operation, 2026-11-11
+
+- **Backend:** `backend/functions/src/rateLimits.ts` counts each call per caller and class in a 60-second window in Firestore and refuses a call over the limit with `RATE_LIMITED` and a retry-after (SC-18, SEC-CHK-19). Seven classes, every number a PLACEHOLDER for review: reader writes 20, link requests 30, role check 60, admin reads 300, admin writes 120, notification sends 10, export 5 per minute. `adminCall`, OP-10, OP-11, OP-12 and OP-14 apply it. OP-12 removes the counters with the account. `rate_limited` joins the closed list of security events.
+- **Panel:** a message for `RATE_LIMITED`. The app already maps it to `serviceUnavailable`, retryable.
+- **Not covered:** sign-in, registration and password reset, limited by the identity provider (NOT VERIFIED, SC-21). App Check is OQ-52.
+- **Tests:** G18 (12) added; U8, G1, G7, G11 and G16 follow. Backend suite: 1145 passed.
+
 ### Added: MOD13-P1-T05 OP-30 deleteIssue and the deleted-issue record (PROVISIONAL), 2026-11-11
 
 - **Backend:** OP-30 `deleteIssue` (`backend/functions/src/issueDeletion.ts`), admin only, on the GS-Q45 working position. The issue must be unpublished and the confirmation must be its title. One transaction deletes it and writes `deleted_issues/{issue_id}` (identifier and time only), which OP-03 lets anyone read so the app can drop a kept copy. Its file records, files, cover and upload jobs are removed afterwards. A repeat returns the first result; a later request is `GONE`.

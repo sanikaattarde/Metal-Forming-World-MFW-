@@ -127,7 +127,9 @@ test('G16 OP-32: the export takes no input', async () => {
 });
 
 test('G16 OP-32: nothing is stored by the export', async () => {
-  const before = (await db.listCollections()).map((c) => c.id).sort();
+  // The rate-limit counter of the call is the one record it makes (MOD13-P1-T07).
+  const names = async () => (await db.listCollections()).map((c) => c.id).filter((id) => id !== 'rate_limits').sort();
+  const before = await names();
   await exportCsv();
-  assert.deepEqual((await db.listCollections()).map((c) => c.id).sort(), before);
+  assert.deepEqual(await names(), before);
 });

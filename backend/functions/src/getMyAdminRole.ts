@@ -7,12 +7,14 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { onCall } from 'firebase-functions/v2/https';
 import { readStanding } from './admin.js';
 import { accountClosed, unauthenticated } from './errors.js';
+import { enforceRate } from './rateLimits.js';
 import { logSecurityRefusals } from './safeLog.js';
 
 export const getMyAdminRole = onCall((request) =>
   logSecurityRefusals('getMyAdminRole', request.auth?.uid, async () => {
     const uid = request.auth?.uid;
     if (!uid) throw unauthenticated();
+    await enforceRate(getFirestore(), uid, 'getMyAdminRole');
 
     const standing = await readStanding({ db: getFirestore(), auth: getAuth() }, uid);
     if (standing.accountClosed) throw accountClosed();

@@ -7,6 +7,7 @@ import * as logger from 'firebase-functions/logger';
 import { onCall } from 'firebase-functions/v2/https';
 import { accountClosed, cannotVerify, invalidArgument, unauthenticated } from './errors.js';
 import { checkProfile, ConfigError, consentId, parsePublicConfig, versionsMatch } from './profile.js';
+import { enforceRate } from './rateLimits.js';
 import { logSecurityRefusals } from './safeLog.js';
 import { isDocumentId, isObject } from './validation.js';
 
@@ -14,6 +15,7 @@ export const saveProfile = onCall((request) =>
   logSecurityRefusals('saveProfile', request.auth?.uid, async () => {
     const uid = request.auth?.uid;
     if (!uid) throw unauthenticated();
+    await enforceRate(getFirestore(), uid, 'saveProfile');
 
     const data: unknown = request.data;
     if (!isObject(data)) throw invalidArgument(['request_id', 'profile']);
