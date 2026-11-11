@@ -2,7 +2,7 @@
 // screen tests. It refuses the way the backend does, with the same codes and reasons. The emulator
 // tests check the real operations.
 import type { CallFn } from '../src/adminApi';
-import type { Category, Issue, NewsControl, NotificationCategory, Post, Reads, SendRecord } from '../src/data';
+import type { Category, Issue, NewsControl, NotificationCategory, Post, Reads, SendRecord, UploadJob } from '../src/data';
 import { serverError } from './fakes';
 
 const PAGE = 20;
@@ -73,6 +73,12 @@ export function fakeServer({
     sends: sends.map((s) => ({ ...s })),
     // Whether the next push is refused, as the stand-in push sender does on the emulators.
     pushFails: false,
+    jobs: [] as (UploadJob & { polls?: number })[],
+    // The server's upload limit (CFG-05), which the panel never sees.
+    uploadLimit: 1_000_000,
+    // What OP-40 decides about the next file that arrives, and how many OP-20 checks see it still pending.
+    nextCheck: { status: 'accepted', reason: null } as { status: 'accepted' | 'rejected'; reason: string | null },
+    checkPolls: 1,
   };
   const log: { name: string; data: Record<string, unknown> }[] = [];
   const failures = new Map<string, unknown>();
@@ -214,9 +220,54 @@ export function fakeServer({
         const items = all.slice(start, start + size);
         return { items: items.map((s) => ({ ...s })), next_cursor: start + size < all.length ? items[items.length - 1].send_id : null };
       }
+      case 'requestUpload': {
+        if (typeof data.declared_size_bytes !== 'number' || data.declared_size_bytes > state.uploadLimit) throw invalid(['declared_size_bytes']);
+        if (!find(data.issue_id)) throw serverError('not-found');
+        const known = created.get(String(data.request_id));
+        let job = state.jobs.find((j) => j.job_id === known);
+        if (!job) {
+          job = { job_id: `job-${next++}`, kind: 'pdf', issue_id: data.issue_id as string, declared_size_bytes: data.declared_size_bytes, status: 'pending', reason: null, revision: null, created_at: ++clock, finished_at: null };
+          state.jobs.unshift(job);
+          created.set(String(data.request_id), job.job_id);
+        }
+        if (job.status !== 'pending') return { job_id: job.job_id, status: job.status };
+        return { job_id: job.job_id, upload_url: `https://upload.example.test/${job.job_id}`, upload_headers: { 'content-type': 'application/pdf', 'x-goog-resumable': 'start' }, expires_at: clock + 900_000 };
+      }
+      case 'listUploadJobs': {
+        const strip = ({ polls, ...job }: UploadJob & { polls?: number }) => ({ ...job });
+        if (data.job_id) {
+          const job = state.jobs.find((j) => j.job_id === data.job_id);
+          if (job && job.polls !== undefined) {
+            if (job.polls > 0) job.polls -= 1;
+            else settle(job);
+          }
+          return { jobs: job ? [strip(job)] : [] };
+        }
+        return { jobs: state.jobs.filter((j) => j.issue_id === data.issue_id).map(strip) };
+      }
       default:
         return {};
     }
+  };
+
+  // OP-40, once the file is in the holding area.
+  function settle(job: UploadJob & { polls?: number }) {
+    delete job.polls;
+    job.finished_at = ++clock;
+    if (state.nextCheck.status === 'rejected') {
+      Object.assign(job, { status: 'rejected', reason: state.nextCheck.reason });
+      return;
+    }
+    const issue = find(job.issue_id)!;
+    const revision = (issue.current_revision ?? 0) + 1;
+    Object.assign(job, { status: 'accepted', revision });
+    Object.assign(issue, { current_revision: revision, updated_at: ++clock });
+  }
+
+  // The file reached the upload address: the check starts, and finishes after `checkPolls` looks.
+  const arrive = (uploadUrl: string) => {
+    const job = state.jobs.find((j) => uploadUrl.endsWith(`/${j.job_id}`));
+    if (job && job.status === 'pending') job.polls = state.checkPolls;
   };
 
   const read: Reads = {
@@ -233,5 +284,6 @@ export function fakeServer({
     state,
     calls: (name: string) => log.filter((entry) => entry.name === name),
     failNext: (name: string, error: unknown) => failures.set(name, error),
+    arrive,
   };
 }

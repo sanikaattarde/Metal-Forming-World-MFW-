@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD12-P2-T02 the issue-file upload in the panel, 2026-11-11
+
+- **Panel:** the issue editor has an issue-file section (`admin/src/IssueFileSection.tsx`, SCR-W-04): choose a PDF, get a job and a signed resumable address from OP-19, send the file in pieces (`admin/src/upload.ts`), and follow OP-20 until OP-40 accepts it as the next revision or deletes it with the reason. A broken upload resumes from what the store holds, and Upload again continues the same job. The panel checks the type and that the file is not empty; the size limit stays the server's (OQ-30). A cover waits for OQ-22.
+- **Not verified:** the upload against a real bucket, and its CORS setting (ENV-TEST).
+- **Tests:** `upload.test.ts` (7), `issue-file.test.tsx` (8) and `upload.emulator.test.ts` (3). Admin suite: 127 passed.
+
 ### Added: MOD12-P2-T05 send-notification and send-log screens, 2026-11-11
 
 - **Panel:** SCR-W-07 (`admin/src/SendNotificationPage.tsx`) sends to an active notification category through OP-25, opening a published issue, a news post or nothing, with the form checked and a review step before the send. SCR-W-08 (`admin/src/SendLogPage.tsx`) lists sends through OP-27 with an outcome filter and Load more, and retries a failed or unknown send through OP-26. The news screen links each post to the send screen (AC-9.7 in two steps). A Notifications menu entry, the public read of the notification categories, and messages for the new reasons.

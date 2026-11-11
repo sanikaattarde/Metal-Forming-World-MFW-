@@ -14,6 +14,8 @@ import { roleCheckThrough } from './adminApi';
 import type { CallFn } from './adminApi';
 import type { Category, NewsControl, NotificationCategory, Reads, Segment } from './data';
 import type { SignInDeps } from './signIn';
+import { resumableUpload } from './upload';
+import type { UploadAddress } from './upload';
 
 export const EMULATOR = {
   projectId: 'demo-mfw',
@@ -64,11 +66,23 @@ export interface Backend {
   firestore: Firestore;
 }
 
+// Sends a file to an upload address, and waits between checks of the job (MOD12-P2-T02).
+export interface FileSender {
+  send(address: UploadAddress, file: Blob, onProgress: (sentBytes: number) => void): Promise<void>;
+  wait(ms: number): Promise<void>;
+}
+
+export const browserFileSender: FileSender = {
+  send: (address, file, onProgress) => resumableUpload((input, init) => fetch(input, init), address, file, onProgress),
+  wait: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+};
+
 export interface Services extends SignInDeps {
   // Calls a server operation as the signed-in account. Screens go through adminApi, never this directly.
   call: CallFn;
   // Public reads, the same the app makes. The rules allow them to anyone, and refuse every client write.
   read: Reads;
+  upload: FileSender;
 }
 
 export function emulatorBackend(authUrl: string = EMULATOR.authUrl, name?: string, functionsPort: number = EMULATOR.functionsPort): Backend {
@@ -124,6 +138,7 @@ export function servicesFor({ auth, functions, firestore }: Backend): Services {
     roleCheck: roleCheckThrough(call),
     call,
     read: readsThrough(firestore),
+    upload: browserFileSender,
   };
 }
 

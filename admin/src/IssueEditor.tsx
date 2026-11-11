@@ -1,7 +1,7 @@
 // SCR-W-03 Issue editor (FR-ADMIN-009, FR-ADMIN-011): an issue's details through
 // OP-16, and publish and unpublish through OP-21 and OP-22, each confirmed first (CODING_STANDARDS.md §15
-// item 7). The PDF and cover upload is left out of this block (W3), so an issue can be published only once a
-// file has been accepted some other way. Placeholder visuals.
+// item 7). The PDF upload is the issue-file section below (SCR-W-04, MOD12-P2-T02); a cover waits for
+// OQ-22. Placeholder visuals.
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
@@ -10,10 +10,13 @@ import type { CallFn } from './adminApi';
 import { createIssue, findIssue, newRequestId, setPublished, updateIssue } from './data';
 import type { Category, Issue, IssueDetails, Reads, Segment } from './data';
 import { describeError } from './describeError';
+import { IssueFileSection } from './IssueFileSection';
+import type { FileSender } from './services';
 
 interface Props {
   api: CallFn;
   read: Reads;
+  upload: FileSender;
 }
 
 interface Form {
@@ -58,7 +61,7 @@ export function IssueEditorRoute(props: Props) {
   return <IssueEditor key={issueId ?? 'new'} issueId={issueId ?? null} {...props} />;
 }
 
-export function IssueEditor({ api, read, issueId }: Props & { issueId: string | null }) {
+export function IssueEditor({ api, read, upload, issueId }: Props & { issueId: string | null }) {
   const navigate = useNavigate();
   const location = useLocation();
   const handedOver = (location.state as { issue?: Issue } | null)?.issue;
@@ -226,6 +229,23 @@ export function IssueEditor({ api, read, issueId }: Props & { issueId: string | 
         <p role="alert" className="message">
           {message}
         </p>
+      )}
+
+      {issue && (
+        <IssueFileSection
+          api={api}
+          upload={upload}
+          issueId={issue.issue_id}
+          hasFile={Boolean(issue.current_revision)}
+          onAccepted={() => {
+            // The accepted file changed the record, so the next save needs its new version. The form keeps any
+            // change not yet saved.
+            findIssue(api, issue.issue_id).then(
+              (found) => found && setIssue(found),
+              () => undefined,
+            );
+          }}
+        />
       )}
     </section>
   );

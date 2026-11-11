@@ -29,6 +29,7 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 | SCR-W-01 Admin sign-in | `src/SignInPage.tsx`, `src/signIn.ts` | MOD12-P1-T01, MOD12-P2-T01 |
 | Issues list | `src/IssuesPage.tsx` | MOD12-P2-T03 |
 | Issue details: create, edit, publish and unpublish | `src/IssueEditor.tsx` | MOD12-P2-T03 |
+| SCR-W-04 Issue file: upload a PDF and follow its check | `src/IssueFileSection.tsx`, `src/upload.ts` | MOD12-P2-T02 |
 | Issue categories: add, rename, reorder and delete | `src/CategoriesPage.tsx` | MOD12-P2-T03 |
 | SCR-W-06 News controls: hide or show a post, mark it as breaking | `src/NewsPage.tsx` | MOD12-P2-T04 |
 | SCR-W-07 Send notification | `src/SendNotificationPage.tsx` | MOD12-P2-T05 |
@@ -46,7 +47,7 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 - **Every write goes through a server operation** (OP-15 to OP-18, OP-21, OP-22) in `src/data.ts`; the public reads of categories and segments use the same Firestore reads as the app, which the rules allow to anyone.
 - **A retry sends the same request identifier**, so a lost reply never makes a second issue or category.
 - **An edit carries the record version the screen showed**; a stale screen is told to reload (`STALE_RECORD`).
-- **Publishing needs an accepted file** (`NO_ACCEPTED_FILE`). The upload screen waits for OQ-22 and OQ-30 (MOD12-P2-T02).
+- **Publishing needs an accepted file** (`NO_ACCEPTED_FILE`). The issue-file section uploads one: OP-19 gives a job and a signed resumable-upload address, `src/upload.ts` sends the file in 8 MB pieces (a PLACEHOLDER) and resumes from the last byte the store holds after a break, and the screen asks OP-20 every 2 seconds until OP-40 accepts or deletes the file, with the reason. Upload again after a break continues the same job. A replacement keeps the current file until the new one is accepted (GS-Q45). A cover waits for OQ-22, and the size limit is the server's (CFG-05, OQ-30).
 - **The server's own message never reaches the screen**: `src/describeError.ts` maps each reason to the panel's wording, and names fields by their labels, never by the value typed.
 
 The news-controls screen lists MFW's posts through OP-24 and sets each post's control through OP-23. Marking a post as breaking sends no notification by itself: each post has a Notify readers link to the send screen with the post linked.
@@ -57,4 +58,5 @@ The send screen sends to one active notification category through OP-25, opening
 
 - **Placeholder visuals and wording.** No brand assets or admin designs exist yet (MOD16-P1-T04). The message wording waits for OQ-20.
 - **The OQ-20 measures are not built**: password rules, a second factor, session expiry and recent sign-in.
-- **Hosting is not configured.** The `hosting` entry of `firebase.json` and the bucket CORS setting for uploads come with ENV-TEST (MOD14-P2-T03).
+- **Hosting is not configured.** The `hosting` entry of `firebase.json` and the bucket CORS setting for uploads come with ENV-TEST (MOD14-P2-T03). The CORS setting must allow the panel's origin to send `Content-Range`, `Content-Type` and `x-goog-resumable`, and to read `Location` and `Range`.
+- **The resumable upload is not verified against a real bucket.** The emulators cannot sign, so their upload address cannot be reached, and a file cannot be uploaded from a panel served locally. The sending is tested against a scripted store (`test/upload.test.ts`).
