@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD11-P2-T04 notifications end at sign-out and account deletion, 2026-11-11
+
+- **App:** when a session ends, by sign-out or by account deletion, `DeviceNotificationService.clearDevice` ends each topic subscription, then unregisters the app from push and forgets a visitor's choices (`app/lib/app/notification_bridge.dart`). The account's OP-09 records stay for the next sign-in, or go with the account (OP-12). A sign-in now forgets a visitor's earlier choices on the device. A failure part-way is finished by the next start.
+- **OQ-55:** the working position is recorded in `OPEN_QUESTIONS.md`; the question stays OPEN, because no device test was possible (no messaging on the emulators; MOD11-P2-T01).
+- **Tests:** `notification_signout_test.dart` (6). App suite: 816 passed, `flutter analyze` clean.
+
 ### Added: MOD11-P2-T02 notification permission and category choices in the app, 2026-11-11
 
 - **App:** `app/lib/features/notifications/`. SCR-A-20 explains what MFW sends before the system prompt, the first time (FR-NOTIF-001). SCR-A-21 under Settings lists the active categories (OP-05) with a switch each, saved at once (FR-NOTIF-002, FR-NOTIF-006). The device subscribes to the chosen categories' push topics and ends the others, so after a change only the new choice arrives (FR-NOTIF-003). A signed-in reader's choices are OP-09 records and follow the reader at sign-in (DATA-007); a visitor's stay on the device (GS-Q46, OQ-09). A tapped notification opens its issue or post through the guard (FR-NOTIF-005). Firebase Cloud Messaging is behind a port (`firebase_messaging` 17.0.1, DEP-102).

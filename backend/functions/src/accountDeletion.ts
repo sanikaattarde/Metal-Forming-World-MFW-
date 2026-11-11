@@ -1,7 +1,8 @@
 // PROVISIONAL (DEC-029, OQ-24). OP-12 requestAccountDeletion, from
 // API_AND_BACKEND_CONTRACT.md section 4, on the working position of immediate deletion (GS-Q50, TD-19).
-// OQ-24 (whether any record is kept) is OPEN, so nothing is kept. Not built: the app side (MOD03-P4-T01),
-// the removal of topic subscriptions (OQ-55) and the schedule of the cleanup (OP-41).
+// OQ-24 (whether any record is kept) is OPEN, so nothing is kept. The backend stores no push token: the app ends
+// the device's topic subscriptions when the session ends (MOD11-P2-T04, OQ-55). Not built: the schedule of the
+// cleanup (OP-41).
 import type { Auth } from 'firebase-admin/auth';
 import { getAuth } from 'firebase-admin/auth';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';

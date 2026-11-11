@@ -15,8 +15,10 @@ import '../domain/push_messaging.dart';
 /// nothing else, so after a change only the new choice arrives
 /// (FR-NOTIF-003).
 ///
-/// When a reader signs in, the account's choices replace the device's
-/// (PROPOSED). What sign-out and deletion do is MOD11-P2-T04.
+/// When a reader signs in, the account's choices replace the device's and a
+/// visitor's earlier choices are forgotten (PROPOSED). At sign-out and at
+/// account deletion, [clearDevice] ends everything (OQ-55 working position,
+/// MOD11-P2-T04).
 ///
 /// Failures: `network` when the records or the push service cannot be
 /// reached, `unknown` otherwise.
@@ -172,7 +174,33 @@ final class DeviceNotificationService implements NotificationService {
   /// visitor's when null: at start-up and when a reader signs in (DATA-007).
   Future<Result<void>> syncTo(String? userId) => _serial(() async {
     try {
+      if (userId != null) {
+        final DeviceChoicesRecord record = await _device.load();
+        await _device.save(
+          record.copyWith(visitorCategories: const <String>{}),
+        );
+      }
       await _subscribeTo(await _chosen(userId));
+      return const Ok<void>(null);
+    } on Object catch (error) {
+      return Err<void>(_failureOf(error));
+    }
+  });
+
+  /// Ends every subscription of this device, then its registration with the
+  /// push service, and forgets a visitor's choices, so the device receives
+  /// nothing until someone chooses again (OQ-55 working position,
+  /// MOD11-P2-T04). Each subscription is ended first, because whether
+  /// unregistering ends them is what OQ-55 asks. The account's records are
+  /// not touched: they come back at the next sign-in, or go with the account
+  /// (OP-12). A failure part-way leaves the rest to the next start, whose
+  /// visitor sync ends what is left.
+  Future<Result<void>> clearDevice() => _serial(() async {
+    try {
+      final DeviceChoicesRecord record = await _device.load();
+      await _device.save(record.copyWith(visitorCategories: const <String>{}));
+      await _subscribeTo(const <String>{});
+      await _push.unregister();
       return const Ok<void>(null);
     } on Object catch (error) {
       return Err<void>(_failureOf(error));

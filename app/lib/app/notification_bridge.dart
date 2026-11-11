@@ -9,6 +9,10 @@ import '../features/notifications/notifications.dart';
 /// device's topics in line with whoever is signed in, and opens the target
 /// of a tapped notification through the [AppNavigator], so the access guard
 /// applies (FR-NOTIF-005, BR-005).
+///
+/// When a session ends, by sign-out or by account deletion (which signs
+/// out), the device stops receiving anything (MOD11-P2-T04, OQ-55 working
+/// position).
 class NotificationBridge extends StatefulWidget {
   /// Creates the bridge around [child].
   const NotificationBridge({
@@ -53,8 +57,13 @@ class _NotificationBridgeState extends State<NotificationBridge> {
       if (_seen && userId == _userId) {
         return;
       }
+      final bool ended = _seen && _userId != null && userId == null;
       _seen = true;
       _userId = userId;
+      if (ended) {
+        unawaited(notifications.clearDevice());
+        return;
+      }
       // At start-up and at each sign-in, the choices of whoever is signed in
       // (DATA-007), or the visitor's on this device.
       unawaited(notifications.syncTo(userId));
