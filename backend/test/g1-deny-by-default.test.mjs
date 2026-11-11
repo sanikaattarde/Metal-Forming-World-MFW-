@@ -45,7 +45,7 @@ for (const path of [...NO_CLIENT_ACCESS, ...UNLISTED]) {
   }
 }
 
-for (const name of ['admin_roles', 'admin_audit', 'upload_jobs', 'notification_sends', 'edition_updates', 'emulator_push_outbox', 'emulator_push', 'unlisted']) {
+for (const name of ['admin_roles', 'admin_audit', 'upload_jobs', 'notification_sends', 'edition_updates', 'emulator_push_outbox', 'emulator_push', 'issue_deletion_requests', 'unlisted']) {
   for (const who of EVERY_ACTOR) {
     test(`G1 listing the ${name} collection is refused for ${who}`, async () => {
       const db = actors[who](env).firestore();
