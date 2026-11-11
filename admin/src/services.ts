@@ -77,12 +77,25 @@ export const browserFileSender: FileSender = {
   wait: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 };
 
+// Hands the admin a text file to save, such as the reader export. Nothing is kept in the browser.
+export type SaveText = (fileName: string, text: string, type: string) => void;
+
+export const browserSaveText: SaveText = (fileName, text, type) => {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+};
+
 export interface Services extends SignInDeps {
   // Calls a server operation as the signed-in account. Screens go through adminApi, never this directly.
   call: CallFn;
   // Public reads, the same the app makes. The rules allow them to anyone, and refuse every client write.
   read: Reads;
   upload: FileSender;
+  saveText: SaveText;
 }
 
 export function emulatorBackend(authUrl: string = EMULATOR.authUrl, name?: string, functionsPort: number = EMULATOR.functionsPort): Backend {
@@ -139,6 +152,7 @@ export function servicesFor({ auth, functions, firestore }: Backend): Services {
     call,
     read: readsThrough(firestore),
     upload: browserFileSender,
+    saveText: browserSaveText,
   };
 }
 

@@ -1,7 +1,7 @@
 // Hand-written stand-ins for the provider and the server, for the tests that need no emulator.
 import type { CallFn } from '../src/adminApi';
 import type { Reads } from '../src/data';
-import type { FileSender, Services } from '../src/services';
+import type { FileSender, SaveText, Services } from '../src/services';
 import type { SignedInUser } from '../src/signIn';
 
 export interface FakeDeps extends Services {
@@ -14,6 +14,7 @@ interface Options {
   call?: CallFn;
   read?: Reads;
   upload?: FileSender;
+  saveText?: SaveText;
 }
 
 export const providerError = (code: string) => Object.assign(new Error(`Firebase: Error (${code}).`), { code });
@@ -22,7 +23,7 @@ export const providerError = (code: string) => Object.assign(new Error(`Firebase
 export const serverError = (code: string, reason?: string) =>
   Object.assign(new Error(code), { code: `functions/${code}`, details: reason ? { reason } : undefined });
 
-export function fakeDeps({ signIn, isAdmin = false, call, read, upload }: Options = {}): FakeDeps {
+export function fakeDeps({ signIn, isAdmin = false, call, read, upload, saveText }: Options = {}): FakeDeps {
   const calls = { signIn: 0, signOut: 0, roleCheck: 0, call: [] as string[] };
   return {
     calls,
@@ -43,5 +44,6 @@ export function fakeDeps({ signIn, isAdmin = false, call, read, upload }: Option
     },
     read: read ?? { categories: async () => [], segments: async () => [], newsControls: async () => [], notificationCategories: async () => [] },
     upload: upload ?? { send: async () => undefined, wait: async () => undefined },
+    saveText: saveText ?? (() => undefined),
   };
 }

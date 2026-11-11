@@ -12,6 +12,7 @@ export { listIssuesForAdmin, publishIssue, saveIssue, unpublishIssue } from './i
 export { setNewsControl } from './newsControls.js';
 export { listNotificationSends, retryNotification, sendNotification } from './notifications.js';
 export { listWordPressPosts } from './wordpress.js';
+export { exportRegisteredUsers, listRegisteredUsers } from './registeredUsers.js';
 export { saveProfile } from './saveProfile.js';
 export { onUploadFinalized } from './uploadFinalized.js';
 export { listUploadJobs, requestUpload } from './uploads.js';

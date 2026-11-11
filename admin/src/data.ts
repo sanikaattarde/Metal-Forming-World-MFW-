@@ -260,3 +260,37 @@ export function requestUpload(api: CallFn, requestId: string, issueId: string, s
 export async function uploadJobs(api: CallFn, query: { issue_id: string } | { job_id: string }): Promise<UploadJob[]> {
   return ((await api('listUploadJobs', query)) as { jobs: UploadJob[] }).jobs;
 }
+
+// OP-31 and OP-32 (MOD12-P2-T06). PROVISIONAL: who sees the list is OQ-51, and the fields wait for OQ-01.
+export interface ReaderRow {
+  user_id: string;
+  email: string | null;
+  full_name: string | null;
+  age_value: number | null;
+  gender: string | null;
+  job_title: string | null;
+  industry_segment_id: string | null;
+  created_at: number | null;
+}
+
+export interface ReaderPage {
+  items: ReaderRow[];
+  next_cursor: string | null;
+}
+
+export interface ReaderExport {
+  csv: string;
+  row_count: number;
+  file_name: string;
+}
+
+// PLACEHOLDER. No document sets how many readers the screen shows at once.
+export const PLACEHOLDER_READERS_PER_PAGE = 50;
+
+export function listReaders(api: CallFn, cursor?: string | null): Promise<ReaderPage> {
+  return api('listRegisteredUsers', { page_size: PLACEHOLDER_READERS_PER_PAGE, ...(cursor ? { cursor } : {}) }) as Promise<ReaderPage>;
+}
+
+export function exportReaders(api: CallFn): Promise<ReaderExport> {
+  return api('exportRegisteredUsers', {}) as Promise<ReaderExport>;
+}

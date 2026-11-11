@@ -10,6 +10,7 @@ import { IssueEditorRoute } from './IssueEditor';
 import { IssuesPage } from './IssuesPage';
 import { MESSAGES } from './messages';
 import { NewsPage } from './NewsPage';
+import { RegisteredUsersPage } from './RegisteredUsersPage';
 import { SendLogPage } from './SendLogPage';
 import { SendNotificationPage } from './SendNotificationPage';
 import type { Services } from './services';
@@ -77,6 +78,7 @@ export function App({ services, unavailableNotice = MESSAGES.notConfigured }: Pr
           <Route path="/news" element={<NewsPage api={api} read={services.read} />} />
           <Route path="/notifications" element={<SendLogPage api={api} read={services.read} />} />
           <Route path="/notifications/new" element={<SendNotificationPage api={api} read={services.read} />} />
+          <Route path="/readers" element={<RegisteredUsersPage api={api} read={services.read} saveText={services.saveText} />} />
           <Route path="*" element={<Navigate to="/issues" replace />} />
         </Route>
       </Routes>

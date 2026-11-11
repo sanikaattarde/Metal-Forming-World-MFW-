@@ -15,6 +15,7 @@ export function AdminLayout({ onSignOut }: Props) {
           <NavLink to="/categories">Categories</NavLink>
           <NavLink to="/news">News</NavLink>
           <NavLink to="/notifications">Notifications</NavLink>
+          <NavLink to="/readers">Readers</NavLink>
         </nav>
         <button type="button" onClick={onSignOut}>
           Sign out
