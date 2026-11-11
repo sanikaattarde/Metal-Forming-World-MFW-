@@ -2,7 +2,7 @@
 // screen tests. It refuses the way the backend does, with the same codes and reasons. The emulator
 // tests check the real operations.
 import type { CallFn } from '../src/adminApi';
-import type { Category, Issue, NewsControl, NotificationCategory, Post, Reads, SendRecord, UploadJob } from '../src/data';
+import type { Category, Issue, NewsControl, NotificationCategory, Post, ReaderRow, Reads, Segment, SendRecord, UploadJob } from '../src/data';
 import { serverError } from './fakes';
 
 const PAGE = 20;
@@ -63,6 +63,8 @@ export function fakeServer({
   controls = [] as NewsControl[],
   notificationCategories = NOTIFICATION_CATEGORIES,
   sends = [] as SendRecord[],
+  readers = [] as ReaderRow[],
+  segments = [] as Segment[],
 } = {}) {
   const state = {
     issues: issues.map((i) => ({ ...i })),
@@ -79,6 +81,8 @@ export function fakeServer({
     // What OP-40 decides about the next file that arrives, and how many OP-20 checks see it still pending.
     nextCheck: { status: 'accepted', reason: null } as { status: 'accepted' | 'rejected'; reason: string | null },
     checkPolls: 1,
+    readers: readers.map((r) => ({ ...r })),
+    segments: segments.map((g) => ({ ...g })),
   };
   const log: { name: string; data: Record<string, unknown> }[] = [];
   const failures = new Map<string, unknown>();
@@ -245,6 +249,16 @@ export function fakeServer({
         }
         return { jobs: state.jobs.filter((j) => j.issue_id === data.issue_id).map(strip) };
       }
+      case 'listRegisteredUsers': {
+        const size = Number(data.page_size ?? 50);
+        const start = data.cursor ? state.readers.findIndex((r) => r.user_id === data.cursor) + 1 : 0;
+        const items = state.readers.slice(start, start + size);
+        return { items: items.map((r) => ({ ...r })), next_cursor: start + size < state.readers.length ? items[items.length - 1].user_id : null };
+      }
+      case 'exportRegisteredUsers': {
+        const lines = ['Email,Full name', ...state.readers.map((r) => `${r.email},${r.full_name}`)];
+        return { csv: `${lines.join('\r\n')}\r\n`, row_count: state.readers.length, file_name: 'registered-users-2026-11-11.csv' };
+      }
       default:
         return {};
     }
@@ -272,7 +286,7 @@ export function fakeServer({
 
   const read: Reads = {
     categories: async () => [...state.categories].sort((a, b) => a.display_order - b.display_order),
-    segments: async () => [],
+    segments: async () => state.segments.map((g) => ({ ...g })),
     newsControls: async () => [...state.controls.values()].map((c) => ({ ...c })),
     notificationCategories: async () => [...state.notificationCategories].sort((a, b) => a.display_order - b.display_order),
   };
@@ -287,3 +301,15 @@ export function fakeServer({
     arrive,
   };
 }
+
+export const readerRow = (i: number, over: Partial<ReaderRow> = {}): ReaderRow => ({
+  user_id: `u-${i}`,
+  email: `reader-${i}@example.test`,
+  full_name: `Reader ${i}`,
+  age_value: 30 + i,
+  gender: 'Prefer not to say',
+  job_title: 'Engineer',
+  industry_segment_id: 's1',
+  created_at: Date.UTC(2026, 10, 1 + (i % 28)),
+  ...over,
+});

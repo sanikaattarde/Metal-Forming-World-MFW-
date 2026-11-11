@@ -34,6 +34,7 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 | SCR-W-06 News controls: hide or show a post, mark it as breaking | `src/NewsPage.tsx` | MOD12-P2-T04 |
 | SCR-W-07 Send notification | `src/SendNotificationPage.tsx` | MOD12-P2-T05 |
 | SCR-W-08 Send log, with retry | `src/SendLogPage.tsx` | MOD12-P2-T05 |
+| SCR-W-09 Registered readers and CSV export (PROVISIONAL) | `src/RegisteredUsersPage.tsx` | MOD12-P2-T06 |
 
 ## What the panel does on sign-in
 
@@ -53,6 +54,8 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 The news-controls screen lists MFW's posts through OP-24 and sets each post's control through OP-23. Marking a post as breaking sends no notification by itself: each post has a Notify readers link to the send screen with the post linked.
 
 The send screen sends to one active notification category through OP-25, opening a published issue, a news post or nothing. The form is checked before anything is sent, and a review step asks once more, because a send cannot be taken back. A refusal keeps the request identifier, since it wrote nothing; a push failure leaves a failed record in the log, so the next send is a new one. The send log (OP-27) lists sends newest first, filters by outcome, and offers Retry for a failed or unknown send (OP-26); nothing retries on its own (INV-17). Its columns wait for OQ-19 (PROVISIONAL).
+
+The readers screen lists the registered readers with their profile fields through OP-31 and exports them through OP-32. The CSV is built on the server with formula cells neutralised (SEC-CHK-12) and handed to the admin as a UTF-8 file; nothing is kept in the browser. It is PROVISIONAL: who may see it is OQ-51, the fields wait for OQ-01, and whether it is the "subscriber list" is OQ-31.
 
 ## Known limits
 

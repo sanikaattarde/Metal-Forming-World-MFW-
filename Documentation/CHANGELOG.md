@@ -32,6 +32,13 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD12-P2-T06 the registered-reader list and CSV export (PROVISIONAL), 2026-11-11
+
+- **Backend:** OP-31 `listRegisteredUsers` and OP-32 `exportRegisteredUsers` (`backend/functions/src/registeredUsers.ts`), admin only. Active readers newest first with a cursor, the email from the sign-in provider and the five profile fields; accounts being deleted are hidden. The CSV is built in memory and not stored, with formula cells neutralised (SEC-CHK-12, FX-ADM-07) and a 10,000-row PLACEHOLDER cap (`EXPORT_TOO_LARGE`).
+- **Panel:** SCR-W-09 (`admin/src/RegisteredUsersPage.tsx`) with a personal-data notice, Load more and Export as CSV, and a Readers menu entry.
+- **Open:** OQ-29, OQ-31 and OQ-51. A reader who has never saved a profile has no user record and is not listed.
+- **Tests:** backend G16 and U10 (15 passed); panel `registered-users.test.tsx` (6) and `registered-users.emulator.test.ts` (2). Admin suite: 135 passed.
+
 ### Added: MOD12-P2-T02 the issue-file upload in the panel, 2026-11-11
 
 - **Panel:** the issue editor has an issue-file section (`admin/src/IssueFileSection.tsx`, SCR-W-04): choose a PDF, get a job and a signed resumable address from OP-19, send the file in pieces (`admin/src/upload.ts`), and follow OP-20 until OP-40 accepts it as the next revision or deletes it with the reason. A broken upload resumes from what the store holds, and Upload again continues the same job. The panel checks the type and that the file is not empty; the size limit stays the server's (OQ-30). A cover waits for OQ-22.
