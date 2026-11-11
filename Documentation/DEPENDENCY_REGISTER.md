@@ -348,6 +348,7 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-98 | `cloud_functions` | Calls the backend operations, such as OP-10 and OP-12 | 7.0.1 (`^7.0.1`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
 | DEP-99 | `cloud_firestore` | Reads the reader's own records, such as the profile (MOD-04) | 7.1.0 (`^7.1.0`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
 | DEP-100 | `url_launcher` | Opens MFW's privacy policy and terms of use in the browser (CFG-07, MOD04-P2-T02) | 6.3.3 (`^6.3.3`) | BSD-3-Clause, "The Flutter Authors" | None | CONFIRMED (runtime, app) |
+| DEP-102 | `firebase_messaging` | Push: the notification permission, one topic per category, and taps (TD-13, MOD11-P2-T02). Added on 11 November 2026; its manifest adds the Android `POST_NOTIFICATIONS` permission. iOS delivery needs the push credential and capability in MFW's Apple account (MOD11-P2-T01) | 17.0.1 (`^17.0.1`), with `firebase_messaging_platform_interface` 4.11.1 and `firebase_messaging_web` 4.3.1 | BSD-3-Clause, "The Chromium Authors" | None. Firebase Cloud Messaging has no charge (S2) | CONFIRMED (runtime, app) |
 
 ## 9. Repository and CI Services
 

@@ -29,6 +29,7 @@ final class RouteScreens {
     this.profile,
     this.settings,
     this.deleteAccount,
+    this.notificationSettings,
     this.home,
     this.catalogue,
     this.issue,
@@ -73,6 +74,7 @@ final class RouteScreens {
     profile: profile,
     settings: settings,
     deleteAccount: deleteAccount,
+    notificationSettings: notificationSettings,
     home: home ?? this.home,
     catalogue: catalogue ?? this.catalogue,
     issue: issue ?? this.issue,
@@ -86,6 +88,9 @@ final class RouteScreens {
 
   /// SCR-A-08 (MOD03-P4-T01).
   final ScreenBuilder? deleteAccount;
+
+  /// SCR-A-21 with SCR-A-20 (MOD11-P2-T02).
+  final ScreenBuilder? notificationSettings;
 
   /// SCR-A-06 (MOD04-P2-T03).
   final ScreenBuilder? profile;
@@ -224,6 +229,12 @@ GoRouter buildRouter(
                     'delete-account',
                     ShellText.deleteAccount,
                     screens.deleteAccount,
+                    parent: root,
+                  ),
+                  _route(
+                    'notifications',
+                    ShellText.notifications,
+                    screens.notificationSettings,
                     parent: root,
                   ),
                 ],

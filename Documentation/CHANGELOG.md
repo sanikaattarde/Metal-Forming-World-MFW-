@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD11-P2-T02 notification permission and category choices in the app, 2026-11-11
+
+- **App:** `app/lib/features/notifications/`. SCR-A-20 explains what MFW sends before the system prompt, the first time (FR-NOTIF-001). SCR-A-21 under Settings lists the active categories (OP-05) with a switch each, saved at once (FR-NOTIF-002, FR-NOTIF-006). The device subscribes to the chosen categories' push topics and ends the others, so after a change only the new choice arrives (FR-NOTIF-003). A signed-in reader's choices are OP-09 records and follow the reader at sign-in (DATA-007); a visitor's stay on the device (GS-Q46, OQ-09). A tapped notification opens its issue or post through the guard (FR-NOTIF-005). Firebase Cloud Messaging is behind a port (`firebase_messaging` 17.0.1, DEP-102).
+- **Not verified:** delivery to a device. Push in MFW's accounts is MOD11-P2-T01, and iOS needs its credential and capability first.
+- **Tests:** 25 in `app/test/features/notifications/`. App suite: 810 passed, `flutter analyze` clean.
+
 ### Added: MOD13-P1-T07 rate limits per class of operation, 2026-11-11
 
 - **Backend:** `backend/functions/src/rateLimits.ts` counts each call per caller and class in a 60-second window in Firestore and refuses a call over the limit with `RATE_LIMITED` and a retry-after (SC-18, SEC-CHK-19). Seven classes, every number a PLACEHOLDER for review: reader writes 20, link requests 30, role check 60, admin reads 300, admin writes 120, notification sends 10, export 5 per minute. `adminCall`, OP-10, OP-11, OP-12 and OP-14 apply it. OP-12 removes the counters with the account. `rate_limited` joins the closed list of security events.

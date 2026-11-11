@@ -12,6 +12,7 @@ import '../features/catalogue/catalogue.dart';
 import '../features/downloads/downloads.dart';
 import '../features/library/library.dart';
 import '../features/news/news.dart';
+import '../features/notifications/notifications.dart';
 import '../features/reader/reader.dart';
 import '../core/config/wordpress_config.dart';
 import '../core/network/https_client.dart';
@@ -20,6 +21,7 @@ import 'account_routes.dart';
 import 'content_routes.dart';
 import 'download_resumer.dart';
 import 'firebase_bootstrap.dart';
+import 'notification_bridge.dart';
 import 'placeholder_screens.dart';
 import 'router.dart';
 import 'router_app_navigator.dart';
@@ -139,6 +141,25 @@ final Provider<LibraryRepository?> libraryRepositoryProvider =
       );
     });
 
+/// MOD-11's notification choices and taps (MOD11-P2-T02) over Firebase Cloud
+/// Messaging once Firebase has started, or null without it, in which case
+/// settings has no notifications entry. The device keeps its own choices
+/// next to the download records. Tests override it with fakes.
+final Provider<DeviceNotificationService?> notificationServiceProvider =
+    Provider<DeviceNotificationService?>((Ref ref) {
+      final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
+      if (firebase == null) {
+        return null;
+      }
+      final IssueStorage storage = ref.watch(issueStorageProvider);
+      return DeviceNotificationService(
+        push: FirebasePushMessaging(),
+        documents: FirestoreNotificationDocuments(firebase.firestore),
+        device: JsonDeviceChoices(storage.issueDirectory),
+        currentUserId: () => firebase.identity.currentUser?.uid,
+      );
+    });
+
 /// Opens MFW's policy pages outside the app (CFG-07, MOD04-P2-T02). Tests
 /// override it with a fake.
 final Provider<LinkOpener> linkOpenerProvider = Provider<LinkOpener>(
@@ -212,6 +233,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
         links: ref.read(linkOpenerProvider),
         email: () =>
             ref.read(firebaseServicesProvider)?.identity.currentUser?.email,
+        notifications: ref.read(notificationServiceProvider),
       ),
       accessState: accessState,
       catalogue: ref.read(catalogueRepositoryProvider),
@@ -293,11 +315,16 @@ class MfwApp extends ConsumerWidget {
         theme: theme,
         themeMode: ThemeMode.light,
         routerConfig: ref.watch(routerProvider),
-        builder: (BuildContext context, Widget? child) => DownloadResumer(
-          downloads: downloads is ResumableDownloads
-              ? downloads as ResumableDownloads
-              : null,
-          child: child ?? const SizedBox.shrink(),
+        builder: (BuildContext context, Widget? child) => NotificationBridge(
+          notifications: ref.read(notificationServiceProvider),
+          sessions: () => ref.read(authServiceProvider).watchSession(),
+          navigator: () => ref.read(appNavigatorProvider),
+          child: DownloadResumer(
+            downloads: downloads is ResumableDownloads
+                ? downloads as ResumableDownloads
+                : null,
+            child: child ?? const SizedBox.shrink(),
+          ),
         ),
       );
     }
