@@ -71,8 +71,8 @@ export function App({ services, unavailableNotice = MESSAGES.notConfigured }: Pr
       <Routes>
         <Route element={<AdminLayout onSignOut={() => endSession(null)} />}>
           <Route path="/issues" element={<IssuesPage api={api} />} />
-          <Route path="/issues/new" element={<IssueEditorRoute api={api} read={services.read} />} />
-          <Route path="/issues/:issueId" element={<IssueEditorRoute api={api} read={services.read} />} />
+          <Route path="/issues/new" element={<IssueEditorRoute api={api} read={services.read} upload={services.upload} />} />
+          <Route path="/issues/:issueId" element={<IssueEditorRoute api={api} read={services.read} upload={services.upload} />} />
           <Route path="/categories" element={<CategoriesPage api={api} read={services.read} />} />
           <Route path="/news" element={<NewsPage api={api} read={services.read} />} />
           <Route path="/notifications" element={<SendLogPage api={api} read={services.read} />} />

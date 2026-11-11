@@ -224,3 +224,39 @@ export async function publishedIssues(api: CallFn): Promise<Issue[]> {
   }
   return found;
 }
+
+// OP-19 and OP-20 (MOD12-P2-T02). A PDF only: a cover waits for OQ-22. The size limit is the server's
+// (CFG-05, OQ-30), so the panel does not know it and the server refuses a declared size over it.
+export const PDF_TYPE = 'application/pdf';
+
+export type JobStatus = 'pending' | 'accepted' | 'rejected';
+
+export interface UploadJob {
+  job_id: string;
+  kind: 'pdf';
+  issue_id: string;
+  declared_size_bytes: number;
+  status: JobStatus;
+  reason: string | null;
+  revision: number | null;
+  created_at: number | null;
+  finished_at: number | null;
+}
+
+// A pending job comes with an upload address and the headers to open it. A job already finished has none.
+export interface UploadStart {
+  job_id: string;
+  status?: JobStatus;
+  upload_url?: string;
+  upload_headers?: Record<string, string>;
+  expires_at?: number;
+}
+
+// The same request identifier for the same file, so a second try finds the same job and gets a new address.
+export function requestUpload(api: CallFn, requestId: string, issueId: string, sizeBytes: number): Promise<UploadStart> {
+  return api('requestUpload', { request_id: requestId, kind: 'pdf', issue_id: issueId, declared_size_bytes: sizeBytes, content_type: PDF_TYPE }) as Promise<UploadStart>;
+}
+
+export async function uploadJobs(api: CallFn, query: { issue_id: string } | { job_id: string }): Promise<UploadJob[]> {
+  return ((await api('listUploadJobs', query)) as { jobs: UploadJob[] }).jobs;
+}
