@@ -40,6 +40,6 @@ export function fakeDeps({ signIn, isAdmin = false, call, read }: Options = {}):
       calls.call.push(name);
       return call ? call(name, data) : { items: [], next_cursor: null };
     },
-    read: read ?? { categories: async () => [], segments: async () => [], newsControls: async () => [] },
+    read: read ?? { categories: async () => [], segments: async () => [], newsControls: async () => [], notificationCategories: async () => [] },
   };
 }

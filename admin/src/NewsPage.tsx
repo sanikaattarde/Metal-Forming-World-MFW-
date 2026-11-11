@@ -1,8 +1,9 @@
 // SCR-W-06 News controls (FR-ADMIN-013, FR-ADMIN-014): pick a WordPress post, hide it
 // in the app, or mark it as breaking. Posts come through OP-24 on the server and the flags are saved through
-// OP-23. The panel does not write or edit news. Marking a post as breaking sends no notification: that is
-// OP-25, which is not built (AC-9.7 is not claimed). Placeholder visuals.
+// OP-23. The panel does not write or edit news. Marking a post as breaking sends no notification by itself:
+// each post links to the send screen (SCR-W-07, OP-25), so AC-9.7 is met in two steps. Placeholder visuals.
 import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { AccessLost } from './adminApi';
 import type { CallFn } from './adminApi';
 import { listPosts, setNewsControl } from './data';
@@ -79,7 +80,7 @@ export function NewsPage({ api, read }: Props) {
   return (
     <section>
       <h2>News</h2>
-      <p>Hide a post in the app, or mark it as breaking. Marking a post as breaking does not send a notification.</p>
+      <p>Hide a post in the app, or mark it as breaking. Marking a post as breaking does not send a notification: use Notify readers.</p>
       {message && (
         <p role="alert" className="message">
           {message}
@@ -110,7 +111,8 @@ export function NewsPage({ api, read }: Props) {
                     {post.title}{' '}
                     <a href={post.link} target="_blank" rel="noopener noreferrer">
                       Open post
-                    </a>
+                    </a>{' '}
+                    <Link to={`/notifications/new?post=${post.id}`}>Notify readers</Link>
                   </td>
                   <td>{post.date.slice(0, 10)}</td>
                   <td>

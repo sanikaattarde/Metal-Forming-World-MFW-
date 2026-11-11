@@ -31,6 +31,8 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 | Issue details: create, edit, publish and unpublish | `src/IssueEditor.tsx` | MOD12-P2-T03 |
 | Issue categories: add, rename, reorder and delete | `src/CategoriesPage.tsx` | MOD12-P2-T03 |
 | SCR-W-06 News controls: hide or show a post, mark it as breaking | `src/NewsPage.tsx` | MOD12-P2-T04 |
+| SCR-W-07 Send notification | `src/SendNotificationPage.tsx` | MOD12-P2-T05 |
+| SCR-W-08 Send log, with retry | `src/SendLogPage.tsx` | MOD12-P2-T05 |
 
 ## What the panel does on sign-in
 
@@ -47,7 +49,9 @@ The panel was first built on the spike branches `spike/sa-admin-skeleton` and `s
 - **Publishing needs an accepted file** (`NO_ACCEPTED_FILE`). The upload screen waits for OQ-22 and OQ-30 (MOD12-P2-T02).
 - **The server's own message never reaches the screen**: `src/describeError.ts` maps each reason to the panel's wording, and names fields by their labels, never by the value typed.
 
-The news-controls screen lists MFW's posts through OP-24 and sets each post's control through OP-23. Marking a post as breaking sends no notification: dispatch is MOD11-P2-T03.
+The news-controls screen lists MFW's posts through OP-24 and sets each post's control through OP-23. Marking a post as breaking sends no notification by itself: each post has a Notify readers link to the send screen with the post linked.
+
+The send screen sends to one active notification category through OP-25, opening a published issue, a news post or nothing. The form is checked before anything is sent, and a review step asks once more, because a send cannot be taken back. A refusal keeps the request identifier, since it wrote nothing; a push failure leaves a failed record in the log, so the next send is a new one. The send log (OP-27) lists sends newest first, filters by outcome, and offers Retry for a failed or unknown send (OP-26); nothing retries on its own (INV-17). Its columns wait for OQ-19 (PROVISIONAL).
 
 ## Known limits
 

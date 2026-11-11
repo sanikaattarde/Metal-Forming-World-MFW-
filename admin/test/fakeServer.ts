@@ -1,8 +1,8 @@
-// An in-memory stand-in for OP-15 to OP-18, OP-21 and OP-22 and the public category read, for the
+// An in-memory stand-in for OP-15 to OP-18, OP-21 to OP-27 and the public reads, for the
 // screen tests. It refuses the way the backend does, with the same codes and reasons. The emulator
 // tests check the real operations.
 import type { CallFn } from '../src/adminApi';
-import type { Category, Issue, NewsControl, Post, Reads } from '../src/data';
+import type { Category, Issue, NewsControl, NotificationCategory, Post, Reads, SendRecord } from '../src/data';
 import { serverError } from './fakes';
 
 const PAGE = 20;
@@ -35,12 +35,44 @@ export const makePost = (i: number, over: Partial<Post> = {}): Post => ({
   ...over,
 });
 
-export function fakeServer({ issues = [] as Issue[], categories = [] as Category[], posts = [] as Post[], controls = [] as NewsControl[] } = {}) {
+export const NOTIFICATION_CATEGORIES: NotificationCategory[] = [
+  { category_id: 'notif-new-issues', name: 'New issues', display_order: 1, is_active: true },
+  { category_id: 'notif-expo-specials', name: 'Expo specials', display_order: 2, is_active: true },
+  { category_id: 'notif-major-news', name: 'Major news', display_order: 3, is_active: true },
+  { category_id: 'notif-old', name: 'Old category', display_order: 4, is_active: false },
+];
+
+export const sendRecord = (over: Partial<SendRecord> & { send_id: string }): SendRecord => ({
+  category_id: 'notif-new-issues',
+  title: `Send ${over.send_id}`,
+  body: 'A message',
+  target_type: 'none',
+  target_ref: null,
+  sent_by: 'u-1',
+  sent_at: Date.UTC(2026, 10, 11, 9, 30),
+  outcome: 'accepted',
+  attempt_count: 1,
+  last_attempt_at: Date.UTC(2026, 10, 11, 9, 30),
+  ...over,
+});
+
+export function fakeServer({
+  issues = [] as Issue[],
+  categories = [] as Category[],
+  posts = [] as Post[],
+  controls = [] as NewsControl[],
+  notificationCategories = NOTIFICATION_CATEGORIES,
+  sends = [] as SendRecord[],
+} = {}) {
   const state = {
     issues: issues.map((i) => ({ ...i })),
     categories: categories.map((c) => ({ ...c })),
     posts: posts.map((p) => ({ ...p })),
     controls: new Map(controls.map((c) => [c.wp_post_id, { ...c }])),
+    notificationCategories: notificationCategories.map((c) => ({ ...c })),
+    sends: sends.map((s) => ({ ...s })),
+    // Whether the next push is refused, as the stand-in push sender does on the emulators.
+    pushFails: false,
   };
   const log: { name: string; data: Record<string, unknown> }[] = [];
   const failures = new Map<string, unknown>();
@@ -129,6 +161,59 @@ export function fakeServer({ issues = [] as Issue[], categories = [] as Category
         else state.controls.set(control.wp_post_id, control);
         return { ...control };
       }
+      case 'sendNotification': {
+        const missing: string[] = [];
+        if (!state.notificationCategories.some((c) => c.category_id === data.category_id && c.is_active)) missing.push('category_id');
+        if (typeof data.title !== 'string' || !data.title.trim() || data.title.trim().length > 100) missing.push('title');
+        if (typeof data.body !== 'string' || !data.body.trim() || data.body.trim().length > 400) missing.push('body');
+        if (missing.length) throw invalid(missing);
+        const repeat = created.get(String(data.request_id));
+        if (repeat) {
+          const record = state.sends.find((s) => s.send_id === repeat)!;
+          return { send_id: record.send_id, outcome: record.outcome };
+        }
+        if (data.target_type === 'issue' && find(data.target_ref)?.publication_state !== 'published') {
+          throw serverError('failed-precondition', 'TARGET_NOT_AVAILABLE');
+        }
+        if (data.target_type === 'news_post' && !state.posts.some((p) => String(p.id) === data.target_ref)) {
+          throw serverError('failed-precondition', 'TARGET_NOT_AVAILABLE');
+        }
+        const outcome = state.pushFails ? 'failed' : 'accepted';
+        const record: SendRecord = {
+          send_id: `send-${next++}`,
+          category_id: data.category_id as string,
+          title: (data.title as string).trim(),
+          body: (data.body as string).trim(),
+          target_type: data.target_type as SendRecord['target_type'],
+          target_ref: (data.target_ref as string | undefined) ?? null,
+          sent_by: 'u-1',
+          sent_at: ++clock,
+          outcome,
+          attempt_count: 1,
+          last_attempt_at: clock,
+        };
+        state.sends.unshift(record);
+        created.set(String(data.request_id), record.send_id);
+        if (outcome === 'failed') throw Object.assign(serverError('unavailable'), { details: { reason: 'PUSH_FAILED', send_id: record.send_id } });
+        return { send_id: record.send_id, outcome };
+      }
+      case 'retryNotification': {
+        const record = state.sends.find((s) => s.send_id === data.send_id);
+        if (!record) throw serverError('not-found');
+        if (record.outcome === 'accepted') throw serverError('failed-precondition', 'NOT_RETRYABLE');
+        if (record.outcome === 'pending') throw serverError('aborted', 'ATTEMPT_IN_PROGRESS');
+        record.attempt_count += 1;
+        record.outcome = state.pushFails ? 'failed' : 'accepted';
+        if (record.outcome === 'failed') throw Object.assign(serverError('unavailable'), { details: { reason: 'PUSH_FAILED', send_id: record.send_id } });
+        return { send_id: record.send_id, outcome: record.outcome };
+      }
+      case 'listNotificationSends': {
+        const size = Number(data.page_size ?? 20);
+        const all = state.sends.filter((s) => !data.outcome || s.outcome === data.outcome);
+        const start = data.cursor ? all.findIndex((s) => s.send_id === data.cursor) + 1 : 0;
+        const items = all.slice(start, start + size);
+        return { items: items.map((s) => ({ ...s })), next_cursor: start + size < all.length ? items[items.length - 1].send_id : null };
+      }
       default:
         return {};
     }
@@ -138,6 +223,7 @@ export function fakeServer({ issues = [] as Issue[], categories = [] as Category
     categories: async () => [...state.categories].sort((a, b) => a.display_order - b.display_order),
     segments: async () => [],
     newsControls: async () => [...state.controls.values()].map((c) => ({ ...c })),
+    notificationCategories: async () => [...state.notificationCategories].sort((a, b) => a.display_order - b.display_order),
   };
 
   return {

@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD12-P2-T05 send-notification and send-log screens, 2026-11-11
+
+- **Panel:** SCR-W-07 (`admin/src/SendNotificationPage.tsx`) sends to an active notification category through OP-25, opening a published issue, a news post or nothing, with the form checked and a review step before the send. SCR-W-08 (`admin/src/SendLogPage.tsx`) lists sends through OP-27 with an outcome filter and Load more, and retries a failed or unknown send through OP-26. The news screen links each post to the send screen (AC-9.7 in two steps). A Notifications menu entry, the public read of the notification categories, and messages for the new reasons.
+- **Tests:** `admin/test/notifications.test.tsx` (14) and `notifications.emulator.test.ts` (6) against the real operations. Admin suite: 109 passed.
+
 ### Added: MOD11-P2-T03 notification sends and the send log, 2026-11-11
 
 - **Backend:** OP-25 `sendNotification`, OP-26 `retryNotification` and OP-27 `listNotificationSends` (`backend/functions/src/notifications.ts`), admin only. A send goes to the category's push topic through a port (`pushSender.ts`): Firebase Cloud Messaging, or a stand-in on the emulators. The record is written as pending first, then marked accepted or failed (GS-Q27). An issue link must be published, and a post must exist on the site and not be hidden (`postExists` in `wordpress.ts`). Only an admin retries (INV-17), and `markStaleSends` is the OP-41 task for attempts that never reported back. The record fields are PROVISIONAL (OQ-19), and the limits are PLACEHOLDERS.

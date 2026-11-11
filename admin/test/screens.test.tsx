@@ -25,12 +25,12 @@ const type = (label: string | RegExp, value: string) => fireEvent.change(screen.
 
 // ---- SCR-W-02 issues list ----
 
-test('after sign-in the panel opens the issues list, with a menu for issues, categories and news', async () => {
+test('after sign-in the panel opens the issues list, with a menu for issues, categories, news and notifications', async () => {
   const { deps } = setUp();
   await signedInApp(deps);
   expect(await screen.findByRole('heading', { name: 'Issues' })).toBeTruthy();
   const menu = screen.getByRole('navigation', { name: 'Admin sections' });
-  expect(within(menu).getAllByRole('link').map((link) => link.textContent)).toEqual(['Issues', 'Categories', 'News']);
+  expect(within(menu).getAllByRole('link').map((link) => link.textContent)).toEqual(['Issues', 'Categories', 'News', 'Notifications']);
 });
 
 test('FR-ADMIN-011: the list shows published and unpublished issues, newest first, and filters by state', async () => {

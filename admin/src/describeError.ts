@@ -11,6 +11,9 @@ const FIELD_LABELS: Record<string, string> = {
   edition: 'Edition',
   name: 'Name',
   display_order: 'Order',
+  body: 'Message',
+  target_type: 'Opens',
+  target_ref: 'Linked issue or post',
 };
 
 export const ERRORS = {
@@ -21,6 +24,10 @@ export const ERRORS = {
   gone: 'This issue was deleted.',
   siteUnavailable: 'The news site could not be reached. Try again later.',
   notFound: 'This record no longer exists. Reload the list.',
+  targetNotAvailable: 'The linked issue is not published, or the linked post is missing or hidden in the app.',
+  notRetryable: 'This notification was already accepted, so it cannot be sent again.',
+  attemptInProgress: 'An attempt at this notification is still running. Wait a few minutes, then reload the log.',
+  pushFailed: 'The notification could not be sent. It is in the send log as failed, where it can be retried.',
   fields: 'Check these fields: ',
   other: 'The change could not be saved. Try again.',
 } as const;
@@ -38,6 +45,10 @@ export function describeError(error: unknown): string {
   if (reason === 'NO_ACCEPTED_FILE') return ERRORS.noAcceptedFile;
   if (reason === 'GONE') return ERRORS.gone;
   if (reason === 'SITE_UNAVAILABLE') return ERRORS.siteUnavailable;
+  if (reason === 'TARGET_NOT_AVAILABLE') return ERRORS.targetNotAvailable;
+  if (reason === 'NOT_RETRYABLE') return ERRORS.notRetryable;
+  if (reason === 'ATTEMPT_IN_PROGRESS') return ERRORS.attemptInProgress;
+  if (reason === 'PUSH_FAILED') return ERRORS.pushFailed;
   if (code === 'functions/not-found') return ERRORS.notFound;
   return ERRORS.other;
 }
