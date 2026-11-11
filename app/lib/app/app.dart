@@ -7,6 +7,9 @@ import 'package:go_router/go_router.dart';
 import '../contracts/contracts.dart';
 import '../core/config/app_config.dart';
 import '../core/config/firebase_settings.dart';
+import '../core/logging/app_logger.dart';
+import '../core/monitoring/monitoring_config.dart';
+import '../core/monitoring/usage_events.dart';
 import '../features/account/account.dart';
 import '../features/catalogue/catalogue.dart';
 import '../features/downloads/downloads.dart';
@@ -258,6 +261,22 @@ final Provider<AppConfig> appConfigProvider = Provider<AppConfig>(
   (Ref ref) => AppConfig.fromEnvironment(),
 );
 
+/// CFG-11, the crash-reporting and usage-event switches (MOD02-P2-T01,
+/// MOD02-P2-T02). `runMfwApp` reads them once, so a wrong value fails at
+/// start-up; without that override (in tests) everything is off.
+final Provider<MonitoringConfig> monitoringConfigProvider =
+    Provider<MonitoringConfig>((Ref ref) => const MonitoringConfig());
+
+/// MOD-02's usage events (MOD02-P2-T02): the approved list only, which is
+/// empty until OQ-23, so nothing is recorded in any build. No analytics
+/// service is connected (DEC-028).
+final Provider<UsageEvents> usageEventsProvider = Provider<UsageEvents>(
+  (Ref ref) => AllowlistedUsageEvents(
+    enabled: ref.watch(monitoringConfigProvider).usageEventsEnabled,
+    logger: RedactingLogger(),
+  ),
+);
+
 /// The connection type for the mobile-data warning (MOD01-P2-T03,
 /// RS FR-DL-004). Tests override it with `FakeConnectivityService`.
 final Provider<ConnectivityService> connectivityServiceProvider =
@@ -281,12 +300,14 @@ Future<void> runMfwApp() async {
   final FirebaseSettings firebaseSettings = FirebaseSettings.fromEnvironment(
     config.environment,
   );
+  final MonitoringConfig monitoring = MonitoringConfig.fromEnvironment();
   final FirebaseServices firebase = await startFirebase(firebaseSettings);
   registerFontLicences();
   runApp(
     ProviderScope(
       overrides: [
         appConfigProvider.overrideWithValue(config),
+        monitoringConfigProvider.overrideWithValue(monitoring),
         firebaseServicesProvider.overrideWithValue(firebase),
       ],
       child: const MfwApp(),

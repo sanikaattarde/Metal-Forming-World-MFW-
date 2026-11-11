@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD02-P2-T02 the usage-event allowlist, off until OQ-23, 2026-11-11
+
+- **App:** `UsageEvents` (`app/lib/core/monitoring/usage_events.dart`) records an event only if its name and every parameter are on the approved list and every value is plain; a parameter naming a reader, an issue, a post or a page is refused whatever the list says (NFR-PRIV-003, PAC-09). The shipped list is empty until OQ-23, so collection is off in every build. `MonitoringConfig` reads CFG-11 at start-up and refuses a value other than `true` or `false`. No analytics service is connected (DEC-028).
+- **Tests:** `app/test/core/monitoring/usage_events_test.dart` (14). App suite: 830 passed.
+
 ### Added: MOD11-P2-T04 notifications end at sign-out and account deletion, 2026-11-11
 
 - **App:** when a session ends, by sign-out or by account deletion, `DeviceNotificationService.clearDevice` ends each topic subscription, then unregisters the app from push and forgets a visitor's choices (`app/lib/app/notification_bridge.dart`). The account's OP-09 records stay for the next sign-in, or go with the account (OP-12). A sign-in now forgets a visitor's earlier choices on the device. A failure part-way is finished by the next start.
