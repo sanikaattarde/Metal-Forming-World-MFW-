@@ -48,6 +48,9 @@ abstract final class ShellText {
   /// SCR-A-08's placeholder title.
   static const String deleteAccount = 'Delete account';
 
+  /// SCR-A-21.
+  static const String notifications = 'Notifications';
+
   /// SCR-A-06's placeholder title.
   static const String profile = 'Your profile';
 

@@ -4,19 +4,22 @@ import 'package:go_router/go_router.dart';
 import '../contracts/contracts.dart';
 import '../core/config/app_config.dart';
 import '../features/account/account.dart';
+import '../features/notifications/notifications.dart';
 import 'router.dart';
 import 'routes.dart';
 
 /// The account screens of MOD-03 and MOD-04 for the route table, over
-/// [auth] and, when Firebase has started, [profiles]. Screens take their
-/// dependencies through their constructors (DEC-013); navigation stays
-/// here, in the shell.
+/// [auth] and, when Firebase has started, [profiles]; and the notification
+/// choices of MOD-11 inside settings when [notifications] exists. Screens
+/// take their dependencies through their constructors (DEC-013); navigation
+/// stays here, in the shell.
 RouteScreens accountScreens({
   required AuthService auth,
   AccountProfileRepository? profiles,
   AppConfig? config,
   LinkOpener? links,
   String? Function()? email,
+  DeviceNotificationService? notifications,
 }) {
   // CFG-07, shown where the reader accepts them (MOD04-P2-T02).
   final Widget? policyLinks = links == null
@@ -63,7 +66,19 @@ RouteScreens accountScreens({
             onOpenProfile: () => context.go(AppRoutes.profile),
             onSignIn: () => context.go(AppRoutes.signIn),
             onDeleteAccount: () => context.go(AppRoutes.deleteAccount),
+            notifications: notifications == null
+                ? null
+                : NotificationSettingsTile(
+                    onOpen: () => context.go(AppRoutes.notificationSettings),
+                  ),
           ),
+    notificationSettings: notifications == null
+        ? null
+        : (BuildContext context, GoRouterState state) =>
+              NotificationSettingsScreen(
+                notifications: notifications,
+                onBack: () => context.go(AppRoutes.settings),
+              ),
     deleteAccount: (BuildContext context, GoRouterState state) =>
         DeleteAccountScreen(
           auth: auth,

@@ -41,6 +41,10 @@ abstract final class AppRoutes {
   /// SCR-A-08, delete the account (MOD03-P4-T01). Needs a session.
   static const String deleteAccount = '/settings/delete-account';
 
+  /// SCR-A-21 with SCR-A-20, the notification choices (MOD11-P2-T02). Open
+  /// to visitors (GS-Q46).
+  static const String notificationSettings = '/settings/notifications';
+
   /// SCR-A-12 for [issueId].
   static String issue(String issueId) =>
       '/issues/${Uri.encodeComponent(issueId)}';
