@@ -8,6 +8,7 @@ import '../contracts/contracts.dart';
 import '../core/config/app_config.dart';
 import '../core/config/firebase_settings.dart';
 import '../core/logging/app_logger.dart';
+import '../core/monitoring/crash_reporter.dart';
 import '../core/monitoring/monitoring_config.dart';
 import '../core/monitoring/usage_events.dart';
 import '../features/account/account.dart';
@@ -267,6 +268,16 @@ final Provider<AppConfig> appConfigProvider = Provider<AppConfig>(
 final Provider<MonitoringConfig> monitoringConfigProvider =
     Provider<MonitoringConfig>((Ref ref) => const MonitoringConfig());
 
+/// MOD-02's crash reporter (MOD02-P2-T01): off unless CFG-11 switches it on,
+/// redacted, and with no reader identity. No crash service is connected
+/// (DEC-028, C-07), so a report goes nowhere yet.
+final Provider<CrashReporter> crashReporterProvider = Provider<CrashReporter>(
+  (Ref ref) => GuardedCrashReporter(
+    enabled: ref.watch(monitoringConfigProvider).crashReportingEnabled,
+    logger: RedactingLogger(),
+  ),
+);
+
 /// MOD-02's usage events (MOD02-P2-T02): the approved list only, which is
 /// empty until OQ-23, so nothing is recorded in any build. No analytics
 /// service is connected (DEC-028).
@@ -301,6 +312,12 @@ Future<void> runMfwApp() async {
     config.environment,
   );
   final MonitoringConfig monitoring = MonitoringConfig.fromEnvironment();
+  // Uncaught errors are reported only when CFG-11 says so (MOD02-P2-T01).
+  if (monitoring.crashReportingEnabled) {
+    installCrashHandlers(
+      GuardedCrashReporter(enabled: true, logger: RedactingLogger()),
+    );
+  }
   final FirebaseServices firebase = await startFirebase(firebaseSettings);
   registerFontLicences();
   runApp(
