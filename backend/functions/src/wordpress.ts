@@ -176,6 +176,38 @@ export async function fetchPosts(
   return { posts: parsed.map(toPost), total_pages: totalPages };
 }
 
+// PLACEHOLDER. A reply to a one-post check holds an identifier only. Not a decided value.
+export const PLACEHOLDER_POST_CHECK_MAX_BYTES = 10_000;
+
+// Whether post `id` exists on the site, for OP-25's link check (API_AND_BACKEND_CONTRACT.md section 5.1). A
+// missing post is false. A site that cannot be read is a SiteError, so that a send is refused as UNAVAILABLE
+// and not as a missing target. The request is made as fetchPosts makes it: no credentials and no redirect.
+export async function postExists(base: URL, id: number, { timeoutMs = PLACEHOLDER_SITE_TIMEOUT_MS } = {}): Promise<boolean> {
+  const url = new URL(`wp-json/wp/v2/posts/${id}`, base);
+  url.searchParams.set('_fields', 'id');
+
+  let response: Response;
+  try {
+    response = await fetch(url, { headers: { Accept: 'application/json' }, redirect: 'error', credentials: 'omit', signal: AbortSignal.timeout(timeoutMs) });
+  } catch {
+    throw new SiteError('unreachable');
+  }
+  const body = await readCapped(response, PLACEHOLDER_POST_CHECK_MAX_BYTES).catch((error: unknown) => {
+    throw error instanceof SiteError ? error : new SiteError('read');
+  });
+  if (response.status === 404) return false;
+  if (!response.ok) throw new SiteError(`status ${response.status}`);
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    throw new SiteError('not JSON');
+  }
+  if ((parsed as { id?: unknown } | null)?.id !== id) throw new SiteError('item id');
+  return true;
+}
+
 export const listWordPressPosts = adminCall('listWordPressPosts', async ({ uid, db, data }) => {
   const invalid = unknownFields(data, FIELDS);
   const page = data.page ?? 1;

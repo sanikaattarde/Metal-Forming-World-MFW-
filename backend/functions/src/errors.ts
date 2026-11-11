@@ -60,3 +60,22 @@ export const siteUnavailable = () =>
 // The caller's authorisation could not be verified, or a needed record is unusable. Fail closed (SC-03).
 export const cannotVerify = () =>
   new HttpsError('internal', 'The request could not be completed. Nothing was changed.');
+
+// OP-25 and OP-26 (API_AND_BACKEND_CONTRACT.md section 5.1). The reason names are the contract's. CONFLICT for
+// a retry that another attempt has started takes `aborted`, as the other conflicts do (PROPOSED).
+export const targetNotAvailable = () =>
+  new HttpsError('failed-precondition', 'The linked issue or post is not available.', { reason: 'TARGET_NOT_AVAILABLE' });
+
+export const notRetryable = () =>
+  new HttpsError('failed-precondition', 'That send cannot be retried.', { reason: 'NOT_RETRYABLE' });
+
+export const attemptInProgress = () =>
+  new HttpsError('aborted', 'Another attempt at that send has started.', { reason: 'ATTEMPT_IN_PROGRESS' });
+
+// The push service refused or could not be reached. The send record is marked failed, and its identifier
+// travels in the details so that the panel can offer the retry.
+export const pushFailed = (sendId: string) =>
+  new HttpsError('unavailable', 'The notification could not be sent. It can be retried from the send log.', {
+    reason: 'PUSH_FAILED',
+    send_id: sendId,
+  });
