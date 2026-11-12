@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: iPhone device test run, 2026-11-12
+
+- **Tests:** `app/integration_test/notifications_device_test.dart` checks MOD11-P2-T02, MOD11-P2-T04, MOD02-P2-T01 and MOD02-P2-T02 on a device. It passed on an iPhone 17, as did `download_adapters_test.dart`, `ic03_offline_opening_test.dart` and `reader_pdfrx_test.dart`: 14 tests in all. Record: `Documentation/test-evidence/IPHONE_DEVICE_TEST_EVIDENCE.md`.
+- **Found:** `flutter test -d` cannot attach to this iPhone (the USB port forward is refused), so the tests ran as profile builds read from the device console. Push delivery and the two emulator-backed device tests were not run.
+
 ### Added: MOD02-P2-T01 crash reporting with no user identifier, off until C-07, 2026-11-11
 
 - **App:** `CrashReporter` (`app/lib/core/monitoring/crash_reporter.dart`) over a `CrashSink` port with no way to set a user identifier (NFR-OBS-001, DATA-014). Every report is redacted with the logger's rules, a failure to send writes one local line, and nothing is thrown. With `CFG_11_CRASH_REPORTING_ENABLED=true`, `runMfwApp` installs handlers that report uncaught Flutter and platform errors as fatal, after the earlier handlers. No crash service is connected, so a report goes nowhere yet.
