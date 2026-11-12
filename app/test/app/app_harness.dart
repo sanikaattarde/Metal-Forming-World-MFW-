@@ -7,7 +7,10 @@ import 'package:mfw_app/contracts/contracts.dart';
 import 'package:mfw_app/core/config/app_config.dart';
 import 'package:mfw_app/features/account/account.dart';
 import 'package:mfw_app/features/notifications/notifications.dart';
+import 'package:mfw_app/features/reader/reader.dart';
 import 'package:mfw_app/features/sharing/sharing.dart';
+
+import '../fakes/fake_reader_preferences.dart';
 
 /// Pumps [MfwApp] with [auth] as the `AuthService`, waits for the first
 /// access state, and returns the router.
@@ -52,6 +55,7 @@ Future<GoRouter> pumpAppWithContent(
   NewsRepository? news,
   ShareSheet? share,
   AppConfig? config,
+  ReaderPreferences? readerPreferences,
 }) async {
   final ProviderContainer container = ProviderContainer.test(
     overrides: [
@@ -60,6 +64,10 @@ Future<GoRouter> pumpAppWithContent(
       newsRepositoryProvider.overrideWithValue(news),
       if (share != null) shareSheetProvider.overrideWithValue(share),
       if (config != null) appConfigProvider.overrideWithValue(config),
+      // The device folder is a platform channel, which tests do not have.
+      readerPreferencesProvider.overrideWithValue(
+        readerPreferences ?? MemoryReaderPreferences(),
+      ),
       downloadManagerProvider.overrideWithValue(downloads),
       issueTitlesProvider.overrideWithValue(null),
       if (renderer != null) pdfRendererProvider.overrideWithValue(renderer),

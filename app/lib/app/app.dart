@@ -189,6 +189,14 @@ final Provider<DeviceNotificationService?> notificationServiceProvider =
       );
     });
 
+/// The reader's choice of page turning, kept on the device (MOD07-P2-T02).
+/// Tests override it with a fake.
+final Provider<ReaderPreferences> readerPreferencesProvider =
+    Provider<ReaderPreferences>(
+      (Ref ref) =>
+          JsonReaderPreferences(ref.watch(issueStorageProvider).issueDirectory),
+    );
+
 /// MOD-10's share sheet (MOD10-P1-T01): `share_plus`, text only. Tests
 /// override it with a fake.
 final Provider<ShareSheet> shareSheetProvider = Provider<ShareSheet>(
@@ -269,6 +277,9 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
         email: () =>
             ref.read(firebaseServicesProvider)?.identity.currentUser?.email,
         notifications: ref.read(notificationServiceProvider),
+        readerMode: ReaderModeTile(
+          preferences: ref.read(readerPreferencesProvider),
+        ),
       ),
       accessState: accessState,
       catalogue: ref.read(catalogueRepositoryProvider),
@@ -280,6 +291,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       library: ref.read(libraryRepositoryProvider),
       links: ref.read(linkOpenerProvider),
       share: ref.read(shareSheetProvider),
+      readerPreferences: ref.read(readerPreferencesProvider),
       storeLinks: StoreLinks(
         android: ref.read(appConfigProvider).storeLinkAndroid,
         ios: ref.read(appConfigProvider).storeLinkIos,

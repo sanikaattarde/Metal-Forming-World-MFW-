@@ -4,6 +4,8 @@ import 'package:mfw_app/app/theme/mfw_theme.dart';
 import 'package:mfw_app/contracts/contracts.dart';
 import 'package:mfw_app/features/reader/reader.dart';
 
+import '../../fakes/fake_reader_preferences.dart';
+
 /// A document whose pages say "Page n".
 final class FakeDocument implements ReaderDocument {
   FakeDocument(this.pageCount, {this.landscapePages = const <int>{}});
@@ -50,6 +52,7 @@ Future<void> pumpReader(
   VoidCallback? onDownloadAgain,
   VoidCallback? onClose,
   List<Widget> Function(ReaderController reader)? actions,
+  ReaderPreferences? preferences,
 }) async {
   await tester.pumpWidget(
     MaterialApp(
@@ -62,6 +65,7 @@ Future<void> pumpReader(
         onDownloadAgain: onDownloadAgain,
         onClose: onClose,
         actions: actions,
+        preferences: preferences,
       ),
     ),
   );
@@ -115,15 +119,21 @@ void main() {
       expect(find.text('2 / 3'), findsOneWidget);
     });
 
-    testWidgets('a swipe turns the page [FR-READ-007]', (
+    testWidgets('a swipe turns the page in the swipe mode [FR-READ-007]', (
       WidgetTester tester,
     ) async {
       await pumpReader(
         tester,
         FakeRenderer(Ok<PdfDocumentHandle>(FakeDocument(3))),
+        preferences: MemoryReaderPreferences(ReaderMode.swipe),
       );
       await tester.pumpAndSettle();
-      await tester.fling(find.byType(PageView), const Offset(-400, 0), 1000);
+      expect(find.byType(PageView), findsOneWidget);
+      await tester.fling(
+        find.byKey(ReaderScreen.pagesKey),
+        const Offset(-400, 0),
+        1000,
+      );
       await tester.pumpAndSettle();
       expect(find.text('2 / 3'), findsOneWidget);
     });
@@ -156,7 +166,7 @@ void main() {
         },
       );
       await tester.pumpAndSettle();
-      expect(reader!.mode, ReaderMode.swipe);
+      expect(reader!.mode, ReaderMode.pageTurn);
 
       await reader!.goToPage(4);
       await tester.pumpAndSettle();

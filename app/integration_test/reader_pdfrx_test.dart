@@ -107,7 +107,11 @@ void main() {
     await tester.tap(find.widgetWithIcon(IconButton, Icons.chevron_right));
     await _until(tester, find.text('2 / 4'));
 
-    await tester.fling(find.byType(PageView), const Offset(-300, 0), 1000);
+    await tester.fling(
+      find.byKey(ReaderScreen.pagesKey),
+      const Offset(-300, 0),
+      1000,
+    );
     await _until(tester, find.text('3 / 4'));
     expect(tester.takeException(), isNull);
   });

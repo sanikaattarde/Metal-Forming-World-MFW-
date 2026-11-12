@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD07-P2-T02 page-turn and swipe modes, 2026-11-12
+
+- **App:** the reader opens in page-turn mode: the page lifts from its left edge and swings away over the next, following a drag, and a fling or a drag past a third of the width completes the turn (FR-READ-006). The buttons turn one page with the effect and the slider jumps. With the system's reduce-motion setting, pages change with no effect. Settings has a "Turning pages" entry to choose the plain swipe instead, kept on the device in `reader_preferences.json` (FR-READ-007, FR-READ-008, OQ-14 working position).
+- **Tests:** `reader_modes_test.dart` (13), one settings-to-reader route test, and the existing reader tests in both modes. App suite: 917 passed, `flutter analyze` clean. The device reader test (`reader_pdfrx_test.dart`) is updated but was not run again on a phone.
+
 ### Added: MOD10-P1-T01 share an issue or an article, 2026-11-12
 
 - **App:** `app/lib/features/sharing/`. Share on issue details sends the title and both store links of CFG-08 (FR-SHR-001, FR-SHR-002, OQ-15 working position of 12 November 2026, PROVISIONAL); it is not offered until a link is set. Share on an article sends the title and its website address (FR-SHR-003, FR-SHR-004). The sheet takes text only, so no file is ever shared, and no link opens the app (FR-SHR-005, FR-SHR-006). On a tablet the sheet points at the button. `share_plus` 13.3.1 added (DEP-52).
