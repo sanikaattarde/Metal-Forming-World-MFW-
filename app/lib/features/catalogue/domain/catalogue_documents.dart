@@ -19,6 +19,10 @@ abstract interface class CatalogueDocuments {
   /// Every industry segment, for the segment filter (MOD05-P2-T02).
   Future<List<Map<String, Object?>>> segments();
 
+  /// Whether the last read came from the device's copy, because the server
+  /// could not be reached (MOD05-P2-T05, OQ-10 working position).
+  bool get lastReadFromCache;
+
   /// The key under which each map carries its document's identifier.
   static const String idKey = '__id';
 }

@@ -19,7 +19,7 @@ import '../domain/issue_search.dart';
 ///   `serviceUnavailable` (retryable), `notFound` (missing or unpublished),
 ///   `invalidResponse`.
 final class DocumentCatalogueRepository
-    implements CatalogueRepository, SegmentSource {
+    implements CatalogueRepository, SegmentSource, OfflineCatalogue {
   /// Creates the repository over [documents], with covers from [covers].
   DocumentCatalogueRepository(this._documents, {required this.covers});
 
@@ -27,6 +27,9 @@ final class DocumentCatalogueRepository
 
   /// Where covers are loaded from.
   final CoverUrls covers;
+
+  @override
+  bool get fromDevice => _documents.lastReadFromCache;
 
   @override
   Future<Result<List<IssueSummary>>> listPublishedIssues() => _guard(() async {

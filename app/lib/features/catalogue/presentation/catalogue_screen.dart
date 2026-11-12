@@ -7,6 +7,7 @@ import '../../../core/ui/reloadable.dart';
 import '../domain/issue_search.dart';
 import 'catalogue_text.dart';
 import 'issue_row.dart';
+import 'offline_notice.dart';
 
 /// The catalogue (SCR-A-11): every published issue, newest first, with its
 /// cover, title, date, description and category (RS FR-MAG-001 to
@@ -99,17 +100,21 @@ class _CatalogueScreenState extends State<CatalogueScreen>
             ],
           ),
         ),
-        Ok<CatalogueContent>(:final CatalogueContent value) => RefreshIndicator(
-          onRefresh: refresh,
-          child: _CatalogueList(
-            content: value,
-            search: _search,
-            query: _query,
-            onQuery: _setQuery,
-            onClear: _clear,
-            onOpen: widget.onOpenIssue,
+        Ok<CatalogueContent>(:final CatalogueContent value) =>
+          withOfflineNotice(
+            widget.catalogue,
+            RefreshIndicator(
+              onRefresh: refresh,
+              child: _CatalogueList(
+                content: value,
+                search: _search,
+                query: _query,
+                onQuery: _setQuery,
+                onClear: _clear,
+                onOpen: widget.onOpenIssue,
+              ),
+            ),
           ),
-        ),
       },
     );
   }

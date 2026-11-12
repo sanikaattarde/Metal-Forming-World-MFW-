@@ -90,6 +90,14 @@ final class IndustrySegment {
 
 /// Gives the industry segments, by name (OP-01 returns them with the
 /// catalogue, `API_AND_BACKEND_CONTRACT.md` section 3.1).
+/// A catalogue that can answer from the device when offline (MOD05-P2-T05,
+/// RS NFR-OFF-002; OQ-10 working position of 12 November 2026, PROVISIONAL).
+abstract interface class OfflineCatalogue {
+  /// Whether the last answer came from the device, so the screen says the
+  /// app is offline.
+  bool get fromDevice;
+}
+
 abstract interface class SegmentSource {
   /// Lists the segments.
   Future<Result<List<IndustrySegment>>> listSegments();
