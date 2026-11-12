@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD13-P2-T01 the full allowed and refused rule matrix, run and recorded, 2026-11-12
+
+- **Tests:** G20 (58 tests, 676 checks): every client operation on public records, issues, own records, another reader's records, server-only records and files, for the visitor, FX-USR-01 to FX-USR-05, another reader, an admin, a removed admin and admin-looking claims. All as expected.
+- **Evidence:** `Documentation/test-evidence/RULE_MATRIX_EVIDENCE.md`, the matrix and its mapping to SEC-CHK-02 to SEC-CHK-06, SEC-CHK-11 and SEC-CHK-18. No defect. Open: the backup flag of SEC-CHK-04 on a device, and a repeat on ENV-TEST.
+
 ### Added: MOD08-P2-T03 the second-device, isolation and deletion check (IC-04), 2026-11-12
 
 - **Tests:** G19 (3) on the emulators, each device its own client SDK app signed in through the Auth emulator: a bookmark and a favourite made on one device show on the reader's other device, and a removal travels back; another reader's device can neither read, watch nor write them; and after account deletion (OP-12) the records are gone and the other device's list is emptied or its access ends (FR-BKM-005, FR-BKM-007, FR-FAV-003, FR-AUTH-009, IC-04, IC-08). The app side of the same flow is the repository's watch, already tested with fakes.
