@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD03-P3-T01 the account-linking spike, emulator only, 2026-11-12
+
+- **Spike:** G21 (6) on the Auth emulator with its test Google credentials, recorded in `Documentation/test-evidence/ACCOUNT_LINKING_SPIKE.md`. A verified password account and Google with the same address become one account with both ways in; an unverified password account is taken over by Google and its password stops working; Google first blocks a later password sign-up (`email-already-in-use`); an explicit link works; Google's verified result sets the account's verified flag (OQ-04). The TD-06 rule of the OQ-04 and OQ-05 working positions holds on the emulator. The real service is NOT VERIFIED until ENV-TEST exists. Google Sign-In itself stays MOD03-P3-T02 (DEC-006).
+
 ### Added: MOD13-P2-T01 the full allowed and refused rule matrix, run and recorded, 2026-11-12
 
 - **Tests:** G20 (58 tests, 676 checks): every client operation on public records, issues, own records, another reader's records, server-only records and files, for the visitor, FX-USR-01 to FX-USR-05, another reader, an admin, a removed admin and admin-looking claims. All as expected.
