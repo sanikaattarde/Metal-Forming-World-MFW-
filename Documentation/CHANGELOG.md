@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD07-P2-T04 damaged-file handling checked end to end (AC-2.6), 2026-11-12
+
+- **App:** closes the task built in MOD07-P2-T01 (`fileCorrupt` from the renderer) and MOD06-P3-T03 (the reader's Download again through MOD-06). No code change.
+- **Tests:** `ac26_damaged_file_test.dart` (3), on the real download manager over fake storage: a copy the renderer refuses shows the error and Download again, the copy is removed, and the new copy opens; a copy damaged on disk (wrong length) is removed before the reader and downloads again; a copy that stays damaged keeps saying so with no crash (FR-READ-010, AC-2.6, IC-03). PDFium's refusal of the truncated FX-PDF-10 is the device test `reader_pdfrx_test.dart`.
+
 ### Added: MOD01-P3-T01 notification taps checked end to end (IC-05), 2026-11-12
 
 - **App:** closes the task built across MOD01-P2-T01 (RouterAppNavigator) and MOD11-P2-T02 (the notification bridge). With no copy on the device, the reader route now asks the catalogue whether the issue is still published, and an unpublished one says "This issue is no longer available" instead of offering a download that cannot work (FX-NTF-06). A copy already kept still opens.
