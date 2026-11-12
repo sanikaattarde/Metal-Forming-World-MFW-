@@ -129,4 +129,8 @@ abstract final class CatalogueText {
 
   /// The text for [failure].
   static String failure(AppFailure failure) => messageFor(failure);
+
+  /// Shown over the catalogue read from the device (MOD05-P2-T05).
+  static const String offlineCopy =
+      'You are offline. This is the catalogue from your last visit.';
 }

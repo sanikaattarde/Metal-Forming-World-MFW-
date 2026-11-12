@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD05-P2-T05 the catalogue offline, PROVISIONAL, 2026-11-12
+
+- **App:** when the server cannot be reached, the catalogue's reads fall back to the copy the Firestore SDK keeps on the device from earlier reads, and Home, the catalogue and issue details say "You are offline. This is the catalogue from your last visit." (NFR-OFF-002, OQ-10 working position of 12 November 2026). With nothing kept, the screens fail as before with Retry. A refresh online reads the server again, so a publication change still shows (FR-MAG-007, FR-MAG-008). The SDK's default cache size is used.
+- **Tests:** `catalogue_offline_test.dart` (7). App suite: 946 passed, `flutter analyze` clean. The fallback itself runs only on a device and was not run on one.
+
 ### Added: MOD12-P3-T01 permanent deletion of an issue in the panel, PROVISIONAL, 2026-11-12
 
 - **Panel:** SCR-W-03 has a Delete permanently section for an unpublished issue. The button stays off until the admin types the issue's title (spaces at the ends do not count), then OP-30 runs and the list opens with a notice (FR-ADMIN-012, OQ-21 working position GS-Q45). Messages for `NOT_UNPUBLISHED` and `CONFIRMATION_MISMATCH`; a retry after a refusal is a new request. Published issues show no deletion.

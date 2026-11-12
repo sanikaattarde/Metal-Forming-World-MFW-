@@ -8,6 +8,7 @@ import '../../../core/ui/reloadable.dart';
 import 'catalogue_screen.dart';
 import 'catalogue_text.dart';
 import 'issue_row.dart';
+import 'offline_notice.dart';
 
 /// What the home screen can ask the shell to do.
 final class HomeActions {
@@ -117,10 +118,18 @@ class _HomeScreenState extends State<HomeScreen>
             onOpenDownloads: widget.actions.onOpenDownloads,
           ),
         ),
-        Ok<CatalogueContent>(:final CatalogueContent value) => RefreshIndicator(
-          onRefresh: _refreshAll,
-          child: _Home(content: value, news: _news, actions: widget.actions),
-        ),
+        Ok<CatalogueContent>(:final CatalogueContent value) =>
+          withOfflineNotice(
+            widget.catalogue,
+            RefreshIndicator(
+              onRefresh: _refreshAll,
+              child: _Home(
+                content: value,
+                news: _news,
+                actions: widget.actions,
+              ),
+            ),
+          ),
       },
     );
   }

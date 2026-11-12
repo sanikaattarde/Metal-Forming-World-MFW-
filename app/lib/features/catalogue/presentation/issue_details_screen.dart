@@ -7,6 +7,7 @@ import '../../../core/ui/content_widgets.dart';
 import '../../../core/ui/reloadable.dart';
 import 'catalogue_text.dart';
 import 'issue_row.dart';
+import 'offline_notice.dart';
 
 /// What SCR-A-12 can ask the shell to do. Navigation stays in the shell
 /// (DEC-013), so the screen only calls these.
@@ -124,12 +125,15 @@ class _IssueDetailsScreenState extends State<IssueDetailsScreen>
             onRefresh: refresh,
             child: _Failure(failure: failure, onRetry: retry),
           ),
-          Ok<IssueContent>(:final IssueContent value) => RefreshIndicator(
-            onRefresh: refresh,
-            child: _Details(
-              content: value,
-              state: state,
-              actions: widget.actions,
+          Ok<IssueContent>(:final IssueContent value) => withOfflineNotice(
+            widget.catalogue,
+            RefreshIndicator(
+              onRefresh: refresh,
+              child: _Details(
+                content: value,
+                state: state,
+                actions: widget.actions,
+              ),
             ),
           ),
         },

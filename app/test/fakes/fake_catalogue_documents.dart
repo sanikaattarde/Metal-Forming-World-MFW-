@@ -28,6 +28,12 @@ final class FakeCatalogueDocuments implements CatalogueDocuments {
   /// How many reads were made.
   int reads = 0;
 
+  /// What [lastReadFromCache] answers, as for a device that is offline.
+  bool fromCache = false;
+
+  @override
+  bool get lastReadFromCache => fromCache;
+
   Map<String, Object?> _withId(String id, Map<String, Object?> data) =>
       <String, Object?>{...data, CatalogueDocuments.idKey: id};
 
