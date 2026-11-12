@@ -92,7 +92,7 @@ pull request opened or updated
   → review by the other developer (DEVELOPMENT_WORKFLOW.md §6)
 ```
 
-QG-01 to QG-06 run in `.github/workflows/pr.yml` for pull requests and pushes to `main` that change `app/` or the workflow. QG-11 and the other steps are PLANNED.
+QG-01 to QG-06 run in `.github/workflows/pr.yml` for pull requests and pushes to `main` that change `app/` or the workflow. QG-08 runs in `.github/workflows/backend.yml`. QG-10, QG-11 and QG-12 run in `.github/workflows/checks.yml` on every pull request and push to `main` (MOD15-P2-T01, 12 November 2026): QG-11 (gitleaks 8.30.1, pinned and checksum-checked, config `.gitleaks.toml`) fails the run; QG-10 (`scripts/checks/licence_check.py`, also weekly) and QG-12 (`scripts/checks/doc_check.py`) report only until their false positives are tuned. Each runs locally with the command in its step. The other steps are PLANNED.
 
 ### 5.2 Integration on `main` (PLANNED)
 
