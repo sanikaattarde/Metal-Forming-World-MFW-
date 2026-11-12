@@ -7,14 +7,18 @@ import '../../../app/theme/mfw_tokens.dart';
 import '../../../core/errors/failure_messages.dart';
 import '../../../core/ui/content_widgets.dart';
 import '../domain/reader_document.dart';
+import '../domain/reader_preferences.dart';
+import 'page_turn_view.dart';
 
 /// The reader (SCR-A-14): one issue's pages, one at a time, turned by a
-/// swipe or by the previous and next buttons (RS FR-READ-003,
-/// FR-READ-007; `CODING_STANDARDS.md` section 9 rule 6), with the page
-/// number and a slider to move far (FR-READ-001).
+/// drag or by the previous and next buttons (RS FR-READ-003;
+/// `CODING_STANDARDS.md` section 9 rule 6), with the page number and a
+/// slider to move far (FR-READ-001).
 ///
-/// The page-turn effect and the mode switch are MOD07-P2-T02 (OQ-14),
-/// zoom and the two-page spread MOD07-P2-T03. A file that cannot be
+/// Pages turn with the page-turn effect, or slide in the plain swipe mode,
+/// as the reader chose in settings (MOD07-P2-T02, FR-READ-006 to
+/// FR-READ-008, OQ-14 working position: page turn first). Zoom and the
+/// two-page spread are MOD07-P2-T03. A file that cannot be
 /// opened shows why, with a way to download it again when one is given
 /// (FR-READ-010).
 class ReaderScreen extends StatefulWidget {
@@ -27,8 +31,15 @@ class ReaderScreen extends StatefulWidget {
     this.onClose,
     this.onDownloadAgain,
     this.actions,
+    this.preferences,
     super.key,
   });
+
+  /// The reader's choice of page turning; null opens in the default mode.
+  final ReaderPreferences? preferences;
+
+  /// The pages, in either mode, for tests and the reader check.
+  static const Key pagesKey = Key('reader-pages');
 
   /// The complete, verified copy MOD-06 handed over (IC-03).
   final LocalIssueFile file;
@@ -62,6 +73,7 @@ class _ReaderScreenState extends State<ReaderScreen>
   Result<PdfDocumentHandle>? _opened;
   PageController? _pages;
   int _page = 1;
+  ReaderMode _mode = ReaderPreferences.defaultMode;
   final StreamController<int> _pageChanges = StreamController<int>.broadcast();
 
   @override
@@ -71,6 +83,12 @@ class _ReaderScreenState extends State<ReaderScreen>
   }
 
   Future<void> _open() async {
+    final ReaderPreferences? preferences = widget.preferences;
+    if (preferences != null) {
+      _mode = await preferences.mode().catchError(
+        (Object _) => ReaderPreferences.defaultMode,
+      );
+    }
     final Result<PdfDocumentHandle> opened = await widget.renderer.open(
       widget.file,
     );
@@ -121,13 +139,19 @@ class _ReaderScreenState extends State<ReaderScreen>
       return;
     }
     final int target = page.clamp(1, _pageCount);
+    if (_mode == ReaderMode.pageTurn) {
+      if (target != _page) {
+        _shown(target - 1);
+      }
+      return;
+    }
     if (pages.hasClients) {
       pages.jumpToPage(target - 1);
     }
   }
 
   @override
-  ReaderMode get mode => ReaderMode.swipe;
+  ReaderMode get mode => _mode;
 
   /// The page currently shown, 1-based.
   int get currentPage => _page;
@@ -168,20 +192,24 @@ class _ReaderScreenState extends State<ReaderScreen>
           onClose: widget.onClose,
         ),
         Ok<PdfDocumentHandle>(:final PdfDocumentHandle value) =>
-          PageView.builder(
-            controller: _pages,
-            itemCount: value.pageCount,
-            onPageChanged: _shown,
-            itemBuilder: (BuildContext context, int index) => Padding(
-              padding: const EdgeInsets.all(MfwSpace.lg),
-              child: Semantics(
-                label: ReaderText.pageOf(index + 1, value.pageCount),
-                child: value is ReaderDocument
-                    ? value.page(index + 1)
-                    : const SizedBox.expand(),
-              ),
+          switch (_mode) {
+            ReaderMode.swipe => PageView.builder(
+              key: ReaderScreen.pagesKey,
+              controller: _pages,
+              itemCount: value.pageCount,
+              onPageChanged: _shown,
+              itemBuilder: (BuildContext context, int index) =>
+                  _pageAt(value, index),
             ),
-          ),
+            ReaderMode.pageTurn => PageTurnView(
+              key: ReaderScreen.pagesKey,
+              page: _page - 1,
+              pageCount: value.pageCount,
+              onPageChanged: _shown,
+              itemBuilder: (BuildContext context, int index) =>
+                  _pageAt(value, index),
+            ),
+          },
       },
       bottomNavigationBar: opened is Ok<PdfDocumentHandle>
           ? _PageBar(
@@ -193,6 +221,21 @@ class _ReaderScreenState extends State<ReaderScreen>
     );
   }
 }
+
+/// Page [index] (0-based) of [document] on the reader's background, so a
+/// page turning over another hides it.
+Widget _pageAt(PdfDocumentHandle document, int index) => ColoredBox(
+  color: MfwColours.inputFill,
+  child: Padding(
+    padding: const EdgeInsets.all(MfwSpace.lg),
+    child: Semantics(
+      label: ReaderText.pageOf(index + 1, document.pageCount),
+      child: document is ReaderDocument
+          ? document.page(index + 1)
+          : const SizedBox.expand(),
+    ),
+  ),
+);
 
 class _PageBar extends StatelessWidget {
   const _PageBar({

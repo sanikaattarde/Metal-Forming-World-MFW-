@@ -29,8 +29,12 @@ class ReaderRoute extends StatefulWidget {
     this.initialPage,
     this.onClose,
     this.actions,
+    this.preferences,
     super.key,
   });
+
+  /// The reader's choice of page turning (MOD07-P2-T02).
+  final ReaderPreferences? preferences;
 
   /// The issue.
   final String issueId;
@@ -144,6 +148,7 @@ class _ReaderRouteState extends State<ReaderRoute> {
         body: const Center(child: CircularProgressIndicator()),
       ),
       Ok<LocalIssueFile>(:final LocalIssueFile value) => ReaderScreen(
+        preferences: widget.preferences,
         key: ValueKey<String>(value.path),
         file: value,
         title: _title,

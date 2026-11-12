@@ -20,6 +20,7 @@ RouteScreens accountScreens({
   LinkOpener? links,
   String? Function()? email,
   DeviceNotificationService? notifications,
+  Widget? readerMode,
 }) {
   // CFG-07, shown where the reader accepts them (MOD04-P2-T02).
   final Widget? policyLinks = links == null
@@ -71,6 +72,7 @@ RouteScreens accountScreens({
                 : NotificationSettingsTile(
                     onOpen: () => context.go(AppRoutes.notificationSettings),
                   ),
+            readerMode: readerMode,
           ),
     notificationSettings: notifications == null
         ? null

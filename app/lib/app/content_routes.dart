@@ -10,6 +10,7 @@ import '../features/downloads/downloads.dart';
 import '../features/account/account.dart';
 import '../features/library/library.dart';
 import '../features/news/news.dart';
+import '../features/reader/reader.dart';
 import '../features/sharing/sharing.dart';
 import 'access_guard.dart';
 import 'reader_route.dart';
@@ -32,6 +33,7 @@ RouteScreens withContentScreens(
   LinkOpener? links,
   ShareSheet? share,
   StoreLinks storeLinks = const StoreLinks(),
+  ReaderPreferences? readerPreferences,
 }) {
   final RouteScreens withDownloads = downloads == null
       ? base
@@ -44,6 +46,7 @@ RouteScreens withContentScreens(
                   final String issueId = state.pathParameters['issueId'] ?? '';
                   return ReaderRoute(
                     key: ValueKey<String>(issueId),
+                    preferences: readerPreferences,
                     issueId: issueId,
                     downloads: downloads,
                     renderer: renderer,

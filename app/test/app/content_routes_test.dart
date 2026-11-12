@@ -6,6 +6,7 @@ import 'package:mfw_app/app/shell_text.dart';
 import 'package:mfw_app/contracts/contracts.dart';
 import 'package:mfw_app/core/config/app_config.dart';
 import 'package:mfw_app/features/downloads/downloads.dart';
+import 'package:mfw_app/features/reader/reader.dart';
 
 import '../fakes/fake_auth_service.dart';
 import '../fakes/fake_catalogue_repository.dart';
@@ -16,6 +17,7 @@ import '../fakes/fake_news_repository.dart';
 import '../features/sharing/share_test.dart' show RecordingShareSheet;
 import '../fixtures/fx_issue_files.dart';
 import '../fakes/fake_server.dart';
+import '../fakes/fake_reader_preferences.dart';
 import '../features/reader/reader_screen_test.dart'
     show FakeDocument, FakeRenderer;
 import '../fakes/test_users.dart';
@@ -88,6 +90,46 @@ void main() {
         sheet.shared.single.text,
         'Synthetic post 9001\nhttps://news.example.test/synthetic-post-9001/',
       );
+    });
+  });
+
+  group('Turning pages [MOD07-P2-T02]', () {
+    testWidgets('Swipe chosen in settings opens the next issue in the swipe '
+        'mode [FR-READ-008]', (WidgetTester tester) async {
+      final FakeAuthService auth = FakeAuthService(
+        FakeServer(),
+        signedInAs: fxUsr01,
+      );
+      final FakeDownloadManager downloads = FakeDownloadManager(
+        auth,
+        FakeIssueFileService(auth, files: fxIssueFiles),
+      );
+      await downloads.start('fx-iss-01', mobileDataAccepted: true);
+      final MemoryReaderPreferences preferences = MemoryReaderPreferences();
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        auth,
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        downloads: downloads,
+        renderer: FakeRenderer(Ok<PdfDocumentHandle>(FakeDocument(4))),
+        readerPreferences: preferences,
+      );
+      router.go('/issues/fx-iss-01/read');
+      await tester.pumpAndSettle();
+      expect(find.byType(PageTurnView), findsOneWidget);
+
+      router.go('/settings');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(ReaderModeText.title));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Swipe'));
+      await tester.pumpAndSettle();
+      expect(preferences.kept, ReaderMode.swipe);
+
+      router.go('/issues/fx-iss-01/read');
+      await tester.pumpAndSettle();
+      expect(find.byType(PageView), findsOneWidget);
+      expect(find.byType(PageTurnView), findsNothing);
     });
   });
 
