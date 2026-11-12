@@ -135,3 +135,28 @@ final class MemoryPendingDownloads implements PendingDownloads {
     required String issueId,
   }) async => _rows.remove((ownerUserId, issueId));
 }
+
+/// What happens to kept copies when their reader or their issue goes
+/// (MOD06-P3-T02, RS FR-DL-010, IC-08; OQ-11 working position of
+/// 27 October 2026, DEC-033, PROPOSED). Sign-out needs nothing here: copies
+/// are kept per reader, so a signed-out device shows none, and the same
+/// reader finds them again after signing in (rule 7). Unpublishing needs
+/// nothing either: a kept copy still opens.
+abstract interface class KeptCopyLifecycle {
+  /// Removes every copy, partial file and pending download of [userId], as
+  /// after account deletion. Other readers' copies stay.
+  Future<void> removeReader(String userId);
+
+  /// Removes every reader's copies of [issueIds], which were permanently
+  /// deleted (OP-03), and any download of them under way. Returns how many
+  /// copies went.
+  Future<int> removeIssues(Set<String> issueIds);
+}
+
+/// OP-03 `listDeletedIssues`: the issues deleted for good, a public read
+/// (`DATABASE_AND_DATA_MODEL.md` section 12).
+abstract interface class DeletedIssueList {
+  /// The IDs of the deleted issues. Fails when the list cannot be read, as
+  /// offline; nothing is removed then.
+  Future<Result<Set<String>>> deletedIssueIds();
+}
