@@ -69,26 +69,37 @@ final Provider<CatalogueRepository?> catalogueRepositoryProvider =
       );
     });
 
-/// MOD-09's news from MFW's WordPress site (MOD09-P1-T01), or null when the
-/// build names no site (CFG-03). With Firebase started, the admin's hidden
-/// and breaking controls apply (MOD09-P2-T03, OP-04). Tests override it
-/// with a fake.
-final Provider<NewsRepository?> newsRepositoryProvider =
-    Provider<NewsRepository?>((Ref ref) {
+/// MOD-09's news from MFW's WordPress site (MOD09-P1-T01) with the copies
+/// kept on the device for reading offline and the saved articles
+/// (MOD09-P2-T02), or null when the build names no site (CFG-03).
+final Provider<OfflineNewsRepository?> offlineNewsProvider =
+    Provider<OfflineNewsRepository?>((Ref ref) {
       final WordPressSiteConfig? site = ref.watch(appConfigProvider).wordPress;
       if (site == null) {
         return null;
       }
-      final NewsRepository wordPress = WordPressNewsRepository(
-        client: IoHttpsGetClient(),
-        config: site,
+      return OfflineNewsRepository(
+        news: WordPressNewsRepository(client: IoHttpsGetClient(), config: site),
+        store: JsonNewsCache(ref.watch(issueStorageProvider).issueDirectory),
       );
+    });
+
+/// The news the screens read: [offlineNewsProvider] with, once Firebase has
+/// started, the admin's hidden and breaking controls on top (MOD09-P2-T03,
+/// OP-04), so they apply to the copies on the device too. Null when the
+/// build names no site. Tests override it with a fake.
+final Provider<NewsRepository?> newsRepositoryProvider =
+    Provider<NewsRepository?>((Ref ref) {
+      final OfflineNewsRepository? news = ref.watch(offlineNewsProvider);
+      if (news == null) {
+        return null;
+      }
       final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
       if (firebase == null) {
-        return wordPress;
+        return news;
       }
       return ControlledNewsRepository(
-        news: wordPress,
+        news: news,
         controls: FirestoreNewsControlsService(firebase.firestore),
       );
     });
@@ -255,6 +266,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       accessState: accessState,
       catalogue: ref.read(catalogueRepositoryProvider),
       news: ref.read(newsRepositoryProvider),
+      offlineNews: ref.read(offlineNewsProvider),
       downloads: ref.read(downloadManagerProvider),
       titles: ref.read(issueTitlesProvider),
       renderer: ref.read(pdfRendererProvider),

@@ -68,4 +68,33 @@ abstract final class NewsText {
   /// The tooltip of a category filter.
   static String filterTooltip(String name, {required bool selected}) =>
       selected ? '$name, shown' : 'Show $name';
+
+  /// An article read from the device (FR-NEWS-005).
+  static const String offlineArticle =
+      'You are offline. This article was loaded earlier.';
+
+  /// The Save button, when the article is not saved.
+  static const String save = 'Save for reading offline';
+
+  /// The Save button, when the article is saved.
+  static const String unsave = 'Remove from saved';
+
+  /// After Save.
+  static const String saved = 'Saved for reading offline.';
+
+  /// After removing.
+  static const String removed = 'Removed from saved articles.';
+
+  /// When Save could not be written.
+  static const String saveFailed = 'The article could not be saved.';
+
+  /// The filter that shows the saved articles.
+  static const String savedFilter = 'Saved';
+
+  /// No saved articles.
+  static const String savedEmptyHeading = 'No saved articles';
+
+  /// The line under [savedEmptyHeading].
+  static const String savedEmptyText =
+      'Save an article to read it without a connection.';
 }

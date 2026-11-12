@@ -23,6 +23,7 @@ RouteScreens withContentScreens(
   required ValueListenable<AccessState> accessState,
   CatalogueRepository? catalogue,
   NewsRepository? news,
+  OfflineNewsRepository? offlineNews,
   DownloadManager? downloads,
   IssueTitles? titles,
   PdfRenderer? renderer,
@@ -85,6 +86,9 @@ RouteScreens withContentScreens(
             news: news,
             onOpenPost: (String postId) =>
                 context.push(AppRoutes.newsPost(postId)),
+            loadSaved: offlineNews == null
+                ? null
+                : () => _savedArticles(offlineNews, news),
           ),
           newsArticle: (BuildContext context, GoRouterState state) {
             final String postId = state.pathParameters['postId'] ?? '';
@@ -94,6 +98,12 @@ RouteScreens withContentScreens(
               postId: postId,
               onOpenLink: (Uri uri) async => await links?.open(uri) ?? false,
               onBack: () => _backTo(context, AppRoutes.news),
+              fromDevice: offlineNews?.fromDevice,
+              actions: offlineNews == null
+                  ? null
+                  : (NewsPost post) => <Widget>[
+                      SaveArticleButton(saved: offlineNews, post: post),
+                    ],
             );
           },
         );
@@ -270,4 +280,17 @@ Future<String> _titleOf(
     Ok<IssueSummary>(:final IssueSummary value) => value.title,
     _ => issueId,
   };
+}
+
+/// The saved articles, with the admin's controls applied when [news] has
+/// them, so a post hidden later leaves the saved list too (FR-NEWS-008).
+Future<Result<List<NewsPost>>> _savedArticles(
+  OfflineNewsRepository offline,
+  NewsRepository news,
+) async {
+  final List<NewsPost> saved = await offline.saved();
+  if (news is ControlledNewsRepository) {
+    return news.applyTo(saved);
+  }
+  return Ok<List<NewsPost>>(saved);
 }

@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD09-P2-T02 offline articles and Save, 2026-11-12
+
+- **App:** `OfflineNewsRepository` keeps each opened article (the last 20, a PLACEHOLDER until OQ-16) and the first page of each list in `news_cache.json` in the app's private folder. When WordPress cannot be reached, the list and those articles come from the device with an offline notice, and pictures are not loaded (FR-NEWS-005). Save on SCR-A-19 keeps an article until the reader removes it, and a Saved filter on SCR-A-18 lists them (FR-NEWS-006, OQ-16 working position). The admin's controls apply on top, so a post hidden later leaves the device lists too.
+- **Tests:** `offline_news_test.dart` (17). App suite: 891 passed, `flutter analyze` clean.
+
 ### Added: MOD09-P2-T03 hidden and breaking posts in the app, 2026-11-12
 
 - **App:** `ControlledNewsRepository` applies the admin's news controls, read through OP-04 (`FirestoreNewsControlsService`, a public read of `news_controls`). A hidden post is never listed and opens as not found (FR-NEWS-008). A breaking post carries a Breaking label and comes first, newest first, at most five, on the News list and the home section (FR-NEWS-009, OQ-17 working position of 12 November 2026, PROVISIONAL). A breaking post beyond the first page is read on its own and pinned. When the controls cannot be read, the news fails too, so a hidden post never shows by mistake; offline, the SDK keeps the last controls read.
