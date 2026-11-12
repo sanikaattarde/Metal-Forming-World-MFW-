@@ -2,8 +2,8 @@
 // This is the only module that writes `admin_roles` and `admin_guard` (INV-05). The data model is
 // DATABASE_AND_DATA_MODEL.md sections 4.17 and 4.21, and the rules are INV-03, INV-08 and INV-09.
 //
-// Not built, because they wait for OQ-58: OP-34, OP-35, OP-37, OP-38, OP-39, the change record
-// (ADMIN_AUDIT_EVENT), INV-04, INV-06 and INV-07. Also not built: OP-42, the real bootstrap step.
+// OP-35, OP-37, OP-38 and OP-39 are in adminManagement.ts, switched off until OQ-58 (MOD12-P3-T02). OP-34 is not
+// built.
 import type { Auth } from 'firebase-admin/auth';
 import { FieldValue } from 'firebase-admin/firestore';
 import type { DocumentReference, Firestore, Transaction } from 'firebase-admin/firestore';

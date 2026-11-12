@@ -17,6 +17,8 @@ export interface AdminContext {
   uid: string;
   db: Firestore;
   data: Record<string, unknown>;
+  // When the caller last signed in, in seconds, from the token (for the recent-sign-in check of OP-35 and OP-37).
+  authTime?: number;
 }
 
 export function adminCall<T>(operation: string, handler: (context: AdminContext) => Promise<T>) {
@@ -31,7 +33,8 @@ export function adminCall<T>(operation: string, handler: (context: AdminContext)
       await enforceRate(db, uid, operation);
 
       const data: unknown = request.data;
-      return handler({ uid, db, data: isObject(data) ? data : {} });
+      const authTime: unknown = request.auth?.token.auth_time;
+      return handler({ uid, db, data: isObject(data) ? data : {}, authTime: typeof authTime === 'number' ? authTime : undefined });
     });
   });
 }

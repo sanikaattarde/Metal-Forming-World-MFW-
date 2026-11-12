@@ -135,6 +135,31 @@ export function deleteIssue(api: CallFn, issueId: string, confirmation: string, 
   return api('deleteIssue', { request_id: requestId, issue_id: issueId, confirmation }) as Promise<{ issue_id: string; deleted: true }>;
 }
 
+// OP-35 to OP-39, switched off until OQ-58 (MOD12-P3-T02, PROVISIONAL).
+export interface AdminRow {
+  user_id: string;
+  email: string | null;
+  is_active: boolean;
+}
+
+export interface AdminChange {
+  event_id: string;
+  action: 'admin_add' | 'admin_remove' | 'bootstrap_admin';
+  actor_user_id: string;
+  target_user_id: string;
+  occurred_at: string | null;
+}
+
+export const listAdmins = (api: CallFn) => api('listAdmins', {}) as Promise<{ items: AdminRow[] }>;
+
+export const listAdminChanges = (api: CallFn) => api('listAdminChanges', {}) as Promise<{ items: AdminChange[]; next_cursor: string | null }>;
+
+export const addAdmin = (api: CallFn, email: string, requestId = newRequestId()) =>
+  api('addAdmin', { request_id: requestId, target_email: email.trim(), expected_state: 'not_admin' }) as Promise<AdminRow>;
+
+export const removeAdmin = (api: CallFn, userId: string, confirmation: string, requestId = newRequestId()) =>
+  api('removeAdmin', { request_id: requestId, target_user_id: userId, expected_state: 'admin', confirmation }) as Promise<AdminRow>;
+
 export function saveCategory(api: CallFn, category: { category_id?: string; name: string; display_order: number }, requestId = newRequestId()): Promise<Category> {
   return api('saveCategory', { request_id: requestId, ...category }) as Promise<Category>;
 }

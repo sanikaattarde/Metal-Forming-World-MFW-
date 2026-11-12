@@ -5,6 +5,7 @@ import { getApps, initializeApp } from 'firebase-admin/app';
 if (getApps().length === 0) initializeApp();
 
 export { requestAccountDeletion } from './accountDeletion.js';
+export { addAdmin, listAdminChanges, listAdmins, removeAdmin } from './adminManagement.js';
 export { deleteCategory, saveCategory } from './categories.js';
 export { deleteIssue } from './issueDeletion.js';
 export { getIssueFile } from './issueFile.js';

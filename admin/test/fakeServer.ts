@@ -83,6 +83,10 @@ export function fakeServer({
     checkPolls: 1,
     readers: readers.map((r) => ({ ...r })),
     segments: segments.map((g) => ({ ...g })),
+    // OP-35 to OP-39 (MOD12-P3-T02): admins and the accounts that could become one.
+    admins: [{ user_id: 'u-1', email: 'admin@example.test', is_active: true }],
+    accounts: new Map<string, { user_id: string; verified: boolean }>([['reader@example.test', { user_id: 'u-2', verified: true }]]),
+    adminChanges: [] as { event_id: string; action: string; actor_user_id: string; target_user_id: string; occurred_at: string }[],
   };
   const log: { name: string; data: Record<string, unknown> }[] = [];
   const failures = new Map<string, unknown>();
@@ -140,6 +144,29 @@ export function fakeServer({
         record.publication_state = name === 'publishIssue' ? 'published' : 'unpublished';
         record.updated_at = ++clock;
         return { ...record };
+      }
+      case 'listAdmins':
+        return { items: state.admins.filter((a) => a.is_active).map((a) => ({ ...a })) };
+      case 'listAdminChanges':
+        return { items: [...state.adminChanges].reverse(), next_cursor: null };
+      case 'addAdmin': {
+        const account = state.accounts.get(String(data.target_email).toLowerCase());
+        if (!account) throw serverError('not-found');
+        if (!account.verified) throw serverError('failed-precondition', 'TARGET_EMAIL_NOT_VERIFIED');
+        if (state.admins.some((a) => a.user_id === account.user_id && a.is_active)) throw serverError('failed-precondition', 'ALREADY_ADMIN');
+        const row = { user_id: account.user_id, email: String(data.target_email), is_active: true };
+        state.admins.push(row);
+        state.adminChanges.push({ event_id: `e-${next++}`, action: 'admin_add', actor_user_id: 'u-1', target_user_id: row.user_id, occurred_at: '2026-11-12T10:00:00.000Z' });
+        return { ...row };
+      }
+      case 'removeAdmin': {
+        const row = state.admins.find((a) => a.user_id === data.target_user_id && a.is_active);
+        if (!row) throw serverError('failed-precondition', 'NOT_AN_ADMIN');
+        if (String(data.confirmation).trim().toLowerCase() !== (row.email ?? '').toLowerCase()) throw invalid(['confirmation']);
+        if (state.admins.filter((a) => a.is_active).length === 1) throw serverError('failed-precondition', 'LAST_ADMIN');
+        row.is_active = false;
+        state.adminChanges.push({ event_id: `e-${next++}`, action: 'admin_remove', actor_user_id: 'u-1', target_user_id: row.user_id, occurred_at: '2026-11-12T11:00:00.000Z' });
+        return { ...row };
       }
       case 'deleteIssue': {
         const record = find(data.issue_id);
