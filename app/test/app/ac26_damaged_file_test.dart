@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mfw_app/app/reader_route.dart';
 import 'package:mfw_app/app/theme/mfw_theme.dart';
 import 'package:mfw_app/contracts/contracts.dart';
-import 'package:mfw_app/features/downloads/downloads.dart';
 import 'package:mfw_app/features/reader/reader.dart';
 
 import '../fakes/fake_reader_preferences.dart';
