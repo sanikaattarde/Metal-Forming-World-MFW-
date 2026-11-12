@@ -13,7 +13,7 @@ import '../fakes/fake_issue_file_service.dart';
 import '../fakes/fake_server.dart';
 import '../fakes/test_users.dart';
 import '../features/reader/reader_screen_test.dart'
-    show FakeDocument, FakeRenderer;
+    show FakeDocument, FakeRenderer, phone, useSize;
 import '../fixtures/fx_issue_files.dart';
 
 FakeDownloadManager downloadsFor(TestUser user) {
@@ -49,6 +49,7 @@ void main() {
   group('ReaderRoute: MOD-06 hands MOD-07 the copy [MOD06-P3-T03, IC-03]', () {
     testWidgets('a downloaded issue opens in the reader at the page asked '
         'for [FR-DL-007, AC-4.2]', (WidgetTester tester) async {
+      useSize(tester, phone);
       final FakeDownloadManager downloads = downloadsFor(fxUsr01);
       await downloads.start('fx-iss-01', mobileDataAccepted: true);
       final FakeRenderer renderer = FakeRenderer(

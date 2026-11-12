@@ -15,8 +15,18 @@ final class FakeDocument implements ReaderDocument {
   final Set<int> landscapePages;
   int closed = 0;
 
+  /// The sharpness each page was last drawn at.
+  final Map<int, double> sharpness = <int, double>{};
+
   @override
-  Widget page(int pageNumber) => Center(child: Text('Page $pageNumber'));
+  Widget page(
+    int pageNumber, {
+    double sharpness = 1,
+    Alignment alignment = Alignment.center,
+  }) {
+    this.sharpness[pageNumber] = sharpness;
+    return Center(child: Text('Page $pageNumber'));
+  }
 
   @override
   bool isLandscape(int pageNumber) => landscapePages.contains(pageNumber);
@@ -39,6 +49,19 @@ final class FakeRenderer implements PdfRenderer {
   }
 }
 
+/// A phone held upright, 390 by 844 points.
+const Size phone = Size(390, 844);
+
+/// The same phone turned on its side.
+const Size phoneLandscape = Size(844, 390);
+
+/// Draws the test at [size] in points, until the test ends.
+void useSize(WidgetTester tester, Size size) {
+  tester.view.devicePixelRatio = 3;
+  tester.view.physicalSize = size * 3;
+  addTearDown(tester.view.reset);
+}
+
 const LocalIssueFile file = LocalIssueFile(
   issueId: 'fx-iss-01',
   fileRevision: 1,
@@ -53,7 +76,9 @@ Future<void> pumpReader(
   VoidCallback? onClose,
   List<Widget> Function(ReaderController reader)? actions,
   ReaderPreferences? preferences,
+  Size size = phone,
 }) async {
+  useSize(tester, size);
   await tester.pumpWidget(
     MaterialApp(
       theme: buildMfwTheme(),

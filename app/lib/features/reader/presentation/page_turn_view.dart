@@ -59,6 +59,11 @@ class _PageTurnViewState extends State<PageTurnView>
   @override
   void didUpdateWidget(PageTurnView old) {
     super.didUpdateWidget(old);
+    // A second finger, or a zoom, stops a turn being dragged: it falls back.
+    if (!widget.enabled && _target != null && !_turn.isAnimating) {
+      _target = null;
+      _turn.value = 0;
+    }
     final int wanted = widget.page;
     if (wanted == _index || wanted == _target) {
       return;

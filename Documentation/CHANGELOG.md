@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD07-P2-T03 zoom to 300% and the two-page spread, 2026-11-12
+
+- **App:** pinch zoom up to 300%, and a double tap to zoom to 200% and back, so zoom works with one finger (FR-READ-005). Once a gesture ends the page is drawn again at the zoom's resolution, in half steps, within a budget of 12 million pixels per page image (PLACEHOLDER until MOD07-P3-T01 measures it): an A4 page on a phone at 300% gets about four fifths of the screen's resolution. A zoomed page pans instead of turning, and two fingers never turn a page. When the screen is wider than it is tall, two pages show side by side after the cover, and a page that is already wide stands alone (FR-READ-009). A tablet held upright shows one page, so text stays large enough (PROPOSED, to confirm at M2 with AC-2.4).
+- **Tests:** `reader_zoom_spread_test.dart` (14); two route tests now run on an upright phone. App suite: 929 passed, `flutter analyze` clean. Sharpness at 300% (AC-2.3) is judged by eye on a device and is not yet checked.
+
 ### Added: MOD07-P2-T02 page-turn and swipe modes, 2026-11-12
 
 - **App:** the reader opens in page-turn mode: the page lifts from its left edge and swings away over the next, following a drag, and a fling or a drag past a third of the width completes the turn (FR-READ-006). The buttons turn one page with the effect and the slider jumps. With the system's reduce-motion setting, pages change with no effect. Settings has a "Turning pages" entry to choose the plain swipe instead, kept on the device in `reader_preferences.json` (FR-READ-007, FR-READ-008, OQ-14 working position).

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 import 'package:mfw_app/contracts/contracts.dart';
@@ -59,9 +60,48 @@ final class _PdfrxDocument implements ReaderDocument {
     return page.width > page.height;
   }
 
+  /// The most pixels one page image may hold when zoomed: 12 million,
+  /// about 48 MB (PLACEHOLDER until the measurements of MOD07-P3-T01). An
+  /// A4 page on a phone at 300% gets about four fifths of the screen's
+  /// resolution; a smaller zoom gets all of it.
+  static const double pixelBudget = 12e6;
+
   @override
-  Widget page(int pageNumber) =>
-      PdfPageView(document: _document, pageNumber: pageNumber);
+  Widget page(
+    int pageNumber, {
+    double sharpness = 1,
+    Alignment alignment = Alignment.center,
+  }) {
+    if (sharpness <= 1) {
+      return PdfPageView(
+        document: _document,
+        pageNumber: pageNumber,
+        alignment: alignment,
+      );
+    }
+    final PdfPage page = _document.pages[pageNumber - 1];
+    // PdfPageView draws at its size times the device pixel ratio, up to
+    // maximumDpi: a higher ratio draws a zoomed page sharp, and the dpi
+    // keeps the image within the budget.
+    final double budgetDpi =
+        72 * math.sqrt(pixelBudget / (page.width * page.height));
+    return Builder(
+      builder: (BuildContext context) {
+        final MediaQueryData query = MediaQuery.of(context);
+        return MediaQuery(
+          data: query.copyWith(
+            devicePixelRatio: query.devicePixelRatio * sharpness,
+          ),
+          child: PdfPageView(
+            document: _document,
+            pageNumber: pageNumber,
+            alignment: alignment,
+            maximumDpi: budgetDpi,
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Future<void> close() => _document.dispose();
