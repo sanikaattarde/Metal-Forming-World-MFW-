@@ -1,0 +1,9 @@
+# QG-11: findings checked by hand and found synthetic (MOD15-P2-T01, 12 November 2026). Each line is one exact
+# finding; anything new still fails the scan.
+# An unsigned sample token ({"alg":"none"}, {"sub":"u"}) that the redaction test must hide.
+c88433304cc7fc924b8d03cd0ea9040225ddc5fc:backend/test/u3-issue-file-parts.test.mjs:generic-api-key:100
+2fd8f671e6ba1c1b368fc42012810a6598dbdac0:backend/spike/test/u3-issue-file-parts.test.mjs:generic-api-key:100
+# An unsigned sample token ({"sub":"test"}) for the app's redaction test.
+1deadb3c032bfa94d06be2b9048828a7e8b59b72:app/test/core/logging/redaction_test.dart:jwt:9
+# The name of the CFG-08 store-link setting, not a value.
+1d7e80c85210e92f024956909375ce3b9d014760:app/lib/core/config/app_config.dart:generic-api-key:158
