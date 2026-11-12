@@ -1,0 +1,12 @@
+# QG-11 secrets scan (MOD15-P2-T01): gitleaks' own rules, with an allowlist for the synthetic values the local
+# emulators use, which are valid nowhere else (DEC-024). Add a value here only when it is synthetic.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Synthetic emulator values"
+regexes = [
+  '''fake-key''',
+  '''Bearer owner''',
+  '''test-password-1''',
+]

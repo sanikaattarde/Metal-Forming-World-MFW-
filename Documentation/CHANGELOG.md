@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD15-P2-T01 the licence, secrets and documentation checks (QG-10 to QG-12), 2026-11-12
+
+- **CI:** `.github/workflows/checks.yml` on every pull request and push to `main`. QG-11 runs gitleaks 8.30.1 over the whole history, downloaded at a pinned version and checked against its SHA-256, with `.gitleaks.toml` allowing only the synthetic emulator values; a finding fails the run. QG-10 (`scripts/checks/licence_check.py`, also weekly) checks that every direct dependency of the app, the backend, the functions and the panel is in `DEPENDENCY_REGISTER.md`, and that each npm package declares an allowed licence. QG-12 (`scripts/checks/doc_check.py`) checks relative links, task IDs, decisions and open questions. Both report only for now, as agreed on 12 November 2026.
+- **Local run:** `python3 scripts/checks/licence_check.py` and `python3 scripts/checks/doc_check.py` from the repository root: 0 findings each after two script fixes. gitleaks was not run locally; its first result is the CI run on this merge.
+
 ### Added: MOD12-P3-T02 adding and removing admins in the panel, switched off until OQ-58, 2026-11-12
 
 - **Backend:** OP-35 `addAdmin`, OP-37 `removeAdmin`, OP-38 `listAdmins` and OP-39 `listAdminChanges` (`backend/functions/src/adminManagement.ts`). Every one refuses with `FEATURE_OFF` unless `config/private.admin_management_enabled` is true, which nothing sets (DEC-027: not agreed scope until MFW answers OQ-58). An addition or removal needs a recent sign-in (5 minutes, PLACEHOLDER until OQ-56), checks the state the admin saw (`STALE_ADMIN_STATE`, INV-07), keeps at least one admin (`LAST_ADMIN`, INV-03), writes the role, the guard and a change record holding identifiers and a time only in one transaction (INV-04, GS-Q44), and ends a removed admin's sessions (INV-09). A target is named by identifier or by email address (the address is a PROPOSED addition to the contract). A removal needs the address typed to confirm. A repeat returns the first result.
