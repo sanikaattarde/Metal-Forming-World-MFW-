@@ -8,6 +8,9 @@ import '../core/config/firebase_settings.dart';
 import '../features/account/account.dart';
 import '../features/catalogue/catalogue.dart';
 
+/// The addresses at which the emulators are the device's own.
+const Set<String> _loopback = <String>{'127.0.0.1', 'localhost', '::1'};
+
 /// The Firebase services the app's adapters use, once Firebase has started.
 final class FirebaseServices {
   /// Creates the set.
@@ -67,6 +70,7 @@ Future<FirebaseServices> startFirebase(FirebaseSettings settings) async {
           : '${settings.projectId}.appspot.com');
   CoverUrls covers = CoverUrls(bucket: bucket);
   String? emulatorTarget;
+  BackendCalls backend = FirebaseBackendCalls(functions);
   final String? host = settings.emulatorHost;
   if (host != null) {
     // The Android emulator sees the developer's machine as 10.0.2.2.
@@ -79,11 +83,21 @@ Future<FirebaseServices> startFirebase(FirebaseSettings settings) async {
     await auth.useAuthEmulator(target, 9099);
     functions.useFunctionsEmulator(target, 5001);
     firestore.useFirestoreEmulator(target, 8080);
+    // An iPhone reaching the emulators at the developer machine's address:
+    // the Firebase Apple SDK will not send the sign-in token over plain HTTP
+    // there, so the calls go through EmulatorBackendCalls (ENV-LOCAL only).
+    if (!android && !_loopback.contains(target)) {
+      backend = EmulatorBackendCalls(
+        origin: Uri(scheme: 'http', host: target, port: 5001),
+        projectId: settings.projectId,
+        idToken: () async => auth.currentUser?.getIdToken(),
+      );
+    }
   }
 
   return FirebaseServices(
     identity: FirebaseIdentityProvider(auth),
-    backend: FirebaseBackendCalls(functions),
+    backend: backend,
     firestore: firestore,
     covers: covers,
     emulatorHost: emulatorTarget,

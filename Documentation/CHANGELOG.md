@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Fixed: server calls from an iPhone to the local emulators, 2026-11-12
+
+- **App:** on an iPhone pointed at the emulators on the developer's network, every server call (such as saving the profile) failed as "Sign in to continue", because the Firebase Apple SDK refuses to send the sign-in token over plain HTTP to an address that is not the phone's own. Those calls now go through `EmulatorBackendCalls` (`app/lib/features/account/data/emulator_backend_calls.dart`), which speaks the callable protocol itself with the Auth emulator's token. ENV-LOCAL only; simulators and Android keep the SDK.
+- **Tests:** `emulator_backend_calls_test.dart` (4); a profile save over the Mac's network address returned `complete`.
+
 ### Added: iPhone device test run, 2026-11-12
 
 - **Tests:** `app/integration_test/notifications_device_test.dart` checks MOD11-P2-T02, MOD11-P2-T04, MOD02-P2-T01 and MOD02-P2-T02 on a device. It passed on an iPhone 17, as did `download_adapters_test.dart`, `ic03_offline_opening_test.dart` and `reader_pdfrx_test.dart`: 14 tests in all. Record: `Documentation/test-evidence/IPHONE_DEVICE_TEST_EVIDENCE.md`.
