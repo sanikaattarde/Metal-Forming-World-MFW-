@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD01-P3-T01 notification taps checked end to end (IC-05), 2026-11-12
+
+- **App:** closes the task built across MOD01-P2-T01 (RouterAppNavigator) and MOD11-P2-T02 (the notification bridge). With no copy on the device, the reader route now asks the catalogue whether the issue is still published, and an unpublished one says "This issue is no longer available" instead of offering a download that cannot work (FX-NTF-06). A copy already kept still opens.
+- **Tests:** `ic05_notification_taps_test.dart` (8): FX-NTF-01 to FX-NTF-08 tapped on the push client, through MOD-11's service, the bridge, the access guard and the real router: the reader with full access, the article signed out, the sign-in step with the issue kept (BR-005), and unknown, incomplete or malformed payloads ignored. App suite: 958 passed. The tap on a device waits for push in MFW's accounts (MOD11-P2-T01).
+
 ### Added: MOD08-P2-T04 bookmarks and favourites offline, with changes sent later, PROVISIONAL, 2026-11-12
 
 - **App:** the Library shows the reader's bookmarks and favourites from the device when offline, with a notice, and a change made offline is kept on the device and sent when the connection returns, through the Firestore SDK's own queue (FR-BKM-008, OQ-10 working position of 12 November 2026). With no connection at all a change now returns at once instead of after the 10-second wait. Back online, a notice says while changes still wait to be sent. A change the server refuses later is undone in the list, as before. The adapter reads the SDK's snapshot metadata (`isFromCache`, `hasPendingWrites`) for the notices.

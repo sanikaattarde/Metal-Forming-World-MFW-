@@ -56,6 +56,7 @@ Future<GoRouter> pumpAppWithContent(
   ShareSheet? share,
   AppConfig? config,
   ReaderPreferences? readerPreferences,
+  DeviceNotificationService? notifications,
 }) async {
   final ProviderContainer container = ProviderContainer.test(
     overrides: [
@@ -68,6 +69,8 @@ Future<GoRouter> pumpAppWithContent(
       readerPreferencesProvider.overrideWithValue(
         readerPreferences ?? MemoryReaderPreferences(),
       ),
+      if (notifications != null)
+        notificationServiceProvider.overrideWithValue(notifications),
       downloadManagerProvider.overrideWithValue(downloads),
       issueTitlesProvider.overrideWithValue(null),
       if (renderer != null) pdfRendererProvider.overrideWithValue(renderer),
