@@ -154,7 +154,7 @@ Section 8.1 holds review entries for the candidates the WS-B scaffold needs, and
 | DEP-49 | App directories (path_provider) | Private storage paths (MOD-06) | — | LICENSE file | None expected | NOT NEEDED for MOD06-P2-T02 (10 November 2026): the app's `mfw/storage` platform channel gives the issue folder, Android's no-backup storage and iOS Application Support excluded from backups, which path_provider does not offer |
 | DEP-50 | Connectivity type: connectivity_plus | Mobile-data warning (MOD-01; RS FR-DL-004) | None | Read on 9 November 2026: section 8.1. Update of 9 November 2026: YG read this licence (reported in chat, not filed). Accuracy on both platforms is checked on a device | None expected | CONFIRMED (7.3.2 locked, pull request #63) |
 | DEP-51 | Resumable download client (an HTTP client with range requests, or a platform background-download plugin) | MOD-06 (RS FR-DL-006) | DEC-020; WP-02 spike | LICENSE file; background behaviour | None expected | RESOLVED (10 November 2026): no package; `dart:io`'s HttpClient with `Range` requests (`HttpFileTransport`, MOD06-P2-T02) |
-| DEP-52 | Share sheet (for example share_plus) | MOD-10 | — | LICENSE file | None expected | CANDIDATE |
+| DEP-52 | Share sheet (`share_plus`) | MOD-10 | — | LICENSE file | None | CONFIRMED (runtime, app): see section 8.6 |
 | DEP-53 | Link opening (url_launcher) | Policy links and article links (MOD-04, MOD-09) | — | LICENSE file | None expected | CANDIDATE |
 | DEP-54 | HTML rendering for WordPress content | MOD-09 (`CODING_STANDARDS.md` §7) | — | LICENSE file; **must not run scripts** (SEC-CHK-15). Resolved on 12 November 2026 (MOD09-P2-T01): no renderer package. The app parses the post with DEP-66 and draws only text, links, headings, lists, quotes and HTTPS images itself (`app/lib/features/news/domain/article_content.dart`), so nothing in a post can run. | None | RESOLVED (no package) |
 | DEP-55 | Local cache storage for news and metadata | MOD-05, MOD-09 (RS FR-NEWS-005) | OQ-10, OQ-16 | LICENSE file | None expected | News resolved on 12 November 2026 with no package: a JSON file in the app's private folder (`json_news_cache.dart`, MOD09-P2-T02). The catalogue (OQ-10) is still open |
@@ -350,13 +350,14 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-100 | `url_launcher` | Opens MFW's privacy policy and terms of use in the browser (CFG-07, MOD04-P2-T02) | 6.3.3 (`^6.3.3`) | BSD-3-Clause, "The Flutter Authors" | None | CONFIRMED (runtime, app) |
 | DEP-102 | `firebase_messaging` | Push: the notification permission, one topic per category, and taps (TD-13, MOD11-P2-T02). Added on 11 November 2026; its manifest adds the Android `POST_NOTIFICATIONS` permission. iOS delivery needs the push credential and capability in MFW's Apple account (MOD11-P2-T01) | 17.0.1 (`^17.0.1`), with `firebase_messaging_platform_interface` 4.11.1 and `firebase_messaging_web` 4.3.1 | BSD-3-Clause, "The Chromium Authors" | None. Firebase Cloud Messaging has no charge (S2) | CONFIRMED (runtime, app) |
 
-### 8.6 App packages for the news (12 November 2026)
+### 8.6 App packages for the news and sharing (12 November 2026)
 
 `app/`. Added with `flutter pub add` and locked in `app/pubspec.lock`.
 
 | ID | Package | Purpose | Version | Licence | Cost | Status |
 |---|---|---|---|---|---|---|
 | DEP-66 | `html` (the Dart team) | Parses a WordPress post body into a tree, which the app draws itself without running anything (DEP-54, MOD09-P2-T01, SEC-CHK-15). The app never calls `htmlToCodeMarkup()`, the function fixed in 0.15.7 | 0.15.7 (`^0.15.7`) | MIT, as section 8.1 records (the attribution discrepancy there stays open) | None | CONFIRMED (runtime, app) |
+| DEP-52 | `share_plus` (Flutter Community) | The share sheet for an issue or an article, text only (MOD10-P1-T01, FR-SHR-001 to FR-SHR-006). It brings `share_plus_platform_interface` 7.2.0, `cross_file`, `mime`, `win32` and `ffi_leak_tracker` | 13.3.1 (`^13.3.1`) | BSD-3-Clause, "the Flutter project authors", read from the package's LICENSE file on 12 November 2026 | None | CONFIRMED (runtime, app) |
 
 ## 9. Repository and CI Services
 

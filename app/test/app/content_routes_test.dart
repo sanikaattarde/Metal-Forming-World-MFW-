@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mfw_app/app/content_routes.dart';
 import 'package:mfw_app/app/shell_text.dart';
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/core/config/app_config.dart';
 import 'package:mfw_app/features/downloads/downloads.dart';
 
 import '../fakes/fake_auth_service.dart';
@@ -12,6 +13,7 @@ import '../fakes/fake_download_manager.dart';
 import '../fakes/fake_issue_file_service.dart';
 import '../fakes/fake_library_repository.dart';
 import '../fakes/fake_news_repository.dart';
+import '../features/sharing/share_test.dart' show RecordingShareSheet;
 import '../fixtures/fx_issue_files.dart';
 import '../fakes/fake_server.dart';
 import '../features/reader/reader_screen_test.dart'
@@ -21,6 +23,74 @@ import 'app_harness.dart';
 import 'router_test.dart' show titled;
 
 void main() {
+  group('Share [MOD10-P1-T01]', () {
+    final AppConfig listed = AppConfig(
+      environment: AppEnvironment.local,
+      storeLinkAndroid: Uri.parse('https://play.example.test/details?id=x'),
+      storeLinkIos: Uri.parse('https://apps.example.test/app/id1'),
+    );
+
+    testWidgets('a visitor shares an issue with both store links '
+        '[FR-SHR-001, FR-SHR-002]', (WidgetTester tester) async {
+      final RecordingShareSheet sheet = RecordingShareSheet();
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        FakeAuthService(FakeServer()),
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        share: sheet,
+        config: listed,
+      );
+      router.go('/issues/fx-iss-01');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Share'));
+      await tester.pumpAndSettle();
+
+      final String text = sheet.shared.single.text;
+      expect(text, startsWith('Test Issue 01'));
+      expect(text, contains('play.example.test'));
+      expect(text, contains('apps.example.test'));
+    });
+
+    testWidgets('before any listing, issue details offer no Share', (
+      WidgetTester tester,
+    ) async {
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        FakeAuthService(FakeServer()),
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        share: RecordingShareSheet(),
+        config: const AppConfig(environment: AppEnvironment.local),
+      );
+      router.go('/issues/fx-iss-01');
+      await tester.pumpAndSettle();
+
+      expect(find.byTooltip('Share'), findsNothing);
+    });
+
+    testWidgets('an article is shared with its website address '
+        '[FR-SHR-003, FR-SHR-004]', (WidgetTester tester) async {
+      final RecordingShareSheet sheet = RecordingShareSheet();
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        FakeAuthService(FakeServer()),
+        news: FakeNewsRepository(posts: <NewsPost>[syntheticPost('9001')]),
+        share: sheet,
+        config: const AppConfig(environment: AppEnvironment.local),
+      );
+      router.go('/news/9001');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Share'));
+      await tester.pumpAndSettle();
+
+      expect(
+        sheet.shared.single.text,
+        'Synthetic post 9001\nhttps://news.example.test/synthetic-post-9001/',
+      );
+    });
+  });
+
   group('News routes [MOD09-P2-T01]', () {
     testWidgets('a visitor opens the News tab and an article, and back '
         'returns to the list [FR-NEWS-007]', (WidgetTester tester) async {
