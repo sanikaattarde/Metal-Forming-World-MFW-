@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:mfw_app/app/app.dart';
 
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/core/config/app_config.dart';
 import 'package:mfw_app/features/account/account.dart';
 import 'package:mfw_app/features/notifications/notifications.dart';
+import 'package:mfw_app/features/sharing/sharing.dart';
 
 /// Pumps [MfwApp] with [auth] as the `AuthService`, waits for the first
 /// access state, and returns the router.
@@ -48,12 +50,16 @@ Future<GoRouter> pumpAppWithContent(
   PdfRenderer? renderer,
   LibraryRepository? library,
   NewsRepository? news,
+  ShareSheet? share,
+  AppConfig? config,
 }) async {
   final ProviderContainer container = ProviderContainer.test(
     overrides: [
       authServiceProvider.overrideWithValue(auth),
       catalogueRepositoryProvider.overrideWithValue(catalogue),
       newsRepositoryProvider.overrideWithValue(news),
+      if (share != null) shareSheetProvider.overrideWithValue(share),
+      if (config != null) appConfigProvider.overrideWithValue(config),
       downloadManagerProvider.overrideWithValue(downloads),
       issueTitlesProvider.overrideWithValue(null),
       if (renderer != null) pdfRendererProvider.overrideWithValue(renderer),

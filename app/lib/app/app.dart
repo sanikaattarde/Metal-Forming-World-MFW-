@@ -18,6 +18,7 @@ import '../features/library/library.dart';
 import '../features/news/news.dart';
 import '../features/notifications/notifications.dart';
 import '../features/reader/reader.dart';
+import '../features/sharing/sharing.dart';
 import '../core/config/wordpress_config.dart';
 import '../core/network/https_client.dart';
 import '../core/network/connectivity_service.dart';
@@ -188,6 +189,12 @@ final Provider<DeviceNotificationService?> notificationServiceProvider =
       );
     });
 
+/// MOD-10's share sheet (MOD10-P1-T01): `share_plus`, text only. Tests
+/// override it with a fake.
+final Provider<ShareSheet> shareSheetProvider = Provider<ShareSheet>(
+  (Ref ref) => const PluginShareSheet(),
+);
+
 /// Opens MFW's policy pages outside the app (CFG-07, MOD04-P2-T02). Tests
 /// override it with a fake.
 final Provider<LinkOpener> linkOpenerProvider = Provider<LinkOpener>(
@@ -272,6 +279,11 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       renderer: ref.read(pdfRendererProvider),
       library: ref.read(libraryRepositoryProvider),
       links: ref.read(linkOpenerProvider),
+      share: ref.read(shareSheetProvider),
+      storeLinks: StoreLinks(
+        android: ref.read(appConfigProvider).storeLinkAndroid,
+        ios: ref.read(appConfigProvider).storeLinkIos,
+      ),
     ),
   );
   ref.onDispose(() {

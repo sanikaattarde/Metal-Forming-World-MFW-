@@ -10,6 +10,7 @@ import '../features/downloads/downloads.dart';
 import '../features/account/account.dart';
 import '../features/library/library.dart';
 import '../features/news/news.dart';
+import '../features/sharing/sharing.dart';
 import 'access_guard.dart';
 import 'reader_route.dart';
 import 'router.dart';
@@ -29,6 +30,8 @@ RouteScreens withContentScreens(
   PdfRenderer? renderer,
   LibraryRepository? library,
   LinkOpener? links,
+  ShareSheet? share,
+  StoreLinks storeLinks = const StoreLinks(),
 }) {
   final RouteScreens withDownloads = downloads == null
       ? base
@@ -99,11 +102,18 @@ RouteScreens withContentScreens(
               onOpenLink: (Uri uri) async => await links?.open(uri) ?? false,
               onBack: () => _backTo(context, AppRoutes.news),
               fromDevice: offlineNews?.fromDevice,
-              actions: offlineNews == null
-                  ? null
-                  : (NewsPost post) => <Widget>[
-                      SaveArticleButton(saved: offlineNews, post: post),
-                    ],
+              actions: (NewsPost post) => <Widget>[
+                if (offlineNews != null)
+                  SaveArticleButton(saved: offlineNews, post: post),
+                if (share != null)
+                  ShareButton(
+                    onShare: (Rect? origin) => AppShareService(
+                      sheet: share,
+                      links: storeLinks,
+                      origin: origin,
+                    ).shareArticle(post),
+                  ),
+              ],
             );
           },
         );
@@ -137,15 +147,20 @@ RouteScreens withContentScreens(
         catalogue: catalogue,
         accessState: accessState,
         // The star for a reader with full access only (OQ-12, YG's answer,
-        // PROVISIONAL).
-        appBarActions: library == null
-            ? null
-            : (IssueSummary issue, AccessState state) =>
-                  state == AccessState.fullAccess
-                  ? <Widget>[
-                      FavouriteButton(library: library, issueId: issue.issueId),
-                    ]
-                  : const <Widget>[],
+        // PROVISIONAL). Share for everyone once a store link is known
+        // (OQ-15 working position, PROVISIONAL).
+        appBarActions: (IssueSummary issue, AccessState state) => <Widget>[
+          if (share != null && storeLinks.any)
+            ShareButton(
+              onShare: (Rect? origin) => AppShareService(
+                sheet: share,
+                links: storeLinks,
+                origin: origin,
+              ).shareIssue(issue),
+            ),
+          if (library != null && state == AccessState.fullAccess)
+            FavouriteButton(library: library, issueId: issue.issueId),
+        ],
         actions: IssueDetailsActions(
           onRead: (IssueSummary issue) {
             // Read downloads first (OQ-08 working position), so the title

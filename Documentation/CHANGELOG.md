@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD10-P1-T01 share an issue or an article, 2026-11-12
+
+- **App:** `app/lib/features/sharing/`. Share on issue details sends the title and both store links of CFG-08 (FR-SHR-001, FR-SHR-002, OQ-15 working position of 12 November 2026, PROVISIONAL); it is not offered until a link is set. Share on an article sends the title and its website address (FR-SHR-003, FR-SHR-004). The sheet takes text only, so no file is ever shared, and no link opens the app (FR-SHR-005, FR-SHR-006). On a tablet the sheet points at the button. `share_plus` 13.3.1 added (DEP-52).
+- **Tests:** `share_test.dart` (9) and three Share route tests. App suite: 903 passed, `flutter analyze` clean.
+
 ### Added: MOD09-P2-T02 offline articles and Save, 2026-11-12
 
 - **App:** `OfflineNewsRepository` keeps each opened article (the last 20, a PLACEHOLDER until OQ-16) and the first page of each list in `news_cache.json` in the app's private folder. When WordPress cannot be reached, the list and those articles come from the device with an offline notice, and pictures are not loaded (FR-NEWS-005). Save on SCR-A-19 keeps an article until the reader removes it, and a Saved filter on SCR-A-18 lists them (FR-NEWS-006, OQ-16 working position). The admin's controls apply on top, so a post hidden later leaves the device lists too.
