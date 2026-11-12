@@ -16,10 +16,19 @@ import 'news_text.dart';
 /// The posts of the categories MFW selects, newest first, with a filter
 /// for one category, pull to refresh and a Show more button for the next
 /// page. When the site cannot be reached, the screen says so with Retry,
-/// and keeps the posts it already shows.
+/// and keeps the posts it already shows. With [loadSaved], a Saved
+/// filter lists the articles kept on the device (MOD09-P2-T02).
 class NewsScreen extends StatefulWidget {
   /// Creates the screen.
-  const NewsScreen({required this.news, required this.onOpenPost, super.key});
+  const NewsScreen({
+    required this.news,
+    required this.onOpenPost,
+    this.loadSaved,
+    super.key,
+  });
+
+  /// The saved articles, with the admin's controls applied.
+  final Future<Result<List<NewsPost>>> Function()? loadSaved;
 
   /// MOD-09's news.
   final NewsRepository news;
@@ -34,6 +43,7 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   List<NewsCategory> _categories = const <NewsCategory>[];
   String? _category;
+  bool _savedView = false;
 
   /// The posts shown, in order, or null before the first page.
   List<NewsPost>? _posts;
@@ -74,9 +84,18 @@ class _NewsScreenState extends State<NewsScreen> {
         _failure = null;
       });
     }
-    final Result<NewsPage> result = await widget.news.listPosts(
-      categoryId: _category,
-    );
+    final Future<Result<List<NewsPost>>> Function()? loadSaved =
+        widget.loadSaved;
+    final Result<NewsPage> result = _savedView && loadSaved != null
+        ? switch (await loadSaved()) {
+            Ok<List<NewsPost>>(:final List<NewsPost> value) => Ok<NewsPage>(
+              NewsPage(posts: value, hasMore: false, fromCache: false),
+            ),
+            Err<List<NewsPost>>(:final AppFailure failure) => Err<NewsPage>(
+              failure,
+            ),
+          }
+        : await widget.news.listPosts(categoryId: _category);
     if (!mounted || generation != _generation) {
       return;
     }
@@ -138,11 +157,23 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   void _choose(String? categoryId) {
-    if (categoryId == _category) {
+    if (categoryId == _category && !_savedView) {
       return;
     }
     setState(() {
       _category = categoryId;
+      _savedView = false;
+    });
+    unawaited(_loadFirst());
+  }
+
+  void _chooseSaved() {
+    if (_savedView) {
+      return;
+    }
+    setState(() {
+      _category = null;
+      _savedView = true;
     });
     unawaited(_loadFirst());
   }
@@ -190,18 +221,24 @@ class _NewsScreenState extends State<NewsScreen> {
                 NewsText.unreachableKept,
                 kind: NoticeKind.offline,
               ),
-            if (_categories.length > 1) _chips(),
+            if (_categories.length > 1 || widget.loadSaved != null) _chips(),
             const SizedBox(height: MfwSpace.sm),
             if (posts != null && posts.isEmpty)
-              EmptyState(
-                icon: Icons.article_outlined,
-                heading: _category == null
-                    ? NewsText.noneHeading
-                    : NewsText.emptyHeading,
-                text: _category == null
-                    ? NewsText.noneText
-                    : NewsText.emptyText,
-              ),
+              _savedView
+                  ? const EmptyState(
+                      icon: Icons.bookmark_border,
+                      heading: NewsText.savedEmptyHeading,
+                      text: NewsText.savedEmptyText,
+                    )
+                  : EmptyState(
+                      icon: Icons.article_outlined,
+                      heading: _category == null
+                          ? NewsText.noneHeading
+                          : NewsText.emptyHeading,
+                      text: _category == null
+                          ? NewsText.noneText
+                          : NewsText.emptyText,
+                    ),
             for (final NewsPost post in posts ?? const <NewsPost>[])
               NewsRow(
                 key: ValueKey<String>(post.postId),
@@ -243,9 +280,23 @@ class _NewsScreenState extends State<NewsScreen> {
         for (final (String? id, String name) in options)
           FilterChip(
             label: Text(name),
-            tooltip: NewsText.filterTooltip(name, selected: id == _category),
-            selected: id == _category,
+            tooltip: NewsText.filterTooltip(
+              name,
+              selected: !_savedView && id == _category,
+            ),
+            selected: !_savedView && id == _category,
             onSelected: (_) => _choose(id),
+          ),
+        if (widget.loadSaved != null)
+          FilterChip(
+            avatar: _savedView ? null : const Icon(Icons.bookmark_border),
+            label: const Text(NewsText.savedFilter),
+            tooltip: NewsText.filterTooltip(
+              NewsText.savedFilter,
+              selected: _savedView,
+            ),
+            selected: _savedView,
+            onSelected: (_) => _chooseSaved(),
           ),
       ],
     );

@@ -150,6 +150,25 @@ final class ControlledNewsRepository implements NewsRepository {
     };
   }
 
+  /// [posts] with the latest controls applied: hidden ones left out and
+  /// breaking ones marked, in the same order. For posts kept on the device,
+  /// such as the saved articles (MOD09-P2-T02).
+  Future<Result<List<NewsPost>>> applyTo(List<NewsPost> posts) async {
+    final Result<NewsControls> controls = await _read(fresh: true);
+    return switch (controls) {
+      Err<NewsControls>(:final AppFailure failure) => Err<List<NewsPost>>(
+        failure,
+      ),
+      Ok<NewsControls>(:final NewsControls value) => Ok<List<NewsPost>>(
+        List<NewsPost>.unmodifiable(<NewsPost>[
+          for (final NewsPost post in posts)
+            if (!value.hiddenPostIds.contains(post.postId))
+              _marked(post, value),
+        ]),
+      ),
+    };
+  }
+
   @override
   Future<Result<List<NewsCategory>>> listCategories() => _news.listCategories();
 

@@ -26,8 +26,14 @@ class ArticleScreen extends StatefulWidget {
     required this.onOpenLink,
     this.onBack,
     this.actions,
+    this.fromDevice,
     super.key,
   });
+
+  /// Whether the post just read came from the device, not the site
+  /// (MOD09-P2-T02). The screen then says it is offline and loads no
+  /// pictures.
+  final bool Function(String postId)? fromDevice;
 
   /// MOD-09's news.
   final NewsRepository news;
@@ -52,6 +58,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
   Result<NewsPost>? _post;
   List<ArticleBlock> _blocks = const <ArticleBlock>[];
   String? _category;
+  bool _offline = false;
 
   @override
   void initState() {
@@ -69,6 +76,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
     }
     setState(() {
       _post = result;
+      _offline = widget.fromDevice?.call(widget.postId) ?? false;
       if (result case Ok<NewsPost>(:final NewsPost value)) {
         _blocks = parseArticle(value.contentHtml, base: value.link);
       }
@@ -155,6 +163,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
           post: value,
           category: _category,
           blocks: _blocks,
+          offline: _offline,
           onOpenLink: (Uri uri) => unawaited(_open(uri)),
         ),
       },
@@ -175,8 +184,10 @@ class _Article extends StatelessWidget {
     required this.category,
     required this.blocks,
     required this.onOpenLink,
+    required this.offline,
   });
 
+  final bool offline;
   final NewsPost post;
   final String? category;
   final List<ArticleBlock> blocks;
@@ -184,7 +195,7 @@ class _Article extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Uri? image = post.imageUrl;
+    final Uri? image = offline ? null : post.imageUrl;
     final String label = <String>[
       if (post.isBreaking) NewsText.breaking,
       ?category,
@@ -192,6 +203,11 @@ class _Article extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(MfwSpace.lg),
       children: <Widget>[
+        if (offline)
+          const ContentNotice(
+            NewsText.offlineArticle,
+            kind: NoticeKind.offline,
+          ),
         if (label.isNotEmpty) ...<Widget>[
           Text(label.toUpperCase(), style: MfwType.label),
           const SizedBox(height: MfwSpace.sm),
@@ -225,7 +241,11 @@ class _Article extends StatelessWidget {
           ),
           const SizedBox(height: MfwSpace.lg),
         ],
-        ArticleBody(blocks: blocks, onOpenLink: onOpenLink),
+        ArticleBody(
+          blocks: blocks,
+          onOpenLink: onOpenLink,
+          showImages: !offline,
+        ),
       ],
     );
   }
