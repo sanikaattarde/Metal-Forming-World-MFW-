@@ -62,4 +62,14 @@ abstract final class LibraryText {
 
   /// The text for [failure].
   static String failure(AppFailure failure) => messageFor(failure);
+
+  /// The library read from the device (MOD08-P2-T04).
+  static const String offline =
+      'You are offline. These are your bookmarks and favourites on this '
+      'device. Changes are sent when you are back online.';
+
+  /// Changes made offline that the server has not had yet.
+  static const String pending =
+      'Some changes are waiting to be sent. They go when the connection '
+      'returns.';
 }

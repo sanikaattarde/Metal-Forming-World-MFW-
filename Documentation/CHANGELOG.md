@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD08-P2-T04 bookmarks and favourites offline, with changes sent later, PROVISIONAL, 2026-11-12
+
+- **App:** the Library shows the reader's bookmarks and favourites from the device when offline, with a notice, and a change made offline is kept on the device and sent when the connection returns, through the Firestore SDK's own queue (FR-BKM-008, OQ-10 working position of 12 November 2026). With no connection at all a change now returns at once instead of after the 10-second wait. Back online, a notice says while changes still wait to be sent. A change the server refuses later is undone in the list, as before. The adapter reads the SDK's snapshot metadata (`isFromCache`, `hasPendingWrites`) for the notices.
+- **Tests:** `library_offline_test.dart` (4). App suite: 950 passed, `flutter analyze` clean. The SDK's cache and queue run only on a device and were not run on one.
+
 ### Added: MOD05-P2-T05 the catalogue offline, PROVISIONAL, 2026-11-12
 
 - **App:** when the server cannot be reached, the catalogue's reads fall back to the copy the Firestore SDK keeps on the device from earlier reads, and Home, the catalogue and issue details say "You are offline. This is the catalogue from your last visit." (NFR-OFF-002, OQ-10 working position of 12 November 2026). With nothing kept, the screens fail as before with Retry. A refresh online reads the server again, so a publication change still shows (FR-MAG-007, FR-MAG-008). The SDK's default cache size is used.
