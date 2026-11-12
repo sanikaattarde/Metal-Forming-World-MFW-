@@ -10,7 +10,8 @@ import 'package:mfw_app/features/downloads/domain/file_names.dart';
 // WaitingForNetwork while the network is down, asks for a new grant after
 // expiry (DEC-020), and resumes a stopped download the next time the app is
 // open (rule 6, OQ-54 working position).
-// TODO(yg): the copy kind, kept or temporary, waits for OQ-08 (GS-Q43).
+// MOD06-P3-T01 adds the temporary copy kind (TemporaryCopies), on the OQ-08
+// working position of 12 November 2026 (PROVISIONAL).
 // MOD06-P3-T02 adds what happens to copies when their reader or their issue
 // goes (KeptCopyLifecycle), on the OQ-11 working position.
 
@@ -21,7 +22,11 @@ import 'package:mfw_app/features/downloads/domain/file_names.dart';
 /// see only the signed-in reader's copies. A copy is listed only after its
 /// size and hash match (rule 4, invariant I-1).
 final class IssueDownloadManager
-    implements DownloadManager, ResumableDownloads, KeptCopyLifecycle {
+    implements
+        DownloadManager,
+        ResumableDownloads,
+        KeptCopyLifecycle,
+        TemporaryCopies {
   /// Creates the manager. [currentUserId] gives the signed-in reader's ID,
   /// or null when signed out.
   IssueDownloadManager({
@@ -64,6 +69,14 @@ final class IssueDownloadManager
 
   final Map<(String, String), DownloadedIssue> _copies =
       <(String, String), DownloadedIssue>{};
+
+  /// Temporary copies, in memory only: never in the registry, so the repair
+  /// at the next start deletes a file left behind.
+  final Map<(String, String), DownloadedIssue> _temporary =
+      <(String, String), DownloadedIssue>{};
+
+  /// Downloads under way that end as temporary copies.
+  final Set<(String, String)> _temporaryWanted = <(String, String)>{};
   final Map<(String, String), DownloadStatus> _status =
       <(String, String), DownloadStatus>{};
   final Map<(String, String), Future<Result<void>>> _running =
@@ -149,6 +162,12 @@ final class IssueDownloadManager
       return Future<Result<void>>.value(_unauthenticated);
     }
     final (String, String) key = (userId, issueId);
+    // Download while reading a temporary copy keeps that copy.
+    _temporaryWanted.remove(key);
+    final DownloadedIssue? reading = _temporary.remove(key);
+    if (reading != null) {
+      return _keep(key, reading);
+    }
     final Future<Result<void>>? running = _running[key];
     if (running != null) {
       return running;
@@ -160,6 +179,71 @@ final class IssueDownloadManager
         });
     _running[key] = download;
     return download;
+  }
+
+  Future<Result<void>> _keep((String, String) key, DownloadedIssue copy) async {
+    await _registry.save(copy);
+    _copies[key] = copy;
+    _notify();
+    return const Ok<void>(null);
+  }
+
+  @override
+  Future<Result<void>> startTemporary(
+    String issueId, {
+    required bool mobileDataAccepted,
+  }) async {
+    await _ready;
+    final String? userId = _currentUserId();
+    if (userId == null) {
+      return _unauthenticated;
+    }
+    final (String, String) key = (userId, issueId);
+    if (_copies.containsKey(key) || _temporary.containsKey(key)) {
+      return const Ok<void>(null);
+    }
+    final Future<Result<void>>? running = _running[key];
+    if (running != null) {
+      return running;
+    }
+    _temporaryWanted.add(key);
+    final Future<Result<void>> download = _guarded(key, mobileDataAccepted)
+        .whenComplete(() {
+          _running.remove(key);
+          _cancelRequested.remove(key);
+          _temporaryWanted.remove(key);
+        });
+    _running[key] = download;
+    return download;
+  }
+
+  @override
+  bool isTemporary(String issueId) {
+    final String? userId = _currentUserId();
+    if (userId == null) {
+      return false;
+    }
+    final (String, String) key = (userId, issueId);
+    return !_copies.containsKey(key) &&
+        (_temporary.containsKey(key) || _temporaryWanted.contains(key));
+  }
+
+  @override
+  Future<void> discardTemporary(String issueId) async {
+    final String? userId = _currentUserId();
+    if (userId == null) {
+      return;
+    }
+    final (String, String) key = (userId, issueId);
+    if (_temporaryWanted.contains(key)) {
+      await _cancelWhere(((String, String) k) => k == key);
+    }
+    final DownloadedIssue? copy = _temporary.remove(key);
+    if (copy != null) {
+      await _store.deleteFile(copy.localFile.path);
+    }
+    _status.remove(key);
+    _notify();
   }
 
   /// Stops a running download and deletes its partial file (RD-01,
@@ -214,6 +298,7 @@ final class IssueDownloadManager
       await _store.deleteFile(copy.localFile.path);
       await _forget(copy);
     }
+    await _dropTemporaries(((String, String) key) => key.$1 == userId);
     final List<PendingDownload> pending = await _pending.load();
     final Set<String> others = <String>{
       for (final PendingDownload p in pending)
@@ -251,6 +336,9 @@ final class IssueDownloadManager
       await _forget(copy);
       removed += 1;
     }
+    removed += await _dropTemporaries(
+      ((String, String) key) => issueIds.contains(key.$2),
+    );
     for (final PendingDownload p in await _pending.load()) {
       if (issueIds.contains(p.issueId)) {
         await _pending.remove(ownerUserId: p.ownerUserId, issueId: p.issueId);
@@ -315,18 +403,20 @@ final class IssueDownloadManager
     if (userId == null) {
       return const Err<LocalIssueFile>(AppFailure(FailureCode.unauthenticated));
     }
-    final DownloadedIssue? copy = _copies[(userId, issueId)];
+    final (String, String) key = (userId, issueId);
+    final DownloadedIssue? copy = _copies[key] ?? _temporary[key];
     if (copy == null) {
       return const Err<LocalIssueFile>(AppFailure(FailureCode.notFound));
     }
+    final bool temporary = !_copies.containsKey(key);
     final int? length = await _store.fileLength(copy.localFile.path);
     if (length == null) {
-      await _forget(copy);
+      temporary ? _dropTemporary(key) : await _forget(copy);
       return const Err<LocalIssueFile>(AppFailure(FailureCode.notFound));
     }
     if (length != copy.sizeBytes) {
       await _store.deleteFile(copy.localFile.path);
-      await _forget(copy);
+      temporary ? _dropTemporary(key) : await _forget(copy);
       return const Err<LocalIssueFile>(
         AppFailure(FailureCode.fileCorrupt, retryable: true),
       );
@@ -362,6 +452,9 @@ final class IssueDownloadManager
     await _repairRows(_copies.values.toList());
     final Set<String> known = <String>{
       for (final DownloadedIssue copy in _copies.values) copy.localFile.path,
+      // A temporary copy of this session is known; one of an earlier
+      // session has no row and goes here.
+      for (final DownloadedIssue copy in _temporary.values) copy.localFile.path,
     };
     await Future.wait(<Future<void>>[
       for (final String path in await _store.completeFiles())
@@ -446,13 +539,16 @@ final class IssueDownloadManager
       case Ok<IssueFileGrant>(:final IssueFileGrant value):
         grant = value;
     }
-    await _pending.save(
-      PendingDownload(
-        ownerUserId: userId,
-        issueId: issueId,
-        mobileDataAccepted: mobileDataAccepted,
-      ),
-    );
+    // A temporary copy is not resumed after a restart.
+    if (!_temporaryWanted.contains(key)) {
+      await _pending.save(
+        PendingDownload(
+          ownerUserId: userId,
+          issueId: issueId,
+          mobileDataAccepted: mobileDataAccepted,
+        ),
+      );
+    }
 
     String fileName = _freeFileName(issueId, grant.revision);
     String partial = partialFileName(fileName);
@@ -600,6 +696,14 @@ final class IssueDownloadManager
       downloadedAt: _clock(),
       contentHash: grant.contentHash,
     );
+    if (_temporaryWanted.contains(key)) {
+      // Read: kept in memory only, so it is not listed and not resumed.
+      _temporary[key] = copy;
+      await _forgetPending(key);
+      _status.remove(key);
+      _notify();
+      return const Ok<void>(null);
+    }
     await _registry.save(copy);
     await _forgetPending(key);
     _copies[key] = copy;
@@ -724,7 +828,10 @@ final class IssueDownloadManager
   /// a second reader's copy does not replace the first (RD-05).
   String _freeFileName(String issueId, int revision) {
     final Set<String> used = <String>{
-      for (final DownloadedIssue copy in _copies.values)
+      for (final DownloadedIssue copy in <DownloadedIssue>[
+        ..._copies.values,
+        ..._temporary.values,
+      ])
         copy.localFile.path.substring(copy.localFile.path.lastIndexOf('/') + 1),
     };
     for (int copy = 1; ; copy++) {
@@ -740,11 +847,31 @@ final class IssueDownloadManager
     if (userId == null) {
       return const NotDownloaded();
     }
-    final DownloadedIssue? copy = _copies[(userId, issueId)];
+    final DownloadedIssue? copy =
+        _copies[(userId, issueId)] ?? _temporary[(userId, issueId)];
     if (copy != null) {
       return Downloaded(copy);
     }
     return _status[(userId, issueId)] ?? const NotDownloaded();
+  }
+
+  /// Deletes each temporary copy whose key [matches]; returns how many.
+  Future<int> _dropTemporaries(
+    bool Function((String, String) key) matches,
+  ) async {
+    final List<(String, String)> keys = _temporary.keys.where(matches).toList();
+    for (final (String, String) key in keys) {
+      final DownloadedIssue? copy = _temporary.remove(key);
+      if (copy != null) {
+        await _store.deleteFile(copy.localFile.path);
+      }
+    }
+    return keys.length;
+  }
+
+  void _dropTemporary((String, String) key) {
+    _temporary.remove(key);
+    _notify();
   }
 
   Future<void> _forget(DownloadedIssue copy) async {

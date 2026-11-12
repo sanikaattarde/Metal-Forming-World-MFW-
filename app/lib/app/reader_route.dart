@@ -30,8 +30,15 @@ class ReaderRoute extends StatefulWidget {
     this.onClose,
     this.actions,
     this.preferences,
+    this.published,
     super.key,
   });
+
+  /// Whether the issue is still published: true, false, or null when that
+  /// cannot be told, as offline. With no copy on the device, an issue that
+  /// is no longer published says so instead of offering a download
+  /// (FX-NTF-06). A copy already kept still opens (OQ-11 working position).
+  final Future<bool?> Function(String issueId)? published;
 
   /// The reader's choice of page turning (MOD07-P2-T02).
   final ReaderPreferences? preferences;
@@ -68,6 +75,7 @@ class ReaderRoute extends StatefulWidget {
 
 class _ReaderRouteState extends State<ReaderRoute> {
   Result<LocalIssueFile>? _local;
+  bool _gone = false;
   String _title = '';
   StreamSubscription<DownloadStatus>? _watching;
 
@@ -81,6 +89,15 @@ class _ReaderRouteState extends State<ReaderRoute> {
   @override
   void dispose() {
     unawaited(_watching?.cancel());
+    // Read made a temporary copy: it goes when the reader closes
+    // (MOD06-P3-T01, OQ-08 working position).
+    final DownloadManager downloads = widget.downloads;
+    if (downloads is TemporaryCopies &&
+        (downloads as TemporaryCopies).isTemporary(widget.issueId)) {
+      unawaited(
+        (downloads as TemporaryCopies).discardTemporary(widget.issueId),
+      );
+    }
     super.dispose();
   }
 
@@ -91,10 +108,22 @@ class _ReaderRouteState extends State<ReaderRoute> {
     if (!mounted) {
       return;
     }
+    bool gone = false;
+    if (local is Err<LocalIssueFile>) {
+      gone =
+          await widget.published
+              ?.call(widget.issueId)
+              .catchError((Object _) => null) ==
+          false;
+      if (!mounted) {
+        return;
+      }
+    }
     setState(() {
       _local = local;
+      _gone = gone;
     });
-    if (local is Err<LocalIssueFile>) {
+    if (local is Err<LocalIssueFile> && !gone) {
       _waitForCopy();
     }
   }
@@ -127,14 +156,26 @@ class _ReaderRouteState extends State<ReaderRoute> {
   }
 
   Future<void> _downloadAgain() async {
-    await widget.downloads.delete(widget.issueId);
+    final DownloadManager downloads = widget.downloads;
+    final bool temporary =
+        downloads is TemporaryCopies &&
+        (downloads as TemporaryCopies).isTemporary(widget.issueId);
+    if (temporary) {
+      await (downloads as TemporaryCopies).discardTemporary(widget.issueId);
+    } else {
+      await downloads.delete(widget.issueId);
+    }
     if (!mounted) {
       return;
     }
     setState(() {
-      _local = const Err<LocalIssueFile>(
-        AppFailure(FailureCode.fileCorrupt, retryable: true),
-      );
+      // A damaged temporary copy is read again with Read now; a damaged
+      // kept one is downloaded and kept again.
+      _local = temporary
+          ? const Err<LocalIssueFile>(AppFailure(FailureCode.notFound))
+          : const Err<LocalIssueFile>(
+              AppFailure(FailureCode.fileCorrupt, retryable: true),
+            );
     });
     _waitForCopy();
   }
@@ -161,6 +202,10 @@ class _ReaderRouteState extends State<ReaderRoute> {
             : (ReaderController reader) =>
                   widget.actions!(widget.issueId, value, reader),
       ),
+      Err<LocalIssueFile>() when _gone => _NoLongerPublished(
+        title: _title,
+        onClose: widget.onClose,
+      ),
       Err<LocalIssueFile>(:final AppFailure failure) => _NeedsDownload(
         issueId: widget.issueId,
         title: _title,
@@ -169,6 +214,40 @@ class _ReaderRouteState extends State<ReaderRoute> {
         onClose: widget.onClose,
       ),
     };
+  }
+}
+
+class _NoLongerPublished extends StatelessWidget {
+  const _NoLongerPublished({required this.title, this.onClose});
+
+  final String title;
+  final VoidCallback? onClose;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: onClose == null
+            ? null
+            : IconButton(
+                tooltip: ReaderText.close,
+                icon: const Icon(Icons.close),
+                onPressed: onClose,
+              ),
+        title: Text(title),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(MfwSpace.lg),
+        children: const <Widget>[
+          EmptyState(
+            icon: Icons.block_outlined,
+            heading: ReaderRouteText.goneHeading,
+            text: ReaderRouteText.goneText,
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -216,7 +295,13 @@ class _NeedsDownload extends StatelessWidget {
               heading: ReaderRouteText.downloadFirstHeading,
               text: ReaderRouteText.downloadFirstText,
             ),
-            DownloadPanel(downloads: downloads, issueId: issueId),
+            // A kept copy that was damaged is kept again; otherwise Read
+            // fetches a copy for this reading only.
+            DownloadPanel(
+              downloads: downloads,
+              issueId: issueId,
+              temporary: !damaged,
+            ),
           ],
         ],
       ),
@@ -227,12 +312,20 @@ class _NeedsDownload extends StatelessWidget {
 /// User-facing text of the reader route. PLACEHOLDER wording until M2.
 abstract final class ReaderRouteText {
   /// Heading when the issue is not on the device.
-  static const String downloadFirstHeading = 'Download this issue to read it';
+  static const String downloadFirstHeading = 'Read this issue';
 
-  /// Line when the issue is not on the device.
+  /// Line when the issue is not on the device: Read fetches a copy for this
+  /// reading only (MOD06-P3-T01).
   static const String downloadFirstText =
-      'Once it is on this device, it opens here and reads with no '
-      'connection.';
+      'Read now fetches a copy for this reading only. To read with no '
+      'connection, use Download on the issue page.';
+
+  /// Heading for an issue no longer published, with no copy here.
+  static const String goneHeading = 'This issue is no longer available';
+
+  /// Line under [goneHeading].
+  static const String goneText =
+      'MFW has taken it out of the catalogue, so it cannot be downloaded.';
 
   /// Notice when the copy was damaged and removed.
   static const String damaged =

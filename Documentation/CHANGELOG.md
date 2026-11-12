@@ -32,6 +32,34 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD03-P3-T01 the account-linking spike, emulator only, 2026-11-12
+
+- **Spike:** G21 (6) on the Auth emulator with its test Google credentials, recorded in `Documentation/test-evidence/ACCOUNT_LINKING_SPIKE.md`. A verified password account and Google with the same address become one account with both ways in; an unverified password account is taken over by Google and its password stops working; Google first blocks a later password sign-up (`email-already-in-use`); an explicit link works; Google's verified result sets the account's verified flag (OQ-04). The TD-06 rule of the OQ-04 and OQ-05 working positions holds on the emulator. The real service is NOT VERIFIED until ENV-TEST exists. Google Sign-In itself stays MOD03-P3-T02 (DEC-006).
+
+### Added: MOD13-P2-T01 the full allowed and refused rule matrix, run and recorded, 2026-11-12
+
+- **Tests:** G20 (58 tests, 676 checks): every client operation on public records, issues, own records, another reader's records, server-only records and files, for the visitor, FX-USR-01 to FX-USR-05, another reader, an admin, a removed admin and admin-looking claims. All as expected.
+- **Evidence:** `Documentation/test-evidence/RULE_MATRIX_EVIDENCE.md`, the matrix and its mapping to SEC-CHK-02 to SEC-CHK-06, SEC-CHK-11 and SEC-CHK-18. No defect. Open: the backup flag of SEC-CHK-04 on a device, and a repeat on ENV-TEST.
+
+### Added: MOD08-P2-T03 the second-device, isolation and deletion check (IC-04), 2026-11-12
+
+- **Tests:** G19 (3) on the emulators, each device its own client SDK app signed in through the Auth emulator: a bookmark and a favourite made on one device show on the reader's other device, and a removal travels back; another reader's device can neither read, watch nor write them; and after account deletion (OP-12) the records are gone and the other device's list is emptied or its access ends (FR-BKM-005, FR-BKM-007, FR-FAV-003, FR-AUTH-009, IC-04, IC-08). The app side of the same flow is the repository's watch, already tested with fakes.
+
+### Added: MOD06-P3-T01 the Read and Download copy kinds, PROVISIONAL, 2026-11-12
+
+- **App:** on the OQ-08 working position of 12 November 2026, as drawn in the reader frames (GS-Q43): Read with no copy on the device offers "Read now", which fetches a temporary copy through the same grant, check and progress as a download. It opens in the reader, is not listed in Downloads, is not resumed after a restart, and goes when the reader closes; one left by an app that stopped goes at the next start, through the existing repair of files with no record. Download keeps a copy as before, and Download while reading keeps the same file without fetching it again. A kept copy always opens first. Account deletion and a deleted issue remove temporary copies too. A damaged kept copy is downloaded and kept again; a damaged temporary one is read again with Read now. YG's report of MFW's answer (one kind, the copy kept) differs; MFW's filed answer settles it.
+- **Tests:** `copy_kinds_test.dart` (8); the reader route and AC-2.6 tests follow the new wording. App suite: 969 passed, `flutter analyze` clean.
+
+### Added: MOD07-P2-T04 damaged-file handling checked end to end (AC-2.6), 2026-11-12
+
+- **App:** closes the task built in MOD07-P2-T01 (`fileCorrupt` from the renderer) and MOD06-P3-T03 (the reader's Download again through MOD-06). No code change.
+- **Tests:** `ac26_damaged_file_test.dart` (3), on the real download manager over fake storage: a copy the renderer refuses shows the error and Download again, the copy is removed, and the new copy opens; a copy damaged on disk (wrong length) is removed before the reader and downloads again; a copy that stays damaged keeps saying so with no crash (FR-READ-010, AC-2.6, IC-03). PDFium's refusal of the truncated FX-PDF-10 is the device test `reader_pdfrx_test.dart`.
+
+### Added: MOD01-P3-T01 notification taps checked end to end (IC-05), 2026-11-12
+
+- **App:** closes the task built across MOD01-P2-T01 (RouterAppNavigator) and MOD11-P2-T02 (the notification bridge). With no copy on the device, the reader route now asks the catalogue whether the issue is still published, and an unpublished one says "This issue is no longer available" instead of offering a download that cannot work (FX-NTF-06). A copy already kept still opens.
+- **Tests:** `ic05_notification_taps_test.dart` (8): FX-NTF-01 to FX-NTF-08 tapped on the push client, through MOD-11's service, the bridge, the access guard and the real router: the reader with full access, the article signed out, the sign-in step with the issue kept (BR-005), and unknown, incomplete or malformed payloads ignored. App suite: 958 passed. The tap on a device waits for push in MFW's accounts (MOD11-P2-T01).
+
 ### Added: MOD08-P2-T04 bookmarks and favourites offline, with changes sent later, PROVISIONAL, 2026-11-12
 
 - **App:** the Library shows the reader's bookmarks and favourites from the device when offline, with a notice, and a change made offline is kept on the device and sent when the connection returns, through the Firestore SDK's own queue (FR-BKM-008, OQ-10 working position of 12 November 2026). With no connection at all a change now returns at once instead of after the 10-second wait. Back online, a notice says while changes still wait to be sent. A change the server refuses later is undone in the list, as before. The adapter reads the SDK's snapshot metadata (`isFromCache`, `hasPendingWrites`) for the notices.

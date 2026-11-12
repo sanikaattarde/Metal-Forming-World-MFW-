@@ -96,7 +96,7 @@ void main() {
         downloads,
         FakeRenderer(Ok<PdfDocumentHandle>(FakeDocument(2))),
       );
-      expect(find.text('Download this issue to read it'), findsOneWidget);
+      expect(find.text(ReaderRouteText.downloadFirstHeading), findsOneWidget);
       expect(find.byType(DownloadPanel), findsOneWidget);
 
       await tester.tap(find.widgetWithText(FilledButton, 'Download'));
