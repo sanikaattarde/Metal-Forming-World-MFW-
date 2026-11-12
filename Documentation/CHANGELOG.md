@@ -35,7 +35,7 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 ### Added: MOD15-P2-T01 the licence, secrets and documentation checks (QG-10 to QG-12), 2026-11-12
 
 - **CI:** `.github/workflows/checks.yml` on every pull request and push to `main`. QG-11 runs gitleaks 8.30.1 over the whole history, downloaded at a pinned version and checked against its SHA-256, with `.gitleaks.toml` allowing only the synthetic emulator values; a finding fails the run. QG-10 (`scripts/checks/licence_check.py`, also weekly) checks that every direct dependency of the app, the backend, the functions and the panel is in `DEPENDENCY_REGISTER.md`, and that each npm package declares an allowed licence. QG-12 (`scripts/checks/doc_check.py`) checks relative links, task IDs, decisions and open questions. Both report only for now, as agreed on 12 November 2026.
-- **Local run:** `python3 scripts/checks/licence_check.py` and `python3 scripts/checks/doc_check.py` from the repository root: 0 findings each after two script fixes. gitleaks was not run locally; its first result is the CI run on this merge.
+- **Local run:** `python3 scripts/checks/licence_check.py` and `python3 scripts/checks/doc_check.py` from the repository root: 0 findings each after two script fixes. In CI, gitleaks found four items in the 233 commits: three unsigned sample tokens in redaction tests and the name of a configuration key. All four are synthetic and are listed by fingerprint in `.gitleaksignore`, so anything new still fails. All three checks then passed, with 0 findings for QG-10 and QG-12.
 
 ### Added: MOD12-P3-T02 adding and removing admins in the panel, switched off until OQ-58, 2026-11-12
 
