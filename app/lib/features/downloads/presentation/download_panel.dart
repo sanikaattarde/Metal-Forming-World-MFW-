@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/features/downloads/domain/download_ports.dart';
 import 'package:mfw_app/features/downloads/presentation/downloads_text.dart';
 
 /// Download prompt and progress for one issue (SCR-A-13; where it sits on
@@ -16,8 +17,13 @@ class DownloadPanel extends StatefulWidget {
   const DownloadPanel({
     required this.downloads,
     required this.issueId,
+    this.temporary = false,
     super.key,
   });
+
+  /// Fetches a temporary copy for this reading (Read, MOD06-P3-T01), when
+  /// the manager has the kind; otherwise a kept one.
+  final bool temporary;
 
   /// MOD-06.
   final DownloadManager downloads;
@@ -80,10 +86,16 @@ class _DownloadPanelState extends State<DownloadPanel> {
       }
       _mobileDataAccepted = true;
     }
-    final Result<void> result = await widget.downloads.start(
-      widget.issueId,
-      mobileDataAccepted: _mobileDataAccepted,
-    );
+    final DownloadManager downloads = widget.downloads;
+    final Result<void> result = widget.temporary && downloads is TemporaryCopies
+        ? await (downloads as TemporaryCopies).startTemporary(
+            widget.issueId,
+            mobileDataAccepted: _mobileDataAccepted,
+          )
+        : await downloads.start(
+            widget.issueId,
+            mobileDataAccepted: _mobileDataAccepted,
+          );
     // The connection changed to mobile data after the plan was made: show
     // a fresh plan, so the warning comes before the download.
     if (mounted &&
@@ -94,6 +106,9 @@ class _DownloadPanelState extends State<DownloadPanel> {
       });
     }
   }
+
+  bool get _readsOnce =>
+      widget.temporary && widget.downloads is TemporaryCopies;
 
   Future<void> _retry() async {
     final Result<DownloadPlan> plan = await widget.downloads.prepare(
@@ -175,7 +190,11 @@ class _DownloadPanelState extends State<DownloadPanel> {
                 if (value.enoughSpace)
                   FilledButton(
                     onPressed: () => unawaited(_download(value)),
-                    child: const Text(DownloadsText.download),
+                    child: Text(
+                      _readsOnce
+                          ? DownloadsText.readNow
+                          : DownloadsText.download,
+                    ),
                   )
                 else
                   const Text(DownloadsText.notEnoughSpace),

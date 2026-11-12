@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mfw_app/app/reader_route.dart';
 import 'package:mfw_app/app/theme/mfw_theme.dart';
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/features/downloads/downloads.dart';
 import 'package:mfw_app/features/reader/reader.dart';
 
 import '../fakes/fake_reader_preferences.dart';
@@ -74,7 +75,9 @@ void main() {
       expect(rig.store.files, isEmpty);
       expect(find.text(ReaderRouteText.damaged), findsOneWidget);
 
-      await tester.tap(find.widgetWithText(FilledButton, 'Download'));
+      await tester.tap(
+        find.widgetWithText(FilledButton, DownloadsText.download),
+      );
       await tester.pumpAndSettle();
 
       expect(renderer.opens, 2);
@@ -93,7 +96,9 @@ void main() {
 
       expect(renderer.opens, 0);
       expect(find.text(ReaderRouteText.damaged), findsOneWidget);
-      await tester.tap(find.widgetWithText(FilledButton, 'Download'));
+      await tester.tap(
+        find.widgetWithText(FilledButton, DownloadsText.download),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('1 / 3'), findsOneWidget);
@@ -110,7 +115,9 @@ void main() {
 
       await tester.tap(find.text(ReaderText.downloadAgain));
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(FilledButton, 'Download'));
+      await tester.tap(
+        find.widgetWithText(FilledButton, DownloadsText.download),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text(ReaderText.damagedHeading), findsOneWidget);

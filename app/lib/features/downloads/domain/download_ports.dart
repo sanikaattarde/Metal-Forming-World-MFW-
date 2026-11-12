@@ -160,3 +160,30 @@ abstract interface class DeletedIssueList {
   /// offline; nothing is removed then.
   Future<Result<Set<String>>> deletedIssueIds();
 }
+
+/// The two copy kinds (MOD06-P3-T01, RS FR-READ-002, FR-DL-001, FR-DL-008;
+/// OQ-08 working position of 12 November 2026, chosen by Sanika Attarde,
+/// PROVISIONAL, as in the reader frames of GS-Q43): Read opens a temporary
+/// copy, and Download keeps one.
+///
+/// A temporary copy is fetched and checked as a kept one is, but it is not
+/// listed in Downloads, is not resumed after a restart, and is removed when
+/// the reader closes it, or at the next start if the app stopped first. A
+/// kept copy is always opened before a temporary one.
+abstract interface class TemporaryCopies {
+  /// Fetches a temporary copy of [issueId] for the signed-in reader, as
+  /// [DownloadManager.start] fetches a kept one. Does nothing when a kept
+  /// copy is on the device.
+  Future<Result<void>> startTemporary(
+    String issueId, {
+    required bool mobileDataAccepted,
+  });
+
+  /// Whether the signed-in reader's copy of [issueId] is temporary, or one
+  /// is being fetched.
+  bool isTemporary(String issueId);
+
+  /// Removes the signed-in reader's temporary copy of [issueId], and stops
+  /// one being fetched.
+  Future<void> discardTemporary(String issueId);
+}

@@ -89,6 +89,15 @@ class _ReaderRouteState extends State<ReaderRoute> {
   @override
   void dispose() {
     unawaited(_watching?.cancel());
+    // Read made a temporary copy: it goes when the reader closes
+    // (MOD06-P3-T01, OQ-08 working position).
+    final DownloadManager downloads = widget.downloads;
+    if (downloads is TemporaryCopies &&
+        (downloads as TemporaryCopies).isTemporary(widget.issueId)) {
+      unawaited(
+        (downloads as TemporaryCopies).discardTemporary(widget.issueId),
+      );
+    }
     super.dispose();
   }
 
@@ -147,14 +156,26 @@ class _ReaderRouteState extends State<ReaderRoute> {
   }
 
   Future<void> _downloadAgain() async {
-    await widget.downloads.delete(widget.issueId);
+    final DownloadManager downloads = widget.downloads;
+    final bool temporary =
+        downloads is TemporaryCopies &&
+        (downloads as TemporaryCopies).isTemporary(widget.issueId);
+    if (temporary) {
+      await (downloads as TemporaryCopies).discardTemporary(widget.issueId);
+    } else {
+      await downloads.delete(widget.issueId);
+    }
     if (!mounted) {
       return;
     }
     setState(() {
-      _local = const Err<LocalIssueFile>(
-        AppFailure(FailureCode.fileCorrupt, retryable: true),
-      );
+      // A damaged temporary copy is read again with Read now; a damaged
+      // kept one is downloaded and kept again.
+      _local = temporary
+          ? const Err<LocalIssueFile>(AppFailure(FailureCode.notFound))
+          : const Err<LocalIssueFile>(
+              AppFailure(FailureCode.fileCorrupt, retryable: true),
+            );
     });
     _waitForCopy();
   }
@@ -274,7 +295,13 @@ class _NeedsDownload extends StatelessWidget {
               heading: ReaderRouteText.downloadFirstHeading,
               text: ReaderRouteText.downloadFirstText,
             ),
-            DownloadPanel(downloads: downloads, issueId: issueId),
+            // A kept copy that was damaged is kept again; otherwise Read
+            // fetches a copy for this reading only.
+            DownloadPanel(
+              downloads: downloads,
+              issueId: issueId,
+              temporary: !damaged,
+            ),
           ],
         ],
       ),
@@ -285,12 +312,13 @@ class _NeedsDownload extends StatelessWidget {
 /// User-facing text of the reader route. PLACEHOLDER wording until M2.
 abstract final class ReaderRouteText {
   /// Heading when the issue is not on the device.
-  static const String downloadFirstHeading = 'Download this issue to read it';
+  static const String downloadFirstHeading = 'Read this issue';
 
-  /// Line when the issue is not on the device.
+  /// Line when the issue is not on the device: Read fetches a copy for this
+  /// reading only (MOD06-P3-T01).
   static const String downloadFirstText =
-      'Once it is on this device, it opens here and reads with no '
-      'connection.';
+      'Read now fetches a copy for this reading only. To read with no '
+      'connection, use Download on the issue page.';
 
   /// Heading for an issue no longer published, with no copy here.
   static const String goneHeading = 'This issue is no longer available';
