@@ -134,6 +134,16 @@ final class RuledLibraryDocuments implements LibraryDocuments {
     favourites[uid]?.remove(issueId);
     _changes.add(null);
   }
+
+  /// The state [watchSync] reports for each reader; set by a test.
+  final Map<String, StreamController<LibrarySync>> syncs =
+      <String, StreamController<LibrarySync>>{};
+
+  @override
+  Stream<LibrarySync> watchSync(String uid) =>
+      (syncs[uid] ??= StreamController<LibrarySync>.broadcast(
+        sync: true,
+      )).stream;
 }
 
 void main() {

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mfw_app/contracts/contracts.dart';
 
 import '../domain/library_documents.dart';
 
@@ -7,17 +10,20 @@ import '../domain/library_documents.dart';
 /// (`DATABASE_AND_DATA_MODEL.md` section 12). Timestamps become UTC
 /// `DateTime`s. Thin on purpose: it runs only on a device or simulator.
 ///
-/// With no connection a write is kept on the device and sent when the
-/// connection returns, but the database does not answer it until then. A
-/// write therefore returns after [serverWait] at most, so the reader's
-/// bookmark and star are not held for the whole time offline. A refusal
-/// that comes later puts the record back in the watched list. More offline
-/// behaviour is MOD08-P2-T04, with OQ-10.
+/// Offline (MOD08-P2-T04; OQ-10 working position of 12 November 2026,
+/// PROVISIONAL): the lists come from the SDK's copy on the device, and a
+/// change is kept on the device and sent when the connection returns. The
+/// database does not answer such a write until then, so with no
+/// connection a write returns at once, and otherwise after [serverWait] at
+/// most. A refusal that comes later puts the record back in the watched
+/// list. [watchSync] tells the screens which of these is the case.
 final class FirestoreLibraryDocuments implements LibraryDocuments {
-  /// Creates the adapter over [firestore].
-  FirestoreLibraryDocuments(this._firestore);
+  /// Creates the adapter over the database. The connectivity service, when
+  /// given, tells it when there is no connection at all.
+  FirestoreLibraryDocuments(this._firestore, {this._connectivity});
 
   final FirebaseFirestore _firestore;
+  final ConnectivityService? _connectivity;
 
   CollectionReference<Map<String, dynamic>> _bookmarks(String uid) =>
       _firestore.collection('users').doc(uid).collection('bookmarks');
@@ -38,8 +44,20 @@ final class FirestoreLibraryDocuments implements LibraryDocuments {
   /// How long a write waits for the database's answer.
   static const Duration serverWait = Duration(seconds: 10);
 
-  Future<void> _write(Future<void> Function() call) =>
-      _guard(() => call().timeout(serverWait, onTimeout: () {}));
+  Future<void> _write(Future<void> Function() call) async {
+    final ConnectionType? connection = await _connectivity
+        ?.current()
+        .then<ConnectionType?>(
+          (ConnectionType c) => c,
+          onError: (Object _) => null,
+        );
+    if (connection == ConnectionType.none) {
+      // Kept on the device at once; the server answers when it can.
+      unawaited(call().then<void>((_) {}, onError: (Object _) {}));
+      return;
+    }
+    return _guard(() => call().timeout(serverWait, onTimeout: () {}));
+  }
 
   Future<T> _guard<T>(Future<T> Function() call) async {
     try {
@@ -104,4 +122,55 @@ final class FirestoreLibraryDocuments implements LibraryDocuments {
   @override
   Future<void> deleteFavourite(String uid, String issueId) =>
       _write(() => _favourites(uid).doc(issueId).delete());
+
+  @override
+  Stream<LibrarySync> watchSync(String uid) {
+    SnapshotMetadata? bookmarks;
+    SnapshotMetadata? favourites;
+    final List<StreamSubscription<QuerySnapshot<Map<String, dynamic>>>> subs =
+        <StreamSubscription<QuerySnapshot<Map<String, dynamic>>>>[];
+    late final StreamController<LibrarySync> out;
+    void emit() {
+      final SnapshotMetadata? b = bookmarks;
+      final SnapshotMetadata? f = favourites;
+      if (b == null || f == null) {
+        return;
+      }
+      out.add(
+        LibrarySync(
+          fromDevice: b.isFromCache || f.isFromCache,
+          pendingChanges: b.hasPendingWrites || f.hasPendingWrites,
+        ),
+      );
+    }
+
+    out = StreamController<LibrarySync>(
+      onListen: () {
+        subs
+          ..add(
+            _bookmarks(uid)
+                .snapshots(includeMetadataChanges: true)
+                .listen((QuerySnapshot<Map<String, dynamic>> s) {
+                  bookmarks = s.metadata;
+                  emit();
+                }, onError: out.addError),
+          )
+          ..add(
+            _favourites(uid)
+                .snapshots(includeMetadataChanges: true)
+                .listen((QuerySnapshot<Map<String, dynamic>> s) {
+                  favourites = s.metadata;
+                  emit();
+                }, onError: out.addError),
+          );
+      },
+      onCancel: () async {
+        for (final StreamSubscription<QuerySnapshot<Map<String, dynamic>>> sub
+            in subs) {
+          await sub.cancel();
+        }
+      },
+    );
+    return out.stream.distinct();
+  }
 }

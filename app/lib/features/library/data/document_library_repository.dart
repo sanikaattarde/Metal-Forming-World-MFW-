@@ -17,9 +17,11 @@ import '../domain/library_documents.dart';
 ///   its first revision and date (rule 2), none is `forbidden`.
 /// - Favourites need full access too: YG's answer to OQ-12 of 10 November
 ///   2026, PROVISIONAL until MFW answers.
-/// - Reading offline follows the database's own cache until OQ-10 decides
-///   (MOD08-P2-T04).
-final class DocumentLibraryRepository implements LibraryRepository {
+/// - Offline, the lists come from the device and changes wait there to be
+///   sent; [watchSync] says so (MOD08-P2-T04, OQ-10 working position of
+///   12 November 2026, PROVISIONAL).
+final class DocumentLibraryRepository
+    implements LibraryRepository, LibrarySyncSource {
   /// Creates the repository over [documents], for the reader that
   /// [currentUserId] names, whose access [accessState] gives.
   DocumentLibraryRepository(
@@ -172,6 +174,10 @@ final class DocumentLibraryRepository implements LibraryRepository {
       return Err<void>(failureFromLibrary(error.code));
     }
   }
+
+  @override
+  Stream<LibrarySync> watchSync() =>
+      _perUser(_documents.watchSync, LibrarySync.current);
 
   /// [watch] for the signed-in reader, again for each new reader, and
   /// [empty] while signed out. The sign-in stream repeats the current

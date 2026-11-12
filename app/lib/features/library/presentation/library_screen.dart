@@ -5,6 +5,7 @@ import 'package:mfw_app/contracts/contracts.dart';
 
 import '../../../app/theme/mfw_tokens.dart';
 import '../../../core/ui/content_widgets.dart';
+import '../domain/library_documents.dart';
 import 'library_text.dart';
 
 /// The library (SCR-A-16 and SCR-A-17 as one screen with two views,
@@ -35,6 +36,22 @@ class LibraryScreen extends StatelessWidget {
   /// favourites view.
   final ValueChanged<String>? onOpenIssue;
 
+  /// [body] under the offline or waiting-changes notice, when the library
+  /// says where it stands (MOD08-P2-T04).
+  Widget _withSync(Widget body) {
+    final LibraryRepository source = library;
+    if (source is! LibrarySyncSource) {
+      return body;
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        _SyncNotice(sync: (source as LibrarySyncSource).watchSync()),
+        Expanded(child: body),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final ValueChanged<String>? openIssue = onOpenIssue;
@@ -49,7 +66,7 @@ class LibraryScreen extends StatelessWidget {
           automaticallyImplyLeading: false,
           title: const Text(LibraryText.bookmarks),
         ),
-        body: bookmarks,
+        body: _withSync(bookmarks),
       );
     }
     return DefaultTabController(
@@ -65,13 +82,61 @@ class LibraryScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(
-          children: <Widget>[
-            bookmarks,
-            _Favourites(library: library, titleOf: titleOf, onOpen: openIssue),
-          ],
+        body: _withSync(
+          TabBarView(
+            children: <Widget>[
+              bookmarks,
+              _Favourites(
+                library: library,
+                titleOf: titleOf,
+                onOpen: openIssue,
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// The notice over the library: offline, or changes waiting to be sent.
+class _SyncNotice extends StatefulWidget {
+  const _SyncNotice({required this.sync});
+
+  final Stream<LibrarySync> sync;
+
+  @override
+  State<_SyncNotice> createState() => _SyncNoticeState();
+}
+
+class _SyncNoticeState extends State<_SyncNotice> {
+  // Listened to once for the screen's life.
+  late final Stream<LibrarySync> _sync = widget.sync;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<LibrarySync>(
+      stream: _sync,
+      builder: (BuildContext context, AsyncSnapshot<LibrarySync> snapshot) {
+        final LibrarySync sync = snapshot.data ?? LibrarySync.current;
+        if (!sync.fromDevice && !sync.pendingChanges) {
+          return const SizedBox.shrink();
+        }
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(
+            MfwSpace.lg,
+            MfwSpace.lg,
+            MfwSpace.lg,
+            0,
+          ),
+          child: sync.fromDevice
+              ? const ContentNotice(
+                  LibraryText.offline,
+                  kind: NoticeKind.offline,
+                )
+              : const ContentNotice(LibraryText.pending, kind: NoticeKind.info),
+        );
+      },
     );
   }
 }

@@ -160,7 +160,10 @@ final Provider<LibraryRepository?> libraryRepositoryProvider =
         return null;
       }
       return DocumentLibraryRepository(
-        FirestoreLibraryDocuments(firebase.firestore),
+        FirestoreLibraryDocuments(
+          firebase.firestore,
+          connectivity: ref.watch(connectivityServiceProvider),
+        ),
         currentUserId: () => firebase.identity.currentUser?.uid,
         accessState: () =>
             ref.read(accessStateProvider).value ?? AccessState.signedOut,
