@@ -47,11 +47,13 @@ Future<GoRouter> pumpAppWithContent(
   DownloadManager? downloads,
   PdfRenderer? renderer,
   LibraryRepository? library,
+  NewsRepository? news,
 }) async {
   final ProviderContainer container = ProviderContainer.test(
     overrides: [
       authServiceProvider.overrideWithValue(auth),
       catalogueRepositoryProvider.overrideWithValue(catalogue),
+      newsRepositoryProvider.overrideWithValue(news),
       downloadManagerProvider.overrideWithValue(downloads),
       issueTitlesProvider.overrideWithValue(null),
       if (renderer != null) pdfRendererProvider.overrideWithValue(renderer),
