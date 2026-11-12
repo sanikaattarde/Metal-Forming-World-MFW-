@@ -96,6 +96,9 @@ export interface Services extends SignInDeps {
   read: Reads;
   upload: FileSender;
   saveText: SaveText;
+  // The Admins screen (MOD12-P3-T02), shown only when the build sets VITE_ADMIN_MANAGEMENT=true. Off until OQ-58
+  // (DEC-027); the server has its own switch as well.
+  adminManagement?: boolean;
 }
 
 export function emulatorBackend(authUrl: string = EMULATOR.authUrl, name?: string, functionsPort: number = EMULATOR.functionsPort): Backend {
@@ -158,7 +161,8 @@ export function servicesFor({ auth, functions, firestore }: Backend): Services {
 
 export async function createServices(hostname: string, env: BuildEnv = import.meta.env): Promise<Services | null> {
   const project = projectConfigFrom(env);
-  if (project) return servicesFor(projectBackend(project));
+  const adminManagement = env.VITE_ADMIN_MANAGEMENT === 'true';
+  if (project) return { ...servicesFor(projectBackend(project)), adminManagement };
   if (!isLocalHost(hostname)) return null;
-  return servicesFor(emulatorBackend());
+  return { ...servicesFor(emulatorBackend()), adminManagement };
 }
