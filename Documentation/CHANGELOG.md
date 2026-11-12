@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD08-P2-T03 the second-device, isolation and deletion check (IC-04), 2026-11-12
+
+- **Tests:** G19 (3) on the emulators, each device its own client SDK app signed in through the Auth emulator: a bookmark and a favourite made on one device show on the reader's other device, and a removal travels back; another reader's device can neither read, watch nor write them; and after account deletion (OP-12) the records are gone and the other device's list is emptied or its access ends (FR-BKM-005, FR-BKM-007, FR-FAV-003, FR-AUTH-009, IC-04, IC-08). The app side of the same flow is the repository's watch, already tested with fakes.
+
 ### Added: MOD06-P3-T01 the Read and Download copy kinds, PROVISIONAL, 2026-11-12
 
 - **App:** on the OQ-08 working position of 12 November 2026, as drawn in the reader frames (GS-Q43): Read with no copy on the device offers "Read now", which fetches a temporary copy through the same grant, check and progress as a download. It opens in the reader, is not listed in Downloads, is not resumed after a restart, and goes when the reader closes; one left by an app that stopped goes at the next start, through the existing repair of files with no record. Download keeps a copy as before, and Download while reading keeps the same file without fetching it again. A kept copy always opens first. Account deletion and a deleted issue remove temporary copies too. A damaged kept copy is downloaded and kept again; a damaged temporary one is read again with Read now. YG's report of MFW's answer (one kind, the copy kept) differs; MFW's filed answer settles it.
