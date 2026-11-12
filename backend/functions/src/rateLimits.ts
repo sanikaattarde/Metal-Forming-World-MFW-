@@ -56,6 +56,10 @@ export const OPERATION_CLASSES: Record<string, RateClass> = {
   sendNotification: 'notification_send',
   retryNotification: 'notification_send',
   exportRegisteredUsers: 'export',
+  addAdmin: 'admin_write',
+  removeAdmin: 'admin_write',
+  listAdmins: 'admin_read',
+  listAdminChanges: 'admin_read',
 };
 
 export const counterId = (rateClass: RateClass, uid: string) => `${rateClass}__${uid}`;

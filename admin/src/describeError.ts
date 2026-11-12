@@ -32,6 +32,15 @@ export const ERRORS = {
   rateLimited: 'Too many requests in a short time. Wait a minute, then try again.',
   notUnpublished: 'Unpublish the issue before deleting it.',
   confirmationMismatch: 'The title typed does not match the issue title.',
+  featureOff: 'Adding and removing admins is not switched on for this project.',
+  recentSignIn: 'For this change, sign out and sign in again, then repeat it.',
+  alreadyAdmin: 'That account is already an admin.',
+  notAnAdmin: 'That account is not an active admin.',
+  lastAdmin: 'At least one active admin must remain.',
+  targetClosed: 'That account is closed.',
+  targetUnverified: 'That reader has not verified their email address yet.',
+  staleAdmins: 'The admin list changed. Reload it, then try again.',
+  noAccount: 'No account uses that address.',
   fields: 'Check these fields: ',
   other: 'The change could not be saved. Try again.',
 } as const;
@@ -56,6 +65,14 @@ export function describeError(error: unknown): string {
   if (reason === 'EXPORT_TOO_LARGE') return ERRORS.exportTooLarge;
   if (reason === 'NOT_UNPUBLISHED') return ERRORS.notUnpublished;
   if (reason === 'CONFIRMATION_MISMATCH') return ERRORS.confirmationMismatch;
+  if (reason === 'FEATURE_OFF') return ERRORS.featureOff;
+  if (reason === 'RECENT_SIGN_IN_REQUIRED') return ERRORS.recentSignIn;
+  if (reason === 'ALREADY_ADMIN') return ERRORS.alreadyAdmin;
+  if (reason === 'NOT_AN_ADMIN') return ERRORS.notAnAdmin;
+  if (reason === 'LAST_ADMIN') return ERRORS.lastAdmin;
+  if (reason === 'TARGET_ACCOUNT_CLOSED') return ERRORS.targetClosed;
+  if (reason === 'TARGET_EMAIL_NOT_VERIFIED') return ERRORS.targetUnverified;
+  if (reason === 'STALE_ADMIN_STATE') return ERRORS.staleAdmins;
   if (reason === 'RATE_LIMITED' || code === 'functions/resource-exhausted') return ERRORS.rateLimited;
   if (code === 'functions/not-found') return ERRORS.notFound;
   return ERRORS.other;

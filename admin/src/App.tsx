@@ -9,6 +9,7 @@ import { CategoriesPage } from './CategoriesPage';
 import { IssueEditorRoute } from './IssueEditor';
 import { IssuesPage } from './IssuesPage';
 import { MESSAGES } from './messages';
+import { AdminsPage } from './AdminsPage';
 import { NewsPage } from './NewsPage';
 import { RegisteredUsersPage } from './RegisteredUsersPage';
 import { SendLogPage } from './SendLogPage';
@@ -70,7 +71,7 @@ export function App({ services, unavailableNotice = MESSAGES.notConfigured }: Pr
   if (signedIn) {
     return (
       <Routes>
-        <Route element={<AdminLayout onSignOut={() => endSession(null)} />}>
+        <Route element={<AdminLayout onSignOut={() => endSession(null)} adminManagement={services.adminManagement === true} />}>
           <Route path="/issues" element={<IssuesPage api={api} />} />
           <Route path="/issues/new" element={<IssueEditorRoute api={api} read={services.read} upload={services.upload} />} />
           <Route path="/issues/:issueId" element={<IssueEditorRoute api={api} read={services.read} upload={services.upload} />} />
@@ -79,6 +80,7 @@ export function App({ services, unavailableNotice = MESSAGES.notConfigured }: Pr
           <Route path="/notifications" element={<SendLogPage api={api} read={services.read} />} />
           <Route path="/notifications/new" element={<SendNotificationPage api={api} read={services.read} />} />
           <Route path="/readers" element={<RegisteredUsersPage api={api} read={services.read} saveText={services.saveText} />} />
+          {services.adminManagement === true && <Route path="/admins" element={<AdminsPage api={api} />} />}
           <Route path="*" element={<Navigate to="/issues" replace />} />
         </Route>
       </Routes>

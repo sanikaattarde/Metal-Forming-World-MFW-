@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD12-P3-T02 adding and removing admins in the panel, switched off until OQ-58, 2026-11-12
+
+- **Backend:** OP-35 `addAdmin`, OP-37 `removeAdmin`, OP-38 `listAdmins` and OP-39 `listAdminChanges` (`backend/functions/src/adminManagement.ts`). Every one refuses with `FEATURE_OFF` unless `config/private.admin_management_enabled` is true, which nothing sets (DEC-027: not agreed scope until MFW answers OQ-58). An addition or removal needs a recent sign-in (5 minutes, PLACEHOLDER until OQ-56), checks the state the admin saw (`STALE_ADMIN_STATE`, INV-07), keeps at least one admin (`LAST_ADMIN`, INV-03), writes the role, the guard and a change record holding identifiers and a time only in one transaction (INV-04, GS-Q44), and ends a removed admin's sessions (INV-09). A target is named by identifier or by email address (the address is a PROPOSED addition to the contract). A removal needs the address typed to confirm. A repeat returns the first result.
+- **Panel:** SCR-W-10 Admins: the list, add by address, remove with the address typed, and the recent changes. Its menu entry shows only in a build with `VITE_ADMIN_MANAGEMENT=true`.
+- **Tests:** G22 (7) on the emulators; `admins.test.tsx` (4). Panel unit suite: 104 passed, build clean.
+
 ### Added: MOD03-P3-T01 the account-linking spike, emulator only, 2026-11-12
 
 - **Spike:** G21 (6) on the Auth emulator with its test Google credentials, recorded in `Documentation/test-evidence/ACCOUNT_LINKING_SPIKE.md`. A verified password account and Google with the same address become one account with both ways in; an unverified password account is taken over by Google and its password stops working; Google first blocks a later password sign-up (`email-already-in-use`); an explicit link works; Google's verified result sets the account's verified flag (OQ-04). The TD-06 rule of the OQ-04 and OQ-05 working positions holds on the emulator. The real service is NOT VERIFIED until ENV-TEST exists. Google Sign-In itself stays MOD03-P3-T02 (DEC-006).
