@@ -5,6 +5,7 @@
 /// implemented by adapters once DEC-020 and their packages are approved.
 library;
 
+export 'data/firestore_deleted_issues.dart';
 export 'data/functions_issue_file_service.dart';
 export 'data/http_file_transport.dart';
 export 'data/io_file_store.dart';

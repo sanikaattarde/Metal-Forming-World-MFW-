@@ -31,4 +31,35 @@ void main() {
     }
     expect(downloads.calls, 1);
   });
+
+  testWidgets('the copies of deleted issues are swept at the start and on '
+      'each return [MOD06-P3-T02]', (WidgetTester tester) async {
+    int sweeps = 0;
+    await tester.pumpWidget(
+      DownloadResumer(
+        downloads: CountingResumer(),
+        sweep: () async => sweeps++,
+        child: const SizedBox(),
+      ),
+    );
+    expect(sweeps, 1);
+
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    expect(sweeps, 2);
+  });
+
+  testWidgets('a sweep that fails does not stop the app', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      DownloadResumer(
+        downloads: CountingResumer(),
+        sweep: () async => throw StateError('offline'),
+        child: const Text('app', textDirection: TextDirection.ltr),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('app'), findsOneWidget);
+  });
 }

@@ -225,12 +225,29 @@ final Provider<AuthService> authServiceProvider = Provider<AuthService>((
   final AccountProfileRepository? profiles = ref.watch(
     profileRepositoryProvider,
   );
-  return AccountAuthService(
+  final AccountAuthService service = AccountAuthService(
     firebase.identity,
     profileStatus: profiles?.watchStatus,
     backend: firebase.backend,
   );
+  // Account deletion removes the reader's kept copies (MOD06-P3-T02, IC-08,
+  // OQ-11 working position).
+  final DownloadManager? downloads = ref.watch(downloadManagerProvider);
+  if (downloads is KeptCopyLifecycle) {
+    service.addDeletionHook((downloads as KeptCopyLifecycle).removeReader);
+  }
+  return service;
 });
+
+/// OP-03, the issues deleted for good, once Firebase has started
+/// (MOD06-P3-T02). Tests override it with a fake.
+final Provider<DeletedIssueList?> deletedIssueListProvider =
+    Provider<DeletedIssueList?>((Ref ref) {
+      final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
+      return firebase == null
+          ? null
+          : FirestoreDeletedIssues(firebase.firestore);
+    });
 
 /// The current access state (`API_AND_MODULE_CONTRACTS.md` section 4.1).
 ///
@@ -399,6 +416,7 @@ class MfwApp extends ConsumerWidget {
     final ThemeData theme = buildMfwTheme();
     if (accessState.hasValue) {
       final DownloadManager? downloads = ref.read(downloadManagerProvider);
+      final DeletedIssueList? deleted = ref.read(deletedIssueListProvider);
       return MaterialApp.router(
         theme: theme,
         themeMode: ThemeMode.light,
@@ -410,6 +428,12 @@ class MfwApp extends ConsumerWidget {
           child: DownloadResumer(
             downloads: downloads is ResumableDownloads
                 ? downloads as ResumableDownloads
+                : null,
+            sweep: deleted != null && downloads is KeptCopyLifecycle
+                ? () => sweepDeletedIssues(
+                    deleted,
+                    downloads as KeptCopyLifecycle,
+                  )
                 : null,
             child: child ?? const SizedBox.shrink(),
           ),

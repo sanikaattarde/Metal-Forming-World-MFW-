@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD06-P3-T02 kept copies after sign-out, account deletion and deletion of an issue, 2026-11-12
+
+- **App:** on the OQ-11 working position (DEC-033, PROPOSED). Sign-out hides a reader's copies until the same reader signs in, as before (copies are kept per reader). Account deletion now removes the reader's copies, downloads under way, stopped downloads and their partial files, after OP-12 and before the sign-out (IC-08); other readers' copies stay. Unpublishing leaves a copy. At each start and return to the foreground the app reads OP-03 (`deleted_issues`, from the server) and removes every copy of a deleted issue; offline, nothing is removed until the next read. `IssueDownloadManager` implements the new `KeptCopyLifecycle` port.
+- **Tests:** `kept_copy_lifecycle_test.dart` (8) and two in `download_resumer_test.dart`. App suite: 939 passed, `flutter analyze` clean.
+
 ### Added: MOD07-P2-T03 zoom to 300% and the two-page spread, 2026-11-12
 
 - **App:** pinch zoom up to 300%, and a double tap to zoom to 200% and back, so zoom works with one finger (FR-READ-005). Once a gesture ends the page is drawn again at the zoom's resolution, in half steps, within a budget of 12 million pixels per page image (PLACEHOLDER until MOD07-P3-T01 measures it): an A4 page on a phone at 300% gets about four fifths of the screen's resolution. A zoomed page pans instead of turning, and two fingers never turn a page. When the screen is wider than it is tall, two pages show side by side after the cover, and a page that is already wide stands alone (FR-READ-009). A tablet held upright shows one page, so text stays large enough (PROPOSED, to confirm at M2 with AC-2.4).

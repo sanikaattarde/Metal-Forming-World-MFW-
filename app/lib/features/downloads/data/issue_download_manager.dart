@@ -11,7 +11,8 @@ import 'package:mfw_app/features/downloads/domain/file_names.dart';
 // expiry (DEC-020), and resumes a stopped download the next time the app is
 // open (rule 6, OQ-54 working position).
 // TODO(yg): the copy kind, kept or temporary, waits for OQ-08 (GS-Q43).
-// TODO(yg): offline rules and sign-out behaviour wait for T-06.5 and OQ-11.
+// MOD06-P3-T02 adds what happens to copies when their reader or their issue
+// goes (KeptCopyLifecycle), on the OQ-11 working position.
 
 /// [DownloadManager] over the MOD-06 ports (API_AND_MODULE_CONTRACTS
 /// section 6.6; PDF_READER_AND_OFFLINE_DESIGN section 4).
@@ -20,7 +21,7 @@ import 'package:mfw_app/features/downloads/domain/file_names.dart';
 /// see only the signed-in reader's copies. A copy is listed only after its
 /// size and hash match (rule 4, invariant I-1).
 final class IssueDownloadManager
-    implements DownloadManager, ResumableDownloads {
+    implements DownloadManager, ResumableDownloads, KeptCopyLifecycle {
   /// Creates the manager. [currentUserId] gives the signed-in reader's ID,
   /// or null when signed out.
   IssueDownloadManager({
@@ -196,6 +197,87 @@ final class IssueDownloadManager
     await _store.deleteFile(copy.localFile.path);
     await _forget(copy);
     return const Ok<void>(null);
+  }
+
+  /// Removes [userId]'s copies, downloads under way, stopped downloads and
+  /// their partial files, as after account deletion (IC-08). A partial
+  /// file that another reader's stopped download of the same issue may
+  /// share is left to that download.
+  @override
+  Future<void> removeReader(String userId) async {
+    await _ready;
+    await _cancelWhere(((String, String) key) => key.$1 == userId);
+    for (final DownloadedIssue copy
+        in _copies.values
+            .where((DownloadedIssue c) => c.ownerUserId == userId)
+            .toList()) {
+      await _store.deleteFile(copy.localFile.path);
+      await _forget(copy);
+    }
+    final List<PendingDownload> pending = await _pending.load();
+    final Set<String> others = <String>{
+      for (final PendingDownload p in pending)
+        if (p.ownerUserId != userId) p.issueId,
+    };
+    for (final PendingDownload p in pending) {
+      if (p.ownerUserId == userId) {
+        await _pending.remove(ownerUserId: userId, issueId: p.issueId);
+        if (!others.contains(p.issueId)) {
+          await _dropPartials(p.issueId);
+        }
+      }
+    }
+    _status.removeWhere(
+      ((String, String) key, DownloadStatus _) => key.$1 == userId,
+    );
+    _notify();
+  }
+
+  /// Removes every reader's copies of [issueIds], and any download of them,
+  /// once OP-03 lists them as deleted for good.
+  @override
+  Future<int> removeIssues(Set<String> issueIds) async {
+    if (issueIds.isEmpty) {
+      return 0;
+    }
+    await _ready;
+    await _cancelWhere(((String, String) key) => issueIds.contains(key.$2));
+    int removed = 0;
+    for (final DownloadedIssue copy
+        in _copies.values
+            .where((DownloadedIssue c) => issueIds.contains(c.issueId))
+            .toList()) {
+      await _store.deleteFile(copy.localFile.path);
+      await _forget(copy);
+      removed += 1;
+    }
+    for (final PendingDownload p in await _pending.load()) {
+      if (issueIds.contains(p.issueId)) {
+        await _pending.remove(ownerUserId: p.ownerUserId, issueId: p.issueId);
+      }
+    }
+    for (final String issueId in issueIds) {
+      await _dropPartials(issueId);
+    }
+    _status.removeWhere(
+      ((String, String) key, DownloadStatus _) => issueIds.contains(key.$2),
+    );
+    _notify();
+    return removed;
+  }
+
+  /// Cancels each download under way whose key [matches], and waits for it.
+  Future<void> _cancelWhere(bool Function((String, String) key) matches) async {
+    final List<Future<Result<void>>> stopping = <Future<Result<void>>>[];
+    for (final MapEntry<(String, String), Future<Result<void>>> running
+        in _running.entries.toList()) {
+      if (matches(running.key)) {
+        _cancelRequested.add(running.key);
+        _wake(running.key);
+        stopping.add(running.value);
+      }
+    }
+    await Future.wait(stopping);
   }
 
   /// The signed-in reader's copies, after the same check of each row
