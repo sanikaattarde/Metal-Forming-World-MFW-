@@ -11,6 +11,7 @@ import '../fakes/fake_catalogue_repository.dart';
 import '../fakes/fake_download_manager.dart';
 import '../fakes/fake_issue_file_service.dart';
 import '../fakes/fake_library_repository.dart';
+import '../fakes/fake_news_repository.dart';
 import '../fixtures/fx_issue_files.dart';
 import '../fakes/fake_server.dart';
 import '../features/reader/reader_screen_test.dart'
@@ -20,6 +21,70 @@ import 'app_harness.dart';
 import 'router_test.dart' show titled;
 
 void main() {
+  group('News routes [MOD09-P2-T01]', () {
+    testWidgets('a visitor opens the News tab and an article, and back '
+        'returns to the list [FR-NEWS-007]', (WidgetTester tester) async {
+      final FakeNewsRepository news = FakeNewsRepository(
+        posts: <NewsPost>[syntheticPost('9002', day: 2), syntheticPost('9001')],
+        categories: const <NewsCategory>[
+          NewsCategory(categoryId: '7', name: 'Industry News'),
+        ],
+      );
+      await pumpAppWithContent(
+        tester,
+        FakeAuthService(FakeServer()),
+        catalogue: FakeCatalogueRepository.fromFixtures(),
+        news: news,
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text('News'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Synthetic post 9002'), findsOneWidget);
+
+      await tester.tap(find.text('Synthetic post 9001'));
+      await tester.pumpAndSettle();
+      expect(find.text('Synthetic body.'), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
+
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+      expect(find.text('Synthetic post 9002'), findsOneWidget);
+    });
+
+    testWidgets('an article opened directly goes back to the list', (
+      WidgetTester tester,
+    ) async {
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        FakeAuthService(FakeServer()),
+        news: FakeNewsRepository(posts: <NewsPost>[syntheticPost('9001')]),
+      );
+      router.go('/news/9001');
+      await tester.pumpAndSettle();
+      expect(find.text('Synthetic body.'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+      expect(router.routerDelegate.currentConfiguration.uri.path, '/news');
+    });
+
+    testWidgets('without a news site the routes stay placeholders', (
+      WidgetTester tester,
+    ) async {
+      final GoRouter router = await pumpAppWithContent(
+        tester,
+        FakeAuthService(FakeServer()),
+      );
+      router.go('/news');
+      await tester.pumpAndSettle();
+      expect(titled(ShellText.news), findsOneWidget);
+    });
+  });
+
   group('Catalogue routes [MOD05-P2-T01]', () {
     testWidgets('a visitor opens the catalogue and an issue from it, and '
         'back returns to the catalogue [FR-MAG-001, FR-SRCH-006]', (

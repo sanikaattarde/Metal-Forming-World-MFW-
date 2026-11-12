@@ -3,3 +3,8 @@
 library;
 
 export 'data/wordpress_news_repository.dart' show WordPressNewsRepository;
+export 'domain/article_content.dart';
+export 'presentation/article_body.dart';
+export 'presentation/article_screen.dart';
+export 'presentation/news_screen.dart';
+export 'presentation/news_text.dart';

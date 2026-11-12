@@ -246,6 +246,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
       titles: ref.read(issueTitlesProvider),
       renderer: ref.read(pdfRendererProvider),
       library: ref.read(libraryRepositoryProvider),
+      links: ref.read(linkOpenerProvider),
     ),
   );
   ref.onDispose(() {

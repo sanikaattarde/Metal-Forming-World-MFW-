@@ -36,7 +36,15 @@ final class RouteScreens {
     this.downloads,
     this.reader,
     this.library,
+    this.news,
+    this.newsArticle,
   });
+
+  /// SCR-A-18 (MOD09-P2-T01).
+  final ScreenBuilder? news;
+
+  /// SCR-A-19 (MOD09-P2-T01).
+  final ScreenBuilder? newsArticle;
 
   /// SCR-A-15 (MOD06-P2-T02).
   final ScreenBuilder? downloads;
@@ -65,6 +73,8 @@ final class RouteScreens {
     ScreenBuilder? downloads,
     ScreenBuilder? reader,
     ScreenBuilder? library,
+    ScreenBuilder? news,
+    ScreenBuilder? newsArticle,
   }) => RouteScreens(
     signIn: signIn,
     passwordReset: passwordReset,
@@ -81,6 +91,8 @@ final class RouteScreens {
     downloads: downloads ?? this.downloads,
     reader: reader ?? this.reader,
     library: library ?? this.library,
+    news: news ?? this.news,
+    newsArticle: newsArticle ?? this.newsArticle,
   );
 
   /// SCR-A-07 (MOD04-P2-T04).
@@ -186,17 +198,21 @@ GoRouter buildRouter(
             routes: <RouteBase>[
               GoRoute(
                 path: AppRoutes.news,
-                builder: (BuildContext context, GoRouterState state) =>
-                    const PlaceholderScreen(title: ShellText.news),
+                builder:
+                    screens.news ??
+                    (BuildContext context, GoRouterState state) =>
+                        const PlaceholderScreen(title: ShellText.news),
                 routes: <RouteBase>[
                   GoRoute(
                     path: ':postId',
                     parentNavigatorKey: root,
-                    builder: (BuildContext context, GoRouterState state) =>
-                        PlaceholderScreen(
-                          title: ShellText.newsArticle,
-                          detail: state.pathParameters['postId'],
-                        ),
+                    builder:
+                        screens.newsArticle ??
+                        (BuildContext context, GoRouterState state) =>
+                            PlaceholderScreen(
+                              title: ShellText.newsArticle,
+                              detail: state.pathParameters['postId'],
+                            ),
                   ),
                 ],
               ),

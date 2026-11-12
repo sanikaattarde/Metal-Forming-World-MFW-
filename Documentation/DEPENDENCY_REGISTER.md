@@ -156,7 +156,7 @@ Section 8.1 holds review entries for the candidates the WS-B scaffold needs, and
 | DEP-51 | Resumable download client (an HTTP client with range requests, or a platform background-download plugin) | MOD-06 (RS FR-DL-006) | DEC-020; WP-02 spike | LICENSE file; background behaviour | None expected | RESOLVED (10 November 2026): no package; `dart:io`'s HttpClient with `Range` requests (`HttpFileTransport`, MOD06-P2-T02) |
 | DEP-52 | Share sheet (for example share_plus) | MOD-10 | — | LICENSE file | None expected | CANDIDATE |
 | DEP-53 | Link opening (url_launcher) | Policy links and article links (MOD-04, MOD-09) | — | LICENSE file | None expected | CANDIDATE |
-| DEP-54 | HTML rendering for WordPress content | MOD-09 (`CODING_STANDARDS.md` §7) | — | LICENSE file; **must not run scripts** (SEC-CHK-15). The parser DEP-66 is recorded in section 8.1 as one input; the rendering route stays open. | None expected | UNRESOLVED |
+| DEP-54 | HTML rendering for WordPress content | MOD-09 (`CODING_STANDARDS.md` §7) | — | LICENSE file; **must not run scripts** (SEC-CHK-15). Resolved on 12 November 2026 (MOD09-P2-T01): no renderer package. The app parses the post with DEP-66 and draws only text, links, headings, lists, quotes and HTTPS images itself (`app/lib/features/news/domain/article_content.dart`), so nothing in a post can run. | None | RESOLVED (no package) |
 | DEP-55 | Local cache storage for news and metadata | MOD-05, MOD-09 (RS FR-NEWS-005) | OQ-10, OQ-16 | LICENSE file | None expected | UNRESOLVED |
 | DEP-56 | JSON code generation (json_serializable, freezed) | Serialization (`CODING_STANDARDS.md` §7) | — | LICENSE files | None expected | CANDIDATE (optional) |
 | DEP-57 | Mocking library (for example mocktail) | Tests (`CODING_STANDARDS.md` §10) | — | LICENSE file | None expected | CANDIDATE (optional) |
@@ -349,6 +349,14 @@ The lockfile pins the packages these bring in. Under the position on QG-10 (sect
 | DEP-99 | `cloud_firestore` | Reads the reader's own records, such as the profile (MOD-04) | 7.1.0 (`^7.1.0`) | BSD-3-Clause | None | CONFIRMED (runtime, app) |
 | DEP-100 | `url_launcher` | Opens MFW's privacy policy and terms of use in the browser (CFG-07, MOD04-P2-T02) | 6.3.3 (`^6.3.3`) | BSD-3-Clause, "The Flutter Authors" | None | CONFIRMED (runtime, app) |
 | DEP-102 | `firebase_messaging` | Push: the notification permission, one topic per category, and taps (TD-13, MOD11-P2-T02). Added on 11 November 2026; its manifest adds the Android `POST_NOTIFICATIONS` permission. iOS delivery needs the push credential and capability in MFW's Apple account (MOD11-P2-T01) | 17.0.1 (`^17.0.1`), with `firebase_messaging_platform_interface` 4.11.1 and `firebase_messaging_web` 4.3.1 | BSD-3-Clause, "The Chromium Authors" | None. Firebase Cloud Messaging has no charge (S2) | CONFIRMED (runtime, app) |
+
+### 8.6 App packages for the news (12 November 2026)
+
+`app/`. Added with `flutter pub add` and locked in `app/pubspec.lock`.
+
+| ID | Package | Purpose | Version | Licence | Cost | Status |
+|---|---|---|---|---|---|---|
+| DEP-66 | `html` (the Dart team) | Parses a WordPress post body into a tree, which the app draws itself without running anything (DEP-54, MOD09-P2-T01, SEC-CHK-15). The app never calls `htmlToCodeMarkup()`, the function fixed in 0.15.7 | 0.15.7 (`^0.15.7`) | MIT, as section 8.1 records (the attribution discrepancy there stays open) | None | CONFIRMED (runtime, app) |
 
 ## 9. Repository and CI Services
 

@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 import '../contracts/contracts.dart';
 import '../features/catalogue/catalogue.dart';
 import '../features/downloads/downloads.dart';
+import '../features/account/account.dart';
 import '../features/library/library.dart';
+import '../features/news/news.dart';
 import 'access_guard.dart';
 import 'reader_route.dart';
 import 'router.dart';
@@ -25,6 +27,7 @@ RouteScreens withContentScreens(
   IssueTitles? titles,
   PdfRenderer? renderer,
   LibraryRepository? library,
+  LinkOpener? links,
 }) {
   final RouteScreens withDownloads = downloads == null
       ? base
@@ -75,10 +78,29 @@ RouteScreens withContentScreens(
                 context.push(AppRoutes.issue(issueId)),
           ),
         );
+  final RouteScreens withNews = news == null
+      ? withLibrary
+      : withLibrary.withContent(
+          news: (BuildContext context, GoRouterState state) => NewsScreen(
+            news: news,
+            onOpenPost: (String postId) =>
+                context.push(AppRoutes.newsPost(postId)),
+          ),
+          newsArticle: (BuildContext context, GoRouterState state) {
+            final String postId = state.pathParameters['postId'] ?? '';
+            return ArticleScreen(
+              key: ValueKey<String>(postId),
+              news: news,
+              postId: postId,
+              onOpenLink: (Uri uri) async => await links?.open(uri) ?? false,
+              onBack: () => _backTo(context, AppRoutes.news),
+            );
+          },
+        );
   if (catalogue == null) {
-    return withLibrary;
+    return withNews;
   }
-  return withLibrary.withContent(
+  return withNews.withContent(
     home: (BuildContext context, GoRouterState state) => HomeScreen(
       catalogue: catalogue,
       news: news,
@@ -146,11 +168,13 @@ RouteScreens withContentScreens(
 String returningTo(String step, String from) =>
     Uri(path: step, queryParameters: <String, String>{'from': from}).toString();
 
-void _back(BuildContext context) {
+void _back(BuildContext context) => _backTo(context, AppRoutes.home);
+
+void _backTo(BuildContext context, String fallback) {
   if (context.canPop()) {
     context.pop();
   } else {
-    context.go(AppRoutes.home);
+    context.go(fallback);
   }
 }
 

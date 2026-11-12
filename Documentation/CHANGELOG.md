@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD09-P2-T01 the News list, the article page and the category filter, 2026-11-12
+
+- **App:** SCR-A-18 lists the posts of the selected categories, newest first, with a filter per category, pull to refresh and Show more for the next page (FR-NEWS-001 to FR-NEWS-004). SCR-A-19 shows the category, title, date, picture and body (FR-NEWS-003). Both are open to visitors (FR-NEWS-007). When WordPress cannot be reached, the list says so with Retry and keeps what it shows (FR-STATE-005).
+- **Security:** the body is parsed with `html` (DEP-66) and drawn by the app: scripts, styles, forms and event attributes are dropped, only web and mail links are kept and open outside the app, and only HTTPS pictures load (SEC-CHK-15). An embedded player becomes a link to its address (OQ-16 media handling, working position). DEP-54 is resolved with no renderer package.
+- **Tests:** `article_content_test.dart` (11), `news_screens_test.dart` (11) and three News route tests. App suite: 864 passed, `flutter analyze` clean.
+
 ### Fixed: server calls from an iPhone to the local emulators, 2026-11-12
 
 - **App:** on an iPhone pointed at the emulators on the developer's network, every server call (such as saving the profile) failed as "Sign in to continue", because the Firebase Apple SDK refuses to send the sign-in token over plain HTTP to an address that is not the phone's own. Those calls now go through `EmulatorBackendCalls` (`app/lib/features/account/data/emulator_backend_calls.dart`), which speaks the callable protocol itself with the Auth emulator's token. ENV-LOCAL only; simulators and Android keep the SDK.
