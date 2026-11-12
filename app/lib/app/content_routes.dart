@@ -47,6 +47,9 @@ RouteScreens withContentScreens(
                   return ReaderRoute(
                     key: ValueKey<String>(issueId),
                     preferences: readerPreferences,
+                    published: catalogue == null
+                        ? null
+                        : (String id) => _isPublished(catalogue, id),
                     issueId: issueId,
                     downloads: downloads,
                     renderer: renderer,
@@ -312,3 +315,16 @@ Future<Result<List<NewsPost>>> _savedArticles(
   }
   return Ok<List<NewsPost>>(saved);
 }
+
+/// Whether [issueId] is published: false when the catalogue says it is not
+/// found, null when the catalogue cannot tell.
+Future<bool?> _isPublished(
+  CatalogueRepository catalogue,
+  String issueId,
+) async => switch (await catalogue.getIssue(issueId)) {
+  Ok<IssueSummary>() => true,
+  Err<IssueSummary>(:final AppFailure failure)
+      when failure.code == FailureCode.notFound =>
+    false,
+  Err<IssueSummary>() => null,
+};
