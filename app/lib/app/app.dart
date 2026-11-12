@@ -70,14 +70,27 @@ final Provider<CatalogueRepository?> catalogueRepositoryProvider =
     });
 
 /// MOD-09's news from MFW's WordPress site (MOD09-P1-T01), or null when the
-/// build names no site (CFG-03). Tests override it with a fake.
+/// build names no site (CFG-03). With Firebase started, the admin's hidden
+/// and breaking controls apply (MOD09-P2-T03, OP-04). Tests override it
+/// with a fake.
 final Provider<NewsRepository?> newsRepositoryProvider =
     Provider<NewsRepository?>((Ref ref) {
       final WordPressSiteConfig? site = ref.watch(appConfigProvider).wordPress;
       if (site == null) {
         return null;
       }
-      return WordPressNewsRepository(client: IoHttpsGetClient(), config: site);
+      final NewsRepository wordPress = WordPressNewsRepository(
+        client: IoHttpsGetClient(),
+        config: site,
+      );
+      final FirebaseServices? firebase = ref.watch(firebaseServicesProvider);
+      if (firebase == null) {
+        return wordPress;
+      }
+      return ControlledNewsRepository(
+        news: wordPress,
+        controls: FirestoreNewsControlsService(firebase.firestore),
+      );
     });
 
 /// Where issue files live, from the platform (MOD06-P2-T02, section 8.2).
