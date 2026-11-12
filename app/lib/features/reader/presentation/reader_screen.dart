@@ -8,7 +8,10 @@ import '../../../core/errors/failure_messages.dart';
 import '../../../core/ui/content_widgets.dart';
 import '../domain/reader_document.dart';
 import '../domain/reader_preferences.dart';
+import '../domain/spreads.dart';
 import 'page_turn_view.dart';
+import 'swipe_pages.dart';
+import 'zoomable_unit.dart';
 
 /// The reader (SCR-A-14): one issue's pages, one at a time, turned by a
 /// drag or by the previous and next buttons (RS FR-READ-003;
@@ -17,8 +20,11 @@ import 'page_turn_view.dart';
 ///
 /// Pages turn with the page-turn effect, or slide in the plain swipe mode,
 /// as the reader chose in settings (MOD07-P2-T02, FR-READ-006 to
-/// FR-READ-008, OQ-14 working position: page turn first). Zoom and the
-/// two-page spread are MOD07-P2-T03. A file that cannot be
+/// FR-READ-008, OQ-14 working position: page turn first). Pinch or double
+/// tap zooms up to 300%, redrawn sharp once the gesture ends, and a zoomed
+/// page pans instead of turning (FR-READ-005). When the reader is wider
+/// than it is tall, two pages show side by side after the cover
+/// (FR-READ-009, MOD07-P2-T03). A file that cannot be
 /// opened shows why, with a way to download it again when one is given
 /// (FR-READ-010).
 class ReaderScreen extends StatefulWidget {
@@ -71,8 +77,12 @@ class ReaderScreen extends StatefulWidget {
 class _ReaderScreenState extends State<ReaderScreen>
     implements ReaderController {
   Result<PdfDocumentHandle>? _opened;
-  PageController? _pages;
   int _page = 1;
+  bool _zoomed = false;
+  int _pointers = 0;
+
+  /// What the last build showed, one page or two at a time.
+  List<List<int>> _units = const <List<int>>[];
   ReaderMode _mode = ReaderPreferences.defaultMode;
   final StreamController<int> _pageChanges = StreamController<int>.broadcast();
 
@@ -101,7 +111,6 @@ class _ReaderScreenState extends State<ReaderScreen>
     if (opened case Ok<PdfDocumentHandle>(:final PdfDocumentHandle value)) {
       final int count = value.pageCount;
       _page = (widget.initialPage ?? 1).clamp(1, count);
-      _pages = PageController(initialPage: _page - 1);
     }
     setState(() {
       _opened = opened;
@@ -110,7 +119,6 @@ class _ReaderScreenState extends State<ReaderScreen>
 
   @override
   void dispose() {
-    _pages?.dispose();
     unawaited(_pageChanges.close());
     if (_opened case Ok<PdfDocumentHandle>(:final PdfDocumentHandle value)) {
       unawaited(value.close());
@@ -134,20 +142,10 @@ class _ReaderScreenState extends State<ReaderScreen>
 
   @override
   Future<void> goToPage(int page) async {
-    final PageController? pages = _pages;
-    if (pages == null || _pageCount == 0) {
+    if (_pageCount == 0) {
       return;
     }
-    final int target = page.clamp(1, _pageCount);
-    if (_mode == ReaderMode.pageTurn) {
-      if (target != _page) {
-        _shown(target - 1);
-      }
-      return;
-    }
-    if (pages.hasClients) {
-      pages.jumpToPage(target - 1);
-    }
+    _show(page.clamp(1, _pageCount));
   }
 
   @override
@@ -156,16 +154,100 @@ class _ReaderScreenState extends State<ReaderScreen>
   /// The page currently shown, 1-based.
   int get currentPage => _page;
 
-  void _shown(int index) {
+  /// Shows [page], 1-based, and reports it when it changed.
+  void _show(int page) {
+    if (page == _page) {
+      return;
+    }
     setState(() {
-      _page = index + 1;
+      _page = page;
+      _zoomed = false;
     });
     _pageChanges.add(_page);
+  }
+
+  /// A view turned to [unit]: its first page is the one shown.
+  void _shownUnit(int unit) {
+    if (unit < 0 || unit >= _units.length || _units[unit].contains(_page)) {
+      return;
+    }
+    _show(_units[unit].first);
+  }
+
+  void _setZoomed(bool zoomed) {
+    if (zoomed != _zoomed) {
+      setState(() => _zoomed = zoomed);
+    }
+  }
+
+  void _pointer(int change) => setState(() {
+    _pointers = (_pointers + change).clamp(0, 10);
+  });
+
+  /// Whether two pages show side by side: when the screen is wider than
+  /// it is tall, on a phone or a tablet (FR-READ-009).
+  bool _spread(BuildContext context) {
+    final Size size = MediaQuery.sizeOf(context);
+    return size.width > size.height;
+  }
+
+  Widget _pages(PdfDocumentHandle document, bool spread) {
+    return Builder(
+      builder: (BuildContext context) {
+        final int index = unitOf(_units, _page);
+        // At 100% with one finger down, a drag turns the page; zoomed, or
+        // with two fingers down, it moves or zooms the page.
+        final bool turning = !_zoomed && _pointers < 2;
+        Widget unit(BuildContext context, int i) {
+          final List<int> shown = _units[i];
+          return ZoomableUnit(
+            key: ValueKey<String>('${shown.join('-')} $spread'),
+            onZoomed: _setZoomed,
+            builder: (BuildContext context, double sharpness) =>
+                _unitAt(document, shown, sharpness),
+          );
+        }
+
+        return Listener(
+          key: ReaderScreen.pagesKey,
+          onPointerDown: (_) => _pointer(1),
+          onPointerUp: (_) => _pointer(-1),
+          onPointerCancel: (_) => _pointer(-1),
+          child: switch (_mode) {
+            ReaderMode.swipe => SwipePages(
+              key: ValueKey<bool>(spread),
+              page: index,
+              pageCount: _units.length,
+              enabled: turning,
+              onPageChanged: _shownUnit,
+              itemBuilder: unit,
+            ),
+            ReaderMode.pageTurn => PageTurnView(
+              key: ValueKey<bool>(spread),
+              page: index,
+              pageCount: _units.length,
+              enabled: turning,
+              onPageChanged: _shownUnit,
+              itemBuilder: unit,
+            ),
+          },
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final Result<PdfDocumentHandle>? opened = _opened;
+    final bool spread = _spread(context);
+    if (opened case Ok<PdfDocumentHandle>(:final PdfDocumentHandle value)) {
+      _units = readerUnits(
+        pageCount: value.pageCount,
+        spread: spread,
+        isLandscape: value is ReaderDocument ? value.isLandscape : null,
+      );
+    }
+    final int index = unitOf(_units, _page);
     return Scaffold(
       backgroundColor: MfwColours.inputFill,
       appBar: AppBar(
@@ -191,30 +273,21 @@ class _ReaderScreenState extends State<ReaderScreen>
           onDownloadAgain: widget.onDownloadAgain,
           onClose: widget.onClose,
         ),
-        Ok<PdfDocumentHandle>(:final PdfDocumentHandle value) =>
-          switch (_mode) {
-            ReaderMode.swipe => PageView.builder(
-              key: ReaderScreen.pagesKey,
-              controller: _pages,
-              itemCount: value.pageCount,
-              onPageChanged: _shown,
-              itemBuilder: (BuildContext context, int index) =>
-                  _pageAt(value, index),
-            ),
-            ReaderMode.pageTurn => PageTurnView(
-              key: ReaderScreen.pagesKey,
-              page: _page - 1,
-              pageCount: value.pageCount,
-              onPageChanged: _shown,
-              itemBuilder: (BuildContext context, int index) =>
-                  _pageAt(value, index),
-            ),
-          },
+        Ok<PdfDocumentHandle>(:final PdfDocumentHandle value) => _pages(
+          value,
+          spread,
+        ),
       },
       bottomNavigationBar: opened is Ok<PdfDocumentHandle>
           ? _PageBar(
-              page: _page,
+              unit: _units.isEmpty ? <int>[_page] : _units[index],
               pageCount: _pageCount,
+              onPrevious: index > 0
+                  ? () => _show(_units[index - 1].first)
+                  : null,
+              onNext: index < _units.length - 1
+                  ? () => _show(_units[index + 1].first)
+                  : null,
               onGoTo: (int page) => unawaited(goToPage(page)),
             )
           : null,
@@ -222,34 +295,73 @@ class _ReaderScreenState extends State<ReaderScreen>
   }
 }
 
-/// Page [index] (0-based) of [document] on the reader's background, so a
-/// page turning over another hides it.
-Widget _pageAt(PdfDocumentHandle document, int index) => ColoredBox(
-  color: MfwColours.inputFill,
-  child: Padding(
-    padding: const EdgeInsets.all(MfwSpace.lg),
+/// [unit], one page or two, of [document] on the reader's background, so
+/// a page turning over another hides it. Two pages meet at the spine.
+Widget _unitAt(PdfDocumentHandle document, List<int> unit, double sharpness) {
+  Widget page(int number, EdgeInsets padding, Alignment alignment) => Padding(
+    padding: padding,
     child: Semantics(
-      label: ReaderText.pageOf(index + 1, document.pageCount),
+      container: true,
+      label: ReaderText.pageOf(number, document.pageCount),
       child: document is ReaderDocument
-          ? document.page(index + 1)
+          ? document.page(number, sharpness: sharpness, alignment: alignment)
           : const SizedBox.expand(),
     ),
-  ),
-);
+  );
+  return ColoredBox(
+    color: MfwColours.inputFill,
+    child: unit.length == 1
+        ? page(unit.single, const EdgeInsets.all(MfwSpace.lg), Alignment.center)
+        : Row(
+            children: <Widget>[
+              Expanded(
+                child: page(
+                  unit.first,
+                  const EdgeInsets.fromLTRB(
+                    MfwSpace.lg,
+                    MfwSpace.lg,
+                    0,
+                    MfwSpace.lg,
+                  ),
+                  Alignment.centerRight,
+                ),
+              ),
+              Expanded(
+                child: page(
+                  unit.last,
+                  const EdgeInsets.fromLTRB(
+                    0,
+                    MfwSpace.lg,
+                    MfwSpace.lg,
+                    MfwSpace.lg,
+                  ),
+                  Alignment.centerLeft,
+                ),
+              ),
+            ],
+          ),
+  );
+}
 
 class _PageBar extends StatelessWidget {
   const _PageBar({
-    required this.page,
+    required this.unit,
     required this.pageCount,
+    required this.onPrevious,
+    required this.onNext,
     required this.onGoTo,
   });
 
-  final int page;
+  /// The pages shown, one or two.
+  final List<int> unit;
   final int pageCount;
+  final VoidCallback? onPrevious;
+  final VoidCallback? onNext;
   final ValueChanged<int> onGoTo;
 
   @override
   Widget build(BuildContext context) {
+    final int page = unit.first;
     return SafeArea(
       top: false,
       child: Container(
@@ -261,7 +373,7 @@ class _PageBar extends StatelessWidget {
             IconButton(
               tooltip: ReaderText.previous,
               icon: const Icon(Icons.chevron_left),
-              onPressed: page > 1 ? () => onGoTo(page - 1) : null,
+              onPressed: onPrevious,
             ),
             Expanded(
               child: pageCount > 1
@@ -277,11 +389,11 @@ class _PageBar extends StatelessWidget {
                     )
                   : const SizedBox.shrink(),
             ),
-            Text(ReaderText.position(page, pageCount), style: MfwType.small),
+            Text(ReaderText.positionOf(unit, pageCount), style: MfwType.small),
             IconButton(
               tooltip: ReaderText.next,
               icon: const Icon(Icons.chevron_right),
-              onPressed: page < pageCount ? () => onGoTo(page + 1) : null,
+              onPressed: onNext,
             ),
           ],
         ),
@@ -356,6 +468,11 @@ abstract final class ReaderText {
 
   /// The position shown in the bar, such as "7 / 64".
   static String position(int page, int pageCount) => '$page / $pageCount';
+
+  /// The position of one page or two, such as "7 / 64" or "6–7 / 64".
+  static String positionOf(List<int> pages, int pageCount) => pages.length == 1
+      ? position(pages.single, pageCount)
+      : '${pages.first}–${pages.last} / $pageCount';
 
   /// What a screen reader says for a page, such as "Page 7 of 64".
   static String pageOf(int page, int pageCount) => 'Page $page of $pageCount';

@@ -19,7 +19,7 @@ import '../fixtures/fx_issue_files.dart';
 import '../fakes/fake_server.dart';
 import '../fakes/fake_reader_preferences.dart';
 import '../features/reader/reader_screen_test.dart'
-    show FakeDocument, FakeRenderer;
+    show FakeDocument, FakeRenderer, phone, useSize;
 import '../fakes/test_users.dart';
 import 'app_harness.dart';
 import 'router_test.dart' show titled;
@@ -417,6 +417,7 @@ void main() {
         'at its page with the bookmark shown [MOD08-P2-T01, FR-BKM-006]', (
       WidgetTester tester,
     ) async {
+      useSize(tester, phone);
       final FakeServer server = FakeServer();
       final FakeAuthService auth = FakeAuthService(server, signedInAs: fxUsr01);
       final FakeDownloadManager downloads = FakeDownloadManager(
