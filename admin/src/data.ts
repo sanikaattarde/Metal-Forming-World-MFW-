@@ -130,6 +130,11 @@ export function setPublished(api: CallFn, issueId: string, published: boolean): 
   return api(published ? 'publishIssue' : 'unpublishIssue', { request_id: newRequestId(), issue_id: issueId }) as Promise<Issue>;
 }
 
+// OP-30, PROVISIONAL (OQ-21, GS-Q45): only an unpublished issue, and the confirmation is its title.
+export function deleteIssue(api: CallFn, issueId: string, confirmation: string, requestId = newRequestId()): Promise<{ issue_id: string; deleted: true }> {
+  return api('deleteIssue', { request_id: requestId, issue_id: issueId, confirmation }) as Promise<{ issue_id: string; deleted: true }>;
+}
+
 export function saveCategory(api: CallFn, category: { category_id?: string; name: string; display_order: number }, requestId = newRequestId()): Promise<Category> {
   return api('saveCategory', { request_id: requestId, ...category }) as Promise<Category>;
 }

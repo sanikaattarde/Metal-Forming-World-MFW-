@@ -1,13 +1,14 @@
 // SCR-W-03 Issue editor (FR-ADMIN-009, FR-ADMIN-011): an issue's details through
 // OP-16, and publish and unpublish through OP-21 and OP-22, each confirmed first (CODING_STANDARDS.md §15
 // item 7). The PDF upload is the issue-file section below (SCR-W-04, MOD12-P2-T02); a cover waits for
-// OQ-22. Placeholder visuals.
+// OQ-22. An unpublished issue can be deleted for good through OP-30 once its title is typed
+// (FR-ADMIN-012, MOD12-P3-T01; PROVISIONAL, OQ-21 working position GS-Q45). Placeholder visuals.
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { AccessLost } from './adminApi';
 import type { CallFn } from './adminApi';
-import { createIssue, findIssue, newRequestId, setPublished, updateIssue } from './data';
+import { createIssue, deleteIssue, findIssue, newRequestId, setPublished, updateIssue } from './data';
 import type { Category, Issue, IssueDetails, Reads, Segment } from './data';
 import { describeError } from './describeError';
 import { IssueFileSection } from './IssueFileSection';
@@ -78,6 +79,10 @@ export function IssueEditor({ api, read, upload, issueId }: Props & { issueId: s
   // One request identifier for the life of a new issue's form, so a retry after a lost reply finds the
   // record the first try made, instead of making a second one (OP-16).
   const createRequest = useRef(newRequestId());
+  // The title typed to confirm a deletion, and one request identifier per attempt, so a retry after a lost
+  // reply gets the first result instead of GONE (OP-30).
+  const [typedTitle, setTypedTitle] = useState('');
+  const deleteRequest = useRef(newRequestId());
 
   useEffect(() => {
     read.categories().then(setCategories, () => setMessage('The categories could not be loaded.'));
@@ -135,6 +140,23 @@ export function IssueEditor({ api, read, upload, issueId }: Props & { issueId: s
     } catch (error) {
       if (!(error instanceof AccessLost)) setMessage(describeError(error));
     } finally {
+      setBusy(false);
+    }
+  }
+
+  async function remove() {
+    if (!issue || busy) return;
+    setBusy(true);
+    setMessage(null);
+    setSaved(null);
+    try {
+      await deleteIssue(api, issue.issue_id, typedTitle, deleteRequest.current);
+      navigate('/issues', { replace: true, state: { notice: `“${issue.title}” was deleted.` } });
+    } catch (error) {
+      if (!(error instanceof AccessLost)) {
+        setMessage(describeError(error));
+        deleteRequest.current = newRequestId();
+      }
       setBusy(false);
     }
   }
@@ -229,6 +251,22 @@ export function IssueEditor({ api, read, upload, issueId }: Props & { issueId: s
         <p role="alert" className="message">
           {message}
         </p>
+      )}
+
+      {issue && !published && (
+        <section aria-labelledby="delete-heading">
+          <h3 id="delete-heading">Delete permanently</h3>
+          <p>
+            This removes the issue, its PDF files and its cover for good, with readers&apos; bookmarks and favourites of it. A
+            copy already downloaded is removed from a reader&apos;s phone the next time the app is online. This cannot be
+            undone.
+          </p>
+          <label htmlFor="delete-confirm">Type the title, {issue.title}, to confirm</label>
+          <input id="delete-confirm" autoComplete="off" value={typedTitle} onChange={(e) => setTypedTitle(e.target.value)} />
+          <button type="button" className="danger" disabled={busy || typedTitle.trim() === '' || typedTitle.trim() !== (issue.title ?? '').trim()} onClick={() => void remove()}>
+            Delete permanently
+          </button>
+        </section>
       )}
 
       {issue && (

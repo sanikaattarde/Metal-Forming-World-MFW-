@@ -30,6 +30,8 @@ export const ERRORS = {
   pushFailed: 'The notification could not be sent. It is in the send log as failed, where it can be retried.',
   exportTooLarge: 'The reader list is too long to export in one file.',
   rateLimited: 'Too many requests in a short time. Wait a minute, then try again.',
+  notUnpublished: 'Unpublish the issue before deleting it.',
+  confirmationMismatch: 'The title typed does not match the issue title.',
   fields: 'Check these fields: ',
   other: 'The change could not be saved. Try again.',
 } as const;
@@ -52,6 +54,8 @@ export function describeError(error: unknown): string {
   if (reason === 'ATTEMPT_IN_PROGRESS') return ERRORS.attemptInProgress;
   if (reason === 'PUSH_FAILED') return ERRORS.pushFailed;
   if (reason === 'EXPORT_TOO_LARGE') return ERRORS.exportTooLarge;
+  if (reason === 'NOT_UNPUBLISHED') return ERRORS.notUnpublished;
+  if (reason === 'CONFIRMATION_MISMATCH') return ERRORS.confirmationMismatch;
   if (reason === 'RATE_LIMITED' || code === 'functions/resource-exhausted') return ERRORS.rateLimited;
   if (code === 'functions/not-found') return ERRORS.notFound;
   return ERRORS.other;

@@ -1,13 +1,15 @@
 // OP-30 deleteIssue, from API_AND_BACKEND_CONTRACT.md section 5.2 (FR-ADMIN-012, INV-14, INV-15, GS-Q45, DEC-033),
 // and the deleted-issue record that OP-03 lists (MOD13-P1-T05, DATABASE_AND_DATA_MODEL.md section 4.22).
-// PROVISIONAL: whether an issue may be deleted at all is OQ-21, so the panel has no delete control yet; the
-// server operation is built on the working position of GS-Q45. Kept copies on devices: OQ-11.
+// PROVISIONAL: whether an issue may be deleted at all is OQ-21; the server operation and the panel's control
+// (MOD12-P3-T01) are built on the working position of GS-Q45. Kept copies on devices: OQ-11, removed by the
+// app once OP-03 lists the issue (MOD06-P3-T02).
 //
 // One transaction deletes the issue and writes the deleted-issue record, which holds the identifier and the time
 // only: no title, no content and no admin identity (M9, M11). The identifier is never reused (INV-14). Afterwards
 // the file records, the stored files, the cover and the upload jobs are removed; a part that fails is left for the
-// cleanup task (`removeIssueRemains`), and the deletion stands. Readers' bookmarks and favourites of the issue are
-// removed by the orphan cleanup (DM section 10.3), which is not built. No audit record is written (GS-Q44).
+// cleanup task (`removeIssueRemains`), and the deletion stands. Readers' bookmarks and favourites of the issue go
+// with the remains too (DM section 10.3, orphaned reader records, INV-13), found by a collection-group query on
+// `issue_id`; `firestore.indexes.json` declares the two indexes it needs. No audit record is written (GS-Q44).
 import { FieldValue } from 'firebase-admin/firestore';
 import type { Firestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
@@ -41,6 +43,9 @@ export const confirms = (typed: unknown, title: unknown): boolean =>
 export async function removeIssueRemains({ db, bucket }: DeletionBackend, issueId: string): Promise<void> {
   const files = await db.collection('issues').doc(issueId).collection('files').get();
   const jobs = await db.collection('upload_jobs').where('issue_id', '==', issueId).get();
+  // Readers' records under users/{uid}/bookmarks and users/{uid}/favourites that point to the issue.
+  const bookmarks = await db.collectionGroup('bookmarks').where('issue_id', '==', issueId).get();
+  const favourites = await db.collectionGroup('favourites').where('issue_id', '==', issueId).get();
 
   const paths = new Set<string>();
   for (const file of files.docs) {
@@ -53,8 +58,16 @@ export async function removeIssueRemains({ db, bucket }: DeletionBackend, issueI
   await bucket.deleteFiles({ prefix: `covers/${issueId}/` });
 
   const writer = db.bulkWriter();
-  for (const doc of [...files.docs, ...jobs.docs]) void writer.delete(doc.ref);
+  for (const doc of [...files.docs, ...jobs.docs, ...readerRecords(bookmarks.docs), ...readerRecords(favourites.docs)]) {
+    void writer.delete(doc.ref);
+  }
   await writer.close();
+}
+
+// Only records at users/{uid}/bookmarks/{id} and users/{uid}/favourites/{id}: a collection of the same name
+// anywhere else is not a reader's.
+function readerRecords<T extends { ref: { path: string } }>(docs: T[]): T[] {
+  return docs.filter((doc) => /^users\/[^/]+\/(bookmarks|favourites)\/[^/]+$/.test(doc.ref.path));
 }
 
 export async function deleteIssueAs(backend: DeletionBackend, uid: string, data: Record<string, unknown>) {

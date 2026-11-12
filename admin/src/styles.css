@@ -33,6 +33,13 @@ button {
   padding: 0.5rem;
 }
 
+/* A step that cannot be undone, such as deleting an issue. Placeholder visuals. */
+button.danger:not(:disabled) {
+  background: #9b1c1c;
+  border-color: #9b1c1c;
+  color: #fff;
+}
+
 .message {
   margin-top: 1rem;
   padding: 0.75rem;
