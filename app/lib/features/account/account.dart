@@ -7,6 +7,7 @@ library;
 
 export 'data/account_auth_service.dart';
 export 'data/account_profile_repository.dart';
+export 'data/emulator_backend_calls.dart';
 export 'data/firebase_backend_calls.dart';
 export 'data/firebase_identity_provider.dart';
 export 'data/firestore_profile_documents.dart';
