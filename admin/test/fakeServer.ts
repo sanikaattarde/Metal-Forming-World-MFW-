@@ -141,6 +141,15 @@ export function fakeServer({
         record.updated_at = ++clock;
         return { ...record };
       }
+      case 'deleteIssue': {
+        const record = find(data.issue_id);
+        if (!record) throw serverError('not-found');
+        if (record.publication_state !== 'unpublished') throw serverError('failed-precondition', 'NOT_UNPUBLISHED');
+        const typed = typeof data.confirmation === 'string' ? data.confirmation.trim() : '';
+        if (typed !== (record.title ?? '').trim()) throw serverError('failed-precondition', 'CONFIRMATION_MISMATCH');
+        state.issues.splice(state.issues.indexOf(record), 1);
+        return { issue_id: record.issue_id, deleted: true };
+      }
       case 'saveCategory': {
         const missing: string[] = [];
         if (typeof data.name !== 'string' || data.name.trim() === '') missing.push('name');

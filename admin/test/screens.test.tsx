@@ -190,6 +190,50 @@ test('an issue with no accepted file cannot be published, and the screen says wh
   expect((await screen.findByRole('alert')).textContent).toBe(ERRORS.noAcceptedFile);
 });
 
+// ---- OP-30, permanent deletion (MOD12-P3-T01, PROVISIONAL) ----
+
+test('FR-ADMIN-012: an unpublished issue is deleted once its title is typed, and the list says so', async () => {
+  const { server, deps } = setUp(fakeServer({ issues: [issueRecord({ issue_id: 'i-1', title: 'March issue' }), issueRecord({ issue_id: 'i-2', title: 'Kept' })], categories: CATEGORIES }));
+  await signedInApp(deps, '/issues/i-1');
+  const remove = await screen.findByRole('button', { name: 'Delete permanently' });
+  expect((remove as HTMLButtonElement).disabled).toBe(true);
+
+  type(/to confirm/, 'March');
+  expect((remove as HTMLButtonElement).disabled).toBe(true);
+  type(/to confirm/, ' March issue ');
+  expect((remove as HTMLButtonElement).disabled).toBe(false);
+  fireEvent.click(remove);
+
+  expect(await screen.findByRole('heading', { name: 'Issues' })).toBeTruthy();
+  expect(screen.getByRole('status').textContent).toBe('“March issue” was deleted.');
+  expect(server.calls('deleteIssue')[0].data).toMatchObject({ issue_id: 'i-1', confirmation: ' March issue ' });
+  await waitFor(() => expect(rowTitles()).toEqual(['Kept']));
+});
+
+test('a published issue offers no deletion', async () => {
+  const { deps } = setUp(fakeServer({ issues: [issueRecord({ issue_id: 'i-1', current_revision: 1, publication_state: 'published' })], categories: CATEGORIES }));
+  await signedInApp(deps, '/issues/i-1');
+  await screen.findByRole('button', { name: 'Unpublish' });
+  expect(screen.queryByRole('button', { name: 'Delete permanently' })).toBeNull();
+});
+
+test('a refusal by the server is shown and nothing is deleted', async () => {
+  const { server, deps } = setUp(fakeServer({ issues: [issueRecord({ issue_id: 'i-1', title: 'March issue' })], categories: CATEGORIES }));
+  await signedInApp(deps, '/issues/i-1');
+  await screen.findByRole('button', { name: 'Delete permanently' });
+  // Published in another tab after this one opened.
+  server.state.issues[0].publication_state = 'published';
+  type(/to confirm/, 'March issue');
+  fireEvent.click(screen.getByRole('button', { name: 'Delete permanently' }));
+
+  expect((await screen.findByRole('alert')).textContent).toBe(ERRORS.notUnpublished);
+  expect(server.state.issues).toHaveLength(1);
+  // A second try is a new request.
+  fireEvent.click(screen.getByRole('button', { name: 'Delete permanently' }));
+  await waitFor(() => expect(server.calls('deleteIssue')).toHaveLength(2));
+  expect(server.calls('deleteIssue')[1].data.request_id).not.toBe(server.calls('deleteIssue')[0].data.request_id);
+});
+
 // ---- SCR-W-05 categories ----
 
 test('FR-ADMIN-010: categories are listed in order, and a new one goes after the last', async () => {

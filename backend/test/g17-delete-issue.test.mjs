@@ -51,7 +51,14 @@ beforeEach(async () => {
   await db.doc('upload_jobs/job-del').set({ job_id: 'job-del', issue_id: 'i-del', status: 'pending' });
   await db.doc('upload_jobs/job-keep').set({ job_id: 'job-keep', issue_id: 'i-keep', status: 'accepted' });
   for (const path of [...FILES, ...KEPT]) await bucket.file(path).save('control-bytes', { resumable: false });
+  // A reader's bookmarks and favourites of both issues (synthetic).
+  for (const id of ['i-del', 'i-keep']) {
+    await db.doc(`users/${reader.uid}/bookmarks/${id}_3`).set({ bookmark_id: `${id}_3`, user_id: reader.uid, issue_id: id, page_number: 3, file_revision: 1, created_at: NOW });
+    await db.doc(`users/${reader.uid}/favourites/${id}`).set({ user_id: reader.uid, issue_id: id, created_at: NOW });
+  }
 });
+
+const readerRecord = async (kind, id) => (await db.doc(`users/${reader.uid}/${kind}/${id}`).get()).exists;
 
 const remove = (over = {}, token = admin.idToken) =>
   callFunction('deleteIssue', { request_id: `request-${(counter += 1)}`, issue_id: 'i-del', confirmation: 'October 2026', ...over }, token);
@@ -63,6 +70,8 @@ const assertRefused = (reply, status, reason) => {
 
 const unchanged = async () => {
   assert.equal((await db.doc('issues/i-del').get()).exists, true);
+  assert.equal(await readerRecord('bookmarks', 'i-del_3'), true);
+  assert.equal(await readerRecord('favourites', 'i-del'), true);
   assert.equal((await db.doc('deleted_issues/i-del').get()).exists, false);
   for (const path of FILES) assert.equal(await exists(path), true, path);
 };
@@ -75,6 +84,24 @@ test('G17 OP-30: an unpublished issue whose title is typed is deleted, with its 
   assert.equal((await db.collection('issues/i-del/files').get()).size, 0);
   assert.equal((await db.doc('upload_jobs/job-del').get()).exists, false);
   for (const path of FILES) assert.equal(await exists(path), false, path);
+});
+
+test('G17 DM 10.3 INV-13: readers\' bookmarks and favourites of the deleted issue go, the others stay', async () => {
+  const reply = await remove();
+  assert.equal(reply.status, 200, reply.raw);
+  assert.equal(await readerRecord('bookmarks', 'i-del_3'), false);
+  assert.equal(await readerRecord('favourites', 'i-del'), false);
+  assert.equal(await readerRecord('bookmarks', 'i-keep_3'), true);
+  assert.equal(await readerRecord('favourites', 'i-keep'), true);
+});
+
+test('G17 the remains task alone removes the reader records too, and a records collection elsewhere is left', async () => {
+  // A collection named like a reader's but not under users/{uid} is not a reader's record.
+  await db.doc('archive/x/bookmarks/i-del_3').set({ issue_id: 'i-del' });
+  await removeIssueRemains({ db, bucket }, 'i-del');
+  assert.equal(await readerRecord('bookmarks', 'i-del_3'), false);
+  assert.equal(await readerRecord('favourites', 'i-del'), false);
+  assert.equal((await db.doc('archive/x/bookmarks/i-del_3').get()).exists, true);
 });
 
 test('G17 the other issues keep everything', async () => {

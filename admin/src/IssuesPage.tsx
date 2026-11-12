@@ -1,7 +1,7 @@
 // SCR-W-02 Issues list (FR-ADMIN-011): published and unpublished issues through OP-15,
 // newest publication date first, a page at a time. Placeholder visuals.
 import { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { AccessLost } from './adminApi';
 import type { CallFn } from './adminApi';
 import { listIssues } from './data';
@@ -20,6 +20,8 @@ export function IssuesPage({ api }: Props) {
   const [cursor, setCursor] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
+  // A notice handed over by the editor, such as after a deletion.
+  const notice = (useLocation().state as { notice?: string } | null)?.notice ?? null;
 
   const load = useCallback(
     async (more: boolean, from: string | null) => {
@@ -46,6 +48,7 @@ export function IssuesPage({ api }: Props) {
   return (
     <section>
       <h2>Issues</h2>
+      {notice && <p role="status">{notice}</p>}
       <p>
         <Link to="/issues/new">New issue</Link>
       </p>

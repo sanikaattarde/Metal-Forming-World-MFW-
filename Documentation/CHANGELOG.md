@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD12-P3-T01 permanent deletion of an issue in the panel, PROVISIONAL, 2026-11-12
+
+- **Panel:** SCR-W-03 has a Delete permanently section for an unpublished issue. The button stays off until the admin types the issue's title (spaces at the ends do not count), then OP-30 runs and the list opens with a notice (FR-ADMIN-012, OQ-21 working position GS-Q45). Messages for `NOT_UNPUBLISHED` and `CONFIRMATION_MISMATCH`; a retry after a refusal is a new request. Published issues show no deletion.
+- **Backend:** the issue's remains now include readers' bookmarks and favourites of it, found by a collection-group query on `issue_id` under `users/{uid}` (DM section 10.3, INV-13). `backend/firestore.indexes.json` declares the two collection-group indexes the query needs in a cloud project, and `firebase.json` points to it.
+- **Tests:** G17 (19, two added) on the emulators, run on spare ports because the phone session's emulators were running; three panel tests in `screens.test.tsx`. Panel unit suite: 100 passed, build clean.
+
 ### Added: MOD06-P3-T02 kept copies after sign-out, account deletion and deletion of an issue, 2026-11-12
 
 - **App:** on the OQ-11 working position (DEC-033, PROPOSED). Sign-out hides a reader's copies until the same reader signs in, as before (copies are kept per reader). Account deletion now removes the reader's copies, downloads under way, stopped downloads and their partial files, after OP-12 and before the sign-out (IC-08); other readers' copies stay. Unpublishing leaves a copy. At each start and return to the foreground the app reads OP-03 (`deleted_issues`, from the server) and removes every copy of a deleted issue; offline, nothing is removed until the next read. `IssueDownloadManager` implements the new `KeptCopyLifecycle` port.
