@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD09-P2-T03 hidden and breaking posts in the app, 2026-11-12
+
+- **App:** `ControlledNewsRepository` applies the admin's news controls, read through OP-04 (`FirestoreNewsControlsService`, a public read of `news_controls`). A hidden post is never listed and opens as not found (FR-NEWS-008). A breaking post carries a Breaking label and comes first, newest first, at most five, on the News list and the home section (FR-NEWS-009, OQ-17 working position of 12 November 2026, PROVISIONAL). A breaking post beyond the first page is read on its own and pinned. When the controls cannot be read, the news fails too, so a hidden post never shows by mistake; offline, the SDK keeps the last controls read.
+- **Tests:** `controlled_news_repository_test.dart` (10), with the IC-06 consumer check on SCR-A-18: a post hidden after the list loads is gone after a pull to refresh. App suite: 874 passed, `flutter analyze` clean.
+
 ### Added: MOD09-P2-T01 the News list, the article page and the category filter, 2026-11-12
 
 - **App:** SCR-A-18 lists the posts of the selected categories, newest first, with a filter per category, pull to refresh and Show more for the next page (FR-NEWS-001 to FR-NEWS-004). SCR-A-19 shows the category, title, date, picture and body (FR-NEWS-003). Both are open to visitors (FR-NEWS-007). When WordPress cannot be reached, the list says so with Retry and keeps what it shows (FR-STATE-005).
