@@ -18,6 +18,7 @@ import '../test/fixtures/synthetic_pdf.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  tearDownAll(() => debugPrint("DEVICE: finished"));
 
   late Directory folder;
 
