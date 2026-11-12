@@ -136,6 +136,10 @@ void main() {
         );
         final Duration firstPage = await untilImage(tester);
         first.stop();
+        fact(
+          '${nameOf(file)} ${mode.name}: first page ${firstPage.inMilliseconds} '
+          'ms, memory ${mb(ProcessInfo.currentRss)} MB',
+        );
 
         // AC-2.5: 20 page turns with the Next button, each until its page
         // image shows.
@@ -153,6 +157,12 @@ void main() {
           await tester.pumpAndSettle(const Duration(milliseconds: 16));
           await untilImage(tester);
           turns.add(turn.elapsedMilliseconds);
+          if (i % 5 == 4) {
+            fact(
+              '${nameOf(file)} ${mode.name}: turn ${i + 1}, memory '
+              '${mb(ProcessInfo.currentRss)} MB',
+            );
+          }
         }
         turns.sort();
         final int rssPaged = ProcessInfo.currentRss;
@@ -177,6 +187,10 @@ void main() {
         }
         await a.up();
         await b.up();
+        fact(
+          '${nameOf(file)} ${mode.name}: pinched, memory '
+          '${mb(ProcessInfo.currentRss)} MB',
+        );
         final Stopwatch sharp = Stopwatch()..start();
         // Give the redraw time: it keeps the old image until the new one.
         for (int i = 0; i < 300; i++) {
