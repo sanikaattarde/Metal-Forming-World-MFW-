@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD07-P1-T02 and MOD07-P3-T01 the reader on MFW's sample issues, on an iPhone, 2026-11-12
+
+- **Tests:** `app/integration_test/reader_mfw_samples_test.dart` runs on a device with MFW's samples copied into the test app (not in Git, numbers only). All 104 pages of the three issues render, each in 162 ms at most. On SCR-A-14 the first page shows in 100 to 147 ms (AC-2.1: 3 s), 20 page turns pass in both modes with no crash (AC-2.5), zoom reaches 300% with the 3x redraw, memory stays between 173 and 226 MB while reading (peak 465 MB), and no frame is requested once a turn ends. No tuning was needed. `reader_pdfrx_test.dart` passed again on the device (7). Evidence: `Documentation/test-evidence/READER_SAMPLES_DEVICE_EVIDENCE.md`.
+- **Not done:** sharp text at 300% (AC-2.3) is judged by eye; a tablet and the agreed device set are still to come.
+
 ### Added: MOD15-P2-T01 the licence, secrets and documentation checks (QG-10 to QG-12), 2026-11-12
 
 - **CI:** `.github/workflows/checks.yml` on every pull request and push to `main`. QG-11 runs gitleaks 8.30.1 over the whole history, downloaded at a pinned version and checked against its SHA-256, with `.gitleaks.toml` allowing only the synthetic emulator values; a finding fails the run. QG-10 (`scripts/checks/licence_check.py`, also weekly) checks that every direct dependency of the app, the backend, the functions and the panel is in `DEPENDENCY_REGISTER.md`, and that each npm package declares an allowed licence. QG-12 (`scripts/checks/doc_check.py`) checks relative links, task IDs, decisions and open questions. Both report only for now, as agreed on 12 November 2026.

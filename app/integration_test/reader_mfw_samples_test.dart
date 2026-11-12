@@ -154,9 +154,24 @@ void main() {
           }
           final Stopwatch turn = Stopwatch()..start();
           await tester.tap(next);
-          await tester.pumpAndSettle(const Duration(milliseconds: 16));
+          // A fixed run of frames rather than pumpAndSettle, which never
+          // returns if something keeps animating.
+          for (int f = 0; f < 30; f++) {
+            await tester.pump(const Duration(milliseconds: 16));
+          }
           await untilImage(tester);
           turns.add(turn.elapsedMilliseconds);
+          if (i == 0) {
+            // Still asking for frames well after the turn ended means
+            // something animates for nothing.
+            for (int f = 0; f < 60; f++) {
+              await tester.pump(const Duration(milliseconds: 16));
+            }
+            fact(
+              '${nameOf(file)} ${mode.name}: frames still requested after a '
+              'turn: ${tester.binding.hasScheduledFrame}',
+            );
+          }
           if (i % 5 == 4) {
             fact(
               '${nameOf(file)} ${mode.name}: turn ${i + 1}, memory '
