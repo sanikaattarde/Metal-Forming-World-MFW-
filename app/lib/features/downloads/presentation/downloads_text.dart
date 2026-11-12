@@ -10,6 +10,9 @@ abstract final class DownloadsText {
   /// The download action.
   static const String download = 'Download';
 
+  /// Fetches a copy for this reading only (Read, MOD06-P3-T01).
+  static const String readNow = 'Read now';
+
   /// Shown for a kept copy.
   static const String downloaded = 'Downloaded';
 

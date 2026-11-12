@@ -32,6 +32,11 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD06-P3-T01 the Read and Download copy kinds, PROVISIONAL, 2026-11-12
+
+- **App:** on the OQ-08 working position of 12 November 2026, as drawn in the reader frames (GS-Q43): Read with no copy on the device offers "Read now", which fetches a temporary copy through the same grant, check and progress as a download. It opens in the reader, is not listed in Downloads, is not resumed after a restart, and goes when the reader closes; one left by an app that stopped goes at the next start, through the existing repair of files with no record. Download keeps a copy as before, and Download while reading keeps the same file without fetching it again. A kept copy always opens first. Account deletion and a deleted issue remove temporary copies too. A damaged kept copy is downloaded and kept again; a damaged temporary one is read again with Read now. YG's report of MFW's answer (one kind, the copy kept) differs; MFW's filed answer settles it.
+- **Tests:** `copy_kinds_test.dart` (8); the reader route and AC-2.6 tests follow the new wording. App suite: 969 passed, `flutter analyze` clean.
+
 ### Added: MOD07-P2-T04 damaged-file handling checked end to end (AC-2.6), 2026-11-12
 
 - **App:** closes the task built in MOD07-P2-T01 (`fileCorrupt` from the renderer) and MOD06-P3-T03 (the reader's Download again through MOD-06). No code change.
