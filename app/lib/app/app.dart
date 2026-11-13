@@ -407,8 +407,7 @@ Future<void> runMfwApp() async {
 /// Shows a loading screen until the first access state arrives, an error
 /// screen with Retry if it cannot be read, and the router after that. The
 /// theme uses the website's colours and fonts (working position of
-/// 8 November 2026, OQ-63). PLACEHOLDER: no MFW name or logo is shown yet,
-/// because the logo file stays out of the repository (DEC-024).
+/// 8 November 2026, OQ-63). The home bar shows MFW's logo (`MfwLogo`).
 class MfwApp extends ConsumerWidget {
   /// Creates the root widget.
   const MfwApp({super.key});

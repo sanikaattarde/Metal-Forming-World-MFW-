@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mfw_app/app/theme/mfw_theme.dart';
 import 'package:mfw_app/contracts/contracts.dart';
+import 'package:mfw_app/core/ui/mfw_logo.dart';
 import 'package:mfw_app/features/catalogue/catalogue.dart';
 
 import '../../fakes/fake_catalogue_repository.dart';
@@ -222,6 +223,25 @@ void main() {
       await tester.pumpAndSettle();
       await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+    });
+
+    testWidgets("the bar shows MFW's logo, read out as the screen's title", (
+      WidgetTester tester,
+    ) async {
+      await pumpHome(
+        tester,
+        FakeCatalogueRepository.fromFixtures(),
+        Calls().actions,
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(
+          of: find.byType(AppBar),
+          matching: find.byType(MfwLogo),
+        ),
+        findsOneWidget,
+      );
+      expect(find.bySemanticsLabel(HomeText.title), findsOneWidget);
     });
   });
 }

@@ -7,9 +7,9 @@
 | Document | Brand Reference |
 | File | `Documentation/BRAND_REFERENCE.md` |
 | Phase | 3: Development Planning and Collaboration. The reference for the design tokens (MOD16-P1-T01), the app theme (MOD01-P2-T02) and the M2 designs of the app and the admin panel |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | Draft for review. Not reviewed. **OBSERVED, and the working position for the app: used as they are (reported by YG on 8 November 2026, not filed).** The values below were read from MFW's public website on 8 November 2026. They are not confirmed by MFW in writing, so OQ-63 stays OPEN. DEP-02 is RECEIVED by reference to the website. Section 7 adds what the supplied logo file and the three issues show. |
-| Date | 8 November 2026 |
+| Date | 14 November 2026 |
 | Prepared by | Yuvraj Gaykhe (WS-B), 8 November 2026 |
 | Approval required | Both developers, for its use in the designs. MFW confirms the values in writing (OQ-63) and approves the screens at M2 |
 
@@ -18,6 +18,7 @@
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 8 November 2026 | First record: MFW's direction as reported on 8 November 2026, the colours, fonts, type scale and page patterns read from the public website and its web logo, the contrast of the colour pairs, what the supplied logo file and the three issues show (section 7, read once YG allowed tools to open them), and what was not inspected. It also records YG's report of the same day that the website's colours and fonts are used in the app as they are, as the working position of section 4.3. Revised on 9 November 2026 after the review of pull request #56: section 7 says which tool read the four files, what left YG's Mac, and that a reference to MFW's permission is added once it is filed. |
+| 0.2 | 14 November 2026 | Section 8, item 3: the app shows the logo from `app/assets/brand/mfw_logo.png`, an RGB picture made from the supplied file, kept in Git with MFW's approval (reported by YG on 14 November 2026, not filed; the DEC-024 exception). |
 
 ### 1.1 Related documents
 
@@ -238,7 +239,7 @@ The magazine fonts Frutiger LT Std, Helvetica LT Std, Arial and Acumin are not p
 
 1. MOD16-P1-T01 draws its tokens from sections 4.3 and 5 only, on the working position that the website's values are used as they are. It adds no other colour or font. A role with no website value (error, success, warning) is the team's proposal, preferring colours the website's kit already defines, and MFW sees it at M2.
 2. The admin panel uses the same tokens. Its screens are WS-A work, and Sanika Attarde updates the WS-A plans.
-3. The logo is used only from the file MFW supplied, never redrawn.
+3. The logo is used only from the file MFW supplied, never redrawn. The app shows `app/assets/brand/mfw_logo.png`, an RGB picture of that file at 1200 by 264 pixels, made with PyMuPDF on 14 November 2026 and kept in Git with MFW's approval (reported by YG, a WhatsApp message from MFW, not filed; the DEC-024 exception in `DECISION_LOG.md`). The widget `MfwLogo` sets only its height.
 4. The low-fi prototype of T-02.1 (pull request #53) stays greyscale. This reference does not change it.
 5. MFW approves the look when it approves the screens at M2. This document approves nothing.
 
