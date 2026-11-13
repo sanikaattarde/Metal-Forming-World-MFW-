@@ -53,7 +53,7 @@ This document proposes the automated checks that guard pull requests, integratio
 |---|---|---|
 | Service | GitHub Actions, since the repository is hosted on GitHub | DEC-022, AGREED. The cost of the first workflow is approved by the repository owner, for the repository as it is now (`DECISION_LOG.md` section 5.9) |
 | Runners | Linux for formatting, analysis, tests and Android builds. macOS for iOS builds, which need Xcode. | PROPOSED |
-| Constraint | Runner minutes, macOS minute cost, and feature availability (environments, required reviewers) depend on the account plan and repository visibility | Not verified |
+| Constraint | Runner minutes, macOS minute cost, and feature availability (environments, required reviewers) depend on the account plan and repository visibility | Visibility and runner cost checked on 14 November 2026: public, and no billable time (section 13.1). The account plan and feature availability are NOT VERIFIED |
 | After handover | CI moves with the repository to MFW's ownership (OQ-48). Secrets are re-created in MFW's account. | PLANNED |
 
 ## 4. Quality Gates
@@ -192,6 +192,23 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 - macOS runners use more of the minute allowance than Linux runners.
 - Any CI cost billed to MFW needs MFW's approval (DEC-022). No price is quoted here, because provider prices change.
 - Sanika Attarde, as the owner of the repository and of the account that pays, approved the cost of `.github/workflows/pr.yml` (three jobs, one on a macOS runner) in writing on 8 November 2026, in the approving review of pull request #48 (DEC-022, `DECISION_LOG.md` section 5.9). No cost is billed to MFW. The plan minutes and the macOS runner cost are NOT VERIFIED, and the check is made again if the repository's visibility or the paying account changes. From 10 November 2026 the workflow also runs on each push to `main` that changes `app/` (DEC-010). Those runs take the place of the pull request runs that tasks no longer open; whether the approval covers them is for Sanika Attarde to confirm.
+
+### 13.1 Finding of MOD15-P1-T01, 14 November 2026
+
+Checked by Yuvraj Gaykhe on 14 November 2026 with the GitHub command line tool and GitHub's documentation. Sanika Attarde has not yet reviewed it.
+
+| Item | Finding | Source |
+|---|---|---|
+| Repository visibility | Public. The owner is a personal account, `sanikaattarde` | GitHub API `repos/sanikaattarde/Metal-Forming-World-MFW-`, read on 14 November 2026 |
+| Actions available | Yes. Three workflows run: App checks (71 runs from 30 October to 12 November 2026), Backend checks (11 runs) and Repository checks (5 runs) | `gh run list`, the latest 200 runs, read on 14 November 2026 |
+| Price of standard runners in a public repository | Free, for every runner system, macOS included. Such runs do not use the account's included allowance | GitHub Docs, "GitHub Actions billing" (`docs.github.com/en/billing/concepts/product-billing/github-actions`), read on 14 November 2026; the page shows no date |
+| What GitHub billed | Nothing. App checks runs 42877362021 (10 November 2026) and 43259188509 (12 November 2026) each show 0 billable milliseconds for their two Linux jobs and their macOS job. The macOS job (QG-06) took 6 minutes 11 seconds and 8 minutes 47 seconds | GitHub API `actions/runs/<id>/timing` and `gh run view`, read on 14 November 2026 |
+| Account plan | NOT VERIFIED. Only the owner can read it, and the API needs a scope that YG's token does not have | GitHub API `users/sanikaattarde/settings/billing/actions` answered 404 |
+| Feature availability (environments, required reviewers) | NOT VERIFIED. Not checked in this task | None |
+
+**If the repository becomes private.** The cost then depends on the paying account's plan. On the GitHub Free plan for a personal account, the same page gives an included allowance of USD 12 a month, Linux 2-core minutes at USD 0.006 and macOS minutes at USD 0.062. By arithmetic, not from the page, one QG-06 run of about 9 minutes would cost about USD 0.56. Prices change, so this is checked again when it matters.
+
+**What it means for MFW.** No CI cost falls to MFW while the repository stays public and owned by `sanikaattarde`. The check is made again when the repository's visibility or its paying account changes, for example at handover (OQ-48). A private repository in MFW's account would put the cost on MFW, and that needs MFW's approval (DEC-022). Step 3 of MOD15-P1-T01, telling Sanika Attarde, is not done yet; this section is what YG passes on.
 
 ## 14. Implementation Steps (Not Performed)
 
