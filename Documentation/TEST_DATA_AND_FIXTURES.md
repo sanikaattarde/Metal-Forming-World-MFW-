@@ -8,7 +8,7 @@
 | File | `Documentation/TEST_DATA_AND_FIXTURES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 32) |
 | Version | 0.9 |
-| Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. Update of 8 November 2026: FX-WP-01 to FX-WP-12 now exist as test files or test cases (section 10, pull request #58). |
+| Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. Update of 8 November 2026: FX-WP-01 to FX-WP-12 now exist as test files or test cases (section 10, pull request #58). Update of 14 November 2026 (MOD17-P1-T01): `app/test/fixtures/README.md` lists where each fixture exists and which wait, and why; `app/test/fixtures/fixtures_load_test.dart` loads them. The PLANNED labels in the tables below are not yet changed one by one. |
 | Date | 6 November 2026 |
 | Approval required | Both developers. MFW confirms where its sample PDFs may be stored (DEC-024). |
 
