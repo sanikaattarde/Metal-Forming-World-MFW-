@@ -7,9 +7,9 @@
 | Document | Decision Log |
 | File | `Documentation/DECISION_LOG.md` |
 | Phase | 3 — Development Planning and Collaboration (document 28) |
-| Version | 0.18 |
+| Version | 0.17 |
 | Status | Draft for review. Not approved. |
-| Date | 14 November 2026 |
+| Date | 9 November 2026 |
 | Approval required | Both developers for this log's structure. Individual entries follow Section 3. |
 
 **Change history**
@@ -32,7 +32,6 @@
 | 0.14 | 7 November 2026 | Two places that said that `SANIKA_IMPLEMENTATION_ROADMAP.md` is not in this repository (the 0.4 row of this table and the DEC-022 row of section 5.6) now say that it has been since 7 November 2026. The task list is committed with its three companion documents. No entry changes status, and no requirement, scope item, decision or MFW approval changed. |
 | 0.15 | 8 November 2026 | DEC-022: the cost is approved by the repository owner for the repository as it is now, and the plan minutes and the macOS runner cost are NOT VERIFIED (MOD15-P1-T01 stays open). Sanika Attarde, who owns the repository and the account that pays for its CI, approved the cost of the workflow of pull request #48 in writing in their approving review of 8 November 2026. Section 5.9 records it and says how the condition of task MOD15-P1-T01 now reads, and the index row, the DEC-022 entry and its row in section 5.6 follow. The plan minutes and the macOS runner cost stay NOT VERIFIED, and the check is made again if the visibility or the paying account changes. The DEC-022 row of section 5.6 also says that MOD15-P1-T01 is a task in `YUVRAJ_IMPLEMENTATION_ROADMAP.md`, owned by Yuvraj Gaykhe with Sanika Attarde's support, where it said that the task is Sanika Attarde's, in `SANIKA_IMPLEMENTATION_ROADMAP.md`, which does not list it. Section 5.10 adds Yuvraj Gaykhe's written positions of 8 November 2026 on DEC-003 and DEC-023 and on their own availability (OQ-38), and the DEC-003 and DEC-023 entries point to it. DEC-003 stays OPEN and DEC-023 stays PROPOSED. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.16 | 8 November 2026 | After the review of pull request #51, which arrived after its merge commit was pushed: the 0.15 row, the Status row of DEC-022 and the update sentence of the DEC-022 row in section 5.6 say "the cost is approved by the repository owner" where they said "the cost condition is met", with "the plan minutes and the macOS runner cost are NOT VERIFIED (MOD15-P1-T01 stays open)" next to it, so that the Status row is not read as the cost check being done. Section 5.9 already read so. No entry changes status, and no MFW approval is recorded. |
-| 0.18 | 14 November 2026 | DEC-024: a row records one exception, MFW's logo. MFW approved keeping the logo in the repository and showing it in the app (reported by YG on 14 November 2026, a WhatsApp message from MFW, not filed). Only an RGB picture made from the supplied file is kept, `app/assets/brand/mfw_logo.png`; the supplied PDF and the sample issues stay out of Git. DEC-024 stays AGREED, and its status does not change. |
 | 0.17 | 9 November 2026 | Section 5.11 adds Sanika Attarde's written positions of 9 November 2026 on DEC-003, DEC-023 and DEC-004 (MOD20-P1-T02, step 4). DEC-003 moves from OPEN to AGREED: Firebase, as S2 proposes, with both developers' written notes filed (sections 5.10 and 5.11). DEC-023 moves from PROPOSED to AGREED as an internal position: the three environments, with MFW's approval still needed because the second project may add cost billed to MFW (OQ-40). DEC-004 moves from OPEN to PROPOSED: a React web app on Firebase Hosting, with the options assessed and a Consequences row; Yuvraj Gaykhe's written position is not filed. The index rows and the three entries follow, and the Status rows of DEC-025 and DEC-026 say that DEC-003 is AGREED. No MFW approval is recorded, and no entry is APPROVED. |
 
 ### 1.1 Related documents

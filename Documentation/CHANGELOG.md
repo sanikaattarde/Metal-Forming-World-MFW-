@@ -35,7 +35,7 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 ### Added: MFW's logo in the app, 2026-11-14
 
 - **App:** the home bar shows MFW's logo (`app/lib/core/ui/mfw_logo.dart`, `app/assets/brand/mfw_logo.png`) in place of the placeholder box. The picture is an RGB copy of the supplied logo file (DEP-02), not redrawn or recoloured. Tests: `test/core/ui/mfw_logo_test.dart` and one home screen test.
-- **Documentation:** `DECISION_LOG.md` 0.18 records the logo as an exception to DEC-024 (MFW's approval reported by YG, a WhatsApp message, not filed); `BRAND_REFERENCE.md` 0.2 section 8 and `inputs/README.md` say where the picture is. The supplied PDF and the sample issues stay out of Git.
+- **Documentation:** `DECISION_LOG.md` records the logo as an exception to DEC-024 (MFW's approval reported by YG, a WhatsApp message, not filed); `BRAND_REFERENCE.md` section 8 and `inputs/README.md` say where the picture is. The supplied PDF and the sample issues stay out of Git.
 
 ### Added: MOD07-P1-T02 and MOD07-P3-T01 the reader on MFW's sample issues, on an iPhone, 2026-11-12
 
