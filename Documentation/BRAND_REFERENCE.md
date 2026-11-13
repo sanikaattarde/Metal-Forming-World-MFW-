@@ -238,7 +238,7 @@ The magazine fonts Frutiger LT Std, Helvetica LT Std, Arial and Acumin are not p
 
 1. MOD16-P1-T01 draws its tokens from sections 4.3 and 5 only, on the working position that the website's values are used as they are. It adds no other colour or font. A role with no website value (error, success, warning) is the team's proposal, preferring colours the website's kit already defines, and MFW sees it at M2.
 2. The admin panel uses the same tokens. Its screens are WS-A work, and Sanika Attarde updates the WS-A plans.
-3. The logo is used only from the file MFW supplied, never redrawn.
+3. The logo is used only from the file MFW supplied, never redrawn. The app shows `app/assets/brand/mfw_logo.png`, an RGB picture of that file at 1200 by 264 pixels, made with PyMuPDF on 14 November 2026 and kept in Git with MFW's approval (reported by YG, a WhatsApp message from MFW, not filed; the DEC-024 exception in `DECISION_LOG.md`). The widget `MfwLogo` sets only its height.
 4. The low-fi prototype of T-02.1 (pull request #53) stays greyscale. This reference does not change it.
 5. MFW approves the look when it approves the screens at M2. This document approves nothing.
 

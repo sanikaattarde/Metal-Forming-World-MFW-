@@ -4,6 +4,7 @@ import 'package:mfw_app/contracts/contracts.dart';
 import '../../../app/theme/mfw_tokens.dart';
 import '../../../core/format/display_format.dart';
 import '../../../core/ui/content_widgets.dart';
+import '../../../core/ui/mfw_logo.dart';
 import '../../../core/ui/reloadable.dart';
 import 'catalogue_screen.dart';
 import 'catalogue_text.dart';
@@ -60,8 +61,7 @@ class HomeScreen extends StatefulWidget {
   /// The shell's actions.
   final HomeActions actions;
 
-  /// The logo for the bar. A placeholder until MFW's file may be used
-  /// (DEC-024, `BRAND_REFERENCE.md` section 8).
+  /// The logo for the bar; MFW's logo when null.
   final Widget? logo;
 
   /// How many issues the archive row shows after the latest.
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen>
           header: true,
           label: HomeText.title,
           child: ExcludeSemantics(
-            child: widget.logo ?? const _LogoPlaceholder(),
+            child: widget.logo ?? const MfwLogo(height: 36),
           ),
         ),
       ),
@@ -456,29 +456,11 @@ class _NewsRow extends StatelessWidget {
   }
 }
 
-class _LogoPlaceholder extends StatelessWidget {
-  const _LogoPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 120,
-      height: 32,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(border: Border.all(color: MfwColours.divider)),
-      child: Text(HomeText.logoPlaceholder, style: MfwType.small),
-    );
-  }
-}
-
 /// User-facing text of SCR-A-10. PLACEHOLDER wording from the reader frames
 /// until M2.
 abstract final class HomeText {
   /// What a screen reader calls the screen.
   static const String title = 'Home';
-
-  /// The logo placeholder's text.
-  static const String logoPlaceholder = 'MFW logo';
 
   /// Spoken while home loads.
   static const String loading = 'Loading the latest issues';

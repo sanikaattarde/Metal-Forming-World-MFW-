@@ -39,6 +39,8 @@ flutter:
   # The licence of each typeface ships with it (SIL Open Font License 1.1,
   # condition 2) and is shown on the licence page (DEP-78).
   assets:
+    # MFW's logo, kept with MFW's approval (DEC-024 exception).
+    - assets/brand/mfw_logo.png
     - assets/fonts/fraunces/OFL.txt
     - assets/fonts/inter/OFL.txt
     - assets/fonts/plus_jakarta_sans/OFL.txt

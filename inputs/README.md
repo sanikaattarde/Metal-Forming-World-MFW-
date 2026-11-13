@@ -10,6 +10,8 @@ Where MFW approves keeping its samples is still open (DEC-024). Until MFW answer
 
 Test fixtures stay synthetic. These files are for local reading and layout checks only (FX-PDF-03 and FX-PDF-04).
 
+One exception: MFW approved keeping its logo in the repository (reported by YG on 14 November 2026, a WhatsApp message from MFW, not filed; `Documentation/DECISION_LOG.md` DEC-024). The app holds an RGB picture made from the logo file, `app/assets/brand/mfw_logo.png`. The logo PDF itself stays out of Git like the others.
+
 ## Files
 
 Size is in bytes. To check a copy, run `shasum -a 256` on the file and compare it with the value here.
