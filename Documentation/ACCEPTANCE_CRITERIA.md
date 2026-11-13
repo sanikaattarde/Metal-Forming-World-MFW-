@@ -92,7 +92,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | AC-2.1 | S2 AC-2; RS NFR-PERF-001 | First page appears quickly | Sample issue downloaded; mid-range test phone; full access (FX-USR-01) | T: open the issue; time per `TESTING_STRATEGY.md` §8.1 | First page within 3 seconds | P1 | CONFIRMED. The target is confirmed at the end of Week 2 [S2]. | Method and repetitions agreed in T-02.3; OQ-26 (device) |
 | AC-2.2 | S2 AC-2; RS FR-READ-003, FR-READ-004 | Pages turn by swipe and by tap | Issue open | T: swipe both ways; tap the turn zones | Pages advance and go back each time | P1 | CONFIRMED | — |
 | AC-2.3 | S2 AC-2; RS FR-READ-005, NFR-PERF-002 | Zoom to 300% keeps text sharp | Issue open on the test phone | T and I: pinch to 300% on agreed text-heavy pages | Text is sharp to the tester | P1 | CONFIRMED | "Sharp" is judged by inspection |
-| AC-2.4 | S2 AC-2; RS FR-READ-009 | Two pages side by side on tablets and in landscape | Tablet (if available); phone in landscape | T: open an issue in each case | Two pages are shown together | P1 | CONFIRMED | Tablet model: OQ-26 |
+| AC-2.4 | S2 AC-2; RS FR-READ-009, NFR-COMP-002 | Two pages side by side on tablets and in landscape | Tablet (if available); phone in landscape | T: open an issue in each case | Two pages are shown together | P1 | CONFIRMED | Tablet model: OQ-26 |
 | AC-2.5 | S2 AC-2; RS NFR-REL-001 | Reading is stable | Issue open | T: 20 consecutive page turns on each test device | No crash | P1 | CONFIRMED | — |
 | AC-2.6 | S2 AC-2; RS FR-READ-010 | A damaged file is handled | FX-PDF-10 placed as the local file | T: open it | An error with a retry option; no crash | P1 | CONFIRMED | FX-PDF-11 is not used here. A reader library may repair it and open it (`TEST_DATA_AND_FIXTURES.md` section 7, PROPOSED). |
 | AC-2.7 | S2 Scope included: Reader; S1 What MFW receives; RS FR-READ-006, FR-READ-007 | Page-turn effect and plain swipe mode are both available | Issue open | D: show both modes | Both modes work | P1 | CONFIRMED (scope item; not in the AC-2 text) | Switching and default: OQ-14. Reader approach confirmed at M2. |
@@ -116,7 +116,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | ID | Source | Criterion | Preconditions | Verification | Pass condition | Priority | Status | Clarification |
 |---|---|---|---|---|---|---|---|---|
 | AC-4.1 | S2 AC-4; RS FR-DL-005 | Download shows progress | FX-USR-01; Wi-Fi | T: start a download | Progress is visible and advances to completion | P1 | CONFIRMED | — |
-| AC-4.2 | S2 AC-4; RS FR-DL-007 | A downloaded issue reads fully in airplane mode | Issue downloaded | T: enable airplane mode; open and page through to the last page | Every page opens | P1 | CONFIRMED | Reading model: OQ-08 |
+| AC-4.2 | S2 AC-4; RS FR-DL-007, FR-READ-002, NFR-OFF-001 | A downloaded issue reads fully in airplane mode | Issue downloaded | T: enable airplane mode; open and page through to the last page | Every page opens | P1 | CONFIRMED | Reading model: OQ-08 |
 | AC-4.3 | S2 AC-4; RS FR-DL-006 | A download resumes after a network break | Download of FX-PDF-05 in progress | T: FX-NET-01 at around 50%; restore the network | Continues from the previous progress, not from zero, and completes | P1 | CONFIRMED | Mechanism: DEC-020 |
 | AC-4.4 | S2 AC-4; RS FR-DL-003 | File size is shown before download | Issue details screen | I | Size shown, and matches the file | P1 | CONFIRMED | Shown before sign-in? OQ-13 |
 | AC-4.5 | S2 AC-4; RS FR-DL-004 | Warning on mobile data | Device on mobile data only | T: start a download | Warning appears before the download starts | P1 | CONFIRMED | — |
@@ -154,7 +154,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | ID | Source | Criterion | Preconditions | Verification | Pass condition | Priority | Status | Clarification |
 |---|---|---|---|---|---|---|---|---|
 | AC-8.1 | S2 AC-8; RS FR-ADMIN-002 | A wrong password is refused | FX-USR-08 (admin) | T: sign in with a wrong password | Refused | P1 | CONFIRMED | Further measures: OQ-20 |
-| AC-8.2 | S2 AC-8; RS FR-ADMIN-003 | A non-admin account is refused | FX-USR-01 (reader) | T: sign in to the admin panel; call an admin operation directly (SEC-CHK-06) | Both refused | P1 | CONFIRMED | — |
+| AC-8.2 | S2 AC-8; RS FR-ADMIN-003, NFR-SEC-007 | A non-admin account is refused | FX-USR-01 (reader) | T: sign in to the admin panel; call an admin operation directly (SEC-CHK-06) | Both refused | P1 | CONFIRMED | — |
 | AC-8.3 | S2 AC-8; RS FR-ADMIN-005 | A valid PDF uploads | FX-ADM-01 | T: upload the PDF, cover and details | Issue created, unpublished, with a success message | P1 | CONFIRMED | — |
 | AC-8.4 | S2 AC-8; RS FR-ADMIN-006 | A renamed non-PDF is rejected | FX-PDF-08, FX-PDF-09 | T: upload each | Rejected with a clear message | P1 | CONFIRMED | — |
 | AC-8.5 | S2 AC-8; RS FR-ADMIN-007 | An oversized file is rejected | FX-PDF-07; FX-PDF-06 as the boundary | T: upload each | FX-PDF-07 rejected with a clear message. FX-PDF-06 handled as OQ-30 decides. | P1 | CONFIRMED (boundary BLOCKED) | OQ-30 |
@@ -168,7 +168,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | ID | Source | Criterion | Preconditions | Verification | Pass condition | Priority | Status | Clarification |
 |---|---|---|---|---|---|---|---|---|
 | AC-9.1 | S2 AC-9; RS FR-NOTIF-001 | The app explains notifications before the system prompt | Fresh install | T: first launch through to the permission step | Explanation shown before the OS prompt | P1 | CONFIRMED | — |
-| AC-9.2 | S2 AC-9; RS FR-NOTIF-004 | A category notification reaches only devices that chose it | Device A opted into "new issues"; device B not | T: admin sends to "new issues" | A receives it; B does not | P1 | CONFIRMED | Categories: OQ-18 |
+| AC-9.2 | S2 AC-9; RS FR-NOTIF-004, FR-ADMIN-016 | A category notification reaches only devices that chose it | Device A opted into "new issues"; device B not | T: admin sends to "new issues" | A receives it; B does not | P1 | CONFIRMED | Categories: OQ-18 |
 | AC-9.3 | S2 AC-9; RS FR-NOTIF-005, BR-005 | Tapping opens the linked issue or article | FX-NTF-01, FX-NTF-02; also FX-NTF-07 while signed out | T: tap each | Opens the target. For FX-NTF-07, a sign-in prompt instead of the issue. | P1 | CONFIRMED (BR-005 is an ASSUMPTION) | — |
 | AC-9.4 | S2 AC-9; RS FR-ADMIN-018 | The send log records each send | Two sends | I: open the send log | Both recorded | P1 | CONFIRMED | Fields: OQ-19 |
 | AC-9.5 | S2 AC-9; RS FR-ADMIN-017 | Only admins can send | FX-USR-01 | T: attempt a send directly (SEC-CHK-06) | Refused | P1 | CONFIRMED | — |
@@ -188,7 +188,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 
 | ID | Source | Criterion | Verification | Pass condition | Priority | Status | Clarification |
 |---|---|---|---|---|---|---|---|
-| AC-11.1 | S2 AC-11; RS NFR-MAINT-003 | Signed Android and iOS builds are made from tagged source code | I: tag, build logs, signatures | Both builds trace to one release tag and are signed | P1 | CONFIRMED | Signing set-up in MFW's accounts |
+| AC-11.1 | S2 AC-11; RS NFR-MAINT-003, NFR-COMP-001 | Signed Android and iOS builds are made from tagged source code | I: tag, build logs, signatures | Both builds trace to one release tag and are signed | P1 | CONFIRMED | Signing set-up in MFW's accounts |
 | AC-11.2 | S2 AC-11 | Store listings carry text approved by MFW | R | MFW's written approval recorded | P1 | CONFIRMED | — |
 | AC-11.3 | S2 AC-11; RS NFR-PRIV-002 | The privacy details in both stores match MFW's privacy policy | I | Side-by-side comparison, with no mismatch | P1 | CONFIRMED | OQ-44 |
 | AC-11.4 | S2 AC-11; RS INT-STORE-001 | Both builds are submitted, and MFW receives the confirmations | I | Submission confirmations held by MFW | P1 | CONFIRMED | Store accounts: OQ-42 |
@@ -198,7 +198,7 @@ These restate S2 "Deliverables and milestones". Dates are in conflict (C-08; `DE
 | ID | Source | Criterion | Verification | Pass condition | Priority | Status | Clarification |
 |---|---|---|---|---|---|---|---|
 | AC-12.1 | S2 AC-12; RS NFR-MAINT-001 | Source code with history is in a repository owned by MFW | I | The repository is under MFW's ownership, with full history | P1 | CONFIRMED | Repository is currently under the `sanikaattarde` account: OQ-48 |
-| AC-12.2 | S2 AC-12; RS NFR-MAINT-002 | Following the written documentation, the developer builds the app and deploys the backend from a clean copy into a fresh project | D | Build and deployment succeed from a clean clone into a fresh project | P1 | CONFIRMED. S2 names a "fresh Firebase project" (C-05). | DEC-003 |
+| AC-12.2 | S2 AC-12; RS NFR-MAINT-002, NFR-MAINT-004 | Following the written documentation, the developer builds the app and deploys the backend from a clean copy into a fresh project | D | Build and deployment succeed from a clean clone into a fresh project | P1 | CONFIRMED. S2 names a "fresh Firebase project" (C-05). | DEC-003 |
 | AC-12.3 | S2 AC-12; RS NFR-SEC-012 | Credentials are held by MFW | I: credential-holder record | MFW holds every credential. The record contains no secret values. | P1 | CONFIRMED | — |
 
 ## 6. Proposed Criteria
@@ -207,10 +207,10 @@ PAC-01 to PAC-11 are from RS §10.2. They are summarised here, and RS holds the 
 
 | ID | Source | Criterion (summary) | Verification | Priority | Status | Clarification |
 |---|---|---|---|---|---|---|
-| PAC-01 | RS §10.2; FR-AUTH-005 | A new reader registers with Google on Android and iOS, completes the profile, opens a full issue, and sees the same items on a second device | T | P2 | PROPOSED; PROVISIONAL (C-04) | OQ-03, OQ-04, OQ-29 |
-| PAC-02 | RS §10.2; FR-PROF-001, BR-003 | Registration needs every mandatory field. An incomplete profile is prompted before a full issue opens. | T | P2 | PROPOSED; PROVISIONAL | OQ-01, OQ-02, OQ-29 |
-| PAC-03 | RS §10.2; FR-USER-002, FR-USER-003 | Admin sees and exports registered users with profile fields; non-admins cannot | T | P2 | PROPOSED; PROVISIONAL | OQ-01, OQ-29 |
-| PAC-04 | RS §10.2; BR-001 | A logged-out visitor can browse, search, filter and read news, but cannot open or download any issue content, including any sample | T | P2 | PROPOSED; PROVISIONAL (C-01) | OQ-29 |
+| PAC-01 | RS §10.2; FR-AUTH-005, FR-PROF-003 | A new reader registers with Google on Android and iOS, completes the profile, opens a full issue, and sees the same items on a second device | T | P2 | PROPOSED; PROVISIONAL (C-04) | OQ-03, OQ-04, OQ-29 |
+| PAC-02 | RS §10.2; FR-PROF-001, FR-PROF-002, FR-PROF-004, BR-003 | Registration needs every mandatory field. An incomplete profile is prompted before a full issue opens. | T | P2 | PROPOSED; PROVISIONAL | OQ-01, OQ-02, OQ-29 |
+| PAC-03 | RS §10.2; FR-USER-002, FR-USER-003, NFR-PRIV-004 | Admin sees and exports registered users with profile fields; non-admins cannot | T | P2 | PROPOSED; PROVISIONAL | OQ-01, OQ-29 |
+| PAC-04 | RS §10.2; BR-001, FR-MAG-001, FR-SRCH-006, FR-NEWS-007 | A logged-out visitor can browse, search, filter and read news, but cannot open or download any issue content, including any sample | T | P2 | PROPOSED; PROVISIONAL (C-01) | OQ-29 |
 | PAC-05 | RS §10.2; FR-SHR-002, FR-SHR-004 | Issue shares link to the store listing; article shares link to the WordPress address | T | P2 | PROPOSED; PROVISIONAL | OQ-15, OQ-29 |
 | PAC-06 | RS §10.2; FR-PRIV-003 | After deletion, the reader cannot sign in and is absent from the admin list and new exports | T | P2 | PROPOSED | OQ-24 |
 | PAC-07 | RS §10.2; FR-SRCH-003 | The industry-segment filter returns the right issues | T | P3 | PROPOSED | OQ-13 |
@@ -219,7 +219,7 @@ PAC-01 to PAC-11 are from RS §10.2. They are summarised here, and RS holds the 
 | PAC-10 | RS §10.2; FR-STATE-001 to 007 | Loading, empty and error states match the screens approved at M2 | D | P3 | PROPOSED | ASM-13 |
 | PAC-11 | RS §10.2; FR-EMAIL-001, FR-EMAIL-002 | If kept: opt in, appear in the export, opt out, disappear. Dropped on the working position (GS-Q49), so there is nothing to test unless MFW keeps the sign-up | T | P3 | PROPOSED; CONFLICT C-02; dropped on the working position | OQ-31 |
 | PAC-12 | New. RS FR-AUTH-006, FR-AUTH-007 | The rule for an email address used with both sign-in methods, and the verification rule for Google accounts, behave as decided. Test with FX-USR-11. | T | P2 | PROPOSED; BLOCKED | OQ-04, OQ-05 |
-| PAC-13 | New. RS NFR-SEC-002; DEC-009 | An issue-file request is refused when signed out, unverified, profile incomplete, using another reader's grant, using an expired grant, or using a guessed storage path. A valid grant for a full-access reader succeeds. (SEC-CHK-02, SEC-CHK-03) | T | P2 | PROPOSED | DEC-020, OQ-37 |
+| PAC-13 | New. RS NFR-SEC-002, FR-DL-002; DEC-009 | An issue-file request is refused when signed out, unverified, profile incomplete, using another reader's grant, using an expired grant, or using a guessed storage path. A valid grant for a full-access reader succeeds. (SEC-CHK-02, SEC-CHK-03) | T | P2 | PROPOSED | DEC-020, OQ-37 |
 | PAC-14 | New. RS FR-DL-010 | Downloaded issues after sign-out, account deletion, or unpublishing behave as decided | T | P2 | PROPOSED; BLOCKED | OQ-11 |
 | PAC-15 | New. Store policy | If confirmed as required, readers can request account deletion through a web link outside the app, as declared to Google Play | I | P2 | PROPOSED; BLOCKED | OQ-45 |
 | PAC-16 | New. PRC-02 | Withdrawn with PRC-02. Deletion is immediate (GS-Q50), so there is no pending state and no undo to test. AC-3.7 and PAC-06 apply, and a deletion that stops part-way is finished by the cleanup task | T | P3 | Withdrawn | OQ-24, AOQ-02 |

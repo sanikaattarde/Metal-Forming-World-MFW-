@@ -76,10 +76,10 @@ AREA ONLY and NO ROW are the two states that need action. They carry a candidate
 
 ```text
 Requirements: 166 (121 FR, 45 NFR)
-├── COVERED     95
-├── RS CLAIM    19
+├── COVERED    112
+├── RS CLAIM     4
 ├── PLAN ONLY   11
-├── REVIEW      33
+├── REVIEW      31
 ├── AREA ONLY    5
 └── NO ROW       3
 ```
@@ -87,36 +87,36 @@ Requirements: 166 (121 FR, 45 NFR)
 | RS area | Requirements | COVERED | RS CLAIM | PLAN ONLY | REVIEW | AREA ONLY | NO ROW |
 |---|---|---|---|---|---|---|---|
 | 5.1 Authentication and account lifecycle | 10 | 9 | 0 | 0 | 0 | 1 | 0 |
-| 5.2 Mandatory reader profile | 7 | 1 | 3 | 0 | 2 | 1 | 0 |
-| 5.3 Public catalogue and magazine metadata | 9 | 4 | 1 | 0 | 3 | 1 | 0 |
-| 5.4 Search, filters, categories, years and editions | 7 | 5 | 1 | 1 | 0 | 0 | 0 |
-| 5.5 Magazine reading experience | 10 | 8 | 1 | 0 | 1 | 0 | 0 |
-| 5.6 PDF handling and offline downloads | 10 | 8 | 2 | 0 | 0 | 0 | 0 |
+| 5.2 Mandatory reader profile | 7 | 4 | 0 | 0 | 2 | 1 | 0 |
+| 5.3 Public catalogue and magazine metadata | 9 | 5 | 0 | 0 | 3 | 1 | 0 |
+| 5.4 Search, filters, categories, years and editions | 7 | 6 | 0 | 1 | 0 | 0 | 0 |
+| 5.5 Magazine reading experience | 10 | 9 | 0 | 0 | 1 | 0 | 0 |
+| 5.6 PDF handling and offline downloads | 10 | 9 | 1 | 0 | 0 | 0 | 0 |
 | 5.7 Bookmarks and favourites | 8 | 5 | 0 | 0 | 2 | 1 | 0 |
-| 5.8 News and WordPress integration | 9 | 6 | 1 | 0 | 2 | 0 | 0 |
+| 5.8 News and WordPress integration | 9 | 7 | 0 | 0 | 2 | 0 | 0 |
 | 5.9 Sharing | 6 | 4 | 0 | 1 | 1 | 0 | 0 |
 | 5.10 Push notifications and notification preferences | 7 | 3 | 1 | 0 | 2 | 1 | 0 |
 | 5.11 Edition-update email sign-up | 3 | 2 | 0 | 0 | 1 | 0 | 0 |
-| 5.12 Admin panel and content management | 19 | 12 | 2 | 0 | 5 | 0 | 0 |
-| 5.13 User administration and reporting | 5 | 3 | 0 | 0 | 2 | 0 | 0 |
+| 5.12 Admin panel and content management | 19 | 14 | 1 | 0 | 4 | 0 | 0 |
+| 5.13 User administration and reporting | 5 | 4 | 0 | 0 | 1 | 0 | 0 |
 | 5.14 Error, empty, loading and recovery states | 7 | 7 | 0 | 0 | 0 | 0 | 0 |
 | 5.15 Account privacy, consent and deletion | 4 | 3 | 0 | 1 | 0 | 0 | 0 |
 | 6.1 and 6.2 Performance and reliability | 5 | 5 | 0 | 0 | 0 | 0 | 0 |
-| 6.3 Security and access control | 12 | 4 | 1 | 6 | 1 | 0 | 0 |
-| 6.4 Privacy and data minimisation | 6 | 2 | 1 | 1 | 2 | 0 | 0 |
+| 6.3 Security and access control | 12 | 5 | 0 | 6 | 1 | 0 | 0 |
+| 6.4 Privacy and data minimisation | 6 | 3 | 0 | 1 | 2 | 0 | 0 |
 | 6.5 Accessibility and usability | 4 | 0 | 0 | 0 | 4 | 0 | 0 |
-| 6.6 Compatibility and supported devices | 5 | 1 | 2 | 0 | 2 | 0 | 0 |
+| 6.6 Compatibility and supported devices | 5 | 3 | 0 | 0 | 2 | 0 | 0 |
 | 6.7 Storage and bandwidth | 3 | 0 | 0 | 0 | 1 | 0 | 2 |
-| 6.8 Maintainability and observability | 8 | 3 | 2 | 1 | 1 | 0 | 1 |
-| 6.9 Offline behaviour | 2 | 0 | 1 | 0 | 1 | 0 | 0 |
-| **All** | **166** | **95** | **19** | **11** | **33** | **5** | **3** |
+| 6.8 Maintainability and observability | 8 | 4 | 1 | 1 | 1 | 0 | 1 |
+| 6.9 Offline behaviour | 2 | 1 | 0 | 0 | 1 | 0 | 0 |
+| **All** | **166** | **112** | **4** | **11** | **31** | **5** | **3** |
 
 ```text
 Flagged for a candidate check (AREA ONLY and NO ROW): 8
 └── FR-AUTH-008, FR-PROF-007, FR-MAG-003, FR-BKM-007, FR-NOTIF-003, NFR-STOR-001, NFR-STOR-002, NFR-OBS-001
 
-RS CLAIM, with no row-level link: 19
-└── FR-PROF-002, FR-PROF-003, FR-PROF-004, FR-MAG-001, FR-SRCH-006, FR-READ-002, FR-DL-001, FR-DL-002, FR-NEWS-007, FR-NOTIF-002, FR-ADMIN-009, FR-ADMIN-016, NFR-SEC-007, NFR-PRIV-004, NFR-COMP-001, NFR-COMP-002, NFR-MAINT-004, NFR-OBS-002, NFR-OFF-001
+RS CLAIM, with no row-level link: 4
+└── FR-DL-001, FR-NOTIF-002, FR-ADMIN-009, NFR-OBS-002
 ```
 
 **What the summary shows.**
@@ -126,9 +126,9 @@ Findings (from the tables below)
 ├── Eight requirements are expected to have a test by RS §13, and no row, plan or security test names them (AREA ONLY and NO ROW)
 │   ├── FR-MAG-003 is CONFIRMED from S1, yet the pass condition of AC-1.1 lists only cover, title, date and description
 │   └── NFR-STOR-001: the largest and near-limit files are used in AC-2.1 and AC-4.3, but those rows do not name the requirement
-├── Nineteen requirements are RS CLAIM: RS §13 cites an AC family or PAC and no row names them. This is a documentation fix: name the requirement in the row, or correct RS §13
+├── Four requirements are RS CLAIM: RS §13 cites an AC family or PAC and no row names them. Fifteen others were named in their rows on 14 November 2026 (MOD17-P1-T03); these four have no row that tests them in full (`COVERAGE_GAP_PROPOSALS.md`)
 │   └── Example: FR-NOTIF-002 (choose categories) cites AC-9. AC-9.2 tests delivery to a device that chose a category, and the choice is only its precondition
-├── Thirty-three requirements are verified by review, inspection or demonstration. Most wait on an open question (OQ-nn) or on the M2 designs
+├── Thirty-one requirements are verified by review, inspection or demonstration. Most wait on an open question (OQ-nn) or on the M2 designs
 └── Six of the twelve NFR-SEC items are PLAN ONLY: the security checklist (SEC-CHK-nn) names them and no acceptance row does
 ```
 
@@ -159,7 +159,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | FR-AUTH-006 | Rule for an email used with both sign-in methods | OPEN | PAC-12 | none | none | COVERED | - |
 | FR-AUTH-007 | Email verification for Google accounts | OPEN | PAC-12 | none | none | COVERED | - |
 | FR-AUTH-008 | Sign out | ASSUMPTION | none | none | MOD-03 | AREA ONLY | PROPOSED check: sign out, then try to open a full issue. Expect the sign-in prompt. What happens to downloads follows OQ-11 |
-| FR-AUTH-009 | Delete account in the app | CONFIRMED | AC-3.7 | ST-14 | OP-12, OP-13, MOD-03, SC-17 | COVERED | - |
+| FR-AUTH-009 | Delete account in the app | CONFIRMED | AC-3.7 | ST-14 | OP-12, MOD-03, SC-17 | COVERED | - |
 | FR-AUTH-010 | Sign-in prompt when a full issue is refused | CONFIRMED | AC-3.3, AC-3.4 | none | OP-11, MOD-01 | COVERED | - |
 
 ### 5.2 Mandatory reader profile
@@ -167,9 +167,9 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | ID | Requirement | Status | AC or PAC | Test plan | Design | State | Note |
 |---|---|---|---|---|---|---|---|
 | FR-PROF-001 | Registration needs every mandatory profile field | PROVISIONAL | PAC-02 | none | OP-02, OP-10, MOD-04 | COVERED | - |
-| FR-PROF-002 | Mandatory fields: name, exact age, gender, occupation, domain of work | PROVISIONAL | RS: PAC-02 | none | OP-10, MOD-04 | RS CLAIM | RS §13 cites PAC-02. No row names this requirement |
-| FR-PROF-003 | Google Sign-In readers complete the same profile | PROVISIONAL | RS: PAC-01 | none | OP-10, MOD-04 | RS CLAIM | RS §13 cites PAC-01. No row names this requirement |
-| FR-PROF-004 | Profile completion prompt before a full issue | PROVISIONAL | RS: PAC-02 | none | OP-10, OP-11, MOD-01, MOD-04 | RS CLAIM | RS §13 cites PAC-02. No row names this requirement |
+| FR-PROF-002 | Mandatory fields: name, exact age, gender, occupation, domain of work | PROVISIONAL | PAC-02 | none | OP-10, MOD-04 | COVERED | - |
+| FR-PROF-003 | Google Sign-In readers complete the same profile | PROVISIONAL | PAC-01 | none | OP-10, MOD-04 | COVERED | - |
+| FR-PROF-004 | Profile completion prompt before a full issue | PROVISIONAL | PAC-02 | none | OP-10, OP-11, MOD-01, MOD-04 | COVERED | - |
 | FR-PROF-005 | Age collected with no age gate or parental consent | PROVISIONAL | none | none | OP-10, MOD-04 | REVIEW | RS method: R: MFW legal review (OQ-07) |
 | FR-PROF-006 | Profile screen | CONFIRMED | none | none | OP-06, OP-10, MOD-04 | REVIEW | RS method: D |
 | FR-PROF-007 | Reader can update profile fields | ASSUMPTION | none | none | OP-10, MOD-04 | AREA ONLY | PROPOSED check: change one profile field, then sign in on a second device. Expect the new value, validated as OQ-01 decides |
@@ -178,7 +178,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 
 | ID | Requirement | Status | AC or PAC | Test plan | Design | State | Note |
 |---|---|---|---|---|---|---|---|
-| FR-MAG-001 | Catalogue visible to every user | CONFIRMED | RS: AC-1, PAC-04 | none | OP-01, MOD-05 | RS CLAIM | RS §13 cites AC-1, PAC-04. No row names this requirement |
+| FR-MAG-001 | Catalogue visible to every user | CONFIRMED | PAC-04 | none | OP-01, MOD-05 | COVERED | - |
 | FR-MAG-002 | Cover, title, date and description per issue | CONFIRMED | AC-1.1 | none | OP-01, OP-16, MOD-05 | COVERED | - |
 | FR-MAG-003 | Category shown per issue | CONFIRMED | none | none | OP-01, OP-16, MOD-05 | AREA ONLY | PROPOSED check: expect each issue's category on the catalogue entry and on issue details. AC-1.1 does not list category in its pass condition |
 | FR-MAG-004 | Latest issue and archive; four to six archive issues at launch | CONFIRMED | AC-1.1 | none | OP-01, OP-16, MOD-05 | COVERED | - |
@@ -197,7 +197,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | FR-SRCH-003 | Industry segment filter | CONFIRMED | PAC-07 | none | OP-01, OP-28, MOD-05 | COVERED | - |
 | FR-SRCH-004 | Year filter | CONFIRMED | AC-1.3 | none | OP-01, MOD-05 | COVERED | - |
 | FR-SRCH-005 | Edition filter | CONFIRMED | AC-1.3 | none | OP-01, MOD-05 | COVERED | - |
-| FR-SRCH-006 | Search and filters for logged-out visitors | ASSUMPTION | RS: PAC-04 | none | MOD-05 | RS CLAIM | RS §13 cites PAC-04. No row names this requirement |
+| FR-SRCH-006 | Search and filters for logged-out visitors | ASSUMPTION | PAC-04 | none | MOD-05 | COVERED | - |
 | FR-SRCH-007 | Search covers metadata only | ASSUMPTION | none | TS 7.3 | MOD-05 | PLAN ONLY | In a test plan or security test. No AC or PAC row |
 
 ### 5.5 Magazine reading experience
@@ -205,7 +205,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | ID | Requirement | Status | AC or PAC | Test plan | Design | State | Note |
 |---|---|---|---|---|---|---|---|
 | FR-READ-001 | Full issue only for signed-in, verified readers | CONFIRMED | AC-3.2 | none | OP-11 | COVERED | - |
-| FR-READ-002 | Read from a complete downloaded copy | CONFIRMED | RS: AC-2, AC-4 | none | none | RS CLAIM | RS §13 cites AC-2, AC-4. No row names this requirement |
+| FR-READ-002 | Read from a complete downloaded copy | CONFIRMED | AC-4.2 | none | none | COVERED | - |
 | FR-READ-003 | Swipe to turn pages | CONFIRMED | AC-2.2 | none | MOD-07 | COVERED | - |
 | FR-READ-004 | Tap to turn pages | CONFIRMED | AC-2.2 | none | MOD-07 | COVERED | - |
 | FR-READ-005 | Pinch zoom to 300% | CONFIRMED | AC-2.3 | none | MOD-07 | COVERED | - |
@@ -220,14 +220,14 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | ID | Requirement | Status | AC or PAC | Test plan | Design | State | Note |
 |---|---|---|---|---|---|---|---|
 | FR-DL-001 | Download an issue to private storage | CONFIRMED | RS: AC-4 | none | MOD-06 | RS CLAIM | RS §13 cites AC-4. No row names this requirement |
-| FR-DL-002 | No download without sign-in and a verified email | CONFIRMED | RS: AC-3 | none | OP-11 | RS CLAIM | RS §13 cites AC-3. No row names this requirement |
+| FR-DL-002 | No download without sign-in and a verified email | CONFIRMED | PAC-13 | none | OP-11 | COVERED | - |
 | FR-DL-003 | File size shown before download | CONFIRMED | AC-4.4 | none | MOD-06 | COVERED | - |
 | FR-DL-004 | Mobile-data warning before download | CONFIRMED | AC-4.5 | none | MOD-01, MOD-06 | COVERED | - |
 | FR-DL-005 | Download progress | CONFIRMED | AC-4.1 | none | MOD-06 | COVERED | - |
 | FR-DL-006 | Resume after a network break | CONFIRMED | AC-4.3 | none | MOD-06 | COVERED | - |
-| FR-DL-007 | Read a downloaded issue offline | CONFIRMED | AC-4.2 | none | MOD-06 | COVERED | - |
-| FR-DL-008 | Downloads screen | CONFIRMED | AC-4.7 | none | MOD-06 | COVERED | - |
-| FR-DL-009 | Delete a download and free its space | CONFIRMED | AC-4.6 | none | MOD-06 | COVERED | - |
+| FR-DL-007 | Read a downloaded issue offline | CONFIRMED | AC-4.2, PAC-20 | none | MOD-06 | COVERED | - |
+| FR-DL-008 | Downloads screen | CONFIRMED | AC-4.7, PAC-20 | none | MOD-06 | COVERED | - |
+| FR-DL-009 | Delete a download and free its space | CONFIRMED | AC-4.6, PAC-20 | none | MOD-06 | COVERED | - |
 | FR-DL-010 | Downloads after sign-out, deletion or unpublishing | OPEN | PAC-14, PAC-20 | none | OP-03, MOD-06 | COVERED | - |
 
 ### 5.7 Bookmarks and favourites
@@ -253,7 +253,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | FR-NEWS-004 | New post appears after refresh | CONFIRMED | AC-7.2 | none | MOD-09 | COVERED | - |
 | FR-NEWS-005 | Loaded articles readable offline with a notice | CONFIRMED | AC-7.4 | none | MOD-09 | COVERED | - |
 | FR-NEWS-006 | How articles are kept for offline reading | OPEN | none | none | none | REVIEW | RS method: R: resolve OQ-16 |
-| FR-NEWS-007 | News available to logged-out visitors | CONFIRMED | RS: PAC-04 | none | MOD-09 | RS CLAIM | RS §13 cites PAC-04. No row names this requirement |
+| FR-NEWS-007 | News available to logged-out visitors | CONFIRMED | PAC-04 | none | MOD-09 | COVERED | - |
 | FR-NEWS-008 | Hidden posts not shown | CONFIRMED | AC-8.8 | none | OP-04, MOD-09 | COVERED | - |
 | FR-NEWS-009 | Presentation of breaking posts | OPEN | none | none | OP-04, OP-23 | REVIEW | RS method: R: resolve OQ-17 |
 
@@ -307,7 +307,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | FR-ADMIN-013 | Hide a WordPress post | CONFIRMED | AC-8.8 | none | OP-23, OP-24, MOD-12 | COVERED | - |
 | FR-ADMIN-014 | Mark a post as breaking | CONFIRMED | AC-9.7 | TS 7.8 | OP-23, OP-24, MOD-12 | COVERED | - |
 | FR-ADMIN-015 | Send a post as a breaking-news notification | CONFIRMED | AC-9.7 | TS 7.8 | OP-24, OP-25, MOD-12 | COVERED | - |
-| FR-ADMIN-016 | Send a category notification | CONFIRMED | RS: AC-9 | none | OP-25, MOD-11, MOD-12 | RS CLAIM | RS §13 cites AC-9. No row names this requirement |
+| FR-ADMIN-016 | Send a category notification | CONFIRMED | AC-9.2 | none | OP-25, MOD-11, MOD-12 | COVERED | - |
 | FR-ADMIN-017 | Only admins send notifications | CONFIRMED | AC-9.5 | none | OP-25, MOD-11, MOD-12 | COVERED | - |
 | FR-ADMIN-018 | Send log | CONFIRMED | AC-9.4 | none | OP-25, OP-27, MOD-11, MOD-12 | COVERED | - |
 | FR-ADMIN-019 | No news authoring in the admin panel | CONFIRMED | none | none | MOD-09, MOD-12 | REVIEW | RS method: I |
@@ -340,7 +340,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 |---|---|---|---|---|---|---|---|
 | FR-PRIV-001 | Consent at registration | CONFIRMED | PAC-08 | TS 8.3 | OP-10, MOD-04 | COVERED | - |
 | FR-PRIV-002 | Policy and terms reachable in the app | ASSUMPTION | PAC-08 | none | MOD-04 | COVERED | - |
-| FR-PRIV-003 | Account deletion removes reader data | CONFIRMED | AC-3.7, PAC-06 | TS 8.3, TS 9, SEC-CHK-11, ST-14 | OP-12, OP-41, MOD-13 (+1) | COVERED | OP-13 is withdrawn (GS-Q50) |
+| FR-PRIV-003 | Account deletion removes reader data | CONFIRMED | AC-3.7, PAC-06 | TS 8.3, TS 9, SEC-CHK-11, ST-14 | OP-12, OP-41, MOD-13 (+1) | COVERED | - |
 | FR-PRIV-004 | Confirm before account deletion | ASSUMPTION | none | ST-14 | OP-12, MOD-04, SC-17 | PLAN ONLY | In a test plan or security test. No AC or PAC row |
 
 ### 6.1 and 6.2 Performance and reliability
@@ -363,7 +363,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | NFR-SEC-004 | Downloads in app-private storage | CONFIRMED | none | TS 9, SEC-CHK-04 | none | PLAN ONLY | In a test plan or security test. No AC or PAC row |
 | NFR-SEC-005 | Own bookmarks and favourites only | CONFIRMED | AC-5.4 | TS 9, SEC-CHK-05, ST-06 | OP-07, OP-08, MOD-08, SC-05 (+1) | COVERED | - |
 | NFR-SEC-006 | Own profile and preferences only | ASSUMPTION | none | TS 9, SEC-CHK-05, ST-06 | OP-06, MOD-04, SC-06 | PLAN ONLY | In a test plan or security test. No AC or PAC row |
-| NFR-SEC-007 | Only admins change the catalogue and news controls | CONFIRMED | RS: AC-8 | TS 9, SEC-CHK-06, SEC-CHK-18, ST-02 (+2) | OP-15, OP-16, OP-21, OP-40 (+2) | RS CLAIM | RS §13 cites AC-8. No row names this requirement |
+| NFR-SEC-007 | Only admins change the catalogue and news controls | CONFIRMED | AC-8.2 | TS 9, SEC-CHK-06, SEC-CHK-18, ST-02 (+2) | OP-15, OP-16, OP-21, OP-40 (+2) | COVERED | - |
 | NFR-SEC-008 | Backend enforces upload checks | CONFIRMED | none | TS 9, SEC-CHK-07, ST-13 | OP-19, OP-40, SC-08 | PLAN ONLY | In a test plan or security test. No AC or PAC row |
 | NFR-SEC-009 | Login gating and private storage only; no DRM | CONFIRMED | none | none | none | REVIEW | RS method: I |
 | NFR-SEC-010 | Security checklist completed | CONFIRMED | AC-10.3 | TS 9 | none | COVERED | - |
@@ -377,7 +377,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | NFR-PRIV-001 | Collect only approved profile fields | PROVISIONAL | none | TS 8.3 | none | PLAN ONLY | In a test plan or security test. No AC or PAC row |
 | NFR-PRIV-002 | Store privacy details match MFW's policy | CONFIRMED | AC-11.3 | none | none | COVERED | - |
 | NFR-PRIV-003 | No per-user reading tracking in usage events | PROVISIONAL | PAC-09 | TS 8.3, TS 9, SEC-CHK-10, ST-12 | MOD-02, MOD-08, SC-16 | COVERED | - |
-| NFR-PRIV-004 | Personal-data exports for admins only | ASSUMPTION | RS: PAC-03 | TS 9, SEC-CHK-12, ST-15 | OP-31, OP-32, SC-15 | RS CLAIM | RS §13 cites PAC-03. No row names this requirement |
+| NFR-PRIV-004 | Personal-data exports for admins only | ASSUMPTION | PAC-03 | TS 9, SEC-CHK-12, ST-15 | OP-31, OP-32, SC-15 | COVERED | - |
 | NFR-PRIV-005 | Retention periods | OPEN | none | none | OP-12 | REVIEW | RS method: R: resolve OQ-24 |
 | NFR-PRIV-006 | Legal review of age collection | OPEN | none | none | none | REVIEW | RS method: R: resolve OQ-07 |
 
@@ -394,8 +394,8 @@ Lists longer than a few items show the first items and a count, for example "(+3
 
 | ID | Requirement | Status | AC or PAC | Test plan | Design | State | Note |
 |---|---|---|---|---|---|---|---|
-| NFR-COMP-001 | Android and iOS from one codebase | CONFIRMED | RS: AC-10 | none | none | RS CLAIM | RS §13 cites AC-10. No row names this requirement |
-| NFR-COMP-002 | Reader on phones and tablets, both orientations | CONFIRMED | RS: AC-2 | none | none | RS CLAIM | RS §13 cites AC-2. No row names this requirement |
+| NFR-COMP-001 | Android and iOS from one codebase | CONFIRMED | AC-11.1 | none | none | COVERED | - |
+| NFR-COMP-002 | Reader on phones and tablets, both orientations | CONFIRMED | AC-2.4 | none | none | COVERED | - |
 | NFR-COMP-003 | Agreed test device set | CONFIRMED | AC-10.2 | none | none | COVERED | The team has a mid-range Android phone and a current iPhone only (GS-Q54, R25) |
 | NFR-COMP-004 | Minimum OS versions | OPEN | none | none | none | REVIEW | RS method: R: resolve OQ-26 |
 | NFR-COMP-005 | Admin panel browsers | OPEN | none | none | none | REVIEW | RS method: R: resolve OQ-26 |
@@ -415,7 +415,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 | NFR-MAINT-001 | Source code in an MFW-owned repository | CONFIRMED | AC-12.1 | none | none | COVERED | - |
 | NFR-MAINT-002 | Build and deploy from a clean copy | CONFIRMED | AC-12.2 | none | none | COVERED | - |
 | NFR-MAINT-003 | Signed builds from tagged code | CONFIRMED | AC-11.1 | none | none | COVERED | - |
-| NFR-MAINT-004 | Technical documentation contents | CONFIRMED | RS: AC-12 | none | none | RS CLAIM | RS §13 cites AC-12. No row names this requirement |
+| NFR-MAINT-004 | Technical documentation contents | CONFIRMED | AC-12.2 | none | none | COVERED | - |
 | NFR-MAINT-005 | Thin data layer | ASSUMPTION | none | none | none | REVIEW | RS method: R: architecture document |
 | NFR-MAINT-006 | No paid component without approval | CONFIRMED | none | TS 9, SEC-CHK-13 | none | PLAN ONLY | In a test plan or security test. No AC or PAC row |
 | NFR-OBS-001 | Crash reporting | CONFIRMED | none | none | MOD-02 | NO ROW | PROPOSED check: force a crash in a test build on each platform. Expect a report in MFW's crash service with no reader identity (DATA-014) |
@@ -425,7 +425,7 @@ Lists longer than a few items show the first items and a count, for example "(+3
 
 | ID | Requirement | Status | AC or PAC | Test plan | Design | State | Note |
 |---|---|---|---|---|---|---|---|
-| NFR-OFF-001 | Downloads screen and downloaded issues offline | CONFIRMED | RS: AC-4 | none | none | RS CLAIM | RS §13 cites AC-4. No row names this requirement |
+| NFR-OFF-001 | Downloads screen and downloaded issues offline | CONFIRMED | AC-4.2 | none | none | COVERED | - |
 | NFR-OFF-002 | Offline catalogue, bookmarks and favourites | OPEN | none | none | none | REVIEW | RS method: R: resolve OQ-10 |
 
 ## 6. Open Items
