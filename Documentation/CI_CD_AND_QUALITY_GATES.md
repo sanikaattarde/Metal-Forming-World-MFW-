@@ -7,9 +7,9 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.11 |
+| Version | 0.10 |
 | Status | Draft for review. Not approved. **Two workflows exist: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests and on pushes to `main` that change `app/` or the workflow (T-01.5, DEC-010), and `.github/workflows/backend.yml` runs QG-08. Every other gate and pipeline below is PLANNED.** |
-| Date | 14 November 2026 |
+| Date | 9 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
 
 **Change history**
@@ -25,7 +25,6 @@
 | 0.7 | 8 November 2026 | Section 3 and section 13 record that the repository owner approved the cost of the workflow of pull request #48 in writing on 8 November 2026 (DEC-022, `DECISION_LOG.md` section 5.9). The plan minutes and the macOS runner cost stay NOT VERIFIED. No gate changed. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.8 | 9 November 2026 | QG-05 tries the Android build up to 3 times, 30 seconds apart, and the Gradle wrapper downloads the binary distribution of Gradle 9.3.1 rather than the full one, after GitHub answered 504 to the Gradle download on 8 and 9 November 2026 (pull request #58, two commits made by the Copilot coding agent started from YG's account and kept by YG). A retry also repeats a build that fails for a real reason, so a real failure takes up to three times as long to show. No gate is added, removed or made optional. |
 | 0.9 | 9 November 2026 | QG-08 and QG-14 are no longer blocked by DEC-003, which is AGREED (`DECISION_LOG.md` section 5.11). Both stay not available until the first backend code adds them. Section 14 item 5 and the open item in section 15 say the same, and that DEC-004 is PROPOSED, so QG-09 stays blocked. No gate is added, removed or made optional. |
-| 0.11 | 14 November 2026 | Section 13.1 records the finding of MOD15-P1-T01: the repository is public, GitHub's billing page says standard hosted runners are free in public repositories, and GitHub reports no billable time for the Linux and macOS jobs of two App checks runs. The account plan was not readable and stays NOT VERIFIED. The Constraint row of section 3 points to section 13.1. No gate is added, removed or made optional. |
 | 0.10 | 9 November 2026 | Section 10: the configuration part of SEC-CHK-01 now runs in QG-03, as `app/test/core/network/cleartext_config_test.dart` (pull request #63, MOD01-P2-T03): the Android manifest turns cleartext off and no manifest turns it on, and the iOS `Info.plist` has no App Transport Security exception. The proxy observation stays manual. No gate is added, removed or made optional. |
 
 ### 1.1 Related documents
