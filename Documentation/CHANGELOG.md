@@ -34,7 +34,7 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ### Documentation: MOD20-P1-T04 review of the three planning documents, 2026-11-14
 
-- `PLANNING_DOCUMENTS_REVIEW.md` 0.1 (new): YG's review of the module inventory and both roadmaps. The task counts, IDs, owners, dependencies and parents are consistent (125 tasks, 58 and 67). Findings PR-01 to PR-05: 29 stale "Blocked by" lines, a stale status column, 16 tasks done by another owner, and the status rows. YG's position on VR-01 is recorded and stays open until Sanika Attarde writes hers. None of the three documents is edited.
+- `PLANNING_DOCUMENTS_REVIEW.md` 0.1 (new): YG's review of the module inventory and both roadmaps. The task counts, IDs, owners, dependencies and parents are consistent (125 tasks, 58 and 67). Findings PR-01 to PR-05: 29 stale "Blocked by" lines, a stale status column, 16 tasks done by another owner, and the status rows. YG's position on VR-01 is recorded and stays open until Sanika Attarde writes a position. None of the three documents is edited.
 
 ### Added: MOD07-P1-T02 and MOD07-P3-T01 the reader on MFW's sample issues, on an iPhone, 2026-11-12
 
