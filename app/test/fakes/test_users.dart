@@ -118,6 +118,14 @@ const TestUser fxUsr07 = TestUser(
   documentedAccessState: AccessState.fullAccess,
 );
 
+/// FX-USR-13: a known and an unknown address, for the registration, sign-in
+/// and password-reset messages that must not tell them apart (SEC-CHK-17,
+/// PAC-17). The known address is FX-USR-01's.
+const ({String known, String unknown}) fxUsr13 = (
+  known: 'fx-usr-01@example.com',
+  unknown: 'fx-usr-13-unknown@example.com',
+);
+
 /// Every reader persona with an account. FX-USR-09, the logged-out visitor,
 /// is not an account: it is a device with nobody signed in.
 const List<TestUser> readerPersonas = <TestUser>[

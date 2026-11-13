@@ -7,9 +7,9 @@
 | Document | Test Data and Fixtures |
 | File | `Documentation/TEST_DATA_AND_FIXTURES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 32) |
-| Version | 0.9 |
-| Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. Update of 8 November 2026: FX-WP-01 to FX-WP-12 now exist as test files or test cases (section 10, pull request #58). |
-| Date | 6 November 2026 |
+| Version | 0.10 |
+| Status | Draft for review. Not approved. Every fixture is PLANNED. None has been created. Update of 8 November 2026: FX-WP-01 to FX-WP-12 now exist as test files or test cases (section 10, pull request #58). Update of 14 November 2026 (MOD17-P1-T01): `app/test/fixtures/README.md` lists where each fixture exists and which wait, and why; `app/test/fixtures/fixtures_load_test.dart` loads them. The PLANNED labels in the tables below are not yet changed one by one. |
+| Date | 14 November 2026 |
 | Approval required | Both developers. MFW confirms where its sample PDFs may be stored (DEC-024). |
 
 **Change history**
@@ -25,6 +25,7 @@
 | 0.7 | 5 November 2026 | FX-PDF-11 had no upload expectation, as the review of pull request #18 noted. Its "Used by" cell and the note under the table say that the expectation is not set and follows the depth of the upload check, which is OQ-61. The FX-PDF-09 row cites OQ-61 too. Revised on 5 November 2026 after the review of pull request #24: the note says that the backend spike's check accepts FX-PDF-11, so readers can meet one, and RD-08 matters. No fixture or other expectation changed. |
 | 0.8 | 6 November 2026 | The note under the table cites the simulator result, which is now filed in `test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md`, and no longer says that it is not filed. It is a result on the iOS simulator in a debug build and not a result on a phone. No fixture or expectation changed. |
 | 0.9 | 8 November 2026 | Section 10 says where FX-WP-01 to FX-WP-12 now are (pull request #58), and the status row notes it. No fixture row or expected result changed. |
+| 0.10 | 14 November 2026 | The status row points to `app/test/fixtures/README.md`, the index of MOD17-P1-T01: which fixtures exist in the app and backend tests, and which wait (FX-USR-08 and 10 to 12, FX-PDF-03 to 05, FX-NET-01 to 05, FX-LIB-03, FX-WP-13, FX-ADM-01 to 04), with the reason. FX-USR-13 is added to `app/test/fakes/test_users.dart`. No fixture row or expected result changed. |
 
 ### 1.1 Related documents
 
