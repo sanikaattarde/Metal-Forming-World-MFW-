@@ -35,7 +35,7 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 ### Added: MOD17-P1-T01 the fixture index and load test, 2026-11-14
 
 - `app/test/fixtures/README.md` says where each fixture family is and which fixtures wait, with the reason. `app/test/fixtures/fixtures_load_test.dart` loads the catalogue, notification and WordPress files, the reader personas and the generated PDFs. FX-USR-13 is added to `app/test/fakes/test_users.dart`.
-- `TEST_DATA_AND_FIXTURES.md` 0.10 points to the index. Still waiting: FX-PDF-05 (no generator; OQ-30), FX-ADM-01 to 04 (OQ-22), and the device procedures FX-NET-01 to 05.
+- `TEST_DATA_AND_FIXTURES.md` points to the index. Still waiting: FX-PDF-05 (no generator; OQ-30), FX-ADM-01 to 04 (OQ-22), and the device procedures FX-NET-01 to 05.
 
 ### Added: MOD07-P1-T02 and MOD07-P3-T01 the reader on MFW's sample issues, on an iPhone, 2026-11-12
 
