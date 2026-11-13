@@ -32,6 +32,12 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Documentation: MOD17-P1-T03 coverage gaps and the regenerated matrix, 2026-11-14
+
+- `ACCEPTANCE_CRITERIA.md` 0.7 names fifteen RS CLAIM requirements in the Source cells of the rows that test them; no criterion or pass condition changed.
+- `REQUIREMENT_COVERAGE_MATRIX.md` 0.5 is regenerated from those rows: 112 COVERED, 4 RS CLAIM, 11 PLAN ONLY, 31 REVIEW, 5 AREA ONLY, 3 NO ROW. FR-DL-007 to 009 list PAC-20; the withdrawn OP-13 is removed; the summary counts, stale since 0.2, are recounted.
+- `COVERAGE_GAP_PROPOSALS.md` 0.1 (new): eleven candidate checks, PROPOSED, for the AREA ONLY, NO ROW and remaining RS CLAIM requirements. Any new PAC row needs MFW's written approval.
+
 ### Added: MOD07-P1-T02 and MOD07-P3-T01 the reader on MFW's sample issues, on an iPhone, 2026-11-12
 
 - **Tests:** `app/integration_test/reader_mfw_samples_test.dart` runs on a device with MFW's samples copied into the test app (not in Git, numbers only). All 104 pages of the three issues render, each in 162 ms at most. On SCR-A-14 the first page shows in 100 to 147 ms (AC-2.1: 3 s), 20 page turns pass in both modes with no crash (AC-2.5), zoom reaches 300% with the 3x redraw, memory stays between 173 and 226 MB while reading (peak 465 MB), and no frame is requested once a turn ends. No tuning was needed. `reader_pdfrx_test.dart` passed again on the device (7). Evidence: `Documentation/test-evidence/READER_SAMPLES_DEVICE_EVIDENCE.md`.
