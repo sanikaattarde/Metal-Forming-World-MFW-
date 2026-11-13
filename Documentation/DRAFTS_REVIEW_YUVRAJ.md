@@ -44,7 +44,7 @@ A script read the five documents and printed findings only. It is not kept in th
 
 | Ref | Finding | Proposed change |
 |---|---|---|
-| MX-A1 | The first pass raised M-1 and M-2, and version 0.4 of 7 November 2026 answers them. The matrix was regenerated on 14 November 2026 for MOD17-P1-T03 (branch `docs/yg-mod17-coverage`, not yet on `main`). The column of rows now matches the Source cells of `ACCEPTANCE_CRITERIA.md` for all 166 requirements, the counts are recounted, and OP-13 is gone | None. This part is not independent of that task, because the same person made both |
+| MX-A1 | The first pass raised M-1 and M-2, and version 0.4 of 7 November 2026 answers them. The matrix was regenerated on 14 November 2026 for MOD17-P1-T03 (see the CHANGELOG entry of that date). The column of rows now matches the Source cells of `ACCEPTANCE_CRITERIA.md` for all 166 requirements, the counts are recounted, and OP-13 is gone | None. This part is not independent of that task, because the same person made both |
 | MX-A2 | RC-01 to RC-04 stay open. `COVERAGE_GAP_PROPOSALS.md` proposes eleven candidate checks | Both developers decide, then MFW for any new PAC row |
 
 ### 2.4 `SCREEN_INVENTORY_AND_NAVIGATION.md`

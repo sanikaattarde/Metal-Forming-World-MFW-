@@ -40,7 +40,7 @@ This is a reading for review, not a decision.
 | VR-02, MOD-02 has no task in the old roadmap | Closed by the four MOD02 tasks. Nothing to decide |
 | VR-03, TD-18 against DEC-023 | Open. DEC-023 is AGREED as an internal position, and `DECISION_LOG.md` says TD-18 is reconciled when it is next edited |
 | VR-04, two operation catalogues | DEC-026 is AGREED, with OP-nn as the main IDs. Closed on the working position |
-| VR-05, the matrix still cites OP-13 | Fixed on the branch `docs/yg-mod17-coverage` (MOD17-P1-T03), not yet merged to `main` |
+| VR-05, the matrix still cites OP-13 | Fixed by MOD17-P1-T03: the matrix was regenerated on 14 November 2026 (`CHANGELOG.md`) |
 | VR-06, `SCOPE_AND_EXCLUSIONS.md` is out of date | Open. No task is scheduled. DEC-032 holds the working position |
 | VR-07, in-panel admin management is not in S2 or S1 | Open. It goes to MFW through MOD20-P2-T02 |
 | VR-08 and VR-09, devices and the missing MFW inputs | Open. Both wait for MFW (OQ-26, DEC-017) |
