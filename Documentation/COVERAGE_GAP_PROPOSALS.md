@@ -7,7 +7,7 @@
 | Version | 0.1 |
 | Status | Draft for review. **PROPOSED.** Prepared by Yuvraj Gaykhe (WS-B) on 14 November 2026. Sanika Attarde has not reviewed it. No check here is a PAC row: a new PAC row needs both developers' agreement and then MFW's written approval before it is contractual (`ACCEPTANCE_CRITERIA.md`). |
 | Date | 14 November 2026 |
-| Related | `REQUIREMENT_COVERAGE_MATRIX.md` 0.5; `ACCEPTANCE_CRITERIA.md` 0.7; `TEST_DATA_AND_FIXTURES.md` |
+| Related | `REQUIREMENT_COVERAGE_MATRIX.md`; `ACCEPTANCE_CRITERIA.md`; `TEST_DATA_AND_FIXTURES.md` |
 
 ## 1. What changed on 14 November 2026
 

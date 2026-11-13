@@ -7,9 +7,9 @@
 | Document | Acceptance Criteria |
 | File | `Documentation/ACCEPTANCE_CRITERIA.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 31) |
-| Version | 0.7 |
+| Version | 0.6 |
 | Status | Draft for review. Not approved. No criterion has been tested. |
-| Date | 14 November 2026 |
+| Date | 5 November 2026 |
 | Approval required | Both developers for the verification detail. MFW in writing for every PAC criterion before it becomes contractual. |
 
 **Change history**
@@ -21,7 +21,6 @@
 | 0.3 | 25 October 2026 | Related-documents row added for the coverage matrix and the reader design. No criterion changed. |
 | 0.4 | 27 October 2026 | Positions from the questioning session of 26 and 27 October 2026 applied (Technology Decisions section 10.5). PAC-16 and PAC-18 are withdrawn with PRC-02 and PRC-01. PAC-11 is dropped on the working position. PAC-19 (admin add and remove) and PAC-20 (Read and Download) are added as proposals. No AC row changed, except that the clarification of AC-7.4 and AC-8.9 names the working positions. No criterion is approved. |
 | 0.5 | 4 November 2026 | The fixture cell of AC-2.6 names FX-PDF-10 only (was "FX-PDF-10 or FX-PDF-11"). The criterion, the pass condition and the CONFIRMED status are unchanged, and still follow S2 AC-2 and FR-READ-010. FX-PDF-11 is kept for a separate PROPOSED expectation in `TEST_DATA_AND_FIXTURES.md`, because a reader library may repair it and open it. No criterion is approved. |
-| 0.7 | 14 November 2026 | MOD17-P1-T03 (RC-02): fifteen requirements that RS §13 tests through a row are now named in that row's Source cell: FR-PROF-003 (PAC-01), FR-PROF-002 and FR-PROF-004 (PAC-02), NFR-PRIV-004 (PAC-03), FR-MAG-001, FR-SRCH-006 and FR-NEWS-007 (PAC-04), FR-DL-002 (PAC-13), NFR-COMP-002 (AC-2.4), FR-READ-002 and NFR-OFF-001 (AC-4.2), NFR-SEC-007 (AC-8.2), FR-ADMIN-016 (AC-9.2), NFR-COMP-001 (AC-11.1) and NFR-MAINT-004 (AC-12.2). No criterion, pass condition, priority or status changed, and no row was added. `COVERAGE_GAP_PROPOSALS.md` gives the reasons and the candidate checks. |
 | 0.6 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. Rows that gave another document's version or date now give none. No requirement, scope item, decision or status label changed. |
 
 ### 1.1 Related documents

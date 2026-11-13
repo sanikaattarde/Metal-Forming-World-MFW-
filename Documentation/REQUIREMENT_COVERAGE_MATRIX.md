@@ -6,9 +6,9 @@
 |---|---|
 | Document | Requirement Coverage Matrix |
 | File | `Documentation/REQUIREMENT_COVERAGE_MATRIX.md` |
-| Version | 0.5 |
+| Version | 0.4 |
 | Status | Draft for review. Not approved. **DERIVED: this matrix repeats what other documents say and is not a source of truth. No result is a pass for T-11.2 or T-11.3. Emulator and simulator results are in `test-evidence/`.** |
-| Date | 14 November 2026 |
+| Date | 7 November 2026 |
 | Audience | The two developers, when they plan tests and review the acceptance criteria. |
 | Proposed owner | Yuvraj (WS-B), PROPOSED and not agreed. Reviewer: Sanika Attarde (WS-A). |
 | Approval required | Both developers. MFW only if a candidate check later becomes a numbered PAC row, because a PAC row is not contractual until MFW approves it in writing. |
@@ -21,7 +21,6 @@
 | 0.1 | 24 October 2026 | Initial draft. Read from the documents of commit 5a436a3 (pull request 3, which has since reached `main` by a direct push on 2026-10-25, with no review by a person; see `CHANGELOG.md`, Repository History), so the identifiers it cites are those of that commit. |
 | 0.2 | 27 October 2026 | Rows for FR-ADMIN-004, FR-USER-001, FR-USER-005, FR-PRIV-003, FR-DL-010 and NFR-COMP-003 updated by hand for the positions of 26 and 27 October 2026 (PAC-19 and PAC-20 added, OP-13 withdrawn, OP-33 and the edition-update rows dropped on the working position). The matrix was not regenerated, so other rows still show the identifiers of the earlier documents. The stale sentence about pull request 3 in section 6 is corrected. No requirement status changed. |
 | 0.3 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
-| 0.5 | 14 November 2026 | MOD17-P1-T03. Regenerated from `ACCEPTANCE_CRITERIA.md` 0.7 by the rules of section 2, with a script that recomputes the "AC or PAC" column, the states and the counts (the script is not kept in the repository, RC-03). Fifteen RS CLAIM requirements are now named in a row and are COVERED; four stay RS CLAIM (FR-DL-001, FR-NOTIF-002, FR-ADMIN-009, NFR-OBS-002). FR-DL-007 to FR-DL-009 now list PAC-20, whose Source names that range. The withdrawn OP-13 is removed from FR-AUTH-009 and from the note of FR-PRIV-003. The summary counts are recounted from the tables: before this version they said 95 COVERED and 33 REVIEW, while the tables held 97 and 31 since the hand edits of 0.2. `COVERAGE_GAP_PROPOSALS.md` holds the candidate checks for the eight AREA ONLY and NO ROW requirements and the four RS CLAIM left. No requirement, status or candidate check changed. |
 | 0.4 | 7 November 2026 | Findings of Sanika Attarde's first pass of MOD20-P1-T03 (issue 31, M-1 and M-2), with YG's positions of 6 November 2026, PROPOSED. The status line no longer says that nothing has been tested: it says that no result is a pass for T-11.2 or T-11.3, and that the emulator and simulator results are in `test-evidence/` (M-1). Section 2 says that the matrix has no evidence column, and that suite TS-14 is not traced per requirement, and why (M-2). No row, state, count, requirement, scope item, decision or MFW approval changed. |
 
 ### 1.1 Related documents

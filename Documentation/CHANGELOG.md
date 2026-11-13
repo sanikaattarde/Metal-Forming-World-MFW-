@@ -34,8 +34,8 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ### Documentation: MOD17-P1-T03 coverage gaps and the regenerated matrix, 2026-11-14
 
-- `ACCEPTANCE_CRITERIA.md` 0.7 names fifteen RS CLAIM requirements in the Source cells of the rows that test them; no criterion or pass condition changed.
-- `REQUIREMENT_COVERAGE_MATRIX.md` 0.5 is regenerated from those rows: 112 COVERED, 4 RS CLAIM, 11 PLAN ONLY, 31 REVIEW, 5 AREA ONLY, 3 NO ROW. FR-DL-007 to 009 list PAC-20; the withdrawn OP-13 is removed; the summary counts, stale since 0.2, are recounted.
+- `ACCEPTANCE_CRITERIA.md` names fifteen RS CLAIM requirements in the Source cells of the rows that test them; no criterion or pass condition changed.
+- `REQUIREMENT_COVERAGE_MATRIX.md` is regenerated from those rows: 112 COVERED, 4 RS CLAIM, 11 PLAN ONLY, 31 REVIEW, 5 AREA ONLY, 3 NO ROW. FR-DL-007 to 009 list PAC-20; the withdrawn OP-13 is removed; the summary counts, stale since 0.2, are recounted.
 - `COVERAGE_GAP_PROPOSALS.md` 0.1 (new): eleven candidate checks, PROPOSED, for the AREA ONLY, NO ROW and remaining RS CLAIM requirements. Any new PAC row needs MFW's written approval.
 
 ### Added: MOD07-P1-T02 and MOD07-P3-T01 the reader on MFW's sample issues, on an iPhone, 2026-11-12
