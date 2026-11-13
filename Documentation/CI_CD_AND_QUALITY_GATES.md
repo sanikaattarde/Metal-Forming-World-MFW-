@@ -7,9 +7,9 @@
 | Document | CI/CD and Quality Gates |
 | File | `Documentation/CI_CD_AND_QUALITY_GATES.md` |
 | Phase | 4 — Testing, Release and Risk Management (document 33) |
-| Version | 0.10 |
+| Version | 0.11 |
 | Status | Draft for review. Not approved. **Two workflows exist: `.github/workflows/pr.yml` runs QG-01 to QG-06 on pull requests and on pushes to `main` that change `app/` or the workflow (T-01.5, DEC-010), and `.github/workflows/backend.yml` runs QG-08. Every other gate and pipeline below is PLANNED.** |
-| Date | 9 November 2026 |
+| Date | 14 November 2026 |
 | Approval required | Both developers (DEC-022). MFW if any cost is billed to MFW. |
 
 **Change history**
@@ -25,6 +25,7 @@
 | 0.7 | 8 November 2026 | Section 3 and section 13 record that the repository owner approved the cost of the workflow of pull request #48 in writing on 8 November 2026 (DEC-022, `DECISION_LOG.md` section 5.9). The plan minutes and the macOS runner cost stay NOT VERIFIED. No gate changed. No MFW approval is recorded, and no entry is APPROVED. |
 | 0.8 | 9 November 2026 | QG-05 tries the Android build up to 3 times, 30 seconds apart, and the Gradle wrapper downloads the binary distribution of Gradle 9.3.1 rather than the full one, after GitHub answered 504 to the Gradle download on 8 and 9 November 2026 (pull request #58, two commits made by the Copilot coding agent started from YG's account and kept by YG). A retry also repeats a build that fails for a real reason, so a real failure takes up to three times as long to show. No gate is added, removed or made optional. |
 | 0.9 | 9 November 2026 | QG-08 and QG-14 are no longer blocked by DEC-003, which is AGREED (`DECISION_LOG.md` section 5.11). Both stay not available until the first backend code adds them. Section 14 item 5 and the open item in section 15 say the same, and that DEC-004 is PROPOSED, so QG-09 stays blocked. No gate is added, removed or made optional. |
+| 0.11 | 14 November 2026 | Section 13.1 records the finding of MOD15-P1-T01: the repository is public, GitHub's billing page says standard hosted runners are free in public repositories, and GitHub reports no billable time for the Linux and macOS jobs of two App checks runs. The account plan was not readable and stays NOT VERIFIED. The Constraint row of section 3 points to section 13.1. No gate is added, removed or made optional. |
 | 0.10 | 9 November 2026 | Section 10: the configuration part of SEC-CHK-01 now runs in QG-03, as `app/test/core/network/cleartext_config_test.dart` (pull request #63, MOD01-P2-T03): the Android manifest turns cleartext off and no manifest turns it on, and the iOS `Info.plist` has no App Transport Security exception. The proxy observation stays manual. No gate is added, removed or made optional. |
 
 ### 1.1 Related documents
@@ -53,7 +54,7 @@ This document proposes the automated checks that guard pull requests, integratio
 |---|---|---|
 | Service | GitHub Actions, since the repository is hosted on GitHub | DEC-022, AGREED. The cost of the first workflow is approved by the repository owner, for the repository as it is now (`DECISION_LOG.md` section 5.9) |
 | Runners | Linux for formatting, analysis, tests and Android builds. macOS for iOS builds, which need Xcode. | PROPOSED |
-| Constraint | Runner minutes, macOS minute cost, and feature availability (environments, required reviewers) depend on the account plan and repository visibility | Not verified |
+| Constraint | Runner minutes, macOS minute cost, and feature availability (environments, required reviewers) depend on the account plan and repository visibility | Visibility and runner cost checked on 14 November 2026: public, and no billable time (section 13.1). The account plan and feature availability are NOT VERIFIED |
 | After handover | CI moves with the repository to MFW's ownership (OQ-48). Secrets are re-created in MFW's account. | PLANNED |
 
 ## 4. Quality Gates
@@ -192,6 +193,23 @@ QG-11 scans every change for keys, tokens, keystores and credential files. On a 
 - macOS runners use more of the minute allowance than Linux runners.
 - Any CI cost billed to MFW needs MFW's approval (DEC-022). No price is quoted here, because provider prices change.
 - Sanika Attarde, as the owner of the repository and of the account that pays, approved the cost of `.github/workflows/pr.yml` (three jobs, one on a macOS runner) in writing on 8 November 2026, in the approving review of pull request #48 (DEC-022, `DECISION_LOG.md` section 5.9). No cost is billed to MFW. The plan minutes and the macOS runner cost are NOT VERIFIED, and the check is made again if the repository's visibility or the paying account changes. From 10 November 2026 the workflow also runs on each push to `main` that changes `app/` (DEC-010). Those runs take the place of the pull request runs that tasks no longer open; whether the approval covers them is for Sanika Attarde to confirm.
+
+### 13.1 Finding of MOD15-P1-T01, 14 November 2026
+
+Checked by Yuvraj Gaykhe on 14 November 2026 with the GitHub command line tool and GitHub's documentation. Sanika Attarde has not yet reviewed it.
+
+| Item | Finding | Source |
+|---|---|---|
+| Repository visibility | Public. The owner is a personal account, `sanikaattarde` | GitHub API `repos/sanikaattarde/Metal-Forming-World-MFW-`, read on 14 November 2026 |
+| Actions available | Yes. Three workflows run: App checks (71 runs from 30 October to 12 November 2026), Backend checks (11 runs) and Repository checks (5 runs) | `gh run list`, the latest 200 runs, read on 14 November 2026 |
+| Price of standard runners in a public repository | Free, for every runner system, macOS included. Such runs do not use the account's included allowance | GitHub Docs, "GitHub Actions billing" (`docs.github.com/en/billing/concepts/product-billing/github-actions`), read on 14 November 2026; the page shows no date |
+| What GitHub billed | Nothing. App checks runs 42877362021 (10 November 2026) and 43259188509 (12 November 2026) each show 0 billable milliseconds for their two Linux jobs and their macOS job. The macOS job (QG-06) took 6 minutes 11 seconds and 8 minutes 47 seconds | GitHub API `actions/runs/<id>/timing` and `gh run view`, read on 14 November 2026 |
+| Account plan | NOT VERIFIED. Only the owner can read it, and the API needs a scope that YG's token does not have | GitHub API `users/sanikaattarde/settings/billing/actions` answered 404 |
+| Feature availability (environments, required reviewers) | NOT VERIFIED. Not checked in this task | None |
+
+**If the repository becomes private.** The cost then depends on the paying account's plan. On the GitHub Free plan for a personal account, the same page gives an included allowance of USD 12 a month, Linux 2-core minutes at USD 0.006 and macOS minutes at USD 0.062. By arithmetic, not from the page, one QG-06 run of about 9 minutes would cost about USD 0.56. Prices change, so this is checked again when it matters.
+
+**What it means for MFW.** No CI cost falls to MFW while the repository stays public and owned by `sanikaattarde`. The check is made again when the repository's visibility or its paying account changes, for example at handover (OQ-48). A private repository in MFW's account would put the cost on MFW, and that needs MFW's approval (DEC-022). Step 3 of MOD15-P1-T01, telling Sanika Attarde, is not done yet; this section is what YG passes on.
 
 ## 14. Implementation Steps (Not Performed)
 

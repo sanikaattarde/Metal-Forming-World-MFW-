@@ -32,6 +32,10 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Documentation: MOD15-P1-T01 Actions availability and runner cost, 2026-11-14
+
+- `CI_CD_AND_QUALITY_GATES.md` 0.11 section 13.1: the repository is public, standard runners are free there (GitHub Docs), and GitHub billed 0 ms for the Linux and macOS jobs of runs 42877362021 and 43259188509. The account plan and feature availability stay NOT VERIFIED. No cost falls to MFW while the repository stays public.
+
 ### Added: MOD07-P1-T02 and MOD07-P3-T01 the reader on MFW's sample issues, on an iPhone, 2026-11-12
 
 - **Tests:** `app/integration_test/reader_mfw_samples_test.dart` runs on a device with MFW's samples copied into the test app (not in Git, numbers only). All 104 pages of the three issues render, each in 162 ms at most. On SCR-A-14 the first page shows in 100 to 147 ms (AC-2.1: 3 s), 20 page turns pass in both modes with no crash (AC-2.5), zoom reaches 300% with the 3x redraw, memory stays between 173 and 226 MB while reading (peak 465 MB), and no frame is requested once a turn ends. No tuning was needed. `reader_pdfrx_test.dart` passed again on the device (7). Evidence: `Documentation/test-evidence/READER_SAMPLES_DEVICE_EVIDENCE.md`.
