@@ -4,7 +4,7 @@
 import { afterAll, beforeAll, beforeEach, expect, test } from 'vitest';
 import { adminApi } from '../src/adminApi';
 import type { CallFn } from '../src/adminApi';
-import { newRequestId, requestUpload, uploadJobs } from '../src/data';
+import { getUploadLimits, newRequestId, requestUpload, uploadJobs } from '../src/data';
 import { emulatorBackend, servicesFor } from '../src/services';
 import type { Backend, Services } from '../src/services';
 import { signInAdmin } from '../src/signIn';
@@ -12,6 +12,7 @@ import { AUTH_URL, clearAll, createAdmin, PASSWORD, requireEmulators, setDoc } f
 
 // TEST VALUE. The real limit is "150 MB by default", with its unit and boundary open (OQ-30).
 const TEST_LIMIT = 4096;
+const TEST_COVER_RULES = { max_bytes: 2048, min_width_px: 600, min_height_ratio: 1.27, max_height_ratio: 1.56, stored_max_width_px: 1600 };
 
 let backend: Backend;
 let services: Services;
@@ -36,7 +37,7 @@ beforeEach(async () => {
   await clearAll();
   n += 1;
   await createAdmin(`admin-${n}@example.test`);
-  await setDoc('config/private', { max_upload_bytes: TEST_LIMIT });
+  await setDoc('config/private', { max_upload_bytes: TEST_LIMIT, cover_rules: TEST_COVER_RULES });
   await setDoc('issues/i-1', { issue_id: 'i-1', title: 'November', publication_state: 'unpublished', publication_date: '2026-11-01' });
   expect(await signInAdmin(services, `admin-${n}@example.test`, PASSWORD)).toBe('signed-in');
 });
@@ -64,4 +65,23 @@ test('AC-8.5: a declared size over the limit is refused naming the size field, a
 test('an issue that does not exist is not found', async () => {
   const error = await requestUpload(api, newRequestId(), 'i-none', 10).catch((e: unknown) => e);
   expect(error).toMatchObject({ code: 'functions/not-found' });
+});
+
+test('a cover is requested with its own kind and type, against the cover limit (MOD12-P2-T02, OQ-22)', async () => {
+  const cover = await requestUpload(api, newRequestId(), 'i-1', 2048, 'cover', 'image/png');
+  expect(cover.upload_headers).toEqual({ 'content-type': 'image/png', 'x-goog-resumable': 'start' });
+  const [job] = await uploadJobs(api, { job_id: cover.job_id });
+  expect(job).toMatchObject({ kind: 'cover', content_type: 'image/png', status: 'pending', detail: null });
+
+  const over = await requestUpload(api, newRequestId(), 'i-1', 2049, 'cover', 'image/jpeg').catch((e: unknown) => e);
+  expect(over).toMatchObject({ code: 'functions/invalid-argument', details: { fields: ['declared_size_bytes'] } });
+  const gif = await requestUpload(api, newRequestId(), 'i-1', 10, 'cover', 'image/gif').catch((e: unknown) => e);
+  expect(gif).toMatchObject({ code: 'functions/invalid-argument', details: { fields: ['content_type'] } });
+});
+
+test('getUploadLimits gives the limits from the settings, for the panel to name them', async () => {
+  expect(await getUploadLimits(api)).toEqual({
+    pdf_max_bytes: TEST_LIMIT,
+    cover: { max_bytes: 2048, min_width_px: 600, min_height_ratio: 1.27, max_height_ratio: 1.56, content_types: ['image/jpeg', 'image/png'] },
+  });
 });

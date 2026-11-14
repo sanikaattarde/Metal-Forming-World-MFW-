@@ -3,6 +3,7 @@
 // in-memory stand-in server. The real operations are checked in content.emulator.test.ts.
 import { cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, expect, test } from 'vitest';
+import { COVER_TEXT } from '../src/CoverSection';
 import { ERRORS } from '../src/describeError';
 import { MESSAGES } from '../src/messages';
 import { fakeDeps, serverError } from './fakes';
@@ -162,7 +163,7 @@ test('an edit sends the record version the screen showed, and a stale screen is 
 });
 
 test('AC-8.7: publishing asks first; cancelling sends nothing; confirming publishes', async () => {
-  const issue = issueRecord({ issue_id: 'i-1', current_revision: 1 });
+  const issue = issueRecord({ issue_id: 'i-1', current_revision: 1, cover_path: 'covers/i-1/v1' });
   const { server, deps } = setUp(fakeServer({ issues: [issue], categories: CATEGORIES }));
   await signedInApp(deps, '/issues/i-1');
   fireEvent.click(await screen.findByRole('button', { name: 'Publish' }));
@@ -188,6 +189,15 @@ test('an issue with no accepted file cannot be published, and the screen says wh
   fireEvent.click(screen.getByRole('button', { name: 'Publish' }));
   fireEvent.click(screen.getByRole('button', { name: 'Confirm publish' }));
   expect((await screen.findByRole('alert')).textContent).toBe(ERRORS.noAcceptedFile);
+});
+
+test('an issue with a file but no cover cannot be published, and the screen says why (OQ-22 working position)', async () => {
+  const { deps } = setUp(fakeServer({ issues: [issueRecord({ issue_id: 'i-1', current_revision: 1 })], categories: CATEGORIES }));
+  await signedInApp(deps, '/issues/i-1');
+  expect(await screen.findByText(COVER_TEXT.none)).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Publish' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Confirm publish' }));
+  expect((await screen.findByRole('alert')).textContent).toBe(ERRORS.noCover);
 });
 
 // ---- OP-30, permanent deletion (MOD12-P3-T01, PROVISIONAL) ----

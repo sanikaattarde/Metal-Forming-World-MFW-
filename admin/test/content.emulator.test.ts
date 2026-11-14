@@ -58,7 +58,7 @@ const visitorCanRead = async (issueId: string) =>
     },
   );
 
-// An accepted file, as the upload trigger (OP-40) would leave it. The upload screen waits for OQ-22 and OQ-30 (MOD12-P2-T02).
+// An accepted file, as the upload trigger (OP-40) would leave it, with a cover (MOD12-P2-T02).
 async function acceptFile(issueId: string) {
   await setDoc(`issues/${issueId}/files/1`, { revision: 1, status: 'current', size_bytes: 1000, checksum_sha256: 'a'.repeat(64), storage_path: `issues/${issueId}/1-test.pdf` });
   const issue = await findIssue(api, issueId);
@@ -74,6 +74,8 @@ async function acceptFile(issueId: string) {
     current_revision: 1,
     page_count: 3,
     file_size_bytes: 1000,
+    // Publishing needs a cover too (OQ-22 working position); the backend's G23 uploads a real one.
+    cover_path: `covers/${issueId}/test`,
     created_at: new Date(),
     updated_at: new Date(),
   });
