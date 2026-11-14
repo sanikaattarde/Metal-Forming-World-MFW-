@@ -42,6 +42,7 @@ export const OPERATION_CLASSES: Record<string, RateClass> = {
   getMyAdminRole: 'role_check',
   listIssuesForAdmin: 'admin_read',
   listUploadJobs: 'admin_read',
+  getUploadLimits: 'admin_read',
   listWordPressPosts: 'admin_read',
   listNotificationSends: 'admin_read',
   listRegisteredUsers: 'admin_read',

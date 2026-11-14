@@ -20,4 +20,4 @@ Where each fixture of `Documentation/TEST_DATA_AND_FIXTURES.md` lives, and which
 | FX-LIB (library) | 01, 02 | `fx_library.dart` | 03: OQ-11 and OQ-21 |
 | FX-WP (WordPress) | 01 to 12 | `wordpress/`; 10 and 11 are made in `../features/news/data/wordpress_news_repository_test.dart` | 13 (news controls) belongs to MOD09-P2-T03 |
 | FX-NTF (notifications) | 01 to 08 | `notifications/fx_ntf_payloads.json` | The oversized case of 08: no size limit is defined |
-| FX-ADM (admin) | 05 to 09 | `backend/test/g5-admin-gate.test.mjs`, `g8-admin-operations.test.mjs`, `g10-uploads.test.mjs`, `u10-csv.test.mjs`; `admin/test/sign-in.emulator.test.ts` | 01 to 04 (the upload form and cover rules): OQ-22, and the admin upload screen of WS-A |
+| FX-ADM (admin) | 01 to 03, 05 to 09 | `backend/test/cover-fixtures.mjs` (generated covers), `u11-cover-check.test.mjs`, `g23-cover-upload.test.mjs`, `g5-admin-gate.test.mjs`, `g8-admin-operations.test.mjs`, `g10-uploads.test.mjs`, `u10-csv.test.mjs`; `admin/test/cover.test.tsx`, `admin/test/sign-in.emulator.test.ts` | 04 (details missing in the upload form). 01 to 03 follow the OQ-22 working position of 14 November 2026 (PROVISIONAL) |

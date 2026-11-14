@@ -33,9 +33,11 @@ import {
   makePdf,
   noPagesPdf,
   notAPdf,
+  ownerOnlyPdf,
   protectedPdf,
   truncatedPdf,
 } from './pdf-fixtures.mjs';
+import { TEST_COVER_RULES } from './cover-fixtures.mjs';
 
 // TEST VALUES. The real limit is "150 MB by default", with its unit and boundary open (OQ-30).
 const TEST_LIMIT = 8192;
@@ -43,8 +45,8 @@ const TEST_LIFETIME_SECONDS = 600;
 const NOW = new Date('2026-11-03T10:00:00Z');
 const LIVE_FILE = makePdf({ pages: 2 });
 
-const JOB_FIELDS = ['created_at', 'declared_size_bytes', 'issue_id', 'job_id', 'kind', 'requested_by', 'status'];
-const VIEW_FIELDS = ['created_at', 'declared_size_bytes', 'finished_at', 'issue_id', 'job_id', 'kind', 'reason', 'revision', 'status'];
+const JOB_FIELDS = ['content_type', 'created_at', 'declared_size_bytes', 'issue_id', 'job_id', 'kind', 'requested_by', 'status'];
+const VIEW_FIELDS = ['content_type', 'created_at', 'declared_size_bytes', 'detail', 'finished_at', 'issue_id', 'job_id', 'kind', 'reason', 'revision', 'status'];
 const FILE_FIELDS = ['accepted_at', 'checksum_sha256', 'issue_id', 'page_count', 'revision', 'size_bytes', 'status', 'storage_path', 'uploaded_at', 'uploaded_by'];
 
 let env;
@@ -109,7 +111,7 @@ const invalid = (reply, fields) => {
 };
 
 const setConfig = (over = {}) =>
-  db.doc('config/private').set({ max_upload_bytes: TEST_LIMIT, profile_gate_enabled: false, signed_url_lifetime: TEST_LIFETIME_SECONDS, ...over });
+  db.doc('config/private').set({ max_upload_bytes: TEST_LIMIT, cover_rules: TEST_COVER_RULES, profile_gate_enabled: false, signed_url_lifetime: TEST_LIFETIME_SECONDS, ...over });
 
 const seedIssue = (id, over = {}) =>
   db.doc(`issues/${id}`).set({ issue_id: id, title: 'An issue', description: 'What it covers', category_id: 'c1', publication_state: 'unpublished', ...over });
@@ -227,6 +229,7 @@ test('G10 requestUpload: an admin gets a job, an address that cannot resolve and
     job_id: reply.result.job_id,
     kind: 'pdf',
     issue_id: 'i-new',
+    content_type: 'application/pdf',
     requested_by: admin.uid,
     declared_size_bytes: 1000,
     status: 'pending',
@@ -255,7 +258,8 @@ test('G10 requestUpload: another request or another admin makes another job', as
 
 const BAD_REQUESTS = {
   'a field it does not take': [{ revision: 2 }, ['revision']],
-  'a cover (OQ-22)': [{ kind: 'cover' }, ['kind']],
+  'a kind it does not know': [{ kind: 'image' }, ['kind']],
+  'a cover sent with the PDF type': [{ kind: 'cover' }, ['content_type']],
   'no kind': [{ kind: undefined }, ['kind']],
   'an issue path': [{ issue_id: 'i-live/files/1' }, ['issue_id']],
   'a size of zero': [{ declared_size_bytes: 0 }, ['declared_size_bytes']],
@@ -268,7 +272,7 @@ const BAD_REQUESTS = {
   'the PDF type in capitals': [{ content_type: 'APPLICATION/PDF' }, ['content_type']],
   'no content type': [{ content_type: undefined }, ['content_type']],
   'no request identifier': [{ request_id: '' }, ['request_id']],
-  'two problems, named in order': [{ kind: 'cover', content_type: 'text/plain' }, ['content_type', 'kind']],
+  'two problems, named in order': [{ kind: 'video', declared_size_bytes: 0 }, ['declared_size_bytes', 'kind']],
 };
 
 for (const [name, [over, fields]] of Object.entries(BAD_REQUESTS)) {
@@ -279,7 +283,7 @@ for (const [name, [over, fields]] of Object.entries(BAD_REQUESTS)) {
   });
 }
 
-test('G10 requestUpload: a declared size exactly at the limit is taken (the boundary is OQ-30)', async () => {
+test('G10 requestUpload: a declared size exactly at the limit is taken (OQ-30 working position)', async () => {
   const reply = await request({ declared_size_bytes: TEST_LIMIT });
   assert.equal(reply.error, undefined, reply.raw);
 });
@@ -341,6 +345,7 @@ test('G10 a valid PDF becomes revision 1 of a new issue, which stays unpublished
 test('G10 an accepted file can be published, and then a reader gets it through getIssueFile (INV-02, OP-11)', async () => {
   const file = makePdf({ pages: 3 });
   await upload(file);
+  await db.doc('issues/i-new').update({ cover_path: 'covers/i-new/v1' }); // publishing needs a cover (G23)
   const published = await call('publishIssue', { request_id: 'p1', issue_id: 'i-new' });
   assert.equal(published.error, undefined, published.raw);
 
@@ -399,13 +404,19 @@ test('G10 after a job is finished, a repeat gets its status and no new address',
   assert.deepEqual(reply.result, { job_id: jobIdFor(admin.uid, 'r1'), status: 'accepted' });
 });
 
+test('G10 accepted: a PDF that limits printing and copying but opens without a password (OQ-30 working position)', async () => {
+  const { job } = await upload(ownerOnlyPdf());
+  assert.equal(job.status, 'accepted');
+  assert.equal((await db.doc('issues/i-new').get()).get('page_count'), 2);
+});
+
 // ---- OP-40: rejected. The job says why, the file is removed and nothing else changes. ----
 
 const REJECTED = {
   'a PNG named as a PDF (FX-PDF-08)': [notAPdf, 'NOT_A_PDF'],
   'the header and nothing usable (FX-PDF-09)': [headerOnly, 'NOT_A_PDF'],
   'the first half of a valid file (FX-PDF-10)': [truncatedPdf, 'NOT_A_PDF'],
-  'a password-protected PDF (FX-PDF-12; OQ-30)': [protectedPdf, 'NOT_A_PDF'],
+  'a password-protected PDF (FX-PDF-12; OQ-30 working position)': [protectedPdf, 'PDF_PROTECTED'],
   'an empty file (FX-PDF-13)': [emptyFile, 'NOT_A_PDF'],
   'a PDF with no pages': [noPagesPdf, 'NOT_A_PDF'],
   'a page that cannot be loaded': [brokenPageTreePdf, 'NOT_A_PDF'],

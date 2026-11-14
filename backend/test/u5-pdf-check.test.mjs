@@ -13,6 +13,7 @@ import {
   makePdf,
   noPagesPdf,
   notAPdf,
+  ownerOnlyPdf,
   protectedPdf,
   truncatedPdf,
 } from './pdf-fixtures.mjs';
@@ -39,6 +40,12 @@ test('U5 a few stray bytes after the end-of-file marker are accepted', async () 
 // pdf.js repairs a damaged cross-reference table and loads every page. Recorded as behaviour, not as a decision.
 test('U5 a PDF with a damaged cross-reference table is accepted, because pdf.js repairs it (FX-PDF-11)', async () => {
   assert.deepEqual(await inspectPdf(corruptXrefPdf()), { ok: true, pageCount: 3 });
+});
+
+test('U5 a PDF that limits printing and copying but needs no password to open is accepted (OQ-30)', async () => {
+  const file = ownerOnlyPdf();
+  assert.ok(file.toString('latin1').includes('/Encrypt'));
+  assert.deepEqual(await inspectPdf(file), { ok: true, pageCount: 2 });
 });
 
 // ---- Refused ----

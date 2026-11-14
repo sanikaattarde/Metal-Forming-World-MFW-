@@ -22,6 +22,7 @@
 | 0.4 | 5 November 2026 | The related-documents row for `CLOUD_INFRASTRUCTURE_AND_COSTS.md` no longer gives version 0.1 of 25 October 2026, because that document is at a later version. It says the draft exists, and the README index gives its version. No environment, configuration item or step changed. |
 | 0.5 | 5 November 2026 | The header of the related-documents table reads "Status", with no date. No requirement, scope item, decision or status label changed. |
 | 0.6 | 8 November 2026 | MFW's clarifications, reported by YG on 8 November 2026 and not filed. Section 4 notes that cloud access is promised for next week and points to `CLOUD_ACCESS_SETUP_CHECKLIST.md`. CFG-03 records the website MFW shared, and stays OPEN (OQ-39). CFG-04 records the working position that the app shows the website's categories, as YG reports, and stays OPEN. Section 7.6 records the public read-only check of that day. No environment, step or status label changed, and nothing has been deployed. |
+| 0.7 | 14 November 2026 | CFG-05 records the setting and the OQ-30 working position (157,286,400 bytes, inclusive). CFG-16 is added for the cover rules of the OQ-22 working position (MOD12-P2-T02). Both values are PROVISIONAL. |
 
 ### 1.1 Related documents
 
@@ -90,7 +91,7 @@ Update of 8 November 2026: MFW says cloud access will be provided next week (rep
 | CFG-02 | Cloud region | — | OPEN (OQ-41) |
 | CFG-03 | WordPress site address | None recorded before 8 November 2026. Update of 8 November 2026: https://metalformingworld.com, the website MFW shared (reported by YG, not filed) | OPEN (OQ-39): not yet given in writing as the site the app reads |
 | CFG-04 | WordPress categories shown in the app | None recorded before 8 November 2026. Working position of 8 November 2026 (reported by YG, not filed): the nine sections of the website's News menu, the WordPress categories with IDs 7 and 11 to 18. Blog (ID 1) is not shown | OPEN (RS INT-WP-003; OQ-39): not given in writing |
-| CFG-05 | Upload size limit | 150 MB by default (RS FR-ADMIN-007) | Boundary and unit: OQ-30 |
+| CFG-05 | Upload size limit | 150 MB by default (RS FR-ADMIN-007). Set as `config/private.max_upload_bytes`; there is no default in code, so a missing value refuses every PDF upload. Working position of 14 November 2026 (PROVISIONAL): 157286400, which is 150 x 2²⁰ bytes, with a file of exactly the limit accepted | OPEN (OQ-30) |
 | CFG-06 | Issue-file grant lifetime | — | OPEN (OQ-37) |
 | CFG-07 | Privacy policy and terms-of-use addresses | — | MFW input (CH §12) |
 | CFG-08 | Store links used for sharing | — | OPEN (OQ-15) |
@@ -101,6 +102,7 @@ Update of 8 November 2026: MFW says cloud access will be provided next week (rep
 | CFG-13 | Notification categories | — | OPEN (OQ-18) |
 | CFG-14 | Admin accounts | — | MFW's admin list (CH §12); OQ-20 |
 | CFG-15 | App name and identifiers (Android application ID, iOS bundle ID) | — | OPEN (OQ-42) |
+| CFG-16 | Cover image rules | Set as `config/private.cover_rules`; there is no default in code, so a missing or unusable value refuses every cover upload. Working position of 14 November 2026 (PROVISIONAL): `max_bytes` 5242880 (5 x 2²⁰), `min_width_px` 600, `min_height_ratio` 1.27, `max_height_ratio` 1.56, `stored_max_width_px` 1600 | OPEN (OQ-22) |
 
 ## 6. Verification and Smoke Tests
 
