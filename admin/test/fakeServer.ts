@@ -76,10 +76,12 @@ export function fakeServer({
     // Whether the next push is refused, as the stand-in push sender does on the emulators.
     pushFails: false,
     jobs: [] as (UploadJob & { polls?: number })[],
-    // The server's upload limit (CFG-05), which the panel never sees.
+    // The server's upload limits (CFG-05, CFG-13). The panel reads them through getUploadLimits.
     uploadLimit: 1_000_000,
+    coverLimit: 500_000,
+    limitsFail: false,
     // What OP-40 decides about the next file that arrives, and how many OP-20 checks see it still pending.
-    nextCheck: { status: 'accepted', reason: null } as { status: 'accepted' | 'rejected'; reason: string | null },
+    nextCheck: { status: 'accepted', reason: null } as { status: 'accepted' | 'rejected'; reason: string | null; detail?: string },
     checkPolls: 1,
     readers: readers.map((r) => ({ ...r })),
     segments: segments.map((g) => ({ ...g })),
@@ -140,7 +142,10 @@ export function fakeServer({
       case 'unpublishIssue': {
         const record = find(data.issue_id);
         if (!record) throw serverError('not-found');
-        if (name === 'publishIssue' && !record.current_revision) throw serverError('failed-precondition', 'NO_ACCEPTED_FILE');
+        if (name === 'publishIssue' && record.publication_state !== 'published') {
+          if (!record.current_revision) throw serverError('failed-precondition', 'NO_ACCEPTED_FILE');
+          if (!record.cover_path) throw serverError('failed-precondition', 'NO_COVER');
+        }
         record.publication_state = name === 'publishIssue' ? 'published' : 'unpublished';
         record.updated_at = ++clock;
         return { ...record };
@@ -261,18 +266,40 @@ export function fakeServer({
         return { items: items.map((s) => ({ ...s })), next_cursor: start + size < all.length ? items[items.length - 1].send_id : null };
       }
       case 'requestUpload': {
-        if (typeof data.declared_size_bytes !== 'number' || data.declared_size_bytes > state.uploadLimit) throw invalid(['declared_size_bytes']);
+        const cover = data.kind === 'cover';
+        const types = cover ? ['image/jpeg', 'image/png'] : ['application/pdf'];
+        if (!types.includes(String(data.content_type))) throw invalid(['content_type']);
+        const limit = cover ? state.coverLimit : state.uploadLimit;
+        if (typeof data.declared_size_bytes !== 'number' || data.declared_size_bytes > limit) throw invalid(['declared_size_bytes']);
         if (!find(data.issue_id)) throw serverError('not-found');
         const known = created.get(String(data.request_id));
         let job = state.jobs.find((j) => j.job_id === known);
         if (!job) {
-          job = { job_id: `job-${next++}`, kind: 'pdf', issue_id: data.issue_id as string, declared_size_bytes: data.declared_size_bytes, status: 'pending', reason: null, revision: null, created_at: ++clock, finished_at: null };
+          job = {
+            job_id: `job-${next++}`,
+            kind: cover ? 'cover' : 'pdf',
+            issue_id: data.issue_id as string,
+            content_type: String(data.content_type),
+            declared_size_bytes: data.declared_size_bytes,
+            status: 'pending',
+            reason: null,
+            detail: null,
+            revision: null,
+            created_at: ++clock,
+            finished_at: null,
+          };
           state.jobs.unshift(job);
           created.set(String(data.request_id), job.job_id);
         }
         if (job.status !== 'pending') return { job_id: job.job_id, status: job.status };
-        return { job_id: job.job_id, upload_url: `https://upload.example.test/${job.job_id}`, upload_headers: { 'content-type': 'application/pdf', 'x-goog-resumable': 'start' }, expires_at: clock + 900_000 };
+        return { job_id: job.job_id, upload_url: `https://upload.example.test/${job.job_id}`, upload_headers: { 'content-type': String(job.content_type), 'x-goog-resumable': 'start' }, expires_at: clock + 900_000 };
       }
+      case 'getUploadLimits':
+        if (state.limitsFail) throw serverError('internal');
+        return {
+          pdf_max_bytes: state.uploadLimit,
+          cover: { max_bytes: state.coverLimit, min_width_px: 600, min_height_ratio: 1.27, max_height_ratio: 1.56, content_types: ['image/jpeg', 'image/png'] },
+        };
       case 'listUploadJobs': {
         const strip = ({ polls, ...job }: UploadJob & { polls?: number }) => ({ ...job });
         if (data.job_id) {
@@ -305,10 +332,16 @@ export function fakeServer({
     delete job.polls;
     job.finished_at = ++clock;
     if (state.nextCheck.status === 'rejected') {
-      Object.assign(job, { status: 'rejected', reason: state.nextCheck.reason });
+      Object.assign(job, { status: 'rejected', reason: state.nextCheck.reason, detail: state.nextCheck.detail ?? null });
       return;
     }
     const issue = find(job.issue_id)!;
+    if (job.kind === 'cover') {
+      // A cover does not change the record's version, as on the server.
+      Object.assign(job, { status: 'accepted' });
+      Object.assign(issue, { cover_path: `covers/${issue.issue_id}/${job.job_id}`, cover_url: `https://covers.example.test/${issue.issue_id}/${job.job_id}` });
+      return;
+    }
     const revision = (issue.current_revision ?? 0) + 1;
     Object.assign(job, { status: 'accepted', revision });
     Object.assign(issue, { current_revision: revision, updated_at: ++clock });

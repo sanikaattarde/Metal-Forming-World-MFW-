@@ -97,7 +97,7 @@ beforeEach(async () => {
   await db.doc('categories/c1').set({ category_id: 'c1', name: 'Category one', display_order: 1 });
   await db.doc('categories/c-unused').set({ category_id: 'c-unused', name: 'Unused', display_order: 2 });
   await db.doc('segments/s1').set({ segment_id: 's1', name: 'Segment one', display_order: 1, is_active: true });
-  await seedIssue('i-ready', { current_revision: 1 });
+  await seedIssue('i-ready', { current_revision: 1, cover_path: 'covers/i-ready/v1' });
   await seedAcceptedFile('i-ready');
   await seedIssue('i-live', { current_revision: 1, publication_state: 'published', published_at: NOW });
   await seedAcceptedFile('i-live');
@@ -313,8 +313,38 @@ for (const status of ['superseded', 'removed']) {
   });
 }
 
+// OQ-22 working position of 14 November 2026 (PROVISIONAL): an issue is published only with a cover.
+for (const [name, cover] of [
+  ['no cover', undefined],
+  ['an empty cover path', ''],
+  ['another issue\'s cover', 'covers/i-live/v1'],
+  ['a path outside the cover area', 'issues/i-nocover/1.pdf'],
+]) {
+  test(`G8 publish: ${name} is refused with NO_COVER, and nothing changes`, async () => {
+    await seedIssue('i-nocover', { current_revision: 1, ...(cover === undefined ? {} : { cover_path: cover }) });
+    await seedAcceptedFile('i-nocover');
+    const before = await dump();
+    refused(await call('publishIssue', { request_id: 'r1', issue_id: 'i-nocover' }), 'FAILED_PRECONDITION', 'NO_COVER');
+    assert.equal(await dump(), before);
+  });
+}
+
+test('G8 publish: an issue already published without a cover stays published, and a repeat succeeds', async () => {
+  assert.equal((await db.doc('issues/i-live').get()).get('cover_path'), undefined);
+  const reply = await call('publishIssue', { request_id: 'r1', issue_id: 'i-live' });
+  assert.equal(reply.result.publication_state, 'published', reply.raw);
+});
+
+test('G8 publish: the reply gives the cover\'s public address, with no token', async () => {
+  const reply = await call('publishIssue', { request_id: 'r1', issue_id: 'i-ready' });
+  const url = new URL(reply.result.cover_url);
+  assert.equal(decodeURIComponent(url.pathname.split('/o/')[1]), 'covers/i-ready/v1');
+  assert.equal(url.searchParams.get('alt'), 'media');
+  assert.equal(url.searchParams.has('token'), false);
+});
+
 test('G8 publish: an issue with no description is refused by name', async () => {
-  await seedIssue('i-bare', { current_revision: 1, description: '' });
+  await seedIssue('i-bare', { current_revision: 1, description: '', cover_path: 'covers/i-bare/v1' });
   await seedAcceptedFile('i-bare');
   invalid(await call('publishIssue', { request_id: 'r1', issue_id: 'i-bare' }), ['description']);
 });

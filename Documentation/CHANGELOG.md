@@ -32,6 +32,14 @@ AGREED (DEC-015, `DECISION_LOG.md` section 5.6).
 
 ## Unreleased
 
+### Added: MOD12-P2-T02 cover upload, the upload limits and protected PDFs, 2026-11-14
+
+- **Decisions (PROVISIONAL, chosen by Sanika Attarde in a question session):** OQ-22 covers are JPEG or PNG, at most 5 MB, at least 600 pixels wide, portrait within 10% of A4 (height 1.27 to 1.56 times the width), and an issue is published only with a cover. The server stores a re-encoded JPEG at most 1600 pixels wide with no photo metadata, and deletes the cover it replaces. OQ-30: "MB" is 2²⁰ bytes (157,286,400), a file of exactly the limit is accepted, only developers change the limits, and a PDF that needs a password is refused as PDF_PROTECTED. Both questions stay OPEN for MFW.
+- **Backend:** OP-19 takes `kind: cover` with its own types and limit, and keeps the job's content type. OP-40 checks covers in `coverCheck.ts` with `sharp` (DEP-103): the signature first, so no other decoder is reached, a pixel cap, the width and shape, then the clean copy at `covers/{issue_id}/{job_id}`. OP-21 refuses NO_COVER. `getUploadLimits` and the admin view's `cover_url` are added (PROPOSED). Settings: `config/private.max_upload_bytes` (CFG-05) and `cover_rules` (CFG-16), with no defaults in code.
+- **Panel:** a Cover section in the issue editor (SCR-W-04) shows the current cover and a preview of the chosen image, names the server's rules, and explains each refusal. The PDF section names its limit and the PDF_PROTECTED refusal. Both sections share `uploadFlow.ts`.
+- **Tests:** backend U11 (cover check), G23 (cover uploads), and additions to U5, G7, G8 and G10, including a real owner-password-only PDF; `npm test` in `backend/`: 1297 passed, 0 failed (emulator only). Panel `cover.test.tsx` and additions to the screen and emulator tests; `npm test` in `admin/`: 162 passed, 0 failed.
+- **Not verified:** the signed upload of an image to the real store (the emulators cannot sign); the `sharp` binaries on the Cloud Functions runtime, which come from the lockfile's Linux entries; whether the LGPL of the bundled `libvips` needs a notice for server use.
+
 ### Added: MFW's logo in the app, 2026-11-14
 
 - **App:** the home bar shows MFW's logo (`app/lib/core/ui/mfw_logo.dart`, `app/assets/brand/mfw_logo.png`) in place of the placeholder box. The picture is an RGB copy of the supplied logo file (DEP-02), not redrawn or recoloured. Tests: `test/core/ui/mfw_logo_test.dart` and one home screen test.

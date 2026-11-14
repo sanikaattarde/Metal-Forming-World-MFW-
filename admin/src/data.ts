@@ -19,6 +19,9 @@ export interface Issue {
   segment_ids: string[];
   publication_state: PublicationState | null;
   current_revision: number | null;
+  // The cover (MOD12-P2-T02): its path, and the public address the server gives for it (PROPOSED).
+  cover_path?: string | null;
+  cover_url?: string | null;
   page_count: number | null;
   file_size_bytes: number | null;
   published_at: number | null;
@@ -255,19 +258,26 @@ export async function publishedIssues(api: CallFn): Promise<Issue[]> {
   return found;
 }
 
-// OP-19 and OP-20 (MOD12-P2-T02). A PDF only: a cover waits for OQ-22. The size limit is the server's
-// (CFG-05, OQ-30), so the panel does not know it and the server refuses a declared size over it.
+// OP-19 and OP-20 (MOD12-P2-T02), for an issue's PDF or its cover. The limits are the server's (CFG-05,
+// CFG-13; OQ-22 and OQ-30 working positions of 14 November 2026, PROVISIONAL): the panel reads them through
+// getUploadLimits (PROPOSED) to name them, and the server refuses a declared size over them in any case.
 export const PDF_TYPE = 'application/pdf';
+export const COVER_TYPES = ['image/jpeg', 'image/png'] as const;
+
+export type UploadKind = 'pdf' | 'cover';
 
 export type JobStatus = 'pending' | 'accepted' | 'rejected';
 
 export interface UploadJob {
   job_id: string;
-  kind: 'pdf';
+  kind: UploadKind;
   issue_id: string;
+  content_type?: string | null;
   declared_size_bytes: number;
   status: JobStatus;
   reason: string | null;
+  // Why a cover was refused: FORMAT, UNREADABLE, TOO_NARROW or SHAPE (PROPOSED).
+  detail?: string | null;
   revision: number | null;
   created_at: number | null;
   finished_at: number | null;
@@ -283,8 +293,30 @@ export interface UploadStart {
 }
 
 // The same request identifier for the same file, so a second try finds the same job and gets a new address.
-export function requestUpload(api: CallFn, requestId: string, issueId: string, sizeBytes: number): Promise<UploadStart> {
-  return api('requestUpload', { request_id: requestId, kind: 'pdf', issue_id: issueId, declared_size_bytes: sizeBytes, content_type: PDF_TYPE }) as Promise<UploadStart>;
+export function requestUpload(
+  api: CallFn,
+  requestId: string,
+  issueId: string,
+  sizeBytes: number,
+  kind: UploadKind = 'pdf',
+  contentType: string = PDF_TYPE,
+): Promise<UploadStart> {
+  return api('requestUpload', { request_id: requestId, kind, issue_id: issueId, declared_size_bytes: sizeBytes, content_type: contentType }) as Promise<UploadStart>;
+}
+
+export interface UploadLimits {
+  pdf_max_bytes: number;
+  cover: {
+    max_bytes: number;
+    min_width_px: number;
+    min_height_ratio: number;
+    max_height_ratio: number;
+    content_types: string[];
+  };
+}
+
+export function getUploadLimits(api: CallFn): Promise<UploadLimits> {
+  return api('getUploadLimits', {}) as Promise<UploadLimits>;
 }
 
 export async function uploadJobs(api: CallFn, query: { issue_id: string } | { job_id: string }): Promise<UploadJob[]> {

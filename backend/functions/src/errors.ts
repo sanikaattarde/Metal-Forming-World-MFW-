@@ -29,6 +29,10 @@ export const inUse = () =>
 export const noAcceptedFile = () =>
   new HttpsError('failed-precondition', 'That issue has no accepted file.', { reason: 'NO_ACCEPTED_FILE' });
 
+// OP-21: an issue is published only with a cover (OQ-22 working position of 14 November 2026, PROVISIONAL).
+export const noCover = () =>
+  new HttpsError('failed-precondition', 'That issue has no cover.', { reason: 'NO_COVER' });
+
 export const accountClosed = () =>
   new HttpsError('failed-precondition', 'This account is closed.', { reason: 'ACCOUNT_CLOSED' });
 

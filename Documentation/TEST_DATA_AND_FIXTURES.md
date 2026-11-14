@@ -25,6 +25,7 @@
 | 0.7 | 5 November 2026 | FX-PDF-11 had no upload expectation, as the review of pull request #18 noted. Its "Used by" cell and the note under the table say that the expectation is not set and follows the depth of the upload check, which is OQ-61. The FX-PDF-09 row cites OQ-61 too. Revised on 5 November 2026 after the review of pull request #24: the note says that the backend spike's check accepts FX-PDF-11, so readers can meet one, and RD-08 matters. No fixture or other expectation changed. |
 | 0.8 | 6 November 2026 | The note under the table cites the simulator result, which is now filed in `test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md`, and no longer says that it is not filed. It is a result on the iOS simulator in a debug build and not a result on a phone. No fixture or expectation changed. |
 | 0.9 | 8 November 2026 | Section 10 says where FX-WP-01 to FX-WP-12 now are (pull request #58), and the status row notes it. No fixture row or expected result changed. |
+| 0.10 | 14 November 2026 | FX-ADM-02, FX-ADM-03 and FX-PDF-12 record the expected results of the OQ-22 and OQ-30 working positions (MOD12-P2-T02). The cover images are generated in `backend/test/cover-fixtures.mjs`. |
 
 ### 1.1 Related documents
 
@@ -125,7 +126,7 @@ The upload limit is 150 MB by default (RS FR-ADMIN-007). Whether exactly 150 MB 
 | FX-PDF-09 | Starts with the `%PDF-` header but is not a valid PDF | Small | Generated | Yes | AC-8.4 (depth of the "genuine PDF" check, OQ-61) |
 | FX-PDF-10 | Truncated PDF (valid first half only) | Small | Generated | Yes | AC-2.6 |
 | FX-PDF-11 | PDF with a corrupted cross-reference table | Small | Generated | Yes | Repair tolerance (PROPOSED, not an AC row): the library opens the repaired file with every page of the PDF it was made from, in order, or gives an error with a retry option, and does not crash. See the note below. Upload expectation: not set. It follows the depth of the upload check (OQ-61) |
-| FX-PDF-12 | Password-protected PDF | Small | Generated | Yes | Upload behaviour (OQ-30) |
+| FX-PDF-12 | Password-protected PDF | Small | Generated | Yes | Upload behaviour (OQ-30). Working position of 14 November 2026: refused as PDF_PROTECTED; a PDF that only limits printing and copying is accepted |
 | FX-PDF-13 | Zero-byte file named `.pdf` | 0 bytes | Generated | Yes | Upload validation |
 
 **Note on FX-PDF-10 and FX-PDF-11.** FX-PDF-10 (truncated) is the AC-2.6 fixture: a damaged file shows an error with a retry option, as S2 AC-2 and FR-READ-010 say. FX-PDF-11 has wrong cross-reference offsets, and a reader library may rebuild them and open the file. The simulator result is filed in `test-evidence/PDF_LIBRARY_SIMULATOR_EVIDENCE.md` (1 November 2026, iOS simulator, debug build): pdfrx opened FX-PDF-11 and drew all four pages, each equal to the same page of FX-PDF-01 pixel for pixel, pdfx gave an error at open, and both gave an error on FX-PDF-10. YG accepts a repaired open of FX-PDF-11, if it shows every page of the PDF it was made from, in order. The fixture is generated, so its page count is known. FR-READ-010 and S2 AC-2 say that a damaged file shows an error with a retry option. Accepting a repaired open reads them as covering a damaged file that the app cannot open. That reading is an ASSUMPTION of the development team and is not MFW's. It is RD-08 in `PDF_READER_AND_OFFLINE_DESIGN.md` section 12, for MFW with the reader approach at M2 (DEC-005). This is a position and not a decision. It ranks no library, and DEC-005 stays OPEN. A result on the agreed test phones is still needed (OQ-26). Whether the upload accepts FX-PDF-11 is not set (OQ-61). The backend spike's check (emulator only, not merged, DEC-003 OPEN) accepts it, because pdf.js repairs it, so readers can meet one, and RD-08 matters.
@@ -226,8 +227,8 @@ The shape follows `API_AND_MODULE_CONTRACTS.md` §6.11 (PROPOSED).
 | ID | Content | Expected result |
 |---|---|---|
 | FX-ADM-01 | FX-PDF-01, a valid synthetic cover image and complete details | Upload succeeds (AC-8.3) |
-| FX-ADM-02 | Cover in a format not allowed | Rejected per OQ-22 |
-| FX-ADM-03 | Cover over the size limit | Rejected per OQ-22 |
+| FX-ADM-02 | Cover in a format not allowed | Rejected per OQ-22. Working position of 14 November 2026: GIF, WebP, TIFF and SVG are refused as COVER_INVALID (FORMAT) |
+| FX-ADM-03 | Cover over the size limit | Rejected per OQ-22. Working position of 14 November 2026: refused at OP-19 by its declared size, or as OVER_LIMIT by OP-40 |
 | FX-ADM-04 | Required issue details missing | Rejected with field messages |
 | FX-ADM-05 | Admin operation called with a reader session (FX-USR-01) | Refused on the server (SEC-CHK-06) |
 | FX-ADM-06 | Admin operation with an expired or signed-out admin session | Refused; asked to sign in |

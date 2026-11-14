@@ -9,15 +9,23 @@ import type { Firestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 import { onObjectFinalized } from 'firebase-functions/v2/storage';
 import { readStanding } from './admin.js';
+import { inspectCover } from './coverCheck.js';
+import type { CoverDetail } from './coverCheck.js';
 import { inspectPdf } from './pdfCheck.js';
 import { logOperation } from './safeLog.js';
-import { readUploadLimit } from './uploads.js';
+import { readCoverRules, readUploadLimit } from './uploads.js';
 import { isDocumentId } from './validation.js';
 
 const OPERATION = 'onUploadFinalized';
 
-// The contract's reasons, less COVER_INVALID (OQ-22). ISSUE_NOT_FOUND is added (spike note 09).
-export type Rejection = 'NOT_A_PDF' | 'OVER_LIMIT' | 'UPLOADER_NOT_AUTHORISED' | 'ISSUE_NOT_FOUND';
+// The contract's reasons. ISSUE_NOT_FOUND is added (spike note 09). PDF_PROTECTED is added for a PDF that
+// needs a password to open (OQ-30 working position of 14 November 2026, PROVISIONAL): readers could not
+// open it. A PDF that only limits printing or copying opens without a password, so it is accepted.
+export type Rejection = 'NOT_A_PDF' | 'PDF_PROTECTED' | 'OVER_LIMIT' | 'UPLOADER_NOT_AUTHORISED' | 'ISSUE_NOT_FOUND' | 'COVER_INVALID';
+
+// The cover area (DATABASE_AND_DATA_MODEL.md section 8). The job is the version, so each cover has a new,
+// unguessable address and an app never shows an old copy it kept (AOQ-20).
+export const coverPath = (issueId: string, jobId: string) => `covers/${issueId}/${jobId}`;
 
 type Bucket = ReturnType<ReturnType<typeof getStorage>['bucket']>;
 
@@ -55,12 +63,12 @@ export async function finalizeUpload({ db, auth, bucket }: UploadBackend, object
   }
 
   const uploader: unknown = job.get('requested_by');
-  const reject = async (reason: Rejection): Promise<Outcome> => {
+  const reject = async (reason: Rejection, detail?: CoverDetail): Promise<Outcome> => {
     await file.delete({ ignoreNotFound: true });
     await db.runTransaction(async (tx) => {
       // A job moves on from pending once, and not back (DATABASE_AND_DATA_MODEL.md section 4.19).
       if ((await tx.get(jobRef)).get('status') !== 'pending') return;
-      tx.update(jobRef, { status: 'rejected', reason, finished_at: FieldValue.serverTimestamp() });
+      tx.update(jobRef, { status: 'rejected', reason, ...(detail ? { detail } : {}), finished_at: FieldValue.serverTimestamp() });
     });
     return { outcome: reason, uploader: uploader as string };
   };
@@ -69,13 +77,15 @@ export async function finalizeUpload({ db, auth, bucket }: UploadBackend, object
   const standing = isDocumentId(uploader) ? await readStanding({ db, auth }, uploader) : null;
   if (!standing || standing.accountClosed || !standing.roleActive || !standing.emailVerified) return reject('UPLOADER_NOT_AUTHORISED');
 
+  if (job.get('kind') === 'cover') return acceptCover({ db, bucket }, object, jobRef, job.get('issue_id') as string, reject, uploader as string);
+
   // 2. The size the store reports, then the bytes themselves. The name and the declared type count for nothing.
   const limit = await readUploadLimit(db);
   if (!(object.size <= limit)) return reject('OVER_LIMIT');
   const [content] = await file.download();
   if (content.length > limit) return reject('OVER_LIMIT');
   const verdict = await inspectPdf(content);
-  if (!verdict.ok) return reject('NOT_A_PDF');
+  if (!verdict.ok) return reject(verdict.why === 'PasswordException' ? 'PDF_PROTECTED' : 'NOT_A_PDF');
 
   const issueRef = db.collection('issues').doc(job.get('issue_id') as string);
   const issue = await issueRef.get();
@@ -129,6 +139,56 @@ export async function finalizeUpload({ db, auth, bucket }: UploadBackend, object
   });
 
   return { outcome: 'ACCEPTED', uploader: uploader as string };
+}
+
+// A cover, after the uploader's standing is checked (OP-40 step 2, "a cover goes through its own checks").
+// Only the re-encoded copy is stored, never the uploaded bytes. The issue points to it in one transaction,
+// and the cover it replaces is then deleted. If that deletion fails, the old cover is an orphan for the
+// cleanup (OP-41); if the transaction fails, the new one is.
+async function acceptCover(
+  { db, bucket }: Pick<UploadBackend, 'db' | 'bucket'>,
+  object: UploadedObject,
+  jobRef: FirebaseFirestore.DocumentReference,
+  issueId: string,
+  reject: (reason: Rejection, detail?: CoverDetail) => Promise<Outcome>,
+  uploader: string,
+): Promise<Outcome> {
+  const file = bucket.file(object.name);
+  const rules = await readCoverRules(db);
+  if (!(object.size <= rules.maxBytes)) return reject('OVER_LIMIT');
+  const [content] = await file.download();
+  if (content.length > rules.maxBytes) return reject('OVER_LIMIT');
+  const verdict = await inspectCover(content, rules);
+  if (!verdict.ok) return reject('COVER_INVALID', verdict.detail);
+
+  const issueRef = db.collection('issues').doc(issueId);
+  if (!(await issueRef.get()).exists) return reject('ISSUE_NOT_FOUND');
+
+  const path = coverPath(issueRef.id, jobRef.id);
+  // Each address is used once, so the copy may be kept by any cache for a long time. The value is PROPOSED.
+  await bucket.file(path).save(verdict.jpeg, {
+    resumable: false,
+    contentType: 'image/jpeg',
+    metadata: { cacheControl: 'public, max-age=31536000, immutable' },
+    preconditionOpts: { ifGenerationMatch: 0 },
+  });
+  await file.delete();
+
+  const previous = await db.runTransaction(async (tx) => {
+    const [jobNow, issueNow] = await Promise.all([tx.get(jobRef), tx.get(issueRef)]);
+    if (jobNow.get('status') !== 'pending' || !issueNow.exists) throw new Error('the job or the issue changed while the cover was checked');
+    const old: unknown = issueNow.get('cover_path');
+    const now = FieldValue.serverTimestamp();
+    tx.update(issueRef, { cover_path: path });
+    tx.update(jobRef, { status: 'accepted', finished_at: now });
+    return old;
+  });
+
+  // Only a cover of this issue is ever deleted here.
+  if (typeof previous === 'string' && previous !== path && previous.startsWith(`covers/${issueRef.id}/`)) {
+    await bucket.file(previous).delete({ ignoreNotFound: true }).catch(() => undefined);
+  }
+  return { outcome: 'ACCEPTED', uploader };
 }
 
 export const onUploadFinalized = onObjectFinalized(async (event) => {

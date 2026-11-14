@@ -21,6 +21,7 @@ export const ERRORS = {
   nameTaken: 'Another category already has that name.',
   inUse: 'This category is used by at least one issue, so it cannot be deleted.',
   noAcceptedFile: 'This issue has no accepted PDF yet, so it cannot be published.',
+  noCover: 'This issue has no cover yet, so it cannot be published. Upload a cover first.',
   gone: 'This issue was deleted.',
   siteUnavailable: 'The news site could not be reached. Try again later.',
   notFound: 'This record no longer exists. Reload the list.',
@@ -56,6 +57,7 @@ export function describeError(error: unknown): string {
   if (reason === 'NAME_TAKEN') return ERRORS.nameTaken;
   if (reason === 'IN_USE') return ERRORS.inUse;
   if (reason === 'NO_ACCEPTED_FILE') return ERRORS.noAcceptedFile;
+  if (reason === 'NO_COVER') return ERRORS.noCover;
   if (reason === 'GONE') return ERRORS.gone;
   if (reason === 'SITE_UNAVAILABLE') return ERRORS.siteUnavailable;
   if (reason === 'TARGET_NOT_AVAILABLE') return ERRORS.targetNotAvailable;

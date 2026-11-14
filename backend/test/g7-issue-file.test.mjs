@@ -368,7 +368,7 @@ test('G7 check 5: unpublishing stops new links at once, and publishing restores 
   assert.equal(off.result.publication_state, 'unpublished', off.raw);
   await refused('ISSUE_NOT_AVAILABLE', { issue_id: 'i-pub' });
 
-  await db.doc('issues/i-pub').update({ title: 'An issue', description: 'What it covers', category_id: 'c1' });
+  await db.doc('issues/i-pub').update({ title: 'An issue', description: 'What it covers', category_id: 'c1', cover_path: 'covers/i-pub/v1' });
   const on = await callFunction('publishIssue', { request_id: 'r2', issue_id: 'i-pub' }, admin.idToken);
   assert.equal(on.result.publication_state, 'published', on.raw);
   assertGrant(await getFile({ issue_id: 'i-pub' }));

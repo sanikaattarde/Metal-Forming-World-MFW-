@@ -389,7 +389,7 @@ A category is the theme of one issue, and an issue has exactly one (FR-MAG-003).
 | `edition` | text | No | A label. The meaning is OQ-13. The website labels its issues by period, such as "April-May 2026", and shows no edition number or volume (WEB). |
 | `category_id` | text | Yes | FR-MAG-003. |
 | `publication_state` | enum(unpublished, published) | Yes | Default `unpublished`. S2 excludes a draft and review workflow, so there is no third state. |
-| `cover_path` | text | No | A path in the public cover area. A cover is public metadata. Format checks are OQ-22. |
+| `cover_path` | text | No | A path in the public cover area, `covers/{issue_id}/{job_id}` (MOD12-P2-T02). A cover is public metadata. The checks are OQ-22's working position of 14 November 2026; an issue is published only with a cover. |
 | `current_revision` | integer | No | The revision that readers receive. Required before publishing. |
 | `file_size_bytes` | integer | No | Copied from the current revision so the size shows before the download (FR-DL-003). Public only if OQ-13 allows it. |
 | `page_count` | integer | No | Copied from the current revision. Public only if OQ-13 allows it. |
@@ -683,10 +683,12 @@ Searching for a reader by email address, when an admin looks for a person to add
 | `job_id` | text | Yes | |
 | `kind` | enum(pdf, cover) | Yes | |
 | `issue_id` | text | Yes | |
+| `content_type` | text | Yes | The type the upload address is signed for: `application/pdf`, or `image/jpeg` or `image/png` for a cover. Added 14 November 2026 (MOD12-P2-T02, PROPOSED). A job made before then has none and is a PDF. |
 | `requested_by` | text | Yes | |
 | `declared_size_bytes` | integer | Yes | |
 | `status` | enum(pending, accepted, rejected, expired) | Yes | |
 | `reason` | text | No | A plain message for a rejection, such as "not a genuine PDF" or "over the size limit". |
+| `detail` | text | No | For COVER_INVALID, why: FORMAT, UNREADABLE, TOO_NARROW or SHAPE. Added 14 November 2026 (MOD12-P2-T02, PROPOSED). |
 | `created_at`, `finished_at` | timestamp | Yes, and No | |
 
 ### 4.20 APP_CONFIG
@@ -712,7 +714,8 @@ Searching for a reader by email address, when an admin looks for a person to add
 | `policy_versions` | Public | The current privacy policy and terms of use versions (OQ-27). |
 | `news_category_ids` | Public | The WordPress categories shown in the app (INT-WP-003). |
 | `wordpress_base_url` | Private | The address of MFW's WordPress site that OP-24 reads (CFG-03). No value is set until MFW confirms the address (OQ-39). The backend spike added it (finding L-1, emulator only, not merged). PROPOSED. |
-| `max_upload_bytes` | Private | The upload limit, 150 MB by default (FR-ADMIN-007, OQ-30). |
+| `max_upload_bytes` | Private | The upload limit, 150 MB by default (FR-ADMIN-007, OQ-30). Working position of 14 November 2026: 157,286,400 bytes, inclusive (CFG-05). |
+| `cover_rules` | Private | The cover checks of the OQ-22 working position of 14 November 2026: `max_bytes`, `min_width_px`, `min_height_ratio`, `max_height_ratio` and `stored_max_width_px` (CFG-16). |
 | `signed_url_lifetime` | Private | How long a download link works (TD-09, AOQ-07). |
 | `signed_url_requests_per_reader` | Private | A cap on download-link requests per reader per day (an ASSUMPTION). |
 | `retention_periods` | Private | Retention for send records, change records, superseded revisions, upload jobs and the deleted-issue list (OQ-24, AOQ-04, AOQ-19). |
@@ -893,7 +896,7 @@ File store
 │       WordPress owns. The model never refers to it (GS-Q32, AOQ-18, now OQ-57)
 ├── Cover image
 │   ├── Lives in: the public-read area
-│   ├── Path pattern (provisional): covers/{issue_id}/{version}
+│   ├── Path pattern (provisional): covers/{issue_id}/{version}; the version is the upload job (MOD12-P2-T02)
 │   ├── The database holds: ISSUE.cover_path
 │   ├── Access: public (FR-MAG-002); format and size checks are OQ-22
 │   └── Before publication: a cover is reachable by anyone who knows its path. The paths are opaque, so

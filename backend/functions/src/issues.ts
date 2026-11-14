@@ -3,8 +3,9 @@
 // and the form of the cursor, are PROPOSED.
 import { FieldValue } from 'firebase-admin/firestore';
 import type { DocumentSnapshot, Timestamp } from 'firebase-admin/firestore';
+import { getStorage } from 'firebase-admin/storage';
 import { adminCall } from './adminCall.js';
-import { gone, invalidArgument, noAcceptedFile, notFound, staleRecord } from './errors.js';
+import { gone, invalidArgument, noAcceptedFile, noCover, notFound, staleRecord } from './errors.js';
 import { checkIssueInput, sameIssueValues } from './issueChecks.js';
 import { derivedId, isDocumentId, isNonEmptyText } from './validation.js';
 
@@ -13,6 +14,16 @@ export const PLACEHOLDER_MAX_PAGE_SIZE = 100;
 
 const millis = (value: unknown): number | null =>
   value && typeof (value as Timestamp).toMillis === 'function' ? (value as Timestamp).toMillis() : null;
+
+// The public address of a cover, for the panel to show it (PROPOSED). A cover is public (GS-D7), so the
+// address carries no token; it is the one the app builds from cover_path (CoverUrls). On the emulators it
+// points at the local file store.
+export function coverUrl(path: unknown): string | null {
+  if (typeof path !== 'string' || !path.startsWith('covers/') || path.includes('..')) return null;
+  const rest = `/v0/b/${encodeURIComponent(getStorage().bucket().name)}/o/${encodeURIComponent(path)}?alt=media`;
+  const emulator = process.env.FUNCTIONS_EMULATOR === 'true' ? process.env.FIREBASE_STORAGE_EMULATOR_HOST : undefined;
+  return emulator ? `http://${emulator}${rest}` : `https://firebasestorage.googleapis.com${rest}`;
+}
 
 // A fixed list of fields. A file location is never returned (SC-07), and it is not on the issue anyway.
 function issueView(snap: DocumentSnapshot) {
@@ -28,6 +39,7 @@ function issueView(snap: DocumentSnapshot) {
     segment_ids: get('segment_ids') ?? [],
     publication_state: get('publication_state'),
     cover_path: get('cover_path'),
+    cover_url: coverUrl(snap.get('cover_path')),
     current_revision: get('current_revision'),
     file_size_bytes: get('file_size_bytes'),
     page_count: get('page_count'),
@@ -137,6 +149,11 @@ export const publishIssue = adminCall('publishIssue', async ({ db, data }) => {
     const revision: unknown = snap.get('current_revision');
     const file = Number.isInteger(revision) ? await tx.get(ref.collection('files').doc(String(revision))) : null;
     if (!file?.exists || file.get('status') !== 'current') throw noAcceptedFile();
+
+    // And only with a cover (OQ-22 working position of 14 November 2026, PROVISIONAL). An issue published
+    // before this rule keeps its state; the rule applies when an issue is published.
+    const cover: unknown = snap.get('cover_path');
+    if (typeof cover !== 'string' || !cover.startsWith(`covers/${snap.id}/`)) throw noCover();
 
     const missing = ['title', 'description', 'category_id'].filter((name) => !isNonEmptyText(snap.get(name)));
     if (missing.length > 0) throw invalidArgument(missing);

@@ -17,4 +17,4 @@ export { listWordPressPosts } from './wordpress.js';
 export { exportRegisteredUsers, listRegisteredUsers } from './registeredUsers.js';
 export { saveProfile } from './saveProfile.js';
 export { onUploadFinalized } from './uploadFinalized.js';
-export { listUploadJobs, requestUpload } from './uploads.js';
+export { getUploadLimits, listUploadJobs, requestUpload } from './uploads.js';

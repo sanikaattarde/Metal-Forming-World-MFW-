@@ -1,15 +1,16 @@
 // SCR-W-03 Issue editor (FR-ADMIN-009, FR-ADMIN-011): an issue's details through
 // OP-16, and publish and unpublish through OP-21 and OP-22, each confirmed first (CODING_STANDARDS.md §15
-// item 7). The PDF upload is the issue-file section below (SCR-W-04, MOD12-P2-T02); a cover waits for
-// OQ-22. An unpublished issue can be deleted for good through OP-30 once its title is typed
+// item 7). The cover and the PDF are uploaded in the sections below (SCR-W-04, MOD12-P2-T02); an issue is
+// published only with both (OQ-22 working position of 14 November 2026, PROVISIONAL). An unpublished issue can be deleted for good through OP-30 once its title is typed
 // (FR-ADMIN-012, MOD12-P3-T01; PROVISIONAL, OQ-21 working position GS-Q45). Placeholder visuals.
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { AccessLost } from './adminApi';
 import type { CallFn } from './adminApi';
-import { createIssue, deleteIssue, findIssue, newRequestId, setPublished, updateIssue } from './data';
-import type { Category, Issue, IssueDetails, Reads, Segment } from './data';
+import { CoverSection } from './CoverSection';
+import { createIssue, deleteIssue, findIssue, getUploadLimits, newRequestId, setPublished, updateIssue } from './data';
+import type { Category, Issue, IssueDetails, Reads, Segment, UploadLimits } from './data';
 import { describeError } from './describeError';
 import { IssueFileSection } from './IssueFileSection';
 import type { FileSender } from './services';
@@ -83,6 +84,13 @@ export function IssueEditor({ api, read, upload, issueId }: Props & { issueId: s
   // reply gets the first result instead of GONE (OP-30).
   const [typedTitle, setTypedTitle] = useState('');
   const deleteRequest = useRef(newRequestId());
+  // The server's upload limits, to name them in the upload sections. Without them the sections still work.
+  const [limits, setLimits] = useState<UploadLimits | null>(null);
+
+  useEffect(() => {
+    if (issueId === null) return;
+    getUploadLimits(api).then(setLimits, () => setLimits(null));
+  }, [api, issueId]);
 
   useEffect(() => {
     read.categories().then(setCategories, () => setMessage('The categories could not be loaded.'));
@@ -105,6 +113,16 @@ export function IssueEditor({ api, read, upload, issueId }: Props & { issueId: s
       },
     );
   }, [api, issueId, issue]);
+
+  // An accepted file or cover changed the record, so it is read again for its new state. The form keeps any
+  // change not yet saved.
+  function reload() {
+    if (!issue) return;
+    findIssue(api, issue.issue_id).then(
+      (found) => found && setIssue(found),
+      () => undefined,
+    );
+  }
 
   const field = (name: keyof Form) => (e: { target: { value: string } }) => setForm((f) => ({ ...f, [name]: e.target.value }));
 
@@ -182,6 +200,7 @@ export function IssueEditor({ api, read, upload, issueId }: Props & { issueId: s
         <p>
           State: <strong>{published ? 'Published' : 'Unpublished'}</strong>
           {issue.current_revision ? ` · File revision ${issue.current_revision}` : ' · No accepted file'}
+          {issue.cover_path ? ' · Cover set' : ' · No cover'}
         </p>
       )}
       <form onSubmit={save}>
@@ -270,19 +289,24 @@ export function IssueEditor({ api, read, upload, issueId }: Props & { issueId: s
       )}
 
       {issue && (
+        <CoverSection
+          api={api}
+          upload={upload}
+          issueId={issue.issue_id}
+          coverUrl={issue.cover_url ?? null}
+          limits={limits}
+          onAccepted={reload}
+        />
+      )}
+
+      {issue && (
         <IssueFileSection
           api={api}
           upload={upload}
           issueId={issue.issue_id}
           hasFile={Boolean(issue.current_revision)}
-          onAccepted={() => {
-            // The accepted file changed the record, so the next save needs its new version. The form keeps any
-            // change not yet saved.
-            findIssue(api, issue.issue_id).then(
-              (found) => found && setIssue(found),
-              () => undefined,
-            );
-          }}
+          limits={limits}
+          onAccepted={reload}
         />
       )}
     </section>

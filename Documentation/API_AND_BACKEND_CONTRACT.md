@@ -31,6 +31,7 @@
 | 0.5 | 5 November 2026 | The control-table row of related documents gives the names only, because versions are in the README index. No requirement, scope item, decision or status label changed. |
 | 0.6 | 6 November 2026 | Findings of Sanika Attarde's second-person review (issues 29 and 32) that this document holds. Section 2.3 rule 1 excepts check 0 of OP-11, and rule 2 puts the verified-email check at the admin gate (R-7, A-1). OP-14 returns `email_verified`. OP-12 requires a recent sign-in, refuses a repeat with ALREADY_DELETING, removes the admin role record, and deletes the user record last (R-4). OP-24 returns the GMT date (R-8). OP-10 and section 3.4 record that the app-side profile and consent operations differ and that no route accepts a changed policy version (R-3), and section 2.5 records that a category in use and a duplicate name have no agreed code (R-2). Section 11 names the Firebase codes in lower case and says CONFLICT has none (R-2). OP-08, OP-09, OP-41 and section 2.3 item 4 record that rules make no read, so a favourite or preference for a missing target and a write from a deleted account's old session are tolerated and cleaned up (R-5, R-6). All of it is PROPOSED, and the spike facts are emulator only. No requirement, scope item, decision or MFW approval changed. Revised on 6 November 2026 after the review of pull request #35: OP-12 has an Open line for the re-authentication step, the failure code and the window of a reader's deletion, and OP-09 says that cleanup removes a preference only for a missing category, so one for an inactive category stays (PROPOSED). |
 | 0.7 | 7 November 2026 | Section 2.3 rule 1 no longer says that `SYSTEM_ARCHITECTURE.md` sections 7.4 and 10.1 do not yet show check 0 of OP-11, because version 0.6 of that document shows it (issue 32, A-1). No operation, rule, requirement, scope item, decision, status label or MFW approval changed. |
+| 0.8 | 14 November 2026 | Covers built (MOD12-P2-T02) on the OQ-22 and OQ-30 working positions of 14 November 2026, PROVISIONAL. OP-19 takes a cover with its own types and limit. OP-40 states the cover checks and the stored copy, and adds PDF_PROTECTED, ISSUE_NOT_FOUND and a COVER_INVALID detail (PROPOSED). OP-20 shows the kind, type and detail. OP-21 refuses NO_COVER. getUploadLimits and the admin view's cover_url are added (PROPOSED). |
 
 ### 1.1 Sources and authority
 
@@ -138,7 +139,7 @@ Error categories
 ├── UNAUTHENTICATED        no valid sign-in
 ├── FORBIDDEN              signed in, but not allowed: wrong role, or not the owner
 ├── FAILED_PRECONDITION    a rule is not met. The reason code says which: ACCOUNT_CLOSED, EMAIL_NOT_VERIFIED,
-│                          PROFILE_INCOMPLETE, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, NO_ACCEPTED_FILE, NOT_UNPUBLISHED,
+│                          PROFILE_INCOMPLETE, ISSUE_NOT_AVAILABLE, NO_CURRENT_FILE, NO_ACCEPTED_FILE, NO_COVER, NOT_UNPUBLISHED,
 │                          CONFIRMATION_MISMATCH, IN_USE, NOT_RETRYABLE, ALREADY_DELETING, TARGET_NOT_AVAILABLE,
 │                          LAST_ADMIN, RECENT_SIGN_IN_REQUIRED, TARGET_ACCOUNT_CLOSED, TARGET_EMAIL_NOT_VERIFIED,
 │                          ALREADY_ADMIN, NOT_AN_ADMIN
@@ -516,22 +517,31 @@ Admin operations                                      [any admin]
 │   ├── In: request_id; kind (pdf or cover); issue_id; declared_size_bytes; content_type
 │   ├── Out: job_id, upload_url (signed, resumable, short-lived), upload_headers (the headers the client sends to open the
 │   │   session; added 10 November 2026, PROPOSED) and expires_at. The URL points to a holding area
-│   ├── Checks: the issue exists; the size is within max_upload_bytes (150 MB by default); the content type is allowed. It serves a
-│   │   first upload and a replacement (GS-Q45)
+│   ├── Checks: the issue exists; the size is within max_upload_bytes (150 MB by default) for a PDF, or within cover_rules.max_bytes
+│   │   for a cover; the content type is allowed (application/pdf for a PDF; image/jpeg or image/png for a cover, OQ-22 working
+│   │   position of 14 November 2026). It serves a first upload and a replacement (GS-Q45)
 │   ├── Refuses: INVALID_ARGUMENT (size or type); NOT_FOUND; RATE_LIMITED
 │   ├── Writes: UPLOAD_JOB (pending). Audit: none (GS-Q44)
 │   ├── Repeat: harmless. The same request_id returns the same job
 │   └── Requirements: FR-ADMIN-005, FR-ADMIN-007, NFR-SEC-008 (CONFIRMED); FR-ADMIN-008, FR-ADMIN-012 (OPEN); OQ-21, OQ-22, OQ-30
 ├── OP-20 listUploadJobs
 │   ├── In: issue_id or job_id
-│   ├── Out: the status and the reason for a rejection
+│   ├── Out: the status and the reason for a rejection, with the job's kind, content type and, for a cover, the detail of a rejection
 │   └── Requirements: FR-ADMIN-006 (CONFIRMED); FR-STATE-007 (ASSUMPTION); GS-Q20
+├── getUploadLimits                                    [added 14 November 2026, PROPOSED; no OP number yet]
+│   ├── In: nothing
+│   ├── Out: pdf_max_bytes, and the cover rules (max_bytes, min_width_px, min_height_ratio, max_height_ratio, content_types), read from
+│   │   the settings each time, so the panel can name them. The panel holds no limit of its own
+│   ├── Refuses: as every admin read. A missing or unusable setting fails closed. Audit: none. Rate class: admin_read
+│   └── Requirements: FR-ADMIN-007, FR-ADMIN-008; OQ-22, OQ-30
 ├── OP-21 publishIssue and OP-22 unpublishIssue
 │   ├── In: request_id; issue_id
-│   ├── Out: the issue with its new state
+│   ├── Out: the issue with its new state. The admin view of an issue also carries cover_url, the cover's public address with no
+│   │   token (added 14 November 2026, PROPOSED)
 │   ├── Checks: for publish, in one transaction, the issue has an accepted current revision and has its title, description and
-│   │   category (INV-02). A repeat of the same state succeeds and changes nothing
-│   ├── Refuses: NOT_FOUND; FAILED_PRECONDITION NO_ACCEPTED_FILE
+│   │   category (INV-02), and a cover in its own cover area (OQ-22 working position of 14 November 2026). A repeat of the same
+│   │   state succeeds and changes nothing, so an issue published before the cover rule stays published
+│   ├── Refuses: NOT_FOUND; FAILED_PRECONDITION NO_ACCEPTED_FILE or NO_COVER
 │   ├── Writes: ISSUE. Audit: none (GS-Q44)
 │   └── Requirements: FR-ADMIN-011, FR-MAG-007, FR-MAG-008, NFR-SEC-007 (CONFIRMED); INV-02
 ├── OP-23 setNewsControl
@@ -633,11 +643,16 @@ Triggered, scheduled and operator operations
 │   ├── In: the uploaded object and its upload job
 │   ├── Steps
 │   │   ├── 1. Re-check the uploader's current role (INV-08)
-│   │   ├── 2. Check that the file is a genuine PDF, not only by its name, and within the size limit. A cover goes through its own checks (OQ-22)
+│   │   ├── 2. Check that the file is a genuine PDF, not only by its name, and within the size limit. A cover goes through its own checks
+│   │   │   (OQ-22 working position of 14 November 2026): a JPEG or PNG signature, the cover size limit, a decode, the minimum width
+│   │   │   and the portrait shape. Only a re-encoded JPEG copy is stored, at covers/{issue_id}/{job_id}; the issue points to it in one
+│   │   │   transaction, and the cover it replaces is then deleted
 │   │   ├── 3. Move the file to the private path and remove it from the holding area
 │   │   └── 4. In one transaction mark the old current revision superseded, write the new revision as current, set current_revision, the
 │   │       size and the page count on the issue, and set the job to accepted (INV-01)
-│   ├── Rejects (job rejected, object removed): upload_rejected, with the reason NOT_A_PDF, OVER_LIMIT, UPLOADER_NOT_AUTHORISED or COVER_INVALID
+│   ├── Rejects (job rejected, object removed): upload_rejected, with the reason NOT_A_PDF, OVER_LIMIT, UPLOADER_NOT_AUTHORISED or COVER_INVALID.
+│   │   Added 14 November 2026 (PROPOSED): PDF_PROTECTED for a PDF that needs a password to open (OQ-30 working position), ISSUE_NOT_FOUND,
+│   │   and a detail for COVER_INVALID (FORMAT, UNREADABLE, TOO_NARROW or SHAPE)
 │   ├── Failure: if the database write fails after the move, an orphan file remains and cleanup removes it
 │   └── Requirements: FR-ADMIN-006, FR-ADMIN-007, NFR-SEC-007, NFR-SEC-008 (CONFIRMED); FR-ADMIN-008, FR-ADMIN-012 (OPEN); INV-01, INV-08
 ├── OP-41 scheduledMaintenance                        [schedule; runs under the backend's own credentials]
